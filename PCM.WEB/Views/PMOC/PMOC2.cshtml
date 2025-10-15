@@ -1,0 +1,278 @@
+﻿@model List<PCM.WEB.MODELS.PMOC2>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b d-print-none">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="#">@PCM.WEB.Properties.Resources.pmoc</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento_pmoc</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="row">
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC2", "PMOC",  new { status = 3, type = ViewBag.type})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-snowflake-o fa-2x text-pulse"></i></div>
+                        <div class="font-size-h5 font-w600 text-pulse" data-speed="1000" data-to="@ViewBag.status.quantidade_atrasado" id="quantidade_atrasado" name="quantidade_atrasado">@ViewBag.status.quantidade_atrasado</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC2", "PMOC",  new { status = 1, type = ViewBag.type})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-snowflake-o fa-2x text-warning"></i></div>
+                        <div class="font-size-h5 font-w600 text-warning" data-speed="1000" data-to="@ViewBag.status.quantidade_pendente" id="quantidade_pendente" name="quantidade_pendente">@ViewBag.status.quantidade_pendente</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC2", "PMOC",  new { status = 4, type = ViewBag.type})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-snowflake-o fa-2x text-primary"></i></div>
+                        <div class="font-size-h5 font-w600 text-primary" data-speed="1000" data-to="@ViewBag.status.quantidade_em_andamento" id="quantidade_em_andamento" name="quantidade_em_andamento">@ViewBag.status.quantidade_em_andamento</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.em_andamento</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC2", "PMOC",  new { status = 2, type = ViewBag.type})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-snowflake-o fa-2x text-earth-light"></i></div>
+                        <div class="font-size-h5 font-w600 text-earth"><span data-speed="1000" data-to="@ViewBag.status.quantidade_concluido" id="quantidade_concluido" name="quantidade_concluido">@ViewBag.status.quantidade_concluido</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="block">
+
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.pmoc</h3>                    
+                <div class="block-options">
+                    <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
+                    <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
+                    <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                </div>
+            </div>
+
+            <div class="block-content" id="div_grid" style="display:none">
+
+                @for (int i = 0; i < Model.Count; i++)
+                {
+
+                    if (i == 0 || Model[i].unidade != Model[i - 1].unidade)
+                    {
+
+                        <div class="content-block border-b"></div>
+
+                        <div class="content-block mt-20 ">
+                            <h5 class="font-w600">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].unidade)</span></h5>
+                        </div>
+
+                        <div class="content-block border-b"></div>
+
+                        <div class="content-block mt-20 border-b">
+                            <h5 class="font-w600">@PCM.WEB.Properties.Resources.tipo_ar_condicionado: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].tipo_ar_condicionado)</span></h5>
+                        </div>
+
+                    }
+                    else if (Model[i].codigo_tipo_ar_condicionado != Model[i - 1].codigo_tipo_ar_condicionado)
+                    {
+                        <div class="content-block mt-20 border-b">
+                            <h5 class="font-w600">@PCM.WEB.Properties.Resources.tipo_ar_condicionado: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].tipo_ar_condicionado)</span></h5>
+                        </div>
+                    }
+
+                    if (i == 0 || Model[i].linha != Model[i - 1].linha)
+                    {
+                        @Html.Raw("<div class='row mt-20'>");
+                    }
+
+                    if ((Model[i].status == 2) || (Model[i].status == 4))
+                    {
+                        <div class="col-md-2 col-xl-1">
+                            <div class="block block-rounded block-bordered">
+                                @*<a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoPMOC", "PMOC", new { codigo_unidade = item.codigo_unidade, codigo_pmoc_ordem_servico = equipamento.codigo_pmoc_ordem_servico, view = "PMOC"})">*@
+                                <div class="text-center">
+                                    <i class="fa fa-snowflake-o fa-2x @Model[i].cor mb-5 mt-5 d-print-none"></i>
+                                    <h6 class="font-w700 mb-5">@Model[i].tag</h6>
+                                    <h6 class="font-w600 mb-5">@Model[i].descricao</h6>
+                                    <h6 class="mb-5"><small><b>Último: </b>@Model[i].data_ultima</small></h6>
+                                    <h6 class="mb-5"><small><b>Próximo:</b> @Model[i].data_proxima_formatada</small></h6>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-2 col-xl-1">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ApontamentoPMOC", "PMOC", new { codigo_unidade = Model[i].codigo_unidade, codigo_equipamento = Model[i].codigo_equipamento, data_manutencao = Model[i].data_proxima, view = "PMOC2" })">
+                                <div class="text-center">
+                                    <i class="fa fa-snowflake-o fa-2x @Model[i].cor mb-5 mt-5 d-print-none"></i>
+                                    <h6 class="font-w700 mb-5">@Model[i].tag</h6>
+                                    <h6 class="font-w600 mb-5">@Model[i].descricao</h6>
+                                    <h6 class="mb-5"><small><b>Último: </b>@Model[i].data_ultima</small></h6>
+                                    <h6 class="mb-5"><small><b>Próximo:</b>@Model[i].data_proxima_formatada</small></h6>
+                                </div>
+                            </a>
+                        </div>
+                    }
+
+                    if (i == (Model.Count - 1) || Model[i].linha != Model[i + 1].linha)
+                    {
+                        @Html.Raw("</div>");
+                    }
+
+                }
+
+            </div>
+
+            <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+               
+                <div class="block-content block-content-full">
+
+                    <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
+                        <thead class="thead-pcm">
+                            <tr>
+                                @if (Session["unidade"] == "")
+                                {
+                                    <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
+                                }
+                                <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.tipo_ar_condicionado</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.tag</th>
+                                <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.data_ultimo_pmoc</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.data_proximo_pmoc</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.status</th>
+                                <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr >
+                                @if (Session["unidade"] == "")
+                                {
+                                    <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                }
+                                <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.tipo_ar_condicionado)</td>
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.tag)</td>
+                                <td>@Html.DisplayFor(modelItem => item.descricao)</td>
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.data_ultima)</td>
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima_formatada)</td>
+                                <td class="text-center"><span class="badge @item.cor.ToString().Replace("text", "bg")">@Html.DisplayFor(modelItem => item.descricao_status)</span></td>
+                                <td class="text-center d-print-none" style="width: 80px;">
+                                    <div class="btn-group">
+                                        @if ((item.status != 2) && (item.status != 4))
+                                        {<a href="@Url.Action("ApontamentoPMOC", "PMOC", new { codigo_unidade = item.codigo_unidade, codigo_equipamento = item.codigo_equipamento, data_manutencao = item.data_proxima, view = "PMOC" })" class="btn btn-sm btn-secondary"><i class="fa fa-snowflake-o"></i></a>}
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: false,
+                    searching: true,
+                    lengthChange: false,
+                    paging: false,
+                    pageLength: 15,
+                    autoWidth: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar'},
+                        { extend: 'print',
+
+                            text: 'Imprimir'},
+                        { extend: 'excel'},
+                        { extend: 'pdf', orientation: 'landscape'},
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+
+        // Initialize when page loads
+        jQuery(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+
+            if ('@ViewBag.type' == 'list') {
+                $("#div_list").show();
+                $("#div_grid").hide();
+            }else if ('@ViewBag.type' == 'grid') {
+                $("#div_list").hide();
+                $("#div_grid").show();
+            }
+        });
+
+</script>
+}

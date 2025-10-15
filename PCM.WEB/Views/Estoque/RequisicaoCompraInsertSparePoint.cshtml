@@ -1,0 +1,247 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.estoque</span>
+                <a class="breadcrumb-item active">@PCM.WEB.Properties.Resources.estRequisicaoCompraSparePoint</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("RequisicaoCompraInsertSparePoint", "Estoque", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="produtosJson" name="produtosJson" value="" />
+
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.estRequisicaoCompraSparePoint</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" id="btnSave" name="btnSave"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                                <a href="@Url.Action("RequisicaoCompra", "Estoque")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-10">
+                                    <label>@PCM.WEB.Properties.Resources.fornecedor</label>
+                                    <div>@Html.DropDownList("fornecedor", null, "", new { @class = "form-control js-select2" })</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="block block-rounded" id="products">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600 h1">@PCM.WEB.Properties.Resources.produto</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+
+                            <table class="table table-bordered table-sm table-striped table-vcenter" id="tbMain" name="tbMain">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>@PCM.WEB.Properties.Resources.produto</th>
+                                        <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                        <th>@PCM.WEB.Properties.Resources.unidade_medida</th>
+                                        <th>@PCM.WEB.Properties.Resources.quantidadeEstoque</th>
+                                        <th>@PCM.WEB.Properties.Resources.quantidadeTransito</th>
+                                        <th>@PCM.WEB.Properties.Resources.ponto_reposicao</th>
+                                        <th>@PCM.WEB.Properties.Resources.quantidadeRequisicao</th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/select")
+    @Styles.Render("~/Content/dataTables")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/select")
+
+<script>
+
+    $(document).ready(function () {
+
+        var unidade = $("#unidade");
+        var fornecedor = $("#fornecedor");
+
+        var table = $('#tbMain').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 15,
+            autoWidth: false,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadRequisicaoCompraSparePoint",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.codigoEmpresa = @ViewBag.codigoEmpresa,
+                    d.codigoUnidade = ($("#unidade").val() == "") ? "-1" : $("#unidade").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                { data: "produto" },
+                { data: "descricao" },
+                { data: "uom" },
+                { data: "estoque" },
+                { data: "transito" },
+                { data: "pontoReposicao" },
+                {
+                    data: "quantidade",
+                    render: function (data, type, row, meta) {
+                        return `<input type="number" class="form-control text-center" value="${data}" data-rowindex="${meta.row}" />`;
+                    }
+                },
+            ],
+            columnDefs: [
+                {
+                    className: 'text-center', targets: [0, 2, 3, 4, 5, 6]
+                },
+                { width: '150px', targets: [0, 2, 3, 4, 5, 6] }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: '@Html.Raw(PCM.WEB.Properties.Resources.copy)' },
+                {
+                    extend: 'print',
+                    text: '@Html.Raw(PCM.WEB.Properties.Resources.print)'
+                },
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+            language: {
+                emptyTable: "Nenhum registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+            }
+        });
+
+        unidade.change(function () {
+
+            var request = { "empresa": @ViewBag.codigoEmpresa, "unidade": unidade.val() };
+
+            $.post("LoadComboFornecedor", request, function (obj) {
+                fornecedor.empty();
+                option = $("<option>", { "value": "" }).text("");
+                fornecedor.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    fornecedor.append(option);
+                });
+            }, "json");
+
+            table.ajax.reload(null, false);
+
+        });
+
+        $("#btnSave").click(function () {
+            $("#btnSave").prop("disabled", true);
+            $("#form").submit();
+        });
+
+    $('#form').validate({
+        onkeyup: false,
+        onclick: false,
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'unidade': {
+                required: true
+            }
+        },
+        messages: {
+            'unidade': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        invalidHandler: function (event, validator) {
+            $("#btnSave").prop("disabled", false);
+        },
+        submitHandler: function (form) {
+
+            table.rows().every(function () {
+                let rowData = this.data();   
+                let quantidade = $(this.node()).find('input[type="text"]').val();
+                rowData.quantidade = quantidade;
+                this.data(rowData);
+            });
+
+            let dataArray = table.rows().data().toArray();
+            let jsonString = JSON.stringify(dataArray);
+            $('#produtosJson').val(jsonString);
+            return true;
+
+        }
+    });
+
+    });
+
+    // Initialize when page loads
+    jQuery(function () {
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+    });
+
+</script>
+}

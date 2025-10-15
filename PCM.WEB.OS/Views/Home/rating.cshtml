@@ -1,0 +1,132 @@
+﻿@{
+    Layout = string.Empty;
+}
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="utf-8" />
+    <title>VC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="VC" name="description" />
+    <meta content="" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+
+    <!-- App css -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/app.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/timepicker/bootstrap-material-datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/sweet-alert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+    <link href="~/lib/animate/animate.css" rel="stylesheet" type="text/css">
+    <link href="~/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/timepicker/bootstrap-material-datetimepicker.css" rel="stylesheet">
+    <link href="~/lib/flatpickr/flatpickr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/rating/themes/rating.css" />
+    
+</head>
+
+<body class="account-body">
+
+    <div class="container-fluid">
+
+
+        <form autocomplete="off" class="form-horizontal auth-form" asp-action="rating" asp-controller="Home" name="form" id="form" method="post">
+@* 
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="page-title">Avaliação</h4>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                        <hr class="hr-dashed">
+                    </div><!--end page-title-box-->
+                </div><!--end col-->
+            </div><!--end row-->
+ *@
+            <div class="row mt-3">
+
+                <div class="col-12">
+
+                    <div class="accordion" id="accordionFlushExample">
+                        <div class="accordion-item">
+                            <h5 class="accordion-header m-0" id="flush-headingOne">
+                                <button class="accordion-button fw-semibold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
+                                    <h5 class="card-title">Avaliação</h5>
+                                </button>
+                            </h5>
+                            <div id="collapseOne" class="accordion-collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+
+
+                                    <input type="hidden" name="UniqueId" value="@ViewBag.uniqueId" />
+
+                                    @for (int i = 0; i < ViewBag.questions.Count; i++)
+                                    {
+                                        var item = ViewBag.questions[i];
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="p-2">
+                                                    <h5 class="mt-0 mb-2">@item.descricao</h5>
+
+                                                    <input type="hidden" name="Ratings[@i].QuestionId" value="@item.codigo" />
+
+                                                    <select class="example-css" name="Ratings[@i].Value" autocomplete="off">
+                                                        <option value="">Selecione</option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <button class="btn btn-sm btn-soft-primary m-3" asp-action="rating" asp-controller="Home" type="submit" id="btnSave"><i class="fas fa-save me-2 align-self-center icon-xs"></i>Salvar</button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-sm btn-soft-primary mb-3" type="button"
+                                            onclick="window.location.href='@Url.Action("Index", "Home", new { uniqueId = ViewBag.uniqueId })'" id="btnUndo">
+                                        <i class="fas fa-undo me-2 icon-xs"></i>Voltar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div> <!-- end row -->
+
+        </form>
+
+    </div><!-- container -->
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery-3.7.1.js"></script>
+    <script src="~/js/jquery.core.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/rating/jquery.barrating.min.js"></script>
+    <script src="~/js/pages/home/jquery.rating.init.js"></script>
+
+</body>
+</html>

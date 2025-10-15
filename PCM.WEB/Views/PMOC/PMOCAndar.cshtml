@@ -1,0 +1,244 @@
+﻿@model List<PCM.WEB.MODELS.PMOCAndar>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.pmoc</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.historico</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">        
+
+        <!-- Listagem -->
+        <div class="block block-rounded border">
+
+            @using (Html.BeginForm("PMOCAndar", "PMOC", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                            <div>@Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })</div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>@PCM.WEB.Properties.Resources.data</label>
+                                            <div>@Html.DropDownList("data", null, "", new { @class = "form-control" })</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+                if (Model.Count > 1)
+                {
+
+                    <div class="col-md-12 col-xl-12">
+                        <!-- Toggle Tasks Navigation on mobile -->
+                        <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                        <div class="block-content block-content-full">
+
+                            <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
+
+                                <thead>
+                                    <tr class="table-secondary">
+                                        @for (int i = 0; i <= Model.Count - 1; i++)
+                                        {
+                                            if (i == 0)
+                                            {
+                                                <th class="text-center" style="width:20px">#</th>
+                                            }
+                                            else
+                                            {
+                                                <th class="text-center" style="width:100px">@Model[i].andar</th>
+                                            }
+                                        }
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @for (int i = 0; i <= Model[0].equipamentos.Count - 1; i++)
+                                    {
+                                        <tr>
+                                            @for (int j = 0; j <= Model.Count - 1; j++)
+                                            {
+                                                if (@Model[j].equipamentos[i].value.ToString().Contains("BIMESTRAL"))
+                                                {
+                                                    <td class="text-center bg-success font-w600 text-white">@Model[j].equipamentos[i].value</td>
+                                                }
+                                                else if (@Model[j].equipamentos[i].value.ToString().Contains("SEMESTRAL"))
+                                                {
+                                                    <td class="text-center bg-warning font-w600">@Model[j].equipamentos[i].value</td>
+                                                }
+                                                else if (@Model[j].equipamentos[i].value.ToString().Contains("ANUAL"))
+                                                {
+                                                    <td class="text-center bg-primary font-w600 text-white">@Model[j].equipamentos[i].value</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-center">@Model[j].equipamentos[i].value</td>
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                }
+
+            }
+        </div>        
+    </div>           
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+    var BeTableDatatables = function () {
+        // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+        var exDataTable = function () {
+            jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                sWrapper: "dataTables_wrapper dt-bootstrap4"
+            });
+        };
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        var initDataTableSimple = function () {
+            jQuery('.js-dataTable-list').dataTable({
+                fixedHeader: false,
+                searching: false,
+                paging: false,
+                ordering: false,
+                lengthChange: false,
+                pageLength: 15,
+                autoWidth: true,
+                dom: 'Bfrtip',
+                buttons: ['pageLength',
+                    {
+                        extend: 'excel',
+                        text: 'Export excel',
+                        customize: function (xlsx) {
+                            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                            $('.bg-success', sheet).each(function () {
+                                if ($(this).text().includes("BIMESTRAL")) {
+                                    $(this).attr('s', '40');
+                                    $(this).css('background-color', 'green');
+                                }
+                                if ($(this).text().includes("SEMESTRAL")) {
+                                    $(this).attr('s', '35');
+                                    $(this).css('background-color', 'red');
+                                }
+                            });
+                        },
+                        exportOptions: {
+                            columns: ':visible',
+                        }
+                    }
+                ],
+                language: {
+                    "search": "Procurar:",
+                    "lengthMenu": "Exibir _MENU_ ",
+                    "zeroRecords": "Nenhum Registro Encontrado",
+                    "info": "_MAX_ registro(s)",
+                    "infoEmpty": "Nenhum Registro encontrado",
+                    "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Override a few DataTable defaults
+                exDataTable();
+
+                // Init Datatables
+                initDataTableSimple();
+            }
+        };
+    }();
+
+    $('#form').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.list-group-item > div > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.list-group-item > div > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.list-group-item > div > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'unidade': {
+                required: true
+            },
+            'data': {
+                required: true
+            }
+        },
+        messages: {
+            'unidade': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'data': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        }
+    });
+
+
+    // Initialize when page loads
+    jQuery(function () {
+        BeTableDatatables.init();
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+    });
+
+</script>
+}

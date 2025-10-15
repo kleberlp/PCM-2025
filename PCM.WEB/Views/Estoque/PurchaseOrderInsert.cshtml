@@ -1,0 +1,572 @@
+﻿@model List<PCM.WEB.MODELS.stock_purchase_order_product>
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.estoque</span>
+                <a class="breadcrumb-item" href="@Url.Action("PurchaseOrderIndex", "InventoryMaterial")">@PCM.WEB.Properties.Resources.purchase_order</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm("PurchaseOrderInsert", "InventoryMaterial", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))        
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="quantity_product" name="quantity_product" value="0" />
+
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.purchase_order</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.save</button>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full"> 
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.branch</label>
+                                    <div>@Html.DropDownList("branch", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.purchase_order</label>
+                                    <div><input type="text" class="form-control" id="purchase_order" name="purchase_order" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#partner').focus(); return false; }"></div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.partner</label>
+                                    <div><input type="text" class="form-control" id="partner" name="partner" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#date').focus(); return false; }"></div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.file</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" accept="*">
+                                        <label class="custom-file-label" for="arquivo"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.date</label>
+                                    <input type="text" class="js-datepicker form-control" id="date" name="date" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.date" onkeypress="if(event.keyCode == 13){event.preventDefault(); startPurchaseOrder(); return false; }">
+                                </div>
+                            </div>
+                        </div>
+                    </div>                 
+
+                    <div class="block block-rounded" id="products">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600 h1">@PCM.WEB.Properties.Resources.products</h3>
+                            <div class="block-options">
+                                <label class="css-control css-control-secondary css-checkbox">
+                                    <input type="checkbox" name="barcode_reader" id="barcode_reader" class="css-control-input" value="true" />
+                                    <span class="css-control-indicator"></span>
+                                    <span class="h5 text-white">@PCM.WEB.Properties.Resources.barcode</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-2" id="div_barcode" name="div_barcode" style="display:none">
+                                    <label for="ecom-product-name">@PCM.WEB.Properties.Resources.barcode</label>
+                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); document.getElementById('quantity').focus(); return false; }" onblur="loadProductInfo();"></div>
+                                </div>
+                                <div class="col-md-2" id="div_product" name="div_product">
+                                    <label for="ecom-product-name">@PCM.WEB.Properties.Resources.product</label>
+                                    <div>@Html.DropDownList("product", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-1" id="div_product" name="div_product">
+                                    <label for="ecom-product-name">@PCM.WEB.Properties.Resources.uom</label>
+                                    <div>@Html.DropDownList("uom", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="ecom-product-name">@PCM.WEB.Properties.Resources.description</label>
+                                    <div>
+                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="description" name="description" placeholder="" value="" disabled>
+                                        <input type="hidden" class="form-control" id="product" name="product" value="0">
+                                        <input type="hidden" class="form-control" id="quantity_stock" name="quantity_stock" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="ecom-product-name">@PCM.WEB.Properties.Resources.quantity</label>
+                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="quantity" name="quantity" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#unitary_value').focus(); return false; }"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="ecom-product-name">@PCM.WEB.Properties.Resources.unitary_value</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="unitary_value" name="unitary_value" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); addProduct(); return false; }">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" onclick="addProduct();"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table table-bordered table-sm table-striped table-vcenter" id="table" name="table">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th class="text-center" style="width:200px">@PCM.WEB.Properties.Resources.product</th>
+                                        <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.description</th>
+                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.quantity</th>
+                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.unitary_value</th>
+                                        <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_row" name="table_row">
+                                    @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        <tr id='row' style="display:none">
+                                            @Html.HiddenFor(m => m[i].product_id)
+                                            @Html.HiddenFor(m => m[i].uom_id)
+                                            @Html.HiddenFor(m => m[i].description)
+                                            @Html.HiddenFor(m => m[i].quantity)
+                                            @Html.HiddenFor(m => m[i].unitary_value)
+                                            @Html.HiddenFor(m => m[i].deleted)
+                                            <td class="text-center">@Html.DisplayFor(m => m[i].product)</td>
+                                            <td class="d-none d-sm-table-cell">@Html.DisplayFor(m => m[i].description)</td>
+                                            <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].quantity)</td>
+                                            <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].unitary_value)</td>
+                                            <td class="text-center"><a href="#" onclick="remove(this, @i);" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot id="table_footer" name="table_footer">
+                                    <tr id='row' style="display:none">
+                                        <td class="font-w600" colspan="3">@PCM.WEB.Properties.Resources.total</td>
+                                        <td class="text-center font-w600" style="width:150px">0</td>
+                                        <td class="text-center font-w600" style="width:150px"></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+
+                    </div>  
+                 
+                }
+        
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/select")
+    
+<script>
+
+    var codigo = 1;
+    var objetos = [];
+    var total_quantity = 0;
+    var total_value = 0;
+
+    $(function () {
+
+        $(".custom-file-input").on('change', function () {
+            var filename = document.getElementById("arquivo").files[0].name;
+            $(this).next(".custom-file-label").addClass("selected").html(filename);
+        });
+
+        var branch = $("#branch");
+        var document = $("#document");
+        var barcode_reader = $("#barcode_reader");
+        var product = $("#product");
+        var uom = $("#uom");
+
+        branch.change(function () {
+
+            var request = { "branch": branch.val() };
+
+            $.post("LoadComboProductStock", request, function (obj) {
+                product.empty();
+                option = $("<option>", { "value": "" }).text("");
+                product.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.code }).text(result.description);
+                    product.append(option);
+                });
+            }, "json");
+
+            if (branch.val() != "" && document.val() != "") {
+                $("#btnStartPurchaseOrder").prop("disabled", false);
+            } else {
+                $("#btnStartPurchaseOrder").prop("disabled", true);
+            }
+
+        });
+
+        document.change(function () {
+
+            if (branch.val() != "" && document.val() != "") {
+                $("#btnStartPurchaseOrder").prop("disabled", false);
+            } else {
+                $("#btnStartPurchaseOrder").prop("disabled", true);
+            }
+
+        });
+
+        barcode_reader.change(function () {
+
+            if (barcode_reader.is(':checked')) {
+                $("#div_product").hide();
+                $("#div_barcode").show();
+            } else {
+                $("#div_barcode").hide();
+                $("#div_product").show();
+            }
+
+        });
+
+        product.change(function () {
+
+            var request = { "product": $("#product").val() };
+
+            $.post("LoadComboProductUomStock", request, function (obj) {
+                uom.empty();
+                option = $("<option>", { "value": "" }).text("");
+                uom.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.code, "selected": (obj.length == 1) ? true : false }).text(result.description);
+                    uom.append(option);
+                });
+            }, "json");
+
+            request = { "branch": $("#branch").val(), "product": $("#product").val() };
+
+            jQuery.ajax({
+                type: "POST",
+                url: "LoadProductStockInfo",
+                async: true,
+                data: request,
+                dataType: "json",
+                success: function (data) {
+                    $("#description").val(data.description);
+                }
+            });
+
+        });
+
+        uom.change(function () {
+
+            var request = { "uom": $("#uom").val() };
+
+            jQuery.ajax({
+                type: "POST",
+                url: "LoadUOMInfo",
+                async: true,
+                data: request,
+                dataType: "json",
+                success: function (data) {
+                    $("#quantity").maskMoney({ prefix: '', thousands: '.', decimal: ',', precision: data.decimal_places, allowNegative: false, 'placeholder': '' });
+                }
+            });
+
+        });
+
+    });
+
+    function startPurchaseOrder() {
+
+        if ($("#requester").val() == "") {
+            swal('@PCM.WEB.Properties.Resources.attention', '@PCM.WEB.Properties.Resources.product_not_found', 'error');
+            document.getElementById("requester").focus();
+        }
+        else
+        {
+            $("#branch").select2({ disabled: true });
+            $("#purchase_order").prop("disabled", true);
+            $("#partner").prop("disabled", true);
+            $("#arquivo").prop("disabled", true);
+            $("#date").prop("disabled", true);
+            $("#barcode").val("");
+            $("#product").val("");
+            $("#uom").val("");
+            $("#description").val("");
+            $("#quantity").val("");
+            $("#unitary_value").val("");
+            $("#btnStartPurchaseOrder").hide();
+            $("#products").show();
+            if ($("#barcode_reader").is(':checked')) {
+                $("#barcode").focus();
+            } else {
+                $("#product").focus();
+            }
+        }
+    };
+
+    function loadProductInfo() {
+
+        if ($("#product").val() != "") {
+
+            var request = { "branch": $("#branch").val(), "product": $("#product").val() };
+
+            jQuery.ajax({
+                type: "POST",
+                url: "LoadProductInfo",
+                async: true,
+                data: request,
+                dataType: "json",
+                success: function (return_data) {
+                    if (return_data.product == null) {
+                        swal({
+                            title: '@PCM.WEB.Properties.Resources.product_not_found',
+                            text: '',
+                            type: 'error',
+                            showCancelButton: false,
+                            confirmButtonColor: '#d26a5c',
+                            confirmButtonText: 'OK',
+                            html: false,
+                            preConfirm: function () {
+                                return new Promise(function (resolve) {
+                                    setTimeout(function () {
+                                        resolve();
+                                    }, 50);
+                                });
+                            }
+                        }).then(function (result) {
+                            $("#product").val("");
+                            $("#description").val("");
+                            $("#quantity").val("0");
+                            document.getElementById("product").focus();
+                        });
+                    }
+                    else {
+                        $("#description").val(return_data.description);
+                    }
+                }
+            });
+        }
+    }
+
+    function addProduct() {
+
+        if (objetos.indexOf($("#product").val()) >= 0) {
+
+            Swal.fire({
+                title: "PCM",
+                html: "<span class='h3'>@Html.Raw(PCM.WEB.Properties.Resources.validation_record)</span>",
+                showDenyButton: false,
+                showCancelButton: false,
+                confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.yes)",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $("#product").val("");
+                    $("#barcode").val("");
+                    $("#uom").val("");
+                    $("#description").val("");
+                    $("#quantity").val("0");
+                    $("#unitary_value").val("");
+                    $("#product").focus();
+                }
+            })
+
+        }
+        else
+        {
+            objetos.push($("#product").val());
+            //Adiciona linha a Grid
+            var newRowItem = $("<tr id='row'>");
+            var colsItem = '<input data-val="true" name="[' + codigo + '].product_id" type="hidden" value="' + $("#product").val() + '" />';
+            newRowItem.append(colsItem);
+            colsItem = '<input data-val="true" name="[' + codigo + '].uom_id" type="hidden" value="' + $("#uom").val() + '" />';
+            newRowItem.append(colsItem);
+            colsItem = '<input data-val="true" name="[' + codigo + '].description" type="hidden" value="' + $("#description").val() + '" />';
+            newRowItem.append(colsItem);
+            colsItem = '<input data-val="true" name="[' + codigo + '].quantity" type="hidden" value="' + $("#quantity").val() + '" />';
+            newRowItem.append(colsItem);
+            colsItem = '<input data-val="true" name="[' + codigo + '].unitary_value" type="hidden" value="' + $("#unitary_value").val() + '" />';
+            newRowItem.append(colsItem);
+            colsItem = '<input name="[' + codigo + '].deleted" type="hidden" value="0" />';
+            newRowItem.append(colsItem);
+            colsItem = '<td class="text-center">' + $("#product option:selected").text().toUpperCase() + '</td>';
+            newRowItem.append(colsItem);
+            colsItem = '<td class="d-none d-sm-table-cell">' + $("#description").val().toUpperCase() + '</td>';
+            newRowItem.append(colsItem);
+            colsItem = '<td class="text-center" style="width:150px">' + $("#quantity").val() + '</td>';
+            newRowItem.append(colsItem);
+            colsItem = '<td class="text-center" style="width:150px">' + $("#unitary_value").val() + '</td>';
+            newRowItem.append(colsItem);
+            colsItem = '<td class="text-center" style="width: 80px;" ><div class="btn-group">';
+            colsItem += '<a href="#" onclick="remove(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>';
+            colsItem += '</div></td>';
+            newRowItem.append(colsItem);
+            $("#table").append(newRowItem);
+
+            total_quantity += parseFloat($("#quantity").val().toString().replace('.', '').replace(",", "."));
+            total_value += (parseFloat($("#quantity").val().toString().replace('.', '').replace(",", ".")).toFixed(2) * parseFloat($("#unitary_value").val().toString().replace('R$ ', '').replace('.', '').replace(",", ".")).toFixed(2));
+
+            $('#table tfoot').empty();
+
+            //Adiciona linha a Grid
+            var newRowItemFooter = $("<tr id='row' class='table-warning'>");
+            var colsItemFooter = '<td class="font-w600 text-right" colspan="2">@PCM.WEB.Properties.Resources.total</td>';
+            newRowItemFooter.append(colsItemFooter);
+            var colsItemFooter = '<td class="font-w600 text-center">' + total_quantity.toString() + '</td>';
+            newRowItemFooter.append(colsItemFooter);
+            var colsItemFooter = '<td class="font-w600 text-center">R$ ' + total_value.toString() + '</td>';
+            newRowItemFooter.append(colsItemFooter);
+            var colsItemFooter = '<td></td>';
+            newRowItemFooter.append(colsItemFooter);
+            $("#table_footer").append(newRowItemFooter);
+
+            codigo = codigo + 1;
+
+            $("#product").val("");
+            $("#uom").val("");
+            $("#description").val("");
+            $("#quantity").val("0");
+            $("#unitary_value").val("");
+            $("#table").show();
+            $("#product").focus();
+        }
+
+    };
+
+    function remove(item, id) {
+
+        var tr = $(item).closest('tr');
+
+        Swal.fire({
+            title: "PCM",
+            html: "<span class='h3'>@Html.Raw(PCM.WEB.Properties.Resources.question_delete_register)</span>",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.yes)",
+            denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.no)",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                tr.fadeOut(400, function () {
+                    tr.hide();
+                    $("input[name$='[" + id + "].deleted']").val("1");
+
+                    total_quantity -= parseFloat($("input[name$='[" + id + "].quantity']").val().toString().replace('.', '').replace(",", "."));
+                    total_value -= (parseFloat($("input[name$='[" + id + "].quantity']").val().toString().replace('.', '').replace(",", ".")).toFixed(2) * parseFloat($("input[name$='[" + id + "].unitary_value']").val().toString().replace('R$ ', '').replace('.', '').replace(",", ".")).toFixed(2));
+
+                    $('#table tfoot').empty();
+
+                    //Adiciona linha a Grid
+                    var newRowItemFooter = $("<tr id='row' class='table-warning'>");
+                    var colsItemFooter = '<td class="font-w600 text-right" colspan="3">@PCM.WEB.Properties.Resources.total</td>';
+                    newRowItemFooter.append(colsItemFooter);
+                    var colsItemFooter = '<td class="font-w600 text-center">' + total_quantity.toString() + '</td>';
+                    newRowItemFooter.append(colsItemFooter);
+                    var colsItemFooter = '<td class="font-w600 text-center">R$ ' + total_value.toString() + '</td>';
+                    newRowItemFooter.append(colsItemFooter);
+                    var colsItemFooter = '<td></td>';
+                    newRowItemFooter.append(colsItemFooter);
+                    $("#table_footer").append(newRowItemFooter);
+
+                    delete objetos[id - 1];
+                    if ($("table > tbody > tr:visible").length == 0) {
+                        $("#table").hide();
+                    }
+                });
+                return false;
+            }
+        });
+
+    };
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.form-group > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'branch': {
+                        required: true
+                    },
+                    'document': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'branch': {
+                        required: '@PCM.WEB.Properties.Resources.required_field'
+                    },
+                    'document': {
+                        required: '@PCM.WEB.Properties.Resources.required_field'
+                    }
+                },
+                submitHandler: function (form) {
+                    if ($("table > tbody > tr:visible").length == 0) {
+                        Swal.fire({
+                            title: "PCM",
+                            html: "<span class='h3'>@Html.Raw(PCM.WEB.Properties.Resources.validation_grid)</span>",
+                            showDenyButton: false,
+                            showCancelButton: false,
+                            confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.yes)",
+                        }).then((result) => {
+                            return false;
+                        });
+                    } else {
+                        $("#branch").select2({ disabled: false });
+                        $("#document").prop("disabled", false);
+                        $("#purchase_order").prop("disabled", false);
+                        $("#arquivo").prop("disabled", false);
+                        $("#date").prop("disabled", false);
+                        return true;
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    // Initialize when page loads
+    jQuery(function () {
+        FormValidation.init();
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        $("#quantity").maskMoney({ prefix: '', thousands: '.', decimal: ',', precision: 0, allowNegative: false, 'placeholder': '' });
+        $("#unitary_value").maskMoney({ prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2, allowNegative: false, 'placeholder': '' });
+        $("#btnStartPurchaseOrder").prop("disabled", true);
+    });
+
+</script>
+}

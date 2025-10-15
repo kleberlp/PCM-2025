@@ -1,0 +1,150 @@
+﻿@model IEnumerable<INTERACTI.WEB.MODELS.Funcionario>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-5 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@INTERACTI.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@INTERACTI.WEB.Properties.Resources.funcionario</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">        
+
+        <!-- Listagem -->
+        <div class="block block-rounded block-themed">
+            <div class="block-header bg-gd-primary">
+                <h3 class="block-title">@INTERACTI.WEB.Properties.Resources.informacoes</h3>
+               @if(ViewBag.inserir)
+                {
+                    <div class="block-options">
+                        <a href="@Url.Action("FuncionarioInsert", "CadastroBasico")" class="btn btn-sm btn-alt-primary">
+                            <i class="fa fa-save mr-5"></i>@INTERACTI.WEB.Properties.Resources.novo
+                        </a>
+                    </div>
+                }
+            </div>
+            
+            <!-- Dynamic Table Full Pagination -->
+            <div class="block">
+                <div class="block-content block-content-full">
+                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                    <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                        <thead>
+                            <tr>
+                                @if(ViewBag.editar)
+                                {
+                                    <th class="text-center" style="width: 20px;"></th>
+                                }
+                                @if(ViewBag.excluir)
+                                {
+                                    <th class="text-center" style="width: 20px;"></th>
+                                }
+                                @if(Session["unidade"] == "")
+                                {
+                                    <th class="d-none d-sm-table-cell">@INTERACTI.WEB.Properties.Resources.unidade </th>
+                                }
+                                <th class="d-none d-sm-table-cell text-center">@INTERACTI.WEB.Properties.Resources.cpf</th>
+                                <th>@INTERACTI.WEB.Properties.Resources.nome</th>
+                                <th class="d-none d-sm-table-cell text-center">@INTERACTI.WEB.Properties.Resources.funcao</th>
+                                <th class="d-none d-sm-table-cell text-center" style="width: 120px;">@INTERACTI.WEB.Properties.Resources.ativo</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>                       
+                            @foreach (var item in Model)
+                            {
+                                <tr>     
+                                     @if(ViewBag.editar)
+                                    {
+                                        <td class="text-center" style="width: 20px;">@Html.ActionLink(" ", "FuncionarioEdit", new { codigo = item.codigo }, new { @class = "si si-pencil" })</td>                  
+                                    }
+                                    @if(ViewBag.excluir)
+                                    {
+                                        <td class="text-center" style="width: 20px;">@Html.ActionLink(" ", "FuncionarioDelete", new { codigo = item.codigo }, new { @class = "si si-trash" })</td>                 
+                                    }                          
+                                    @if(Session["unidade"] == "")
+                                    {
+                                        <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                    }               
+                                    <td class="d-none d-sm-table-cell text-center">@Html.DisplayFor(modelItem => item.cpf)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.nome)</td>
+                                    <td class="d-none d-sm-table-cell text-center">@Html.DisplayFor(modelItem => item.funcao)</td>
+                                    <td class="d-none d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.ativo)</td>                                                                
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END Dynamic Table Full Pagination -->
+            </div>                        
+        </div>
+
+        </div>
+        <!-- END Funcionario -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/cookie")    
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/bundles/codebase")
+
+    <!-- Page JS Code -->
+    <script>
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init full extra DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableFullPagination = function () {
+                jQuery('.js-dataTable-full-pagination').dataTable({
+                    searching: true,
+                    lengthChange: false,
+                    @ViewBag.columnDefs,
+                    pageLength: 10,                    
+                    lengthMenu: [[5, 8, 15, 20], [5, 8, 15, 20]],
+                    autoWidth: false,
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "Exibir página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableFullPagination();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () { BeTableDatatables.init(); });
+
+    </script>
+}

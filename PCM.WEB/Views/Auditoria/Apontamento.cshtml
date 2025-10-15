@@ -1,0 +1,645 @@
+﻿@model PCM.WEB.MODELS.QAApontamento
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.auditoria</a>
+                <a class="breadcrumb-item" href="@Url.Action("AuditoriaQualidadeIndex", "Auditoria")">@PCM.WEB.Properties.Resources.auditoria_corporativo</a>
+                <a class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content" id="main" name="main" style="display:none">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("Apontamento", "Auditoria", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="codigo_auditoria_interna" id="codigo_auditoria_interna" value="@Model.codigo_auditoria_interna">
+                    <input type="hidden" name="codigo_empresa" id="codigo_empresa" value="@Model.codigo_empresa">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@Model.codigo_unidade">
+                    <input type="hidden" name="codigo_usuario" id="codigo_usuario" value="@ViewBag.codigo_usuario">
+                    <input type="hidden" name="codigo_auditoria" id="codigo_auditoria" value="@Model.codigo_auditoria">
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento</h3>
+                            <div class="block-options">
+                                @if (Model.status != 2)
+                                {
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                        <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                    </button>
+                                }
+                                @if (ViewBag.excluir)
+                                {
+                                    <button type="button" onclick="DeleteAuditoria(@Model.codigo_empresa, @Model.codigo_unidade, @Model.codigo_auditoria);" class="btn btn-square btn-secondary min-width-100 h-75">
+                                        <i class="fa fa-times mr-5"></i>@PCM.WEB.Properties.Resources.excluir
+                                    </button>
+                                }
+                                <button type="button" id="btnImprimir" name="btnImprimir" onclick="Imprimir();" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+
+                                <a href="@Url.Action("AuditoriaCorporativoIndex", "Auditoria")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            @if (Session["unidade"] == "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@Model.unidade</span></div></div>
+                            }
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.auditoria: <span class="text-primary">@Model.descricao</span></div></div>
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.numero_documento: <span class="text-primary">@Model.numero_documento</span></div></div>
+                            <hr />
+                            @if (Model.status == 2)
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.concluido: <span class="text-primary">SIM</span></div></div>
+                            }
+                            else
+                            {
+                                <div class="form-group row font-w600">
+                                    <div class="col-12">
+                                        @PCM.WEB.Properties.Resources.concluido:
+                                        <label class="css-control css-control-success css-switch">
+                                            <input type="checkbox" class="css-control-input" id="concluido" name="concluido" value="true">
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="divPrazo" name="divPrazo" style="display:none">
+                                    <label for="prazo_dias" class="col-12">@PCM.WEB.Properties.Resources.prazo_dias</label>
+                                    <div class="col-2"><input type="text" class="form-control" id="prazo_dias" name="prazo_dias" value=""></div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    if (Model.checklist.Count > 0)
+                    {
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist</h3>
+                        </div>
+                        <div class="block block-content block-content-full border">
+                            <table class="table table-sm table-vcenter js-dataTable-list">
+
+                                <tbody>
+                                    @for (int i = 0; i < Model.checklist.Count; i++)
+                                    {
+                                        if (i == 0 || Model.checklist[i].grupo != Model.checklist[i - 1].grupo)
+                                        {
+                                            <tr class="table-secondary">
+                                                <th colspan="8">@Model.checklist[i].grupo</th>
+                                            </tr>
+
+                                        }
+                                        if ((i == 0 || Model.checklist[i].subgrupo != Model.checklist[i - 1].subgrupo) && Model.checklist[i].subgrupo != "")
+                                        {
+                                            <tr class="table-primary">
+                                                <th colspan="4">@Model.checklist[i].subgrupo</th>
+                                                <th>@PCM.WEB.Properties.Resources.observacao</th>
+                                                <th style="width:100px">@PCM.WEB.Properties.Resources.prazo_dias</th>
+                                                <th style="width:50px">@PCM.WEB.Properties.Resources.foto</th>
+                                            </tr>
+                                        }
+
+                                        if (Model.status == 2)
+                                        {
+                                            <tr>
+                                                @Html.HiddenFor(m => m.checklist[i].codigo_checklist)
+                                                @Html.HiddenFor(m => m.checklist[i].codigo_item_checklist)
+                                                @Html.HiddenFor(m => m.checklist[i].codigo_tipo_item_checklist)
+                                                @Html.HiddenFor(m => m.checklist[i].resultado)
+                                                @Html.HiddenFor(m => m.checklist[i].prazo)
+                                                <td>@Html.DisplayFor(m => m.checklist[i].checklist) - @Html.DisplayFor(m => m.checklist[i].descricao)</td>
+                                                <td class="text-center" style="width:150px" colspan="3">@Model.checklist[i].resultado</td>
+                                                <td>@Model.checklist[i].observacao</td>
+                                                <td style="width:100px">@Model.checklist[i].prazo</td>
+                                                <td style="width:50px">
+                                                    <div class="btn-group">
+                                                        <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                @Html.HiddenFor(m => m.checklist[i].codigo_checklist)
+                                                @Html.HiddenFor(m => m.checklist[i].codigo_item_checklist)
+                                                @Html.HiddenFor(m => m.checklist[i].codigo_tipo_item_checklist)
+                                                @Html.HiddenFor(m => m.checklist[i].resultado)
+                                                @if (Model.checklist[i].quantidade_ordem_servico > 0)
+                                                {
+                                                    <td class="text-danger">@Html.DisplayFor(m => m.checklist[i].checklist) - @Html.DisplayFor(m => m.checklist[i].descricao)</td>
+
+                                                }
+                                                else
+                                                {
+
+                                                    <td>@Html.DisplayFor(m => m.checklist[i].checklist) - @Html.DisplayFor(m => m.checklist[i].descricao)</td>
+                                                }
+                                                @if (Model.checklist[i].codigo_tipo_item_checklist == 1)
+                                                {
+                                                    <td class="text-center" style="width:50px">
+                                                        <span class="text-center font-w600">SIM</span>
+                                                        <label class="css-control css-control-success css-checkbox">
+                                                            @if (Model.checklist[i].resultado == "SIM")
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('SIM', @i); }" type="radio" value="SIM" checked />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('SIM', @i); }" type="radio" value="SIM" />
+                                                            }
+                                                            <span class="css-control-indicator"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-center" style="width:50px"></td>
+                                                    <td class="text-center" style="width:50px">
+                                                        <span class="text-center font-w600">NÃO</span>
+                                                        <label class="css-control css-control-danger css-checkbox">
+                                                            @if (Model.checklist[i].resultado == "NÃO")
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('NÃO', @i); }" type="radio" value="NÃO" checked />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('NÃO', @i); }" type="radio" value="NÃO" />
+                                                            }
+                                                            <span class="css-control-indicator"></span>
+                                                        </label>
+                                                    </td>
+                                                }
+                                                else if (Model.checklist[i].codigo_tipo_item_checklist == 3)
+                                                {
+
+                                                    <td class="text-center" colspan="3">
+                                                        <div><input type="text" class="form-control" name="[@i].opcao" value="@Model.checklist[i].resultado" onChange="resultado(this.value, @i);" /></div>
+                                                    </td>
+                                                }
+                                                else if (Model.checklist[i].codigo_tipo_item_checklist == 4)
+                                                {
+
+                                                    <td class="text-center" colspan="3">
+                                                        <div><input type="text" class="form-control" name="[@i].opcao" value="@Model.checklist[i].resultado" onChange="resultado(this.value, @i);" /></div>
+                                                    </td>
+                                                }
+                                                else if (Model.checklist[i].codigo_tipo_item_checklist == 5)
+                                                {
+
+                                                    <td class="text-center" colspan="3">
+                                                        <div><input type="text" class="form-control" name="[@i].opcao" value="@Model.checklist[i].resultado" onChange="resultado(this.value, @i);" /></div>
+                                                    </td>
+                                                }
+                                                else if (Model.checklist[i].codigo_tipo_item_checklist == 8)
+                                                {
+                                                    <td class="text-center" style="width:50px">
+                                                        <span class="text-center font-w600">SIM</span>
+                                                        <label class="css-control css-control-success css-checkbox">
+                                                            @if (Model.checklist[i].resultado == "SIM")
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('SIM', @i); }" type="radio" value="SIM" checked />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('SIM', @i); }" type="radio" value="SIM" />
+                                                            }
+                                                            <span class="css-control-indicator"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-center" style="width:50px">
+                                                        <span class="text-center font-w600">NÃO</span>
+                                                        <label class="css-control css-control-danger css-checkbox">
+                                                            @if (Model.checklist[i].resultado == "NÃO")
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('NÃO', @i); }" type="radio" value="NÃO" checked />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('NÃO', @i); }" type="radio" value="NÃO" />
+                                                            }
+                                                            <span class="css-control-indicator"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-center" style="width:50px">
+                                                        <span class="text-center font-w600">N/A</span>
+                                                        <label class="css-control css-control-secondary css-checkbox">
+                                                            @if (Model.checklist[i].resultado == "N/A")
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('N/A', @i); }" type="radio" value="N/A" checked />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="css-control-input" name="[@i].opcao" onChange="if(this.checked) { resultado('N/A', @i); }" type="radio" value="N/A" />
+                                                            }
+                                                            <span class="css-control-indicator"></span>
+                                                        </label>
+                                                    </td>
+                                                }
+                                                <td><div>@Html.TextBoxFor(m => m.checklist[i].observacao, new { @class = "form-control", @maxlength = 200 })</div></td>
+                                                <td><div>@Html.TextBoxFor(m => m.checklist[i].prazo, new { @class = "js-masked-number-int form-control text-center", @maxlength = 3 })</div></td>
+                                                <td>
+                                                    @if (Model.checklist[i].allow_picture)
+                                                    {
+                                                        if (Model.checklist[i].possui_foto)
+                                                        {
+                                                            <div class="btn-group">
+                                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="btn-group">
+                                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Dynamic Table Full Pagination -->
+                    }
+                }
+                <!-- END Basic Info -->
+            </div>
+            <!-- END Update Product -->
+        </div>
+        <!-- END Page Content -->
+
+        <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-0">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.foto</h3>
+                        </div>
+                        <div class="block-content">
+
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
+                                <div class="col-12">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="fileInput" name="fileInput" multiple accept=".png, .jpg, .jpeg">
+                                        <span class="custom-file-label">@PCM.WEB.Properties.Resources.selecione_arquivo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row items-push js-gallery img-fluid-100" id="galery">
+                            </div>
+                            <!-- END Advanced Gallery -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="codigo_auditoria_interna" value="@Model.codigo_auditoria_interna" />
+                        <input type="hidden" id="codigo_auditoria" value="@Model.codigo_auditoria " />
+                        <input type="hidden" id="data" value="@ViewBag.data" />
+                        <input type="hidden" id="codigo_item_checklist" />
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo(); $(this).next('.custom-file-label').addClass('selected').html('');"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$(this).next('.custom-file-label').addClass('selected').html('');" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</main>
+<!-- END Main Container -->
+<!-- From Right Modal -->
+<div class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-15">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.relatorio</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="si si-close font-w600"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content block-content-full">
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirResumido();">
+                                <div class="text-md-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Auditoria - Corporativo</h6>
+                                    <h6 class="mb-5"><small>Resumido</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirDetalhado();">
+                                <div class="text-md-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Auditoria - Corporativo</h6>
+                                    <h6 class="mb-5"><small>Detalhado</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+]
+<!-- From Right Modal -->
+<div class="modal fade" id="modalDataOrdemServico" tabindex="-1" role="dialog" aria-labelledby="modalDataOrdemServico" aria-hidden="true">
+    @using (Html.BeginForm("Apontamento", "Auditoria", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "form_data", @id = "form_data", enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" name="codigo_ordem_servico" id="codigo_ordem_servico" value="0">
+        <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="0">
+        <input type="hidden" name="data_os" id="data_os" value="">
+        <div class="modal-dialog modal-dialog-fromright" role="document">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent mb-15">
+                    <div class="block-header bg-secondary">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.novo_prazo_plano_acao</h3>
+                    </div>
+                    <div class="block-content">
+                        <label class="col-12">@PCM.WEB.Properties.Resources.prazo</label>
+                        <div class="col-md-6"><input type="text" class="js-datepicker form-control" id="data_ordem_servico" name="data_ordem_servico" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value=""></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar" id="salvar"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- END From Right Modal -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/select")
+    @Styles.Render("~/Content/magnificpopup")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/magnificpopup")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+
+    $(document).ready(function () { $("#prazo_dias").maskMoney({ prefix: '', thousands: '.', decimal: ',', precision: 0, allowNegative: false, 'placeholder': '' }); });
+
+        $(function () {
+
+            var concluido = $("#concluido");
+            var prazo_dias = $("#prazo_dias");
+            var divPrazo = $("#divPrazo");
+
+            concluido.change(function () {
+
+                if (concluido.prop('checked')) {
+                    divPrazo.show();
+                } else {
+                    divPrazo.hide();
+                    prazo_dias.val("0");
+                }
+
+            });
+
+        });
+
+        function resultado(value, id) {
+            $("input[name$='[" + id + "].resultado']").val(value);
+        };
+
+        function Imprimir() {
+            $('#modalReport').modal('show');
+        }
+
+        function ImprimirResumido() {
+            window.open('AuditoriaPrintPDFResumido' + '?codigo_empresa=' + $("#codigo_empresa").val() + '&codigo_unidade=' + $("#codigo_unidade").val() + '&codigo_auditoria=' + $("#codigo_auditoria").val(), '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+        function ImprimirDetalhado() {
+            window.open('AuditoriaPrintPDFDetalhado' + '?codigo_empresa=' + $("#codigo_empresa").val() + '&codigo_unidade=' + $("#codigo_unidade").val() + '&codigo_auditoria=' + $("#codigo_auditoria").val(), '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+        function Arquivo() {
+
+            $("#salvar_arquivo").prop("disabled", true)
+
+            var formdata = new FormData();
+            var oFile = document.getElementById("fileInput");
+
+            for (i = 0; i < oFile.files.length; i++) {
+                formdata.append(oFile.files[i].name, fileInput.files[i]);
+            }
+
+            Codebase.layout('header_loader_on');
+
+            //Creating an XMLHttpRequest and sending
+            var oXMLHttpRequest = new XMLHttpRequest();
+            oXMLHttpRequest.open('POST', 'UploadFoto?codigo_unidade=' + $("#codigo_unidade").val() + '&codigo_auditoria=' + $("#codigo_auditoria").val() + '&codigo_item_checklist=' + $("#codigo_item_checklist").val());
+            oXMLHttpRequest.send(formdata);
+            oXMLHttpRequest.onreadystatechange = function () {
+
+                if (oXMLHttpRequest.readyState == 4 && oXMLHttpRequest.status == 200) {
+
+                    var result = JSON.parse(oXMLHttpRequest.response);
+
+                    if (result == "false") {
+
+                        swal({
+                            title: "Checklist",
+                            text: 'Erro ao realizar o Upload da Imagem!',
+                            type: 'error',
+                            showCancelButton: false,
+                            confirmButtonText: 'OK',
+                            html: false,
+                            preConfirm: function () {
+                                return new Promise(function (resolve) {
+                                    setTimeout(function () {
+                                        resolve();
+                                    }, 50);
+                                });
+                            }
+                        });
+
+                        Codebase.layout('header_loader_off');
+
+                    } else {
+            		$('#fileInput').val('');
+            		$('.custom-file-label').text("");
+                        LoadArquivo();
+                        Codebase.layout('header_loader_off');
+                    }
+                }
+            }
+
+            $("#salvar_arquivo").prop("disabled", false)
+
+            return false;
+        }
+
+        function DeleteAuditoria(codigo_empresa, codigo_unidade, codigo_auditoria) {
+
+
+            swal.fire({
+                title: 'Deseja excluir a Auditoria?',
+                text: 'Esta auditoria não poderá ser recuperada!',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d26a5c',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function (result) {
+                if (result.value) {
+                    $.post("AuditoriaCorporativoExcluir", { "codigo_empresa": codigo_empresa, "codigo_unidade": codigo_unidade, "codigo_auditoria": codigo_auditoria },
+                         function (result2) {
+                            if (result2) {
+                                swal.fire('Auditoria Excluida com Sucesso!', '', 'success').then(function (result2) { window.location.href = '@Url.Action("AuditoriaCorporativoIndex", "Auditoria")'; });
+                            } else {
+                                swal.fire('Não foi possível excluir a Auditoria!', '', 'error');
+                             };
+                        });
+                }
+            });
+
+        }
+
+        function DeleteAuditoriaPicture(codigo) {
+
+            swal.fire({
+                title: 'Deseja excluir a Foto?',
+                text: 'Esta foto não poderá ser recuperada!',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d26a5c',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function (result) {
+                if (result.value) {
+                    $.post("AuditoriaCorporativoExcluirFoto", { "codigo_empresa": $("#codigo_empresa").val(), "codigo_unidade": $("#codigo_unidade").val(), "codigo_auditoria": $("#codigo_auditoria").val(), "codigo_item_checklist": $("#codigo_item_checklist").val(), "codigo": codigo},
+                        function (result) {
+                            if (result) {
+                                swal.fire('Foto Excluida com Sucesso!', '', 'success').then(function (result) { LoadArquivo(); });
+                            } else {
+                                swal.fire('Não foi possível excluir a foto da Auditoria!', '', 'error');
+                            }
+                        });
+                }
+            });
+
+        }
+
+        function LoadArquivo() {
+
+            $("#galery").empty();
+
+            jQuery.ajax({
+                type: "POST",
+                url: "LoadFoto",
+                async: false,
+                data: { "codigo_unidade": $("#codigo_unidade").val(), "codigo_auditoria": $("#codigo_auditoria").val(), "codigo_item_checklist": $("#codigo_item_checklist").val() },
+                dataType: "json",
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        var image = '<div class="col-sm-6 col-xl-3 options-container">';
+                        image += '<img class="img-fluid options-item" src="' + response[i].filename + '" alt="">';
+                        image += '<div class="options-overlay bg-black-op-75">';
+                        image += '<div class="options-overlay-content">';
+                        image += '<a class="btn btn-sm btn-rounded btn-alt-danger min-width-75" onclick="DeleteAuditoriaPicture(' + response[i].codigo + ');">';
+                        image += '<i class="fa fa-times"></i> Excluir';
+                        image += '</a>';
+                        image += '</div>';
+                        image += '</div>';
+                        image += '</div>';
+                        $("#galery").append(image);
+                    }
+                }
+            });
+
+        }
+
+        $(function () {
+            $('.custom-file-input').on('change', function () {
+                var fileName = document.getElementById("fileInput").files[0].name;
+                $(this).next('.custom-file-label').addClass("selected").html(fileName);
+            })
+        });
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                    },
+                    messages: {
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            //FormValidation.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2', 'masked-inputs', 'magnific-popup']);
+            $("#main").show();
+            Codebase.layout('header_loader_off');
+        });
+
+    </script>
+}

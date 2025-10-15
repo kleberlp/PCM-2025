@@ -1,0 +1,361 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.estoque</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.ordemCompra</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("OrdemCompraIndex", "Estoque", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-secondary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.search</button>
+
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.ordemCompra</h3>
+                        @*@if (ViewBag.insert)
+                        {
+                            <div class="block-options">
+                                <a href="@Url.Action("PurchaseOrderInsert", "InventoryMaterial")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.create
+                                </a>
+                            </div>
+                        }*@
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                        @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.ordemCompra</label>
+                                        <input type="text" class="form-control" id="ordemCompra" name="ordemCompra" value="@ViewBag.purchase_order" maxlength="50">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.fornecedor</label>
+                                        @Html.DropDownList("fornecedor", null, "", new { @class = "form-control js-select2" })
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.data</label>
+                                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                            <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text font-w600">-</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.status</label>
+                                        @Html.DropDownList("status", null, "", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.search</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full border">
+
+                    <table class="table table-sm table-vcenter table-striped js-dataTable-list" id="tbMain">
+
+                        <thead class="table-secondary">
+                            <tr>
+                                <th data-sortable="false"></th>
+                                <th>@PCM.WEB.Properties.Resources.ordemCompra</th>
+                                <th>@PCM.WEB.Properties.Resources.data</th>
+                                <th>@PCM.WEB.Properties.Resources.fornecedor</th>
+                                <th>@PCM.WEB.Properties.Resources.status</th>
+                                <th>@PCM.WEB.Properties.Resources.quantidade</th>
+                                <th>@PCM.WEB.Properties.Resources.quantidadeRecebida</th>
+                                <th>@PCM.WEB.Properties.Resources.quantidadePendente</th>
+                                <th data-sortable="false"></th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+    function format(d) {
+
+        var table_info = '';
+
+        jQuery.ajax({
+            type: "POST",
+            url: "LoadOrdemCompraProduto",
+            async: false,
+            data: {
+                "codigoEmpresa": @ViewBag.codigoEmpresa,
+                "codigoUnidade": d.codigoUnidade,
+                "codigoOrdemCompra": d.codigoOrdemCompra
+            },
+            dataType: "json",
+            success: function (response) {
+
+                table_info = '<table class="table table-bordered table-vcenter"> ';
+                table_info += '<thead> ';
+                table_info += '<tr class="table-secondary"> ';
+                table_info += '<th class="text-center col-2">@PCM.WEB.Properties.Resources.produto</th> ';
+                table_info += '<th>@PCM.WEB.Properties.Resources.descricao</th> ';
+                table_info += '<th class="text-center col-2">@PCM.WEB.Properties.Resources.quantidade</th> ';
+                table_info += '<th class="text-center col-2">@PCM.WEB.Properties.Resources.quantidadeRecebida</th> ';
+                table_info += '<th class="text-center col-1">@PCM.WEB.Properties.Resources.unidade_medida</th> ';
+                table_info += '</tr>';
+                table_info += '</thead> ';
+                table_info += '<tbody>';
+
+                for (var i = 0; i < response.length; i++) {
+
+                    table_info += '<tr class="bg-white"> ';
+                    table_info += '<td class="text-center col-2">' + response[i].produto + '</td> ';
+                    table_info += '<td>' + response[i].descricao + '</td> ';
+                    table_info += '<td class="text-center col-2">' + response[i].quantidade + '</td> ';
+                    table_info += '<td class="text-center col-2">' + response[i].quantidadeRecebida + '</td> ';
+                    table_info += '<td class="text-center col-1">' + response[i].uom + '</td> ';
+                    table_info += '</tr>';
+                }
+
+                table_info += '</tbody> ' +
+                              '</table>';
+
+            }
+        });
+
+        return table_info;
+
+    }
+
+    $(document).ready(function () {
+
+        $(this)
+            .find('[data-fa-i2svg]')
+            .toggleClass('fa-minus-square')
+            .toggleClass('fa-plus-square');
+
+        Codebase.helpers(['table-tools', 'datepicker', 'maxlength', 'select2']);
+
+        var table = $('#tbMain').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 15,
+            autoWidth: false,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadOrdemCompra",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.codigoUnidade = $("#unidade").val(),
+                    d.ordemCompra = $("#ordemCompra").val(),
+                    d.fornecedor = ($("#fornecedor").val() == "") ? -1 : $("#fornecedor").val(),
+                    d.dataInicio = $("#dataInicio").val(),
+                    d.dataTermino = $("#dataTermino").val(),
+                    d.status = ($("#status").val() == "") ? -1 : $("#status").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    class: "details-control",
+                    orderable: false,
+                    data: null,
+                    defaultContent: "",
+                    render: function () {
+                        return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+                    },
+                    width: "15px"
+                },
+                { data: "ordemCompra", class: "font-w600 text-center" },
+                { data: "dataCriacao", class: "text-center" },
+                { data: "fornecedor" },
+                { data: "statusDescricao", class: "text-center font-w600" },
+                { data: "quantidade", class: "text-center" },
+                { data: "quantidadeRecebida", class: "text-center" },
+                { data: "quantidadePendente", class: "text-center" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'><button type='button' id='btnDelete' class= 'btn btn-sm btn-secondary'><i class='fa fa-times'></i></button>" +
+                                    "<button type='button' id='btnLaudo' class='btn btn-sm btn-secondary'><i class='fa fa-file'></i></button></div>"
+                }
+            ],
+            columnDefs: [
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if (col == 4) {
+                            $(td).addClass(rowData.cssClass);
+                        }
+                        if (col == 8 && rowData.path == "") {
+                            $(td).find('#btnLaudo').hide();
+                        }
+                    }, targets: [0, 4, 8]
+                },
+                { width: '40px', targets: [8] }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: '@Html.Raw(PCM.WEB.Properties.Resources.copy)' },
+                {
+                    extend: 'print',
+                    text: '@Html.Raw(PCM.WEB.Properties.Resources.print)'
+                },
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+            language: {
+                emptyTable: "Nenhum registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+            }
+        });
+
+        $('#tbMain tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+
+            if (this.id == "btnDelete") {
+                deleteRegister(data);
+            } else if (this.id == "btnLaudo") {
+                downloadFile(data);
+            }
+
+        });
+
+        function downloadFile(data) {
+            window.open("DownloadFile?path=" + data.path, "_blank");
+        }
+
+        function deleteRegister(data) {
+
+            Swal.fire({
+                title: "@Html.Raw(PCM.WEB.Properties.Resources.pcm)",
+                html: "@Html.Raw(PCM.WEB.Properties.Resources.cancelarRegistro)<br><br><b>@Html.Raw(PCM.WEB.Properties.Resources.ordemCompra):</b> " + data.purchase_order,
+                icon: "question",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+                denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "DeleteOrdemCompra",
+                        async: false,
+                        data: {
+                            "ordemCompraId": data.id,
+                            "codigoUnidade": data.codigoUnidade
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            Swal.fire({
+                                title: "@Html.Raw(PCM.WEB.Properties.Resources.pcm)",
+                                text: response,
+                                icon: "success",
+                                showDenyButton: false,
+                                showCancelButton: false,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    table.ajax.reload(null, false);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+        }
+
+        $('#tbMain tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var tdi = tr.find("i.fa");
+            var row = table.row(tr);
+
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                tdi.first().removeClass('fa-minus-square');
+                tdi.first().addClass('fa-plus-square');
+                // tr.find('svg').attr('data-icon', 'plus-square');    // FontAwesome 5
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                tdi.first().removeClass('fa-plus-square');
+                tdi.first().addClass('fa-minus-square');
+                // tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
+            }
+        });
+
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
+
+        // Reload DataTable
+        $('#filtrar').click(function () {
+            table.ajax.reload(null, false);
+        });
+
+    });
+
+</script>
+}

@@ -1,0 +1,377 @@
+﻿@model PCM.WEB.MODELS.stock_inventory
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.estoque</span>
+                <a class="breadcrumb-item" href="@Url.Action("StockInventory", "InventoryMaterial")">@PCM.WEB.Properties.Resources.inventory</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("StockInventory", "InventoryMaterial", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="type" name="type" value="arquivo" />
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.inventory</h3>
+                            <div class="block-options">
+                                <a href="@Url.Action("StockInventoryDownloadExcel", "InventoryMaterial")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-download mr-5"></i>@PCM.WEB.Properties.Resources.download_excel
+                                </a>
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="$('#type').val('save'); $('#form').submit();">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.save
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.branch</label>
+                                    <div>@Html.DropDownList("branch", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-7">
+                                    <label>@PCM.WEB.Properties.Resources.file</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                        <label class="custom-file-label" for="arquivo"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.worksheet</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="worksheet" name="worksheet" value="" maxlength="20">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-upload mr-5" id="btnUpload" name="btnUpload" disabled onclick="$('#type').val('arquivo'); $('#form').submit();"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    if (Model.success && (Model.result.Count > 0))
+                    {
+
+                        <!-- Dynamic Table Full Pagination -->
+                        <div class="block block-rounded border" id="div_result">
+
+                            <div class="block-content block-content-full">
+
+                                <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                                <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full" id="tb_main">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.product</th>
+                                            <th>@PCM.WEB.Properties.Resources.description</th>
+                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.batch</th>
+                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.quantity_inventory</th>
+                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.quantity</th>
+                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.divergence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table_body" name="table_body">
+                                        @foreach (var item in Model.result)
+                                        {
+                                        <tr>
+                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.product)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.description)</td>
+                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.batch)</td>
+                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.quantity_inventory)</td>
+                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.quantity)</td>
+                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.divergence)</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    }
+
+                    if (Model.success && (Model.result_error.Count > 0))
+                    {
+
+                        <!-- Dynamic Table Full Pagination -->
+                        <div class="block block-rounded border" id="div_error">
+
+                            <div class="block-content block-content-full">
+
+                                <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                                <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full" id="tb_main_error">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.product</th>
+                                            <th>@PCM.WEB.Properties.Resources.error</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table_body_error" name="table_body_error">
+                                        @foreach (var item in Model.result_error)
+                                        {
+                                        <tr>
+                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.product)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.error)</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+
+<script>
+
+    var register = 0;
+
+    if ("@Model.success" == "True") {
+        register = @Model.result.Count();
+    }
+
+    $(function () {
+
+        $(".custom-file-input").on('change', function () {
+            var filename = document.getElementById("arquivo").files[0].name;
+            $(this).next(".custom-file-label").addClass("selected").html(filename);
+        });
+
+        var branch = $("#branch");
+        var arquivo = $("#arquivo");
+        var worksheet = $("#worksheet");
+
+        branch.change(function () {
+
+            if (branch.val() != "" && arquivo.val() != "" && worksheet.val() != "") {
+                $("#btnUpload").prop('disabled', false);
+            } else {
+                $("#btnUpload").prop('disabled', true);
+            }
+
+        });
+
+        arquivo.change(function () {
+
+            if (branch.val() != "" && arquivo.val() != "" && worksheet.val() != "") {
+                $("#btnUpload").prop('disabled', false);
+            } else {
+                $("#btnUpload").prop('disabled', true);
+            }
+
+        });
+
+        worksheet.change(function () {
+
+            if (branch.val() != "" && arquivo.val() != "" && worksheet.val() != "") {
+                $("#btnUpload").prop('disabled', false);
+            } else {
+                $("#btnUpload").prop('disabled', true);
+            }
+
+        });
+
+        worksheet.keypress(function () {
+
+            if (branch.val() != "" && arquivo.val() != "" && worksheet.val() != "") {
+                $("#btnUpload").prop('disabled', false);
+            } else {
+                $("#btnUpload").prop('disabled', true);
+            }
+
+        });
+
+    });
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.form-group > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'branch': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'branch': {
+                        required: '@PCM.WEB.Properties.Resources.required_field'
+                    }
+                },
+                submitHandler: function (form) {
+                    if (register == 0 && $("#type").val() != "arquivo") {
+                        Swal.fire({
+                            title: "PCM",
+                            html: "<span class='h4'>@Html.Raw(PCM.WEB.Properties.Resources.zero_register)</span>",
+                            showDenyButton: false,
+                            showCancelButton: false
+                        });
+                        return false;
+                    } else {
+                        form.submit();
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+
+    function uploadBinPosition() {
+
+        Codebase.layout("header_loader_on");
+
+        var formData;
+        formData = new FormData();
+        formData.append('branch', $("#branch").val());
+        formData.append('worksheet', $("#worksheet").val());
+        formData.append('arquivo', document.getElementById("arquivo").files[0]); // para apenas 1 arquivo
+
+        $.ajax({
+            url: 'VCBinPositionUploadExcel', // Url do lado server que vai receber o arquivo
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function (data) {
+
+                $("#table_body tr").remove();
+                $("#table_body_error tr").remove();
+                register = 0;
+
+                if (data.success) {
+
+                    if (data.result != null) { $("#number_rows").html(data.result.length); register = data.result.length; }
+                    if (data.result_error != null) { $("#number_rows_error").html(data.result_error.length); }
+                    $("#total_rows").show();
+
+                    $.each(data.result, function (indice, result) {
+
+                        var rowsItem = $("<tr id='linha'>");
+                        var colsItem = "";
+                        rowsItem.append(colsItem);
+
+                        colsItem = '<input type="hidden" name="[' + indice + '].branch" value="' + result.branch + '" />';
+                        colsItem += '<input type="hidden" name="[' + indice + '].bin_position" value="' + result.bin_position + '" />';
+                        colsItem += '<input type="hidden" name="[' + indice + '].storage_type" value="' + result.storage_type + '" />';
+                        colsItem += '<input type="hidden" name="[' + indice + '].type_description" value="' + result.type_description + '" />';
+                        colsItem += '<input type="hidden" name="[' + indice + '].bin_position_sap" value="' + result.bin_position_sap + '" />';
+                        colsItem += '<input type="hidden" name="[' + indice + '].zone" value="' + result.zone + '" />';
+                        rowsItem.append(colsItem);
+
+                        colsItem = '<td class="text-center font-w600">' + result.branch + '</td>';
+                        colsItem += '<td class="text-center font-w600">' + result.bin_position + '</td>';
+                        colsItem += '<td class="text-center">' + result.storage_type + '</td>';
+                        colsItem += '<td class="text-center">' + result.bin_position_sap + '</td>';
+                        colsItem += '<td class="text-center">' + result.zone + '</td>';
+                        rowsItem.append(colsItem);
+                        $("#tb_main").append(rowsItem);
+
+                    });
+
+                    $.each(data.result_error, function (indice, result) {
+
+                        var rowsItem = $("<tr id='linha'>");
+                        var colsItem = "";
+                        rowsItem.append(colsItem);
+
+                        colsItem = '<td class="text-center font-w600">' + result.branch + '</td>';
+                        colsItem += '<td class="text-center font-w600">' + result.bin_position + '</td>';
+                        colsItem += '<td class="text-center">' + result.storage_type + '</td>';
+                        colsItem += '<td class="text-center">' + result.bin_position_sap + '</td>';
+                        colsItem += '<td class="text-center">' + result.zone + '</td>';
+                        colsItem += '<td class="badge-danger">' + result.error + '</td>';
+                        rowsItem.append(colsItem);
+                        $("#tb_main_error").append(rowsItem);
+
+                    });
+
+                    if (data.result_error != null && data.result_error.length > 0) {
+                        $("#div_error").show();
+                    } else {
+                        $("#div_error").hide();
+                    }
+
+                    if (data.result != null && data.result.length > 0) {
+                        $("#div_result").show();
+                    } else {
+                        $("#div_result").hide();
+                    }
+
+                } else {
+                    Swal.fire(data.message, '', 'error');
+                }
+
+                Codebase.layout("header_loader_off");
+
+            }
+        });
+    };
+
+    // Initialize when page loads
+    jQuery(function () {
+        FormValidation.init();
+        Codebase.helpers(['maxlength']);
+
+        if("@Model.message" != "")
+        {
+            Swal.fire({
+                title: "PCM",
+                html: "<span class='h4'>@Html.Raw(Model.message)</span>",
+                showDenyButton: false,
+                showCancelButton: false
+            });
+        }
+
+    });
+
+</script>
+
+}

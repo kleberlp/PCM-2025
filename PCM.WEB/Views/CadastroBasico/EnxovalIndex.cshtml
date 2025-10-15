@@ -1,0 +1,227 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.enxoval</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("EnxovalIndex", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" id="codigo" name="codigo" value="" />
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.enxoval</h3>
+                        <div class="block-options">
+
+                            @if (ViewBag.inserir)
+                            {
+                                <a href="@Url.Action("EnxovalInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                </a>
+                            }
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-3">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                    <div class="col-md-7"><div><input type="text" id="descricao" name="descricao" value="@ViewBag.descricao" placeholder="@PCM.WEB.Properties.Resources.descricao" class="form-control"></div></div>
+                                    <div class="col-md-2">@Html.DropDownList("ativo", null, PCM.WEB.Properties.Resources.ativo, new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full">
+
+                    <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+
+                        <thead>
+                            <tr class="table-secondary">
+                                @if (Session["unidade"] == "")
+                                {
+                                    <th class="col-3">@PCM.WEB.Properties.Resources.unidade </th>
+                                }
+                                <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.peso</th>
+                                <th class="d-lg-table-cell text-center" style="width: 85px;">@PCM.WEB.Properties.Resources.ativo</th>
+                                @if (ViewBag.editar || ViewBag.excluir)
+                                {
+                                    <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                }
+                            </tr>
+                        </thead>
+
+                    </table>
+
+                </div>
+            </div>
+            <!-- END Page Content -->
+
+        }
+
+    </div>
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript">
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+        Codebase.helpers(['datepicker', 'maxlength', 'select2', 'table-tools']);
+
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        table = $('#tb_main').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            //scrollY: '400px',
+            //scrollCollapse: true,
+            paging: true,
+            //fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 15,
+            autoWidth: false,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadEnxoval",
+                type: "POST",
+                datatype: "json",
+                data: {
+                    "unidade": $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                    "descricao": $("#descricao").val(),
+                    "ativo": $("#ativo").val() == "" ? "-1" : $("#ativo").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                { data: "unidade" },
+                { data: "descricao" },
+                { data: "peso" },
+                { data: "texto_ativo" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'> " +
+                        "<button type='button' id='btnEditar' name='btnEditar' class='btn btn-sm btn-secondary' title='Editar'> <i class='fa fa-pencil'></i></button>" +
+                        "<button type='button' id='btnExcluir' name='btnExcluir' class='btn btn-sm btn-secondary' title='Excluir'> <i class='fa fa-times'></i></button>"
+                }
+            ],
+            columnDefs: [
+                { className: 'text-center', targets: [2, 3, 4] },
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+
+                        if (col == 0 && ("@Session["unidade"].ToString()" != "")) {
+                            $(td).hide();
+                        }
+
+                    }, targets: [0]
+                },
+                { width: '40px', targets: 4 }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                {extend: 'print',text: 'Imprimir'},
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+                language: {
+                "search": "Procurar:",
+                "lengthMenu": "Exibir _MENU_ ",
+                "info": "_MAX_ registro(s)",
+                "infoFiltered": "(filtrado de _MAX_ registro(s))"
+            }
+        });
+
+        // Add "Select All" checkbox in the header
+        var table = $('#tb_main').DataTable();
+        var selectAllCheckbox = $("<input type='checkbox' class='css-control-sm css-control-success css-checkbox py-0 px-0'>").on('change', function () {
+            var checkboxes = table.column(0).nodes().to$().find('input[type="checkbox"]');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        $('#tab_main').DataTable({
+            order: [[1, 'asc']]
+        });
+
+        $('#tb_main tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+
+            if (this.id == "btnEditar") {
+                editarRegistro(data);
+            } else if (this.id == "btnExcluir") {
+                deletarRegistro(data);
+            }
+
+        });
+
+
+        function editarRegistro(data) {
+
+            window.open("../CadastroBasico/EnxovalEdit?codigo=" + data.codigo, "_self");;
+
+        }
+
+        function deletarRegistro(data) {
+
+            window.open("../CadastroBasico/EnxovalDelete?codigo=" + data.codigo, "_self");;
+
+        }
+
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
+
+    });
+
+    </script>
+}

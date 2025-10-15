@@ -1,0 +1,204 @@
+﻿@model List<PCM.WEB.MODELS.UHDedetizacaoList>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.uh</a>
+                <a class="breadcrumb-item" href="@Url.Action("Dedetizacao", "UH")">@PCM.WEB.Properties.Resources.dedetizacao </a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="row">
+            <div class="col-6 col-sm-12 col-md-4 col-xl-4">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Dedetizacao", "UH",  new { status = 1})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bug fa-2x text-pulse"></i></div>
+                        <div class="font-size-h5 font-w600 text-pulse" data-speed="1000" data-to="@ViewBag.status.quantidade_atrasado" id="quantidade_atrasado" name="quantidade_atrasado">@ViewBag.status.quantidade_atrasado</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-4 col-xl-4">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Dedetizacao", "UH",  new { status = 3})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bug fa-2x text-warning"></i></div>
+                        <div class="font-size-h5 font-w600 text-warning" data-speed="1000" data-to="@ViewBag.status.quantidade_pendente" id="quantidade_pendente" name="quantidade_pendente">@ViewBag.status.quantidade_pendente</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-4 col-xl-4">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Dedetizacao", "UH",  new { status = 2})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bug fa-2x text-earth-light"></i></div>
+                        <div class="font-size-h5 font-w600 text-earth"><span data-speed="1000" data-to="@ViewBag.status.quantidade_realizada" id="quantidade_realizada" name="quantidade_realizada">@ViewBag.status.quantidade_realizada</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("Dedetizacao", "UH", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+    <div class="block">
+
+        <div class="block-header block-header-default bg-gd-default">
+            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.dedetizacao - @ViewBag.lastUpdate</h3>
+            <div class="block-options">
+                @if (Session["codigo_unidade"].ToString() != "-1")
+                {
+                    <a href="@Url.Action("DedetizacaoApontamentoMultiplos", "UH", new { codigo_unidade = Session["codigo_unidade"].ToString(), codigo_uh_atividade = 1})" class="btn btn-square btn-secondary min-width-100 h-75">
+                        <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.apontamento Múltiplos
+                    </a>
+                }
+                <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
+                <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
+                <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>                
+            </div>
+        </div>
+
+        <div class="block-content" id="div_grid" style="display:block">
+            @{
+                int aux = 0;
+
+                for (int i = 0; i < Model.Count; i++)
+                {
+
+                    if (i == 0 || Model[i].unidade != Model[i - 1].unidade)
+                    {
+                        if (i > 0 && aux > 0)
+                        {
+                            @Html.Raw("</div>");
+                            aux = 0;
+                        }
+                        <div class="content-block border-b"></div>
+                        <div class="content-block border-b pt-20">
+                            @if (Session["unidade"] == "")
+                            {<h5 class="font-size-h5">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].unidade)</span></h5>}
+                            <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.bloco: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].bloco)</span></h6>
+                            <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                        </div>
+
+                    }
+                    else if (Model[i].bloco != Model[i - 1].bloco)
+                    {
+                        if (i > 0 && aux > 0)
+                        {
+                            @Html.Raw("</div>");
+                            aux = 0;
+                        }
+                        <div class="content-block border-b"></div>
+                        <div class="content-block border-b pt-20">
+                            <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.bloco: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].bloco)</span></h6>
+                            <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                        </div>
+                    }
+                    else if (Model[i].andar != Model[i - 1].andar)
+                    {
+                        if (i > 0 && aux > 0)
+                        {
+                            @Html.Raw("</div>");
+                            aux = 0;
+                        }
+                        <div class="content-block border-b"></div>
+                        <div class="content-block border-b pt-20">
+                            <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                        </div>
+                    }
+
+                    if (i == 0 || aux == 0)
+                    {
+                        @Html.Raw("<div class='row mt-20'>");
+                    }
+
+                    aux += 1;
+
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("DedetizacaoApontamento", "UH", new { codigo_apartamento = Model[i].codigo_apartamento, codigo_unidade = Model[i].codigo_unidade, codigo_uh_atividade = Model[i].codigo_uh_atividade, codigo = Model[i].codigo, color = Model[i].css_class })">
+                            <div class="text-center">
+                                <i class="@Html.Raw(@Model[i].icon) @Model[i].css_class mt-10"></i>
+                                <h6 class="font-w700 mb-5">@Model[i].apartamento</h6>
+                                <h6 class="mb-10"><small>@Model[i].data</small></h6>
+                                <h6 class="mb-5 font-w600"><small class="font-w600 text-danger">@Model[i].room_status</small></h6>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    if (i == (Model.Count - 1) || aux == 12)
+                    {
+                            @Html.Raw("</div>");
+                            aux = 0;
+                        }
+                    }
+                }
+
+            </div>
+
+        <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+
+            <div class="block-content block-content-full">
+
+                <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
+                    <thead class="thead-pcm">
+                        <tr>
+                            @if (Session["unidade"] == "")
+                            {
+                                <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
+                            }
+                            <th class="text-center">@PCM.WEB.Properties.Resources.bloco</th>
+                            <th class="text-center">@PCM.WEB.Properties.Resources.andar</th>
+                            <th class="text-center">@PCM.WEB.Properties.Resources.apartamento</th>
+                            <th class="text-center">@PCM.WEB.Properties.Resources.data</th>
+                            <th class="text-center">@PCM.WEB.Properties.Resources.status_uh</th>
+                            <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                @if (Session["unidade"] == "")
+                                {
+                                    <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                }
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.bloco)</td>
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.andar)</td>
+                                <td class="text-center @item.css_class">@Html.DisplayFor(modelItem => item.apartamento)</td>
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima)</td>
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.room_status)</td>
+                                <td class="text-center d-print-none" style="width: 80px;">
+                                    <div class="btn-group">
+                                        @if ((item.status != 3))
+                                        {<a href="@Url.Action("DedetizacaoApontamento", "UH", new { codigo_apartamento = item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_uh_atividade = item.codigo_uh_atividade, codigo = item.codigo, color = item.css_class})" class="btn btn-sm btn-secondary"><i class="fa fa-hotel"></i></a>}
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

@@ -1,0 +1,343 @@
+﻿@model List<INTERACTI.WEB.MODELS.ApontamentoChecklist>
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-5 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@INTERACTI.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("Agenda", "PCM")">@INTERACTI.WEB.Properties.Resources.agenda_servico</a>
+                <span class="breadcrumb-item active">@INTERACTI.WEB.Properties.Resources.apontamento</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm("Apontamento", "PCM", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data"  }))        
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="codigo_pcm_programada" id="codigo_pcm_programada" value="@ViewBag.apontamento.codigo_pcm_programada">
+                    <input type="hidden" name="codigo_pcm_ordem_servico" id="codigo_pcm_ordem_servico" value="@ViewBag.apontamento.codigo_pcm_ordem_servico">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.apontamento.codigo_unidade">
+
+                    <div class="block block-rounded block-themed">
+                        <div class="block-header bg-gd-primary">
+                            <h3 class="block-title">@INTERACTI.WEB.Properties.Resources.informacoes</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-sm btn-alt-primary">
+                                    <i class="fa fa-save mr-5"></i>@INTERACTI.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("Agenda", "PCM")" class="btn btn-sm btn-alt-primary">
+                                    <i class="si si-action-undo mr-5"></i>@INTERACTI.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">                             
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.unidade</label>
+                                <div class="col-12">@ViewBag.apontamento.unidade</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.setor</label>
+                                <div class="col-12">@ViewBag.apontamento.setor</div>
+                            </div>                
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.equipamento</label>
+                                <div class="col-12">@ViewBag.apontamento.equipamento</div>
+                            </div>                
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.servico</label>
+                                <div class="col-12">@ViewBag.apontamento.servico</div>
+                            </div>       
+                            @if(ViewBag.apontamento.codigo_tipo_servico == 1)
+                            {         
+                                <div class="form-group row">
+                                    <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.funcionario</label>
+                                    <div class="col-12">@Html.DropDownList("funcionario", null, "", new { @class = "form-control" })</div>
+                                </div>                
+                            }
+                            @if(ViewBag.apontamento.codigo_tipo_servico == 2)
+                            {         
+                                <div class="form-group row">
+                                    <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.fornecedor</label>
+                                    <div class="col-12">@Html.DropDownList("fornecedor", null, "", new { @class = "form-control" })</div>
+                                </div>                
+                            }
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.solucao</label>
+                                <div class="col-12"><textarea class="form-control" id="descricao_solucao" name="descricao_solucao" maxlength="5000" rows="6" value="@ViewBag.apontamento.descricao_solucao" ></textarea></div>
+                            </div>  
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.data</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value=""></div>
+                                </div>
+                                @if(ViewBag.apontamento.aponta_horas)
+                                {
+                                    <div class="col-4">
+                                        <label for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.hora_inicio</label>
+                                        <div><input type="text" class="form-control" id="hora_inicio" name="hora_inicio" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="HH:MM" placeholder="" value=""></div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.hora_termino</label>
+                                        <div><input type="text" class="form-control" id="hora_termino" name="hora_termino" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="HH:MM" placeholder="" value=""></div>
+                                    </div>
+                                }
+                            </div>               
+                        </div>                        
+                    </div>
+
+                    if (Model.Count > 0)
+                    {
+                        
+                        <!-- Dynamic Table Full Pagination -->
+                        <div class="block block-rounded block-themed">
+                            <div class="block-header bg-gd-primary">
+                                <h3 class="block-title">@INTERACTI.WEB.Properties.Resources.checklist</h3>                                
+                            </div>
+                            <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                            <table class="table table-bordered table-striped table-vcenter">
+                                <thead>
+                                    <tr>
+                                        <th >@INTERACTI.WEB.Properties.Resources.descricao </th>
+                                        <th class="text-center" style="width:150px">@INTERACTI.WEB.Properties.Resources.conforme</th>
+                                        <th>@INTERACTI.WEB.Properties.Resources.comentario</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>         
+                                @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                    <tr>    
+                                        @Html.HiddenFor(m => m[i].codigo)
+                                        @Html.HiddenFor(m => m[i].descricao)
+                                        <td>@Html.DisplayFor(m => m[i].descricao)</td>
+                                        <td class="text-center" style="width:150px">
+                                            <label class="css-control css-control-success css-switch">
+                                                @Html.CheckBoxFor(m => m[i].conforme, new { @class = "css-control-input"})
+                                                <span class="css-control-indicator"></span>
+                                            </label>
+                                        </td>    
+                                        <td>@Html.TextBoxFor(m => m[i].comentario, new { @class = "form-control col-12", @maxlength="200" })</td>   
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Dynamic Table Full Pagination -->
+                    }
+                }
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/cookie")    
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/bundles/codebase")
+
+    <script>
+
+        
+        $(document).ready(function () { $("#hora_inicio").mask("99:99"); });
+        $(document).ready(function () { $("#hora_termino").mask("99:99"); });
+
+        $(function () {
+
+            var unidade = $("#unidade");
+            var setor = $("#setor");
+            var equipamento = $("#equipamento");
+
+            unidade.change(function () {
+                var request = { "unidade": unidade.val() };
+                $.post("LoadSetor", request, function (obj) {
+                    setor.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    setor.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        setor.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadEquipamento", request, function (obj) {
+                    equipamento.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    equipamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        equipamento.append(option);
+                    });
+                }, "json");
+            });
+
+        });
+
+        $(function () {
+
+            var unidade = $("#unidade");
+            var setor = $("#setor");
+            var equipamento = $("#equipamento");
+
+            setor.change(function () {
+                var request = { "unidade": unidade.val(), "setor": setor.val() };
+                $.post("LoadEquipamentoSetor", request, function (obj) {
+                    equipamento.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    equipamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        equipamento.append(option);
+                    });
+                }, "json");
+            });
+
+        });
+
+        $.validator.addMethod('time', function (value, element, param) {
+            return value == '' || value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
+        }, '@INTERACTI.WEB.Properties.Resources.valida_hora');
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'funcionario': {
+                            required: true
+                        },
+                        'fornecedor': {
+                            required: true
+                        },
+                        'descricao_solucao': {
+                            required: true
+                        },
+                        'data': {
+                            required: true
+                        },
+                        'hora_inicio': {
+                            required: true,
+                            time: true
+                        },
+                        'hora_termino': {
+                            required: true,
+                            time: true
+                        }
+                    },
+                    messages: {
+                        'funcionario': {
+                            required: '@INTERACTI.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'fornecedor': {
+                            required: '@INTERACTI.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'descricao_solucao': {
+                            required: '@INTERACTI.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'data': {
+                            required: '@INTERACTI.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'hora_inicio': {
+                            required: '@INTERACTI.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'hora_termino': {
+                            required: '@INTERACTI.WEB.Properties.Resources.campo_requerido'
+                        }
+                    }
+                });
+            };
+        
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init full extra DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableFullPagination = function () {
+                jQuery('.js-dataTable-full-pagination').dataTable({
+                    searching: false,
+                    paginate: false,
+                    odering: false,
+                    lengthChange: false,
+                    lengthMenu: false,
+                    pageLength: 10,
+                    lengthMenu: [[5, 8, 15, 20], [5, 8, 15, 20]],
+                    autoWidth: false,
+                    info: false,
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "Exibir página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableFullPagination();
+                }
+            };
+        }();
+
+
+        // Initialize when page loads
+        jQuery(function () {
+            //BeTableDatatables.init();
+            FormValidation.init();
+            Codebase.helpers(['datepicker', 'maxlength']);
+        });
+
+    </script>
+}

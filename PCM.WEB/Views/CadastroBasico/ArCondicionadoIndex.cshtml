@@ -1,0 +1,485 @@
+﻿@model List<PCM.WEB.MODELS.ArCondicionado>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.ar_condicionado</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("ArCondicionadoIndex", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" id="codigo" name="codigo" value="" />
+
+            <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+                <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.ar_condicionado</h3>
+                        <div class="block-options">
+
+                            @if (ViewBag.inserir)
+                            {
+                                <a href="@Url.Action("ArCondicionadoInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                </a>
+                            }
+                            @if (ViewBag.imprimir)
+                            {
+                                <button type="button" id="btnImprimir" name="btnImprimir" onclick="Imprimir();" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                            }
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-2"><div><input type="text" id="tag" name="tag" value="@ViewBag.tag" placeholder="@PCM.WEB.Properties.Resources.tag " class="form-control"></div></div>
+                                    <div class="col-md-5"><div>@Html.DropDownList("tipo_ar_condicionado", null, PCM.WEB.Properties.Resources.tipo_ar_condicionado, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-3"><div>@Html.DropDownList("departamento", null, PCM.WEB.Properties.Resources.departamento_responsavel, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2">@Html.DropDownList("ativo", null, PCM.WEB.Properties.Resources.ativo, new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-6"><div>@Html.DropDownList("setor", null, PCM.WEB.Properties.Resources.setor, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-6"><div>@Html.DropDownList("apartamento", null, PCM.WEB.Properties.Resources.apartamento, new { @class = "js-select2 form-control" })</div></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+                <div class="block block-rounded border">
+
+                    <div class="block-content block-content-full">
+
+                        <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th class="text-md-center" style="width: 50px;" data-sortable="false">
+                                    </th>
+                                    <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
+                                    <th class="d-lg-table-cell text-center">@PCM.WEB.Properties.Resources.tag</th>
+                                    <th class="d-lg-table-cell">@PCM.WEB.Properties.Resources.descricao</th>
+                                    <th class="d-lg-table-cell">@PCM.WEB.Properties.Resources.setor</th>
+                                    <th class="d-lg-table-cell">@PCM.WEB.Properties.Resources.local</th>
+                                    <th class="d-lg-table-cell">@PCM.WEB.Properties.Resources.tipo_ar_condicionado</th>
+                                    <th class="d-lg-table-cell">@PCM.WEB.Properties.Resources.potencia</th>
+                                    <th class="d-lg-table-cell text-center" style="width: 85px;">@PCM.WEB.Properties.Resources.ativo</th>
+                                    <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+
+                        </table>
+
+                    </div>
+                </div>
+            <!-- END Page Content -->
+
+        }
+
+        </div>
+
+</main>
+<!-- END Main Container -->
+
+<!-- From Right Modal -->
+<div class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-15">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.relatorio</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="si si-close font-w600"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content block-content-full">
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaZebra();">
+                                <div class="text-md-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
+                                    <h6 class="mb-5"><small>Zebra</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaA4();">
+                                <div class="text-md-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
+                                    <h6 class="mb-5"><small>A4</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+        $(function () {
+
+            $.ajaxSetup({async: false});
+
+            var unidade = $("#unidade");
+            var setor = $("#setor");
+            var tipo_ar_condicionado = $("#tipo_ar_condicionado");
+            var apartamento = $("#apartamento");
+            var departamento = $("#departamento");
+
+            if ("@Session["unidade"]" == "") {
+
+                unidade.select2();
+
+                unidade.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.unidade)', allowClear: true });
+                setor.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true });
+                apartamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true });
+                departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento_responsavel)', allowClear: true });
+
+                if (unidade.val() == "" || unidade.val() == "-1") {
+                    tipo_ar_condicionado.prop("disabled", true);
+                    setor.prop("disabled", true);
+                    apartamento.prop("disabled", true);
+                    departamento.prop("disabled", true);
+
+                    setor.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true });
+                    apartamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true });
+                }
+
+                unidade.change(function () {
+
+                    if (unidade.val() == "") {
+
+                        tipo_ar_condicionado.empty();
+                        setor.empty();
+                        apartamento.empty();
+                        tipo_ar_condicionado.prop("disabled", true);
+                        setor.prop("disabled", true);
+                        apartamento.prop("disabled", true);
+                        tipo_ar_condicionado.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.tipo_ar_condicionado)', allowClear: true });
+                        setor.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true });
+                        apartamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true });
+
+                    } else {
+
+                        var request = { "unidade": unidade.val() };
+
+                        $.post("LoadTipoArCondicionado", request, function (obj) {
+                            tipo_ar_condicionado.empty();
+                            option = $("<option>", { "value": "" }).text("");
+                            tipo_ar_condicionado.append(option);
+                            $.each(obj, function (indice, result) {
+                                option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                                tipo_ar_condicionado.append(option);
+                            });
+                        }, "json");
+
+                        $.post("LoadSetor", request, function (obj) {
+                            setor.empty();
+                            option = $("<option>", { "value": "" }).text("");
+                            setor.append(option);
+                            $.each(obj, function (indice, result) {
+                                option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                                setor.append(option);
+                            });
+                        }, "json");
+
+                        $.post("LoadApartamento", request, function (obj) {
+                            apartamento.empty();
+                            option = $("<option>", { "value": "" }).text("");
+                            apartamento.append(option);
+                            $.each(obj, function (indice, result) {
+                                option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                                apartamento.append(option);
+                            });
+                        }, "json");
+
+                        tipo_ar_condicionado.prop("disabled", false);
+                        setor.prop("disabled", false);
+                        apartamento.prop("disabled", false);
+                        tipo_ar_condicionado.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.tipo_ar_condicionado)', allowClear: true });
+                        setor.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true });
+                        apartamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true });
+
+                    }
+
+                });
+
+            }
+
+            setor.change(function () {
+
+                if (setor.val() == "") {
+
+                    var request = { "unidade": unidade.val(), "setor": "-1" };
+
+                    $.post("LoadApartamento", request, function (obj) {
+                        apartamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        apartamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            apartamento.append(option);
+                        });
+                    }, "json");
+
+                }
+
+                else {
+
+                    var request = { "unidade": unidade.val(), "setor": setor.val() };
+
+                    $.post("LoadApartamento", request, function (obj) {
+                        apartamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        apartamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            apartamento.append(option);
+                        });
+                    }, "json");
+
+                }
+
+            });
+
+        });
+
+        function Imprimir() {
+            objetos = [];
+            $('input[type=checkbox]').each(function () {
+                if (this.checked) {
+                    objetos.push(this.value);
+                }
+            });
+            if (objetos.length > 0) {
+                $('#codigo').val(objetos.join(','));
+                $('#modalReport').modal('show');
+            } else {
+                swal({
+                    title: 'Imprimir Etiqueta',
+                    text: 'Favor selecionar um ou mais Registro!',
+                    type: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    html: false,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 50);
+                        });
+                    }
+                });
+            }
+        }
+
+        function ImprimirEtiquetaZebra() {
+            var codigo = $("#codigo").val();
+            window.open('PrintEtiquetaEquipamento' + '?codigo=' + codigo + '&report=ETQ000000001_ZEBRA', '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+        function ImprimirEtiquetaA4() {
+            var codigo = $("#codigo").val();
+            window.open('PrintEtiquetaEquipamento' + '?codigo=' + codigo + '&report=ETQ000000001_A4', '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); 
+        Codebase.helpers(['datepicker', 'maxlength', 'select2', 'table-tools']);
+
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        table = $('#tb_main').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            //scrollY: '400px',
+            //scrollCollapse: true,
+            //paging: false,
+            //fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 300,
+            autoWidth: false,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadArCondicionado",
+                type: "POST",
+                datatype: "json",
+                data: {
+                    "tag": $("#tag").val(),
+                    "usuario": $("#tipo_ar_condicionado").val() == "" ? "-1" : $("#tipo_ar_condicionado").val(),
+                    "unidade": $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                    "setor": $("#setor").val() == "" ? "-1" : $("#setor").val(),
+                    "apartamento": $("#apartamento").val() == "" ? "-1" : $("#apartamento").val(),
+                    "departamento": $("#departamento").val() == "" ? "-1" : $("#departamento").val(),
+                    "ativo": $("#ativo").val() == "" ? "-1" : $("#ativo").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    orderable: false,
+                    data: "codigo",
+                    defaultContent: "<td class='d-none d-sm-table-cell text-center' style='width: 50px;'>" +
+                        "<label class='css-control-sm css-control-success css-checkbox py-0 px-0'>" +
+                        "<input type='checkbox' id='checkbox' class='css-control-input' name='x'>" +
+                        "<span class='css-control-indicator'></span>" +
+                        "</label>" +
+                        "</td >"
+                },
+                { data: "unidade" },
+                { data: "tag" },
+                { data: "descricao" },
+                { data: "setor" },
+                { data: "apartamento" },
+                { data: "tipo_ar_condicionado" },
+                { data: "potencia" },
+                { data: "texto_ativo" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'> " +
+                        "<button type='button' id='btnEditar' name='btnEditar' class='btn btn-sm btn-secondary' title='Editar'> <i class='fa fa-pencil'></i></button>" +
+                        "<button type='button' id='btnExcluir' name='btnExcluir' class='btn btn-sm btn-secondary' title='Excluir'> <i class='fa fa-times'></i></button>"
+                }
+            ],
+            columnDefs: [
+                { className: 'text-center', targets: [0, 2, 7, 8] },               
+                { width: '80px', targets: 7 },
+                {
+                    targets: 0, // Index of the column starting from 0
+                    type: 'html',
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return "<label class='css-control-sm css-control-success css-checkbox py-0 px-0'> " +
+                            "<input type='checkbox' class='css-control-input' value='" + row.codigo + "' name='x'>" +
+                            "<span class='css-control-indicator'></span>" +
+                            "</label>"
+                    }
+                }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                {extend: 'print',text: 'Imprimir'},
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+                language: {
+                "search": "Procurar:",
+                "lengthMenu": "Exibir _MENU_ ",
+                "info": "_MAX_ registro(s)",
+                "infoFiltered": "(filtrado de _MAX_ registro(s))"
+            }
+        });
+
+        // Add "Select All" checkbox in the header
+        var table = $('#tb_main').DataTable();
+        var selectAllCheckbox = $("<input type='checkbox' class='css-control-sm css-control-success css-checkbox py-0 px-0'>").on('change', function () {
+            var checkboxes = table.column(0).nodes().to$().find('input[type="checkbox"]');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        $('#tab_main').DataTable({
+            order: [[1, 'asc']]
+        });
+
+        $('#tb_main thead th:eq(0)').append(selectAllCheckbox);
+
+        $('#tb_main tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+
+            if (this.id == "btnEditar") {
+                editarRegistro(data);
+            } else if (this.id == "btnExcluir") {
+                deletarRegistro(data);
+            }
+
+        });
+
+
+        function editarRegistro(data) {
+
+            window.open("../CadastroBasico/ArCondicionadoEdit?codigo=" + data.codigo, "_self");;
+
+        }
+
+        function deletarRegistro(data) {
+
+            window.open("../OrdemServico/OrdemServicoDelete?codigo=" + data.codigo + "&unidade=" + data.codigo_unidade, "_self");;
+
+        }
+
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
+
+    });
+
+</script>
+}

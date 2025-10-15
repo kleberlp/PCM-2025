@@ -1,0 +1,350 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.RelatorioItensAuditaveis>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.cadastro_basico</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.cad_relatorio_itens_auditaveis</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("RelatorioItensAuditaveisIndex", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Listagem -->
+            <div class="block block-rounded border">
+
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+                <div class="js-tasks-nav d-none d-md-block">
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cad_relatorio_itens_auditaveis</h3>
+                            <div class="block-options">
+
+                                @if (ViewBag.inserir)
+                                {
+                                    <a href="@Url.Action("RelatorioItensAuditaveisInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                        <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                            @Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>@PCM.WEB.Properties.Resources.descricao</label>
+                                            <input type="text" id="descricao" name="descricao" value="@ViewBag.descricao" placeholder="@PCM.WEB.Properties.Resources.descricao" class="form-control">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                            @Html.DropDownList("ativo", null, PCM.WEB.Properties.Resources.ativo, new { @class = "js-select2 form-control" })
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+                <div class="block-content block-content-full border-2x">
+
+                        <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th class="text-center"></th>
+                                    <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
+                                    <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.descricao</th>
+                                    <th class="d-none d-sm-table-cell text-md-center" style="width: 80px;">@PCM.WEB.Properties.Resources.ativo</th>
+                                    <th class="text-md-center" style="width: 80px;" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+
+                        </table>
+
+                </div>
+
+            </div>
+            <!-- END Unidade -->
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+                  <script type="text/javascript">
+
+                      var table;
+
+    function format(data) {
+
+        var table_info = '';
+
+        jQuery.ajax({
+            type: "POST",
+            url: "LoadRelatorioItensAuditaveisChecklist",
+            async: false,
+            data: {
+                "codigo": data.codigo
+            },
+            dataType: "json",
+            success: function (response) {
+
+                table_info = '<table class="table table-sm table-vcenter table-striped js-dataTable-list"> ' +
+                    '<thead> ' +
+                    '<tr class="table-secondary">' +
+                    '<th>@Html.Raw(PCM.WEB.Properties.Resources.checklist)</th>'
+                    '</tr>' +
+                    '</thead> ' +
+                    '<tbody>';
+
+                for (var i = 0; i < response.length; i++) {
+
+                    table_info += '<tr class="bg-white"> ';
+                    table_info += '<td>' + response[i].descricao + '</td>';
+                    table_info += '</tr>';
+
+                }
+
+                table_info += '</tbody> ' +
+                    '</table>';
+
+            }
+        });
+
+        return table_info;
+
+    }
+
+        jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        table = $('#tb_main').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            info: false,
+            scrollCollapse: false,
+            scrollY: '40vh',
+            paging: false,
+            fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 15,
+            autoWidth: false,
+            ajax: {
+                url: "LoadRelatorioItensAuditaveis",
+                type: "POST",
+                datatype: "json",
+                data: {
+                    "descricao": $("#descricao").val(),
+                    "unidade": $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                    "ativo": $("#ativo").val() == "" ? "-1" : $("#ativo").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    class: "details-control",
+                    orderable: false,
+                    data: null,
+                    defaultContent: "",
+                    render: function () {
+                        return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+                    },
+                    width: "15px"
+                },
+                { data: "unidade", class: "font-w600"},
+                { data: "descricao", class: "font-w600" },
+                { data: "ativo", class: "text-center" },
+                {
+                    orderable: false,
+                    data: null,
+                    class: "text-center",
+                    defaultContent: "<div class='btn-group'> " +
+                        "<button type='button' id='btnEditar' name='btnEditar' class='btn btn-sm btn-secondary' title='Editar Ordem de Serviço'> <i class='fa fa-pencil'></i></button>" +
+                        "<button type='button' id='btnExcluir' name='btnExcluir' class='btn btn-sm btn-secondary' title='Excluir Ordem de Serviço'> <i class='fa fa-times'></i></button>"
+                }
+            ],
+            columnDefs: [
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+
+                        if (col == 1 && ("@Session["unidade"].ToString()" != "")) {
+                            $(td).hide();
+                        }
+
+                        if (col == 1) {
+                            $(td).addClass("font-w600");
+                        }
+                        if (col == 3 && rowData.ativo == true) {
+                            $(td).html("<label class='css-control css-control-success css-checkbox'><input type = 'checkbox' class='css-control-input' checked disabled><span class='css-control-indicator'></span></label >");
+                        }
+                        if (col == 3 && rowData.ativo == false) {
+                            $(td).html("<label class='css-control css-control-success css-checkbox'><input type = 'checkbox' class='css-control-input' disabled><span class='css-control-indicator'></span></label >");
+                        }
+                        if (col == 4 && "@ViewBag.editar" == "false") {
+                            $(td).find("#btnEditar").hide();
+                        }
+                        if (col == 4 && "@ViewBag.excluir" == "false") {
+                            $(td).find("#btnExcluir").hide();
+                        }
+                    }, targets: [1, 3, 4]
+                },
+                { width: '80px', targets: 3 },
+                { width: '45px', targets: 4 }
+            ],
+            //dom: 'Bfrtip',
+            //buttons: [
+            //    { extend: 'copy', text: 'Copiar' },
+            //    {extend: 'print',text: 'Imprimir'},
+            //    { extend: 'excel' },
+            //    { extend: 'pdf', orientation: 'portrait' },
+            //],
+                language: {
+                "search": "Procurar:",
+                "lengthMenu": "Exibir _MENU_ ",
+                "info": "_MAX_ registro(s)",
+                "infoFiltered": "(filtrado de _MAX_ registro(s))"
+            }
+        });
+
+        $('#tb_main tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+            row = table.row($(this).closest('tr')).data();
+            tr = table.row($(this).closest('tr'))
+            index = table.row($(this).closest('tr')).index();
+
+            if (this.id == "btnEditar") {
+                editar(data);
+            } else if (this.id == "btnExcluir") {
+                deletar(data, tr);
+            }
+
+        });
+
+        function editar(data) {
+
+            window.open("../CadastroBasico/RelatorioItensAuditaveisEdit?codigo=" + data.codigo, "_self");;
+
+        }
+
+        function deletar(data, tr) {
+
+            Swal.fire({
+                title: "@PCM.WEB.Properties.Resources.pcm",
+                html: "@Html.Raw(PCM.WEB.Properties.Resources.deseja_excluir)<br><br><b>@Html.Raw(PCM.WEB.Properties.Resources.descricao):</b> " + data.descricao,
+                icon: "question",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+                denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "RelatorioItensAuditaveisDelete",
+                        async: false,
+                        data: {
+                            "codigo": data.codigo
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            Swal.fire({
+                                title: "@PCM.WEB.Properties.Resources.pcm",
+                                html: response,
+                                icon: "success",
+                                showDenyButton: false,
+                                showCancelButton: false,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    tr.remove();
+                                    table.draw();
+                                    //$("#form").submit();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+        }
+
+        // Add event listener for opening and closing details
+        $('#tb_main tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var tdi = tr.find("i.fa");
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                tdi.first().removeClass('fa-minus-square');
+                tdi.first().addClass('fa-plus-square');
+                // tr.find('svg').attr('data-icon', 'plus-square');    // FontAwesome 5
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                tdi.first().removeClass('fa-plus-square');
+                tdi.first().addClass('fa-minus-square');
+                // tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
+            }
+        });
+
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
+
+    });
+
+                  </script>
+
+}

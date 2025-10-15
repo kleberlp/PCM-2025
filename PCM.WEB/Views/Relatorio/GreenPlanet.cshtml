@@ -1,0 +1,713 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.relatorio</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.green_planet</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("GreenPlanet", "Relatorio", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="col-md-12 col-xl-12">
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                @if (Session["unidade"] == "")
+                                {
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="unidade" id="unidade" value="@Session["codigo_unidade"]">
+                                }
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-2">@Html.DropDownList("agrupado_por", null, PCM.WEB.Properties.Resources.agrupado_por, new { @class = "js-select2 form-control" })</div>
+                                        <div class="col-md-2">@Html.DropDownList("forma_calculo", null, PCM.WEB.Properties.Resources.forma_calculo_green_planet, new { @class = "js-select2 form-control" })</div>
+                                        <div class="col-md-2">@Html.DropDownList("grupo_item_medicao", null, PCM.WEB.Properties.Resources.grupo_item_medicao, new { @class = "js-select2 form-control" })</div>
+                                        <div class="col-md-2">@Html.DropDownList("item_medicao", null, PCM.WEB.Properties.Resources.item_medicao, new { @class = "js-select2 form-control" })</div>
+                                        <div class="col-md-4">
+                                            <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                                <div class="input-group-prepend input-group-append">
+                                                    <span class="input-group-text font-w600">-</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    @if (ViewBag.imprimir)
+                                    {
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+                <!-- CHART -->
+                <div class="d-md-block d-none">
+                    <div class="block block-rounded block-mode-loading-refresh" id="my-block">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">Gráfico - @PCM.WEB.Properties.Resources.green_planet</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="pull-all pt-50">
+                                <canvas id="canvas" height="70px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END CHART -->
+                @*<div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.green_planet</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option text-dark font-w600" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                        </div>
+                    </div>*@
+
+                <!-- Table -->
+                <div class="table-responsive table-sm push block block-content-full p-10">
+                    <table class="table table-bordered table-hover js-dataTable-list" name="tbList" id="tbList">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>@PCM.WEB.Properties.Resources.item_medicao</th>
+                                <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.data</th>
+                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.quantidade_hospede</th>
+                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.ocupacao_quartos</th>
+                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.valor</th>
+                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.medicao</th>
+                                <th class="text-center" style="width: 20px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <!-- END Table -->
+
+                <div>
+                    <i><span class="font-w600 text-danger h6">** Erro de Lançamento</span></i>
+                </div>
+
+
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+<!-- From Right Modal -->
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+
+            @using (Html.BeginForm("GreenPlanetUpdate", "Relatorio", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form_modal", @id = "form_modal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" id="codigoUnidade" name="codigoUnidade" value="" />
+                <input type="hidden" id="codigoItemMedicao" name="codigoItemMedicao" value="" />
+                <input type="hidden" id="dataMedicao" name="dataMedicao" value="" />
+
+                <div class="block block-themed block-transparent mb-15">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.green_planet</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="si si-close font-w600"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <label id="descricaoItemMedicao" name="descricaoItemMedicao"></label>
+                            </div>
+                            <div class="col-4">
+                                <label>@PCM.WEB.Properties.Resources.quantidade_hospede</label>
+                                <div><input type="text" class="form-control" id="quantidadeHospede" name="quantidadeHospede" maxlength="5" value=""></div>
+                            </div>
+                            <div class="col-4">
+                                <label>@PCM.WEB.Properties.Resources.ocupacao_quartos</label>
+                                <div><input type="text" class="form-control" id="ocupacaoUH" name="ocupacaoUH" maxlength="5" value=""></div>
+                            </div>
+                            <div class="col-4">
+                                <label>@PCM.WEB.Properties.Resources.valor</label>
+                                <div><input type="text" class="form-control" id="valor" name="valor" value=""></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnConfirm" id="btnConfirm" onclick="$('#form_modal').submit();" )><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnClose" id="btnClose" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+
+<div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.foto</h3>
+                </div>
+                <div class="block-content">
+
+                    <div class="row items-push js-gallery img-fluid-100" id="galery">
+                    </div>
+                    <!-- END Advanced Gallery -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<input type="hidden" id="codigo_auditoria_interna" value="@Model.codigo_pcm_programada_ordem_servico" />
+                    <input type="hidden" id="codigo_auditoria" value="@Model.codigo " />
+                    <input type="hidden" id="data" value="@ViewBag.data" />*@
+                <input type="hidden" id="codigo_item_checklist" />
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$(this).next('.custom-file-label').addClass('selected').html('');" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/chart")
+
+    <script>
+
+    function PrintGreenPlanet() {
+
+        var unidade = $('#unidade option:selected').text();
+        var nomeFantasia = $("#unidade").val();
+        var dataInicio = $("#data_inicio").val();
+        var dataTermino = $("#data_termino").val();
+        var dataTermino = ($("#forma_calculo").val() == "") ? -1 : $("#forma_calculo").val();
+        var agrupadoPor = ($("#agrupado_por").val() == "") ? -1 : $("#agrupado_por").val();
+        var grupoItemMedicao = ($("#grupo_item_medicao").val() == "") ? -1 : $("#grupo_item_medicao").val();
+        var itemMedicao = ($("#item_medicao").val() == "") ? -1 : $("#item_medicao").val();
+
+        window.open('PrintGreenPlanet' + '?dataInicio=' + dataInicio + '&dataTermino=' + dataTermino + '&formaCalculo=' + formaCalculo + '&agrupadoPor=' + agrupadoPor + '&grupoItemMedicao=' + grupoItemMedicao + '&itemMedicao=' + itemMedicao + '&unidade=' + unidade + '&nomeFantasia=' + nomeFantasia, '_blank');
+    }
+
+    function ImprimirRelatorio() {
+
+        var unidade = $("#unidade").val();
+        var data_inicio = $("#data_inicio").val();
+        var data_termino = $("#data_termino").val();
+
+        window.open('PrintHorasTrabalhadas' + '?unidade=' + unidade + '&data_inicio=' + data_inicio + '&data_termino=' + data_termino + '&nome_fantasia=' + $("#unidade option:selected").text(), '_blank');
+    }
+
+    var colorNames = Object.keys(window.chartColors);
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: []
+        },
+        options: {
+            responsive: true,
+            elements: {
+                line: {
+                    tension: 0.2
+                }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        suggestedMax: 5
+                    }
+                }]
+            },
+            legend: { position: 'right' },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        return data.labels[tooltipItem.index] + ': ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + ' @Html.Raw(ViewBag.unidade_medida)';
+                    }
+                }
+            }
+        }
+    };
+
+    $(function () {
+
+
+        $.ajaxSetup({ async: false });
+
+        var session_unidade = '@Session["codigo_unidade"]';
+        var unidade = $("#unidade");
+        var grupo_item_medicao = $("#grupo_item_medicao");
+        var item_medicao = $("#item_medicao");
+
+        if ("@Session["unidade"]" == "") {
+            unidade.select2({ placeholder: '@PCM.WEB.Properties.Resources.unidade', allowClear: true });
+        }
+        grupo_item_medicao.select2({ placeholder: 'Grupo - Item de Medição', allowClear: true });
+        item_medicao.select2({ placeholder: 'Item de Medição', allowClear: true });
+        if(session_unidade == "-1" && unidade.val() == ""){
+            grupo_item_medicao.prop("disabled", true);
+        }
+        if (grupo_item_medicao.val() == "") {
+            item_medicao.prop("disabled", true);
+        }
+
+        //UNIDADE
+        unidade.change(function () {
+
+            if (unidade.val() == "") {
+                grupo_item_medicao.empty();
+                item_medicao.empty();
+                grupo_item_medica.prop("disabled", true);
+                item_medicao.prop("disabled", true);
+                grupo_item_medicao.select2({ placeholder: 'Grupo - Item de Medição', allowClear: true });
+                item_medicao.select2({ placeholder: 'Item de Medição', allowClear: true });
+            }
+            else {
+                var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
+                $.post("LoadGrupoItemMedicao", request, function (obj) {
+                    grupo_item_medicao.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    grupo_item_medicao.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        grupo_item_medicao.append(option);
+                    });
+                }, "json");
+
+                grupo_item_medicao.prop("disabled", false);
+                grupo_item_medicao.select2({ placeholder: 'Grupo - Item de Medição', allowClear: true });
+            }
+
+        });
+
+        //GRUPO - ITEM DE MEDIÇÃO
+        grupo_item_medicao.change(function () {
+
+            if (grupo_item_medicao.val() == "") {
+                item_medicao.empty();
+                item_medicao.prop("disabled", true);
+                item_medicao.select2({ placeholder: 'Item de Medição', allowClear: true });
+            }
+            else {
+                var request = { "unidade": (session_unidade == "-1")? unidade.val(): session_unidade, "grupo_item_medicao": (grupo_item_medicao.val() == "")? "-1": grupo_item_medicao.val()};
+                $.post("LoadItemMedicao", request, function (obj) {
+                    item_medicao.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    item_medicao.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        item_medicao.append(option);
+                    });
+                }, "json");
+
+                item_medicao.prop("disabled", false);
+                item_medicao.select2({ placeholder: 'Item de Medição', allowClear: true });
+            }
+        });
+
+    });
+
+    function loadChart() {
+
+        config.data.labels.length = 0;
+        config.data.datasets.length = 0;
+        var session_unidade = '@Session["codigo_unidade"]';
+        var unidade = $("#unidade");
+        var agrupado_por = $("#agrupado_por");
+        var forma_calculo = $("#forma_calculo");
+        var grupo_item_medicao = $("#grupo_item_medicao");
+        var item_medicao = $("#item_medicao");
+        var data_inicio = $("#data_inicio");
+        var data_termino = $("#data_termino");
+
+        var request = { "data_inicio": data_inicio.val(), "data_termino": data_termino.val(), "unidade": (session_unidade == "-1") ? unidade.val() : session_unidade, "forma_calculo": forma_calculo.val(), "agrupado_por": agrupado_por.val(), "grupo_item_medicao": grupo_item_medicao.val(), "item_medicao": (item_medicao.val() == "") ? "-1" : item_medicao.val() };
+
+        //Obtém eixo X
+        $.post("ChartGreenPlanetData", request, function (obj) {
+            $.each(obj, function (indice, result) {
+                config.data.labels.push(result);
+            });
+        }, "json");
+
+        $.post("ChartGreenPlanet", request, function (obj) {
+
+            $.each(obj, function (indice, result) {
+
+                var colorName = colorNames[config.data.datasets.length % colorNames.length];
+                var newColor = window.chartColors[colorName];
+                var borderColor = window.chartBorderColors[colorName];
+
+                var newDataset = {
+                    label: result.item_medicao,
+                    backgroundColor: newColor,
+                    borderColor: borderColor,
+                    data: [],
+                    fill: false
+                };
+
+                for (var index = 0; index < result.valor.length; ++index) {
+                    newDataset.data.push(result.valor[index]);
+                }
+
+                config.data.datasets.push(newDataset);
+                window.chart.update();
+            });
+        }, "json");
+    }
+
+    window.onload = function () {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.chart = new Chart(ctx, config);
+    };
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.row > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.row').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.row').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'agrupado_por': {
+                        required: true
+                    },
+                    'forma_calculo': {
+                        required: true
+                    },
+                    'grupo_item_medicao': {
+                        required: true
+                    },
+                    'data_inicio': {
+                        required: true
+                    },
+                    'data_termino': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'agrupado_por': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    },
+                    'forma_calculo': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    },
+                    'grupo_item_medicao': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    },
+                    'data_inicio': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    },
+                    'data_termino': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    }
+                }, submitHandler: function (form) {
+                    loadGrid();
+                    loadChart();
+                    return false;
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    function loadGrid() {
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        $("#tbList").DataTable({
+            //info: false,
+            //scrollCollapse: true,
+            //scrollY: '40vh',
+            paging: false,
+            fixedHeader: true,
+            processing: true,   
+            destroy: true,
+            searching: false,
+            lengthChange: false,
+            autoWidth: true,
+            ajax: {
+                url: "LoadGreenPlanet",
+                type: "POST",
+                datatype: "json",
+                data: {
+                    "dataInicio": $("#data_inicio").val(),
+                    "dataTermino": $("#data_termino").val(),
+                    "formaCalculo": $("#forma_calculo").val() == "" ? "-1" : $("#forma_calculo").val(),
+                    "agrupadoPor": $("#agrupado_por").val() == "" ? "-1" : $("#agrupado_por").val(),
+                    "grupoItemMedicao": $("#grupo_item_medicao").val() == "" ? "-1" : $("#grupo_item_medicao").val(),
+                    "itemMedicao": $("#item_medicao").val() == "" ? "-1" : $("#item_medicao").val(),
+                    "unidade": $("#unidade").val() == "" ? "-1" : $("#unidade").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                { data: "descricao", class: "font-size-sm font-w600" },
+                { data: "data", class: "font-size-sm text-center" },
+                { data: "quantidade_hospedes", class: "font-size-sm text-center" },
+                { data: "quartos_ocupados", class: "font-size-sm text-center" },
+                { data: "valor_texto", class: "font-size-sm text-center" },
+                { data: "medicao", class: "font-size-sm text-center" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'><button type='button' name='btnEditar' id='btnEditar' class='btn btn-sm btn-secondary'><i class='fa fa-pencil'></i></button> " +
+                                    "<button type='button' name='btnFoto' id='btnFoto' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#modalFoto'><i class='fa fa-camera'></i></button></div>"
+                }
+            ],
+            columnDefs: [
+                { width: '150px', targets: [1, 2, 3, 4, 5] },
+                { width: '45px', targets: 6 },
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+
+                        if (col == 4 && rowData.erro_valor) {
+                            $(td).addClass("bg-danger text-white");
+                        }
+
+                        if (col == 6 && rowData.foto == 0) {
+                            $(td).find('#btnFoto').hide();
+                        }
+
+                    }, targets: [4, 6]
+                },
+            ],
+           dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: '@Html.Raw(PCM.WEB.Properties.Resources.copy)' },
+                {
+                    extend: 'print',
+                    text: '@Html.Raw(PCM.WEB.Properties.Resources.print)'
+                },
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+            language: {
+                "search": "@Html.Raw(PCM.WEB.Properties.Resources.search):",
+                "lengthMenu": "@Html.Raw(PCM.WEB.Properties.Resources.display) _MENU_ ",
+                "zeroRecords": "@Html.Raw(PCM.WEB.Properties.Resources.zero_records)",
+                "info": "_MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)",
+                "infoEmpty": "",
+                "infoFiltered": "@Html.Raw(PCM.WEB.Properties.Resources.filtered_from) _MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)"
+            }
+        });
+
+    }
+
+
+    $('#tbList tbody').on('click', 'button', function () {
+
+        var data = $('#tbList').DataTable().row($(this).closest('tr')).data();
+
+        if (this.id == "btnEditar") {
+            EditGreenPlanet(data);
+        }
+
+        if (this.id == "btnFoto") {
+            ViewFoto(data);
+        }
+
+    });
+
+    function ViewFoto(data) {
+
+        $("#galery").empty();
+
+        jQuery.ajax({
+            type: "POST",
+            url: "LoadFotoGreenPlanet",
+            async: false,
+            data: { "codigo_unidade": $("#unidade").val(), "data": data.data },
+            dataType: "json",
+            success: function (response) {
+                for (var i = 0; i < response.length; i++) {
+                    var image = '<div class="col-sm-6 col-xl-3">';
+                    image += '<a class="img-link img-link-zoom-in img-lightbox" href="' + response[i].filename + '">';
+                    image += '<img class="img-fluid" src="' + response[i].filename + '" alt="">';
+                    image += '</a>';
+                    image += '</div>';
+                    $("#galery").append(image);
+                }
+            }
+        });
+
+    }
+
+    function EditGreenPlanet(data) {
+        $('#btnConfirm').show();
+        $("#codigoUnidade").val(data.codigo_unidade);
+        $("#codigoItemMedicao").val(data.codigo);
+        $("#dataMedicao").val(data.data);
+        $("#quantidadeHospede").val(data.quantidade_hospedes);
+        $("#ocupacaoUH").val(data.quartos_ocupados);
+        $("#descricaItemMedicao").val(data.descricao);
+        $("#valor").val(data.medicao);
+
+        //Abre Formulário
+        jQuery('#modalEdit').modal('show');
+    }
+
+    $('#form_modal').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+            $('#btnSave').show();
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'quantidadeHospede': {
+                required: true
+            },
+            'ocupacaoUH': {
+                required: true
+            },
+            'valor': {
+                required: true
+            }
+        },
+        messages: {
+            'quantidadeHospede': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'ocupacaoUH': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'valor': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+            $('#btnConfirm').hide();
+            var formdata = new FormData();
+            jQuery('#modalEdit').modal('hide');
+            Codebase.layout('header_loader_on');
+
+            formdata.append("unidade", $("#codigoUnidade").val());
+            formdata.append("data", $("#dataMedicao").val());
+            formdata.append("codigoItemMedicao", $("#codigoItemMedicao").val());
+            formdata.append("ocupacaoUH", $("#ocupacaoUH").val());
+            formdata.append("quantidadeHospede", $("#quantidadeHospede").val());
+            formdata.append("valor", $("#valor").val());
+
+            //Creating an XMLHttpRequest and sending
+            var oXMLHttpRequest = new XMLHttpRequest();
+            oXMLHttpRequest.open('POST', 'GreenPlanetUpdate')
+            oXMLHttpRequest.send(formdata);
+            oXMLHttpRequest.onreadystatechange = function () {
+
+                if (oXMLHttpRequest.readyState == 4 && oXMLHttpRequest.status == 200) {
+
+                    Codebase.layout('header_loader_off');
+                    swal.fire({
+                        title: "PCM by SIM",
+                        text: oXMLHttpRequest.response,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: 'OK',
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }).then(function (result) {
+                        if (result.value) {
+                            loadGrid();
+                            loadChart();
+                        }
+                    });
+
+                }
+            }
+
+            return false;
+        }
+    });
+
+
+    // Initialize when page loads
+    jQuery(function () {
+        //Codebase.blocks('#my-block', 'content_hide');
+        FormValidation.init();
+        loadChart();
+        loadGrid();
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+    });
+
+    </script>
+}

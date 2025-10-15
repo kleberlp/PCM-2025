@@ -1,0 +1,311 @@
+﻿
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="row invisible" data-toggle="appear">
+            <!-- Row #2 -->
+            <div class="col-md-12">
+                <!-- Chart.js Charts (initialized in js/pages/be_comp_charts.js), for more examples you can check out http://www.chartjs.org/docs/ -->
+                <h2 class="content-heading">Indicadores</h2>
+                <div class="row">        
+           
+                    <div class="col-xl-6">
+                        <!-- Bars Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Pendente x Realizado</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                        <i class="si si-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <!-- Bars Chart Container -->
+                                <canvas id="lineChart" height="140" width=""></canvas>
+                            </div>
+                        </div>
+                        <!-- END Bars Chart -->
+                    </div>
+
+               
+                    <div class="col-xl-6">
+                        <!-- Donut Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Manutenção x Tipo OS</h3>                                
+                            </div>
+                            <div class="block-content block-content-full text-center">
+                                <!-- Donut Chart Container -->
+                                <canvas class="manutencao_tipo_ordem_servico"></canvas>
+                            </div>
+                        </div>
+                        <!-- END Donut Chart -->
+                    </div>
+
+                    <div class="col-xl-12" style="height:300px">
+                        <!-- Donut Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Manutenção x Categoria</h3>                                
+                            </div>
+                            <div class="block-content block-content-full text-center">
+                                <!-- Donut Chart Container -->
+                                <canvas class="manutencao_categoria"></canvas>
+                            </div>
+                        </div>
+                        <!-- END Donut Chart -->
+                    </div>
+
+                </div>
+                <!-- END Chart.js Charts -->
+            </div>                        
+            <!-- END Row #2 -->
+        </div>
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/cookie")    
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/bundles/codebase")
+    @Scripts.Render("~/plugins/chartjs")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var chartLinesCon = jQuery('.lineChart');
+            var chartLines;
+
+            var lineData = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "Example dataset",
+                        fillColor: "rgba(220,220,220,0.5)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: [65, 59, 80, 81, 56, 55, 40]
+                    },
+                    {
+                        label: "Example dataset",
+                        fillColor: "rgba(26,179,148,0.5)",
+                        strokeColor: "rgba(26,179,148,0.7)",
+                        pointColor: "rgba(26,179,148,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(26,179,148,1)",
+                        data: [28, 48, 40, 19, 86, 27, 90]
+                    }
+                ]
+            };
+
+            var lineOptions = {
+                scaleShowGridLines: true,
+                scaleGridLineColor: "rgba(0,0,0,.05)",
+                scaleGridLineWidth: 1,
+                bezierCurve: true,
+                bezierCurveTension: 0.4,
+                pointDot: true,
+                pointDotRadius: 4,
+                pointDotStrokeWidth: 1,
+                pointHitDetectionRadius: 20,
+                datasetStroke: true,
+                datasetStrokeWidth: 2,
+                datasetFill: true,
+                responsive: true,
+            };
+
+
+            //var ctx = document.getElementById("lineChart").getContext("2d");
+            //var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+
+            // Init Charts
+            if (chartLinesCon.length) {
+                chartLines = new Chart(chartLinesCon, { type: 'line', data: lineData });
+            }
+            //var barData = {
+            //    labels: ["January", "February", "March", "April", "May", "June", "July"],
+            //    datasets: [
+            //        {
+            //            label: "My First dataset",
+            //            fillColor: "rgba(220,220,220,0.5)",
+            //            strokeColor: "rgba(220,220,220,0.8)",
+            //            highlightFill: "rgba(220,220,220,0.75)",
+            //            highlightStroke: "rgba(220,220,220,1)",
+            //            data: [65, 59, 80, 81, 56, 55, 40]
+            //        },
+            //        {
+            //            label: "My Second dataset",
+            //            fillColor: "rgba(26,179,148,0.5)",
+            //            strokeColor: "rgba(26,179,148,0.8)",
+            //            highlightFill: "rgba(26,179,148,0.75)",
+            //            highlightStroke: "rgba(26,179,148,1)",
+            //            data: [28, 48, 40, 19, 86, 27, 90]
+            //        }
+            //    ]
+            //};
+
+            //var barOptions = {
+            //    scaleBeginAtZero: true,
+            //    scaleShowGridLines: true,
+            //    scaleGridLineColor: "rgba(0,0,0,.05)",
+            //    scaleGridLineWidth: 1,
+            //    barShowStroke: true,
+            //    barStrokeWidth: 2,
+            //    barValueSpacing: 5,
+            //    barDatasetSpacing: 1,
+            //    responsive: true,
+            //}
+
+
+            //var ctx = document.getElementById("barChart").getContext("2d");
+            //var myNewChart = new Chart(ctx).Bar(barData, barOptions);
+
+            //var polarData = [
+            //    {
+            //        value: 300,
+            //        color: "#a3e1d4",
+            //        highlight: "#1ab394",
+            //        label: "App"
+            //    },
+            //    {
+            //        value: 140,
+            //        color: "#dedede",
+            //        highlight: "#1ab394",
+            //        label: "Software"
+            //    },
+            //    {
+            //        value: 200,
+            //        color: "#b5b8cf",
+            //        highlight: "#1ab394",
+            //        label: "Laptop"
+            //    }
+            //];
+
+            //var polarOptions = {
+            //    scaleShowLabelBackdrop: true,
+            //    scaleBackdropColor: "rgba(255,255,255,0.75)",
+            //    scaleBeginAtZero: true,
+            //    scaleBackdropPaddingY: 1,
+            //    scaleBackdropPaddingX: 1,
+            //    scaleShowLine: true,
+            //    segmentShowStroke: true,
+            //    segmentStrokeColor: "#fff",
+            //    segmentStrokeWidth: 2,
+            //    animationSteps: 100,
+            //    animationEasing: "easeOutBounce",
+            //    animateRotate: true,
+            //    animateScale: false,
+            //    responsive: true,
+
+            //};
+
+            //var ctx = document.getElementById("polarChart").getContext("2d");
+            //var myNewChart = new Chart(ctx).PolarArea(polarData, polarOptions);
+
+            //var doughnutData = [
+            //    {
+            //        value: 300,
+            //        color: "#a3e1d4",
+            //        highlight: "#1ab394",
+            //        label: "App"
+            //    },
+            //    {
+            //        value: 50,
+            //        color: "#dedede",
+            //        highlight: "#1ab394",
+            //        label: "Software"
+            //    },
+            //    {
+            //        value: 100,
+            //        color: "#b5b8cf",
+            //        highlight: "#1ab394",
+            //        label: "Laptop"
+            //    }
+            //];
+
+            //var doughnutOptions = {
+            //    segmentShowStroke: true,
+            //    segmentStrokeColor: "#fff",
+            //    segmentStrokeWidth: 2,
+            //    percentageInnerCutout: 45, // This is 0 for Pie charts
+            //    animationSteps: 100,
+            //    animationEasing: "easeOutBounce",
+            //    animateRotate: true,
+            //    animateScale: false,
+            //    responsive: true,
+            //};
+
+
+            //var ctx = document.getElementById("doughnutChart").getContext("2d");
+            //var myNewChart = new Chart(ctx).Doughnut(doughnutData, doughnutOptions);
+
+
+            //var radarData = {
+            //    labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+            //    datasets: [
+            //        {
+            //            label: "My First dataset",
+            //            fillColor: "rgba(220,220,220,0.2)",
+            //            strokeColor: "rgba(220,220,220,1)",
+            //            pointColor: "rgba(220,220,220,1)",
+            //            pointStrokeColor: "#fff",
+            //            pointHighlightFill: "#fff",
+            //            pointHighlightStroke: "rgba(220,220,220,1)",
+            //            data: [65, 59, 90, 81, 56, 55, 40]
+            //        },
+            //        {
+            //            label: "My Second dataset",
+            //            fillColor: "rgba(26,179,148,0.2)",
+            //            strokeColor: "rgba(26,179,148,1)",
+            //            pointColor: "rgba(26,179,148,1)",
+            //            pointStrokeColor: "#fff",
+            //            pointHighlightFill: "#fff",
+            //            pointHighlightStroke: "rgba(151,187,205,1)",
+            //            data: [28, 48, 40, 19, 96, 27, 100]
+            //        }
+            //    ]
+            //};
+
+            //var radarOptions = {
+            //    scaleShowLine: true,
+            //    angleShowLineOut: true,
+            //    scaleShowLabels: false,
+            //    scaleBeginAtZero: true,
+            //    angleLineColor: "rgba(0,0,0,.1)",
+            //    angleLineWidth: 1,
+            //    pointLabelFontFamily: "'Arial'",
+            //    pointLabelFontStyle: "normal",
+            //    pointLabelFontSize: 10,
+            //    pointLabelFontColor: "#666",
+            //    pointDot: true,
+            //    pointDotRadius: 3,
+            //    pointDotStrokeWidth: 1,
+            //    pointHitDetectionRadius: 20,
+            //    datasetStroke: true,
+            //    datasetStrokeWidth: 2,
+            //    datasetFill: true,
+            //    responsive: true,
+            //}
+
+            //var ctx = document.getElementById("radarChart").getContext("2d");
+            //var myNewChart = new Chart(ctx).Radar(radarData, radarOptions);
+
+        });
+    </script>
+}
+

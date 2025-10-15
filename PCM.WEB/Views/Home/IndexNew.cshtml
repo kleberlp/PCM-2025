@@ -1,0 +1,954 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("IndexNew", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+
+            <div class="row invisible" data-toggle="appear">
+                <div class="col-sm-12 col-md-6 col-xl-4">
+                    <div class="input-group">
+                        @Html.DropDownList("unidade", null, null, new { @class = "form-control material font-w600 js-select2" })
+                        <input type="hidden" name="nome_fantasia" id="nome_fantasia" value="@ViewBag.nome_fantasia" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-xl-4">
+                    <div class="input-group">
+                        @Html.DropDownList("modulo", null, null, new { @class = "form-control material font-w600 js-select2" })
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+
+                if ((int)ViewBag.codigo_tipo_unidade == 2)
+                {
+                <div class="row invisible" data-toggle="appear">
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoInsert", "OrdemServico")">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-wrench fa-2x"></i></div>
+                                <div class="font-size-h4 font-w600 text-primary">@PCM.WEB.Properties.Resources.ordem_servico</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.nova</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-pulse"></i></div>
+                                <div class="font-size-h4 font-w600 text-pulse" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_condo" id="quantidade_pendente_condo" name="quantidade_pendente_condo">0</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente CONDO</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-earth-light"></i></div>
+                                <div class="font-size-h4 font-w600 text-earth"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_concluida_condo" id="quantidade_realizada_condo" name="quantidade_realizada_condo">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_realizada CONDO</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-primary-light"></i></div>
+                                <div class="font-size-h4 font-w600 text-primary"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_condo" id="quantidade_andamento_condo" name="quantidade_andamento_condo">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_andamento CONDO</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-info"></i></div>
+                                <div class="font-size-h4 font-w600 text-info"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_condo" id="quantidade_vinculada_condo" name="quantidade_vinculada_condo">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_vinculada CONDO</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- END Row #2 -->
+                </div>
+
+                <div class="row invisible" data-toggle="appear">
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-pulse"></i></div>
+                                <div class="font-size-h4 font-w600 text-pulse" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool" name="quantidade_pendente_pool">0</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente POOL</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-earth-light"></i></div>
+                                <div class="font-size-h4 font-w600 text-earth"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_concluida_pool" id="quantidade_realizada_pool" name="quantidade_realizada_pool">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_realizada POOL</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-primary-light"></i></div>
+                                <div class="font-size-h4 font-w600 text-primary"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_pool" id="quantidade_andamento_pool" name="quantidade_andamento_pool">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_andamento POOL</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-elegance"></i></div>
+                                <div class="font-size-h4 font-w600 text-elegance-dark"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_pool" id="quantidade_vinculada_pool" name="quantidade_vinculada_pool">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_vinculada POLL</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- END Row #2 -->
+                </div>
+
+                }
+                else
+                {
+
+                <div class="row invisible" data-toggle="appear">
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoInsert", "OrdemServico")">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-wrench fa-2x"></i></div>
+                                <div class="font-size-h4 font-w600 text-primary">@PCM.WEB.Properties.Resources.ordem_servico</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.nova</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-pulse"></i></div>
+                                <div class="font-size-h4 font-w600 text-pulse" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool" name="quantidade_pendente_pool">0</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-earth-light"></i></div>
+                                <div class="font-size-h4 font-w600 text-earth"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_concluida_pool" id="quantidade_realizada_pool" name="quantidade_realizada_pool">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_realizada</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-primary-light"></i></div>
+                                <div class="font-size-h4 font-w600 text-primary"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_pool" id="quantidade_andamento_pool" name="quantidade_andamento_pool">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_andamento</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x text-elegance"></i></div>
+                                <div class="font-size-h4 font-w600 text-elegance"><span data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_pool" id="quantidade_vinculada_pool" name="quantidade_vinculada_pool">0</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_vinculada</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- END Row #2 -->
+                </div>
+
+                }
+
+                <div class="row invisible" data-toggle="appear">
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoPreventiva", "PCM")">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-0 d-none d-sm-block js-pie-chart pie-chart " data-percent="@ViewBag.ChartGauge.preventiva" data-line-width="4" data-size="120" data-bar-color="@ViewBag.ChartGauge.cor_preventiva" data-track-color="rgba(2,2,2,.25)" data-scale-color="rgba(2,2,2,.5)">
+                                    <span class=" font-size-h1 font-w600" style="color:@ViewBag.ChartGauge.cor_preventiva">@ViewBag.ChartGauge.preventiva</span>
+                                </div>
+                                <div class="font-size-h4 font-w600 text-secundary">Preventiva</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.visualizar</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoLaudo", "PCM")">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-0 d-none d-sm-block js-pie-chart pie-chart " data-percent="@ViewBag.ChartGauge.laudo" data-line-width="4" data-size="120" data-bar-color="@ViewBag.ChartGauge.cor_laudo" data-track-color="rgba(2,2,2,.25)" data-scale-color="rgba(2,2,2,.5)">
+                                    <span class="font-size-h1 font-w600" style="color:@ViewBag.ChartGauge.cor_laudo">@ViewBag.ChartGauge.laudo</span>
+                                </div>
+                                <div class="font-size-h4 font-w600 text-secundary">Laudo</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.visualizar</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoRotina", "PCM")">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-0 d-none d-sm-block js-pie-chart pie-chart " data-percent="@ViewBag.ChartGauge.rotina" data-line-width="4" data-size="120" data-bar-color="@ViewBag.ChartGauge.cor_rotina" data-track-color="rgba(2,2,2,.25)" data-scale-color="rgba(2,2,2,.5)">
+                                    <span class="font-size-h1 font-w600" style="color:@ViewBag.ChartGauge.cor_rotina">@ViewBag.ChartGauge.rotina</span>
+                                </div>
+                                <div class="font-size-h4 font-w600 text-secundary">Rotina</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.visualizar</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC", "PMOC")">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-0 d-none d-sm-block js-pie-chart pie-chart " data-percent="@ViewBag.ChartGauge.pmoc" data-line-width="4" data-size="120" data-bar-color="@ViewBag.ChartGauge.cor_pmoc" data-track-color="rgba(2,2,2,.25)" data-scale-color="rgba(2,2,2,.5)">
+                                    <span class="font-size-h1 font-w600" style="color:@ViewBag.ChartGauge.cor_pmoc">@ViewBag.ChartGauge.pmoc</span>
+                                </div>
+                                <div class="font-size-h4 font-w600 text-secundary">PMOC</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.visualizar</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ChecklistUH", "UH")">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-0 d-none d-sm-block js-pie-chart pie-chart " data-percent="@ViewBag.ChartGauge.uh_dia" data-line-width="4" data-size="120" data-bar-color="@ViewBag.ChartGauge.cor_uh_dia" data-track-color="rgba(2,2,2,.25)" data-scale-color="rgba(2,2,2,.5)">
+                                    <span class="font-size-h1 font-w600" style="color:@ViewBag.ChartGauge.cor_uh_dia">@ViewBag.ChartGauge.uh_dia</span>
+                                </div>
+                                <div class="font-size-h4 font-w600 text-secundary">U.H em Dia</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.visualizar</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ChecklistUH", "UH")">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-0 d-none d-sm-block js-pie-chart pie-chart " data-percent="@ViewBag.ChartGauge.green_planet" data-line-width="4" data-size="120" data-bar-color="@ViewBag.ChartGauge.cor_green_planet" data-track-color="rgba(2,2,2,.25)" data-scale-color="rgba(2,2,2,.5)">
+                                    <span class="font-size-h1 font-w600" style="color:@ViewBag.ChartGauge.cor_green_planet">@ViewBag.ChartGauge.green_planet</span>
+                                </div>
+                                <div class="font-size-h4 font-w600 text-secundary">Green Planet</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.visualizar</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- END Row #1 -->
+                </div>
+
+
+                <hr class="border-3x" />
+
+
+
+
+                @*<div class="row invisible" data-toggle="appear">
+
+                    <div class="col-12 col-sm-12 col-md-3 col-xl-3">
+                        <div class="block block-rounded block-bordered block-link-shadow">
+                            <div class="block-header block-header-default bg-primary-dark">
+                                <i class="si si-doc text-white"></i><h3 class="block-title text-white text-center font-w600">Laudo</h3>
+                            </div>
+                            <div class="block-content block-content-full clearfix">
+                                <canvas style="width:100%;text-align:center;display:inline" id="chartLaudo"></canvas>
+                                <div class="font-size-h5 font-w600 text-center"><span id="text-laudo"></span><span>%</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-3 col-xl-3">
+                        <div class="block block-rounded block-bordered block-link-shadow">
+                            <div class="block-header block-header-default bg-primary-dark">
+                                <i class="si si-settings text-white"></i><h3 class="block-title text-white text-center font-w600">Preventiva</h3>
+                            </div>
+                            <div class="block-content block-content-full clearfix">
+                                <canvas style="width:100%;text-align:center;display:inline" id="chartPreventiva"></canvas>
+                                <div class="font-size-h5 font-w600 text-center"><span id="text-preventiva"></span><span>%</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-3 col-xl-3">
+                        <div class="block block-rounded block-bordered block-link-shadow">
+                            <div class="block-header block-header-default bg-primary-dark">
+                                <i class="fa fa-retweet text-white"></i><h3 class="block-title text-white text-center font-w600">UH em Dia</h3>
+                            </div>
+                            <div class="block-content block-content-full clearfix">
+                                <canvas style="width:100%;text-align:center;display:inline" id="chartUH"></canvas>
+                                <div class="font-size-h5 font-w600 text-center"><span id="text-uh"></span><span>%</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-3 col-xl-3">
+                        <div class="block block-rounded block-bordered block-link-shadow">
+                            <div class="block-header block-header-default bg-primary-dark">
+                                <i class="fa fa-snowflake-o text-white"></i><h3 class="block-title text-white text-center font-w600">PMOC</h3>
+                            </div>
+                            <div class="block-content block-content-full clearfix">
+                                <canvas style="width:100%;text-align:center;display:inline" id="chartPMOC"></canvas>
+                                <div class="font-size-h5 font-w600 text-center"><span id="text-pmoc"></span><span>%</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>*@
+
+                <div class="row invisible" data-toggle="appear">
+
+                    <!-- CHART - MANUTENÇÃO ABERTO x CONCLUíDO -->
+                    <div class="col-md-6">
+                        <div class="block block-rounded block-mode-loading-refresh">
+                            <div class="block-header bg-primary-dark ">
+                                <h3 class=" block-title text-white">Gráfico - @PCM.WEB.Properties.Resources.manutencao_aberto_concluido</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                        <i class="si si-chart text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full">
+                                <div class="pull-all pt-50">
+                                    <canvas id="chartManutencaoAbertoConcluido"></canvas>
+                                </div>
+                            </div>
+                            <div class="block-content">
+                                <div class="row items-push">
+                                    <div class="col-6 col-sm-4 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">Aberto</div>
+                                        <div class="font-size-h2 font-w600" style="color:rgba(255, 0, 0);" id="aberto">0</div>
+                                    </div>
+                                    <div class="col-6 col-sm-4 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">Concluído</div>
+                                        <div class="font-size-h2 font-w600" style="color:rgba(34, 177, 76);" id="concluido">0</div>
+                                    </div>
+                                    <div class="col-12 col-sm-4 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">Saldo</div>
+                                        <div class="font-size-h2 font-w600" style="color:rgb(255,201,14);" id="saldo">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CHART - TEMPO MÉDIO DE ATENDIMENTO -->
+                    <div class="col-md-6">
+                        <div class="block block-rounded block-mode-loading-refresh">
+                            <div class="block-header bg-primary-dark ">
+                                <h3 class=" block-title text-white">Gráfico - @PCM.WEB.Properties.Resources.manutencao_tempo_medio_atendimento</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                        <i class="si si-chart text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full">
+                                <div class="pull-all pt-50">
+                                    <canvas id="chartManutencaoTempoMedioAtendimento"></canvas>
+                                </div>
+                            </div>
+                            <div class="block-content">
+                                <div class="row items-push">
+                                    <div class="col-6 col-sm-2 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">NO DIA</div>
+                                        <div class="font-size-h2 font-w600" style="color: rgba(34, 177, 76);" id="no_dia">0%</div>
+                                    </div>
+                                    <div class="col-6 col-sm-2 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">1 DIA</div>
+                                        <div class="font-size-h2 font-w600" style="color: rgba(63, 72, 204);" id="um_dia">0%</div>
+                                    </div>
+                                    <div class="col-12 col-sm-2 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">3 DIAS</div>
+                                        <div class="font-size-h2 font-w600" style="color: rgb(255,201,14);" id="tres_dia">0%</div>
+                                    </div>
+                                    <div class="col-12 col-sm-2 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">5 DIAS</div>
+                                        <div class="font-size-h2 font-w600" style="color: rgba(255, 128, 0);" id="cinco_dia">0%</div>
+                                    </div>
+                                    <div class="col-12 col-sm-2 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">>5 DIAS</div>
+                                        <div class="font-size-h2 font-w600" style="color: rgba(255, 0, 0);" id="mais_cinco_dia">0%</div>
+                                    </div>
+                                    <div class="col-12 col-sm-2 text-center text-sm-center">
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">NÃO ATENDIDO</div>
+                                        <div class="font-size-h2 font-w600" style="color: rgba(128, 0, 128);" id="nao_antendido">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                if ((bool)Session["rel_green_planet"] && Session["codigo_unidade"].ToString() != "-1")
+                {
+
+                <div class="row invisible" data-toggle="appear">
+
+                    <div class="col-md-12">
+                        <div class="block block-rounded block-mode-loading-refresh">
+                            <div class="block-header bg-primary-dark ">
+                                <h3 class=" block-title text-white">Gráfico - @PCM.WEB.Properties.Resources.green_planet</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                        <i class="si si-chart text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row pt-20 pb-10 pl-10 pr-10">
+                                <div class="col-md-2">@Html.DropDownList("agrupado_por", null, @PCM.WEB.Properties.Resources.agrupado_por, new { @class = "form-control material font-w600" })</div>
+                                <div class="col-md-2">@Html.DropDownList("forma_calculo", null, @PCM.WEB.Properties.Resources.forma_calculo_green_planet, new { @class = "form-control material font-w600" })</div>
+                                <div class="col-md-4">@Html.DropDownList("grupo_item_medicao", null, @PCM.WEB.Properties.Resources.grupo_item_medicao, new { @class = "form-control material font-w600" })</div>
+                                <div class="col-md-4 input-group">
+                                    <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                        <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                        <div class="input-group-prepend input-group-append">
+                                            <span class="input-group-text font-w600">-</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-square btn-secondary fa fa-refresh" onclick="refreshGreenPlanet();" id="btnRefreshGreenPlanet" name="btnRefreshGreenPlanet"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="block-content block-content-full">
+                                <div class="pull-all pt-20">
+                                    <canvas id="chartGreenPlanet" height="70px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END CHART -->
+                }
+
+                <div class="row invisible" data-toggle="appear">
+
+                    <!-- PRINCIPAIS PRODUTOS -->
+                    <div class="col-12">
+                        <div class="block-header block-header-default border-b bg-primary-dark">
+                            <h3 class="block-title text-white">Principas Ocorrências</h3>
+                            <div class="dropdown float-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(1);">Dia Anterior</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(7);">Semana</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(30);">Mês</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(365);">Ano</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <table class="table table-borderless table-striped" id="tb-principais-ocorrencias">
+                                <thead>
+                                    <tr class="bg-gray">
+                                        <th class="text-center" style="width: 100px;">#</th>
+                                        <th>@PCM.WEB.Properties.Resources.equipamento</th>
+                                        <th class="text-center" style="width: 150px;">Quantidade</th>
+                                        <th class="text-center" style="width: 150px;">Horas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tb-principais-ocorrencias-body">
+                                    @foreach (var item in ViewBag.PrincipaisOcorrencias)
+                                    {
+                                        <tr>
+                                            <td class="text-center" style="width: 100px;">@item.item</td>
+                                            <td class="font-w600">@item.local</td>
+                                            <td class="text-center">@item.quantidade</td>
+                                            <td class="text-center">@item.horas</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- END PRINCIPAIS PRODUTOS -->
+
+                </div>
+                }
+
+            </div>
+            <!-- END Page Content -->
+            <!-- From Right Modal -->
+            <div class="modal fade" id="modal-fromright" tabindex="-1" role="dialog" aria-labelledby="modal-fromright" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-fromright" role="document">
+                    <div class="modal-content">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">@PCM.WEB.Properties.Resources.log_book</h3>
+                            </div>
+                            <div class="block-content">
+                                <textarea type="text" class="form-control" id="informacao" name="informacao" value="@ViewBag.InfoOrdemServico.log_book" maxlength="5000" rows="15">@ViewBag.InfoOrdemServico.log_book</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn bg-gray-light" onclick="confirmLogBook();" data-dismiss="modal">
+                                <i class="fa fa-check"></i>@PCM.WEB.Properties.Resources.confirmado
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END From Right Modal -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/plugins/gauge")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/easy_pie_chart")
+
+    <script>
+
+        var informacao = $("#informacao");
+        var unidade = $("#unidade");
+        var modulo = $("#modulo");
+        var nome_fantasia = $("#nome_fantasia");
+        var agrupado_por = $("#agrupado_por");
+        var forma_calculo = $("#forma_calculo");
+        var grupo_item_medicao = $("#grupo_item_medicao");
+        var data_inicio = $("#data_inicio");
+        var data_termino = $("#data_termino");
+
+        var colorNamesAbertoConcluido = Object.keys(window.chartColors);
+        var colorNamesTempoMedioAtendimento = Object.keys(window.chartColors);
+        var colorNamesGreenPlanet = Object.keys(window.chartColors);
+
+        //var chrLaudo = new Gauge(document.getElementById("chartLaudo"));
+        //var chrPrenventiva = new Gauge(document.getElementById("chartPreventiva"));
+        //var chrUH = new Gauge(document.getElementById("chartUH"));
+        //var chrPMOC = new Gauge(document.getElementById("chartPMOC"));
+
+        $(document).ready(function () {
+            if (informacao.val() != "") {
+                jQuery('#modal-fromright').modal('show');
+            }
+        });
+
+        $(function () {
+
+            unidade.change(function () {
+                $("#form").submit();
+            });
+
+            modulo.change(function () {
+                $("#form").submit();
+            });
+
+        });
+
+        function refreshGreenPlanet() {
+            configGreenPlanet.data.labels = [];
+            configGreenPlanet.data.datasets = [];
+            LoadChartGreenPlanet();
+        };
+
+        function confirmLogBook() {
+            $.post("Home/ConfirmLogBook");
+        }
+
+        var configTempoMedioAtendimento = {
+            type: 'horizontalBar',
+            options: {
+                responsive: true,
+                data: {
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                    }],
+                    labels: []
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        padding: 20
+                    },
+                    position: 'bottom',
+                },
+                title: {
+                    display: false,
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                },
+                tooltips: {
+                    enabled: true
+                }
+            }
+        };
+
+        var configAbertoConcluido = {
+            type: 'line',
+            options: {
+                responsive: true,
+                data: {
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                    }],
+                    labels: []
+                },
+                legend: {
+                    display: false,
+                    position: 'bottom',
+                },
+                title: {
+                    display: false,
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        };
+
+        var configGreenPlanet = {
+            type: 'line',
+            data: {
+                labels: []
+            },
+            options: {
+                responsive: true,
+                elements: {
+                    line: {
+                        tension: 0.2
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            suggestedMax: 29
+                        }
+                    }]
+                },
+                legend: { position: 'right' }
+            }
+        };
+
+        function LoadChartManutencaoTempoMedioAtendimento() {
+
+            var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val(), "ano": new Date().getFullYear() };
+
+            $.post("@Url.Content("~/Relatorio/ChartManutencaoTempoMedioAtendimento")", request, function (obj) {
+
+                var newDataset = {
+                    label: [],
+                    data: [],
+                    backgroundColor: [],
+                    fill: false
+                };
+
+                $.each(obj, function (indice, result) {
+
+                    switch (result.tipo) {
+                        case 'NO DIA':
+                            colorName = 'rgba(34, 177, 76, 0.7)';
+                            borderColorName = 'rgba(34, 177, 76, 0.8)';
+                            $("#no_dia").text(result.valor + '%');
+                            break;
+                        case '1 DIA':
+                            colorName = 'rgba(63, 72, 204, 0.7)';
+                            borderColorName = 'rgba(63, 72, 204, 0.8)';
+                            $("#um_dia").text(result.valor + '%');
+                            break;
+                        case '3 DIAS':
+                            colorName = 'rgba(255, 201, 14, 0.7)';
+                            borderColorName = 'rgba(255, 201, 14, 0.8)';
+                            $("#tres_dia").text(result.valor + '%');
+                            break;
+                        case '5 DIAS':
+                            colorName = 'rgba(255, 128, 0, 0.7)';
+                            borderColorName = 'rgba(255, 128, 0, 0.8)';
+                            $("#cinco_dia").text(result.valor + '%');
+                            break;
+                        case '> 5 DIAS':
+                            colorName = 'rgba(255, 0, 0, 0.7)';
+                            borderColorName = 'rgba(255, 0, 0, 0.8)';
+                            $("#mais_cinco_dia").text(result.valor + '%');
+                            break;
+                        case 'NÃO ATENDIDO':
+                            colorName = 'rgba(128, 0, 128, 0.7)';
+                            borderColorName = 'rgba(128, 0, 128, 0.8)';
+                            $("#nao_atendido").text(result.valor + '%');
+                            break;
+                    }
+
+                    //var colorName = colorNamesTempoMedioAtendimento[newDataset.data.length % colorNamesTempoMedioAtendimento.length];
+                    //var newColor = window.chartColors[colorName];
+                    configTempoMedioAtendimento.data.labels.push(result.tipo);
+                    newDataset.data.push(Number(result.valor));
+                    newDataset.backgroundColor.push(colorName);
+                });
+
+                configTempoMedioAtendimento.data.datasets.push(newDataset);
+                window.TempoMedioAtendimento.update();
+
+            }, "json");
+        }
+
+        function LoadChartManutencaoAbertoConcluido() {
+
+            var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val(), "data_inicio": "@ViewBag.data_inicio", "data_termino": new Date().toDateString() };
+
+            $.post("@Url.Content("~/Relatorio/ChartManutencaoAbertoConcluido")", request, function (obj) {
+
+                var Aberto = {
+                    label: 'Aberto',
+                    data: [],
+                    fill: false,
+                    backgroundColor: 'rgba(255, 0, 0, 0.7)',
+                    borderColor: 'rgba(255, 0, 0, 1)',
+                    pointBorderColor: 'rgba(255, 0, 0, 1)',
+                };
+
+                var Concluido = {
+                    label: 'Concluído',
+                    data: [],
+                    fill: false,
+                    backgroundColor: 'rgba(34, 177, 76, 0.7)',
+                    borderColor: 'rgba(34, 177, 76, 1)',
+                    pointBorderColor: 'rgba(34, 177, 76, 1)',
+                };
+
+                var Saldo = {
+                    label: 'Saldo',
+                    data: [],
+                    fill: true,
+                    backgroundColor: 'rgba(255, 201, 14, 0.1)',
+                    borderColor: 'rgba(255, 201, 14, 0.6)',
+                    pointBorderColor: 'rgba(255, 201, 14, 0.6)',
+                };
+
+                $.each(obj, function (indice, result) {
+                    configAbertoConcluido.data.labels.push(result.data);
+                    Aberto.data.push(result.aberto);
+                    Concluido.data.push(result.concluido);
+                    Saldo.data.push(result.saldo);
+                    $("#aberto").text(result.aberto);
+                    $("#concluido").text(result.concluido);
+                    $("#saldo").text(result.saldo);
+                });
+
+                configAbertoConcluido.data.datasets.push(Aberto);
+                configAbertoConcluido.data.datasets.push(Concluido);
+                configAbertoConcluido.data.datasets.push(Saldo);
+                window.AbertoConcluido.update();
+
+            }, "json");
+        }
+
+        function LoadChartGreenPlanet() {
+
+            var session_unidade = '@Session["codigo_unidade"]';
+            var unidade = $("#unidade");
+            var agrupado_por = $("#agrupado_por");
+            var forma_calculo = $("#forma_calculo");
+            var grupo_item_medicao = $("#grupo_item_medicao");
+            var data_inicio = $("#data_inicio");
+            var data_termino = $("#data_termino");
+
+            if ((session_unidade != "-1" || unidade.val() != "-1") && grupo_item_medicao.val() != null) {
+
+                var request = { "data_inicio": data_inicio.val(), "data_termino": data_termino.val(), "unidade": (session_unidade == "-1") ? unidade.val() : session_unidade, "forma_calculo": forma_calculo.val(), "agrupado_por": agrupado_por.val(), "grupo_item_medicao": grupo_item_medicao.val(), "item_medicao": "-1" };
+
+                //Obtém eixo X
+                $.post("@Url.Content("~/Relatorio/ChartGreenPlanetData")", request, function (obj) {
+                    $.each(obj, function (indice, result) {
+                        configGreenPlanet.data.labels.push(result);
+                    });
+                }, "json");
+
+                $.post("@Url.Content("~/Relatorio/ChartGreenPlanet")", request, function (obj) {
+
+                    if (obj.length == 0) {
+                        configGreenPlanet.data.labels = [];
+                        configGreenPlanet.data.datasets = [];
+                        window.GreenPlanet.update();
+                    } else {
+                        $.each(obj, function (indice, result) {
+
+                            var colorName = colorNamesGreenPlanet[configGreenPlanet.data.datasets.length % colorNamesGreenPlanet.length];
+                            var newColor = window.chartColors[colorName];
+                            var borderColor = window.chartBorderColors[colorName];
+
+                            var newDataset = {
+                                label: result.item_medicao,
+                                backgroundColor: newColor,
+                                borderColor: borderColor,
+                                data: [],
+                                fill: false
+                            };
+
+                            for (var index = 0; index < result.valor.length; ++index) {
+                                newDataset.data.push(result.valor[index]);
+                            }
+
+                            configGreenPlanet.data.datasets.push(newDataset);
+                            window.GreenPlanet.update();
+                        });
+                    }
+                }, "json");
+
+            } else {
+                configGreenPlanet.data.labels = [];
+                configGreenPlanet.data.datasets = [];
+                window.GreenPlanet.update();
+            }
+
+        }
+
+        function LoadChartGauge() {
+
+            var opts = {
+                angle: -0.08,
+                lineWidth: 0.3,
+                radiusScale: 1,
+                percentColors: [[0.0, "#FF1919"], [0.65, "#FDF406"], [1.0, "#29B435"]],
+                staticZones: [
+                   { strokeStyle: "#FF1919", min: 0, max: 65 }, // Red from 100 to 130
+                   { strokeStyle: "#FDF406", min: 65, max: 85 }, // Yellow
+                   { strokeStyle: "#29B435", min: 85, max: 100 }
+                ],
+                pointer: {
+                    length: 0.6,
+                    strokeWidth: 0.035,
+                    color: '#000000'
+                },
+                limitMax: false,
+                limitMin: false,
+                generateGradient: false,
+                highDpiSupport: true,
+                renderTicks: {
+                    divisions: 5,
+                    divWidth: 1.1,
+                    divLength: 0.7,
+                    divColor: "#333333",
+                    subDivisions: 3,
+                    subLength: 0.5,
+                    subWidth: 0.6,
+                    subColor: "#666666"
+                },
+                staticLabels: {
+                    font: "10px sans-serif",
+                    labels: [0, 65, 85],
+                    color: "#000000",
+                },
+            };
+
+            var laudo = "@ViewBag.ChartGauge.laudo";
+            var preventiva = "@ViewBag.ChartGauge.preventiva";
+            var uh = "@ViewBag.ChartGauge.uh_dia";
+            var pmoc = "@ViewBag.ChartGauge.pmoc";
+
+            chrLaudo.setOptions(opts);
+            chrLaudo.setTextField(document.getElementById("text-laudo"));
+            chrLaudo.minValue = 0;
+            chrLaudo.maxValue = 100;
+
+            chrPrenventiva.setOptions(opts);
+            chrPrenventiva.setTextField(document.getElementById("text-preventiva"));
+            chrPrenventiva.minValue = 0;
+            chrPrenventiva.maxValue = 100;
+
+            chrUH.setOptions(opts);
+            chrUH.setTextField(document.getElementById("text-uh"));
+            chrUH.minValue = 0;
+            chrUH.maxValue = 100;
+
+            chrPMOC.setOptions(opts);
+            chrPMOC.setTextField(document.getElementById("text-pmoc"));
+            chrPMOC.minValue = 0;
+            chrPMOC.maxValue = 100;
+
+            chrLaudo.set(laudo);
+            chrPrenventiva.set(preventiva);
+            chrUH.set(uh);
+            chrPMOC.set(pmoc);
+        }
+
+        function PrincipaisOcorrencias(quantidade) {
+
+            var dataString = { "unidade": unidade.val(), "quantidade": quantidade, "qualidade": false };
+            $("#tb-principais-ocorrencias-body").empty();
+
+            jQuery.ajax({
+                type: "POST",
+                url: "@Url.Content("Home/PrincipaisOcorrencias")",
+                async: false,
+                data: dataString,
+                dataType: "json",
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        var newRowItem = $("<tr>");
+                        var colsItem = "";
+                        colsItem = '<td class="text-center" style="width: 100px;">' + response[i].item + '</td>';
+                        newRowItem.append(colsItem);
+                        colsItem = '<td class="font-w600">' + response[i].local + '</td>';
+                        newRowItem.append(colsItem);
+                        colsItem = '<td class="text-center">' + response[i].quantidade + '</td>';
+                        newRowItem.append(colsItem);
+                        colsItem = '<td class="text-center">' + response[i].horas + '</td>';
+                        newRowItem.append(colsItem);
+                        $("#tb-principais-ocorrencias").append(newRowItem);
+                    }
+                }
+            });
+        }
+
+        window.onload = function () {
+            var cManutencaoTempoMedioAtencimento = document.getElementById('chartManutencaoTempoMedioAtendimento').getContext('2d');
+            window.TempoMedioAtendimento = new Chart(cManutencaoTempoMedioAtencimento, configTempoMedioAtendimento);
+            var cManutencaoAbertoConcluido = document.getElementById('chartManutencaoAbertoConcluido').getContext('2d');
+            window.AbertoConcluido = new Chart(cManutencaoAbertoConcluido, configAbertoConcluido);
+            if ('@Session["rel_green_planet"]' == 'True' && '@Session["codigo_unidade"].ToString()' != '-1') {
+                var cGreenPlanet = document.getElementById('chartGreenPlanet').getContext('2d');
+                window.GreenPlanet = new Chart(cGreenPlanet, configGreenPlanet);
+            }
+        };
+
+        // Initialize when page loads
+        jQuery(function () {
+            LoadChartManutencaoTempoMedioAtendimento();
+            LoadChartManutencaoAbertoConcluido();
+            //LoadChartGauge();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2', 'easy-pie-chart']);
+        });
+
+    </script>
+}
+

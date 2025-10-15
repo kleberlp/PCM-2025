@@ -1,0 +1,162 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.ManutencaoApontamento>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento_os</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">   
+
+        <div class="block block-rounded border">
+    
+            <div class="block">
+                
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento_os</h3>
+                    <div class="block-options">                        
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onClick="history.go(-1);"><i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar</button>    
+                    </div>
+                </div>            
+
+                <div class="block-content">
+                
+                    <!-- Table -->
+                    <div class="table-responsive table-sm push">
+                        <table class="table table-sm table-vcenter table-striped js-dataTable-list">
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.ordem_servico</th>
+                                    <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.executor</th>
+                                    <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.local</th>
+                                    <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                    <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_inicio</th>
+                                    <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_termino</th>
+                                    <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.horas</th>
+                                    <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.total</th>
+                                    @if (ViewBag.administrador)
+                                    {
+                                        <th data-sortable="false" class="text-center" style="width: 80px;" data-sortable="false"></th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico)</td>
+                                    <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.executor)</td>
+                                    <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.local)</td>
+                                    <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.descricao)</td>
+                                    <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.data_inicio)</td>
+                                    <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.data_termino)</td>
+                                    @if (item.erro == true)
+                                    {
+                                        <td class="text-center" style="width: 150px;"><span class="badge badge-danger">@Html.DisplayFor(modelItem => item.horas)</span></td>
+                                        <td class="text-center" style="width: 150px;"><span class="badge badge-danger">@Html.DisplayFor(modelItem => item.custo)</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.horas)</td>
+                                        <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.custo)</td>
+                                    }
+                                    @if (ViewBag.administrador)
+                                    {
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <a href="@Url.Action("ApontamentoOSEdit", "PCM", new { codigo = item.codigo, codigo_unidade = item.codigo_unidade, return_page = "ManutencaoApontamento" })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END Table -->
+
+                </div>
+
+            </div>
+
+        </div>
+   
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/dataTables")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+
+    <script type="text/javascript">
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: true,
+                    searching: true,
+                    lengthChange: false,
+                    paging: false,
+                    autoWidth: false,
+                    scrollX: false,
+                    scrollColapse: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar' },
+                        {
+                            extend: 'print',
+                            text: 'Imprimir'
+                        },
+                        { extend: 'excel' },
+                        { extend: 'pdf', orientation: 'portrait' },
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+
+        // Initialize when page loads
+        jQuery(function () { $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss'); BeTableDatatables.init(); });
+
+    </script>
+}

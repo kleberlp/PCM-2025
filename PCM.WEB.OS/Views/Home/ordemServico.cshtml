@@ -1,0 +1,184 @@
+﻿@model PCM.WEB.OS.MODELS.OSHospedeApartamento
+@{
+    Layout = string.Empty;
+}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8" />
+    <title>VC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/icons.min.css" rel="stylesheet" />
+    <link href="~/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="~/css/app.css" rel="stylesheet" />
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/sweet-alert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/lib/flatpickr/flatpickr.min.css" rel="stylesheet" />
+</head>
+<body class="account-body">
+    <div class="container-fluid">
+
+        <form autocomplete="off"
+              class="form-horizontal auth-form"
+              asp-action="ordemServico"
+              asp-controller="Home"
+              method="post"
+              enctype="multipart/form-data"
+              id="form">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" id="uniqueId" name="uniqueId" value="@ViewBag.uniqueId" />
+
+            <!-- DADOS UH -->
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="accordion" id="accUh">
+                        <div class="accordion-item">
+                            <h5 class="accordion-header m-0" id="hdUh">
+                                <button class="accordion-button fw-semibold bg-light" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#colUh"
+                                        aria-expanded="true" aria-controls="colUh">
+                                    <h5 class="card-title m-0">Dados da UH</h5>
+                                </button>
+                            </h5>
+                            <div id="colUh" class="accordion-collapse show" aria-labelledby="hdUh" data-bs-parent="#accUh">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="form-label font-bold">Apartamento: @Model.apartamento</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Bloco: @Model.bloco</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Andar: @Model.andar</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DADOS CHAMADO -->
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="accordion" id="accChamado">
+                        <div class="accordion-item">
+                            <h5 class="accordion-header m-0" id="hdChamado">
+                                <button class="accordion-button fw-semibold bg-light" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#colChamado"
+                                        aria-expanded="true" aria-controls="colChamado">
+                                    <h5 class="card-title m-0">Dados do Chamado</h5>
+                                </button>
+                            </h5>
+                            <div id="colChamado" class="accordion-collapse show" aria-labelledby="hdChamado" data-bs-parent="#accChamado">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="itemOSHospede">Item</label>
+                                            @Html.DropDownList("itemOSHospede", null, "", new { @class = "form-select", @required = "true" })
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="descricao">Descrição</label>
+                                            <textarea class="form-control" rows="5" id="descricao" name="descricao" maxlength="250"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3 text-center">
+                                        <div class="col-12 d-flex justify-content-center gap-2">
+                                            <button type="button" class="btn btn-primary" id="btnCamera">
+                                                Tirar foto (câmera)
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" id="btnGaleria">
+                                                Escolher da galeria
+                                            </button>
+                                        </div>
+
+                                        <!-- Inputs reais (escondidos). Ambos usam name="file" -->
+                                        <input id="inputCamera" type="file" name="file" accept="image/*" capture="environment" style="display:none" />
+                                        <input id="inputGaleria" type="file" name="file" accept="image/*" style="display:none" />
+
+                                        <!-- Preview opcional -->
+                                        <div class="col-12 mt-2">
+                                            <img id="preview" style="max-width:260px; display:none; border:1px solid #eee; border-radius:8px;" />
+                                            <div id="fileInfo" class="text-muted small mt-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <hr class="hr-solid">
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-sm btn-soft-primary mb-3" id="btnSave">
+                                            <i class="fas fa-save me-2 icon-xs"></i>Salvar
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-sm btn-soft-primary mb-3" type="button"
+                                                onclick="window.location.href='@Url.Action("Index", "Home", new { uniqueId = ViewBag.uniqueId })'" id="btnUndo">
+                                            <i class="fas fa-undo me-2 icon-xs"></i>Voltar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const btnCamera  = document.getElementById('btnCamera');
+        const btnGaleria = document.getElementById('btnGaleria');
+        const inCamera   = document.getElementById('inputCamera');
+        const inGaleria  = document.getElementById('inputGaleria');
+        const preview    = document.getElementById('preview');
+        const fileInfo   = document.getElementById('fileInfo');
+
+        // Abre câmera
+        btnCamera.addEventListener('click', () => {
+            if (inCamera.showPicker) inCamera.showPicker(); else inCamera.click();
+        });
+
+        // Abre galeria
+        btnGaleria.addEventListener('click', () => {
+            if (inGaleria.showPicker) inGaleria.showPicker(); else inGaleria.click();
+        });
+
+        // Preview e info
+        function onChosen(input) {
+            const file = input.files && input.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            preview.src = url;
+            preview.style.display = 'inline-block';
+            fileInfo.textContent = `${file.name} - ${(file.size/1024/1024).toFixed(2)} MB`;
+        }
+
+        inCamera.addEventListener('change', () => onChosen(inCamera));
+        inGaleria.addEventListener('change', () => onChosen(inGaleria));
+
+        // (Opcional) Auto-submit após tirar/selecionar a foto:
+        // inCamera.addEventListener('change', () => document.getElementById('form').submit());
+        // inGaleria.addEventListener('change', () => document.getElementById('form').submit());
+    </script>
+</body>
+</html>

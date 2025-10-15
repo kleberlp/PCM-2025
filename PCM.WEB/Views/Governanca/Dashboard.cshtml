@@ -1,0 +1,430 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content bg-white">
+
+        @using (Html.BeginForm("Dashboard", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="block d-print-normal p-10 m-10" style="display:none">
+                <div class="form-row">
+                    <div class="col-3">
+                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
+                    </div>
+                    <div class="col-6 text-center">
+                        <label class="h2">Desempenho @ViewBag.nome_fantasia</label>
+                    </div>
+                    <div class="col-3 text-right">
+                        <label class="h4 font-w600">01/03</label>
+                    </div>
+                </div>
+                <hr />
+            </div>
+
+            <div class="row invisible" data-toggle="appear">
+                <div class="col-md-4">
+                    <label>@PCM.WEB.Properties.Resources.unidade</label>
+                    @Html.DropDownList("unidade", null, null, new { @class = "form-control material font-w600 js-select2" })
+                </div>
+                <div class="col-md-4">
+                    <label>@PCM.WEB.Properties.Resources.data</label>
+                    <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                        <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
+                        <div class="input-group-prepend input-group-append">
+                            <span class="input-group-text font-w600">-</span>
+                        </div>
+                        <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
+                    </div>
+                </div>
+                <input type="hidden" name="nome_fantasia" id="nome_fantasia" value="@ViewBag.nome_fantasia" />
+                <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@Session["codigo_unidade"]" />
+            </div>
+
+            <br />
+
+            <div class="block d-print-normal bg-white">
+
+
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@ViewBag.nome_fantasia</h3>
+                    <div class="block-options">
+                        <!-- Print Page functionality is initialized in Codebase() -> uiHelperPrint() -->
+                        <button type="button" class="btn-block-option text-white" onclick="Codebase.helpers('print-page');">
+                            <i class="si si-printer text-white"></i> @PCM.WEB.Properties.Resources.imprimir
+                        </button>
+                        <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                    </div>
+                </div>
+
+                <div class="row invisible pt-20 pr-20 pl-20" data-toggle="appear">
+
+                    <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-3x"></i></div>
+                                <div class="font-size-h3 font-w600 text-primary">@ViewBag.dashboard_info.quantidadeUHs</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">Nº UH's'</div>
+                                <div class="font-size-h3 font-w600 text-primary">@ViewBag.dashboard_info.quantidateUHsGovernanca</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">UH's Vistoriadas</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-user fa-3x"></i></div>
+                                <div class="font-size-h3 font-w600 text-primary">@ViewBag.dashboard_info.quantidadeCamareira</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">Nº Camareiras</div>
+                                <div class="font-size-h3 font-w600 text-primary">@ViewBag.dashboard_info.quantidadeVistoriador</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">Nº Supervisores</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-clock-o fa-3x"></i></div>
+                                <div class="font-size-h3 font-w600 text-primary">@ViewBag.dashboard_info.hhDisponivel</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">HH Disponível</div>
+                                <div class="font-size-h3 font-w600 text-primary">@ViewBag.dashboard_info.hhUtilizado</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">HH Utilizado</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-3x"></i></div>
+                                <div class="font-size-h3 font-w600 text-primary">@ViewBag.dashboard_info.quantidadeOSGerada</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">Qtde. OS Gerada</div>
+                                <div class="font-size-h3 font-w600 text-primary">&nbsp;</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">&nbsp;</div>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Arrumado x Vistoriado -->
+            <div class="block">
+
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">Qtd. UH's Arrumados x Vistoriados</h3>
+                </div>
+
+                <div class="block">
+
+
+                    <div class="col-md-12">
+                        <div class="block block-rounded block-mode-loading-refresh">
+                            <div class="block-content block-content-full">
+                                <div class="pull-all pt-30 p-20">
+                                    <canvas id="chartArrumadoxVistoriado" height="80px" class="chartCanvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Arrumação e Vistoria (Unidade) -->
+            <div class="block">
+
+                <div class="form-row">
+
+                    <div class="col-md-6">
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">Nº de Arrumações por Camareira</h3>
+                        </div>
+
+                        <div class="block">
+
+
+                            <div class="col-md-12">
+                                <div class="block block-rounded block-mode-loading-refresh">
+                                    <div class="block-content block-content-full">
+                                        <div class="pull-all pt-30 p-20">
+                                            <canvas id="chartArrumacaoDia" height="80px" class="chartCanvas"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">Nº de Vistorias por Vistoriador</h3>
+                        </div>
+
+                        <div class="block">
+
+
+                            <div class="col-md-12">
+                                <div class="block block-rounded block-mode-loading-refresh">
+                                    <div class="block-content block-content-full">
+                                        <div class="pull-all pt-30 p-20">
+                                            <canvas id="chartVistoriaDia" height="80px" class="chartCanvas"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arrumação e Vistoria (Unidade) -->
+            <div class="block">
+
+                <div class="form-row">
+
+                    <div class="col-md-6">
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">Produtividade por Camareira</h3>
+                        </div>
+
+                        <div class="block">
+
+
+                            <div class="col-md-12">
+                                <div class="block block-rounded block-mode-loading-refresh">
+                                    <div class="block-content block-content-full">
+                                        <div class="pull-all pt-30 p-20">
+                                            <canvas id="chartProdutividadeCamareira" height="80px" class="chartCanvas"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <table class="table table-borderless table-striped" id="tbProdutividadeCamareira">
+                                    <thead>
+                                        <tr class="bg-gray">
+                                            <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                            <th>@PCM.WEB.Properties.Resources.quantidade_realizada</th>
+                                            <th>@PCM.WEB.Properties.Resources.quantidade_pendente</th>
+                                            <th>@PCM.WEB.Properties.Resources.total</th>
+                                            <th>@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in @ViewBag.ProdutividadeCamareira)
+                                        {
+                                            <tr>
+                                                <td class="bg-info-light font-w400">@item.unidade</td>
+                                                <td class="text-center">@item.quantidadeOK</td>
+                                                <td class="text-center">@item.quantidadePendente</td>
+                                                <td class="text-center">@item.total</td>
+                                                <td class="text-center">@item.percentual</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">Produtividade por Vistoriador</h3>
+                        </div>
+
+                        <div class="block">
+
+
+                            <div class="col-md-12">
+                                <div class="block block-rounded block-mode-loading-refresh">
+                                    <div class="block-content block-content-full">
+                                        <div class="pull-all pt-30 p-20">
+                                            <canvas id="chartProdutividadeVistoriador" height="80px" class="chartCanvas"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <table class="table table-borderless table-striped" id="tbProdutividadeVistoriador">
+                                    <thead>
+                                        <tr class="bg-gray">
+                                            <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                            <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_realizada</th>
+                                            <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_pendente</th>
+                                            <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
+                                            <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in @ViewBag.ProdutividadeVistoriador)
+                                        {
+                                            <tr>
+                                                <td class="bg-info-light font-w400">@item.unidade</td>
+                                                <td class="text-center">@item.quantidadeOK</td>
+                                                <td class="text-center">@item.quantidadePendente</td>
+                                                <td class="text-center">@item.total</td>
+                                                <td class="text-center">@item.percentual</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row invisible" data-toggle="appear" id="divNaoConformidade">
+
+                <div class="col-12">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white">Atendimento - Ordem de Serviço</h3>
+                    </div>
+
+                    <div class="form-group row">
+
+                        <div class="col-md-12">
+                            <table class="table table-borderless table-striped" id="tbOrdemServico">
+                                <thead>
+                                    <tr class="bg-gray">
+                                        <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                        <th class="text-center">Qtde. Colaborador</th>
+                                        <th class="text-center">Qtde. Terceiros</th>
+                                        <th class="text-center">H.H. Disponível</th>
+                                        <th class="text-center">Qtde. OS Gerada</th>
+                                        <th class="text-center">Qtde. OS Atendida</th>
+                                        <th class="text-center">Qtde. OS por PAX</th>
+                                        <th class="text-center">Qtde. OS Pendente</th>
+                                        <th class="text-center">% OS Pendente x OS Gerada</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in @ViewBag.AtendimentoOS)
+                                    {
+                                        <tr>
+                                            <td class="bg-info-light font-w400">@item.unidade</td>
+                                            <td class="text-center">@item.quantidadeProprio</td>
+                                            <td class="text-center">@item.quantidadeTerceiro</td>
+                                            <td class="text-center">@item.hhDisponivel</td>
+                                            <td class="text-center">@item.quantidaeOSGerada</td>
+                                            <td class="text-center">@item.quantidaeOSAtendida</td>
+                                            <td class="text-center">@item.quantidaeOSPAX</td>
+                                            <td class="text-center">@item.quantidadeOSPendente</td>
+                                            <td class="text-center">@item.percentualAtendido</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+    <div id="api-urls"
+         data-chart-arrumado-vistoriado="@Url.Content("~/Governanca/ChartArrumadoxVistoriado")"
+         data-chart-arrumacao-dia="@Url.Content("~/Governanca/ChartArrumacaoDia")"
+         data-chart-vistoria-dia="@Url.Content("~/Governanca/ChartVistoriaDia")"
+         data-chart-produtividade-camareira="@Url.Content("~/Governanca/ChartProdutividadeCamareira")"
+         data-chart-produtividade-vistoriador="@Url.Content("~/Governanca/ChartProdutividadeVistoriador")"
+         data-chart-nao-conformidade-tipo="@Url.Content("~/Governanca/ChartNaoConformidadeTipo")"
+         data-resource-checklist="@PCM.WEB.Properties.Resources.checklist"
+         data-resource-resultado="@PCM.WEB.Properties.Resources.resultado"
+         data-resource-observacao="@PCM.WEB.Properties.Resources.observacao"
+         data-resource-enxoval="@PCM.WEB.Properties.Resources.enxoval"
+         data-resource-quantidade="@PCM.WEB.Properties.Resources.quantidade"
+         data-resource-peso="@PCM.WEB.Properties.Resources.peso"
+         data-resource-total="@PCM.WEB.Properties.Resources.total">
+
+    </div>
+
+</main>
+<!-- END Main Container -->
+<!-- From Right Modal -->
+
+<div class="modal" id="modal-extra-large" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true">
+    <div class="modal-dialog modal-xlg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-15">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="si si-close font-w600"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="block-content block-content-full">
+
+                    <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+
+                        <thead>
+                            <tr class="table-secondary">
+                                <th class="text-center"></th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.data</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.uh</th>
+                                <th class="text-left">@PCM.WEB.Properties.Resources.camareira</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.hora_inicio</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.hora_termino</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.tempo_gasto</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.tipoGovernanca</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.nao_conformidade</th>
+                                <th class="text-left">@PCM.WEB.Properties.Resources.responsavel_vistoria</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.dataHoraVistoria</th>
+                            </tr>
+                        </thead>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/plugins/gauge")
+    @Scripts.Render("~/plugins/select")
+    <script src="~/Content/js/pages/Governanca/dashboard.js"></script>
+}
+

@@ -1,0 +1,263 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.AuditoriaExterna>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.auditoria_externa</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">        
+
+        <!-- Listagem -->
+
+        @using (Html.BeginForm("AuditoriaIndex", "Auditoria", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data"  }))        
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+               
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.auditoria_externa</h3>
+                        @if(ViewBag.inserir)
+                        {
+                            <div class="block-options">
+                                <a href="@Url.Action("AuditoriaInsert", "Auditoria")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo</a>
+                            </div>
+                        }                
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <div class="col-md-4">
+                                            <div>@Html.DropDownList("unidade", null, @PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" id="unidade" name="unidade" value="@Session["codigo_unidade"]">
+                                    }
+                                    <div class="col-md-4">
+                                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                            <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text font-w600">-</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Html.DropDownList("fornecedor", null, @PCM.WEB.Properties.Resources.fornecedor, new { @class = "js-select2 form-control", @allowClear = "true" })
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item block-options text-right">                                                    
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar" ><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="block block-rounded border">
+
+            <div class="block-content block-content-full border">
+
+                <table class="table table-sm table-vcenter table-striped js-dataTable-list">
+
+                    <thead>
+                        <tr class="table-secondary">
+                            @if (Session["unidade"] == "")
+                            {
+                                <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
+                            }
+                            <th class="d-none d-sm-table-cell text-md-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data</th>
+                            <th class="d-none d-sm-table-cell text-md-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data_validade</th>
+                            <th>@PCM.WEB.Properties.Resources.descricao</th>
+                            <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.fornecedor</th>
+                            <th class="d-none d-sm-table-cell text-md-center" style="width: 120px;">@PCM.WEB.Properties.Resources.valor</th>
+                            @if (ViewBag.editar || ViewBag.excluir)
+                            {
+                                <th class="text-md-center" style="width: 80px;" data-sortable="false"></th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                @if (Session["unidade"] == "")
+                                {
+                                    <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                }
+                                <td class="d-none d-sm-table-cell text-md-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.data)</td>
+                                <td class="d-none d-sm-table-cell text-md-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.data_validade)</td>
+                                <td>@Html.DisplayFor(modelItem => item.descricao)</td>
+                                <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.fornecedor)</td>
+                                <td class="d-none d-sm-table-cell text-md-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.valor_texto)</td>
+                                @if (ViewBag.excluir || item.path_arquivo != "")
+                                {
+                                    <td class="text-md-center" style="width: 80px;">
+                                        <div class="btn-group">
+                                            @if (ViewBag.excluir)
+                                            {<a href="@Url.Action("AuditoriaDelete", "Auditoria", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
+                                            @if (item.path_arquivo != "")
+                                            {<a href="@Url.Content(item.path_arquivo)" target="_blank" class="btn btn-sm btn-secondary"><i class="fa fa-file-pdf-o"></i></a>}
+                                            @if (item.path_arquivo == "")
+                                            {<a href="@Url.Action("AuditoriaPrintPDF", "Auditoria", new { codigo_unidade = item.codigo_unidade, codigo_auditoria = item.codigo })" target="_blank" class="btn btn-sm btn-secondary"><i class="fa fa-file-pdf-o"></i></a>}
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+        
+    </div>
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {    
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $.ajaxSetup({ async: false });
+
+            var unidade = $("#unidade")
+            var fornecedor = $("#fornecedor");
+            
+            fornecedor.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.fornecedor' });
+            
+            if (programada.val() == "") {
+                equipamento.prop("disabled", true);
+            }
+            if (unidade.val() == "" || unidade.val() == "-1") {
+                fornecedor.prop("disabled", true);
+                fornecedor.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.fornecedor' });
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+                    fornecedor.prop("disabled", true);
+                    fornecedor.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.fornecedor' });
+                }
+                else
+                {
+
+                    var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
+
+                    $.post("LoadFornecedor", request, function (obj) {
+                        fornecedor.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        fornecedor.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            fornecedor.append(option);
+                        });
+                    }, "json");
+
+                    fornecedor.prop("disabled", false);
+                    fornecedor.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.fornecedor' });
+                }
+
+            });
+
+        });
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: true,
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 15,
+                    columnDefs: [{ orderable: false, targets: [0] }], order: [1],
+                    autoWidth: false,
+                    scrollX: false,
+                    scrollColapse: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar' },
+                        {
+                            extend: 'print',
+                            text: 'Imprimir'
+                        },
+                        { extend: 'excel' },
+                        { extend: 'pdf', orientation: 'portrait' },
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init();
+            Codebase.
+            'datepicker', 'maxlength', 'select2']);
+        });
+
+    </script>
+}

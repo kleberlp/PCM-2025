@@ -1,0 +1,73 @@
+﻿@model PCM.WEB.MODELS.AuditoriaCorporativo
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.cadastro_basico</span>
+                <a class="breadcrumb-item" href="@Url.Action("AuditoriaCorporativoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.auditoria_corporativo</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.excluir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.codigo)
+                    @Html.HiddenFor(model => model.codigo_unidade)
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.deseja_excluir</h3>
+                            <div class="block-options">
+                                @if(ViewBag.erro == "")
+                                {
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                        <i class="si si-trash mr-5"></i>@PCM.WEB.Properties.Resources.excluir
+                                    </button>
+                                }
+                                <a href="@Url.Action("AuditoriaCorporativoIndex", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            @if (ViewBag.erro != "")
+                            {
+                                <div class="form-group row">
+                                    <i><label class="col-12 font-w600 text-danger">** @ViewBag.erro</label></i>
+                                </div>
+                            }
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.unidade: <span class="font-w400">@Html.DisplayFor(model => model.unidade)</span></label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.descricao: <span class="font-w400">@Html.DisplayFor(model => model.descricao)</span></label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.checklist: <span class="font-w400">@Html.DisplayFor(model => model.checklist)</span></label>
+                            </div>
+                        </div>                        
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

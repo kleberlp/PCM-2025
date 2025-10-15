@@ -1,0 +1,107 @@
+﻿    <!-- Main Container -->
+    <main id="main-container">
+   
+        <!-- Breadcrumb -->
+        <div class="bg-body-light border-b">
+            <div class="content py-0 text-center">
+                <nav class="breadcrumb bg-body-light mb-0">
+                    <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                    <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.log_book</span>
+                </nav>
+            </div>
+        </div>
+        <!-- END Breadcrumb -->
+
+        <!-- Page Content -->
+        <div class="content">   
+
+            <div class="col-md-6 col-xl-3">
+            
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.log_book</h3>
+                            <div class="block-options">
+                                <a href="@Url.Action("LogBookInsert", "LogBook")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.inserir</a>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                        <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                        <div class="input-group-prepend input-group-append">
+                                            <span class="input-group-text font-w600">-</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                    </div>
+                                </li>    
+                                <li class="list-group-item">
+                                    <div>@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>                                    
+                                </li>                          
+                                <li class="list-group-item text-right">                                                                                        
+                                    <button type="button" onclick="loadLogBook();" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+            </div>
+    
+            <div id="vertical-timeline" class="vertical-container light-timeline center-orientation col-md-6 col-xl-9"></div>
+ 
+        </div>
+
+    </main>
+
+
+    @section Styles {
+        @Styles.Render("~/Content/datepicker")
+        @Styles.Render("~/Content/select")
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/plugins/validation")
+        @Scripts.Render("~/plugins/maxlenght")
+        @Scripts.Render("~/plugins/datepicker")
+        @Scripts.Render("~/plugins/select")
+
+        <script type="text/javascript">
+
+            function loadLogBook() {
+
+                timeline = $("#vertical-timeline");
+                unidade = $("#unidade");
+                data_inicio = $("#data_inicio");
+                data_termino = $("#data_termino");
+
+                if (unidade.val() != "") {
+
+                    var request = { "unidade": unidade.val(), "data_inicio": data_inicio.val(), "data_termino": data_termino.val() };
+
+                    $.post("LoadLogBook", request, function (obj) {
+                        timeline.empty();
+                        $.each(obj, function (indice, result) {
+                            timeline.append(result.html);
+                        });
+                    }, "json");
+                }
+
+            }
+
+            // Initialize when page loads
+            jQuery(function () { 
+                Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+                loadLogBook();
+            });
+
+        </script>
+    }

@@ -1,0 +1,299 @@
+﻿@model PCM.WEB.MODELS.GovFuncionario
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.governanca</a>
+                <a class="breadcrumb-item" href="@Url.Action("FuncionarioIndex", "Governanca")">@PCM.WEB.Properties.Resources.funcionario</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.editar</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">           
+                @using (Html.BeginForm("FuncionarioEdit", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data"  }))        
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.codigo)
+                    @Html.HiddenFor(model => model.codigo_unidade)
+
+                    @Html.HiddenFor(model => model.cpf)
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.editar</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("FuncionarioIndex", "Governanca")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.tipo_funcionario</label>
+                                    <div>@Html.DropDownList("tipo_funcionario", null, "", new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label>@PCM.WEB.Properties.Resources.nome</label>
+                                    <div>@Html.TextBoxFor(model => model.nome, new { @class = "form-control", @maxlength = "120" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.funcao</label>
+                                    <div>@Html.DropDownList("funcao", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-9">
+                                    <label>@PCM.WEB.Properties.Resources.usuario</label>
+                                    <div>@Html.DropDownList("usuario", null, "", new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.telefone</label>
+                                    <div>@Html.TextBoxFor(model => model.telefone, new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.valor_hora</label>
+                                    <div>@Html.TextBoxFor(model => model.valor_hora, new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="col-12">@PCM.WEB.Properties.Resources.ativo</label>
+                                    <div class="col-12">
+                                        <label class="css-control css-control-success css-switch">
+                                            @Html.CheckBoxFor(model => model.ativo, new { @class = "css-control-input" })
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="col-12">@PCM.WEB.Properties.Resources.contabiliza_hora</label>
+                                    <div class="col-12">
+                                        <label class="css-control css-control-success css-switch">
+                                            @Html.CheckBoxFor(model => model.contabiliza_hora, new { @class = "css-control-input" })
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>                        
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    
+<script>
+
+        $(document).ready(function ($) { $("#valor_hora").maskMoney({ decimal: ",", thousands: "." }); });
+        $(document).ready(function () { $("#cpf").mask("999.999.999-99"); });
+        $(document).ready(function () { $("#telefone").mask("(99) 99999-9999"); });
+
+        $(function () {
+
+            var unidade = $("#unidade");
+            var funcao = $("#funcao");
+            var usuario = $("#usuario");
+
+            unidade.change(function () {
+
+                var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
+
+                $.post("LoadFuncao", request, function (obj) {
+                    funcao.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    funcao.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        funcao.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadUsuario", request, function (obj) {
+                    usuario.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    usuario.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        usuario.append(option);
+                    });
+                }, "json");
+
+            });
+
+        });
+
+        jQuery.validator.addMethod("cpf", function (cpf, element) {
+
+            if (cpf == "") {
+                return true
+            }
+            else {
+                cpf = cpf.replace(".", "");
+                cpf = cpf.replace(".", "");
+                cpf = cpf.replace(".", "");
+                cpf = cpf.replace("-", "");
+
+                var Soma;
+                var Resto;
+                Soma = 0;
+                if (cpf == "00000000000") return false;
+
+                for (i = 1; i <= 9; i++) Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+                Resto = (Soma * 10) % 11;
+
+                if ((Resto == 10) || (Resto == 11)) Resto = 0;
+                if (Resto != parseInt(cpf.substring(9, 10))) return false;
+
+                Soma = 0;
+                for (i = 1; i <= 10; i++) Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+                Resto = (Soma * 10) % 11;
+
+                if ((Resto == 10) || (Resto == 11)) Resto = 0;
+                if (Resto != parseInt(cpf.substring(10, 11))) return false;
+                return true;
+            }
+
+        }, "Informe um CPF v&aacute;lido.");
+
+        jQuery.validator.addMethod("cpf_bd", function (value, element) {
+
+            var unidade = $("#codigo_unidade").val();
+            var codigo = $("#codigo").val();
+
+            if (value == "") {
+                return true
+            }
+            else {
+
+                var dataString = {
+                    "cpf": value,
+                    "codigo": codigo,
+                    "unidade": unidade
+                };
+
+                var result = false;
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "ValidaFuncionario",
+                    async: false,
+                    data: dataString,
+                    dataType: "json",
+                    success: function (return_data) {
+                        if (return_data == false) {
+                            result = false;
+                        } else if (return_data == true) {
+                            result = true;
+                        }
+                    }
+                });
+
+                return result;
+            }
+
+        }, "Informe um CPF v&aacute;lido.");
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'unidade': {
+                            required: true
+                        },
+                        'tipo_funcionario': {
+                            required: true
+                        },
+                        'nome': {
+                            required: true
+                        },
+                        'funcao': {
+                            required: false
+                        }
+                    },
+                    messages: {
+                        'unidade': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'tipo_funcionario': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'cpf': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            cpf: '@PCM.WEB.Properties.Resources.valida_cpf_invalido',
+                            cpf_bd: '@PCM.WEB.Properties.Resources.valida_cpf_bd',
+                        },
+                        'nome': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'funcao': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        }
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            FormValidation.init();
+            Codebase.helpers(['maxlength']);
+        });
+
+</script>
+
+}

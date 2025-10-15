@@ -1,0 +1,405 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("ApartamentoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.uh</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.inserir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("ApartamentoInsert", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadastrar</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("ApartamentoIndex", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label for="unidade">@PCM.WEB.Properties.Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                                </div>                                
+                                <div class="col-md-6" style="display:none" id="div_responsavel_apartamento">
+                                    <label for="responsavel_apartamento">@PCM.WEB.Properties.Resources.responsavel_apartamento</label>
+                                    <div>@Html.DropDownList("responsavel_apartamento", null, "", new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.setor</label>
+                                    <div>@Html.DropDownList("setor", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.uh</label>
+                                    <div><input type="text" class="form-control" id="apartamento" name="apartamento" value="" maxlength="20"></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>@PCM.WEB.Properties.Resources.tipo_apartamento</label>
+                                    <div>@Html.DropDownList("tipo_apartamento", null, "", new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.bloco</label>
+                                    <div><input type="text" class="form-control" id="bloco" name="bloco" value="" maxlength="20"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.andar</label>
+                                    <div><input type="text" class="form-control" id="andar" name="andar" value="" maxlength="10"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.quantidade_cama</label>
+                                    <div><input type="text" class="form-control" id="quantidade_cama" name="quantidade_cama" value="" maxlength="5"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.tipo_cama</label>
+                                    <div>@Html.DropDownList("tipo_cama", null, "", new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@PCM.WEB.Properties.Resources.descritivo</label>
+                                    <div><textarea class="form-control" id="descritivo" name="descritivo" maxlength="2000" rows="6"></textarea></div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.metragem</label>
+                                    <div><input type="text" class="form-control" id="metragem" name="metragem" value="" maxlength="10"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.carga_termica</label>
+                                    <div><input type="text" class="form-control" id="carga_termica" name="carga_termica" value="" maxlength="10"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.numero_pessoas_fixas</label>
+                                    <div><input type="text" class="form-control" id="numero_pessoas_fixas" name="numero_pessoas_fixas" value="" maxlength="10"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.numero_pessoas_volantes</label>
+                                    <div><input type="text" class="form-control" id="numero_pessoas_volantes" name="numero_pessoas_volantes" value="" maxlength="10"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label>@PCM.WEB.Properties.Resources.descricao_atividade</label>
+                                    <div><input type="text" class="form-control" id="descricao_atividade" name="descricao_atividade" value="" maxlength="150"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>Data Última Vistoria</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data_ultima_manutencao" name="data_ultima_manutencao" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.ativo</label>
+                                    <div>
+                                        <label class="css-control css-control-success css-switch">
+                                            <input type="checkbox" class="css-control-input" id="ativo" name="ativo" checked value="true">
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/select")
+    @Styles.Render("~/Content/datepicker")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+
+    $(document).ready(function () { $("#andar").maskMoney({ prefix: '', thousands: '', precision: 0, allowNegative: false, 'placeholder': '' }); });
+        $(function () {
+
+            var unidade = $("#unidade");
+            var setor = $("#setor");
+            var bloco = $("#bloco");
+            var andar = $("#andar");
+            var tipo_apartamento = $("#tipo_apartamento");
+            var tipo_cama = $("#tipo_cama");
+
+            if (unidade.val() == "") {
+
+                setor.empty();
+                tipo_apartamento.empty();
+                tipo_cama.empty();
+
+                setor.prop("disabled", true);
+                tipo_apartamento.prop("disabled", true);
+                tipo_cama.prop("disabled", true);
+
+                setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+                tipo_apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.tipo_apartamento', allowClear: true });
+                tipo_cama.select2({ placeholder: '@PCM.WEB.Properties.Resources.tipo_cama', allowClear: true });
+
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+
+                    setor.empty();
+                    tipo_apartamento.empty();
+                    tipo_cama.empty();
+
+                    setor.prop("disabled", true);
+                    tipo_apartamento.prop("disabled", true);
+                    tipo_cama.prop("disabled", true);
+
+                    setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+                    tipo_apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.tipo_apartamento', allowClear: true });
+                    tipo_cama.select2({ placeholder: '@PCM.WEB.Properties.Resources.tipo_cama', allowClear: true });
+                }
+                else {
+
+
+                    var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
+
+                    $.post("LoadSetor", request, function (obj) {
+                        setor.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        setor.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            setor.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadTipoApartamento", request, function (obj) {
+                        tipo_apartamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        tipo_apartamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            tipo_apartamento.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadTipoCama", request, function (obj) {
+                        tipo_cama.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        tipo_cama.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            tipo_cama.append(option);
+                        });
+                    }, "json");
+
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "LoadTipoUnidade",
+                        async: false,
+                        data: request,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result == 1) {
+                                $("#div_responsavel_apartamento").hide();
+                            } else {
+                                $("#div_responsavel_apartamento").show();;
+                            }
+                        }
+                    });
+
+                    setor.prop("disabled", false);
+                    bloco.prop("disabled", false);
+                    tipo_apartamento.prop("disabled", false);
+                    andar.prop("disabled", false);
+                    tipo_cama.prop("disabled", false);
+
+                    setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+                    bloco.select2({ placeholder: '@PCM.WEB.Properties.Resources.bloco', allowClear: true });
+                    tipo_apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.tipo_apartamento', allowClear: true });
+                    andar.select2({ placeholder: '@PCM.WEB.Properties.Resources.andar', allowClear: true });
+                    tipo_cama.select2({ placeholder: '@PCM.WEB.Properties.Resources.tipo_cama', allowClear: true });
+                }
+
+            });
+
+        });
+
+        jQuery.validator.addMethod("apartamento_bd", function (value, element) {
+
+            var unidade = ($("#unidade").val() == "") ? "-1" : $("#unidade").val();
+
+            var dataString = {
+                "apartamento": value,
+                "codigo": -1,
+                "unidade": unidade
+            };
+
+            var result = false;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "ValidaApartamento",
+                async: false,
+                data: dataString,
+                dataType: "json",
+                success: function (return_data) {
+                    if (return_data == false) {
+                        result = false;
+                    } else if (return_data == true) {
+                        result = true;
+                    }
+                }
+            });
+
+            return result;
+
+        }, "");
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'unidade': {
+                            required: true
+                        },
+                        'setor': {
+                            required: true
+                        },
+                        'apartamento': {
+                            required: true,
+                            apartamento_bd: true
+                        },
+                        'tipo_apartamento': {
+                            required: true
+                        },
+                        'bloco': {
+                            required: true
+                        },
+                        'andar': {
+                            required: true
+                        },
+                        'tipo_cama': {
+                            required: true
+                        },
+                        'quantidade_cama': {
+                            required: true,
+                            number: true
+                        }
+                    },
+                    messages: {
+                        'unidade': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'setor': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'apartamento': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            apartamento_bd: '@PCM.WEB.Properties.Resources.valida_apartamento_bd'
+                        },
+                        'tipo_apartamento': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'bloco': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'andar': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'tipo_cama': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'quantidade_cama': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            number: '@PCM.WEB.Properties.Resources.campo_numerico'
+                        }
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            FormValidation.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+
+            var request = { "unidade": ($("#unidade").val() == "") ? "-1" : $("#unidade").val() };
+
+            jQuery.ajax({
+                type: "POST",
+                url: "LoadTipoUnidade",
+                async: false,
+                data: request,
+                dataType: "json",
+                success: function (result) {
+                    if (result == 1) {
+                        $("#div_responsavel_apartamento").hide();
+                    } else {
+                        $("#div_responsavel_apartamento").show();;
+                    }
+                }
+            });
+
+        });
+
+    </script>
+}

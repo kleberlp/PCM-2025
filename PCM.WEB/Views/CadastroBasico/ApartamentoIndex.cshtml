@@ -1,0 +1,443 @@
+﻿@model List<PCM.WEB.MODELS.Apartamento>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apartamento</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("ApartamentoIndex", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" id="codigo" name="codigo" value="" />
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apartamento</h3>
+                        <div class="block-options">
+                            @if (ViewBag.inserir)
+                            {
+                                <a href="@Url.Action("ApartamentoInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                </a>
+                            }
+                            @if (ViewBag.imprimir)
+                            {
+                                <button type="button" id="btnImprimir" name="btnImprimir" onclick="Imprimir();" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                            }
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                        @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.bloco</label>
+                                        @Html.DropDownList("bloco", null, "", new { @class = "js-select2 form-control" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.andar</label>
+                                        @Html.DropDownList("andar", null, "", new { @class = "js-select2 form-control" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.responsavel_apartamento</label>
+                                        @Html.DropDownList("responsavelApartamento", null, "", new { @class = "js-select2 form-control" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.ativo</label>
+                                        @Html.DropDownList("ativo", null, "", new { @class = "js-select2 form-control" })
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full">
+
+                    <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+
+                        <thead>
+
+                            <tr class="table-secondary">
+                                <th></th>
+                                <th>@PCM.WEB.Properties.Resources.unidade </th>
+                                <th>@PCM.WEB.Properties.Resources.setor</th>
+                                <th>@PCM.WEB.Properties.Resources.uh</th>
+                                <th>@PCM.WEB.Properties.Resources.responsavel_apartamento</th>
+                                <th>@PCM.WEB.Properties.Resources.tipo_apartamento</th>
+                                <th>@PCM.WEB.Properties.Resources.tipo_cama</th>
+                                <th>@PCM.WEB.Properties.Resources.quantidade_cama</th>
+                                <th>@PCM.WEB.Properties.Resources.ativo </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                    </table>
+
+                </div>
+            </div>
+            <!-- END Page Content -->
+
+        }
+
+    </div>
+
+</main>
+<!-- END Main Container -->
+<!-- From Right Modal -->
+<div class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-15">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.relatorio</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="si si-close font-w600"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content block-content-full">
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaZebra();">
+                                <div class="text-md-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
+                                    <h6 class="mb-5"><small>Zebra</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaA4();">
+                                <div class="text-md-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
+                                    <h6 class="mb-5"><small>A4</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $.ajaxSetup({ async: false });
+
+        var unidade = $("#unidade");
+        var bloco = $("#bloco");
+        var andar = $("#andar");
+
+        unidade.change(function () {
+
+            if (unidade.val() == "") {
+                bloco.empty();
+                andar.empty();
+            } else {
+
+                var request = { "unidade": unidade.val() };
+
+                $.post("LoadBloco", request, function (obj) {
+                    bloco.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    bloco.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        bloco.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadAndar", request, function (obj) {
+                    andar.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    andar.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        andar.append(option);
+                    });
+                }, "json");
+
+            }
+
+        });
+
+    })
+
+        function Imprimir() {
+            objetos = [];
+            $('input[type=checkbox]').each(function () {
+                if (this.checked) {
+                    objetos.push(this.value);
+                }
+            });
+            if (objetos.length > 0) {
+                $('#codigo').val(objetos.join(','));
+                $('#modalReport').modal('show');
+            } else {
+                swal({
+                    title: 'Imprimir Etiqueta',
+                    text: 'Favor selecionar um ou mais Registro!',
+                    type: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    html: false,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 50);
+                        });
+                    }
+                });
+            }
+        }
+
+        function ImprimirEtiquetaZebra() {
+            var codigo = $("#codigo").val();
+            window.open('PrintEtiquetaApartamento' + '?codigo=' + codigo + '&report=ETQ_UH_0000001_A4', '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+        function ImprimirEtiquetaA4() {
+            var codigo = $("#codigo").val();
+            window.open('PrintEtiquetaApartamento' + '?codigo=' + codigo + '&report=ETQ_UH_0000001_A4', '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+        Codebase.helpers(['datepicker', 'maxlength', 'select2', 'table-tools']);
+
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        table = $('#tb_main').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            scrollY: '55vh',
+            scrollCollapse: true,
+            paging: false,
+            fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 300,
+            autoWidth: true,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadApartamento",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.unidade = $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                    d.bloco = $("#bloco").val() == "" ? "" : $("#bloco").val(),
+                    d.andar = $("#andar").val() == "" ? "" : $("#andar").val(),
+                    d.responsavelApartamento = $("#responsavelApartamento").val() == "" ? "-1" : $("#responsavelApartamento").val(),
+                    d.ativo = $("#ativo").val() == "" ? "-1" : $("#ativo").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    orderable: false,
+                    data: "codigo",
+                    defaultContent: "<td class='d-none d-sm-table-cell text-center' style='width: 50px;'>" +
+                        "<label class='css-control-sm css-control-success css-checkbox py-0 px-0'>" +
+                        "<input type='checkbox' id='checkbox' class='css-control-input' name='x'>" +
+                        "<span class='css-control-indicator'></span>" +
+                        "</label>" +
+                        "</td >"
+                },
+                { data: "unidade" },
+                { data: "setor" },
+                { data: "apartamento" },
+                { data: "responsavel_apartamento" },
+                { data: "tipo_apartamento" },
+                { data: "tipo_cama" },
+                { data: "quantidade_cama" },
+                { data: "ativoTexto" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'> " +
+                        "<button type='button' id='btnEditar' name='btnEditar' class='btn btn-sm btn-secondary' title='Editar'> <i class='fa fa-pencil'></i></button>" +
+                        "<button type='button' id='btnExcluir' name='btnExcluir' class='btn btn-sm btn-secondary' title='Excluir'> <i class='fa fa-times'></i></button>"
+                }
+            ],
+            columnDefs: [
+                { className: 'text-center', targets: [0, 3, 4, 5, 6, 7, 8, 9] },
+                { width: '30px', targets: [0, 9] },
+                { width: '150px', targets: [3, 4, 5, 6, 7, 8] },
+                {
+                    targets: 0, // Index of the column starting from 0
+                    type: 'html',
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return "<label class='css-control-sm css-control-success css-checkbox py-0 px-0'> " +
+                            "<input type='checkbox' class='css-control-input' value='" + row.codigo + "' name='x'>" +
+                            "<span class='css-control-indicator'></span>" +
+                            "</label>"
+                    }
+                }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                {extend: 'print',text: 'Imprimir'},
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+                language: {
+                "search": "Procurar:",
+                "lengthMenu": "Exibir _MENU_ ",
+                "info": "_MAX_ registro(s)",
+                "infoFiltered": "(filtrado de _MAX_ registro(s))"
+            }
+        });
+
+        // Add "Select All" checkbox in the header
+        var table = $('#tb_main').DataTable();
+        var selectAllCheckbox = $("<input type='checkbox' class='css-control-sm css-control-success css-checkbox py-0 px-0'>").on('change', function () {
+            var checkboxes = table.column(0).nodes().to$().find('input[type="checkbox"]');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        $('#tab_main').DataTable({
+            order: [[1, 'asc']]
+        });
+
+        $('#tb_main thead th:eq(0)').append(selectAllCheckbox);
+
+        $('#tb_main tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+
+            if (this.id == "btnEditar") {
+                editarRegistro(data);
+            } else if (this.id == "btnExcluir") {
+                deletarRegistro(data);
+            }
+
+        });
+
+        function deletarRegistro(data) {
+
+            Swal.fire({
+                title: "@PCM.WEB.Properties.Resources.pcm",
+                html: "@Html.Raw(PCM.WEB.Properties.Resources.deseja_excluir)<br><br><b>@Html.Raw(PCM.WEB.Properties.Resources.descricao):</b> " + data.descricao,
+                icon: "question",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+                denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "RelatorioItensAuditaveisDelete",
+                        async: false,
+                        data: {
+                            "codigo": data.codigo
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            Swal.fire({
+                                title: "@PCM.WEB.Properties.Resources.pcm",
+                                html: response,
+                                icon: "success",
+                                showDenyButton: false,
+                                showCancelButton: false,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    tr.remove();
+                                    table.draw();
+                                    //$("#form").submit();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+        }
+
+        function editarRegistro(data) {
+
+            window.open("../CadastroBasico/ApartamentoEdit?codigo=" + data.codigo, "_self");;
+
+        }
+
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
+
+        // Reload DataTable
+        $('#filtrar').click(function () {
+            table.ajax.reload(null, false);
+        });
+
+    });
+
+</script>
+}

@@ -1,0 +1,175 @@
+﻿@model INTERACTI.WEB.MODELS.login
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>@INTERACTI.WEB.Properties.Resources.title</title>
+
+        <meta name="description" content="Sistema de Planejamento e Controle de Manutenção">
+        <meta name="author" content="SIM">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="PCM by SIM">
+        <meta property="og:site_name" content="PCM by SIM">
+        <meta property="og:description" content="PCM - Planejamento e Controle de Manutenção by SIM">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Icons -->
+        <link rel="shortcut icon" href="~/Images/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="~/Images/favicons/favicon192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="~/Images/favicons/favicon180x180.png">
+        <!-- END Icons -->
+
+        @Styles.Render("~/Content/css")
+
+    </head>
+
+    <body>
+
+        <div id="page-container" class="main-content-boxed">
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="bg-image" style="background-image: url('../Images/photos/photo1.jpg');">
+                    <div class="row mx-0 bg-black-op">
+                        <div class="hero-static col-md-6 col-xl-8 d-none d-md-flex align-items-md-end">
+                            <div class="p-30 invisible" data-toggle="appear">
+                                <p class="font-size-h3 font-w600 text-white">
+                                    @INTERACTI.WEB.Properties.Resources.nome_sistema
+                                </p>
+                                <p class="font-italic text-white-op">
+                                    Copyright &copy; <span class="js-year-copy">2017</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="hero-static col-md-6 col-xl-4 d-flex align-items-center bg-white invisible" data-toggle="appear" data-class="animated fadeInRight">
+                            <div class="content content-full">
+                                <!-- Header -->
+                                    
+                                <div class="px-30 py-10">                                        
+                                    @*<img class="img-fluid options-item" src="~/Images/favicons/favicon20x20.png" alt="">*@
+                                    <a class="link-effect font-w700" href="http://www.sim-end.com">                                            
+                                        <i class="fa fa-2x fa-cog fa-spin"></i>
+                                        <span class="font-size-xl">@INTERACTI.WEB.Properties.Resources.pcm</span><span class="font-size-xl text-primary-dark"> @INTERACTI.WEB.Properties.Resources.bysim</span>
+                                    </a>
+                                </div>
+                                <!-- END Header -->
+
+                                <!-- Sign In Form -->
+                                <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.js) -->
+                                <!-- For more examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-signin px-30", role = "form" }))
+                                {
+
+                                    <div class="form-group row">
+                                        <div class="col-12">
+                                            <div class="form-material floating">
+                                                <input type="text" class="form-control" id="usuario" name="email" value="">
+                                                <label for="email">@INTERACTI.WEB.Properties.Resources.email</label>                                                 
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-12">
+                                            <div class="form-material floating">
+                                                <input type="password" class="form-control" id="senha" name="senha" value="">
+                                                <label for="password">@INTERACTI.WEB.Properties.Resources.senha</label>                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-sm btn-hero btn-alt-primary">
+                                            <i class="si si-login mr-10"></i> @INTERACTI.WEB.Properties.Resources.login
+                                        </button>
+                                        <div class="mt-30">
+                                            <a class="link-effect text-muted mr-10 mb-5 d-inline-block" href="">
+                                                <i class="fa fa-warning mr-5"></i> @INTERACTI.WEB.Properties.Resources.esqueci_senha
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                                <!-- END Sign In Form -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+        </div>
+          
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/cookie") 
+    @Scripts.Render("~/plugins/validation")    
+    @Scripts.Render("~/bundles/codebase")  
+
+    <!-- Page JS Code -->
+    <script>
+
+        var login = function () {
+
+            // Init Sign In Form Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationSignIn = function () {
+                jQuery('.js-validation-signin').validate({
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'email': {
+                            required: true,
+                            email: true
+                        },
+                        'senha': {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        'email': {
+                            required: '@INTERACTI.WEB.Properties.Resources.campo_requerido',
+                            email: '@INTERACTI.WEB.Properties.Resources.valida_email_valido'
+                        },
+                        'senha': {
+                            required: '@INTERACTI.WEB.Properties.Resources.campo_requerido'
+                        }
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Init Sign In Form Validation
+                    initValidationSignIn();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () { login.init(); });
+
+    </script>
+
+
+    </body>
+</html>

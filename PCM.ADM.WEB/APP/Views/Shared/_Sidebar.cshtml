@@ -1,0 +1,311 @@
+﻿
+        <!-- Side Overlay-->
+        <aside id="side-overlay">
+            <!-- Side Overlay Scroll Container -->
+            <div id="side-overlay-scroll">
+                <!-- Side Header -->
+                <div class="content-header content-header-fullrow">
+                    <div class="content-header-section align-parent">
+                        <!-- Close Side Overlay -->
+                        <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                        <button type="button" class="btn btn-circle btn-dual-secondary align-v-r" data-toggle="layout" data-action="side_overlay_close">
+                            <i class="fa fa-times text-danger"></i>
+                        </button>
+                        <!-- END Close Side Overlay -->
+
+                        <!-- User Info -->
+                        <div class="content-header-item">
+                            <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html">@Session["nome"]</a>
+                        </div>
+                        <!-- END User Info -->
+                    </div>
+                </div>
+                <!-- END Side Header -->
+
+                <!-- Side Content -->
+                <div class="content-side">
+
+                    <!-- Profile -->
+                    <div class="block pull-r-l">
+                        <div class="block-header bg-body-light">
+                            <h3 class="block-title">
+                                <i class="fa fa-fw fa-pencil font-size-default mr-5"></i>Perfil
+                            </h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <form action="be_pages_dashboard.html" method="post" onsubmit="return false;">
+                                <div class="form-group mb-15">
+                                    <label for="side-overlay-profile-name">Nome</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="side-overlay-profile-name" name="side-overlay-profile-name" placeholder="Seu Nome.." value=@Session["nome"]>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-user"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-15">
+                                    <label for="side-overlay-profile-email">E-mail</label>
+                                    <div class="input-group">
+                                        <input type="email" class="form-control" id="side-overlay-profile-email" name="side-overlay-profile-email" placeholder="Seu E-mail.." value=@Session["email"]>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-envelope"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-15">
+                                    <label for="side-overlay-profile-password">Nova Senha</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="side-overlay-profile-password" name="side-overlay-profile-password" placeholder="Nova Senha..">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-asterisk"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-15">
+                                    <label for="side-overlay-profile-password-confirm">Confirmar Nova Senha</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="side-overlay-profile-password-confirm" name="side-overlay-profile-password-confirm" placeholder="Confirmar Nova Senha..">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-asterisk"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-block btn-alt-primary" disabled>
+                                            <i class="fa fa-refresh mr-5"></i> Atualizar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- END Profile -->
+                </div>
+                <!-- END Side Content -->
+            </div>
+            <!-- END Side Overlay Scroll Container -->
+        </aside>
+        <!-- END Side Overlay -->
+
+        <!-- Sidebar -->
+        <!--
+            Helper classes
+
+            Adding .sidebar-mini-hide to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
+            Adding .sidebar-mini-show to an element will make it visible (opacity: 1) when the sidebar is in mini mode
+                If you would like to disable the transition, just add the .sidebar-mini-notrans along with one of the previous 2 classes
+
+            Adding .sidebar-mini-hidden to an element will hide it when the sidebar is in mini mode
+            Adding .sidebar-mini-visible to an element will show it only when the sidebar is in mini mode
+                - use .sidebar-mini-visible-b if you would like to be a block when visible (display: block)
+        -->
+        <nav id="sidebar">
+            <!-- Sidebar Scroll Container -->
+            <div id="sidebar-scroll">
+                <!-- Sidebar Content -->
+                <div class="sidebar-content">
+                    <!-- Side Header -->
+                    <div class="content-header content-header-fullrow px-15">
+                        <!-- Mini Mode -->
+                        <div class="content-header-section sidebar-mini-visible-b">
+                            <!-- Logo -->
+                            <span class="content-header-item font-w700 font-size-xl float-left animated fadeIn">
+                                <span class="text-dual-primary-dark">c</span><span class="text-primary">b</span>
+                            </span>
+                            <!-- END Logo -->
+                        </div>
+                        <!-- END Mini Mode -->
+
+                        <!-- Normal Mode -->
+                        <div class="content-header-section text-center align-parent sidebar-mini-hidden">
+                            <!-- Close Sidebar, Visible only on mobile screens -->
+                            <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                            <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none align-v-r" data-toggle="layout" data-action="sidebar_close">
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
+                            <!-- END Close Sidebar -->
+
+                            <!-- Logo -->
+                            <div class="content-header-item">      
+                                <a class="link-effect font-w700" href="@Url.Action("Index", "Home")">                                            
+                                    <i class="fa fa-2x fa-cog fa-spin"></i>
+                                    <span class="font-size-xl">@INTERACTI.WEB.Properties.Resources.pcm</span><span class="font-size-xl text-primary-dark"> @INTERACTI.WEB.Properties.Resources.bysim</span>
+                                </a>
+                            </div>
+                            <!-- END Logo -->
+                        </div>
+                        <!-- END Normal Mode -->
+                    </div>
+                    <!-- END Side Header -->
+
+                    <!-- Side User -->
+                    <div class="content-side content-side-full content-side-user px-10 align-parent">
+                        <!-- Visible only in mini mode -->
+                        <div class="sidebar-mini-visible-b align-v animated fadeIn">
+                            <div class="col-md-12 animated fadeIn"  width="150" height="100">
+                                <div class="options-container">
+                                    <img class="img-fluid options-item" src="@Session["imagem"]" alt="">                                    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Visible only in mini mode -->
+
+                        <!-- Visible only in normal mode -->
+                        <div class="sidebar-mini-hidden-b text-center">
+                            <div class="col-md-12 animated fadeIn"  width="150" height="100">
+                                <div class="options-container">
+                                    <img class="img-fluid options-item" src="@Session["imagem"]" alt="">                                    
+                                </div>
+                            </div>
+                            @*<a class="img-link" href="">
+                                <img class="img-fluid" width="120" src="@Session["imagem"]" alt="">
+                            </a>*@
+                            <ul class="list-inline mt-10">
+                                <li class="list-inline-item">
+                                    <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" data-action="side_overlay_toggle">@Session["nome"]</a>
+                                </li>                                
+                                <li class="list-inline-item">
+                                    <a class="link-effect text-dual-primary-dark" href="@Url.Action("LogOff", "Account")">
+                                        <i class="si si-logout"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- END Visible only in normal mode -->
+                    </div>
+                    <!-- END Side User -->
+
+                    <!-- Side Navigation -->
+                    <div class="content-side content-side-full">
+                        <ul class="nav-main">
+                            <li>
+                                <a class="active" href="@Url.Action("Index", "Home")"><i class="si si-graph"></i><span class="sidebar-mini-hide">@INTERACTI.WEB.Properties.Resources.dashboard</span></a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "Administracao", cssClass: "open")">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-settings"></i><span class="sidebar-mini-hide">Administração</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "UsuarioIndex", cssClass: "active")" href="@Url.Action("UsuarioIndex", "Administracao")"><span class="sidebar-mini-hide">@INTERACTI.WEB.Properties.Resources.usuarios</span></a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PerfilIndex", cssClass: "active")" href="@Url.Action("PerfilIndex", "Administracao")"></i><span class="sidebar-mini-hide">@INTERACTI.WEB.Properties.Resources.perfil</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "CadastroBasico", cssClass: "open")">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-note"></i><span class="sidebar-mini-hide">Cadastro Básico</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "CategoriaIndex", cssClass: "active")" href="@Url.Action("CategoriaIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.categoria</a>
+                                    </li>                                    
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FornecedorIndex", cssClass: "active")" href="@Url.Action("FornecedorIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.fornecedor</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncaoIndex", cssClass: "active")" href="@Url.Action("FuncaoIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.funcao</a>
+                                    </li>                            
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncionarioIndex", cssClass: "active")" href="@Url.Action("FuncionarioIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.funcionario</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "UnidadeIndex", cssClass: "active")" href="@Url.Action("UnidadeIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.unidades</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "EquipamentoIndex", cssClass: "active")" href="@Url.Action("EquipamentoIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.equipamentos</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ItemMedicaoIndex", cssClass: "active")" href="@Url.Action("ItemMedicaoIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.item_medicao</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "SetorIndex", cssClass: "active")" href="@Url.Action("SetorIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.setor</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="@Html.IsSelected(action: "OrdemServicoIndex", cssClass: "active")" href="@Url.Action("OrdemServicoIndex", "OrdemServico")"><i class="si si-tag"></i>@INTERACTI.WEB.Properties.Resources.solicitar_manutencao</a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "PCM", cssClass: "open")">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-support"></i><span class="sidebar-mini-hide">PCM</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Agenda", cssClass: "active")" href="@Url.Action("Agenda", "PCM")">@INTERACTI.WEB.Properties.Resources.agenda_servico</a>
+                                    </li>                                    
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ProgramadaIndex", cssClass: "active")" href="@Url.Action("ProgramadaIndex", "PCM")">@INTERACTI.WEB.Properties.Resources.programada</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "GreenPlanet", cssClass: "open")">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-equalizer"></i><span class="sidebar-mini-hide">@INTERACTI.WEB.Properties.Resources.green_planet</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "LancamentoIndex", cssClass: "active")" href="@Url.Action("LancamentoIndex", "GreenPlanet")">@INTERACTI.WEB.Properties.Resources.lancamento</a>
+                                    </li>
+                                </ul>
+                            </li>           
+                            <li>
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-notebook"></i><span class="sidebar-mini-hide">@INTERACTI.WEB.Properties.Resources.auditoria</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Index", cssClass: "active")" href="@Url.Action("Index", "Home")">Laudos</a>
+                                    </liHome
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "NormasProcedimentosIndex", cssClass: "active")" href="@Url.Action("NormasProcedimentosIndex", "Auditoria")">Normas e Procedimentos</a>
+                                    </li>
+                                </ul>
+                            </li>                    
+                            <li class="@Html.IsSelected(controller: "Financas", cssClass: "open")">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-calculator"></i><span class="sidebar-mini-hide">Finanças</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ControleGastoIndex", cssClass: "active")" href="@Url.Action("ControleGastoIndex", "Financas")">@INTERACTI.WEB.Properties.Resources.controle_gasto</a>
+                                    </li>
+                                </ul>
+                            </li>               
+                            <li class="@Html.IsSelected(controller: "Relatorio", cssClass: "open")">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-doc"></i><span class="sidebar-mini-hide">Relatórios</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncionarioHorasTrabalhadas", cssClass: "active")" href="@Url.Action("FuncionarioHorasTrabalhadas", "Relatorio")">@INTERACTI.WEB.Properties.Resources.funcionario_horas_trabalhadas</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncionarioOciosidade", cssClass: "active")" href="@Url.Action("FuncionarioOciosidade", "Relatorio")">@INTERACTI.WEB.Properties.Resources.funcionario_ociosidade</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoCategoria", cssClass: "active")" href="@Url.Action("ManutencaoCategoria", "Relatorio")">@INTERACTI.WEB.Properties.Resources.manutencao_categoria</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoExecutor", cssClass: "active")" href="@Url.Action("ManutencaoExecutor", "Relatorio")">@INTERACTI.WEB.Properties.Resources.manutencao_executor</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoSetor", cssClass: "active")" href="@Url.Action("ManutencaoSetor", "Relatorio")">@INTERACTI.WEB.Properties.Resources.manutencao_setor</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoSolicitante", cssClass: "active")" href="@Url.Action("ManutencaoSolicitante", "Relatorio")">@INTERACTI.WEB.Properties.Resources.manutencao_solicitante</a>
+                                    </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoTipoOrdemServico", cssClass: "active")" href="@Url.Action("ManutencaoTipoOrdemServico", "Relatorio")">@INTERACTI.WEB.Properties.Resources.manutencao_tipo_ordem_servico</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END Side Navigation -->
+                </div>
+                <!-- Sidebar Content -->
+            </div>
+            <!-- END Sidebar Scroll Container -->
+        </nav>
+        <!-- END Sidebar -->

@@ -1,0 +1,138 @@
+﻿@model List<PCM.WEB.MODELS.ManutencaoPreventiva>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.preventiva</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="row">
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoPreventiva", "PCM",  new { status = 1})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-settings fa-2x text-warning"></i></div>
+                        <div class="font-size-h2 font-w600  text-warning" data-speed="1000" data-to="@ViewBag.status.pendente" id="pendente" name="pendente">@ViewBag.status.pendente</div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoPreventiva", "PCM",  new { status = 3})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-settings fa-2x text-pulse"></i></div>
+                        <div class="font-size-h2 font-w600 text-pulse"><span data-speed="1000" data-to="@ViewBag.status.atrasado" id="atrasado" name="atrasado">@ViewBag.status.atrasado</span></div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoPreventiva", "PCM",  new { status = 2})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-settings fa-2x text-earth-light"></i></div>
+                        <div class="font-size-h2 font-w600 text-earth"><span data-speed="1000" data-to="@ViewBag.status.concluido" id="concluido" name="concluido">@ViewBag.status.concluido</span></div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoPreventiva", "PCM",  new { status = 4})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-settings fa-2x text-earth-light"></i></div>
+                        <div class="font-size-h2 font-w600 text-earth"><span data-speed="1000" data-to="@ViewBag.status.emAndamento" id="concluido" name="concluido">@ViewBag.status.emAndamento</span></div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.em_andamento</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        @if (Model.Count > 0)
+        {
+
+            <div class="block">
+
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.preventiva</h3>
+                    <div class="block-options">
+                        <a href="@Url.Action("CronogramaManutencaoPreventiva", "PCM")" class="btn btn-square btn-secondary min-width-200 h-75 text-md-center"><span class="si si-calendar float-md-left"></span> Visualizar por Mês</a>
+                    </div>
+                </div>
+
+                <div class="block-content">
+
+                    @foreach (var item in Model)
+                    {
+                        if (@item.statusID != 2)
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ApontamentoProgramada", "PCM", new { codigo_pcm_programada = @item.codigoPCMProgramada, codigo_unidade = @item.codigoUnidade, formulario = "pcm_apontamento_preventiva" })">
+                                        <div class="block-content block-content-full clearfix">
+                                            <div class="float-right mt-15 d-none d-sm-block @item.cssClass "><i class="si si-settings fa-3x"></i></div>
+                                            @if (Session["codigo_unidade"].ToString() == "-1")
+                                            {
+                                                <div class="font-size-h4 font-w600 text-uppercase @item.cssClass mb-15">@item.unidade - @item.preventiva</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="font-size-h4 font-w600 text-uppercase @item.cssClass mb-15">@item.preventiva</div>
+                                            }
+
+                                            @if (item.equipamento != "")
+                                            {<div class="font-size-h5 font-w600 text-uppercase mb-15"><span class="font-w600 text-secondary">@PCM.WEB.Properties.Resources.equipamentos:</span> @item.equipamento</div>}
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.data_ultima_manutencao:</span> @item.dataUltimaManutencao</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.data_proxima_manutencao:</span> @item.dataProximaManutencao</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.periodicidade:</span> @item.intervalo - @item.periodicidade</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoProgramada", "PCM", new { codigo_unidade = @item.codigoUnidade, codigo_pcm_programada_ordem_servico = @item.codigoPCMOrdemServicoProgramada, formulario = "pcm_apontamento_preventiva", view = ViewBag.view })">
+                                        <div class="block-content block-content-full clearfix">
+                                            <div class="float-right mt-15 d-none d-sm-block @item.cssClass "><i class="si si-settings fa-3x"></i></div>
+                                            @if (Session["codigo_unidade"].ToString() == "-1")
+                                            {
+                                                <div class="font-size-h4 font-w600 text-uppercase @item.cssClass mb-15">@item.unidade - @item.preventiva</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="font-size-h4 font-w600 text-uppercase @item.cssClass mb-15">@item.preventiva</div>
+                                            }
+
+                                            @if (item.equipamento != "")
+                                            {<div class="font-size-h5 font-w600 text-uppercase mb-15"><span class="font-w600 text-secondary">@PCM.WEB.Properties.Resources.equipamentos:</span> @item.equipamento</div>}
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.data_ultima_manutencao:</span> @item.dataUltimaManutencao</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.data_proxima_manutencao:</span> @item.dataProximaManutencao</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.periodicidade:</span> @item.intervalo - @item.periodicidade</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

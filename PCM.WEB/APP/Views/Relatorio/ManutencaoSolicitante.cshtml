@@ -1,0 +1,187 @@
+﻿@model IEnumerable<INTERACTI.WEB.MODELS.ManutencaoSolicitante>
+
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">   
+
+        @using (Html.BeginForm("ManutencaoSolicitante", "Relatorio", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new { @class = "js-validation-bootstrap", @name="form", @id="form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+                       
+            <div class="row">
+
+                <div class="col-md-5 col-xl-3">
+                    <!-- Toggle Tasks Navigation on mobile -->
+                    <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@INTERACTI.WEB.Properties.Resources.filtros</button>
+
+                    <!-- Collapsible Tasks Navigation -->
+                    <div class="js-tasks-nav d-none d-md-block">
+                        <!-- Tasks Info -->
+                        <div class="block block-rounded">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">@INTERACTI.WEB.Properties.Resources.filtro</h3>
+                            </div>
+                            <div class="block-content">
+                                <ul class="list-group push">
+                                    <li class="list-group-item">
+                                        <div>@Html.DropDownList("unidade", null, INTERACTI.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>                                    
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div>@Html.DropDownList("ano", null, INTERACTI.WEB.Properties.Resources.ano, new { @class = "form-control" })</div>                                    
+                                    </li>                                
+                                    <li class="list-group-item text-right">                                                    
+                                        <button type="submit" class="btn btn-sm btn-alt-primary" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@INTERACTI.WEB.Properties.Resources.filtrar</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END Tasks Info -->
+
+                    </div>
+                    <!-- END Collapsible Tasks Navigation -->
+                </div>
+
+                </div>
+                             
+            <div class="block">
+                
+            <div class="block-header block-header-default">
+                <h3 class="block-title">@INTERACTI.WEB.Properties.Resources.manutencao_solicitante</h3>
+                <div class="block-options">
+                    @if(ViewBag.imprimir)
+                    {
+                    <button type="button" class="btn-block-option" onclick="Codebase.helpers('print-page');">
+                        <i class="si si-printer"></i> @INTERACTI.WEB.Properties.Resources.imprimir
+                    </button>
+                    }                    
+                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="fullscreen_toggle"></button>                    
+                </div>
+            </div>            
+
+            <div class="block-content">
+                
+                <!-- Table -->
+                <div class="table-responsive push">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>@INTERACTI.WEB.Properties.Resources.solicitante</th>
+                                <th class="text-center" style="width: 100px;">Janeiro</th>
+                                <th class="text-center" style="width: 100px;">Fevereiro</th>
+                                <th class="text-center" style="width: 100px;">Março</th>
+                                <th class="text-center" style="width: 100px;">Abril</th>
+                                <th class="text-center" style="width: 100px;">Maio</th>
+                                <th class="text-center" style="width: 100px;">Junho</th>
+                                <th class="text-center" style="width: 100px;">Julho</th>
+                                <th class="text-center" style="width: 100px;">Agosto</th>
+                                <th class="text-center" style="width: 100px;">Setembro</th>
+                                <th class="text-center" style="width: 100px;">Outubro</th>
+                                <th class="text-center" style="width: 100px;">Novembro</th>
+                                <th class="text-center" style="width: 100px;">Dezembro</th>
+                                <th class="text-center" style="width: 100px;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>     
+                                    <td>@Html.DisplayFor(modelItem => item.solicitante)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.janeiro)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.fevereiro)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.marco)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.abril)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.maio)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.junho)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.julho)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.agosto)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.setembro)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.outubro)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.novembro)</td>
+                                    <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.dezembro)</td>
+                                    <td class="text-center" style="width: 100px;"><b>@Html.DisplayFor(modelItem => item.total)</b></td>
+                                </tr>
+                            }
+                            <tr class="table-warning">     
+                                <td>TOTAL</td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.janeiro</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.fevereiro</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.marco</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.abril</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.maio</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.junho</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.julho</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.agosto</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.setembro</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.outubro</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.novembro</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.dezembro</b></td>
+                                <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.total</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END Table -->
+
+            </div>
+        </div>
+    
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/bundles/codebase")
+
+<script>
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.form-group > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.form-group').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.form-group').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'ano': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'ano': {
+                        required: '@INTERACTI.WEB.Properties.Resources.campo_requerido'
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    // Initialize when page loads
+    jQuery(function () {
+        FormValidation.init();
+    });
+
+</script>
+}

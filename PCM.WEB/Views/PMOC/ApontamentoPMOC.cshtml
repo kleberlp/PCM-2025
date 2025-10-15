@@ -1,0 +1,583 @@
+﻿@model List<PCM.WEB.MODELS.PMOCOrdemServicoChecklist>
+
+<script>
+
+    function setResultado(id, value) {
+        $("input[name$='[" + id + "].resultado']").val(value);
+    };
+
+</script>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("PMOC", "PMOC")">@PCM.WEB.Properties.Resources.pmoc</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento_pmoc</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("ApontamentoPMOC", "PMOC", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="codigo_equipamento" id="codigo_equipamento" value="@ViewBag.pmoc.codigo_equipamento">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.pmoc.codigo_unidade">
+                    <input type="hidden" name="view" id="view" value="@ViewBag.view">
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@ViewBag.resource_apontamento</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" id="btnApontamentoJustificativa" name="btnApontamentoJustificativa" onclick="PMOCJustificativa();">
+                                    <i class="fa fa-save mr-5"></i>Não foi possível realizar o PMOC
+                                </button>
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action(@ViewBag.View, "PMOC")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            @if (Session["unidade"] == "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@ViewBag.pmoc.unidade</span></div></div>
+                            }
+                            @if (@ViewBag.pmoc.setor != "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.setor: <span class="text-primary">@ViewBag.pmoc.setor</span></div></div>
+                            }
+                            @if (@ViewBag.pmoc.equipamento != "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.equipamento_pmoc: <span class="text-primary">@ViewBag.pmoc.equipamento</span></div></div>
+                            }
+                            @if (@ViewBag.pmoc.tipo_ar_condicionado != "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.tipo_ar_condicionado: <span class="text-primary">@ViewBag.pmoc.tipo_ar_condicionado</span></div></div>
+                            }
+                            @if (@ViewBag.pmoc.apartamento != "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.apartamento: <span class="text-primary">@ViewBag.pmoc.apartamento</span></div></div>
+                            }
+                            <div class="border-b mb-15"></div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.funcionario</label>
+                                <div class="col-12">@Html.DropDownList("funcionario", null, "", new { @class = "js-select2 form-control", @multiple = "multiple" })</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.fornecedor</label>
+                                <div class="col-12">@Html.DropDownList("fornecedor", null, "", new { @class = "js-select2 form-control" })</div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@PCM.WEB.Properties.Resources.data_inicio</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data_inicio" name="data_inicio" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data"></div>
+                                </div>
+                                @if (ViewBag.pmoc.aponta_horas)
+                                {
+                                    <div class="col-md-4 hora_inicio" data-autoclose="true">
+                                        <label>@PCM.WEB.Properties.Resources.hora_inicio</label>
+                                        <div><input type="text" class="form-control" id="hora_inicio" name="hora_inicio"></div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@PCM.WEB.Properties.Resources.data_termino</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data_termino" name="data_termino" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data"></div>
+                                </div>
+                                @if (ViewBag.pmoc.aponta_horas)
+                                {
+                                    <div class="col-md-4 hora_termino" data-autoclose="true">
+                                        <label>@PCM.WEB.Properties.Resources.hora_termino</label>
+                                        <div><input type="text" class="form-control" id="hora_termino" name="hora_termino" value=""></div>
+                                    </div>
+                                }
+                            </div>
+                                <div class="form-group row">
+                                    <label class="col-12">@PCM.WEB.Properties.Resources.concluido?</label>
+                                    <div class="col-12">
+                                        <label class="css-control css-control-success css-switch">
+                                            <input type="checkbox" class="css-control-input" id="concluido" name="concluido" value="true" checked>
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+
+                    if (Model.Count > 0)
+                    {
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist</h3>
+                        </div>
+                        <div class="block block-content block-content-full border">
+                            <table class="table table-sm table-hover table-vcenter js-dataTable-list">
+
+                                <tbody>
+
+                                    @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        if (i == 0 || Model[i].grupo != Model[i - 1].grupo)
+                                        {
+                                            <tr class="table-secondary">
+                                                <th colspan="4">@Model[i].grupo</th>
+                                                <th>@PCM.WEB.Properties.Resources.observacao.ToUpper()</th>
+                                            </tr>
+
+                                        }
+                                        if ((i == 0 || Model[i].subgrupo != Model[i - 1].subgrupo) && Model[i].subgrupo != "")
+                                        {
+                                            <tr class="table-primary">
+                                                <th colspan="5">@Model[i].subgrupo</th>
+                                            </tr>
+                                        }
+
+                                        <tr>
+                                            @Html.HiddenFor(m => m[i].codigo)
+                                            @Html.HiddenFor(m => m[i].codigo_tipo_item_checklist)
+                                            @Html.HiddenFor(m => m[i].descricao)
+                                            @Html.HiddenFor(m => m[i].unidade_medida)
+                                            @Html.HiddenFor(m => m[i].valor_minimo)
+                                            @Html.HiddenFor(m => m[i].valor_maximo)
+                                            @Html.HiddenFor(m => m[i].resultado)
+                                            <td>@Html.DisplayFor(m => m[i].checklist) - @Html.DisplayFor(m => m[i].descricao)</td>
+                                            @if (Model[i].codigo_tipo_item_checklist == 1)
+                                            {
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">SIM</span>
+                                                    <label class="css-control css-control-success css-checkbox">
+                                                        @Html.RadioButtonFor(m => m[i].sim_nao, "SIM", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'SIM');" })
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center" style="width:50px"></td>
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">NÃO</span>
+                                                    <label class="css-control css-control-danger css-checkbox">
+                                                        @Html.RadioButtonFor(m => m[i].sim_nao, "NÃO", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'NÃO');" })
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 2)
+                                            {
+                                                <td class="text-center" style="width:150px" colspan="3">
+                                                    <div class="input-group">
+                                                        @Html.TextBoxFor(m => m[i].numero, new { @class = "js-masked-number form-control", @onChange = "setResultado(" + i + ", this.value);" })
+                                                        <div class="input-group-append min-width-50 text-center">
+                                                            <span class="input-group-text font-w600 min-width-50 text-center">@Model[i].unidade_medida</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 3)
+                                            {
+                                                <td class="text-center" style="width:150px" colspan="3">
+                                                    <div>@Html.TextBoxFor(m => m[i].texto, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);" })</div>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 4)
+                                            {
+                                                <td class="text-center" style="width:150px" colspan="3">
+                                                    <div>@Html.TextBoxFor(m => m[i].data, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);" })</div>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 5)
+                                            {
+                                                <td class="text-center" style="width:150px" colspan="3">
+                                                    <div>@Html.TextBoxFor(m => m[i].hora, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);" })</div>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 8)
+                                            {
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">SIM</span>
+                                                    <label class="css-control css-control-success css-checkbox">
+                                                        @Html.RadioButtonFor(m => m[i].sim_nao, "SIM", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'SIM');" })
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">NÃO</span>
+                                                    <label class="css-control css-control-danger css-checkbox">
+                                                        @Html.RadioButtonFor(m => m[i].sim_nao, "NÃO", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'NÃO');" })
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">N/A</span>
+                                                    <label class="css-control css-control-secondary css-checkbox">
+                                                        @Html.RadioButtonFor(m => m[i].sim_nao, "N/A", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'N/A');" })
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                            }
+                                            <td><div>@Html.TextBoxFor(m => m[i].observacao, new { @class = "form-control", @maxlength = 200 })</div></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Dynamic Table Full Pagination -->
+                    }
+                }
+                <!-- END Basic Info -->
+            </div>
+            <!-- END Update Product -->
+        </div>
+        <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+<!-- From Right Modal -->
+<div class="modal fade" id="modalJustificativa" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+
+            @using (Html.BeginForm("PMOCJustificativa", "PMOC", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form_modal", @id = "form_modal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="block block-themed block-transparent mb-15">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.pmoc_justificativa</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="si si-close font-w600"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full">
+
+                        <div class="row">
+
+                            <input type="hidden" name="codigo_equipamento_pmoc" id="codigo_equipamento_pmoc" value="@ViewBag.pmoc.codigo_equipamento">
+                            <input type="hidden" name="codigo_unidade_pmoc" id="codigo_unidade_pmoc" value="@ViewBag.pmoc.codigo_unidade">
+
+                            <div class="col-md-12">
+                                <label>@PCM.WEB.Properties.Resources.justificativa_apontamento:</label>
+                                @Html.DropDownList("justificativa_apontamento", null, "", new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnConfirm" id="btnConfirm" onclick="$('#form_modal').submit();" )><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnClose" id="btnClose" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+    
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/select")
+
+<script>
+
+    $(document).ready(function () { $("#data_inicio").mask("99/99/9999"); });
+    $(document).ready(function () { $("#data_termino").mask("99/99/9999"); });
+    $(document).ready(function () { $("#hora_inicio").mask("99:99"); });
+    $(document).ready(function () { $("#hora_termino").mask("99:99"); });
+    $(document).ready(function () { $("#quantidade_equipamento").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' }); });
+    $(document).ready(function () { $("#valor_manutencao").maskMoney({ prefix: 'R$ ', thousands: '.', decimal: ",", precision: 2, allowNegative: false, 'placeholder': '' }); });
+
+    jQuery.validator.addMethod("maxDate", function (value, element) {
+
+        var curDate = new Date();
+        curDate.setHours(0, 0, 0, 0);
+        var from = value.split("/");
+        var inputDate = new Date(from[2], from[1] - 1, from[0]);
+        if (inputDate > curDate) {
+            return this.optional(element) || false;
+        }
+        else {
+            return this.optional(element) || true;
+        }
+
+    }, '');
+
+    jQuery.validator.addMethod("minDate", function (value, element) {
+
+        if ('@ViewBag.administrador' == 'True') {
+            return this.optional(element) || true;
+        } else {
+            var curDate = new Date();
+            curDate.setDate(curDate.getDate() - 2);
+            curDate.setHours(0, 0, 0, 0);
+            var from = value.split("/");
+            var inputDate = new Date(from[2], from[1] - 1, from[0]);
+            if (inputDate > curDate) {
+                return this.optional(element) || true;
+            }
+            else {
+                return this.optional(element) || false;
+            }
+        }
+    }, '');
+
+    jQuery.validator.addMethod("lessThan", function (value, element, params) {
+
+        var fromCurDate = $(params).val().split("/");
+        var curDate = new Date(fromCurDate[2], fromCurDate[1] - 1, fromCurDate[0]);
+        var fromMinDate = value.split("/");
+        var minDate = new Date(fromMinDate[2], fromMinDate[1] - 1, fromMinDate[0]);
+        if (curDate < minDate) {
+            return this.optional(element) || false;
+        }
+        else {
+            return this.optional(element) || true;
+        }
+    }, '');
+
+    jQuery.validator.addMethod("greaterThan", function (value, element, params) {
+
+        var fromCurDate = $(params).val().split("/");
+        var curDate = new Date(fromCurDate[2], fromCurDate[1] - 1, fromCurDate[0]);
+        var fromMaxDate = value.split("/");
+        var maxDate = new Date(fromMaxDate[2], fromMaxDate[1] - 1, fromMaxDate[0]);
+        if (curDate > maxDate) {
+            return this.optional(element) || false;
+        }
+        else {
+            return this.optional(element) || true;
+        }
+    }, '');
+
+    jQuery.validator.addMethod("apontamentoHoras", function (value, element, params) {
+
+        //Data e Hora - Início
+        var fromDataInicio = $(params[0]).val().split("/");
+        var fromHoraInicio = $(params[1]).val().split(":");
+        var dataInicio = new Date(fromDataInicio[2], fromDataInicio[1] - 1, fromDataInicio[0], fromHoraInicio[0], fromHoraInicio[1], 0, 0);
+
+        //Data e Hora - Término
+        var fromDataTermino = $(params[2]).val().split("/");
+        var fromHoraTermino = value.split(":");
+        var dataTermino = new Date(fromDataTermino[2], fromDataTermino[1] - 1, fromDataTermino[0], fromHoraTermino[0], fromHoraTermino[1], 0, 0);
+
+        var difference = dataTermino - dataInicio;
+
+        if (((difference) / 3600000) > 10) {
+            return this.optional(element) || false;
+        }
+        else {
+            return this.optional(element) || true;
+        }
+    }, '');
+
+    jQuery.validator.addMethod("greaterThanTime", function (value, element, params) {
+
+        //Data e Hora - Início
+        var fromDataInicio = $(params[0]).val().split("/");
+        var fromHoraInicio = $(params[1]).val().split(":");
+        var dataInicio = new Date(fromDataInicio[2], fromDataInicio[1] - 1, fromDataInicio[0], fromHoraInicio[0], fromHoraInicio[1], 0, 0);
+
+        //Data e Hora - Término
+        var fromDataTermino = $(params[2]).val().split("/");
+        var fromHoraTermino = value.split(":");
+        var dataTermino = new Date(fromDataTermino[2], fromDataTermino[1] - 1, fromDataTermino[0], fromHoraTermino[0], fromHoraTermino[1], 0, 0);
+
+        if (dataInicio > dataTermino) {
+            return this.optional(element) || false;
+        }
+        else {
+            return this.optional(element) || true;
+        }
+    }, '');
+
+    $.validator.addMethod('time', function (value, element, param) {
+        return value == '' || value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
+    }, '@PCM.WEB.Properties.Resources.valida_hora');
+
+    function PMOCJustificativa() {
+        //Abre Formulário
+        jQuery('#modalJustificativa').modal('show');
+    }
+
+    $('#form_modal').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+            $('#btnSave').show();
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'justificativa_apontamento': {
+                required: true
+            }
+        },
+        messages: {
+            'justificativa_apontamento': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+
+            $('#btnConfirm').hide();
+
+            var unidade = $("#codigo_unidade_pmoc");
+            var equipamento = $("#codigo_equipamento_pmoc");
+            var justificativa_apontamento = $("#justificativa_apontamento");
+
+            var formdata = new FormData();
+            jQuery('#modalJustificativa').modal('hide');
+
+            Codebase.layout('header_loader_on');
+
+            formdata.append("unidade", unidade.val());
+            formdata.append("equipamento", equipamento.val());
+            formdata.append("justificativa_apontamento", justificativa_apontamento.val());
+
+            //Creating an XMLHttpRequest and sending
+            var oXMLHttpRequest = new XMLHttpRequest();
+            oXMLHttpRequest.open('POST', 'ApontamentoPMOCJustificativa')
+            oXMLHttpRequest.send(formdata);
+            oXMLHttpRequest.onreadystatechange = function () {
+
+                if (oXMLHttpRequest.readyState == 4 && oXMLHttpRequest.status == 200) {
+
+                    Codebase.layout('header_loader_off');
+                    window.location.href = "@ViewBag.View";
+
+                }
+            }
+
+            return false;
+        }
+    });
+
+    $(function () {
+
+        $('.hora_inicio').clockpicker();
+        $('.hora_termino').clockpicker();
+
+    });
+
+    $('#form').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'funcionario': {
+                required: true
+            },
+            'fornecedor': {
+                required: false
+            },
+            'data_inicio': {
+                required: true,
+                minDate: { minDate: true },
+                maxDate: { maxDate: true },
+                lessThan: "#data_termino"
+            },
+            'hora_inicio': {
+                required: true,
+                time: true
+            },
+            'data_termino': {
+                required: true,
+                maxDate: { maxDate: true },
+                greaterThan: "#data_inicio"
+            },
+            'hora_termino': {
+                required: true,
+                time: true,
+                apontamentoHoras: ["#data_inicio", "#hora_inicio", "#data_termino"],
+                greaterThanTime: ["#data_inicio", "#hora_inicio", "#data_termino"]
+            },
+            'valor[]': {
+                required: true
+            }
+        },
+        messages: {
+            'funcionario': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'fornecedor': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'data_inicio': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                minDate: '@PCM.WEB.Properties.Resources.data_menor_permitida',
+                maxDate: '@PCM.WEB.Properties.Resources.data_maior_corrente',
+                lessDate: '@PCM.WEB.Properties.Resources.data_maior_termino'
+            },
+            'data_termino': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                maxDate: '@PCM.WEB.Properties.Resources.data_maior_corrente',
+                greaterThan: '@PCM.WEB.Properties.Resources.data_menor_inicio'
+            },
+            'hora_inicio': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'hora_termino': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                apontamentoHoras: '@PCM.WEB.Properties.Resources.diferenca_maior_10',
+                greaterThanTime: '@PCM.WEB.Properties.Resources.data_menor_inicio'
+            },
+            '[]conforme': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            '[]valor': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        }
+    });
+    
+    // Initialize when page loads
+    jQuery(function () {
+        Codebase.helpers(['datepicker', 'maxlength', 'select2', 'masked-inputs']);
+    });
+
+</script>
+}

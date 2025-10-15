@@ -1,0 +1,715 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.PlanoAcao>
+
+    <!-- Main Container -->
+    <main id="main-container">
+
+        <!-- Breadcrumb -->
+        <div class="bg-body-light border-b">
+            <div class="content py-0 text-center">
+                <nav class="breadcrumb bg-body-light mb-0">
+                    <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                    <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.plano_acao</span>
+                </nav>
+            </div>
+        </div>
+        <!-- END Breadcrumb -->
+        <!-- Page Content -->
+        <div class="content">
+
+            @using (Html.BeginForm("PlanoAcaoIndex", "PlanoAcao", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "form", @id = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <div class="js-tasks-nav d-none d-md-block">
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.plano_acao </h3>
+
+                            @if (ViewBag.inserir)
+                            {
+                                <div class="block-options">
+                                    <a href="@Url.Action("PlanoAcaoInsert", "PlanoAcao")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                        <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                @if (Session["unidade"] == "")
+                                {
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="unidade" id="unidade" value="@Session["codigo_unidade"]">
+                                }
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                                <div class="input-group-prepend input-group-append">
+                                                    <span class="input-group-text font-w600">-</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2"><div><input type="text" id="plano_acao" name="plano_acao" value="@ViewBag.plano_acao" placeholder="@PCM.WEB.Properties.Resources.plano_acao" class="form-control"></div></div>
+                                        <div class="col-md-3"><div>@Html.DropDownList("status", null, PCM.WEB.Properties.Resources.status, new { @class = "js-select2 form-control" })</div></div>
+                                        <div class="col-md-3"><div>@Html.DropDownList("prioridade", null, PCM.WEB.Properties.Resources.prioridade, new { @class = "js-select2 form-control" })</div></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-4"><div>@Html.DropDownList("departamento", null, PCM.WEB.Properties.Resources.departamento_responsavel, new { @class = "js-select2 form-control" })</div></div>
+                                        <div class="col-md-4"><div>@Html.DropDownList("solicitante", null, PCM.WEB.Properties.Resources.solicitante, new { @class = "js-select2 form-control" })</div></div>
+                                        <div class="col-md-4"><div><input type="text" id="executor" name="executor" value="@ViewBag.executor" placeholder="@PCM.WEB.Properties.Resources.executor" class="form-control"></div></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+
+                <div class="row">
+                    <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PlanoAcaoIndex", "PlanoAcao",  new { status = 3})">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-briefcase fa-2x text-pulse"></i></div>
+                                <div class="font-size-h5 font-w600 text-pulse" data-speed="1000" data-to="@ViewBag.plano_acao_status.atrasado" id="quantidade_atrasado" name="quantidade_atrasado">@ViewBag.plano_acao_status.atrasado</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PlanoAcaoIndex", "PlanoAcao",  new { status = 1})">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-briefcase fa-2x text-warning"></i></div>
+                                <div class="font-size-h5 font-w600 text-warning" data-speed="1000" data-to="@ViewBag.plano_acao_status.pendente" id="quantidade_pendente" name="quantidade_pendente">@ViewBag.plano_acao_status.pendente</div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PlanoAcaoIndex", "PlanoAcao",  new { status = 4})">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-briefcase fa-2x text-primary-light"></i></div>
+                                <div class="font-size-h5 font-w600 text-primary"><span data-speed="1000" data-to="@ViewBag.plano_acao_status.em_andamento" id="quantidade_em_andamento" name="quantidade_em_andamento">@ViewBag.plano_acao_status.em_andamento</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.em_andamento</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PlanoAcaoIndex", "PlanoAcao",  new { status = 2})">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-briefcase fa-2x text-earth-light"></i></div>
+                                <div class="font-size-h5 font-w600 text-earth"><span data-speed="1000" data-to="@ViewBag.plano_acao_status.concluido" id="quantidade_concluido" name="quantidade_concluido">@ViewBag.plano_acao_status.concluido</span></div>
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="block block-rounded border">
+                    <div class="block-content block-content-full border">
+
+                        <table class="table table-vcenter table-sm table-hover js-dataTable-list">
+
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.plano_acao</th>
+                                    <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data</th>
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
+                                    }
+                                    <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.descricao</th>
+                                    <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.solicitante</th>
+                                    <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.responsavel_departamento</th>
+                                    <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.departamento</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.percentual_execucao</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data_execucao</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.prioridade</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.prazo_execucao</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.status</th>
+                                    @if (ViewBag.editar || ViewBag.excluir || ViewBag.inserir)
+                                    {
+                                        <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr id="tr.@item.codigo">
+                                        <td class="text-center d-md-table-cell">@Html.DisplayFor(modelItem => item.numero_documento)</td>
+                                        <td class="text-center d-md-table-cell">@Html.DisplayFor(modelItem => item.data_necessidade)</td>
+                                        @if (Session["unidade"] == "")
+                                        {
+                                            <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                        }
+                                        <td class="d-none d-lg-table-cell">@Html.DisplayFor(modelItem => item.descricao)</td>
+                                        <td class="d-none d-lg-table-cell">@Html.DisplayFor(modelItem => item.solicitante)</td>
+                                        <td class="d-none d-lg-table-cell">@Html.DisplayFor(modelItem => item.responsavel)</td>
+                                        <td class="d-none d-lg-table-cell">@Html.DisplayFor(modelItem => item.departamento)</td>
+                                        <td class="d-none d-md-table-cell text-center">@Html.DisplayFor(modelItem => item.percentual)</td>
+                                        <td class="d-none d-md-table-cell text-center">@Html.DisplayFor(modelItem => item.data_execucao)</td>
+                                        <td class="d-none d-md-table-cell text-center">@Html.DisplayFor(modelItem => item.prioridade)</td>
+                                        <td class="d-none d-md-table-cell text-center">@Html.DisplayFor(modelItem => item.data_necessidade)<br><span class="@item.css_class">@Html.DisplayFor(modelItem => item.dias)</td>
+                                        @if (item.status == 1)
+                                        {
+                                            <td class="d-none d-md-table-cell text-center" id="td.@item.codigo"><span class="badge badge-warning">@item.status_descricao</span></td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    @if (ViewBag.inserir)
+                                                    {<a href="@Url.Action("ApontamentoPlanoAcao", "PlanoAcao", new { codigo_pcm_plano_acao = item.codigo, codigo_unidade = item.codigo_unidade, model = "PlanoAcao", page = "PlanoAcaoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
+                                                    @if (ViewBag.editar)
+                                                    {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                                    @if (ViewBag.excluir)
+                                                    {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
+                                                    <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@item.codigo, @item.codigo_unidade, '@item.data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                    <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
+                                                </div>
+                                            </td>
+                                        }
+                                        @if (item.status == 2)
+                                        {
+                                            <td class="d-none d-md-table-cell text-center" id="td.@item.codigo"><span class="badge badge-success">@item.status_descricao</span></td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    @if (ViewBag.editar)
+                                                    {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                                    @if (ViewBag.excluir)
+                                                    {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
+                                                    <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
+                                                    @if (ViewBag.administrador)
+                                                    {@Html.ActionLink(" ", "ReabrirPlanoAcao", new { codigo_pcm_plano_acao = item.codigo, unidade = item.codigo_unidade }, new { @class = "fa fa-unlock btn btn-sm btn-secondary", @title = @PCM.WEB.Properties.Resources.reabrir_ordem_servico, data_toggle = "tooltip" })}
+                                                </div>
+                                            </td>
+                                        }
+                                        @if (item.status == 3)
+                                        {
+                                            <td class="d-none d-md-table-cell text-center" id="td.@item.codigo"><span class="badge badge-danger">@item.status_descricao</span></td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    @if (ViewBag.inserir)
+                                                    {<a href="@Url.Action("ApontamentoPlanoAcao", "PlanoAcao", new { codigo_pcm_plano_acao = item.codigo, codigo_unidade = item.codigo_unidade, model = "PlanoAcao", page = "PlanoAcaoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
+                                                    @if (ViewBag.editar)
+                                                    {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                                    @if (ViewBag.excluir)
+                                                    {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
+                                                <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@item.codigo, @item.codigo_unidade, '@item.data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                    <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
+                                                </div>
+                                            </td>
+                                        }
+                                        @if (item.status == 4)
+                                        {
+                                            <td class="d-none d-md-table-cell text-center" id="td.@item.codigo"><span class="badge badge-primary">@item.status_descricao</span></td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    @if (ViewBag.inserir)
+                                                    {<a href="@Url.Action("ApontamentoPlanoAcao", "PlanoAcao", new { codigo_pcm_plano_acao = item.codigo, codigo_unidade = item.codigo_unidade, model = "PlanoAcao", page = "PlanoAcaoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
+                                                    @if (ViewBag.editar)
+                                                    {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                                    @if (ViewBag.excluir)
+                                                    {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
+                                                <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@item.codigo, @item.codigo_unidade, '@item.data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                    <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
+                                                </div>
+                                            </td>
+                                        }
+                                        @if (item.status == 5)
+                                        {
+                                            <td class="d-none d-md-table-cell text-center" id="td.@item.codigo"><span class="badge badge-info">@item.status_descricao</span></td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    @if (ViewBag.inserir)
+                                                    {<a href="@Url.Action("ApontamentoPlanoAcao", "PlanoAcao", new { codigo_pcm_plano_acao = item.codigo, codigo_unidade = item.codigo_unidade, model = "PlanoAcao", page = "PlanoAcaoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
+                                                    @if (ViewBag.editar)
+                                                    {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                                    @if (ViewBag.excluir)
+                                                    {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
+                                                <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@item.codigo, @item.codigo_unidade, '@item.data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                    <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            }
+        </div>
+
+    </main>
+    <!-- END Main Container -->
+
+    <!-- From Right Modal -->
+    <div class="modal fade" id="modalDataOrdemServico" tabindex="-1" role="dialog" aria-labelledby="modalDataOrdemServico" aria-hidden="true">
+        @using (Html.BeginForm("PlanoAcaoIndex", "PlanoAcao", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "form_data", @id = "form_data", enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" name="codigo_ordem_servico" id="codigo_ordem_servico" value="0">
+            <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="0">
+            <input type="hidden" name="data_os" id="data_os" value="">
+            <div class="modal-dialog modal-dialog-fromright" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-15">
+                        <div class="block-header bg-secondary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.novo_prazo_plano_acao</h3>
+                        </div>
+                        <div class="block-content">
+                            <label class="col-12">@PCM.WEB.Properties.Resources.prazo</label>
+                            <div class="col-md-6"><input type="text" class="js-datepicker form-control" id="data_ordem_servico" name="data_ordem_servico" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value=""></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar" id="salvar"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <!-- END From Right Modal -->
+
+    @section Styles {
+        @Styles.Render("~/Content/datepicker")
+        @Styles.Render("~/Content/dataTables")
+        @Styles.Render("~/Content/select")
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/plugins/dataTables")
+        @Scripts.Render("~/plugins/validation")
+        @Scripts.Render("~/plugins/maxlenght")
+        @Scripts.Render("~/plugins/datepicker")
+        @Scripts.Render("~/plugins/select")
+
+                  <script type="text/javascript">
+
+        $(function () {
+
+            $.ajaxSetup({async: false});
+
+            var unidade = $("#unidade");
+            var prioridade = $("#prioridade");
+            var solicitante = $("#solicitante");
+            var departamento = $("#departamento");
+            var status = $("#status");
+
+            apartamento.select2();
+            status.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.status)', allowClear: true});
+
+            if (unidade.val() == "" || unidade.val() == "-1") {
+                prioridade.prop( "disabled", true );
+                solicitante.prop("disabled", true);
+                departamento.prop("disabled", true);
+                prioridade.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true});
+                solicitante.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true});
+                departamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento)', allowClear: true});
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+
+                    prioridade.empty();
+                    solicitante.empty();
+                    departamento.empty();
+                    prioridade.prop( "disabled", true );
+                    solicitante.prop("disabled", true);
+                    departamento.prop("disabled", true);
+                    prioridade.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true});
+                    setor.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true});
+                    apartamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true});
+                    solicitante.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true});
+                    equipamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)', allowClear: true });
+                    departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento_responsavel)', allowClear: true });
+
+                } else {
+
+                    var request = { "unidade": unidade.val() };
+
+                    $.post("LoadPrioridade", request, function (obj) {
+                        prioridade.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        prioridade.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            prioridade.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadSolicitante", request, function (obj) {
+                        solicitante.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        solicitante.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            solicitante.append(option);
+                        });
+                    }, "json");
+
+                    prioridade.prop("disabled", false);
+                    solicitante.prop("disabled", false);
+                    departamento.prop("disabled", false);
+                    prioridade.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true});
+                    solicitante.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true});
+                    equipamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)', allowClear: true });
+                    departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento_responsavel)', allowClear: true });
+
+                }
+
+            });
+
+            setor.change(function () {
+
+                if (setor.val() == "") {
+                    equipamento.empty();
+                    equipamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)' ,allowClear: true});
+                    equipamento.prop( "disabled", true );
+
+                    var request = { "unidade": unidade.val(), "setor": "-1" };
+
+                    $.post("LoadApartamento", request, function (obj) {
+                        apartamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        apartamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            apartamento.append(option);
+                        });
+                    }, "json");
+
+                }
+
+                else {
+
+                    var request = { "unidade": unidade.val(), "setor": setor.val() };
+
+                    $.post("LoadApartamento", request, function (obj) {
+                        apartamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        apartamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            apartamento.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadEquipamentoSetor", request, function (obj) {
+                        equipamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        equipamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            equipamento.append(option);
+                        });
+                    }, "json");
+
+                    equipamento.prop( "disabled", false );
+                    equipamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)' ,allowClear: true});
+                }
+
+            });
+
+            apartamento.change(function () {
+
+                if (apartamento.val() == "") {
+                    equipamento.empty();
+                    equipamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)' ,allowClear: true});
+                    equipamento.prop( "disabled", true );
+                    if(setor.val() != ""){
+                        setor.trigger('change');
+                    }
+                }
+
+                else{
+
+                    var request = { "unidade": unidade.val(), "apartamento": apartamento.val() };
+
+                    $.post("LoadEquipamentoApartamento", request, function (obj) {
+                        equipamento.empty();
+                            option = $("<option>", { "value": "" }).text("");
+                        equipamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            equipamento.append(option);
+                        });
+                    }, "json");
+
+                    equipamento.prop( "disabled", false );
+                    equipamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)' ,allowClear: true});
+                }
+
+            });
+
+        });
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: true,
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 15,
+                    autoWidth: false,
+                    scrollX: false,
+                    scrollColapse: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar'},
+                        { extend: 'print',
+                            text: 'Imprimir'},
+                        { extend: 'excel'},
+                        { extend: 'pdf', orientation: 'landscape'},
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+        function UpdateStatus(codigo, unidade, data, status){
+
+            if('@ViewBag.administrador_vincular' == 'True' && (status == 5)){
+
+                //Seta Váriaveis
+                $("#codigo_plano_acao").val(codigo);
+                $("#codigo_unidade").val(unidade);
+                $("#codigo_status").val(status);
+                $("#data_os").val(data);
+                $('#funcionario').val([]).trigger('change');
+
+                //Abre Formulário
+                jQuery('#modalFuncionario').modal('show');
+
+            } else if('@Session["funcionario"]' != '' || (status != 5)) {
+
+                var fromDataOS = data.split("/");
+                var data_hoje = new Date();
+                data_hoje.setHours(0, 0, 0, 0);
+                var data_os = new Date(fromDataOS[2], fromDataOS[1] -1, fromDataOS[0]);
+
+                var dataString = {
+                    "codigo": codigo,
+                    "unidade": unidade,
+                    "status": status,
+                    "funcionario": (status == 5)? '@Session["codigo_funcionario"]': "",
+                    "funcionario_nome": (status == 5)? '@Session["funcionario"]': ""
+                };
+
+                $.post("VincularFuncionarioOS", dataString,
+                    function (result) {
+                        if (result == "True") {
+                            if (data_os < data_hoje){
+                                document.getElementById("td." + codigo).innerHTML = (status == 5)? "<span class='badge badge-info'>VINCULADA</span>": "<span class='badge badge-danger'>ATRASADO</span>";
+                            } else{
+                                document.getElementById("td." + codigo).innerHTML = (status == 5)? "<span class='badge badge-info'>VINCULADA</span>": "<span class='badge badge-warning'>PENDENTE</span>";
+                            }
+                            if (status == 5)
+                            {
+                                document.getElementById("btn." + codigo).onclick = function() {UpdateStatus(codigo, unidade, data, 1)};
+                                document.getElementById("btn." + codigo).setAttribute("class", "btn btn-sm btn-danger");
+                                document.getElementById("td.executor." + codigo).innerHTML = '@Session["funcionario"]';
+                            } else {
+                                document.getElementById("btn." + codigo).onclick = function() {UpdateStatus(codigo, unidade, data, 5)};
+                                document.getElementById("btn." + codigo).setAttribute("class", "btn btn-sm btn-secondary");
+                                document.getElementById("td.executor." + codigo).innerHTML = "-";
+                            }
+                        }
+                    });
+
+            }
+        }
+
+        $('#form_funcionario').validate({
+            ignore: [],
+            errorClass: 'invalid-feedback animated fadeInDown',
+            errorElement: 'div',
+            errorPlacement: function (error, e) {
+                jQuery(e).parents('.form-group > div').append(error);
+            },
+            highlight: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+            },
+            success: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                jQuery(e).remove();
+            },
+            rules: {
+                'funcionario': {
+                    required: true
+                }
+            },
+            messages: {
+                'funcionario': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                }
+            },
+            submitHandler: function (form) {
+
+                var funcionario = $("#funcionario").val().toString();
+                var funcionarios = $("#funcionario").select2('data');
+                var codigo = $("#codigo_plano_acao").val();
+                var unidade = $("#codigo_unidade").val();
+                var status = $("#codigo_status").val();
+                var data = $("#data_os").val();
+                var fromDataOS = data.split("/");
+                var data_hoje = new Date();
+                data_hoje.setHours(0, 0, 0, 0);
+                var data_os = new Date(fromDataOS[2], fromDataOS[1] -1, fromDataOS[0]);
+
+                var funcionario_nome = "";
+
+                for(i = 0; i< funcionarios.length; i++)
+                {
+                    if (funcionarios[i].selected) {
+                        funcionario_nome = funcionario_nome.concat((funcionario_nome == "")? "" : "; ", funcionarios[i].text);
+                    }
+                }
+
+                var dataString = {
+                    "codigo": codigo,
+                    "unidade": unidade,
+                    "status": status,
+                    "funcionario": funcionario,
+                    "funcionario_nome": funcionario_nome
+                };
+
+                $.post("VincularFuncionarioOS", dataString,
+                    function (result) {
+                        if (result == "True") {
+                            if (data_os < data_hoje){
+                                document.getElementById("td." + codigo).innerHTML = (status == 5)? "<span class='badge badge-info'>VINCULADA</span>": "<span class='badge badge-danger'>ATRASADO</span>";
+                            } else{
+                                document.getElementById("td." + codigo).innerHTML = (status == 5)? "<span class='badge badge-info'>VINCULADA</span>": "<span class='badge badge-warning'>PENDENTE</span>";
+                            }
+                            if (status == 5)
+                            {
+                                document.getElementById("btn." + codigo).onclick = function() {UpdateStatus(codigo, unidade, data, 1)};
+                                document.getElementById("btn." + codigo).setAttribute("class", "btn btn-sm btn-danger");
+                                document.getElementById("td.executor." + codigo).innerHTML = funcionario_nome;
+                            } else {
+                                document.getElementById("btn." + codigo).onclick = function() {UpdateStatus(codigo, unidade, data, 5)};
+                                document.getElementById("btn." + codigo).setAttribute("class", "btn btn-sm btn-secondary");
+                            }
+                        }
+                    });
+
+                $('#modalFuncionario').modal('hide');
+            }
+        });
+
+        function UpdateDataOrdemServico(codigo, unidade, data){
+
+
+            //Seta Váriaveis
+            $("#codigo_ordem_servico").val(codigo);
+            $("#codigo_unidade").val(unidade);
+            $("#data_os").val(data);
+            $("#data_ordem_servico").val(data);
+
+            //Abre Formulário
+            jQuery('#modalDataOrdemServico').modal('show');
+
+        }
+
+        $('#form_data').validate({
+            ignore: [],
+            errorClass: 'invalid-feedback animated fadeInDown',
+            errorElement: 'div',
+            errorPlacement: function (error, e) {
+                jQuery(e).parents('.form-group > div').append(error);
+            },
+            highlight: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+            },
+            success: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                jQuery(e).remove();
+            },
+            rules: {
+                'data_ordem_servico': {
+                    required: true
+                }
+            },
+            messages: {
+                'data_ordem_servico': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                }
+            },
+            submitHandler: function (form) {
+
+                var data = $("#data_ordem_servico").val().toString();
+                var codigo = $("#codigo_ordem_servico").val();
+                var unidade = $("#codigo_unidade").val();
+
+                var dataString = {
+                    "codigo": codigo,
+                    "unidade": unidade,
+                    "data": data
+                };
+
+                $.post("UpdateDataPlanoAcao", dataString,
+                    function (result) {
+                        $("#form").submit();
+                    });
+
+                $('#modalFuncionario').modal('hide');
+            }
+        });
+
+        // Initialize when page loads
+        jQuery(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+            BeTableDatatables.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+                  </script>
+    }

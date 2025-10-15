@@ -1,0 +1,254 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.ManutencaoTempoMedioAtendimento>
+
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">   
+
+        @using (Html.BeginForm("ManutencaoTempoMedioAtendimento", "Relatorio", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new { @class = "js-validation-bootstrap", @name="form", @id="form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+                    
+            <div class="col-md-12 col-xl-12">
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-8">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>                                    
+                                        <div class="col-md-4">@Html.DropDownList("ano", null, PCM.WEB.Properties.Resources.ano, new { @class = "form-control" })</div>                                    
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">                                                    
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar" ><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    @if(ViewBag.imprimir)
+                                    {
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+           
+                <!-- CHART -->
+                <div class="d-md-block d-none">                
+                    <div class="block block-rounded block-mode-loading-refresh">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">Gráfico - @PCM.WEB.Properties.Resources.manutencao_tempo_medio_atendimento</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="pull-all m-5">
+                                <canvas id="canvas" height="70px"></canvas>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END CHART -->
+                             
+                <div class="block">
+                
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.manutencao_tempo_medio_atendimento</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option text-dark font-w600" data-toggle="block-option" data-action="fullscreen_toggle"></button>                             
+                        </div>
+                    </div>            
+
+                    <div class="block-content">
+                
+                        <!-- Table -->
+                        <div class="table-responsive table-sm push">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>@PCM.WEB.Properties.Resources.mes</th>
+                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.no_dia</th>
+                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.um_dia</th>
+                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.tres_dias</th>
+                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.cinco_dias</th>
+                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.acima_cinco_dias</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>     
+                                            <td>@Html.DisplayFor(modelItem => item.mes)</td>
+                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.no_dia)</td>
+                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.um_dia)</td>
+                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.tres_dias)</td>
+                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.cinco_dias)</td>
+                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.acima_cinco_dias)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Table -->
+
+                    </div>
+
+                </div>
+
+         </div>
+   
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/chart")
+
+<script>
+
+    function ImprimirRelatorio() {
+
+        var unidade = $("#unidade").val();
+        var ano = $("#ano").val();
+
+        window.open('PrintManutencaoTempoMedioAtendimento' + '?unidade=' + unidade + '&ano=' + ano + '&nome_fantasia=' + $("#unidade option:selected").text(), '_blank');
+    }
+
+    var config = {
+        type: 'doughnut',
+        options: {
+            responsive: true,
+            data: {
+                datasets: [{
+                    data: [],
+                    backgroundColor: [],
+                }],
+                labels: []
+            },
+            legend: {
+                display: true,
+                position: 'right',
+            },
+            title: {
+                display: false,
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        },
+        options: {
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var allData = data.datasets[tooltipItem.datasetIndex].data;
+                        var tooltipLabel = data.labels[tooltipItem.index];
+                        var tooltipData = allData[tooltipItem.index];
+                        var total = 0;
+                        for (var i in allData) {
+                            total += parseInt(allData[i]);
+                        }
+                        var tooltipPercentage = Math.round((tooltipData / total) * 100.0);
+                        return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
+                    }
+                }
+            }
+        }
+    };
+
+    var colorNames = Object.keys(window.chartColors);
+
+    function LoadChart() {
+
+        unidade = $("#unidade");
+        ano = $("#ano");
+
+        var request = { "unidade": unidade.val(), "ano": ano.val() };
+
+        $.post("ChartManutencaoTempoMedioAtendimento", request, function (obj) {
+
+            var newDataset = {
+                label: [],
+                data: [],
+                backgroundColor: [],
+                fill: false
+            };
+
+            $.each(obj, function (indice, result) {
+                var colorName = colorNames[newDataset.data.length % colorNames.length];
+                var newColor = window.chartColors[colorName];
+                config.data.labels.push(result.tipo);
+                newDataset.data.push(result.valor);
+                newDataset.backgroundColor.push(newColor);
+            });
+
+            config.data.datasets.push(newDataset);
+            window.myLine.update();
+
+        }, "json");
+    }
+
+    window.onload = function () {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.myLine = new Chart(ctx, config);
+    };
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.list-group-item > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'ano': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'ano': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    // Initialize when page loads
+    jQuery(function () {
+        FormValidation.init();
+        LoadChart();
+    });
+
+</script>
+}
+

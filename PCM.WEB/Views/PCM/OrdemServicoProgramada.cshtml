@@ -1,0 +1,729 @@
+﻿@model List<PCM.WEB.MODELS.PCMProgramadaOrdemServicoChecklist>
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action(@ViewBag.view, "PCM")">@ViewBag.resource_name</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.salvar</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("OrdemServicoProgramada", "PCM", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row gutters-tiny">
+                <!-- Basic Info -->
+                <div class="col-md-12">
+
+                    <input type="hidden" name="codigo_pcm_programada_ordem_servico" id=" codigo_pcm_programada_ordem_servico" value="@ViewBag.ordem_servico.codigo">
+                    <input type="hidden" name="codigo_pcm_programada" id=" codigo_pcm_programada" value="@ViewBag.ordem_servico.codigo_pcm_programada">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.ordem_servico.codigo_unidade">
+                    <input type="hidden" name="view" id="view" value="@ViewBag.view">
+                    <input type="hidden" name="formulario" id="formulario" value="@ViewBag.formulario">
+                    <input type="hidden" name="tipo" id="tipo" value="@ViewBag.tipo">
+                    <input type="hidden" name="pcm_tipo" id="pcm_tipo" value="@ViewBag.pcm_tipo">
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@ViewBag.resource_name</h3>
+                            <div class="block-options">
+                                @if (ViewBag.administrador && ViewBag.ordem_servico.status == "2")
+                                {
+                                    <a href="@Url.Action("ReabrirProgramada", "PCM", new { codigo_pcm_programada_ordem_servico = ViewBag.ordem_servico.codigo, codigo_unidade = ViewBag.ordem_servico.codigo_unidade, formulario = ViewBag.formulario, tipo = ViewBag.tipo })" class="btn btn-square btn-secondary min-width-200 h-75"><i class="fa fa-unlock mr-5"></i>@PCM.WEB.Properties.Resources.reabrir_ordem_servico</a>
+                                }
+                                @if (ViewBag.administrador && ViewBag.ordem_servico.status != "2" && ViewBag.ordem_servico.apontamento.Count > 0)
+                                {
+                                    <a href="@Url.Action("ConcluirProgramada", "PCM", new { codigo_pcm_programada_ordem_servico = ViewBag.ordem_servico.codigo, codigo_unidade = ViewBag.ordem_servico.codigo_unidade, formulario = ViewBag.formulario, tipo = ViewBag.tipo })" class="btn btn-square btn-secondary min-width-200 h-75"><i class="fa fa-lock mr-5"></i>@PCM.WEB.Properties.Resources.concluir_ordem_servico</a>
+                                }
+                                @if (ViewBag.administrador && ViewBag.ordem_servico.status != "2")
+                                {
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                                }
+                                @if (ViewBag.excluir)
+                                {
+                                    <a href="@Url.Action("DeleteOrdemServicoProgramada", "PCM", new { codigo_pcm_programada_ordem_servico = ViewBag.ordem_servico.codigo, codigo_unidade = ViewBag.ordem_servico.codigo_unidade, view = ViewBag.view, control = "PCM", tipo = ViewBag.tipo })" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-times mr-5"></i>@PCM.WEB.Properties.Resources.excluir</a>
+                                }
+                                <a href="@Url.Action(@ViewBag.view, "PCM")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar</a>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            @if (Session["unidade"] == "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@ViewBag.ordem_servico.unidade</span></div></div>
+                            }
+                            @if (@ViewBag.ordem_servico.setor != "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.setor: <span class="text-primary">@ViewBag.ordem_servico.setor</span></div></div>
+                            }
+                            @if (@ViewBag.ordem_servico.equipamento != "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.equipamento: <span class="text-primary">@ViewBag.ordem_servico.equipamento</span></div></div>
+                            }
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.servico: <span class="text-primary">@ViewBag.ordem_servico.servico</span></div></div>
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.categoria: <span class="text-primary">@ViewBag.ordem_servico.categoria</span></div></div>
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.tipo_servico: <span class="text-primary">@ViewBag.ordem_servico.tipo_servico</span></div></div>
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.tipo_ordem_servico: <span class="text-primary">@ViewBag.ordem_servico.tipo_ordem_servico</span></div></div>
+                            <div class="border-b mb-15"></div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.solucao</label>
+                                <div class="col-12"><textarea class="form-control" id="descricao_solucao" name="descricao_solucao" maxlength="5000" rows="6">@ViewBag.ordem_servico.descricao_solucao</textarea></div>
+                            </div>
+                            @if (ViewBag.view != "ManutencaoRotina")
+                            {
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.valor</label>
+                                        <div><input type="text" class="form-control" id="valor_manutencao" name="valor_manutencao" value="@ViewBag.ordem_servico.valor"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.quantidade_equipamento</label>
+                                        <div><input type="text" class="form-control" id="quantidade_equipamento" name="quantidade_equipamento" value="@ViewBag.ordem_servico.quantidade_equipamento"></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @if (@ViewBag.ordem_servico.apontamento.Count > 0)
+                    {
+                        <div class="block block-rounded border">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento</h3>
+                                <div class="block-options">
+                                    @if (ViewBag.ordem_servico.status != "2" && ViewBag.inserir)
+                                    {
+                                        <a href="@Url.Action("ApontamentoProgramadaInsert", "PCM", new { codigo_pcm_programada_ordem_servico = ViewBag.ordem_servico.codigo, codigo_unidade = ViewBag.ordem_servico.codigo_unidade, codigo_pcm_programada = ViewBag.ordem_servico.codigo_pcm_programada, formulario = ViewBag.formulario, tipo = ViewBag.tipo })" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-crosshairs mr-5"></i>@PCM.WEB.Properties.Resources.apontamento</a>
+                                    }
+                                </div>
+                            </div>
+                            <div class="block-content">
+                                <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                                <table class="table table-bordered table-sm table-striped table-vcenter">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th>@PCM.WEB.Properties.Resources.executor</th>
+                                            <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_inicio</th>
+                                            <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_termino</th>
+                                            @if ((ViewBag.editar || ViewBag.excluir) && ViewBag.ordem_servico.status != "2")
+                                            {
+                                                <th class="text-center" style="width: 80px;"></th>
+
+                                            }
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach (var apto in ViewBag.ordem_servico.apontamento)
+                                        {
+                                            <tr>
+                                                <td>@apto.executor</td>
+                                                <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@apto.data_inicio</td>
+                                                <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@apto.data_termino</td>
+                                                @if ((ViewBag.editar || ViewBag.excluir) && ViewBag.ordem_servico.status != "2")
+                                                {
+                                                    <td class="text-center" style="width: 80px;">
+                                                        <div class="btn-group">
+                                                            @if (ViewBag.editar)
+                                                            {<a href="@Url.Action("ApontamentoProgramadaEdit", "PCM", new { codigo_apontamento = apto.codigo, codigo_unidade = apto.codigo_unidade, formulario = ViewBag.formulario, tipo = ViewBag.tipo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                                            @if (ViewBag.excluir)
+                                                            {<button type="button" class="btn btn-sm btn-secondary" onclick="deleteApontamento(@apto.codigo, @apto.codigo_unidade, this);"><i class="fa fa-times"></i></button>}
+                                                        </div>
+                                                    </td>
+
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+
+                    @if (@ViewBag.ordem_servico.checklist.Count > 0)
+                    {
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist</h3>
+                        </div>
+                        <div class="block block-content block-content-full border">
+                            <table class="table table-sm table-hover table-vcenter js-dataTable-list">
+
+                                <tbody>
+                                    @for (int i = 0; i < ViewBag.ordem_servico.checklist.Count; i++)
+                                    {
+                                        if (i == 0 || Model[i].grupo != Model[i - 1].grupo)
+                                        {
+                                            <tr class="table-secondary">
+                                                <th colspan="4">@Model[i].grupo</th>
+                                                <th>@PCM.WEB.Properties.Resources.observacao.ToUpper()</th>
+                                                <th></th>
+                                            </tr>
+
+                                        }
+                                        if ((i == 0 || Model[i].subgrupo != Model[i - 1].subgrupo) && Model[i].subgrupo != "")
+                                        {
+                                            <tr class="table-primary">
+                                                <th colspan="6">@Model[i].subgrupo</th>
+                                            </tr>
+                                        }
+
+                                        <tr>
+                                            @Html.HiddenFor(m => m[i].codigo)
+                                            @Html.HiddenFor(m => m[i].codigo_tipo_item_checklist)
+                                            @Html.HiddenFor(m => m[i].descricao)
+                                            @Html.HiddenFor(m => m[i].unidade_medida)
+                                            @Html.HiddenFor(m => m[i].valor_minimo)
+                                            @Html.HiddenFor(m => m[i].valor_maximo)
+                                            @Html.HiddenFor(m => m[i].resultado)
+                                            <td>@Html.DisplayFor(m => m[i].descricao)</td>
+                                            @if (Model[i].codigo_tipo_item_checklist == 1)
+                                            {
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">SIM</span>
+                                                    <label class="css-control css-control-success css-checkbox">
+                                                        @if (Model[i].resultado == "SIM")
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao, "SIM", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'SIM');", @checked = true })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao, "SIM", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'SIM');" })
+                                                        }
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center" style="width:50px"></td>
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">NÃO</span>
+                                                    <label class="css-control css-control-danger css-checkbox">
+                                                        @if (Model[i].resultado == "NÃO")
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao, "NÃO", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'NÃO');", @checked = true })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao, "NÃO", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'NÃO');" })
+                                                        }
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 2)
+                                            {
+                                                <td class="text-center" style="width:150px" colspan="3">
+                                                    <div class="input-group">
+                                                        @Html.TextBoxFor(m => m[i].numero, new { @class = "js-masked-number form-control", @onChange = "setResultado(" + i + ", this.value);", @Value = Model[i].resultado })
+                                                        <div class="input-group-append min-width-50 text-center">
+                                                            <span class="input-group-text font-w600 min-width-50 text-center">@Model[i].unidade_medida</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 3)
+                                            {
+                                                <td class="text-center" style="width:150px" colspan="3">
+                                                    <div>@Html.TextBoxFor(m => m[i].texto, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);", @Value = Model[i].resultado })</div>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 4)
+                                            {
+                                                <td class="text-center" style="width:150px" colspan="3">
+                                                    <div>@Html.TextBoxFor(m => m[i].data, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);", @Value = Model[i].resultado })</div>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 5)
+                                            {
+                                                <td class="text-center" style="width:150px" colspan="3">
+                                                    <div>@Html.TextBoxFor(m => m[i].hora, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);", @Value = Model[i].resultado })</div>
+                                                </td>
+                                            }
+                                            else if (Model[i].codigo_tipo_item_checklist == 8)
+                                            {
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">SIM</span>
+                                                    <label class="css-control css-control-success css-checkbox">
+                                                        @if (Model[i].resultado == "SIM")
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao_na, "SIM", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'SIM');", @checked = true })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao_na, "SIM", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'SIM');" })
+                                                        }
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">NÃO</span>
+                                                    <label class="css-control css-control-danger css-checkbox">
+                                                        @if (Model[i].resultado == "NÃO")
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao_na, "NÃO", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'NÃO');", @checked = true })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao_na, "NÃO", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'NÃO');" })
+                                                        }
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center" style="width:50px">
+                                                    <span class="text-center font-w600">N/A</span>
+                                                    <label class="css-control css-control-secondary css-checkbox">
+                                                        @if (Model[i].resultado == "N/A")
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao_na, "N/A", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'N/A');", @checked = true })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.RadioButtonFor(m => m[i].sim_nao_na, "N/A", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'N/A');" })
+                                                        }
+                                                        <span class="css-control-indicator"></span>
+                                                    </label>
+                                                </td>
+                                            }
+                                            <td><div>@Html.TextBoxFor(m => m[i].observacao, new { @class = "form-control", @maxlength = 200 })</div></td>
+                                            <td style="width:40px">
+                                                @if (Model[i].allow_picture)
+                                                {
+                                                    <div class="btn-group">
+                                                        <button type="button" onclick="$('#codigo_item_checklist').val(@Model[i].codigo); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Dynamic Table Full Pagination -->
+                    }
+
+                    <!-- END Basic Info -->
+                </div>
+                <!-- END Update Product -->
+            </div>
+
+        }
+        <!-- END Page Content -->
+
+        <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-0">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.foto</h3>
+                        </div>
+                        <div class="block-content">
+
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
+                                <div class="col-12">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="fileInput" name="fileInput" multiple accept=".png, .jpg, .jpeg">
+                                        <span class="custom-file-label">@PCM.WEB.Properties.Resources.selecione_arquivo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row items-push js-gallery img-fluid-100" id="galery">
+                            </div>
+                            <!-- END Advanced Gallery -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @*<input type="hidden" id="codigo_auditoria_interna" value="@Model.codigo_pcm_programada_ordem_servico" />
+                        <input type="hidden" id="codigo_auditoria" value="@Model.codigo " />
+                        <input type="hidden" id="data" value="@ViewBag.data" />*@
+                        <input type="hidden" id="codigo_item_checklist" />
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo(); $(this).next('.custom-file-label').addClass('selected').html('');"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$(this).next('.custom-file-label').addClass('selected').html('');" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+
+    <script>
+
+        $(document).ready(function () { $("#data_inicio").mask("99/99/9999"); });
+        $(document).ready(function () { $("#data_termino").mask("99/99/9999"); });
+        $(document).ready(function () { $("#hora_inicio").mask("99:99"); });
+        $(document).ready(function () { $("#hora_termino").mask("99:99"); });
+        $(document).ready(function () { $("#quantidade_equipamento").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' }); });
+        $(document).ready(function () { $("#valor_manutencao").maskMoney({ prefix: 'R$ ', thousands: '.', decimal: ",", precision: 2, allowNegative: false, 'placeholder': '' }); });
+        
+        function setResultado(id, value) {
+            $("input[name$='[" + id + "].resultado']").val(value);
+        };
+
+        function Arquivo() {
+
+            var formdata = new FormData();
+            var oFile = document.getElementById("fileInput");
+
+            for (i = 0; i < oFile.files.length; i++) {
+                formdata.append(oFile.files[i].name, fileInput.files[i]);
+            }
+
+            Codebase.layout('header_loader_on');
+
+            //Creating an XMLHttpRequest and sending
+            var oXMLHttpRequest = new XMLHttpRequest();
+            oXMLHttpRequest.open('POST', 'UploadFoto?codigo_unidade=' + $("#codigo_unidade").val() + '&codigo_auditoria=' + $("#codigo_auditoria").val() + '&codigo_item_checklist=' + $("#codigo_item_checklist").val());
+            oXMLHttpRequest.send(formdata);
+            oXMLHttpRequest.onreadystatechange = function () {
+
+                if (oXMLHttpRequest.readyState == 4 && oXMLHttpRequest.status == 200) {
+
+                    var result = JSON.parse(oXMLHttpRequest.response);
+
+                    if (result == "false") {
+
+                        swal({
+                            title: "Checklist",
+                            text: 'Erro ao realizar o Upload da Imagem!',
+                            type: 'error',
+                            showCancelButton: false,
+                            confirmButtonText: 'OK',
+                            html: false,
+                            preConfirm: function () {
+                                return new Promise(function (resolve) {
+                                    setTimeout(function () {
+                                        resolve();
+                                    }, 50);
+                                });
+                            }
+                        });
+
+                        Codebase.layout('header_loader_off');
+
+                    } else {
+                        LoadArquivo();
+                        Codebase.layout('header_loader_off');
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        function LoadArquivo() {
+
+            $("#galery").empty();
+
+            jQuery.ajax({
+                type: "POST",
+                url: "LoadFoto",
+                async: false,
+                data: { "codigo_unidade": $("#codigo_unidade").val(), "codigo": @ViewBag.ordem_servico.codigo, "codigo_item_checklist": $("#codigo_item_checklist").val(), "tipo": $("#pcm_tipo").val() },
+                dataType: "json",
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        var image = '<div class="col-sm-6 col-xl-3">';
+                        image += '<a class="img-link img-link-zoom-in img-lightbox" href="' + response[i].filename + '">';
+                        image += '<img class="img-fluid" src="' + response[i].filename + '" alt="">';
+                        image += '</a>';
+                        image += '</div>';
+                        $("#galery").append(image);
+                    }
+                }
+            });
+
+        }
+
+        jQuery.validator.addMethod("funcionario", function (funcionario, element) {
+
+            var tipo = $("#tipo_servico").val();
+            var funcionario = $("#funcionario").val();
+            if (tipo == 1) {
+                if(funcionario != "")
+                    return true;
+                else
+                    return false;
+            }
+            else if (tipo == 2) {
+                return true;
+            }
+        }, '@PCM.WEB.Properties.Resources.campo_requerido');
+
+        jQuery.validator.addMethod("fornecedor", function (funcionario, element) {
+
+            var tipo = $("#tipo_servico").val();
+            var fornecedor = $("#fornecedor").val();
+            if (tipo == 2) {
+                if (fornecedor != "")
+                    return true;
+                else
+                    return false;
+            }
+            else if (tipo == 1) {
+                return true;
+            }
+        }, '@PCM.WEB.Properties.Resources.campo_requerido');
+
+        jQuery.validator.addMethod("maxDate", function (value, element) {
+
+            var curDate = new Date();
+            curDate.setHours(0, 0, 0, 0);
+            var from = value.split("/");
+            var inputDate = new Date(from[2], from[1] - 1, from[0]);
+            if (inputDate > curDate) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+
+        }, '');
+
+        jQuery.validator.addMethod("minDate", function (value, element) {
+
+            var curDate = new Date();
+            curDate.setDate(curDate.getDate() - 2);
+            curDate.setHours(0, 0, 0, 0);
+            var from = value.split("/");
+            var inputDate = new Date(from[2], from[1] - 1, from[0]);
+            if (inputDate > curDate) {
+                return this.optional(element) || true;
+            }
+            else {
+                return this.optional(element) || false;
+            }
+        }, '');
+
+        jQuery.validator.addMethod("lessThan", function (value, element, params) {
+
+            var fromCurDate = $(params).val().split("/");
+            var curDate = new Date(fromCurDate[2], fromCurDate[1] - 1, fromCurDate[0]);
+            var fromMinDate = value.split("/");
+            var minDate = new Date(fromMinDate[2], fromMinDate[1] - 1, fromMinDate[0]);
+            if (curDate < minDate) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+        }, '');
+
+        jQuery.validator.addMethod("greaterThan", function (value, element, params) {
+
+            var fromCurDate = $(params).val().split("/");
+            var curDate = new Date(fromCurDate[2], fromCurDate[1] - 1, fromCurDate[0]);
+            var fromMaxDate = value.split("/");
+            var maxDate = new Date(fromMaxDate[2], fromMaxDate[1] - 1, fromMaxDate[0]);
+            if (curDate > maxDate) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+        }, '');
+
+        jQuery.validator.addMethod("apontamentoHoras", function (value, element, params) {
+
+            //Data e Hora - Início
+            var fromDataInicio = $(params[0]).val().split("/");
+            var fromHoraInicio = $(params[1]).val().split(":");
+            var dataInicio = new Date(fromDataInicio[2], fromDataInicio[1] - 1, fromDataInicio[0], fromHoraInicio[0], fromHoraInicio[1], 0, 0);
+
+            //Data e Hora - Término
+            var fromDataTermino = $(params[2]).val().split("/");
+            var fromHoraTermino = value.split(":");
+            var dataTermino = new Date(fromDataTermino[2], fromDataTermino[1] - 1, fromDataTermino[0], fromHoraTermino[0], fromHoraTermino[1], 0, 0);
+            var difference = dataTermino - dataInicio;
+
+            if (((difference) / 3600000) > 10) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+        }, '');
+
+        $.validator.addMethod('time', function (value, element, param) {
+            return value == '' || value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
+        }, '@PCM.WEB.Properties.Resources.valida_hora');
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'categoria': {
+                            categoria: true
+                        },
+                        'tipo_servico': {
+                            required: true
+                        },
+                        'tipo_ordem_servico': {
+                            required: true
+                        },
+                        'funcionario': {
+                            funcionario: true
+                        },
+                        'fornecedor': {
+                            fornecedor: true
+                        },
+                        'descricao_solucao': {
+                            required: true
+                        },
+                        'data_inicio': {
+                            required: true,
+                            maxDate: { maxDate: true },
+                            lessThan: "#data_termino"
+                        },
+                        'hora_inicio': {
+                            required: true,
+                            time: true
+                        },
+                        'data_termino': {
+                            required: true,
+                            maxDate: { maxDate: true },
+                            greaterThan: "#data_inicio"
+                        },
+                        'hora_termino': {
+                            required: true,
+                            time: true,
+                            apontamentoHoras: ["#data_inicio", "#hora_inicio", "#data_termino"]
+                        },
+                        'valor_manutencao': {
+                            required: true
+                        },
+                        'quantidade_equipamento': {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        'categoria': {
+                            categoria: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'tipo_servico': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'tipo_ordem_servico': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'funcionario': {
+                            funcionario: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'fornecedor': {
+                            fornecedor: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'descricao_solucao': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'data_inicio': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            maxDate: '@PCM.WEB.Properties.Resources.data_maior_corrente',
+                            lessDate: '@PCM.WEB.Properties.Resources.data_maior_termino'
+                        },
+                        'data_termino': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            maxDate: '@PCM.WEB.Properties.Resources.data_maior_corrente',
+                            greaterThan: '@PCM.WEB.Properties.Resources.data_menor_inicio'
+                        },
+                        'hora_inicio': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'hora_termino': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            apontamentoHoras: '@PCM.WEB.Properties.Resources.diferenca_maior_10'
+                        },
+                        'valor_manutencao': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'quantidade_equipamento': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        }
+                    }
+                });
+            };
+        
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Init an example confirm alert on button click
+        function deleteApontamento (codigo_apontamento, codigo_unidade, item) {
+            swal({
+                title: 'Deseja excluir o Apontamento?',
+                text: 'Este apontamento não poderá ser recuperado!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d26a5c',
+                confirmButtonText: 'Sim',
+                html: false,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 50);
+                    });
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    $.post("ApontamentoProgramadaExcluir", { "codigo_unidade": codigo_unidade, "codigo_apontamento": codigo_apontamento },
+                    function (result) {
+                        if (result) {
+                            swal('Apontamento Excluido!', '', 'success');
+                            var tr = $(item).closest('tr');
+                            tr.fadeOut(400, function () { tr.remove(); });
+                            return false;
+                        }
+                    });                 
+                } 
+            });
+        };
+
+        // Initialize when page loads
+        jQuery(function () {
+            FormValidation.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2', 'masked-inputs']);
+        });
+
+    </script>
+}

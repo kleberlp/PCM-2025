@@ -1,0 +1,323 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.nome_sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.cadastro_basico</span>
+                <a class="breadcrumb-item" href="@Url.Action("ProfileIndex", "BasicInput")">@PCM.WEB.Properties.Resources.cadClienteAC</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.inserir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+
+                @using (Html.BeginForm("ClienteAcordoComercial", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", @name = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="username" name="username" value="@ViewBag.username" />
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadClienteAC</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-10">
+                                    <label>@PCM.WEB.Properties.Resources.cliente</label>
+                                    <div>@Html.DropDownList("cliente", null, "", new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="block block-rounded border">
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.enxoval</label>
+                                    <div>@Html.DropDownList("enxoval", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.quantidade</label>
+                                    <div><input type="text" class="form-control" id="quantidade" name="quantidade" value="" maxlength="20"></div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.valorUnitario</label>
+                                    <div><input type="text" class="form-control" id="valorUnitario" name="valorUnitario" value="" maxlength="20"></div>
+                                </div>
+                                <div class="col-lg-6 text-right">
+                                    <label>&nbsp;</label>
+                                    <div><button type="submit" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="block-content block-content-full">
+
+                            <table class="table table-bordered table-vcenter table-sm table-striped table-responsive" id="tb_product">
+
+                                <thead class="table-secondary">
+                                    <tr>
+                                        <th>@PCM.WEB.Properties.Resources.enxoval</th>
+                                        <th>@PCM.WEB.Properties.Resources.quantidade</th>
+                                        <th>@PCM.WEB.Properties.Resources.valorUnitario</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        Codebase.helpers(['table-tools', 'datepicker', 'maxlength', 'select2']);
+        $("#quantidade").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' });
+        $("#valorUnitario").maskMoney({ prefix: 'R$ ', thousands: '.', decimal: ",", precision: 2, allowNegative: false, 'placeholder': '' });
+
+        var unidade = $("#unidade");
+        var cliente = $("#cliente");
+        var enxoval = $("#enxoval");
+
+        unidade.change(function () {
+
+            var request = { "unidade": unidade.val() };
+
+            $.post("LoadComboCliente", request, function (obj) {
+                cliente.empty();
+                option = $("<option>", { "value": "" }).text("");
+                cliente.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    cliente.append(option);
+                });
+            }, "json");
+
+            $.post("LoadComboEnxoval", request, function (obj) {
+                enxoval.empty();
+                option = $("<option>", { "value": "" }).text("");
+                enxoval.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    enxoval.append(option);
+                });
+            }, "json");
+
+        });
+
+        cliente.change(function () {
+            table.ajax.reload(null, false);
+        });
+
+    // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+    var table = $('#tb_product').DataTable({
+        select: {
+            selector: 'td:not(:first-child)',
+            style: 'os'
+        },
+        fixedHeader: true,
+        searching: false,
+        lengthChange: false,
+        paging: false,
+        info: false,
+        pageLength: 15,
+        autoWidth: false,
+        scrollX: false,
+        scrollColapse: true,
+        ajax: {
+            url: "LoadClienteEnxoval",
+            type: "POST",
+            datatype: "json",
+            data: function (d) {
+                d.unidade = $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                    d.cliente = $("#cliente").val() == "" ? "-1" : $("#cliente").val()
+            },
+            dataSrc: ""
+        },
+        columns: [
+            { data: "enxoval" },
+            { data: "quantidade" },
+            { data: "valorUnitario" },
+            {
+                orderable: false,
+                data: null,
+                defaultContent: "<div class='btn-group'><button type='button' id='btnDelete' class= 'btn btn-sm btn-secondary'><i class='fa fa-times'></i></button></div > "
+            }
+        ],
+        columnDefs: [
+            { className: 'text-center', targets: [1, 2] },
+            { width: '15px', targets: [3] }
+        ]
+    });
+
+    $('#tb_product tbody').on('click', 'button', function () {
+
+        var data = table.row($(this).closest('tr')).data();
+
+        if (this.id == "btnDelete") {
+            deleteRegister(data);
+        }
+
+    });
+
+    function deleteRegister(data) {
+
+        Swal.fire({
+            title: "PCM",
+            html: "@Html.Raw(PCM.WEB.Properties.Resources.question_delete_register)<br><br><b>@Html.Raw(PCM.WEB.Properties.Resources.enxoval):</b> " + data.enxoval,
+            icon: "question",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+            denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "DeleteClienteEnxoval",
+                    async: false,
+                    data: {
+                        "unidade": $("#unidade").val(),
+                        "cliente": $("#cliente").val(),
+                        "enxoval": data.codigoEnxoval
+                    },
+                    dataType: "json",
+                    success: function (response) {
+
+                        if (response.success) {
+                            table.ajax.reload(null, false);
+                        } else {
+                            Swal.fire({
+                                title: "PCM",
+                                html: response.message,
+                                icon: "error",
+                                showDenyButton: false,
+                                showCancelButton: false,
+                            });
+                        }
+
+                    }
+                });
+            }
+        });
+
+    }
+
+    $('#form').submit(function (e) {
+        e.preventDefault();
+    }).validate({
+        onkeyup: false,
+        onclick: false,
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'unidade': {
+                required: true
+            },
+            'cliente': {
+                required: true
+            },
+            'enxoval': {
+                required: true
+            },
+            'valorUnitario': {
+                required: true
+            }
+        },
+        messages: {
+            'unidade': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'cliente': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'enxoval': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'valorUnitario': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+
+            jQuery.ajax({
+                type: "POST",
+                url: "InsertClienteEnxoval",
+                async: false,
+                data: {
+                    "unidade": $("#unidade").val(),
+                    "cliente": $("#cliente").val(),
+                    "enxoval": $("#enxoval").val(),
+                    "quantidade": $("#quantidade").val(),
+                    "valorUnitario": $("#valorUnitario").val()
+                },
+                dataType: "json",
+                success: function (response) {
+                    table.ajax.reload(null, false);
+                    $("#enxoval").val(""),
+                    $("#quantidade").val(""),
+                    $("#valorUnitario").val("")
+                }
+            });
+
+        }
+    });
+
+    });
+
+    </script>
+}

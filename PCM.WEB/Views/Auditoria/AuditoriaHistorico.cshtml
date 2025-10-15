@@ -1,0 +1,372 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.QAAuditoriaHistorico>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.auditoria_corporativo</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.historico</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Listagem -->
+        <div class="block block-rounded border">
+
+            @using (Html.BeginForm("AuditoriaHistorico", "Auditoria", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" id="formulario" name="formulario" value="@ViewBag.formulario" />
+                <input type="hidden" name="codigo_empresa" id="codigo_empresa" value="">
+                <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="">
+                <input type="hidden" name="codigo_auditoria" id="codigo_auditoria" value="">
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        @if (Session["unidade"] == "")
+                                        {
+                                            <div class="col-md-3">
+                                                <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                                <div>@Html.DropDownList("unidade", null, @PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <input type="hidden" id="unidade" name="unidade" value="@Session["codigo_unidade"]">
+                                        }
+                                        <div class="col-md-4">
+                                            <label>@PCM.WEB.Properties.Resources.periodo</label>
+                                            <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                                <div class="input-group-prepend input-group-append">
+                                                    <span class="input-group-text font-w600">-</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>@PCM.WEB.Properties.Resources.auditoria_corporativo</label>
+                                            @Html.DropDownList("auditoria_qualidade", null, "", new { @class = "js-select2 form-control", @allowClear = "true" })
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>@PCM.WEB.Properties.Resources.status</label>
+                                            @Html.DropDownList("status", null, "", new { @class = "js-select2 form-control", @allowClear = "true" })
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item block-options text-right">
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+                <div class="col-md-12 col-xl-12">
+                    <!-- Toggle Tasks Navigation on mobile -->
+                    <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                    <div class="block-content block-content-full">
+
+                        <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
+                            <thead>
+                                <tr class="table-secondary">
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
+                                    }
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.data</th>
+                                    <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                    <th>@PCM.WEB.Properties.Resources.executor</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.pontos_possiveis</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.pontos_realizados</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.conforme</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.nao_conforme</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.nao_respondido</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.nao_aplicavel</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.nota</th>
+                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.status</th>
+
+                                    @if (ViewBag.editar || ViewBag.imprimir || ViewBag.administrador)
+                                    {
+                                        <th data-sortable="false" class="text-center" style="width: 80px;"></th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        @if (Session["unidade"] == "")
+                                        {
+                                            <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                        }
+                                        <td class="text-center">@Html.DisplayFor(modelItem => item.data)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.descricao)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.usuario)</td>
+                                        <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.pontos_possiveis)</td>
+                                        <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.pontos_realizados)</td>
+                                        <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.conforme)</td>
+                                        <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.nao_conforme)</td>
+                                        <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.nao_respondido)</td>
+                                        <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.nao_aplicavel)</td>
+                                        <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.nota)</td>
+                                        <td class="d-none d-md-table-cell text-center @item.css_class" style="width: 100px;">@Html.DisplayFor(modelItem => item.descricao_status)</td>
+                                        @if (ViewBag.editar || ViewBag.administrador || ViewBag.imprimir)
+                                        {
+                                            <td class="text-center" style="width: 80px;">
+                                                <div class="btn-group">
+                                                    @if (ViewBag.editar)
+                                                    {<a href="@Url.Action("Apontamento", "Auditoria", new {codigo_unidade = item.codigo_unidade, codigo_auditoria = item.codigo_auditoria , codigo_auditoria_interna = item.codigo_auditoria_interna, action_name = "AuditoriaHistorico" })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                                    @if (ViewBag.imprimir)
+                                                    {<a onclick="Imprimir(@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria);" target="_blank" class="btn btn-sm btn-secondary"><i class="si si-printer"></i></a>}
+                                                    @if (ViewBag.administrador && item.status == 2)
+                                                    {<a onclick="ReabrirAuditoria(@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria);" class="btn btn-sm btn-secondary"><i class="fa fa-unlock"></i></a>}
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+<!-- From Right Modal -->
+<div class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-15">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.relatorio</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="si si-close font-w600"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content block-content-full">
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirResumido();">
+                                <div class="text-md-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Auditoria - Corporativo</h6>
+                                    <h6 class="mb-5"><small>Resumido</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirDetalhado();">
+                                <div class="text-md-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Auditoria - Corporativo</h6>
+                                    <h6 class="mb-5"><small>Detalhado</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript">
+
+        function Imprimir(codigo_empresa, codigo_unidade, codigo_auditoria) {
+            $("#codigo_empresa").val(codigo_empresa);
+            $("#codigo_unidade").val(codigo_unidade);
+            $("#codigo_auditoria").val(codigo_auditoria);
+            $('#modalReport').modal('show');
+        }
+
+        function ImprimirResumido() {
+            window.open('AuditoriaPrintPDFResumido' + '?codigo_empresa=' + $("#codigo_empresa").val() + '&codigo_unidade=' + $("#codigo_unidade").val() + '&codigo_auditoria=' + $("#codigo_auditoria").val(), '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+        function ImprimirDetalhado() {
+            window.open('AuditoriaPrintPDFDetalhado' + '?codigo_empresa=' + $("#codigo_empresa").val() + '&codigo_unidade=' + $("#codigo_unidade").val() + '&codigo_auditoria=' + $("#codigo_auditoria").val(), '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+        $(function () {
+
+            $.ajaxSetup({ async: false });
+
+            var unidade = $("#unidade")
+            var auditoria_qualidade = $("#auditoria_qualidade");
+
+            auditoria_qualidade.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.auditoria_qualidade' });
+
+            if (unidade.val() == "" || unidade.val() == "-1") {
+                auditoria_qualidade.prop("disabled", true);
+                auditoria_qualidade.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.auditoria_qualidade' });
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+                    auditoria_qualidade.prop("disabled", true);
+                    auditoria_qualidade.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.auditoria_qualidade' });
+                }
+                else
+                {
+
+                    var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
+
+                    $.post("LoadAuditoriaQualidade", request, function (obj) {
+                        auditoria_qualidade.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        auditoria_qualidade.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            auditoria_qualidade.append(option);
+                        });
+                    }, "json");
+
+                    auditoria_qualidade.prop("disabled", false);
+                    auditoria_qualidade.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.auditoria_qualidade' });
+                }
+
+            });
+
+        });
+
+        function ReabrirAuditoria(codigo_empresa, codigo_unidade, codigo_auditoria) {
+
+            swal({
+                title: 'Deseja reabrir a Auditoria?',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d26a5c',
+                confirmButtonText: 'Sim',
+                html: false,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 50);
+                    });
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    $.post("AuditoriaQualidadeReabrir", { "codigo_empresa": codigo_empresa, "codigo_unidade": codigo_unidade, "codigo_auditoria": codigo_auditoria },
+                        function (result) {
+                            if (result) {
+                                swal('Auditoria reaberta com Sucesso!', '', 'success').then(function (result) { $("#form").submit(); });
+                            } else {
+                                swal('Não foi possível reabrir a Auditoria!', '', 'error');
+                            }
+                        });
+                }
+            });
+
+        }
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: false,
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 15,
+                    autoWidth: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar'},
+                        { extend: 'print',
+
+                            text: 'Imprimir'},
+                        { extend: 'excel'},
+                        { extend: 'pdf', orientation: 'landscape'},
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+            BeTableDatatables.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+    </script>
+}

@@ -1,0 +1,483 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.lavanderia</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.historico</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+
+    <div class="content">
+
+        <!-- Listagem -->
+        <div class="block block-rounded border">
+
+            @using (Html.BeginForm("Historico", "Lavanderia", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="empresa" id="empresa" value="@Session["empresa"]">
+                <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario">
+
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <div class="js-tasks-nav d-none d-md-block">
+                    <div>
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.historico</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                            @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>@PCM.WEB.Properties.Resources.cliente</label>
+                                            @Html.DropDownList("cliente", null, "", new { @class = "js-select2 form-control" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>@PCM.WEB.Properties.Resources.equipamento</label>
+                                            @Html.DropDownList("equipamento", null, "", new { @class = "js-select2 form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label>@PCM.WEB.Properties.Resources.funcionario</label>
+                                            @Html.DropDownList("funcionario", null, "", new { @class = "js-select2 form-control" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>@PCM.WEB.Properties.Resources.periodo</label>
+                                            <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
+                                                <div class="input-group-prepend input-group-append">
+                                                    <span class="input-group-text font-w600">-</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- END Collapsible Tasks Navigation -->
+
+                <div class="block-content block-content-full">
+
+                    <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+
+                        <thead>
+                            <tr class="table-secondary">
+                                <th class="text-center"></th>
+                                <th>@PCM.WEB.Properties.Resources.data</th>
+                                <th>@PCM.WEB.Properties.Resources.cliente</th>
+                                <th>@PCM.WEB.Properties.Resources.funcionario</th>
+                                <th>@PCM.WEB.Properties.Resources.hora_inicio</th>
+                                <th>@PCM.WEB.Properties.Resources.hora_termino</th>
+                                <th>@PCM.WEB.Properties.Resources.tempo_gasto</th>
+                                <th>@PCM.WEB.Properties.Resources.peso</th>
+                                <th>@PCM.WEB.Properties.Resources.peso Relave</th>
+                                <th>@PCM.WEB.Properties.Resources.peso Total</th>
+                                <th data-sortable="false"></th>
+                            </tr>
+                        </thead>
+
+                    </table>
+
+                </div>
+
+            }
+        </div>
+    </div>
+
+</main>
+<!-- END Main Container -->
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/maskedinput")
+
+<script>
+
+    var row;
+    var tr;
+    var index;
+    var btnVincular;
+    var table;
+
+    $(function () {
+
+        var unidade = $("#unidade");
+        var cliente = $("#cliente");
+        var equipamento = $("#equipamento");
+        var funcionario = $("#funcionario");
+
+        unidade.change(function () {
+
+            var request = { "unidade": unidade.val() };
+
+            $.post("LoadComboCliente", request, function (obj) {
+                cliente.empty();
+                option = $("<option>", { "value": "" }).text("");
+                cliente.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    cliente.append(option);
+                });
+            }, "json");
+
+            $.post("LoadComboEquipamento", request, function (obj) {
+                equipamento.empty();
+                option = $("<option>", { "value": "" }).text("");
+                equipamento.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    equipamento.append(option);
+                });
+            }, "json");
+
+            $.post("LoadComboFuncionario", request, function (obj) {
+                funcionario.empty();
+                option = $("<option>", { "value": "" }).text("");
+                funcionario.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    funcionario.append(option);
+                });
+            }, "json");
+
+        });
+
+        $("#filtrar").on('click', function (e) {
+            $("#form").submit();
+        });
+
+    });
+
+    function format(data) {
+
+        var info = '';
+
+        $.ajax({
+            type: "POST",
+            url: "LoadLavanderiaHistoricoDetalhe",
+            async: false,
+            data: {
+                "empresa": data.codigoEmpresa,
+                "unidade": data.codigoUnidade,
+                "codigo": data.codigo
+            },
+            dataType: "json",
+            success: function (response) {
+                info = '<div class="form-row"> ';
+                info = info + '<table class="table table-bordered table-vcenter table-striped table-sm js-dataTable-full" id="tbDetails"> ';
+                info = info + '<thead> ';
+                info = info + '<tr class="table-secondary"> ';
+                info = info + '<th class="font-size-sm">@PCM.WEB.Properties.Resources.enxoval</th> ';
+                info = info + '<th class="text-center font-size-sm col-2">Qtde.</th> ';
+                info = info + '<th class="text-center font-size-sm col-2">Qtde. Relave</th> ';
+                info = info + '<th class="text-center font-size-sm col-2">Qtde. Total</th> ';
+                info = info + '</tr> ';
+                info = info + '</thead> ';
+                info = info + '<tbody>';
+
+                for (var i = 0; i < response.enxoval.length; i++) {
+
+                    info = info + '<tr class="bg-white"> ';
+                    info = info + '<td class="font-size-sm">' + response.enxoval[i].enxoval + '</td> ';
+                    info = info + '<td class="font-size-sm text-center">' + response.enxoval[i].peso + '</td> ';
+                    info = info + '<td class="font-size-sm text-center">' + response.enxoval[i].pesoRelave + '</td> ';
+                    info = info + '<td class="font-size-sm text-center">' + response.enxoval[i].pesoTotal + '</td> ';
+                    info = info + '</tr> ';
+
+                }
+
+                info = info + '</tbody> ';
+                info = info + '</table> ';
+                info = info + '</div> ';
+
+                info = info + '<div class="form-row">';
+                info = info + '<table class="table table-bordered table-vcenter table-striped table-sm js-dataTable-full" id="tbDetails"> ';
+                info = info + '<thead> ';
+                info = info + '<tr class="table-secondary"> ';
+                info = info + '<th class="font-size-sm">Máquina de Lavar</th> ';
+                info = info + '<th class="text-center font-size-sm col-2">Qtde. Máquinadas</th> ';
+                info = info + '</tr> ';
+                info = info + '</thead> ';
+                info = info + '<tbody>';
+
+                for (var i = 0; i < response.equipamento.length; i++) {
+
+                    info = info + '<tr class="bg-white"> ';
+                    info = info + '<td class="font-size-sm">' + response.equipamento[i].equipamento + '</td> ';
+                    info = info + '<td class="font-size-sm text-center">' + response.equipamento[i].quantidade + '</td> ';
+                    info = info + '</tr> ';
+
+                }
+
+                info = info + '</tbody> ';
+                info = info + '</table> ';
+                info = info + '</div> ';
+
+                info = info + '<div class="form-row">';
+                info = info + '<table class="table table-bordered table-vcenter table-striped table-sm js-dataTable-full" id="tbDetails"> ';
+                info = info + '<thead> ';
+                info = info + '<tr class="table-secondary"> ';
+                info = info + '<th class="font-size-sm">Tipo de Funcionário</th> ';
+                info = info + '<th class="text-center font-size-sm col-2">Quantidade</th> ';
+                info = info + '</tr> ';
+                info = info + '</thead> ';
+                info = info + '<tbody>';
+
+                for (var i = 0; i < response.funcionario.length; i++) {
+
+                    info = info + '<tr class="bg-white"> ';
+                    info = info + '<td class="font-size-sm">' + response.funcionario[i].tipoFuncionario + '</td> ';
+                    info = info + '<td class="font-size-sm text-center">' + response.funcionario[i].quantidade + '</td> ';
+                    info = info + '</tr> ';
+
+                }
+
+                info = info + '</tbody> ';
+                info = info + '</table> ';
+                info = info + '</div> ';
+
+                return info;
+
+            },
+            error: function (data) {
+                Codebase.layout("header_loader_off");
+            }
+        });
+
+        return info;
+
+    }
+
+    $('#form').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'unidade': {
+                required: true
+            }
+        },
+        messages: {
+            'unidade': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+
+            table.ajax.reload(null, false);
+            return false;
+        }
+    });
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+        $.fn.dataTable.moment('DD/MM/YYYY');
+        Codebase.helpers(['js-tooltip', 'table-tools', 'datepicker', 'maxlength', 'select2', 'maxlength']);
+
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        table = $('#tb_main').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            //scrollY: '400px',
+            //scrollCollapse: true,
+            paging: true,
+            //fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 15,
+            autoWidth: false,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadApontamentoHistorico",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.unidade = $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                    d.cliente = $("#cliente").val() == "" ? "-1" : $("#cliente").val(),
+                    d.equipamento = $("#equipamento").val() == "" ? "-1" : $("#equipamento").val(),
+                    d.funcionario = $("#funcionario").val() == "" ? "-1" : $("#funcionario").val(),
+                    d.ataInicio = $("#dataInicio").val(),
+                    d.data_termino = $("#data_termino").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    class: "details-control",
+                    orderable: false,
+                    data: null,
+                    defaultContent: "",
+                    render: function () {
+                        return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+                    },
+                    width: "15px"
+                },
+                { data: "data" },
+                { data: "cliente" },
+                { data: "equipamento" },
+                { data: "horaInicio" },
+                { data: "horaTermino" },
+                { data: "tempoGasto" },
+                { data: "peso" },
+                { data: "pesoRelavagem" },
+                { data: "pesoTotal" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'> " +
+                        "<button type='button' id='btnExcluir' name='btnExcluir' class='btn btn-sm btn-secondary' title='Excluir registro'> <i class='fa fa-times'></i></button></div>"
+                }
+            ],
+            columnDefs: [
+                { className: 'text-center', targets: [0, 1, 4, 5, 6, 7, 8, 9, 10] },
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+
+                        if (col == 11 && ("@ViewBag.excluir" != "True")) {
+                            $(td).find('#btnExcluir').hide();
+                        }
+                    }, targets: [10]
+                },
+                { width: '20px', targets: [0, 10] },
+                { width: '150px', targets: [1, 4, 5, 6, 7, 8, 9] }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                { extend: 'print', text: 'Imprimir' },
+                { extend: 'excel', text: 'Excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+                language: {
+                "search": "Procurar:",
+                "lengthMenu": "Exibir _MENU_ ",
+                "info": "_MAX_ registro(s)",
+                "infoFiltered": "(filtrado de _MAX_ registro(s))"
+            }
+        });
+
+        $('#tb_main tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+            row = table.row($(this).closest('tr')).data();
+            tr = table.row($(this).closest('tr'))
+            index = table.row($(this).closest('tr')).index();
+
+            if (this.id == "btnExcluir") {
+                deleteApontamentoLavanderia(data.codigoEmpresa, data.codigoUnidade, data.codigo);
+            }
+
+        });
+
+        function deleteApontamentoLavanderia(codigoEmpresa, codigoUnidade, codigo) {
+
+            swal.fire({
+                title: 'Deseja excluir o registro?',
+                text: 'Esta registro não poderá ser recuperado!',
+                icon: 'question',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d26a5c',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function (result) {
+                if (result.value) {
+                    $.post("DeleteApontamento", { "empresa": codigoEmpresa, "unidade": codigoUnidade, "codigo": codigo },
+                         function (resultDelete) {
+                             if (resultDelete) {
+                                 swal.fire('Registro excluído com Sucesso!', '', 'success').then(function (resultDelete) { table.ajax.reload(null, false); });
+                            } else {
+                                swal.fire('Não foi possível excluir a registro!', '', 'error');
+                             };
+                        });
+                }
+            });
+
+        }
+
+        // Add event listener for opening and closing details
+        $('#tb_main tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var tdi = tr.find("i.fa");
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                tdi.first().removeClass('fa-minus-square');
+                tdi.first().addClass('fa-plus-square');
+                tr.removeClass('bg-warning-light font-italic font-b');
+                // tr.find('svg').attr('data-icon', 'plus-square');    // FontAwesome 5
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                tdi.first().removeClass('fa-plus-square');
+                tdi.first().addClass('fa-minus-square');
+                tr.addClass('bg-warning-light font-italic font-b');
+                // tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
+            }
+        });
+
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
+
+    });
+
+</script>
+}

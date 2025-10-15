@@ -1,0 +1,158 @@
+﻿
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+        @*<div class="row invisible" data-toggle="appear">
+            <!-- Row #1 -->
+            <div class="col-6">
+                <a class="block block-rounded block-bordered block-link-shadow" href="javascript:void(0)">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block">
+                            <i class="fa fa-gear fa-2x text-primary-light"></i>
+                        </div>
+                        <div class="font-size-h3 font-w600 text-primary" data-toggle="countTo" data-speed="1000" data-to="22">0</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">Serviços Pendentes</div>
+                    </div>
+                </a>
+            </div>  
+            <div class="col-6">
+                <a class="block block-rounded block-bordered block-link-shadow" href="javascript:void(0)">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block">
+                            <i class="fa fa-gear fa-2x text-earth-light"></i>
+                        </div>
+                        <div class="font-size-h3 font-w600 text-earth"><span data-toggle="countTo" data-speed="1000" data-to="18">0</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">Serviços Realizados</div>
+                    </div>
+                </a>
+            </div>                     
+            <!-- END Row #1 -->
+        </div>*@
+        <div class="row invisible" data-toggle="appear">
+            <!-- Row #2 -->
+            <div class="col-md-12">
+                <!-- Chart.js Charts (initialized in js/pages/be_comp_charts.js), for more examples you can check out http://www.chartjs.org/docs/ -->
+                <h2 class="content-heading">Indicadores</h2>
+                <div class="row">        
+           
+                    <div class="col-xl-6">
+                        <!-- Bars Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Pendente x Realizado</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                        <i class="si si-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full text-center">
+                                <!-- Bars Chart Container -->
+                                <canvas class="manutencao_pendente_realizado"></canvas>
+                            </div>
+                        </div>
+                        <!-- END Bars Chart -->
+                    </div>
+
+               
+                    <div class="col-xl-6">
+                        <!-- Donut Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Manutenção x Tipo OS</h3>                                
+                            </div>
+                            <div class="block-content block-content-full text-center">
+                                <!-- Donut Chart Container -->
+                                <canvas class="manutencao_tipo_ordem_servico"></canvas>
+                            </div>
+                        </div>
+                        <!-- END Donut Chart -->
+                    </div>
+
+                    <div class="col-xl-12">
+                        <!-- Donut Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Manutenção x Categoria</h3>                                
+                            </div>
+                            <div class="block-content block-content-full text-center">
+                                <!-- Donut Chart Container -->
+                                <div id="curve_chart" style="width:100%"></div>
+                            </div>
+                        </div>
+                        <!-- END Donut Chart -->
+                    </div>
+
+                </div>
+                <!-- END Chart.js Charts -->
+            </div>                        
+            <!-- END Row #2 -->
+        </div>
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/cookie")    
+    @Scripts.Render("~/bundles/codebase")
+
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">google.load('visualization', '1', { packages: ['corechart'] });</script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['line'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: 'Home/ManutencaoPendenteRealizado',
+            data: '{}',
+            success:
+                function (response) {
+                    drawchartManutencaoTipoOrdemServico(response);
+                },
+            error: function () {
+                alert("Erro ao carregar dados! Tente novamente.");
+            }
+        });
+    }
+
+    function drawchartManutencaoTipoOrdemServico(dataValues) {
+
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Mês');
+        data.addColumn('number', 'Qtde. Realizado');
+        data.addColumn('number', 'Qtde. Pendente');
+
+        for (var i = 0; i < dataValues.length; i++) {
+            data.addRow([dataValues[i].label, dataValues[i].realizado, dataValues[i].pendente]);
+        }
+
+        var options = {
+            series: {
+                0: { axis: 'distance' },
+                1: { axis: 'brightness' }
+            },
+            axes: {
+                y: {
+                    distance: { label: 'parsecs' },
+                    brightness: { side: 'right', label: 'apparent magnitude' }
+                }
+            }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+    }
+
+</script>
+
+}

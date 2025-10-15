@@ -1,0 +1,134 @@
+﻿@{
+    Layout = string.Empty;
+}
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="utf-8" />
+    <title>VC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="VC" name="description" />
+    <meta content="" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/images/favicon.ico">
+
+    <!-- App css -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/app.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/timepicker/bootstrap-material-datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/sweet-alert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+    <link href="~/lib/animate/animate.css" rel="stylesheet" type="text/css">
+    <link href="~/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/timepicker/bootstrap-material-datetimepicker.css" rel="stylesheet">
+    <link href="~/lib/flatpickr/flatpickr.min.css" rel="stylesheet">
+</head>
+
+<body class="account-body">
+
+    <div class="container-fluid">
+
+
+        <form autocomplete="off" class="form-horizontal auth-form" asp-action="temperatureInsert" asp-controller="MasterData" name="form" id="form" method="post">
+
+            <div class="row mt-3">
+
+                <div class="col-12">
+
+                    <div class="accordion" id="accordionFlushExample">
+                        <div class="accordion-item">
+                            <h5 class="accordion-header m-0" id="flush-headingOne">
+                                <button class="accordion-button fw-semibold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
+                                    <h5 class="card-title">Dados da UH</h5>
+                                </button>
+                            </h5>
+                            <div id="collapseOne" class="accordion-collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="form-label font-bold" for="description">Apartamento: @Model.apartamento</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="description">Bloco: @Model.bloco</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="description">Andar: @Model.andar</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div> <!-- end row -->
+
+            <div class="row mt-3">
+
+                <div class="col-lg-12">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card report-card" onclick="window.location.href='@Url.Action("ordemServico", "Home", new { uniqueId = ViewBag.uniqueId })'" style="cursor: pointer;">
+                                <div class="card-body">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col">
+                                            <h3 class="m-0" id="viewInvoiceOpened">Solicitar Manutenção</h3>
+                                        </div>
+                                        <div class="col-auto align-self-center">
+                                            <div class="report-main-icon bg-light-alt">
+                                                <i class="fas fa-cog align-self-center text-success"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end card-body-->
+                            </div>
+                            <!--end card-->
+                        </div>
+                        <div class="col-12">
+                            <div class="card report-card" onclick="window.location.href='@Url.Action("rating", "Home", new { uniqueId = ViewBag.uniqueId })'" style="cursor: pointer;">
+                                <div class="card-body">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col">
+                                            <h3 class="m-0" id="viewInvoiceOpened">Avaliar o Serviço</h3>
+                                        </div>
+                                        <div class="col-auto align-self-center">
+                                            <div class="report-main-icon bg-light-alt">
+                                                <i class="fas fa-star align-self-center text-warning"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end card-body-->
+                            </div>
+                            <!--end card-->
+                        </div>
+                        <!--end col-->
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div><!-- container -->
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery-3.7.1.js"></script>
+    <script src="~/js/jquery.core.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/rating/jquery.barrating.min.js"></script>
+
+</body>
+</html> 

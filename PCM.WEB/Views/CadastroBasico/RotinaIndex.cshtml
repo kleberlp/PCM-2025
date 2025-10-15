@@ -1,0 +1,280 @@
+﻿@model List<PCM.WEB.MODELS.Programada>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.rotina</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <input type="hidden" name="codigo" id="codigo" />
+
+        <!-- Listagem -->
+        <div class="block block-rounded border">
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.rotina</h3>
+                <div class="block-options">
+                    @if (ViewBag.inserir)
+                    {
+                        <a href="@Url.Action("RotinaInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                            <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                        </a>
+                    }
+                    @if (Session["unidade"] != "")
+                    {
+                        <button type="button" id="btnImprimir" name="btnImprimir" onclick="Imprimir();" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                    }
+                </div>
+            </div>
+
+            <div class="block-content block-content-full">
+                <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                <table class="table table-hover js-table-checkable">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th class="text-center" style="width: 50px;">
+                                <label class="css-control-sm css-control-secondary css-checkbox">
+                                    <input type="checkbox" class="css-control-input" id="check-all" name="check-all" value="0">
+                                    <span class="css-control-indicator"></span>
+                                </label>
+                            </th>
+                            @if (Session["unidade"] == "")
+                            {
+                                <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
+                            }
+                            <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.equipamento </th>
+                            <th>@PCM.WEB.Properties.Resources.descricao </th>
+                            <th class="d-none d-sm-table-cell text-center">@PCM.WEB.Properties.Resources.periodicidade </th>
+                            <th class="d-none d-sm-table-cell text-center">@PCM.WEB.Properties.Resources.intervalo </th>
+                            <th class="d-none d-sm-table-cell text-md-center" style="width: 80px;">@PCM.WEB.Properties.Resources.ativo </th>
+                            @if (ViewBag.editar || ViewBag.excluir)
+                            {
+                                <th class="text-center" style="width: 80px;" data-sortable="false"></th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                        <tr>
+                            <td class="d-none d-sm-table-cell text-center" style="width: 50px;">
+                                <label class="css-control-sm css-control-success css-checkbox py-0 px-0">
+                                    <input type="checkbox" class="css-control-input" value="@Model[i].codigo" name="x">
+                                    <span class="css-control-indicator"></span>
+                                </label>
+                            </td>
+                            @if (Session["unidade"] == "")
+                            {
+                                <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => modelItem[i].unidade)</td>
+                            }
+                            <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => modelItem[i].equipamento)</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem[i].descricao)</td>
+                            <td class="d-none d-sm-table-cell text-center">@Html.DisplayFor(modelItem => modelItem[i].periodicidade)</td>
+                            <td class="d-none d-sm-table-cell text-center">@Html.DisplayFor(modelItem => modelItem[i].intervalo)</td>
+                            <td class="d-none d-sm-table-cell text-md-center" style="width: 80px;">
+                                <label class="css-control-sm css-control-secondary css-checkbox">
+                                    @Html.CheckBoxFor(modelItem => modelItem[i].ativo, new { @class = "css-control-input", @disabled = "disabled" })
+                                    <span class="css-control-indicator"></span>
+                                </label>
+                            </td>
+                            @if (ViewBag.editar || ViewBag.excluir)
+                            {
+                                <td class="text-center" style="width: 80px;">
+                                    <div class="btn-group">
+                                        @if (ViewBag.editar)
+                                        {<a href="@Url.Action("RotinaEdit", "CadastroBasico", new { codigo = Model[i].codigo, codigo_unidade = Model[i].codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                        @if (ViewBag.excluir)
+                                        {<a href="@Url.Action("RotinaDelete", "CadastroBasico", new { codigo = Model[i].codigo, codigo_unidade = Model[i].codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+<!-- From Right Modal -->
+<div class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-15">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.relatorio</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="si si-close font-w600"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content block-content-full">
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaZebra();">
+                                <div class="text-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
+                                    <h6 class="mb-5"><small>Zebra</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-xl-6">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaA4();">
+                                <div class="text-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
+                                    <h6 class="mb-5"><small>A4</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" name="unidade" id="unidade" value="">
+                    <input type="hidden" name="mes" id="mes" value="">
+                    <input type="hidden" name="ano" id="ano" value="">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+
+@section Styles {
+    @Styles.Render("~/Content/dataTables")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+
+<script type="text/javascript">
+
+        function Imprimir() {
+            objetos = [];
+            $('input[type=checkbox]').each(function () {
+                if (this.checked && this.value != "true") {
+                    objetos.push(this.value);
+                }
+            });
+            if (objetos.length > 0) {
+                $('#codigo').val(objetos.join(','));
+                $('#modalReport').modal('show');
+            } else {
+                swal({
+                    title: 'Imprimir Etiqueta',
+                    text: 'Favor selecionar um ou mais Registro!',
+                    type: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    html: false,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 50);
+                        });
+                    }
+                });
+            }
+        }
+
+        function ImprimirEtiquetaZebra() {
+            var codigo = $("#codigo").val();
+            window.open('PrintEtiquetaRotina' + '?unidade=' + @Session["codigo_unidade"] + '&codigo=' + codigo + '&report=ETQ000000002_ZEBRA', '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+        function ImprimirEtiquetaA4() {
+            var codigo = $("#codigo").val();
+            window.open('PrintEtiquetaRotina' + '?unidade=' + @Session["codigo_unidade"] + '&codigo=' + codigo + '&report=ETQ000000002_A4', '_blank');
+            jQuery('#modalReport').modal('hide');
+        }
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-table-checkable').dataTable({
+                    columnDefs: [
+                        { orderable: false, targets: [0] },
+                        { type: 'date-br', targets: [2] }
+                    ],
+                    order: [[1, "desc"]],
+                    fixedHeader: true,
+                    searching: true,
+                    lengthChange: false,
+                    pageLength: 15,
+                    autoWidth: false,
+                    scrollX: false,
+                    scrollColapse: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar' },
+                        {
+                            extend: 'print',
+                            text: 'Imprimir'
+                        },
+                        { extend: 'excel' },
+                        { extend: 'pdf', orientation: 'portrait' },
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2', 'table-tools']);
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init();
+        });
+
+</script>
+}

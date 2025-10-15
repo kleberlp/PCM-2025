@@ -1,0 +1,1256 @@
+﻿<!-- Side Overlay-->
+<aside id="side-overlay">
+    <!-- Side Overlay Scroll Container -->
+    <div id="side-overlay-scroll">
+        <!-- Side Header -->
+        <div class="content-header content-header-fullrow">
+            <div class="content-header-section align-parent">
+                <!-- Close Side Overlay -->
+                <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                <button type="button" class="btn btn-circle btn-dual-secondary align-v-r" id="btnClose" data-toggle="layout" data-action="side_overlay_close">
+                    <i class="fa fa-times text-danger"></i>
+                </button>
+                <!-- END Close Side Overlay -->
+                <!-- User Info -->
+                <div class="content-header-item">
+                    <a class="align-middle link-effect text-primary-dark font-w600" href="#">@Session["nome"]</a>
+                </div>
+                <!-- END User Info -->
+            </div>
+        </div>
+        <!-- END Side Header -->
+        <!-- Side Content -->
+        <div class="content-side">
+
+            <form id="frmsidebar" class="border-r">
+                <!-- Profile -->
+                <div class="block pull-r-l">
+                    <div class="block-header bg-body-light">
+                        <h3 class="block-title">
+                            <i class="fa fa-fw fa-pencil font-size-default mr-5"></i>Perfil
+                        </h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <div class="form-group mb-15">
+                            <label for="nome_perfil">@PCM.WEB.Properties.Resources.nome</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="nome_perfil" name="nome_perfil" placeholder="Seu Nome.." value=@Session["nome"]>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-15">
+                            <label for="email_perfil">@PCM.WEB.Properties.Resources.id_usuario</label>
+                            <div class="input-group">
+                                <input type="email" disabled class="form-control" id="email_perfil" name="email_perfil" placeholder="Seu E-mail.." value=@Session["email"]>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-15">
+                            <label for="senha_perfil">@PCM.WEB.Properties.Resources.senha</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="senha_perfil" name="senha_perfil" placeholder="Nova Senha..">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-asterisk"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-15">
+                            <label for="confirmar_senha_perfil">@PCM.WEB.Properties.Resources.confirmar_senha</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirmar_senha_perfil" name="confirmar_senha_perfil" placeholder="Confirmar Nova Senha..">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-asterisk"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-6">
+                                <button type="submit" id="salvar_usuario" name="salvar_usuario" class="btn btn-square btn-secondary min-width-100">
+                                    <i class="fa fa-refresh mr-5"></i> @PCM.WEB.Properties.Resources.salvar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Profile -->
+            </form>
+
+        </div>
+        <!-- END Side Content -->
+    </div>
+    <!-- END Side Overlay Scroll Container -->
+</aside>
+<!-- END Side Overlay -->
+<!-- Sidebar -->
+<!--
+    Helper classes
+
+    Adding .sidebar-mini-hide to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
+    Adding .sidebar-mini-show to an element will make it visible (opacity: 1) when the sidebar is in mini mode
+        If you would like to disable the transition, just add the .sidebar-mini-notrans along with one of the previous 2 classes
+
+    Adding .sidebar-mini-hidden to an element will hide it when the sidebar is in mini mode
+    Adding .sidebar-mini-visible to an element will show it only when the sidebar is in mini mode
+        - use .sidebar-mini-visible-b if you would like to be a block when visible (display: block)
+-->
+<nav id="sidebar">
+
+    <!-- Sidebar Scroll Container -->
+    <div id="sidebar-scroll">
+
+        <!-- Sidebar Content -->
+        <div class="sidebar-content">
+
+            <!-- Side User -->
+            <div class="content-side content-side-full content-side-user px-10 align-parent">
+
+                <!-- Visible only in mini mode -->
+                <div class="sidebar-mini-visible-b align-v animated fadeIn">
+                    <img class="img-avatar img-avatar32" src="@Session["imagem_sidebar_min"]" alt="">
+                </div>
+                <!-- END Visible only in mini mode -->
+                <!-- Visible only in normal mode -->
+                <div class="sidebar-mini-hidden text-center">
+                    <img class="img-avatar img-avatar128" src="@Session["imagem_sidebar"]" alt="">
+                    <ul class="list-inline mt-10">
+                        <li class="list-inline-item">
+                            <a class="link-effect text-primary-dark font-size-xs font-w600 text-uppercase" href="#">@Session["nome"]</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="link-effect text-dual-primary" href="@Url.Action("LogOff", "Account")">
+                                <i class="si si-logout"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END Visible only in normal mode -->
+
+            </div>
+            <!-- END Side User -->
+            <!-- Side Navigation -->
+            <div class="content-side content-side-full">
+
+                <ul class="nav-main">
+                    <li>
+                        <a class="@Html.IsSelected(action: Session["dashboard"].ToString(), cssClass: "active") font-size-sm" href="@Url.Action(Session["dashboard"].ToString(), "Home")"><i class="si si-graph"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.dashboard</span></a>
+                    </li>
+                    @if ((bool)Session["dash_desempenho"])
+                    {
+                        <li>
+                            <a class="@Html.IsSelected(action: "Desempenho", cssClass: "active") font-size-sm" href="@Url.Action("Desempenho", "Home", new { unidade = Session["codigo_unidade"].ToString() })"><i class="si si-bar-chart"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.desempenho - @PCM.WEB.Properties.Resources.manutencao</span></a>
+                        </li>
+                    }
+                    @if ((bool)Session["dash_desempenho_qa"])
+                    {
+                        <li>
+                            <a class="@Html.IsSelected(action: "QualidadeDesempenho", cssClass: "active") font-size-sm" href="@Url.Action("QualidadeDesempenho", "Home", new { unidade = Session["codigo_unidade"].ToString() })"><i class="si si-bar-chart"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.desempenho - @PCM.WEB.Properties.Resources.qualidade</span></a>
+                        </li>
+                    }
+                    @if ((bool)Session["adm_empresa"] || (bool)Session["adm_usuario"] || (bool)Session["adm_configuracao_desempenho_unidade"] || (bool)Session["adm_perfil"] || (bool)Session["adm_perfil_hierarquia"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Administracao", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-settings"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.administracao</span></a>
+                            <ul>
+                                @if ((bool)Session["adm_empresa"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Empresa", cssClass: "active") font-size-sm" href="@Url.Action("Empresa", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.empresa</span></a>
+                                    </li>
+                                }
+                                @if ((bool)Session["adm_cliente"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ClienteIndex", cssClass: "active") font-size-sm" href="@Url.Action("ClienteIndex", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.cliente</span></a>
+                                    </li>
+                                }
+                                @if ((bool)Session["adm_configuracao_desempenho_unidade"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ConfiguracaoDesempenhoUnidade", cssClass: "active") font-size-sm" href="@Url.Action("ConfiguracaoDesempenhoUnidade", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.desempenho_unidades</span></a>
+                                    </li>
+                                }
+                                @if ((bool)Session["adm_usuario"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "UsuarioIndex", cssClass: "active") font-size-sm" href="@Url.Action("UsuarioIndex", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.usuarios</span></a>
+                                    </li>
+                                }
+                                @if ((bool)Session["adm_perfil"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PerfilIndex", cssClass: "active") font-size-sm" href="@Url.Action("PerfilIndex", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.perfil</span></a>
+                                    </li>
+                                }
+                                @if ((bool)Session["adm_perfil_hierarquia"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PerfilHierarquia", cssClass: "active") font-size-sm" href="@Url.Action("PerfilHierarquia", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.perfil_hierarquia</span></a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if ((bool)Session["audit_externa"] || (bool)Session["audit_corporativo"] || (bool)Session["audit_laudo"] || (bool)Session["audit_normas_procedimentos"] || (bool)Session["audit_relatorio"] || (bool)Session["audit_relatorio_mensal_pcm"])
+                    {
+                        <li>
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-notebook"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.auditoria</span></a>
+                            <ul>
+                                @if ((bool)Session["audit_externa"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AuditoriaIndex", cssClass: "active") font-size-sm" href="@Url.Action("AuditoriaIndex", "Auditoria")">@PCM.WEB.Properties.Resources.auditoria_externa</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["audit_corporativo"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AuditoriaCorporativoIndex", cssClass: "active") font-size-sm" href="@Url.Action("AuditoriaCorporativoIndex", "Auditoria")">@PCM.WEB.Properties.Resources.auditoria_corporativo</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["audit_laudo"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "LaudoIndex", cssClass: "active") font-size-sm" href="@Url.Action("LaudoIndex", "Auditoria")">@PCM.WEB.Properties.Resources.laudo</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["audit_normas_procedimentos"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "NormasProcedimentosIndex", cssClass: "active") font-size-sm" href="@Url.Action("NormasProcedimentosIndex", "Auditoria")">@PCM.WEB.Properties.Resources.normas_procedimentos</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["audit_relatorio"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Relatorio", cssClass: "active") font-size-sm" href="@Url.Action("Relatorio", "Auditoria")">@PCM.WEB.Properties.Resources.relatorio_auditaveis</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["audit_relatorio_mensal_pcm"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RelatorioMensal", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioMensal", "Auditoria")">@PCM.WEB.Properties.Resources.relatorio_mensal_pcm</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["audit_corporativo_historico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AuditoriaHistorico", cssClass: "active") font-size-sm" href="@Url.Action("AuditoriaHistorico", "Auditoria")">@PCM.WEB.Properties.Resources.auditoria_corporativo - @PCM.WEB.Properties.Resources.historico</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if ((bool)Session["aeb_auditoria_externa"] || (bool)Session["aeb_contrato"] || (bool)Session["aeb_laudo"] || (bool)Session["aeb_normas_procedimentos"])
+                    {
+                        <li>
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-shopping-basket"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.aeb</span></a>
+                            <ul>
+                                @if ((bool)Session["aeb_auditoria_externa"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AuditoriaExternaIndex", cssClass: "active") font-size-sm" href="@Url.Action("AuditoriaExternaIndex", "AEB")">@PCM.WEB.Properties.Resources.auditoria_externa</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["aeb_contrato"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ContratoIndex", cssClass: "active") font-size-sm" href="@Url.Action("ContratoIndex", "AEB")">@PCM.WEB.Properties.Resources.contrato</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["aeb_laudo"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "LaudoIndex", cssClass: "active") font-size-sm" href="@Url.Action("LaudoIndex", "AEB")">@PCM.WEB.Properties.Resources.laudo</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["aeb_normas_procedimentos"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "NormasProcedimentosIndex", cssClass: "active") font-size-sm" href="@Url.Action("NormasProcedimentosIndex", "AEB")">@PCM.WEB.Properties.Resources.normas_procedimentos</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if ((bool)Session["cad_apartamento"] ||
+                        (bool)Session["cad_ar_condicionado"] ||
+                        (bool)Session["cad_auditoria_corporativo"] ||
+                        (bool)Session["cad_auditoria_qualidade"] ||
+                        (bool)Session["cad_categoria"] ||
+                        (bool)Session["cad_checklist"] ||
+                        (bool)Session["cad_cliente"] ||
+                        (bool)Session["cad_cliente_acordo_comercial"] ||
+                        (bool)Session["cad_departamento"] ||
+                        (bool)Session["cad_departamento_gestor"] ||
+                        (bool)Session["cad_enxoval"] ||
+                        (bool)Session["cad_dedetizacao"] ||
+                        (bool)Session["cad_funcionario"] ||
+                        (bool)Session["cad_familia_equipamento"] ||
+                        (bool)Session["cad_fornecedor"] ||
+                        (bool)Session["cad_funcao"] ||
+                        (bool)Session["cad_grupo_item_medicao"] ||
+                        (bool)Session["cad_grupo_produto"] ||
+                        (bool)Session["cad_unidade"] ||
+                        (bool)Session["cad_atividade"] ||
+                        (bool)Session["cad_equipamento"] ||
+                        (bool)Session["cad_item_medicao"] ||
+                        (bool)Session["cad_itens_gerais"] ||
+                        (bool)Session["cad_justificativa_falta"] ||
+                        (bool)Session["cad_justificativa_apontamento"] ||
+                        (bool)Session["cad_justificativa_cancelar_ordem_servico"] ||
+                        (bool)Session["cad_prioridade"] ||
+                        (bool)Session["cad_produto"] ||
+                        (bool)Session["cad_preventiva"] ||
+                        (bool)Session["cad_laudo"] ||
+                        (bool)Session["cad_rotina"] ||
+                        (bool)Session["cad_setor"] ||
+                        (bool)Session["cad_tarefa"] ||
+                        (bool)Session["cad_tipo_apartamento"] ||
+                        (bool)Session["cad_tipo_ar_condicionado"] ||
+                        (bool)Session["cad_tipo_cama"] ||
+                        (bool)Session["cad_tipo_despesa"] ||
+                        (bool)Session["cad_item_os_hospede"])
+                    {
+                        <li class="@Html.IsSelected(controller: "CadastroBasico", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-note"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.cadastro_basico</span></a>
+                            <ul>
+                                @if ((bool)Session["cad_ar_condicionado"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ArCondicionadoIndex", cssClass: "active") font-size-sm" href="@Url.Action("ArCondicionadoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.ar_condicionado</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_auditoria_corporativo"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AuditoriaCorporativoIndex", cssClass: "active") font-size-sm" href="@Url.Action("AuditoriaCorporativoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.auditoria_corporativo</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_auditoria_qualidade"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AuditoriaQualidadeIndex", cssClass: "active") font-size-sm" href="@Url.Action("AuditoriaQualidadeIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.auditoria_qualidade</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_categoria"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "CategoriaIndex", cssClass: "active") font-size-sm" href="@Url.Action("CategoriaIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.categoria</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_checklist"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ChecklistIndex", cssClass: "active") font-size-sm" href="@Url.Action("ChecklistIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.checklist</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_cliente"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ClienteIndex", cssClass: "active") font-size-sm" href="@Url.Action("ClienteIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.cliente</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_cliente_acordo_comercial"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ClienteEnxoval", cssClass: "active") font-size-sm" href="@Url.Action("ClienteEnxoval", "CadastroBasico")">@PCM.WEB.Properties.Resources.cadClienteAC</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_funcionario"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncionarioIndex", cssClass: "active") font-size-sm" href="@Url.Action("FuncionarioIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.funcionario</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["cad_dedetizacao"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Dedetizacao", cssClass: "active") font-size-sm" href="@Url.Action("Dedetizacao", "CadastroBasico")">@PCM.WEB.Properties.Resources.dedetizacao</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_departamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "DepartamentoIndex", cssClass: "active") font-size-sm" href="@Url.Action("DepartamentoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.departamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_departamento_gestor"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "DepartamentoGestorIndex", cssClass: "active") font-size-sm" href="@Url.Action("DepartamentoGestorIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.departamento_gestor</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_enxoval"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "EnxovalIndex", cssClass: "active") font-size-sm" href="@Url.Action("EnxovalIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.enxoval</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_familia_equipamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FamiliaEquipamentoIndex", cssClass: "active") font-size-sm" href="@Url.Action("FamiliaEquipamentoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.familia_equipamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_fornecedor"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FornecedorIndex", cssClass: "active") font-size-sm" href="@Url.Action("FornecedorIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.fornecedor</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_funcao"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncaoIndex", cssClass: "active") font-size-sm" href="@Url.Action("FuncaoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.funcao</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_grupo_item_medicao"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "GrupoItemMedicaoIndex", cssClass: "active") font-size-sm" href="@Url.Action("GrupoItemMedicaoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.grupo_item_medicao</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_grupo_produto"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "GrupoProdutoIndex", cssClass: "active") font-size-sm" href="@Url.Action("GrupoProdutoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.grupo_produto</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_item_medicao"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ItemMedicaoIndex", cssClass: "active") font-size-sm" href="@Url.Action("ItemMedicaoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.item_medicao</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_itens_gerais"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ItensGeraisIndex", cssClass: "active") font-size-sm" href="@Url.Action("ItensGeraisIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.itens_gerais</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_item_os_hospede"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ItemOSHospedeIndex", cssClass: "active") font-size-sm" href="@Url.Action("ItemOSHospedeIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.itemOSHospede</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_justificativa_apontamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "JustificativaApontamentoIndex", cssClass: "active") font-size-sm" href="@Url.Action("JustificativaApontamentoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.justificativa_apontamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_justificativa_falta"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "JustificativaFaltaIndex", cssClass: "active") font-size-sm" href="@Url.Action("JustificativaFaltaIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.justificativa_falta</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_justificativa_cancelar_ordem_servico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "JustificativaCancelamentoOrdemServicoIndex", cssClass: "active") font-size-sm" href="@Url.Action("JustificativaCancelamentoOrdemServicoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.justificativa_cancelamento_ordem_servico</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_laudo"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "LaudoIndex", cssClass: "active") font-size-sm" href="@Url.Action("LaudoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.laudo</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_atividade"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AtividadeIndex", cssClass: "active") font-size-sm" href="@Url.Action("AtividadeIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.atividade</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_equipamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "EquipamentoIndex", cssClass: "active") font-size-sm" href="@Url.Action("EquipamentoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.equipamentos</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_preventiva"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PreventivaIndex", cssClass: "active") font-size-sm" href="@Url.Action("PreventivaIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.preventiva</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_prioridade"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PrioridadeIndex", cssClass: "active") font-size-sm" href="@Url.Action("PrioridadeIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.prioridade</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_produto"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ProdutoIndex", cssClass: "active") font-size-sm" href="@Url.Action("ProdutoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.produto</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["cad_rotina"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RotinaIndex", cssClass: "active") font-size-sm" href="@Url.Action("RotinaIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.rotina</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_relatorio_itens_auditaveis"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RelatorioItensAuditaveisIndex", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioItensAuditaveisIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.cad_relatorio_itens_auditaveis</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_setor"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "SetorIndex", cssClass: "active") font-size-sm" href="@Url.Action("SetorIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.setor</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_tarefa"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "TarefaIndex", cssClass: "active") font-size-sm" href="@Url.Action("TarefaIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.tarefa </a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_tipo_apartamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "TipoApartamentoIndex", cssClass: "active") font-size-sm" href="@Url.Action("TipoApartamentoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.tipo_apartamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_tipo_ar_condicionado"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "TipoArCondicionadoIndex", cssClass: "active") font-size-sm" href="@Url.Action("TipoArCondicionadoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.tipo_ar_condicionado</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_tipo_cama"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "TipoCamaIndex", cssClass: "active") font-size-sm" href="@Url.Action("TipoCamaIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.tipo_cama</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_tipo_despesa"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "TipoDespesaIndex", cssClass: "active") font-size-sm" href="@Url.Action("TipoDespesaIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.tipo_despesa</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_treinamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "TreinamentoIndex", cssClass: "active") font-size-sm" href="@Url.Action("TreinamentoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.treinamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_apartamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ApartamentoIndex", cssClass: "active") font-size-sm" href="@Url.Action("ApartamentoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.uh</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_unidade"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "UnidadeIndex", cssClass: "active") font-size-sm" href="@Url.Action("UnidadeIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.unidades</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["cfg_opera"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Configuracao", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-gears"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.configuracao</span></a>
+                            <ul>
+                                @if ((bool)Session["cfg_opera"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "InterfaceOpera", cssClass: "active") font-size-sm" href="@Url.Action("InterfaceOpera", "Configuracao")">@PCM.WEB.Properties.Resources.interface_opera</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["est_entrada"] || (bool)Session["est_saida"] || (bool)Session["est_requisicao_compra"] || (bool)Session["est_ordem_compra"] || (bool)Session["est_inventario"] || (bool)Session["est_listagem"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Estoque", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-social-dropbox"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.estoque</span></a>
+                            <ul>
+                                @if ((bool)Session["est_entrada"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Entrada", cssClass: "active") font-size-sm" href="@Url.Action("Entrada", "Estoque")">@PCM.WEB.Properties.Resources.estEntrada</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["est_inventario"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Inventario", cssClass: "active") font-size-sm" href="@Url.Action("Inventario", "Estoque")">@PCM.WEB.Properties.Resources.estInventario</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["est_listagem"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Listagem", cssClass: "active") font-size-sm" href="@Url.Action("Listagem", "Estoque")">@PCM.WEB.Properties.Resources.listagem</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["est_requisicao_compra"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RequisicaoCompra", cssClass: "active") font-size-sm" href="@Url.Action("RequisicaoCompra", "Estoque")">@PCM.WEB.Properties.Resources.estRequisicaoCompra</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["est_ordem_compra"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "OrdemCompra", cssClass: "active") font-size-sm" href="@Url.Action("OrdemCompra", "Estoque")">@PCM.WEB.Properties.Resources.estOrdemCompra</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["est_saida"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Saida", cssClass: "active") font-size-sm" href="@Url.Action("Saida", "Estoque")">@PCM.WEB.Properties.Resources.estSaida</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["excel_ordem_servico"] || (bool)Session["excel_plano_acao_qa"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Excel", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-file-excel-o"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.excel</span></a>
+                            <ul>
+                                @if ((bool)Session["excel_ordem_servico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "OrdemServico", cssClass: "active") font-size-sm" href="@Url.Action("OrdemServico", "Excel")">@PCM.WEB.Properties.Resources.ordem_servico</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["excel_plano_acao_qa"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PlanoAcaoQA", cssClass: "active") font-size-sm" href="@Url.Action("PlanoAcaoQA", "Excel")">@PCM.WEB.Properties.Resources.plano_acao</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["fin_contrato"] || (bool)Session["fin_controle_gasto"] || (bool)Session["fin_input_despesa"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Financas", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-calculator"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.financas</span></a>
+                            <ul>
+                                @if ((bool)Session["fin_contrato"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ContratoIndex", cssClass: "active") font-size-sm" href="@Url.Action("ContratoIndex", "Financas")">@PCM.WEB.Properties.Resources.contrato</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["fin_controle_gasto"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ControleGastoIndex", cssClass: "active") font-size-sm" href="@Url.Action("ControleGastoIndex", "Financas")">@PCM.WEB.Properties.Resources.controle_gasto</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["fin_input_despesa"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "DespesaIndex", cssClass: "active") font-size-sm" href="@Url.Action("DespesaIndex", "Financas")">@PCM.WEB.Properties.Resources.input_despesa</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+
+
+                    @if ((bool)Session["gov_status_uh"] || (bool)Session["gov_lavanderia"] || (bool)Session["gov_apontamento"] || (bool)Session["gov_dashboard"] || (bool)Session["governanca"] || (bool)Session["gov_funcionario"] || (bool)Session["gov_log_alteracao_status_gov"] || (bool)Session["gov_planejamento"] || (bool)Session["gov_historico"] || (bool)Session["rel_consumo_enxoval"] || (bool)Session["rel_horas_trabalhadas_governanca"] || (bool)Session["rel_camareira_uh"] || (bool)Session["rel_responsavel_vistoria_uh"] || (bool)Session["rel_camareira_nc"])
+                    {
+                        <li>
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-hotel"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.governanca</span></a>
+                            <ul>
+                                @if ((bool)Session["gov_dashboard"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Dashboard", cssClass: "active") font-size-sm" href="@Url.Action("Dashboard", "Governanca")">@PCM.WEB.Properties.Resources.dashboard</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_apontamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Apontamento", cssClass: "active") font-size-sm" href="@Url.Action("Apontamento", "Governanca")">@PCM.WEB.Properties.Resources.apontamento </a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_funcionario"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncionarioIndex", cssClass: "active") font-size-sm" href="@Url.Action("FuncionarioIndex", "Governanca")">@PCM.WEB.Properties.Resources.funcionario</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["governanca"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ChecklistGovernanca", cssClass: "active") font-size-sm" href="@Url.Action("ChecklistGovernanca", "Governanca")">@PCM.WEB.Properties.Resources.checklist</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_planejamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Planejamento2", cssClass: "active") font-size-sm" href="@Url.Action("Planejamento2", "Governanca")">@PCM.WEB.Properties.Resources.planejamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_lavanderia"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ApontamentoLavanderia", cssClass: "active") font-size-sm" href="@Url.Action("ApontamentoLavanderia", "Governanca")">@PCM.WEB.Properties.Resources.lavanderia</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_historico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Historico", cssClass: "active") font-size-sm" href="@Url.Action("Historico", "Governanca")">@PCM.WEB.Properties.Resources.historico</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["gov_log_alteracao_status_gov"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "LogAlteracaoStatusGov", cssClass: "active") font-size-sm" href="@Url.Action("LogAlteracaoStatusGov", "Governanca")">@PCM.WEB.Properties.Resources.logAlteracaoStatusGov</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["rel_consumo_enxoval"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RelatorioConsumoEnxovalDia", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioConsumoEnxovalDia", "Governanca")">@PCM.WEB.Properties.Resources.relatorio_consumo_enxoval</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_horas_trabalhadas_governanca"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncionarioHorasTrabalhadasGovernanca", cssClass: "active") font-size-sm" href="@Url.Action("FuncionarioHorasTrabalhadasGovernanca", "Governanca")">@PCM.WEB.Properties.Resources.relatorio_horas_trabalhadas_governanca</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_camareira_uh"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RelatorioCamareiraUH", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioCamareiraUH", "Governanca")">@PCM.WEB.Properties.Resources.relatorio_camareira_uh</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_responsavel_vistoria_uh"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RelatorioVistoriadorUH", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioVistoriadorUH", "Governanca")">@PCM.WEB.Properties.Resources.relatorioVistoriadorUH</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_camareira_nc"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RelatorioCamareiraNC", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioCamareiraNC", "Governanca")">@PCM.WEB.Properties.Resources.relatorio_camareira_nc</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_status_uh"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "StatusUH", cssClass: "active") font-size-sm" href="@Url.Action("StatusUH", "Governanca")">@PCM.WEB.Properties.Resources.status_uh</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+
+                    @if ((bool)Session["green_lancamento"])
+                    {
+                        <li class="@Html.IsSelected(controller: "GreenPlanet", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-pagelines"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.green_planet</span></a>
+                            <ul>
+                                @if ((bool)Session["green_lancamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "LancamentoIndex", cssClass: "active") font-size-sm" href="@Url.Action("LancamentoIndex", "GreenPlanet")">@PCM.WEB.Properties.Resources.medicao</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if ((bool)Session["log_book"])
+                    {
+                        <li>
+                            <a class="@Html.IsSelected(action: "LogBook", cssClass: "active") font-size-sm" href="@Url.Action("LogBook", "LogBook")"><i class="si si-book-open"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.log_book</span></a>
+                        </li>
+                    }
+                    @if ((bool)Session["ordem_servico"])
+                    {
+                        <li>
+                            <a class="@Html.IsSelected(action: "OrdemServicoIndex2", cssClass: "active") font-size-sm" href="@Url.Action("OrdemServicoIndex2", "OrdemServico")"><i class="si si-wrench"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.ordem_servico</span></a>
+                        </li>
+                    }
+                    @if ((bool)Session["pcm_cronograma_semanal"] || (bool)Session["pcm_falta"] || (bool)Session["pcm_apontamento_os"] || (bool)Session["pcm_apontamento_os_edit"] || (bool)Session["pcm_apontamento_laudo"] || (bool)Session["pcm_apontamento_preventiva"] || (bool)Session["pcm_apontamento_rotina"] || (bool)Session["pcm_historico_programada"] || (bool)Session["pcm_requisicao"] || (bool)Session["pcm_requisicao_aprovar_reprovar"])
+                    {
+                        <li class="@Html.IsSelected(controller: "PCM", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-support"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.pcm</span></a>
+                            <ul>
+                                @if ((bool)Session["pcm_apontamento_os_edit"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoApontamento2", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoApontamento2", "PCM")">@PCM.WEB.Properties.Resources.manutencao_apontamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_cronograma_semanal"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "CronogramaSemana", cssClass: "active") font-size-sm" href="@Url.Action("CronogramaSemana", "PCM")">@PCM.WEB.Properties.Resources.cronograma_por_semana</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_falta"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FaltaIndex", cssClass: "active") font-size-sm" href="@Url.Action("FaltaIndex", "PCM")">@PCM.WEB.Properties.Resources.falta</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_apontamento_os"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "OrdemServicoIndex2", cssClass: "active") font-size-sm" href="@Url.Action("OrdemServicoIndex2", "OrdemServico")">@PCM.WEB.Properties.Resources.ordem_servico</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_apontamento_laudo"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoLaudo", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoLaudo", "PCM")">@PCM.WEB.Properties.Resources.laudo</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_apontamento_preventiva"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoPreventiva", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoPreventiva", "PCM")">@PCM.WEB.Properties.Resources.preventiva</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_apontamento_rotina"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoRotina", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoRotina", "PCM")">@PCM.WEB.Properties.Resources.rotina</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_historico_programada"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "HistoricoLaudo", cssClass: "active") font-size-sm" href="@Url.Action("HistoricoLaudo", "PCM", new{formulario = "pcm_apontamento_laudo"})">@PCM.WEB.Properties.Resources.historico_laudo</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_historico_programada"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "HistoricoPreventiva", cssClass: "active") font-size-sm" href="@Url.Action("HistoricoPreventiva", "PCM", new{formulario = "pcm_apontamento_preventiva"})">@PCM.WEB.Properties.Resources.historico_preventiva</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_historico_programada"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "HistoricoRotina", cssClass: "active") font-size-sm" href="@Url.Action("HistoricoRotina", "PCM", new{formulario = "pcm_apontamento_rotina"})">@PCM.WEB.Properties.Resources.historico_rotina</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_requisicao"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Requisicao", cssClass: "active") font-size-sm" href="@Url.Action("Requisicao", "PCM")">@PCM.WEB.Properties.Resources.requisicao</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pcm_requisicao_aprovar_reprovar"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RequisicaoAprovarReprovarIndex", cssClass: "active") font-size-sm" href="@Url.Action("RequisicaoAprovarReprovarIndex", "PCM")">@PCM.WEB.Properties.Resources.requisicao_aprovar_reprovar</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["pcm_plano_acao"])
+                    {
+                        <li>
+                            <a class="@Html.IsSelected(action: "PlanoAcaoIndex", cssClass: "active") font-size-sm" href="@Url.Action("PlanoAcaoIndex", "PlanoAcao")"><i class="si si-briefcase"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.plano_acao</span></a>
+                        </li>
+                    }
+
+                    @if ((bool)Session["pmoc"] || (bool)Session["pmoc_andar"] || (bool)Session["pmoc_bup"] || (bool)Session["pmoc_apontamento"] || (bool)Session["pmoc_historico"] || (bool)Session["pmoc_cronograma"] || (bool)Session["pmoc_cronograma_bup"])
+                    {
+                        <li class="@Html.IsSelected(controller: "PMOC", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-snowflake-o"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.pmoc</span></a>
+                            <ul>
+                                @if ((bool)Session["pmoc"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PMOCIndex", cssClass: "active") font-size-sm" href="@Url.Action("PMOCIndex", "PMOC")">@PCM.WEB.Properties.Resources.cadastro_pmoc</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pmoc_cronograma"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "CronogramaPMOC", cssClass: "active") font-size-sm" href="@Url.Action("CronogramaPMOC", "PMOC")">@PCM.WEB.Properties.Resources.cronograma</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pmoc_apontamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PMOC2", cssClass: "active") font-size-sm" href="@Url.Action("PMOC2", "PMOC")">@PCM.WEB.Properties.Resources.pmoc</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pmoc_andar"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PMOCAndar", cssClass: "active") font-size-sm" href="@Url.Action("PMOCAndar", "PMOC")">@PCM.WEB.Properties.Resources.pmoc - Andar</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pmoc_bup"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PMOCBup", cssClass: "active") font-size-sm" href="@Url.Action("PMOCBup", "PMOC")">@PCM.WEB.Properties.Resources.pmoc - Agrupado</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pmoc_bup"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PMOCHistorico", cssClass: "active") font-size-sm" href="@Url.Action("PMOCHistorico", "PMOC")">@PCM.WEB.Properties.Resources.historico_pmoc - Agrupado</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["pmoc_historico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "HistoricoPMOC", cssClass: "active") font-size-sm" href="@Url.Action("HistoricoPMOC", "PMOC")">@PCM.WEB.Properties.Resources.historico_pmoc</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["qa_auditoria"] || (bool)Session["qa_auditoria_historico"] || (bool)Session["qa_auditoria_cronograma"] || (bool)Session["qa_plano_acao"] || (bool)Session["qa_tarefa"] || (bool)Session["qa_tarefa_historico"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Qualidade", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-area-chart"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.qualidade</span></a>
+                            <ul>
+                                @if ((bool)Session["qa_auditoria"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Auditoria", cssClass: "active") font-size-sm" href="@Url.Action("Auditoria", "Qualidade")">@PCM.WEB.Properties.Resources.auditoria_qualidade</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["qa_auditoria_cronograma"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AuditoriaCronograma", cssClass: "active") font-size-sm" href="@Url.Action("AuditoriaCronograma", "Qualidade")">@PCM.WEB.Properties.Resources.auditoria_cronograma</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["qa_auditoria_historico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AuditoriaHistorico", cssClass: "active") font-size-sm" href="@Url.Action("AuditoriaHistorico", "Qualidade")">@PCM.WEB.Properties.Resources.auditoria_historico</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["qa_plano_acao"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "OrdemServicoIndex", cssClass: "active") font-size-sm" href="@Url.Action("OrdemServicoIndex", "Qualidade")">@PCM.WEB.Properties.Resources.plano_acao </a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["qa_tarefa"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Tarefa", cssClass: "active") font-size-sm" href="@Url.Action("Tarefa", "Qualidade")">@PCM.WEB.Properties.Resources.tarefa</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["qa_tarefa_historico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "TarefaHistorico", cssClass: "active") font-size-sm" href="@Url.Action("TarefaHistorico", "Qualidade")">@PCM.WEB.Properties.Resources.tarefa @PCM.WEB.Properties.Resources.historico</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if ((bool)Session["rel_custo_horas_trabalhadas"] || (bool)Session["rel_funcionario_horas_trabalhadas"] || (bool)Session["rel_funcionario_ociosidade"] || (bool)Session["rel_manutencao"] || (bool)Session["rel_manutencao_categoria"] || (bool)Session["rel_manutencao_executor"] || (bool)Session["rel_manutencao_setor"] || (bool)Session["rel_manutencao_solicitante"] || (bool)Session["rel_manutencao_tipo_ordem_servico"] || (bool)Session["rel_manutencao_tempo_medio_atendimento"] || (bool)Session["rel_pmoc_mes"] || (bool)Session["rel_pmoc_bimestral"] || (bool)Session["rel_nao_conformidade"] || (bool)Session["rel_preventiva_mes"] || (bool)Session["rel_dinamico"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Relatorio", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-doc"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.relatorio</span></a>
+                            <ul>
+                                @if ((bool)Session["rel_custo_horas_trabalhadas"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "CustoHorasTrabalhadas", cssClass: "active") font-size-sm" href="@Url.Action("CustoHorasTrabalhadas", "Relatorio")">@PCM.WEB.Properties.Resources.custo_horas_trabalhadas</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_funcionario_horas_trabalhadas"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncionarioHorasTrabalhadasNew", cssClass: "active") font-size-sm" href="@Url.Action("FuncionarioHorasTrabalhadasNew", "Relatorio")">@PCM.WEB.Properties.Resources.funcionario_horas_trabalhadas</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_funcionario_ociosidade"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "FuncionarioOciosidade", cssClass: "active") font-size-sm" href="@Url.Action("FuncionarioOciosidade", "Relatorio")">@PCM.WEB.Properties.Resources.funcionario_ociosidade</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_green_planet"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "GreenPlanet", cssClass: "active") font-size-sm" href="@Url.Action("GreenPlanet", "Relatorio")">@PCM.WEB.Properties.Resources.green_planet</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Manutencao", cssClass: "active") font-size-sm" href="@Url.Action("Manutencao", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao_categoria"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoCategoria", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoCategoria", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao_categoria</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao_equipamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoEquipamento", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoEquipamento", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao_equipamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao_executor"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoExecutor", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoExecutor", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao_executor</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao_setor"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoSetor", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoSetor", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao_setor</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao_solicitante"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoSolicitante", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoSolicitante", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao_solicitante</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao_tipo_ordem_servico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoTipoOrdemServico", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoTipoOrdemServico", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao_tipo_ordem_servico</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao_aberto_concluido"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoAbertoConcluido", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoAbertoConcluido", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao_aberto_concluido</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_manutencao_tempo_medio_atendimento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ManutencaoTempoMedioAtendimento", cssClass: "active") font-size-sm" href="@Url.Action("ManutencaoTempoMedioAtendimento", "Relatorio")">@PCM.WEB.Properties.Resources.manutencao_tempo_medio_atendimento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_pmoc_mes"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PMOCMes", cssClass: "active") font-size-sm" href="@Url.Action("PMOCMes", "Relatorio")">@PCM.WEB.Properties.Resources.pmoc_mensal</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_pmoc_bimestral"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PMOCAgrupado", cssClass: "active") font-size-sm" href="@Url.Action("PMOCAgrupado", "Relatorio")">PMOC Bimestral</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_preventiva_mes"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PreventivaMes", cssClass: "active") font-size-sm" href="@Url.Action("PreventivaMes", "Relatorio")">@PCM.WEB.Properties.Resources.preventiva_mes</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_log_book"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "LogBookReport", cssClass: "active") font-size-sm" href="@Url.Action("LogBookReport", "Relatorio")">@PCM.WEB.Properties.Resources.log_book</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_nao_conformidade"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "NaoConformidade", cssClass: "active") font-size-sm" href="@Url.Action("NaoConformidade", "Relatorio")">@PCM.WEB.Properties.Resources.nao_conformidade</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_dinamico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RelatorioDinamicoDia", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioDinamicoDia", "Relatorio")">@PCM.WEB.Properties.Resources.cad_relatorio_itens_auditaveis</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["cad_treinamento"])
+                    {
+                        <li>
+                            <a class="@Html.IsSelected(action: "TreinamentoIndex", cssClass: "active")  font-size-sm" href="@Url.Action("TreinamentoIndex", "Treinamento")"><i class="si si-docs"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.treinamento</span></a>
+                        </li>
+                    }
+                    @if ((bool)Session["uh_checklist"] || (bool)Session["uh_checklist_historico"] || (bool)Session["uh_atividade"] || (bool)Session["uh_dedetizacao"])
+                    {
+                        <li class="@Html.IsSelected(controller: "UH", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-retweet"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.uh_em_dia</span></a>
+                            <ul>
+                                @if ((bool)Session["uh_atividade"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "UHAtividade", cssClass: "active") font-size-sm" href="@Url.Action("UHAtividade", "UH")">@PCM.WEB.Properties.Resources.atividade</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["uh_checklist"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ChecklistUH", cssClass: "active") font-size-sm" href="@Url.Action("ChecklistUH", "UH")">@PCM.WEB.Properties.Resources.checklist</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["uh_checklist_historico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "ChecklistHistorico", cssClass: "active") font-size-sm" href="@Url.Action("ChecklistHistorico", "UH")">@PCM.WEB.Properties.Resources.historico</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["uh_dedetizacao"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Dedetizacao", cssClass: "active") font-size-sm" href="@Url.Action("Dedetizacao", "UH")">@PCM.WEB.Properties.Resources.dedetizacao</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["upload_excel"] || (bool)Session["upload_pmoc"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Upload", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-upload"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.upload</span></a>
+                            <ul>
+                                @if ((bool)Session["upload_excel"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "UploadExcel", cssClass: "active") font-size-sm" href="@Url.Action("UploadExcel", "Upload")">@PCM.WEB.Properties.Resources.cadastro_basico</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["upload_pmoc"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "UploadPMOC", cssClass: "active") font-size-sm" href="@Url.Action("UploadPMOC", "Upload")">@PCM.WEB.Properties.Resources.pmoc</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["cad_area_comum"] || (bool)Session["agenda_area_comum"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Excel", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-calendar"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.agenda</span></a>
+                            <ul>
+                                @if ((bool)Session["agenda_area_comum"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Agenda", cssClass: "active") font-size-sm" href="@Url.Action("Agenda", "Agenda")">@PCM.WEB.Properties.Resources.agenda</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["cad_area_comum"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AreaComumIndex", cssClass: "active") font-size-sm" href="@Url.Action("AreaComumIndex", "Agenda")">@PCM.WEB.Properties.Resources.area_comum</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((bool)Session["lav_apontamento"] || (bool)Session["lav_historico"] || (bool)Session["rel_lav_controle"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Lavanderia", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-shower"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.lavanderia</span></a>
+                            <ul>
+                                @if ((bool)Session["lav_apontamento"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Apontamento", cssClass: "active") font-size-sm" href="@Url.Action("Apontamento", "Lavanderia")">@PCM.WEB.Properties.Resources.apontamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["lav_historico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Historico", cssClass: "active") font-size-sm" href="@Url.Action("Historico", "Lavanderia")">@PCM.WEB.Properties.Resources.historico</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["rel_lav_controle"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "RelatorioControleGeral", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioControleGeral", "Lavanderia")">@PCM.WEB.Properties.Resources.controleLavagem</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    <li>
+                        <a class="@Html.IsSelected(action: "Contato", cssClass: "active")  font-size-sm" href="mailto:suporte@simservices.com.br"><i class="si si-envelope"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.contato</span></a>
+                    </li>
+
+                    @if ((bool)Session["app_ios"])
+                    {
+                        <li>
+                            <a class="@Html.IsSelected(action: "LoadIOsLink", cssClass: "active")  font-size-sm" href="@Url.Action("LoadIOsLink", "Home")"><i class="fa fa-apple"></i><span class="sidebar-mini-hide">IOs App</span></a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <!-- END Side Navigation -->
+        </div>
+        <!-- Sidebar Content -->
+    </div>
+    <!-- END Sidebar Scroll Container -->
+</nav>
+<!-- END Sidebar -->
+
+<script type="text/javascript">
+
+    var urlSenha = "@Url.Action("UsuarioUpdate", "Administracao")";
+    var urlNotificacao = "@Url.Action("Notificacao", "Home")";
+    var urlNotificacaoOSHospede = "@Url.Action("NotificacaoOSHospede", "Home")";
+
+</script>

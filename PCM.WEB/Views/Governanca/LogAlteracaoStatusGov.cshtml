@@ -1,0 +1,221 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.nome_sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.governanca</span>
+                <a class="breadcrumb-item active">@PCM.WEB.Properties.Resources.logAlteracaoStatusGov</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("LogAlteracaoStatusGov", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="page landscape-parent">
+
+                <div class="block d-print-normal p-10 m-10" style="display:none">
+                    <div class="form-row">
+                        <div class="col-3">
+                            <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
+                        </div>
+                        <div class="col-6 text-center">
+                            <label class="h2">@PCM.WEB.Properties.Resources.logAlteracaoStatusGov</label>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+
+                <div class="col-md-12 col-xl-12">
+                    <!-- Toggle Tasks Navigation on mobile -->
+                    <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                    <!-- Collapsible Tasks Navigation -->
+                    <div class="js-tasks-nav d-none d-md-block">
+                        <!-- Tasks Info -->
+                        <div class="block">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                            </div>
+                            <div class="block-content">
+                                <ul class="list-group push">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-3 col-lg-3 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                                <div>@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.data</label>
+                                                <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                    <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
+                                                    <div class="input-group-prepend input-group-append">
+                                                        <span class="input-group-text font-w600">-</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.apartamento</label>
+                                                <input type="text" id="apartamento" name="apartamento" value="" class="form-control">
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.status</label>
+                                                @Html.DropDownList("statusPMS", null, PCM.WEB.Properties.Resources.status, new { @class = "form-control js-select2" })
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item text-right d-print-none">
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END Tasks Info -->
+                    </div>
+                    <!-- END Collapsible Tasks Navigation -->
+
+                    <div class="block">
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.logAlteracaoStatusGov</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-dark font-w600" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                            </div>
+                        </div>
+
+                        <div class="block-content">
+
+                            <!-- Table -->
+                            <div class="table-responsive table-sm push">
+                                <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tbMain">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                            <th>@PCM.WEB.Properties.Resources.data</th>
+                                            <th>@PCM.WEB.Properties.Resources.bloco</th>
+                                            <th>@PCM.WEB.Properties.Resources.andar</th>
+                                            <th>@PCM.WEB.Properties.Resources.apartamento</th>
+                                            <th>@PCM.WEB.Properties.Resources.status</th>
+                                            <th>@PCM.WEB.Properties.Resources.usuario</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <!-- END Table -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/plugins/select")
+
+<script>
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+        Codebase.helpers(['datepicker', 'maxlength', 'select2', 'table-tools']);
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        var table = $("#tbMain").DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            order: [[1, 'desc']],
+            info: false,
+            scrollCollapse: false,
+            scrollY: '50vh',
+            paging: false,
+            fixedHeader: true,
+            destroy: true,
+            searching: false,
+            paging: false,
+            lengthChange: false,
+            autoWidth: false,
+            ajax: {
+                url: "LoadLogAlteracaoStatusGov",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.codigoUnidade = $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                    d.dataInicio = $("#dataInicio").val(),
+                    d.dataTermino = $("#dataTermino").val(),
+                    d.status = $("#statusPMS").val(),
+                    d.apartamento = $("#apartamento").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                { data: "unidade" },
+                { data: "dataAlteracao" },
+                { data: "bloco" },
+                { data: "andar" },
+                { data: "apartamento" },
+                { data: "status" },
+                { data: "usuario" }
+            ],
+            columnDefs: [
+                { className: 'text-center', targets: [1, 2, 3, 4] },
+                { width: '140px', targets: [1, 2, 3, 4] },
+                { width: '200px', targets: [6] },
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if (col == 5) {
+                            $(td).addClass(rowData.cssClass);
+                        }
+                    }, targets: [5]
+                },
+            ],
+            language: {
+                "search": "@Html.Raw(PCM.WEB.Properties.Resources.search):",
+                "lengthMenu": "@Html.Raw(PCM.WEB.Properties.Resources.display) _MENU_ ",
+                "zeroRecords": "@Html.Raw(PCM.WEB.Properties.Resources.zero_records)",
+                "info": "_MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)",
+                "infoEmpty": "",
+                "infoFiltered": "@Html.Raw(PCM.WEB.Properties.Resources.filtered_from) _MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)"
+            }
+        });
+
+        // Reload DataTable
+        $('#filtrar').click(function () {
+            table.ajax.reload(null, false);
+        });
+
+    });
+
+</script>
+}

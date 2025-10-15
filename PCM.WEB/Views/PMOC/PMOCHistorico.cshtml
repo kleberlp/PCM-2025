@@ -1,0 +1,428 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.PMOCCronograma>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.pmoc</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.historico</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">        
+
+        <!-- Listagem -->
+        <div class="block block-rounded border">
+            
+            @using (Html.BeginForm("PMOCHistorico", "PMOC", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data"  }))        
+            {
+                @Html.AntiForgeryToken()
+
+                    <!-- Collapsible Tasks Navigation -->
+                    <div class="js-tasks-nav d-none d-md-block">
+                        <!-- Tasks Info -->
+                        <div class="block block-rounded border">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>                           
+                            </div>
+                            <div class="block-content">
+                                <ul class="list-group push">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-6">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                            <div class="col-md-2">@Html.DropDownList("ano", null, PCM.WEB.Properties.Resources.ano, new { @class = "form-control" })</div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item text-right">                                                    
+                                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar" ><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END Tasks Info -->
+                    </div>
+                    <!-- END Collapsible Tasks Navigation -->
+                          
+                <div class="col-md-12 col-xl-12">
+                    <!-- Toggle Tasks Navigation on mobile -->
+                    <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                    <div class="block-content block-content-full">
+
+                        <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
+                            <thead>
+                                <tr class="table-secondary">
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <th class="d-none d-md-table-cell" rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
+                                    }
+                                    <th class="text-center" rowspan="2">@PCM.WEB.Properties.Resources.tag</th>
+                                    <th rowspan="2">@PCM.WEB.Properties.Resources.descricao</th>
+                                    <th class="text-center" colspan="2">1º Bimestre</th>
+                                    <th class="text-center" colspan="2">2º Bimestre</th>
+                                    <th class="text-center" colspan="2">3º Bimestre</th>
+                                    <th class="text-center" colspan="2">4º Bimestre</th>
+                                    <th class="text-center" colspan="2">5º Bimestre</th>
+                                    <th class="text-center" colspan="2">6º Bimestre</th>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th class="text-center">Jan</th>
+                                    <th class="text-center">Fev</th>
+                                    <th class="text-center">Mar</th>
+                                    <th class="text-center">Abr</th>
+                                    <th class="text-center">Mai</th>
+                                    <th class="text-center">Jun</th>
+                                    <th class="text-center">Jul</th>
+                                    <th class="text-center">Ago</th>
+                                    <th class="text-center">Set</th>
+                                    <th class="text-center">Out</th>
+                                    <th class="text-center">Nov</th>
+                                    <th class="text-center">Dez</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>                       
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                    }
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.tag)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.descricao)</td>
+                                    @if (item.mes_1 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_1)</td>
+                                    }
+                                    else if (item.mes_1 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_1)</td>
+                                    }
+                                    else if (item.mes_1 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_1)</td>
+                                    }
+                                    else if (item.mes_1 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_1)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_2 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_2)</td>
+                                    }
+                                    else if (item.mes_2 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_2)</td>
+                                    }
+                                    else if (item.mes_2 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_2)</td>
+                                    }
+                                    else if (item.mes_2 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_2)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_3 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_3)</td>
+                                    }
+                                    else if (item.mes_3 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_3)</td>
+                                    }
+                                    else if (item.mes_3 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_3)</td>
+                                    }
+                                    else if (item.mes_3 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_3)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_4 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_4)</td>
+                                    }
+                                    else if (item.mes_4 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_4)</td>
+                                    }
+                                    else if (item.mes_4 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_4)</td>
+                                    }
+                                    else if (item.mes_4 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_4)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_5 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_5)</td>
+                                    }
+                                    else if (item.mes_5 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_5)</td>
+                                    }
+                                    else if (item.mes_5 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_5)</td>
+                                    }
+                                    else if (item.mes_5 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_5)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_6 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_6)</td>
+                                    }
+                                    else if (item.mes_6 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_6)</td>
+                                    }
+                                    else if (item.mes_6 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_6)</td>
+                                    }
+                                    else if (item.mes_6 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_6)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_7 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_7)</td>
+                                    }
+                                    else if (item.mes_7 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_7)</td>
+                                    }
+                                    else if (item.mes_7 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_7)</td>
+                                    }
+                                    else if (item.mes_7 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_7)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_8 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_8)</td>
+                                    }
+                                    else if (item.mes_8 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_8)</td>
+                                    }
+                                    else if (item.mes_8 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_8)</td>
+                                    }
+                                    else if (item.mes_8 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_8)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_9 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_9)</td>
+                                    }
+                                    else if (item.mes_9 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_9)</td>
+                                    }
+                                    else if (item.mes_9 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_9)</td>
+                                    }
+                                    else if (item.mes_9 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_9)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_10 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_10)</td>
+                                    }
+                                    else if (item.mes_10 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_10)</td>
+                                    }
+                                    else if (item.mes_10 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_10)</td>
+                                    }
+                                    else if (item.mes_10 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_10)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_11 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_11)</td>
+                                    }
+                                    else if (item.mes_11 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_11)</td>
+                                    }
+                                    else if (item.mes_11 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_11)</td>
+                                    }
+                                    else if (item.mes_11 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_11)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                    @if (item.mes_12 == "M")
+                                    {
+                                        <td class="text-center bg-elegance font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_12)</td>
+                                    }
+                                    else if (item.mes_12 == "B")
+                                    {
+                                        <td class="text-center badge-warning font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_12)</td>
+                                    }
+                                    else if (item.mes_12 == "S")
+                                    {
+                                        <td class="text-center badge-primary font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_12)</td>
+                                    }
+                                    else if (item.mes_12 == "A")
+                                    {
+                                        <td class="text-center badge-success font-w600 text-white" style="width:75px">@Html.DisplayFor(modelItem => item.mes_12)</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center " style="width:75px"></td>
+                                    }
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            }        
+    </div>        
+    </div>           
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript">
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: false,
+                    searching: false,
+                    paging: false,
+                    ordering: false,
+                    lengthChange: false,
+                    pageLength: 15,                    
+                    autoWidth: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar'},
+                        { extend: 'print',
+                       
+                            text: 'Imprimir'},
+                        { extend: 'excel'},
+                        { extend: 'pdf', orientation: 'landscape'},
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+
+        // Initialize when page loads
+        jQuery(function () { 
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init(); 
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+    </script>
+}

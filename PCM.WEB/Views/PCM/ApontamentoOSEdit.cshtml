@@ -1,0 +1,534 @@
+﻿@model List<PCM.WEB.MODELS.ApontamentoChecklist>
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action(@ViewBag.return_page, "PCM")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento_os</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("ApontamentoOSEdit", "PCM", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="codigo_apontamento" id="codigo_apontamento" value="@ViewBag.apontamento.codigo_apontamento">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.apontamento.codigo_unidade">
+                    <input type="hidden" name="data_inicio_return" id="data_inicio_return" value="@ViewBag.data_inicio">
+                    <input type="hidden" name="data_termino_return" id="data_termino_return" value="@ViewBag.data_termino">
+                    <input type="hidden" name="return_page" id="return_page" value="@ViewBag.return_page">
+                    <input type="hidden" name="mes_return" id="mes_return" value="@ViewBag.mes">
+                    <input type="hidden" name="ano_return" id="ano_return" value="@ViewBag.ano">
+                    <input type="hidden" name="codigo_funcionario_return" id="codigo_funcionario_return" value="@ViewBag.codigo_funcionario">
+                    <input type="hidden" name="codigo_equipamento_return" id="codigo_equipamento_return" value="@ViewBag.codigo_equipamento">
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento_os</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action(@ViewBag.return_page, "PCM", new { codigo_unidade = ViewBag.codigo_unidade, data_inicio = ViewBag.data_inicio, data_termino = ViewBag.data_termino, mes = ViewBag.mes, ano = ViewBag.ano, codigo_funcionario = ViewBag.codigo_funcionario, codigo_equipamento = ViewBag.codigo_equipamento })" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            @if (Session["unidade"] == "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@ViewBag.apontamento.unidade</span></div></div>
+                            }
+                            @if (@ViewBag.apontamento.setor != "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.setor: <span class="text-primary">@ViewBag.apontamento.setor</span></div></div>
+                            }
+                            @if (@ViewBag.apontamento.equipamento != "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.equipamento: <span class="text-primary">@ViewBag.apontamento.equipamento</span></div></div>
+                            }
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.servico: <span class="text-primary">@ViewBag.apontamento.servico</span></div></div>
+                            @if (ViewBag.tipo == "programada")
+                            {
+                                <input type="hidden" name="tipo_servico" id="tipo_servico" value="@ViewBag.apontamento.codigo_tipo_servico">
+                                if (ViewBag.apontamento.codigo_tipo_servico == 1)
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-12">@PCM.WEB.Properties.Resources.funcionario</label>
+                                        <div class="col-12">@Html.DropDownList("funcionario", null, "", new { @class = "form-control" })</div>
+                                    </div>
+                                }
+                                if (ViewBag.apontamento.codigo_tipo_servico == 2)
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-12">@PCM.WEB.Properties.Resources.fornecedor</label>
+                                        <div class="col-12">@Html.DropDownList("fornecedor", null, "", new { @class = "form-control" })</div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="form-group row">
+                                    <label class="col-12">@PCM.WEB.Properties.Resources.categoria</label>
+                                    <div class="col-12">@Html.DropDownList("categoria", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <label>@PCM.WEB.Properties.Resources.tipo_servico</label>
+                                        <div>@Html.DropDownList("tipo_servico", null, "", new { @class = "form-control", @onChange = "verificaTipoServico();" })</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>@PCM.WEB.Properties.Resources.tipo_ordem_servico</label>
+                                        <div>@Html.DropDownList("tipo_ordem_servico", null, "", new { @class = "form-control" })</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="div_funcionario" style="display:none">
+                                    <label class="col-12">@PCM.WEB.Properties.Resources.funcionario</label>
+                                    <div class="col-12">@Html.DropDownList("funcionario", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="form-group row" id="div_fornecedor" style="display:none">
+                                    <label class="col-12">@PCM.WEB.Properties.Resources.fornecedor</label>
+                                    <div class="col-12">@Html.DropDownList("fornecedor", null, "", new { @class = "form-control" })</div>
+                                </div>
+                            }
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.solucao</label>
+                                <div class="col-12"><textarea class="form-control" id="descricao_solucao" name="descricao_solucao" maxlength="5000" rows="6">@ViewBag.apontamento.descricao_solucao</textarea></div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label>@PCM.WEB.Properties.Resources.data_inicio</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data_inicio" name="data_inicio" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.apontamento.data_inicio"></div>
+                                </div>
+                                @if (ViewBag.apontamento.aponta_horas)
+                                {
+                                    <div class="col-4 hora_termino" data-autoclose="true">
+                                        <label>@PCM.WEB.Properties.Resources.hora_inicio</label>
+                                        <div><input type="text" class="form-control" id="hora_inicio" name="hora_inicio" value="@ViewBag.apontamento.hora_inicio" autocomplete="off"></div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label>@PCM.WEB.Properties.Resources.data_termino</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data_termino" name="data_termino" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.apontamento.data_termino"></div>
+                                </div>
+                                @if (ViewBag.apontamento.aponta_horas)
+                                {
+                                    <div class="col-4 hora_termino" data-autoclose="true">
+                                        <label>@PCM.WEB.Properties.Resources.hora_termino</label>
+                                        <div><input type="text" class="form-control" id="hora_termino" name="hora_termino" value="@ViewBag.apontamento.hora_termino" autocomplete="off"></div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    if (Model.Count > 0)
+                    {
+
+                        <!-- Dynamic Table Full Pagination -->
+                        <div class="block block-rounded border">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist</h3>
+                            </div>
+                            <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                            <table class="table table-bordered table-striped table-vcenter">
+                                <thead>
+                                    <tr>
+                                        <th>@PCM.WEB.Properties.Resources.descricao </th>
+                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.conforme</th>
+                                        <th>@PCM.WEB.Properties.Resources.comentario</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        <tr>
+                                            @Html.HiddenFor(m => m[i].codigo)
+                                            @Html.HiddenFor(m => m[i].descricao)
+                                            <td>@Html.DisplayFor(m => m[i].descricao)</td>
+                                            <td class="text-center" style="width:150px">
+                                                <label class="css-control css-control-success css-switch">
+                                                    @Html.CheckBoxFor(m => m[i].resultado, new { @class = "css-control-input" })
+                                                    <span class="css-control-indicator"></span>
+                                                </label>
+                                            </td>
+                                            <td>@Html.TextBoxFor(m => m[i].observacao, new { @class = "form-control col-12", @maxlength = "200" })</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Dynamic Table Full Pagination -->
+                    }
+                }
+                <!-- END Basic Info -->
+            </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+
+    <script>
+
+        $(document).ready(function () { $("#data_inicio").mask("99/99/9999"); });
+        $(document).ready(function () { $("#data_termino").mask("99/99/9999"); });
+        $(document).ready(function () { $("#hora_inicio").mask("99:99"); });
+        $(document).ready(function () { $("#hora_termino").mask("99:99"); });
+
+        jQuery.validator.addMethod("categoria", function (funcionario, element) {
+
+            var codigo_pcm_ordem_servico = $("#codigo_pcm_ordem_servico").val();
+            var categoria = $("#categoria").val();
+            if (codigo_pcm_ordem_servico != -1) {
+                if (categoria != "")
+                    return true;
+                else
+                    return false;
+            }
+            else{
+                return true;
+            }
+        }, '@PCM.WEB.Properties.Resources.campo_requerido');
+
+        jQuery.validator.addMethod("funcionario", function (funcionario, element) {
+
+            var tipo = $("#tipo_servico").val();
+            var funcionario = $("#funcionario").val();
+            if (tipo == 1) {
+                if(funcionario != "")
+                    return true;
+                else
+                    return false;
+            }
+            else if (tipo == 2) {
+                return true;
+            }
+        }, '@PCM.WEB.Properties.Resources.campo_requerido');
+
+        jQuery.validator.addMethod("fornecedor", function (funcionario, element) {
+
+            var tipo = $("#tipo_servico").val();
+            var fornecedor = $("#fornecedor").val();
+            if (tipo == 2) {
+                if (fornecedor != "")
+                    return true;
+                else
+                    return false;
+            }
+            else if (tipo == 1) {
+                return true;
+            }
+        }, '@PCM.WEB.Properties.Resources.campo_requerido');
+
+        jQuery.validator.addMethod("maxDate", function (value, element) {
+
+            var curDate = new Date();
+            curDate.setHours(0, 0, 0, 0);
+            var from = value.split("/");
+            var inputDate = new Date(from[2], from[1] - 1, from[0]);
+            if (inputDate > curDate) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+
+        }, '');
+
+        jQuery.validator.addMethod("minDate", function (value, element) {
+
+            var curDate = new Date();
+            curDate.setDate(curDate.getDate() - 2);
+            curDate.setHours(0, 0, 0, 0);
+            var from = value.split("/");
+            var inputDate = new Date(from[2], from[1] - 1, from[0]);
+            if (inputDate > curDate) {
+                return this.optional(element) || true;
+            }
+            else {
+                return this.optional(element) || false;
+            }
+        }, '');
+
+        jQuery.validator.addMethod("lessThan", function (value, element, params) {
+
+            var fromCurDate = $(params).val().split("/");
+            var curDate = new Date(fromCurDate[2], fromCurDate[1] - 1, fromCurDate[0]);
+            var fromMinDate = value.split("/");
+            var minDate = new Date(fromMinDate[2], fromMinDate[1] - 1, fromMinDate[0]);
+            if (curDate < minDate) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+        }, '');
+
+        jQuery.validator.addMethod("greaterThan", function (value, element, params) {
+
+            var fromCurDate = $(params).val().split("/");
+            var curDate = new Date(fromCurDate[2], fromCurDate[1] - 1, fromCurDate[0]);
+            var fromMaxDate = value.split("/");
+            var maxDate = new Date(fromMaxDate[2], fromMaxDate[1] - 1, fromMaxDate[0]);
+            if (curDate > maxDate) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+        }, '');
+
+        jQuery.validator.addMethod("greaterThanTime", function (value, element, params) {
+
+            //Data e Hora - Início
+            var fromDataInicio = $(params[0]).val().split("/");
+            var fromHoraInicio = $(params[1]).val().split(":");
+            var dataInicio = new Date(fromDataInicio[2], fromDataInicio[1] - 1, fromDataInicio[0], fromHoraInicio[0], fromHoraInicio[1], 0, 0);
+
+            //Data e Hora - Término
+            var fromDataTermino = $(params[2]).val().split("/");
+            var fromHoraTermino = value.split(":");
+            var dataTermino = new Date(fromDataTermino[2], fromDataTermino[1] - 1, fromDataTermino[0], fromHoraTermino[0], fromHoraTermino[1], 0, 0);
+
+            if (dataInicio > dataTermino) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+        }, '');
+
+        jQuery.validator.addMethod("apontamentoHoras", function (value, element, params) {
+
+            //Data e Hora - Início
+            var fromDataInicio = $(params[0]).val().split("/");
+            var fromHoraInicio = $(params[1]).val().split(":");
+            var dataInicio = new Date(fromDataInicio[2], fromDataInicio[1] - 1, fromDataInicio[0], fromHoraInicio[0], fromHoraInicio[1], 0, 0);
+
+            //Data e Hora - Término
+            var fromDataTermino = $(params[2]).val().split("/");
+            var fromHoraTermino = value.split(":");
+            var dataTermino = new Date(fromDataTermino[2], fromDataTermino[1] - 1, fromDataTermino[0], fromHoraTermino[0], fromHoraTermino[1], 0, 0);
+            var difference = dataTermino - dataInicio;
+
+            if (((difference) / 3600000) > 10) {
+                return this.optional(element) || false;
+            }
+            else {
+                return this.optional(element) || true;
+            }
+        }, '');
+
+        $.validator.addMethod('time', function (value, element, param) {
+            return value == '' || value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
+        }, '@PCM.WEB.Properties.Resources.valida_hora');
+
+        $(function () {
+
+            var unidade = $("#unidade");
+            var setor = $("#setor");
+            var equipamento = $("#equipamento");
+            $('.hora_inicio').clockpicker();
+            $('.hora_termino').clockpicker();
+
+            unidade.change(function () {
+                var request = { "unidade": unidade.val() };
+
+                $.post("LoadCategoria", request, function (obj) {
+                    categoria.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    categria.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        categoria.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadSetor", request, function (obj) {
+                    setor.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    setor.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        setor.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadEquipamento", request, function (obj) {
+                    equipamento.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    equipamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        equipamento.append(option);
+                    });
+                }, "json");
+            });            
+
+        });
+
+        $(function () {
+
+            var unidade = $("#unidade");
+            var setor = $("#setor");
+            var equipamento = $("#equipamento");
+
+            setor.change(function () {
+                var request = { "unidade": unidade.val(), "setor": setor.val() };
+                $.post("LoadEquipamentoSetor", request, function (obj) {
+                    equipamento.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    equipamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        equipamento.append(option);
+                    });
+                }, "json");
+            });
+
+        });
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'categoria': {
+                            categoria: true
+                        },
+                        'tipo_servico': {
+                            required: true
+                        },
+                        'tipo_ordem_servico': {
+                            required: true
+                        },
+                        'funcionario': {
+                            funcionario: true
+                        },
+                        'fornecedor': {
+                            fornecedor: true
+                        },
+                        'descricao_solucao': {
+                            required: true
+                        },
+                        'data_inicio': {
+                            required: true,
+                            maxDate: { maxDate: true },
+                            lessThan: "#data_termino"
+                        },
+                        'hora_inicio': {
+                            required: true,
+                            time: true
+                        },
+                        'data_termino': {
+                            required: true,
+                            maxDate: { maxDate: true },
+                            greaterThan: "#data_inicio"
+                        },
+                        'hora_termino': {
+                            required: true,
+                            time: true,
+                            apontamentoHoras: ["#data_inicio", "#hora_inicio", "#data_termino"],
+                            greaterThanTime: ["#data_inicio", "#hora_inicio", "#data_termino"]
+                        }
+                    },
+                    messages: {
+                        'categoria': {
+                            categoria: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'tipo_servico': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'tipo_ordem_servico': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'funcionario': {
+                            funcionario: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'fornecedor': {
+                            fornecedor: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'descricao_solucao': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'data_inicio': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            maxDate: '@PCM.WEB.Properties.Resources.data_maior_corrente',
+                            lessDate: '@PCM.WEB.Properties.Resources.data_maior_termino'
+                        },
+                        'data_termino': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            maxDate: '@PCM.WEB.Properties.Resources.data_maior_corrente',
+                            greaterThan: '@PCM.WEB.Properties.Resources.data_menor_inicio'
+                        },
+                        'hora_inicio': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'hora_termino': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            apontamentoHoras: '@PCM.WEB.Properties.Resources.diferenca_maior_10',
+                            greaterThanTime: '@PCM.WEB.Properties.Resources.data_menor_inicio'
+                        }
+                    }
+                });
+            };
+        
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            FormValidation.init();
+            Codebase.helpers(['datepicker', 'maxlength']);
+        });
+
+    </script>
+}

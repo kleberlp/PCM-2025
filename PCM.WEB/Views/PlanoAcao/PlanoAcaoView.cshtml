@@ -1,0 +1,218 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.PlanoAcaoApontamento>
+
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">@PCM.WEB.Properties.Resources.plano_acao: @ViewBag.plano_acao.numero_documento</h3>
+                <div class="block-options">
+                   <button type="button" class="btn-block-option" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                </div>
+            </div>
+            <div class="block-content">
+                <!-- Invoice Info -->
+                <div class="row my-20 block-content border">
+
+                    <div class="col-2 text-left">
+                        <img class="img-avatar img-avatar72" src="@Session["imagem_sidebar"]" alt="">
+                    </div>
+
+                    <!-- Company Info -->
+                    <div class="col-5">
+                        <p class="h3">@ViewBag.plano_acao.unidade</p>
+                        <address>
+                            <b>@PCM.WEB.Properties.Resources.solicitante.ToUpper():</b> @ViewBag.plano_acao.solicitante<br>
+                            <b>@PCM.WEB.Properties.Resources.plano_acao: </b>@ViewBag.plano_acao.numero_documento - @ViewBag.plano_acao.data_abertura<br>
+                            <b>@PCM.WEB.Properties.Resources.prioridade: </b>@ViewBag.plano_acao.prioridade<br>
+                            <b>@PCM.WEB.Properties.Resources.departamento: </b>@ViewBag.plano_acao.departamento<br>
+                            <b>@PCM.WEB.Properties.Resources.descricao: </b>@ViewBag.plano_acao.descricao<br>
+
+                        </address>
+                    </div>
+                </div>
+
+                @if (ViewBag.plano_acao.fotos.Count > 0)
+                {
+                    <div class="row my-20 block-content border">
+                        <div class="col-md-9 h3 text-danger">@PCM.WEB.Properties.Resources.descricao.ToUpper(): <span class="h3" style="font-style:italic">@ViewBag.plano_acao.descricao</span></div>
+                        <div class="col-md-3 block">
+                            <div class="block block-rounded border">
+
+                                <div class="block-header block-header-default bg-gd-default">
+                                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.foto</h3>
+                                </div>
+                                @{
+                                    bool image = false;
+                                    bool files = false;
+
+                                    for (int i = 0; i < ViewBag.plano_acao.fotos.Count; i++)
+                                    {
+                                        if (ViewBag.plano_acao.fotos[i].filename.Contains(".jpg") ||
+                                            ViewBag.plano_acao.fotos[i].filename.Contains(".png") ||
+                                            ViewBag.plano_acao.fotos[i].filename.Contains(".jpeg") ||
+                                            ViewBag.plano_acao.fotos[i].filename.Contains(".bmp"))
+                                        {
+                                            image = true;
+                                        }
+                                        else
+                                        {
+                                            files = true;
+                                        }
+                                    }
+                                }
+
+                                @if (image)
+                                {
+                                    <div class="js-slider slick-nav-black slick-nav-hover" data-dots="true" data-arrows="true" data-slides-to-show="1" data-center-mode="true" data-autoplay="true" data-autoplay-speed="3000" id="os_imagem">
+                                        @for (int i = 0; i < ViewBag.plano_acao.fotos.Count; i++)
+                                        {
+                                            if (ViewBag.plano_acao.fotos[i].filename.Contains(".jpg") ||
+                                                ViewBag.plano_acao.fotos[i].filename.Contains(".png") ||
+                                                ViewBag.plano_acao.fotos[i].filename.Contains(".jpeg") ||
+                                                ViewBag.plano_acao.fotos[i].filename.Contains(".bmp"))
+                                            {
+                                                <div class="mt-15">
+                                                    <img class="img-galery" src="@Url.Content(ViewBag.plano_acao.fotos[i].filename)" alt="">
+                                                </div>
+                                            }
+
+                                        }
+                                    </div>
+                                }
+
+                                @if (files)
+                                {
+                                    <div class="table-responsive push">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                @for (int i = 0; i < ViewBag.plano_acao.fotos.Count; i++)
+                                                {
+                                                    if (!ViewBag.plano_acao.fotos[i].filename.Contains(".jpg") &&
+                                                        !ViewBag.plano_acao.fotos[i].filename.Contains(".png") &&
+                                                        !ViewBag.plano_acao.fotos[i].filename.Contains(".jpeg") &&
+                                                        !ViewBag.plano_acao.fotos[i].filename.Contains(".bmp"))
+                                                    {
+                                                        string url = ViewBag.plano_acao.fotos[i].filename;
+                                                        string[] array = url.Split('\\');
+
+                                                        var lastsegment = array[array.Length - 1];
+
+                                                        <tr><td class="text-center"><a target="_blank" href="@Url.Content(ViewBag.plano_acao.fotos[i].filename)">@lastsegment</td></tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="row my-20 block-content border">
+                        <div class="col-md-12 h3 text-danger">@PCM.WEB.Properties.Resources.descricao.ToUpper(): <span class="h3" style="font-style:italic">@ViewBag.plano_acao.descricao</span></div>
+                    </div>
+                }
+                <!-- END Invoice Info -->
+                <!-- Table -->
+
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center" style="width: 50px;"></th>
+                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data</th>
+                            <th>@PCM.WEB.Properties.Resources.executor</th>
+                            <th class="text-center" style="width: 250px;">@PCM.WEB.Properties.Resources.justificativa_apontamento</th>
+                            <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                            <th>@PCM.WEB.Properties.Resources.descricao</th>
+                            <th class="text-center" style="width: 300px;">Imagem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td class="text-center">@Html.DisplayFor(modelItem => item.item)</td>
+                            <td class="text-center">@Html.DisplayFor(modelItem => item.data)</td>
+                            <td>
+                                <p class="font-w600 mb-5">@Html.DisplayFor(modelItem => item.executor)</p>
+                            </td>
+                            @if (item.observacao != "")
+                            {
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.justificativa_apontamento)<br />OBS.: @Html.DisplayFor(modelItem => item.observacao)</td>
+                            }
+                            else
+                            {
+                                <td class="text-center">@Html.DisplayFor(modelItem => item.justificativa_apontamento)</td>
+                            }
+                            <td class="text-center">@Html.DisplayFor(modelItem => item.percentual)</td>
+                            <td class="font-w600 mb-5">@Html.DisplayFor(modelItem => item.descricao)</td>
+                            <td class="text-center">
+                                @if (item.fotos.Count > 0)
+                                {
+                                    <div class="js-slider slick-nav-black slick-nav-hover" data-dots="true" data-arrows="true" data-slides-to-show="1" data-center-mode="true" data-autoplay="true" data-autoplay-speed="3000">
+                                        @for (int i = 0; i < item.fotos.Count; i++)
+                                        {
+                                            <div class="mt-15">
+
+                                                <img class="img-galery" src="@Url.Content(item.fotos[i].filename)" alt="">
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        }
+                        </tbody>
+                        </table>
+                        </div>
+                        <!--END Table-->
+                        <!--Invoice Info-->
+                        <div class= "row my-20 block-content border">
+
+                        <div class= "col-9 text-left">
+                        @*<address>
+                    <b>Km Inicial:</b><br>
+                    <b>Km Final:</b><br>
+                    <b>Km Total:</b><br>
+                </address>*@
+            </div>
+            <div class="col-3 text-center"><br /><br /><br /><br /><div class="font-w700 border-t border-2x col-12">APROVADOR / DATA</div><br /></div>
+            </div>
+            <!-- END Invoice Info -->
+            </div>
+            </div>
+            <!-- END Invoice -->
+            </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+    @Styles.Render("~/Content/slick")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/slick")
+
+    <script>
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2', 'slick']);
+        });
+
+    </script>
+}

@@ -1,0 +1,269 @@
+﻿@model List<PCM.WEB.MODELS.UH>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.uh</a>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistUH", "UH")">@PCM.WEB.Properties.Resources.checklist</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="row">
+
+            @{
+                string additionalClass = ViewBag.statusSelected != null && ViewBag.statusSelected.ToString().Contains("1")
+                    ? "bg-warning-light"
+                    : string.Empty;
+            }
+
+            <div class="col-12 col-sm-12 col-md-12 col-xl-2 col-lg-2">
+                <a class="block block-rounded block-bordered block-link-shadow @additionalClass" href="@Url.Action("ChecklistUH", "UH", new { status = 1, statusSelected = ViewBag.statusSelected })">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-pulse"></i></div>
+                        <div class="font-size-h2 font-w600  text-pulse" data-speed="1000" data-to="@ViewBag.status.quantidade_atrasado" id="pendente" name="pendente">@ViewBag.status.quantidade_atrasado</div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                    </div>
+                </a>
+            </div>
+
+            @{
+                additionalClass = ViewBag.statusSelected != null && ViewBag.statusSelected.ToString().Contains("2")
+                    ? "bg-warning-light"
+                    : string.Empty;
+            }
+
+            <div class="col-12 col-sm-12 col-md-12 col-xl-2 col-lg-2">
+                <a class="block block-rounded block-bordered block-link-shadow @additionalClass" href="@Url.Action("ChecklistUH", "UH", new { status = 2, statusSelected = ViewBag.statusSelected })">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-warning"></i></div>
+                        <div class="font-size-h2 font-w600 text-warning"><span data-speed="1000" data-to="@ViewBag.status.quantidade_pendente" id="atrasado" name="atrasado">@ViewBag.status.quantidade_pendente</span></div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>
+
+            @{
+                additionalClass = ViewBag.statusSelected != null && ViewBag.statusSelected.ToString().Contains("3")
+                    ? "bg-warning-light"
+                    : string.Empty;
+            }
+
+            <div class="col-12 col-sm-12 col-md-12 col-xl-4 col-lg-4">
+                <a class="block block-rounded block-bordered block-link-shadow @additionalClass" href="@Url.Action("ChecklistUH", "UH",  new { status = 3, statusSelected = ViewBag.statusSelected})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-corporate"></i></div>
+                        <div class="font-size-h2 font-w600 text-corporate"><span data-speed="1000" data-to="@ViewBag.status.quantidade_manutencao" id="quantidade_manutencao" name="quantidade_manutencao">@ViewBag.status.quantidade_manutencao</span></div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">Em Manutenção</div>
+                    </div>
+                </a>
+            </div>
+
+            @{
+                additionalClass = ViewBag.statusSelected != null && ViewBag.statusSelected.ToString().Contains("4")
+                    ? "bg-warning-light"
+                    : string.Empty;
+            }
+
+            <div class="col-12 col-sm-12 col-md-12 col-xl-2 col-lg-2 p-15">
+                <a class="block block-rounded block-bordered block-link-shadow @additionalClass" href="@Url.Action("ChecklistUH", "UH",  new { status = 4, statusSelected = ViewBag.statusSelected})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-primary"></i></div>
+                        <div class="font-size-h2 font-w600 text-primary"><span data-speed="1000" data-to="@ViewBag.status.quantidade_nova_vistoria" id="concluido" name="concluido">@ViewBag.status.quantidade_nova_vistoria</span></div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.nova_vistoria</div>
+                    </div>
+                </a>
+            </div>
+
+            @{
+                additionalClass = ViewBag.statusSelected != null && ViewBag.statusSelected.ToString().Contains("5")
+                    ? "bg-warning-light"
+                    : string.Empty;
+            }
+
+            <div class="col-12 col-sm-12 col-md-12 col-xl-2 col-lg-2">
+                <a class="block block-rounded block-bordered block-link-shadow @additionalClass" href="@Url.Action("ChecklistUH", "UH",  new { status = 5, statusSelected = ViewBag.statusSelected})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-success"></i></div>
+                        <div class="font-size-h2 font-w600 text-success"><span data-speed="1000" data-to="@ViewBag.status.quantidade_realizada" id="concluido" name="concluido">@ViewBag.status.quantidade_realizada</span></div>
+                        <div class="font-size-h5 font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="block">
+
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist - @ViewBag.lastUpdate</h3>
+                <div class="block-options">
+                    <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
+                    <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
+                    <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                </div>
+            </div>
+
+            <div class="block-content" id="div_grid" style="display:block">
+                @{
+                    int aux = 0;
+
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+
+                        if (i == 0 || Model[i].unidade != Model[i - 1].unidade)
+                        {
+                            if (i > 0 && aux > 0)
+                            {
+                                @Html.Raw("</div>");
+                                aux = 0;
+                            }
+                            <div class="content-block border-b"></div>
+                            <div class="content-block border-b pt-20">
+                                @if (Session["unidade"] == "")
+                                {<h5 class="font-size-h5">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].unidade)</span></h5>}
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.bloco: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].bloco)</span></h6>
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                            </div>
+
+                        }
+                        else if (Model[i].bloco != Model[i - 1].bloco)
+                        {
+                            if (i > 0 && aux > 0)
+                            {
+                                @Html.Raw("</div>");
+                                aux = 0;
+                            }
+                            <div class="content-block border-b"></div>
+                            <div class="content-block border-b pt-20">
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.bloco: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].bloco)</span></h6>
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                            </div>
+                        }
+                        else if (Model[i].andar != Model[i - 1].andar)
+                        {
+                            if (i > 0 && aux > 0)
+                            {
+                                @Html.Raw("</div>");
+                                aux = 0;
+                            }
+                            <div class="content-block border-b"></div>
+                            <div class="content-block border-b pt-20">
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                            </div>
+                        }
+
+                        if (i == 0 || aux == 0)
+                        {
+                            @Html.Raw("<div class='row mt-20'>");
+                        }
+
+                        aux += 1;
+
+                        if ((int)Model[i].status == 3)
+                        {
+                            <div class="col-md-2 col-xl-1">
+                                <div class="block block-rounded block-bordered block-link-shadow">
+                                    <div class="text-center">
+                                        <i class="fa fa-hotel fa-2x @Model[i].css_class"></i>
+                                        <h6 class="font-w700 mb-5">@Model[i].apartamento</h6>
+                                        <h6 class="mb-5"><small>@Model[i].data_proxima</small></h6>
+                                        <h6 class="mb-5 font-w600"><small class="font-w600 text-danger">@Model[i].room_status</small></h6>
+                                    </div>
+                                </div>
+                            </div>
+
+                            if (i == (Model.Count - 1) || aux == 12)
+                            {
+                                @Html.Raw("</div>");
+                                aux = 0;
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-md-2 col-xl-1">
+                                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ChecklistUHApontamento", "UH", new { codigo_apartamento = @Model[i].codigo_apartamento, codigo_unidade = @Model[i].codigo_unidade, codigo_vistoria = @Model[i].codigo_vistoria, status = @Model[i].status })">
+                                    <div class="text-center">
+                                        <i class="fa fa-hotel fa-2x @Model[i].css_class"></i>
+                                        <h6 class="font-w700 mb-5">@Model[i].apartamento</h6>
+                                        <h6 class="mb-5"><small>@Model[i].data_proxima</small></h6>
+                                        <h6 class="mb-5 font-w600"><small class="font-w600 text-danger">@Model[i].room_status</small></h6>
+                                    </div>
+                                </a>
+                            </div>
+
+                            if (i == (Model.Count - 1) || aux == 12)
+                            {
+                                @Html.Raw("</div>");
+                                aux = 0;
+                            }
+                        }
+
+
+                    }
+                }
+
+            </div>
+
+
+            <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+
+                <div class="block-content block-content-full">
+
+                    <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
+                        <thead class="thead-pcm">
+                            <tr>
+                                @if (Session["unidade"] == "")
+                                {
+                                    <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
+                                }
+                                <th class="text-center">@PCM.WEB.Properties.Resources.bloco</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.andar</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.apartamento</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.data_proxima_vistoria</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.status_uh</th>
+                                <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                    }
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.bloco)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.andar)</td>
+                                    <td class="text-center @item.css_class">@Html.DisplayFor(modelItem => item.apartamento)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.room_status)</td>
+                                    <td class="text-center d-print-none" style="width: 80px;">
+                                        <div class="btn-group">
+                                            @if ((item.status != 3))
+                                            {<a href="@Url.Action("ChecklistUHApontamento", "UH", new { codigo_apartamento = @item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_vistoria = @item.codigo_vistoria, status = @item.status })" class="btn btn-sm btn-secondary"><i class="fa fa-hotel"></i></a>}
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

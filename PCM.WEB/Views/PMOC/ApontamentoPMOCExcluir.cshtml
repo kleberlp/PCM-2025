@@ -1,0 +1,83 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("AgendaPMOC", "PMOC")">@PCM.WEB.Properties.Resources.pmoc</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento_pmoc</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm("ApontamentoPMOCExcluir", "PMOC", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data"  }))        
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="codigo_pmoc_ordem_servico" id="codigo_pmoc_ordem_servico" value="@ViewBag.apontamento.codigo_pmoc_ordem_servico">
+                    <input type="hidden" name="codigo" id="codigo" value="@ViewBag.apontamento.codigo">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.apontamento.codigo_unidade">
+                    <input type="hidden" name="view" id="view" value="@ViewBag.view">
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.deseja_excluir</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.excluir
+                                </button>
+                                <a href="@Url.Action("Agenda", "PCM")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">                             
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.unidade</label>
+                                <div class="col-12">@ViewBag.apontamento.unidade</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.setor</label>
+                                <div class="col-12">@ViewBag.apontamento.setor</div>
+                            </div>                
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.ar_condicionado</label>
+                                <div class="col-12">@ViewBag.apontamento.equipamento</div>
+                            </div>            
+                            @if(@ViewBag.apontamento.funcionario != "")
+                            {
+                                <div class="form-group row">
+                                    <label class="col-12">@PCM.WEB.Properties.Resources.acompanhante</label>
+                                    <div class="col-12">@ViewBag.apontamento.funcionario</div>
+                                </div>                   
+                            }
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.fornecedor</label>
+                                <div class="col-12">@ViewBag.apontamento.fornecedor</div>
+                            </div>                
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label>@PCM.WEB.Properties.Resources.data</label>
+                                    <div>@ViewBag.apontamento.data</div>
+                                </div>
+                            </div>               
+                        </div>                        
+                    </div>
+                }
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

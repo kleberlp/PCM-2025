@@ -1,0 +1,747 @@
+﻿@model List<PCM.WEB.MODELS.PCMCronogramaSemana>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.cronograma_por_semana</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("CronogramaSemana", "PCM", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+            <!-- Collapsible Tasks Navigation -->
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <label for="data">@PCM.WEB.Properties.Resources.unidade</label>
+                                        <div>@Html.DropDownList("unidade", null, null, new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="data">@PCM.WEB.Properties.Resources.tipo</label>
+                                        <div>@Html.DropDownList("tipo_programada", null, null, new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                </div>
+                            <li class="list-group-item text-right">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+
+                <table class="table table-vcenter table-hover table-bordered table-sm table-responsive fc-scrollgrid">
+                    <thead>
+
+                        @{
+                            DateTime currentDate = new DateTime(DateTime.Now.Year, 1, 1);
+                            DateTime dateAux = new DateTime(DateTime.Now.Year, 1, 1);
+                            System.Globalization.DateTimeFormatInfo oDateTimeFormatInfo = System.Globalization.DateTimeFormatInfo.CurrentInfo;
+                            System.Globalization.Calendar oCalendar = oDateTimeFormatInfo.Calendar;
+
+                            <tr class="table-secondary">
+                                <th rowspan="3" class="text-center min-width-20" data-sortable="false"></th>
+                                <th rowspan="3" class="min-width-320">@PCM.WEB.Properties.Resources.descricao</th>
+                                <th rowspan="3" class="min-width-320">@PCM.WEB.Properties.Resources.equipamento</th>
+                                <th rowspan="3" class="min-width-100 text-center">@PCM.WEB.Properties.Resources.prioridade</th>
+                                <th rowspan="3" class="min-width-320">@PCM.WEB.Properties.Resources.setor</th>
+                                <th rowspan="3" class="min-width-100 text-center">@PCM.WEB.Properties.Resources.periodicidade</th>
+                            </tr>
+
+                            <tr class='table-secondary'>
+                                @for (var mes = new DateTime(DateTime.Now.Year, 1, 1).Month; mes <= 12; mes++)
+                                {
+
+                                    var dateStart = new System.DateTime(DateTime.Now.Year, mes, 1);
+                                    int offset = 0;
+
+
+                                    if ((int)dateStart.DayOfWeek == 0)
+                                    {
+                                        offset = 1;
+                                    }
+                                    else if ((int)dateStart.DayOfWeek == 1)
+                                    {
+                                        offset = 0;
+                                    }
+                                    else if ((int)dateStart.DayOfWeek == 2)
+                                    {
+                                        offset = 6;
+                                    }
+                                    else if ((int)dateStart.DayOfWeek == 3)
+                                    {
+                                        offset = 5;
+                                    }
+                                    else if ((int)dateStart.DayOfWeek == 4)
+                                    {
+                                        offset = 4;
+                                    }
+                                    else if ((int)dateStart.DayOfWeek == 5)
+                                    {
+                                        offset = 3;
+                                    }
+                                    else if ((int)dateStart.DayOfWeek == 6)
+                                    {
+                                        offset = 2;
+                                    }
+
+                                    dateStart = dateStart.AddDays(offset);
+                                    int semana = 1;
+
+                                    while (dateStart.AddDays(semana * 7).Month == mes)
+                                    {
+                                        semana = semana + 1;
+                                    }
+
+                                    //int offset = ((weekStart + 7) - weekEnd) % 7;
+                                    string descricao_mes = new DateTime(DateTime.Now.Year, mes, 1).ToString("MMM");
+                                    <th class='text-center' style='width:50px;' colspan="@semana.ToString()">@descricao_mes</th>
+                                }
+                            </tr>
+
+                            <tr class='table-secondary'>
+                                @for (var i = 1; i <= ViewBag.numero_semanas; i++)
+                                {
+                                    <th class='text-center' style='width:50px;'>@i.ToString()</th>
+                                }
+                            </tr>
+
+                        }
+                    </thead>
+                    <tbody>
+                        @{
+
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center min-width-20"><button type="button" class="btn btn-sm btn-secondary" onclick="$('#codigo_unidade').val(@item.codigo_unidade); $('#codigo_tipo_programada').val($('#tipo_programada').val()); $('#codigo_pcm_programada').val(@item.codigo_pcm_programada); jQuery('#modal_semana_start').modal('show');"><i class="fa fa-calendar"></i></button></td>
+                                    <td class="min-width-320">@Html.DisplayFor(modelItem => item.descricao)</td>
+                                    <td class="min-width-320">@Html.DisplayFor(modelItem => item.equipamento)</td>
+                                    <td class="min-width-100 text-center">@Html.DisplayFor(modelItem => item.prioridade)</td>
+                                    <td class="min-width-320">@Html.DisplayFor(modelItem => item.setor)</td>
+                                    <td class="min-width-100 text-center">@Html.DisplayFor(modelItem => item.periodicidade)</td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana1">
+                                            @if (item.semana1 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana1}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana2">
+                                            @if (item.semana2 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana2}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana3">
+                                            @if (item.semana3 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana3}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana4">
+                                            @if (item.semana4 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana4}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana5">
+                                            @if (item.semana5 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana5}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana6">
+                                            @if (item.semana6 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana6}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana7">
+                                            @if (item.semana7 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana7}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana8">
+                                            @if (item.semana8 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana8}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana9">
+                                            @if (item.semana9 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana9}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana10">
+                                            @if (item.semana10 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana10}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana11">
+                                            @if (item.semana11 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana11}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana12">
+                                            @if (item.semana12 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana12}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana13">
+                                            @if (item.semana13 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana13}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana14">
+                                            @if (item.semana14 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana14}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana15">
+                                            @if (item.semana15 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana15}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana16">
+                                            @if (item.semana16 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana16}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana17">
+                                            @if (item.semana17 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana17}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana18">
+                                            @if (item.semana18 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana18}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana19">
+                                            @if (item.semana19 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana19}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana20">
+                                            @if (item.semana20 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana20}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana21">
+                                            @if (item.semana21 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana21}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana22">
+                                            @if (item.semana22 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana22}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana23">
+                                            @if (item.semana23 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana23}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana24">
+                                            @if (item.semana24 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana24}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana25">
+                                            @if (item.semana25 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana25}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana26">
+                                            @if (item.semana26 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana26}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana27">
+                                            @if (item.semana27 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana27}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana28">
+                                            @if (item.semana28 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana28}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana29">
+                                            @if (item.semana29 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana29}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana30">
+                                            @if (item.semana30 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana30}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana31">
+                                            @if (item.semana31 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana31}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana32">
+                                            @if (item.semana32 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana32}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana33">
+                                            @if (item.semana33 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana33}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana34">
+                                            @if (item.semana34 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana34}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana35">
+                                            @if (item.semana35 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana35}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana36">
+                                            @if (item.semana36 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana36}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana37">
+                                            @if (item.semana37 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana37}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana38">
+                                            @if (item.semana38 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana38}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana39">
+                                            @if (item.semana39 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana39}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana40">
+                                            @if (item.semana40 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana40}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana41">
+                                            @if (item.semana41 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana41}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana42">
+                                            @if (item.semana42 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana42}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana43">
+                                            @if (item.semana43 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana43}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana44">
+                                            @if (item.semana44 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana44}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana45">
+                                            @if (item.semana45 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana45}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana46">
+                                            @if (item.semana46 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana46}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana47">
+                                            @if (item.semana47 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana47}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana48">
+                                            @if (item.semana48 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana48}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana49">
+                                            @if (item.semana49 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana49}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana50">
+                                            @if (item.semana50 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana50}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana51">
+                                            @if (item.semana51 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana51}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status-@item.semana52">
+                                            @if (item.semana52 != "")
+                                            {@item.tempo_estimado}
+                                        else
+                                        { @item.semana52}
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+
+                            if (Model.Count > 0)
+                            {
+
+                                <tr>
+                                    <td class="min-width-320" colspan="6">TOTAL</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana1</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana2</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana3</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana4</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana5</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana6</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana7</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana8</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana9</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana10</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana11</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana12</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana13</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana14</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana15</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana16</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana17</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana18</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana19</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana20</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana21</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana22</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana23</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana24</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana25</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana26</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana27</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana28</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana29</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana30</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana31</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana32</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana33</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana34</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana35</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana36</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana37</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana38</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana39</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana40</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana41</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana42</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana43</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana44</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana45</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana46</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana47</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana48</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana49</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana50</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana51</td>
+                                    <td class="text-center font-w600">@Model[Model.Count - 1].total_semana51</td>
+                                </tr>
+
+                            }
+
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@using (Html.BeginForm("CronogramaSemanaData", "PCM", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form_data", @id = "form_data", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <!-- END Main Container -->
+    <!-- From Right Modal -->
+    <div class="modal fade" id="modal_semana_start" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent mb-15">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cronograma_por_semana</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="si si-close font-w600"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full">
+                        <input type="hidden" name="codigo_pcm_programada" id="codigo_pcm_programada" value="" />
+                        <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="" />
+                        <input type="hidden" name="codigo_tipo_programada" id="codigo_tipo_programada" value="" />
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <label for="data">@PCM.WEB.Properties.Resources.semana</label>
+                                <div>@Html.DropDownList("semana", null, null, new { @class = "form-control" })</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="save" id="save"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$('fileInput').val('');;" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- END From Right Modal -->
+}
+
+@section Styles {
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+
+    $("#data").datepicker({
+        format: "mm/yyyy",
+        viewMode: "months",
+        minViewMode: "months"
+    });
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.list-group-item > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'data': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'data': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    // Initialize when page loads
+    jQuery(function () {
+        FormValidation.init();
+        Codebase.helpers(['datepicker', 'select2']);
+    });
+
+    </script>
+}

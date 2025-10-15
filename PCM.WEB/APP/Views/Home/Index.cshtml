@@ -1,0 +1,326 @@
+﻿
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+        @*<div class="row invisible" data-toggle="appear">
+            <!-- Row #1 -->
+            <div class="col-6">
+                <a class="block block-rounded block-bordered block-link-shadow" href="javascript:void(0)">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block">
+                            <i class="fa fa-gear fa-2x text-primary-light"></i>
+                        </div>
+                        <div class="font-size-h3 font-w600 text-primary" data-toggle="countTo" data-speed="1000" data-to="22">0</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">Serviços Pendentes</div>
+                    </div>
+                </a>
+            </div>  
+            <div class="col-6">
+                <a class="block block-rounded block-bordered block-link-shadow" href="javascript:void(0)">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block">
+                            <i class="fa fa-gear fa-2x text-earth-light"></i>
+                        </div>
+                        <div class="font-size-h3 font-w600 text-earth"><span data-toggle="countTo" data-speed="1000" data-to="18">0</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">Serviços Realizados</div>
+                    </div>
+                </a>
+            </div>                     
+            <!-- END Row #1 -->
+        </div>*@
+        <div class="row invisible" data-toggle="appear">
+            <!-- Row #2 -->
+            <div class="col-md-12">
+                <!-- Chart.js Charts (initialized in js/pages/be_comp_charts.js), for more examples you can check out http://www.chartjs.org/docs/ -->
+                <h2 class="content-heading">Indicadores</h2>
+                <div class="row">        
+           
+                    <div class="col-xl-6">
+                        <!-- Bars Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Pendente x Realizado</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                        <i class="si si-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full text-center">
+                                <!-- Bars Chart Container -->
+                                <canvas class="manutencao_pendente_realizado"></canvas>
+                            </div>
+                        </div>
+                        <!-- END Bars Chart -->
+                    </div>
+
+               
+                    <div class="col-xl-6">
+                        <!-- Donut Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Manutenção x Tipo OS</h3>                                
+                            </div>
+                            <div class="block-content block-content-full text-center">
+                                <!-- Donut Chart Container -->
+                                <canvas class="manutencao_tipo_ordem_servico"></canvas>
+                            </div>
+                        </div>
+                        <!-- END Donut Chart -->
+                    </div>
+
+                    <div class="col-xl-12" style="height:300px">
+                        <!-- Donut Chart -->
+                        <div class="block">
+                            <div class="block-header block-header-default">
+                                <h3 class="block-title">Manutenção x Categoria</h3>                                
+                            </div>
+                            <div class="block-content block-content-full text-center">
+                                <!-- Donut Chart Container -->
+                                <canvas class="manutencao_categoria"></canvas>
+                            </div>
+                        </div>
+                        <!-- END Donut Chart -->
+                    </div>
+
+                </div>
+                <!-- END Chart.js Charts -->
+            </div>                        
+            <!-- END Row #2 -->
+        </div>
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/cookie")    
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/bundles/codebase")
+
+    <!-- Page JS Code -->
+    <script>
+
+        var dados_tipo_ordem_servico = [];
+        var label_tipo_ordem_servico = [];
+        var dados_categoria = [];
+        var label_categoria = [];
+
+        var chartManutencaoPendenteRealizado = function () {
+
+            var initChartJS = function () {
+
+                // Get Chart Containers
+                var chartManutencaoPendenteRealizadoCon = jQuery('.manutencao_pendente_realizado');
+
+                // Set Chart and Chart Data variables
+                var chartManutencaoPendenteRealizado;
+
+                // Lines/Bar/Radar Chart Data
+                var chartManutencaoPendenteRealizado = {
+                    labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                    datasets: [
+                        {
+                            label: 'Pendente',
+                            fill: true,
+                            fillColor: "rgba(220,220,220,0.5)",
+                            strokeColor: "rgba(220,220,220,1)",
+                            pointColor: "rgba(220,220,220,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(220,220,220,1)",
+                            data: @ViewBag.ChartPendenteRealizado.pendente
+                        },
+                        {
+                            label: 'Realizado',
+                            fill: true,
+                            backgroundColor: 'rgba(111,171,88,.25)',
+                            borderColor: 'rgba(94,145,66,1)',
+                            pointBackgroundColor: 'rgba(94,145,66,1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(66,165,245,1)',
+                            data: @ViewBag.ChartPendenteRealizado.realizado
+                        }
+                    ]
+                };
+
+                var lineOptions = {
+                    scaleShowGridLines: true,
+                    scaleGridLineColor: "rgba(0,0,0,.05)",
+                    scaleGridLineWidth: 1,
+                    bezierCurve: true,
+                    bezierCurveTension: 0.4,
+                    pointDot: true,
+                    pointDotRadius: 4,
+                    pointDotStrokeWidth: 1,
+                    pointHitDetectionRadius: 20,
+                    datasetStroke: true,
+                    datasetStrokeWidth: 2,
+                    datasetFill: true,
+                    responsive: true,
+                };
+
+
+                // Init Charts
+                if (chartManutencaoPendenteRealizadoCon.length) {
+                    chartManutencaoPendenteRealizado = new Chart(chartManutencaoPendenteRealizadoCon, { type: 'line', data: chartManutencaoPendenteRealizado, options: lineOptions});
+                }
+            };
+
+            return {
+                init: function () {
+
+                    initChartJS();
+                }
+            };
+        }();
+
+        var chartManutencaoTipoOrdemServico = function () {
+
+            var initChartJS = function () {
+
+                // Get Chart Containers
+                var chartManutencaoTipoOrdemServicoCon = jQuery('.manutencao_tipo_ordem_servico');
+
+                // Set Chart and Chart Data variables
+                var chartManutencaoTipoOrdemServico;
+
+                // Donut Data
+                var chartManutencaoTipoOrdemServico = {
+                    labels: ["CHECKLIST", "CORRETIVA", "MELHORIA", "PREDITIVA", "PREVENTIVA"],
+                    datasets: [{
+                        data: @ViewBag.ChartTipoOrdemServico.valor,
+                        backgroundColor: [
+                            'rgba(156,204,101,1)',
+                            'rgba(255,202,40,1)',
+                            'rgba(255,240,245,1)',
+                            'rgba(239,83,80,1)'
+                        ],
+                        hoverBackgroundColor: [
+                            'rgba(156,204,101,.5)',
+                            'rgba(255,202,40,.5)',
+                            'rgba(255,240,245,.5)',
+                            'rgba(239,83,80,.5)'
+                        ]
+                    }]
+                };
+
+                if (chartManutencaoTipoOrdemServicoCon.length) {
+                    chartManutencaoTipoOrdemServico = new Chart(chartManutencaoTipoOrdemServicoCon, { type: 'doughnut', data: chartManutencaoTipoOrdemServico });
+                }
+            };
+
+            return {
+                init: function () {
+
+                    initChartJS();
+                }
+            };
+        }();
+
+        var chartManutencaoCategoria = function () {
+
+            var initChart = function () {
+
+                // Get Chart Containers
+                var chartManutencaoCategoriaCon = jQuery('.manutencao_categoria');
+                
+                // Set Chart and Chart Data variables
+                var chartManutencaoCategoria;
+
+                // ManutencaoCategoria
+                var chartManutencaoCategoria = {
+                    labels: ["REVISAO DE TELEFONE", "APARTAMENTO SEM ENERGIA", "PORTAS DE QUARTOS", "PROBLEMAS COM ILUMINACAO", "BANHEIROS (RALOS, PIAS E BANHEIRAS)", "CHUVEIRO", "AR CONDICIONADOS", "VAZAMENTO", "VASO SANITARIO ENTUPIDO", "PINTURA", "OUTROS", "LIMPEZA E MANUTENCAO"],
+                    datasets: [{
+                        data: @ViewBag.ChartCategoria.valor,
+                        backgroundColor: [
+                            'rgba(160,82,45, 1)',
+                            'rgba(210,105,30, 1)',
+                            'rgba(205,133,63, 1)',
+                            'rgba(244,164,96, 1)',
+                            'rgba(222,184,135, 1)',
+                            'rgba(210,180,140, 1)',
+                            'rgba(188,143,143, 1)',
+                            'rgba(255,228,181, 1)',
+                            'rgba(255,222,173, 1)',
+                            'rgba(255,218,185, 1)',
+                            'rgba(255,228,225, 1)',
+                            'rgba(255,240,245, 1)',
+                            'rgba(250,240,230, 1)',
+                            'rgba(253,245,230, 1)',
+                            'rgba(255,239,213, 1)',
+                            'rgba(255,245,238, 1)',
+                            'rgba(245,255,250, 1)',
+                            'rgba(112,128,144, 1)',
+                            'rgba(119,136,153, 1)',
+                            'rgba(176,196,222, 1)',
+                            'rgba(230,230,250, 1)',
+                            'rgba(255,250,240, 1)',
+                            'rgba(240,248,255, 1)',
+                            'rgba(248,248,255, 1)',
+                            'rgba(240,255,240, 1)',
+                            'rgba(255,255,240, 1)',
+                            'rgba(240,255,255, 1)',
+                            'rgba(255,250,250, 1)'
+                        ],
+                        hoverBackgroundColor: [
+                            'rgba(160,82,45, .5)',
+                            'rgba(210,105,30, .5)',
+                            'rgba(205,133,63, .5)',
+                            'rgba(244,164,96, .5)',
+                            'rgba(222,184,135, .5)',
+                            'rgba(210,180,140, .5)',
+                            'rgba(188,143,143, .5)',
+                            'rgba(255,228,181, .5)',
+                            'rgba(255,222,173, .5)',
+                            'rgba(255,218,185, .5)',
+                            'rgba(255,228,225, .5)',
+                            'rgba(255,240,245, .5)',
+                            'rgba(250,240,230, .5)',
+                            'rgba(253,245,230, .5)',
+                            'rgba(255,239,213, .5)',
+                            'rgba(255,245,238, .5)',
+                            'rgba(245,255,250, .5)',
+                            'rgba(112,128,144, .5)',
+                            'rgba(119,136,153, .5)',
+                            'rgba(176,196,222, .5)',
+                            'rgba(230,230,250, .5)',
+                            'rgba(255,250,240, .5)',
+                            'rgba(240,248,255, .5)',
+                            'rgba(248,248,255, .5)',
+                            'rgba(240,255,240, .5)',
+                            'rgba(255,255,240, .5)',
+                            'rgba(240,255,255, .5)',
+                            'rgba(255,250,250, .5)'
+                        ]
+                    }]
+                };
+
+                if (chartManutencaoCategoriaCon.length) {
+                    chartManutencaoCategoria = new Chart(chartManutencaoCategoriaCon, { type: 'pie', data: chartManutencaoCategoria });
+                }
+            };
+
+            return {
+                init: function () {
+
+                    // Init Chart.js Charts
+                    initChart();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            chartManutencaoPendenteRealizado.init();
+            chartManutencaoTipoOrdemServico.init();
+            chartManutencaoCategoria.init();
+        });
+
+    </script>
+}

@@ -1,0 +1,323 @@
+﻿@model PCM.WEB.MODELS.GovernancaStatusUH
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.governanca</span>
+                <a class="breadcrumb-item" active>@PCM.WEB.Properties.Resources.status_uh</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("StatusUH", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="type" name="type" value="arquivo" />
+                    <input type="hidden" id="details" name="details" value="" />
+                    <input type="hidden" id="empresa" name="empresa" value="@ViewBag.codigoEmpresa" />
+                    <input type="hidden" id="usuario" name="usuario" value="@User.Identity.Name.ToString()" />
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.status_uh</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="$('#type').val('save'); $('#form').submit();">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-7">
+                                    <label>@PCM.WEB.Properties.Resources.arquivo</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                        <label class="custom-file-label" for="arquivo"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.planilha</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="planilha" name="planilha" value="RELATÓRIO" maxlength="20">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-upload mr-5" id="btnUpload" name="btnUpload" disabled></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Table Full Pagination -->
+                    <div class="block block-rounded border" id="div_result">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">Lista de Apartamentos</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+
+                            <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                            <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full" id="tableMain">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>@PCM.WEB.Properties.Resources.bloco</th>
+                                        <th>@PCM.WEB.Properties.Resources.andar</th>
+                                        <th>@PCM.WEB.Properties.Resources.apartamento </th>
+                                        <th>Status UH</th>
+                                        <th>Status Gov</th>
+                                        <th>Status UH</th>
+                                        <th>Status Gov</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Table Full Pagination -->
+                    <div class="block block-rounded border" id="div_error">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">Lista de Erros</h3>
+                        </div>
+
+                        <div class="block-content block-content-full">
+
+                            <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                            <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full" id="tableError">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>@PCM.WEB.Properties.Resources.produto</th>
+                                        <th>Erro</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+
+    var jsonData = [];
+    var jsonDataError = [];
+    var register = 0;
+    var table;
+    var tableError;
+
+    $(function () {
+
+        $(".custom-file-input").on('change', function () {
+            var filename = document.getElementById("arquivo").files[0].name;
+            $(this).next(".custom-file-label").addClass("selected").html(filename);
+        });
+
+        //$("#div_result").hide();
+        //$("#div_error").hide();
+
+        var unidade = $("#unidade");
+        var arquivo = $("#arquivo");
+        var planilha = $("#planilha");
+
+        unidade.change(function () {
+
+            if (unidade.val() != "" && arquivo.val() != "" && planilha.val() != "") {
+                $("#btnUpload").prop('disabled', false);
+            } else {
+                $("#btnUpload").prop('disabled', true);
+            }
+
+        });
+
+        arquivo.change(function () {
+
+            if (unidade.val() != "" && arquivo.val() != "" && planilha.val() != "") {
+                $("#btnUpload").prop('disabled', false);
+            } else {
+                $("#btnUpload").prop('disabled', true);
+            }
+
+        });
+
+        planilha.change(function () {
+
+            if (unidade.val() != "" && arquivo.val() != "" && planilha.val() != "") {
+                $("#btnUpload").prop('disabled', false);
+            } else {
+                $("#btnUpload").prop('disabled', true);
+            }
+
+        });
+
+        planilha.keypress(function () {
+
+            if (unidade.val() != "" && arquivo.val() != "" && planilha.val() != "") {
+                $("#btnUpload").prop('disabled', false);
+            } else {
+                $("#btnUpload").prop('disabled', true);
+            }
+
+        });
+
+        $('#btnUpload').on('click', function () {
+
+            uploadFile();
+
+        });
+
+        table = $('#tableMain').DataTable({
+            lengthChange: false,
+            pageLength: 15,
+            processing: true,
+            scrollX: false,
+            scrollCollapse: true,
+            serverSide: false,
+            data: jsonData,
+            columns: [
+                { data: "bloco" },
+                { data: "andar" },
+                { data: "apartamento" },
+                { data: "statusUH" },
+                { data: "statusGov" },
+                { data: "newStatusGov" },
+                { data: "newStatusUH" }
+            ],
+            language: {
+                emptyTable: "Nenhum registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+            },
+            order: [[0, 'asc']],
+            columnDefs: [
+                { className: 'text-center', targets: [0, 1, 2, 3, 4, 5, 6] }
+            ],
+        });
+
+        tableError = $('#tableError').DataTable({
+            lengthChange: false,
+            pageLength: 15,
+            processing: true,
+            scrollX: false,
+            scrollCollapse: true,
+            serverSide: false,
+            data: jsonDataError,
+            columns: [
+                { data: "apartamento" },
+                { data: "erro" }
+            ],
+            language: {
+                emptyTable: "Nenhum registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+            },
+            order: [[0, 'asc']],
+            columnDefs: [
+                { className: 'text-center', targets: [0] },
+                { width: '200px', targets: [0] }
+            ],
+        });
+
+    });
+
+    function uploadFile() {
+
+        // Pegar o arquivo do input
+        var fileInput = $('#arquivo')[0].files[0];
+
+        // Verifica se um arquivo foi selecionado
+        if (!fileInput) {
+            Swal.fire('Erro', 'Por favor, selecione um arquivo.', 'error');
+            return;
+        }
+
+        // Criar um objeto FormData
+        var formData = new FormData();
+        formData.append('arquivo', fileInput);
+        formData.append('codigoEmpresa', @ViewBag.codigoEmpresa);
+        formData.append('codigoUnidade', $("#unidade").val());
+        formData.append('planilha', $("#planilha").val());
+
+        // Exibe o SweetAlert2 de loading
+        Swal.fire({
+            title: 'Carregando...',
+            html: '<i class="la la-refresh text-secondary la-spin progress-icon-spin"></i>',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Envio Ajax
+        $.ajax({
+            url: "UploadStatusUH",
+            type: 'POST',
+            data: formData,
+            processData: false, // Não processar os dados
+            contentType: false, // Definir como falso para enviar o multipart/form-data corretamente
+            success: function (response) {
+                if (response.success) {
+                    Swal.close();
+                    jsonData = response.result;
+                    table.clear().rows.add(jsonData).draw();
+                    jsonDataError = response.resultError;
+                    tableError.clear().rows.add(jsonDataError).draw();
+                    $("#details").val(JSON.stringify(jsonData));
+                    $("#div_result").show();
+                    $("#div_error").show();
+                    table.columns.adjust().draw();
+                    tableError.columns.adjust().draw();
+
+                } else {
+                    Swal.close(); // Fecha o alert de loading
+                    Swal.fire('Erro', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Erro', xhr.responseJSON.message, 'error');
+            }
+        });
+    }
+
+    </script>
+
+}

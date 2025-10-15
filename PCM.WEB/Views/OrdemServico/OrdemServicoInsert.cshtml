@@ -1,0 +1,432 @@
+﻿    
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("OrdemServicoIndex2", "OrdemServico")">@PCM.WEB.Properties.Resources.ordem_servico</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.inserir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm("OrdemServicoInsert", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id="form" , enctype = "multipart/form-data"  }))        
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadastrar</h3>
+                            <div class="block-options">
+                                <button type="button" onclick="$('#btnSave').hide(); $('#form').submit();" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full"> 
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.unidade</label>
+                                <div class="col-12">@Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })</div>
+                            </div>   
+                            <div class="form-group row">                                
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.prazo_execucao</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.prioridade</label>
+                                    <div>@Html.DropDownList("prioridade", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </div> 
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.setor</label>
+                                <div class="col-12">@Html.DropDownList("setor", null, "", new { @class = "js-select2 form-control", @id="setor" })</div>
+                            </div>                
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.apartamento</label>
+                                <div class="col-12">@Html.DropDownList("apartamento", null, "", new { @class = "js-select2 form-control" })</div>
+                            </div>                     
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.equipamento</label>
+                                <div class="col-12">@Html.DropDownList("equipamento", null, "", new { @class = "js-select2 form-control"})</div>
+                            </div>            
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.descricao</label>
+                                <div class="col-12"><textarea class="form-control" id="descricao" name="descricao" maxlength="5000" rows="6"></textarea></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
+                                <div class="col-12">
+                                    <div class="custom-file">                                        
+                                        <input type="file" class="custom-file-input" id="fileInput" name="fileInput" onchange="Arquivo();" accept="image/*">
+                                        <label id="lblArquivo" class="custom-file-label" for="imagem">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    
+    <script>
+
+        function Arquivo() {
+            document.getElementById("lblArquivo").textContent = document.getElementById("fileInput").files[0].name;
+        }
+
+        $(function () {
+
+            var unidade = $("#unidade");
+            var setor = $("#setor");
+            var equipamento = $("#equipamento");
+            var prioridade = $("#prioridade");
+            var apartamento = $("#apartamento");
+            $.ajaxSetup({ async: false });
+
+
+            if (unidade.val() == "" || unidade.val() == "-1") {
+                setor.prop("disabled", true);
+                prioridade.prop("disabled", true);
+                apartamento.prop("disabled", true);
+                equipamento.prop("disabled", true);
+                prioridade.select2({ placeholder: '@PCM.WEB.Properties.Resources.prioridade', allowClear: true });
+                setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+                apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
+                equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
+            }
+
+            if (setor.val() == "") {
+                apartamento.prop("disabled", true);
+                equipamento.prop("disabled", true);
+                apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
+                equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+                    setor.empty();
+                    prioridade.empty();
+                    apartamento.empty();
+                    equipamento.empty();
+                    setor.prop("disabled", true);
+                    prioridade.prop("disabled", true);
+                    apartamento.prop("disabled", true);
+                    equipamento.prop("disabled", true);
+                    prioridade.select2({ placeholder: '@PCM.WEB.Properties.Resources.prioridade', allowClear: true });
+                    setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+                    apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
+                    equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
+
+                } else {
+
+                    var request = { "unidade": unidade.val() };
+
+                    $.post("LoadPrioridade", request, function (obj) {
+                        prioridade.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        prioridade.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            prioridade.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadSetor", request, function (obj) {
+                        setor.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        setor.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            setor.append(option);
+                        });
+                    }, "json");
+
+                    prioridade.prop("disabled", false);
+                    setor.prop("disabled", false);
+                    prioridade.select2({ placeholder: '@PCM.WEB.Properties.Resources.prioridade', allowClear: true });
+                    setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+
+                }
+
+            });
+
+            setor.change(function () {
+
+                if (setor.val() == "") {
+                    apartamento.empty();
+                    equipamento.empty();
+                    apartamento.empty();
+                    equipamento.empty();
+                    apartamento.prop("disabled", true);
+                    equipamento.prop("disabled", true);
+                    apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
+                    equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
+                }
+                else {
+
+                    var request = { "unidade": unidade.val(), "setor": setor.val() };
+                    $.post("LoadEquipamentoSetor", request, function (obj) {
+                        equipamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        equipamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            equipamento.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadApartamento", request, function (obj) {
+                        apartamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        apartamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            apartamento.append(option);
+                        });
+                    }, "json");
+
+                    apartamento.prop("disabled", false);
+                    equipamento.prop("disabled", false);
+                    apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
+                    equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
+                }
+                
+            });
+
+            apartamento.change(function () {
+
+                if (apartamento.val() == "") {
+
+                    var request = { "unidade": unidade.val(), "setor": setor.val() };
+                    $.post("LoadEquipamentoSetor", request, function (obj) {
+                        equipamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        equipamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            equipamento.append(option);
+                        });
+                    }, "json");
+
+                }
+                else {
+
+                    var request = { "unidade": unidade.val(), "apartamento": apartamento.val() };
+                    $.post("LoadEquipamentoApartamento", request, function (obj) {
+                        equipamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        equipamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            equipamento.append(option);
+                        });
+                    }, "json");
+                }
+            });
+
+        });
+
+        jQuery.validator.addMethod("minDate", function (value, element) {
+
+            if('@ViewBag.administrador' == 'True')
+            {
+                return this.optional(element) || true;
+            } else {
+                var curDate = new Date();
+                curDate.setDate(curDate.getDate());
+                curDate.setHours(0, 0, 0, 0);
+                var from = value.split("/");
+                var inputDate = new Date(from[2], from[1] - 1, from[0]);
+                if (inputDate >= curDate) {
+                    return this.optional(element) || true;
+                }
+                else {
+                    return this.optional(element) || false;
+                }
+            }
+        }, '');
+
+        jQuery.validator.addMethod("validate_ordem_servico", function (value, element) {          
+
+            if (value == "") {
+                return true
+            } else {
+
+                var dataString = {
+                    "unidade": ($("#unidade").val() == "") ? "-1" : $("#unidade").val(),
+                    "equipamento": value
+                };
+
+                var result = false;
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "ValidateOrdemServico",
+                    async: false,
+                    data: dataString,
+                    dataType: "json",
+                    success: function (return_data) {
+                        if (return_data == false) {
+                            result = false;
+                        } else if (return_data == true) {
+                            result = true;
+                        }
+                    }
+                });
+
+                return result;
+
+            }
+
+        }, "");
+
+        $('#form').validate({
+            ignore: [],
+            errorClass: 'invalid-feedback animated fadeInDown',
+            errorElement: 'div',
+            errorPlacement: function (error, e) {
+                jQuery(e).parents('.form-group > div').append(error);
+                $('#btnSave').show(); 
+            },
+            highlight: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+            },
+            success: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                jQuery(e).remove();
+            },
+            rules: {
+                'unidade': {
+                    required: true
+                },
+                'data': {
+                    required: true,
+                    minDate: { minDate: true }
+                },
+                'prioridade': {
+                    required: true
+                },
+                'setor': {
+                    required: true
+                },
+                'descricao': {
+                    required: true
+                },
+                'equipamento': {
+                    validate_ordem_servico: true
+                }
+            },
+            messages: {
+                'unidade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'data': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                    minDate: '@PCM.WEB.Properties.Resources.data_menor_permitida'
+                },
+                'prioridade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'setor': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'descricao': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'equipamento': {
+                    validate_ordem_servico: '@PCM.WEB.Properties.Resources.ar_condicionado_nao_associado'
+                }
+            },
+            submitHandler: function (form) {
+                $('#btnSave').hide();
+                var unidade = $("#unidade");
+                var data = $("#data");
+                var prioridade = $("#prioridade");
+                var descricao = $("#descricao");
+                var setor = $("#setor");
+                var equipamento = $("#equipamento");
+                var apartamento = $("#apartamento");
+
+                var formdata = new FormData();
+                var oFile = document.getElementById("fileInput");
+
+                for (i = 0; i < oFile.files.length; i++) {
+                    formdata.append(oFile.files[i].name, fileInput.files[i]);
+                }
+
+                //Creating an XMLHttpRequest and sending
+                var oXMLHttpRequest = new XMLHttpRequest();
+                oXMLHttpRequest.open('POST', 'InsertOrdemServico?unidade=' + unidade.val() +
+                    '&data=' + data.val() +
+                    '&prioridade=' + prioridade.val() +
+                    '&descricao=' + descricao.val() +
+                    '&setor=' + setor.val() +
+                    '&equipamento=' + equipamento.val() +
+                    '&apartamento=' + apartamento.val());
+                oXMLHttpRequest.send(formdata);
+                oXMLHttpRequest.onreadystatechange = function () {
+
+                    if (oXMLHttpRequest.readyState == 4 && oXMLHttpRequest.status == 200) {
+
+                        swal.fire({
+                            title: oXMLHttpRequest.response,
+                            text: 'Ordem de Serviço gerada com Sucesso!',
+                            type: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: 'OK',
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }).then(function (result) {
+                            if (result.value) {
+                                window.location.href = "OrdemServicoIndex2";
+                            }
+                        });
+
+                    }
+                }
+
+                return false;
+            }
+        });
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+    </script>
+}

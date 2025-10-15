@@ -1,0 +1,425 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.relatorio_horas_trabalhadas_governanca</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("FuncionarioHorasTrabalhadasGovernanca", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+        <div>
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+            <!-- Collapsible Tasks Navigation -->
+            <div class="js-tasks-nav d-none d-md-block">
+                <!-- Tasks Info -->
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-3">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>
+                                    <div class="col-md-3">@Html.DropDownList("funcionario", null, PCM.WEB.Properties.Resources.funcionario, new { @class = "form-control" })</div>
+                                    <div class="col-md-2">@Html.DropDownList("ativo", null, PCM.WEB.Properties.Resources.ativo, new { @class = "form-control" })</div>
+                                    <div class="col-md-2">@Html.DropDownList("ano", null, PCM.WEB.Properties.Resources.ano, new { @class = "form-control" })</div>
+                                    <div class="col-md-2">@Html.DropDownList("horasFaltas", null, PCM.WEB.Properties.Resources.filtro, new { @class = "form-control" })</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                @if (ViewBag.imprimir)
+                                {
+                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- END Tasks Info -->
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+            <div class="block block-rounded border">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.relatorio_horas_trabalhadas_governanca</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option text-dark font-w600" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                    </div>
+                </div>
+
+                <div class="block-content block-content-full border">
+
+                    <!-- Table -->
+                    <div class="table-responsive table-sm push">
+
+                        <table class="table table-bordered nowrap" id="tableMain" name="tableMain">
+                            <thead>
+                                <tr class="table-secondary font-size-sm">
+                                    <th class="border text-center"></th>
+                                    <th rowspan="2" class="border table-secondary">@PCM.WEB.Properties.Resources.funcionario</th>
+                                    <th colspan="2" class="border text-center">Jan.</th>
+                                    <th colspan="2" class="border text-center">Fev.</th>
+                                    <th colspan="2" class="border text-center">Mar.</th>
+                                    <th colspan="2" class="border text-center">Abr.</th>
+                                    <th colspan="2" class="border text-center">Mai.</th>
+                                    <th colspan="2" class="border text-center">Jun.</th>
+                                    <th colspan="2" class="border text-center">Jul.</th>
+                                    <th colspan="2" class="border text-center">Ago.</th>
+                                    <th colspan="2" class="border text-center">Set.</th>
+                                    <th colspan="2" class="border text-center">Out.</th>
+                                    <th colspan="2" class="border text-center">Nov.</th>
+                                    <th colspan="2" class="border text-center">Dez.</th>
+                                    <th colspan="2" class="border text-center">Total</th>
+                                </tr>
+                                <tr class="table-secondary font-size-sm">
+                                    <th></th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                    <th>Horas</th>
+                                    <th>Faltas</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font-size-sm">
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+            }
+
+        </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css">
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/chart")
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            var table = $('#tableMain').DataTable({
+                searching: false,
+                lengthChange: false,
+                paging: false,
+                processing: true,
+                serverSide: false,
+                scrollY: '50vh',
+                scrollCollapse: true,
+                fixedHeader: true,
+                sorting: false,
+                fixedColumns: {
+                    leftColumns: 1,
+                    rightColumns: 0
+                },
+                ajax: {
+                    url: "LoadFuncionarioHorasTrabalhadasGovernanca",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.unidade = ($('#unidade').val() == "") ? "-1" : $("#unidade").val(),
+                            d.funcionario = ($('#funcionario').val() == "") ? "-1" : $("#funcionario").val(),
+                            d.ativo = ($('#ativo').val() == "") ? "-1" : $("#ativo").val(),
+                            d.ano = $('#ano').val()
+                    },
+                    dataSrc: ""
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'copy', text: 'Copiar' },
+                    { extend: 'print', text: 'Imprimir' },
+                    { extend: 'excel' },
+                    { extend: 'pdf', orientation: 'landscape' },
+                ],
+                columns: [
+                    { data: "sequence", visible: false },
+                    { data: "funcionario"},
+                    {
+                        data: "janeiroHoras",
+                        render: function (data, type, row) {
+                            if (row.janeiroHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/01/' + $("#ano").val() + '" target="_blank">' + row.janeiroHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.janeiroHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "janeiroFaltas" },
+                    {
+                        data: "fevereiroHoras",
+                        render: function (data, type, row) {
+                            if (row.fevereiroHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/02/' + $("#ano").val() + '" target="_blank">' + row.fevereiroHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.fevereiroHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "fevereiroFaltas" },
+                    {
+                        data: "marcoHoras",
+                        render: function (data, type, row) {
+                            if (row.marcoHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/03/' + $("#ano").val() + '" target="_blank">' + row.marcoHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.marcoHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "marcoFaltas" },
+                    {
+                        data: "abrilHoras",
+                        render: function (data, type, row) {
+                            if (row.abrilHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/04/' + $("#ano").val() + '" target="_blank">' + row.abrilHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.abrilHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "abrilFaltas" },
+                    {
+                        data: "maioHoras",
+                        render: function (data, type, row) {
+                            if (row.maioHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/05/' + $("#ano").val() + '" target="_blank">' + row.maioHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.maioHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "maioFaltas" },
+                    {
+                        data: "junhoHoras",
+                        render: function (data, type, row) {
+                            if (row.junhoHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/06/' + $("#ano").val() + '" target="_blank">' + row.junhoHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.junhoHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "junhoFaltas" },
+                    {
+                        data: "julhoHoras",
+                        render: function (data, type, row) {
+                            if (row.julhoHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/07/' + $("#ano").val() + '" target="_blank">' + row.julhoHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.julhoHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "julhoFaltas" },
+                    {
+                        data: "agostoHoras",
+                        render: function (data, type, row) {
+                            if (row.agostoHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/08/' + $("#ano").val() + '" target="_blank">' + row.agostoHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.agostoHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "agostoFaltas" },
+                    {
+                        data: "setembroHoras",
+                        render: function (data, type, row) {
+                            if (row.setembroHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/09/' + $("#ano").val() + '" target="_blank">' + row.setembroHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.setembroHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "setembroFaltas" },
+                    {
+                        data: "outubroHoras",
+                        render: function (data, type, row) {
+                            if (row.outubroHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/10/' + $("#ano").val() + '" target="_blank">' + row.outubroHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.outubroHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "outubroFaltas" },
+                    {
+                        data: "novembroHoras",
+                        render: function (data, type, row) {
+                            if (row.novembroHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/11/' + $("#ano").val() + '" target="_blank">' + row.novembroHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.novembroHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "novembroFaltas" },
+                    {
+                        data: "dezembroHoras",
+                        render: function (data, type, row) {
+                            if (row.dezembroHoras != "0:00" && row.funcionario != "TOTAL") {
+                                return '<a href="../Governanca/GovernancaApontamento?codigoUnidade=' + row.codigoUnidade + '&codigoFuncionario=' + row.codigoFuncionario + '&data=01/12/' + $("#ano").val() + '" target="_blank">' + row.dezembroHoras + '</a>';
+                            } else if (row.funcionario == "TOTAL") {
+                                return row.dezembroHoras;
+                            } else {
+                                return "0:00";
+                            }
+                        }
+                    },
+                    { data: "dezembroFaltas" },
+                    { data: "totalHoras" },
+                    { data: "totalFaltas" }
+                ],
+                language: {
+                    emptyTable: "Nenhum registro encontrado",
+                    info: "",
+                    infoEmpty: "",
+                    infoFiltered: "",
+                },
+                columnDefs: [
+                    { className: 'text-center', targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
+                    //{ width: '60px', targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
+                    //{ width: '250px', targets: [1] },
+                    { orderable: false, targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
+                    {
+                        targets: [26, 27],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).addClass('bg-warning-light font-w600 text-dark text-center');
+                        }
+                    },
+                    {
+                        targets: [1],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            if (row.funcionario == "TOTAL") {
+                                $(td).addClass('bg-warning-light font-w600 text-dark text-center');
+                            } else {
+                                $(td).addClass("bg-danger-light font-w600 text-dark");
+                            }
+                        }
+                    }
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if (data.funcionario === 'TOTAL') {
+                        $(row).addClass('bg-warning-light font-w600 text-dark'); // Aplica uma classe personalizada
+                    }
+                }
+            });
+
+            function updateColumnVisibility() {
+
+                let horasFaltas = $("#horasFaltas").val(); 
+
+                [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27].forEach(function (columnIndex) {
+                    let column = table.column(columnIndex);
+                    if (columnIndex % 2 == 0) {
+                        if (horasFaltas !== "0") {
+                            column.visible(true);
+                        } else {
+                            column.visible(false);
+                        }
+                    } else {
+                        if (horasFaltas !== "1") {
+                            column.visible(true);
+                        } else {
+                            column.visible(false);
+                        }
+                    }
+                });
+
+                // Adjust column widths and redraw table
+                table.columns.adjust().draw(false);
+            }
+
+            updateColumnVisibility();
+
+            $('#filtrar').click(function () {
+                table.ajax.reload(null, false);
+                updateColumnVisibility();
+                table.columns.adjust().draw(true);
+            });
+
+        });
+
+    </script>
+}

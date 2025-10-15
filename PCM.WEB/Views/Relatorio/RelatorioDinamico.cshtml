@@ -1,0 +1,276 @@
+﻿@model List<PCM.WEB.MODELS.RelatorioAuditoriaDataValor>
+
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("RelatorioDinamico", "Relatorio", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+<div class="page landscape-parent">
+
+            <div class="block d-print-normal p-10 m-10" style="display:none">
+                <div class="form-row">
+                    <div class="col-3">
+                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
+                    </div>
+                    <div class="col-6 text-center">
+                        <label class="h2">Relatório de Itens Auditáveis</label>
+                    </div>
+                </div>
+                <hr />
+            </div>
+
+            <div class="col-md-12 col-xl-12">
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-6 col-lg-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                                <div class="input-group-prepend input-group-append">
+                                                    <span class="input-group-text font-w600">-</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-lg-4">@Html.DropDownList("relatorio_itens_auditaveis", null, PCM.WEB.Properties.Resources.relatorio, new { @class = "form-control js-select2" })</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right d-print-none">
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="Codebase.helpers('print-page');"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+                <div class="block">
+
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">Itens Auditáveis</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option text-dark font-w600" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                        </div>
+                    </div>
+
+                    <div class="block-content">
+
+                        <!-- Table -->
+                        <div class="table-responsive table-sm push">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th class="text-md-center v-center col-md-1" style="width: 80px;" rowspan="3">@PCM.WEB.Properties.Resources.data</th>
+                                        @foreach (var item in ViewBag.informacao)
+                                        {
+                                            <th colspan="2" class="text-md-center">@item.checklist</th>
+                                        }
+                                    </tr>
+                                    <tr class="table-secondary">
+                                        @foreach (var item in ViewBag.informacao)
+                                        {
+                                            if (item.codigo_tipo_item_checklist == 2)
+                                            {
+                                                <th colspan="2" class="text-md-center">@item.tipo_item_checklist</th>
+                                            }
+                                            else
+                                            {
+                                                <th colspan="2" rowspan="2" class="text-md-center">@item.tipo_item_checklist</th>
+                                            }
+
+                                        }
+                                    </tr>
+                                    <tr class="table-secondary">
+                                        @foreach (var item in ViewBag.informacao)
+                                        {
+                                            if (item.codigo_tipo_item_checklist == 2)
+                                            {
+                                                <th class="text-md-center">@item.valor_minimo</th>
+                                                <th class="text-md-center">@item.valor_maximo</th>
+                                            }
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.informacao.Count > 0)
+                                    {
+
+                                        for (int i = 0; i < Model.Count; i += ViewBag.informacao.Count)
+                                        {
+                                            <tr class='text-md-center'>
+                                                <td class='text -md-center font-w600' style='width: 80px'>@Model[i].data</td>
+
+                                                @for (int j = 0; j < ViewBag.informacao.Count; j++)
+                                                {
+
+                                                    if ((i + j) < Model.Count)
+                                                    {
+
+                                                        if (Model[i + j].codigo_tipo_item != 2)
+                                                        {
+                                                            if (Model[i + j].observacao != "")
+                                                            {
+                                                                <td class="text-md-center" colspan="2" data-toggle="popover" title="@PCM.WEB.Properties.Resources.observacao" data-content="@Model[i + j].observacao" data-placement="bottom">@Model[i + j].resultado @Model[i + j].unidade_medida</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-md-center" colspan="2">@Model[i + j].resultado @Model[i + j].unidade_medida</td>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+
+                                                            if (Model[i + j].observacao != "")
+                                                            {
+                                                                <td colspan="2" class="@Model[i + j].css_class d-print-table-cell" data-toggle="popover" title="@PCM.WEB.Properties.Resources.observacao" data-content="@Model[i + j].observacao" data-placement="bottom">@Model[i + j].resultado @Model[i + j].unidade_medida</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td colspan="2" class="@Model[i + j].css_class d-print-table-cell">@Model[i + j].resultado @Model[i + j].unidade_medida</td>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            </tr>
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Table -->
+
+                    </div>
+
+                </div>
+
+            </div>
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+
+    $(function () {
+
+        $.ajaxSetup({ async: false });
+
+        var unidade = $("#unidade")
+        var relatorio_itens_auditaveis = $("#relatorio_itens_auditaveis");
+        relatorio_itens_auditaveis.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.relatorio' });
+
+        $("#data_inicio").mask("99/99/9999");
+        $("#data_termino").mask("99/99/9999");
+
+        unidade.change(function () {
+
+            var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
+
+            $.post("LoadRelatorioItensAuditaveis", request, function (obj) {
+                relatorio_itens_auditaveis.empty();
+                option = $("<option>", { "value": "" }).text("");
+                relatorio_itens_auditaveis.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    relatorio_itens_auditaveis.append(option);
+                });
+            }, "json");
+
+        });
+
+    });
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.list-group-item > .row > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'data_inicio': {
+                        required: true
+                    },
+                    'data_termino': {
+                        required: true
+                    },
+                    'relatorio_itens_auditaveis': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'data_inicio': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    },
+                    'data_termino': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    },
+                    'relatorio_itens_auditaveis': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    // Initialize when page loads
+    jQuery(function () {
+        FormValidation.init();
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+    });
+
+    </script>
+}

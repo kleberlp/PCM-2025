@@ -1,0 +1,138 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.PMOCUnidade>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="#">@PCM.WEB.Properties.Resources.pmoc</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento_pmoc</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+
+    <!-- Page Content -->
+    <div class="content">   
+
+        <div class="row">
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC", "PMOC",  new { status = 3})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-snowflake-o fa-2x text-pulse"></i></div>
+                        <div class="font-size-h5 font-w600 text-pulse" data-speed="1000" data-to="@ViewBag.status.quantidade_atrasado" id="quantidade_atrasado" name="quantidade_atrasado">@ViewBag.status.quantidade_atrasado</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                    </div>
+                </a>
+            </div>  
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC", "PMOC",  new { status = 1})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-snowflake-o fa-2x text-warning"></i></div>
+                        <div class="font-size-h5 font-w600 text-warning" data-speed="1000" data-to="@ViewBag.status.quantidade_pendente" id="quantidade_pendente" name="quantidade_pendente">@ViewBag.status.quantidade_pendente</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>  
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC", "PMOC",  new { status = 4})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-snowflake-o fa-2x text-primary"></i></div>
+                        <div class="font-size-h5 font-w600 text-primary" data-speed="1000" data-to="@ViewBag.status.quantidade_em_andamento" id="quantidade_em_andamento" name="quantidade_em_andamento">@ViewBag.status.quantidade_em_andamento</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.em_andamento</div>
+                    </div>
+                </a>
+            </div>  
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("PMOC", "PMOC",  new { status = 2})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-snowflake-o fa-2x text-earth-light"></i></div>
+                        <div class="font-size-h5 font-w600 text-earth"><span data-speed="1000" data-to="@ViewBag.status.quantidade_concluido" id="quantidade_concluido" name="quantidade_concluido">@ViewBag.status.quantidade_concluido</span></div>                        
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>  
+        </div>
+
+        <div class="block">
+                            
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.pmoc</h3>
+                <div class="block-options">                    
+                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>                    
+                </div>
+            </div>            
+
+            <div class="block-content">
+                
+                @foreach (var item in Model)
+                {
+
+                    if(item.registro) 
+                    {
+
+                        <div class="content-block border-b"></div>  
+                        <div class="content-block mt-20 ">
+                            <h5 class="font-w600">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@Html.DisplayFor(modelItem => item.unidade)</span></h5> 
+                        </div>                         
+                        foreach (var tipo_ar_condicionado in item.tipo_ar_condicionado)
+                        {
+                            
+                            if (tipo_ar_condicionado.registro) 
+                            {
+                            
+                                <div class="content-block border-b"></div>  
+                                <div class="content-block mt-20 border-b">
+                                    <h5 class="font-w600">@PCM.WEB.Properties.Resources.tipo_ar_condicionado: <span class="text-primary">@Html.DisplayFor(modelItem => tipo_ar_condicionado.tipo_ar_condicionado)</span></h5> 
+                                </div>                         
+                                <div class="row mt-20">
+                                    @foreach (var equipamento in tipo_ar_condicionado.equipamento)
+                                    {     
+                                        if ((equipamento.status == 2) || (equipamento.status == 4))
+                                        {
+                                        <div class="col-md-2 col-xl-1">
+                                            <div class="block block-rounded block-bordered">
+                                                @*<a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoPMOC", "PMOC", new { codigo_unidade = item.codigo_unidade, codigo_pmoc_ordem_servico = equipamento.codigo_pmoc_ordem_servico, view = "PMOC"})">*@
+                                                <div class="text-center">
+                                                    <i class="fa fa-snowflake-o fa-2x @equipamento.cor mb-5 mt-5"></i>
+                                                    <h6 class="font-w700 mb-5">@equipamento.tag</h6>
+                                                    <h6 class="mb-5">@equipamento.descricao</h6>
+                                                    <h6 class="mb-5"><small>@equipamento.periodicidade</small></h6>
+                                                    <h6 class="mb-5"><small>@equipamento.data</small></h6>
+                                                </div>
+                                                @*</a>*@
+                                            </div>
+                                        </div>
+                                        }
+                                        else
+                                        {
+                                        <div class="col-md-2 col-xl-1">
+                                            <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ApontamentoPMOC", "PMOC", new { codigo_unidade = item.codigo_unidade, codigo_equipamento = equipamento.codigo_equipamento, data_manutencao = equipamento.data, view = "PMOC"})">
+                                                <div class="text-center">
+                                                    <i class="fa fa-snowflake-o fa-2x @equipamento.cor mb-5 mt-5"></i>
+                                                    <h6 class="font-w700 mb-5">@equipamento.tag</h6>
+                                                    <h6 class="mb-5">@equipamento.descricao</h6>
+                                                    <h6 class="mb-5"><small>@equipamento.periodicidade</small></h6>
+                                                    <h6 class="mb-5"><small>@equipamento.data</small></h6>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        }
+                                        }
+                                    </div>
+                                    }
+                                }
+                            }
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- END Page Content -->
+        </main>
+        <!-- END Main Container -->

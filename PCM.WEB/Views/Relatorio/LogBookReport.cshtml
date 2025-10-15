@@ -1,0 +1,224 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.RelatorioLogBook>
+
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("LogBookReport", "Relatorio", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="col-md-12 col-xl-12">
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-8">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>
+                                        <div class="col-md-4">
+                                            <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                                <div class="input-group-prepend input-group-append">
+                                                    <span class="input-group-text font-w600">-</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    @if (ViewBag.imprimir)
+                                    {
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+                <div class="block">
+
+                    <div class="block-content">
+
+                        <!-- Table -->
+                        <div class="table-responsive table-sm push">
+                                <table class="table table-bordered table-hover js-dataTable-list">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data</th>
+                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.usuario</th>
+                                            <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.data)</td>
+                                                <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.usuario)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.descricao)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                        </div>
+                        <!-- END Table -->
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/plugins/dataTables")
+
+    <script>
+
+    $(document).ready(function () { $("#data_inicio").mask("99/99/9999"); });
+    $(document).ready(function () { $("#data_termino").mask("99/99/9999"); });
+
+    function ImprimirRelatorio() {
+
+        var unidade = $("#unidade").val();
+        var data_inicio = $("#data_inicio").val();
+        var data_termino = $("#data_termino").val();
+
+        window.open('PrintLogBook' + '?unidade=' + unidade + '&data_inicio=' + data_inicio + '&data_termino=' + data_termino + '&nome_fantasia=' + $("#unidade option:selected").text(), '_blank');
+    }
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: true,
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 15,
+                    columnDefs: [{ orderable: false, targets: [0] }], order: [1],
+                    autoWidth: false,
+                    scrollX: false,
+                    scrollColapse: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar' },
+                        {
+                            extend: 'print',
+                            text: 'Imprimir'
+                        },
+                        { extend: 'excel' },
+                        { extend: 'pdf', orientation: 'portrait' },
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.list-group-item > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'data_inicio': {
+                        required: true
+                    },
+                    'data_termino': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'data_inicio': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    },
+                    'data_termino': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    // Initialize when page loads
+    jQuery(function () {
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init();
+        FormValidation.init();
+        Codebase.helpers(['datepicker']);
+    });
+
+    </script>
+}
+

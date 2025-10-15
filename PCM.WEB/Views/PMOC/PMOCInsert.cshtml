@@ -1,0 +1,226 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.pmoc</a>
+                <a class="breadcrumb-item" href="@Url.Action("PMOCIndex", "PMOC")">@PCM.WEB.Properties.Resources.cadastro_pmoc</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.inserir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("PMOCInsert", "PMOC", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="empresa" name="empresa" value="@Session["empresa"].ToString()" />
+
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadastrar</h3>
+                        <div class="block-options">
+                            <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                            </button>
+                            <a href="@Url.Action("PMOCIndex", "PMOC")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                            </a>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full">
+                        <div class="form-group row">
+                            <label class="col-md-12">@PCM.WEB.Properties.Resources.unidade</label>
+                            <div class="col-md-12">@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@PCM.WEB.Properties.Resources.numero_art</label>
+                                <div><input type="text" class="form-control" id="numero_art" name="numero_art" maxlength="20" value=""></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label>@PCM.WEB.Properties.Resources.vigencia_art</label>
+                                <div>
+                                    <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                        <input type="text" class="form-control" id="data_inicio_vigencia_art" name="data_inicio_vigencia_art" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                        <div class="input-group-prepend input-group-append">
+                                            <span class="input-group-text font-w600">-</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="data_termino_vigencia_art" name="data_termino_vigencia_art" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-12">@PCM.WEB.Properties.Resources.responsavel_tecnico</label>
+                            <div class="col-md-12"><input type="text" class="form-control" id="responsavel_tecnico" name="responsavel_tecnico" maxlength="250" value=""></div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-12">@PCM.WEB.Properties.Resources.cliente_integracao</label>
+                            <div class="col-md-12">@Html.DropDownList("empresa_pmoc", null, "", new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-12">@PCM.WEB.Properties.Resources.unidade_cliente_integracao</label>
+                            <div class="col-md-12">@Html.DropDownList("unidade_pmoc", null, "", new { @class = "form-control" })</div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/maxlenght")
+
+    <script>
+
+        $(function () {
+
+            var empresa = $("#empresa");
+            var unidade = $("#unidade");
+            var empresa_pmoc = $("#empresa_pmoc");
+            var unidade_pmoc = $("#unidade_pmoc");
+
+            unidade.change(function () {
+                var request = { "unidade": unidade.val(), "empresa": (empresa.val() == "") ? "-1" : empresa.val() };
+                $.post("LoadEmpresaPMOC", request, function (obj) {
+                    empresa_pmoc.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    empresa_pmoc.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        empresa_pmoc.append(option);
+                    });
+                }, "json");
+            });
+
+            empresa_pmoc.change(function () {
+                var request = { "unidade": unidade.val(), "empresa": (empresa_pmoc.val() == "") ? "-1" : empresa_pmoc.val() };
+                $.post("LoadUnidadePMOC", request, function (obj) {
+                    unidade_pmoc.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    unidade_pmoc.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        unidade_pmoc.append(option);
+                    });
+                }, "json");
+            });
+
+        });
+        
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    onkeyup: false,
+                    onclick: false,
+                    onfocusout: false,
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'unidade': {
+                            required: true
+                        },
+                        'tipo_servico': {
+                            required: true
+                        },
+                        'numero_art': {
+                            required: true
+                        },
+                        'data_inicio_vigencia_art': {
+                            required: true
+                        },
+                        'data_termino_vigencia_art': {
+                            required: true
+                        },
+                        'empresa_pmoc': {
+                            required: false
+                        },
+                        'unidade_pmoc': {
+                            required: false
+                        },
+                        'responsavel_tecnico': {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        'unidade': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'tipo_servico': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'numero_art': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'data_inicio_vigencia_art': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'data_termino_vigencia_art': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'empresa_pmoc': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'unidade_pmoc': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'responsavel_tecnico': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        }
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            FormValidation.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+    </script>
+}

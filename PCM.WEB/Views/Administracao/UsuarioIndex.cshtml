@@ -1,0 +1,269 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.usuario</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("UsuarioIndex", "Administracao", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.usuarios</h3>
+                        <div class="block-options">
+
+                            @if (ViewBag.inserir)
+                            {
+                                <a href="@Url.Action("UsuarioInsert", "Administracao")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                </a>
+                            }
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-5"><input type="text" id="nome" name="nome" value="@ViewBag.nome" placeholder="@PCM.WEB.Properties.Resources.nome" class="form-control"></div>
+                                    <div class="col-md-5">@Html.DropDownList("departamento", null, PCM.WEB.Properties.Resources.departamento, new { @class = "js-select2 form-control" })</div>
+                                    <div class="col-md-2">@Html.DropDownList("ativo", null, PCM.WEB.Properties.Resources.ativo, new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full">
+                    <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                <th>@PCM.WEB.Properties.Resources.nome</th>
+                                <th>@PCM.WEB.Properties.Resources.apelido</th>
+                                <th>@PCM.WEB.Properties.Resources.perfil</th>
+                                <th>@PCM.WEB.Properties.Resources.departamento</th>
+                                <th>@PCM.WEB.Properties.Resources.id_usuario</th>
+                                <th>@PCM.WEB.Properties.Resources.ativo</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <!-- END Unidade -->
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+            Codebase.helpers(['table-tools', 'datepicker', 'maxlength', 'select2']);
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var table = $('#tb_main').DataTable({
+                select: {
+                    selector: 'td:not(:first-child)',
+                    style: 'os'
+                },
+                paging: true,
+                processing: true,
+                searching: true,
+                lengthChange: false,
+                pageLength: 15,
+                autoWidth: false,
+                scrollX: false,
+                scrollColapse: true,
+                ajax: {
+                    url: "LoadUsuario",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.unidade = $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                        d.departamento = $("#departamento").val() == "" ? "-1" : $("#departamento").val(),
+                        d.nome = $("#nome").val(),
+                        d.ativo = ($("#ativo").val() == "") ? "-1" : $("#ativo").val()
+                    },
+                    dataSrc: ""
+                },
+                columns: [
+                    { data: "unidade" },
+                    { data: "nome" },
+                    { data: "apelido" },
+                    { data: "perfil" },
+                    { data: "departamento" },
+                    { data: "email" },
+                    { data: "ativo" },
+                    {
+                        orderable: false,
+                        data: null,
+                        defaultContent: "<div class='btn-group'><button type='button' id='btnDelete' class= 'btn btn-sm btn-secondary'><i class='fa fa-times'></i></button>" +
+                                        "<button type='button' id='btnEdit' class= 'btn btn-sm btn-secondary'> <i class='fa fa-pencil'></i></button>" +
+                                        "<button type='button' id='btnRefresh' class= 'btn btn-sm btn-secondary'> <i class='fa fa-refresh'></i></button></div > "
+                    }],
+                    columnDefs: [
+                        {
+                            className: 'text-center', targets: [2, 3, 4, 5, 6, 7],
+                            createdCell: function (td, cellData, rowData, row, col) {
+                                if (col == 6 && rowData.ativo == true) {
+                                    $(td).html("<label class='css-control css-control-success css-checkbox'><input type = 'checkbox' class='css-control-input' checked disabled><span class='css-control-indicator'></span></label >");
+                                }
+                                if (col == 6 && rowData.ativo == false) {
+                                    $(td).html("<label class='css-control css-control-success css-checkbox'><input type = 'checkbox' class='css-control-input' disabled><span class='css-control-indicator'></span></label >");
+                                }
+                                if (col == 7 && "@ViewBag.administrador" != "True") {
+                                    $(td).find('#btnRefresh').hide();
+                                }
+                                if (col == 7 && "@ViewBag.excluir" != "True") {
+                                    $(td).find('#btnDelete').hide();
+                                }
+                            },
+                        },
+                        {
+                            width: '40px', targets: [7]
+                        },
+                        {
+                            width: '150px', targets: [6]
+                        }
+                    ],
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'copy', text: '@Html.Raw(PCM.WEB.Properties.Resources.copy)' },
+                    {
+                        extend: 'print',
+                        text: '@Html.Raw(PCM.WEB.Properties.Resources.print)'
+                    },
+                    { extend: 'excel' },
+                    { extend: 'pdf', orientation: 'portrait' },
+                ],
+                language: {
+                    "search": "@Html.Raw(PCM.WEB.Properties.Resources.search):",
+                    "lengthMenu": "@Html.Raw(PCM.WEB.Properties.Resources.display) _MENU_ ",
+                    "info": "_MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)",
+                    "infoEmpty": "@Html.Raw(PCM.WEB.Properties.Resources.zero_records)",
+                    "infoFiltered": "@Html.Raw(PCM.WEB.Properties.Resources.filtered_from) _MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)"
+                }
+            });
+
+            // Reload DataTable
+            $('#filtrar').click(function () {
+                table.ajax.reload(null, false);
+            });
+
+            $('#tb_main tbody').on('click', 'button', function () {
+
+                var data = table.row($(this).closest('tr')).data();
+
+                if (this.id == "btnDelete") {
+                    deleteRegister(data);
+                } if (this.id == "btnEdit") {
+                    editRegister(data);
+                } if (this.id == "btnRefresh") {
+                    UsuarioPassword(data);
+                }
+
+            });
+
+            function deleteRegister(data) {
+
+                Swal.fire({
+                    title: "@Html.Raw(PCM.WEB.Properties.Resources.question_delete_register)",
+                    text: "@Html.Raw(PCM.WEB.Properties.Resources.usuario):</b> " + data.nome,
+                    icon: "question",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+                    denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        jQuery.ajax({
+                            type: "POST",
+                            url: "UsuarioDelete",
+                            async: false,
+                            data: {
+                                "codigo": data.codigo
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                Swal.fire({
+                                    title: "PCM",
+                                    html: response,
+                                    icon: "info",
+                                    showDenyButton: false,
+                                    showCancelButton: false,
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        table.ajax.reload(null, false);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+            }
+
+            function editRegister(data) {
+
+                window.location = 'UsuarioEdit?codigo=' + data.codigo;
+
+    }
+
+    function UsuarioPassword(data) {
+
+        window.location = 'UsuarioPassword?codigo=' + data.codigo;
+
+            }
+
+        });
+
+</script>
+}

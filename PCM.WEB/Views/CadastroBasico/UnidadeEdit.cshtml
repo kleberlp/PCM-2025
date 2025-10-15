@@ -1,0 +1,499 @@
+﻿@model PCM.WEB.MODELS.Unidade
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("UnidadeIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.unidade</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.editar</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("UnidadeEdit", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.codigo)
+                    <input type="hidden" name="change_imagem" id="change_imagem" value="">
+
+                    <div class="block block-rounded border">
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.editar</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("UnidadeIndex", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.tipo_unidade</label>
+                                    <div>@Html.DropDownList("tipo_unidade", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.cnpj</label>
+                                    <div>@Html.TextBoxFor(model => model.cnpj, new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label>@PCM.WEB.Properties.Resources.nome_fantasia</label>
+                                    <div>@Html.TextBoxFor(model => model.nome_fantasia, new { @class = "form-control", @maxlength = "120" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-6">
+                                    <label>@PCM.WEB.Properties.Resources.razao_social</label>
+                                    <div>@Html.TextBoxFor(model => model.razao_social, new { @class = "form-control", @maxlength = "120" })</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.inscricao_estadual</label>
+                                    <div>@Html.TextBoxFor(model => model.inscricao_estadual, new { @class = "form-control", @maxlength = "20" })</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.inscricao_municipal</label>
+                                    <div>@Html.TextBoxFor(model => model.inscricao_municipal, new { @class = "form-control", @maxlength = "20" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.cep</label>
+                                    <div>@Html.TextBoxFor(model => model.cep, new { @class = "form-control", @onblur = "LoadCEP();" })</div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.uf</label>
+                                    <div>@Html.DropDownList("uf", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.municipio</label>
+                                    <div>@Html.TextBoxFor(model => model.municipio, new { @class = "form-control", @maxlength = "100" })</div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <label>@PCM.WEB.Properties.Resources.logradouro</label>
+                                    <div>@Html.TextBoxFor(model => model.logradouro, new { @class = "form-control", @maxlength = "100" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.numero</label>
+                                    <div>@Html.TextBoxFor(model => model.numero, new { @class = "form-control", @maxlength = "60" })</div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.bairro</label>
+                                    <div>@Html.TextBoxFor(model => model.bairro, new { @class = "form-control", @maxlength = "100" })</div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>@PCM.WEB.Properties.Resources.complemento</label>
+                                    <div>@Html.TextBoxFor(model => model.complemento, new { @class = "form-control", @maxlength = "100" })</div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.telefone</label>
+                                    <div>@Html.TextBoxFor(model => model.telefone, new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>Hotel Opera</label>
+                                    <div>@Html.TextBoxFor(model => model.hotel_opera, new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.aponta_horas_manutencao</label>
+                                    <div>
+                                        <label class="css-control css-control-success css-switch">
+                                            @Html.CheckBoxFor(model => model.aponta_horas, new { @class = "css-control-input" })
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.aponta_horas_qualidade</label>
+                                    <div>
+                                        <label class="css-control css-control-success css-switch">
+                                            @Html.CheckBoxFor(model => model.aponta_horas_qualidade, new { @class = "css-control-input" })
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>@PCM.WEB.Properties.Resources.ativo</label>
+                                    <div>
+                                        <label class="css-control css-control-success css-switch">
+                                            @Html.CheckBoxFor(model => model.ativo, new { @class = "css-control-input" })
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="block-header block-mode-loading-repeat block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.dados_empreendimento</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.quantidade_bloco</label>
+                                    <div>@Html.TextBoxFor(model => model.quantidade_bloco, new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.quantidade_andar</label>
+                                    <div>@Html.TextBoxFor(model => model.quantidade_andar, new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.area_total</label>
+                                    <div>@Html.TextBoxFor(model => model.area_total, new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>@PCM.WEB.Properties.Resources.area_total_construida</label>
+                                    <div>@Html.TextBoxFor(model => model.area_total_construida, new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Session["manutencao"].ToString() == "True" || Session["qualidade"].ToString() == "True")
+                        {
+                            <div class="block-header block-mode-loading-repeat block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.configuracao</h3>
+                            </div>
+                            <div class="block-content block-content-full">
+                                <div class="form-group row">
+                                    @if (Session["manutencao"].ToString() == "True")
+                                    {
+                                        <div class="col-lg-2">
+                                            <label>@PCM.WEB.Properties.Resources.aponta_horas_manutencao</label>
+                                            <div>
+                                                <label class="css-control css-control-success css-switch">
+                                                    @Html.CheckBoxFor(model => model.aponta_horas, new { @class = "css-control-input" })
+                                                    <span class="css-control-indicator"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Session["qualidade"].ToString() == "True")
+                                    {
+                                        <div class="col-lg-2">
+                                            <label>@PCM.WEB.Properties.Resources.aponta_horas_qualidade</label>
+                                            <div>
+                                                <label class="css-control css-control-success css-switch">
+                                                    @Html.CheckBoxFor(model => model.aponta_horas_qualidade, new { @class = "css-control-input" })
+                                                    <span class="css-control-indicator"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <div class="block-header block-mode-loading-repeat block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.logo</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <label>Logo tamanho: (250 x 120)</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="logoMin" name="logoMin" onchange="LogoMin();" accept="image/png,image/gif,image/jpeg">
+                                        <label id="lblLogoMin" class="custom-file-label" for="logoMin">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <label>Logo tamanho: (500 x 500)</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="logoMax" name="logoMax" onchange="LogoMax();" accept="image/png,image/gif,image/jpeg">
+                                        <label id="lblLogoMax" class="custom-file-label" for="logoMax">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+            </div>
+            <!-- END Basic Info -->
+            </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    
+    <script>
+
+        function LogoMin() {
+            document.getElementById("lblLogoMin").textContent = document.getElementById("logoMin").files[0].name;
+        }
+
+        function LogoMax() {
+            document.getElementById("lblLogoMax").textContent = document.getElementById("logoMax").files[0].name;
+        }
+
+        $(document).ready(function () { $("#cnpj").mask("99.999.999/9999-99"); });
+        $(document).ready(function () { $("#cep").mask("99.999-999"); });
+        $(document).ready(function () { $("#telefone").mask("(99) 9999-9999"); });
+        $(document).ready(function () { $("#quantidade_bloco").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' }); });
+        $(document).ready(function () { $("#quantidade_andar").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' }); });
+        $(document).ready(function () { $("#area_total").maskMoney({ prefix: '', thousands: '.', precision: 2, allowNegative: false, 'placeholder': '' }); });
+        $(document).ready(function () { $("#area_total_construida").maskMoney({ prefix: '', thousands: '.', precision: 2, allowNegative: false, 'placeholder': '' }); });
+
+        jQuery.validator.addMethod("cnpj", function (cnpj, element) {
+
+            cnpj = cnpj.replace(".", "");
+            cnpj = cnpj.replace(".", "");
+            cnpj = cnpj.replace("/", "");
+            cnpj = cnpj.replace("-", "");
+
+            var numeros, digitos, soma, resultado, pos, tamanho,
+                digitos_iguais = true;
+
+            if (cnpj.length < 14 && cnpj.length > 15)
+                return false;
+
+            for (var i = 0; i < cnpj.length - 1; i++)
+                if (cnpj.charAt(i) != cnpj.charAt(i + 1)) {
+                    digitos_iguais = false;
+                    break;
+                }
+
+            if (!digitos_iguais) {
+                tamanho = cnpj.length - 2
+                numeros = cnpj.substring(0, tamanho);
+                digitos = cnpj.substring(tamanho);
+                soma = 0;
+                pos = tamanho - 7;
+
+                for (i = tamanho; i >= 1; i--) {
+                    soma += numeros.charAt(tamanho - i) * pos--;
+                    if (pos < 2)
+                        pos = 9;
+                }
+
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+
+                if (resultado != digitos.charAt(0))
+                    return false;
+
+                tamanho = tamanho + 1;
+                numeros = cnpj.substring(0, tamanho);
+                soma = 0;
+                pos = tamanho - 7;
+
+                for (i = tamanho; i >= 1; i--) {
+                    soma += numeros.charAt(tamanho - i) * pos--;
+                    if (pos < 2)
+                        pos = 9;
+                }
+
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+
+                if (resultado != digitos.charAt(1))
+                    return false;
+
+                return true;
+            }
+
+            return false;
+        }, "");
+
+        jQuery.validator.addMethod("cnpj_bd", function (value, element) {
+
+            var codigo = $("#codigo").val();
+
+            var dataString = {
+                "cnpj": value,
+                "codigo": codigo
+            };
+
+            var result = false;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "ValidaUnidade",
+                async: false,
+                data: dataString,
+                dataType: "json",
+                success: function (return_data) {
+                    if (return_data == false) {
+                        result = false;
+                    } else if (return_data == true) {
+                        result = true;
+                    }
+                }
+            });
+
+            return result;
+
+        }, "Informe um CNPJ v&aacute;lido.");
+
+        function LoadCEP() {
+
+            var cep = $('#cep').val();
+            
+            if (cep != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: 'CEPInfo',
+                    data: { "cep": cep },
+                    success: function (dados) {
+                        if (dados.length > 0) {
+                            $.each(dados, function (i, obj) {
+                                document.getElementById("uf").value = obj.uf;
+                                document.getElementById("uf").readonly = true;
+                                document.getElementById("municipio").value = obj.municipio;
+                                document.getElementById("municipio").readonly = true;
+                                document.getElementById("logradouro").value = obj.logradouro;
+                                document.getElementById("logradouro").readonly = true;
+                                document.getElementById("bairro").value = obj.bairro;
+                                document.getElementById("bairro").readonly = true;
+                            })
+                        }
+                        else {
+                            cep.value = "";
+                            document.getElementById("uf").value = "";
+                            document.getElementById("uf").readonly = false;
+                            document.getElementById("municipio").value = "";
+                            document.getElementById("municipio").readonly = false;
+                            document.getElementById("logradouro").value = "";
+                            document.getElementById("logradouro").readonly = false;
+                            document.getElementById("bairro").value = "";
+                            document.getElementById("bairro").readonly = false;
+                        };
+                    }
+                });
+            }
+            else {
+                document.getElementById("uf").value = "";
+                document.getElementById("uf").readonly = false;
+                document.getElementById("municipio").value = "";
+                document.getElementById("municipio").readonly = false;
+                document.getElementById("logradouro").value = "";
+                document.getElementById("logradouro").readonly = false;
+                document.getElementById("bairro").value = "";
+                document.getElementById("bairro").readonly = false;
+            }
+        }
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'tipo_unidade': {
+                            required: true
+                        },
+                        'cnpj': {
+                            required: true,
+                            cnpj: true,
+                            cnpj_bd: false,
+                        },
+                        'nome_fantasia': {
+                            required: true
+                        },
+                        'razao_social': {
+                            required: true
+                        },
+                        'cep': {
+                            required: true
+                        },
+                        'uf': {
+                            required: true
+                        },
+                        'municipio': {
+                            required: true
+                        },
+                        'quantidade_bloco': {
+                            required: true,
+                            number: true
+                        },
+                        'quantidade_andar': {
+                            required: true,
+                            number: true
+                        }
+                    },
+                    messages: {
+                        'tipo_unidade': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'cnpj': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            cnpj: '@PCM.WEB.Properties.Resources.valida_cnpj_invalido',
+                            cnpj_bd: '@PCM.WEB.Properties.Resources.valida_cnpj_bd',
+                        },
+                        'nome_fantasia': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'razao_social': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'cep': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'uf': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'municipio': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'quantidade_bloco': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            number: '@PCM.WEB.Properties.Resources.campo_numerico'
+                        },
+                        'quantidade_andar': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            number: '@PCM.WEB.Properties.Resources.campo_numerico'
+                        }
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            FormValidation.init();
+            Codebase.helpers(['maxlength']);
+        });
+
+    </script>
+
+}

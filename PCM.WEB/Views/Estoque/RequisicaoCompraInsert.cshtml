@@ -1,0 +1,406 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.estoque</span>
+                <a class="breadcrumb-item" href="@Url.Action("RequisicaoCompra", "Estoque")">@PCM.WEB.Properties.Resources.estRequisicaoCompra</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("RequisicaoCompraInsert", "Estoque", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="quantity_product" name="quantity_product" value="0" />
+
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.estRequisicaoCompra</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" id="btnSave" name="btnSave"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                                <a href="@Url.Action("RequisicaoCompra", "Estoque")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="produtosJson" name="produtosJson" value="" />
+
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-2" id="div_product" name="div_product">
+                                    <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control js-select2" })</div>
+                                </div>
+                                <div class="col-md-2" id="div_barcode" name="div_barcode" style="display:none">
+                                    <label>@PCM.WEB.Properties.Resources.barcode</label>
+                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); document.getElementById('quantity').focus(); return false; }" onblur="loadProductInfo();"></div>
+                                </div>
+                                <div class="col-md-2" id="div_product" name="div_product">
+                                    <label>@PCM.WEB.Properties.Resources.produto</label>
+                                    <div>@Html.DropDownList("produto", null, "", new { @class = "form-control js-select2" })</div>
+                                </div>
+                                <div class="col-md-2" id="div_product" name="div_product">
+                                    <label>@PCM.WEB.Properties.Resources.unidade_medida</label>
+                                    <div>@Html.DropDownList("uom", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>@PCM.WEB.Properties.Resources.descricao</label>
+                                    <div>
+                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="descricao" name="descricao" placeholder="" value="" disabled>
+                                        <input type="hidden" class="form-control" id="quantidadeEstoque" name="quantidadeEstoque" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.quantidade</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="quantidade" name="quantidade" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); addProduct(); return false; }">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" onclick="addProduct();"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table table-bordered table-sm table-striped table-vcenter" id="tableMain" name="tableMain">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th class="text-center" style="width:200px">@PCM.WEB.Properties.Resources.produto</th>
+                                        <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.descricao</th>
+                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.quantidade</th>
+                                        <th class="text-center" style="width:80px">@PCM.WEB.Properties.Resources.unidade_medida</th>
+                                        <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/select")
+    @Styles.Render("~/Content/dataTables")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/select")
+
+<script>
+
+    var codigo = 1;
+    var objetos = [];
+    var total_quantity = 0;
+    var total_value = 0;
+    var table;
+
+    var jsonData = [];
+
+    $(document).ready(function () {
+
+        $(".custom-file-input").on('change', function () {
+            var filename = document.getElementById("arquivo").files[0].name;
+            $(this).next(".custom-file-label").addClass("selected").html(filename);
+        });
+
+        var unidade = $("#unidade");
+        var produto = $("#produto");
+        var uom = $("#uom");
+
+        unidade.change(function () {
+
+            var request = { "empresa": @ViewBag.codigoEmpresa, "unidade": unidade.val() };
+
+            $.post("LoadComboProduto", request, function (obj) {
+                produto.empty();
+                option = $("<option>", { "value": "" }).text("");
+                produto.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    produto.append(option);
+                });
+            }, "json");
+
+        });
+
+        produto.change(function () {
+
+            if ($("#produto").val() != "") {
+
+                var request = { "empresa": @ViewBag.codigoEmpresa, "produto": $("#produto").val(), "codigoOrdemCompra": -1 };
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "LoadProdutoInfo",
+                    async: true,
+                    data: request,
+                    dataType: "json",
+                    success: function (data) {
+                        $("#descricao").val(data.descricao);
+                    }
+                });
+
+            } else {
+                $("#descricao").val("");
+            }
+
+        });
+
+        uom.change(function () {
+
+            var request = { "uom": $("#uom").val() };
+
+            jQuery.ajax({
+                type: "POST",
+                url: "LoadUOMInfo",
+                async: true,
+                data: request,
+                dataType: "json",
+                success: function (data) {
+                    $("#quantity").maskMoney({ prefix: '', thousands: '.', decimal: ',', precision: data.decimal_places, allowNegative: false, 'placeholder': '' + data.economic_batch + '' });
+                }
+            });
+
+        });
+
+        $("#btnSave").on('click', function () {
+            $("#btnSave").prop("disabled", true);
+            $("#form").submit();
+        });
+
+        table = $('#tableMain').DataTable({
+            lengthChange: false,
+            pageLength: 15,
+            processing: true,
+            searching: false,
+            //scrollX: true,
+            scrollCollapse: true,
+            serverSide: false,
+            data: jsonData,
+            columns: [
+                { data: "produto" },
+                { data: "descricao" },
+                { data: "quantidade" },
+                { data: "unidadeMedida" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'><button type='button' id='btnDelete' class= 'btn btn-sm btn-secondary'><i class='fa fa-times'></i></button></div>"
+                }
+            ],
+            language: {
+                emptyTable: "Nenhum registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+            },
+            order: [[0, 'asc']],
+            columnDefs: [
+                { className: 'text-center', targets: [0, 2, 3, 4] },
+                { width: '20px', targets: [4] },
+                { width: '150px', targets: [0, 2, 3] }
+            ],
+        });
+
+        $('#tableMain tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+
+            if (this.id == "btnDelete") {
+                remove(data);
+            }
+
+        });
+
+
+    });
+
+    function startPurchaseOrder() {
+
+        if ($("#requester").val() == "") {
+            swal('@PCM.WEB.Properties.Resources.pcm', '@PCM.WEB.Properties.Resources.produto_nao_encontrado', 'error');
+            document.getElementById("requester").focus();
+        }
+        else
+        {
+            $("#branch").select2({ disabled: true });
+            $("#supplier").prop("disabled", true);
+            $("#barcode").val("");
+            $('#product').val(null).trigger('change');
+            $("#uom").val("");
+            $("#description").val("");
+            $("#quantity").val("");
+            $("#btnStartPurchaseOrder").hide();
+            $("#products").show();
+            if ($("#barcode_reader").is(':checked')) {
+                $("#barcode").focus();
+            } else {
+                $("#product").focus();
+            }
+        }
+    };
+
+    function loadProductInfo() {
+
+        if ($("#product").val() != "") {
+
+            var request = { "branch": $("#branch").val(), "product": $("#product").val() };
+
+            jQuery.ajax({
+                type: "POST",
+                url: "LoadProductInfo",
+                async: true,
+                data: request,
+                dataType: "json",
+                success: function (return_data) {
+                    if (return_data.product == null) {
+                        swal({
+                            title: '@PCM.WEB.Properties.Resources.produto_nao_encontrado',
+                            text: '',
+                            type: 'error',
+                            showCancelButton: false,
+                            confirmButtonColor: '#d26a5c',
+                            confirmButtonText: 'OK',
+                            html: false,
+                            preConfirm: function () {
+                                return new Promise(function (resolve) {
+                                    setTimeout(function () {
+                                        resolve();
+                                    }, 50);
+                                });
+                            }
+                        }).then(function (result) {
+                            $('#product').val(null).trigger('change');
+                            $("#description").val("");
+                            $("#quantity").val("0");
+                            document.getElementById("product").focus();
+                        });
+                    }
+                    else {
+                        $("#description").val(return_data.description);
+                    }
+                }
+            });
+        }
+    }
+
+    function addProduct() {
+
+        if ($("#produto").val() != "" && parseFloat($("#quantidade").val().toString().replace('.', '').replace(",", ".")) > 0.0) {
+
+            if (objetos.indexOf($("#produto").val()) >= 0) {
+
+                Swal.fire({
+                    title: "@Html.Raw(PCM.WEB.Properties.Resources.pcm)",
+                    text: "@Html.Raw(PCM.WEB.Properties.Resources.valida_bd)",
+                    icon: "warning",
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#produto').val(null).trigger('change');
+                        $("#barcode").val("");
+                        $("#uom").val("");
+                        $("#descricao").val("");
+                        $("#quantidade").val("0");
+                    }
+                })
+
+            }
+            else
+            {
+
+                var newRecord = {
+                    "produto": document.querySelector("#produto option:checked").textContent,
+                    "codigoProduto": document.querySelector("#produto").value,
+                    "descricao": document.querySelector("#descricao").value,
+                    "quantidade": document.querySelector("#quantidade").value,
+                    "unidadeMedida": document.querySelector("#uom option:checked").textContent,
+                    "codigoUnidadeMedida": document.querySelector("#uom").value
+                };
+
+                // Adicionar o novo registro ao JSON
+                jsonData.push(newRecord);
+
+                table.clear().rows.add(jsonData).draw();
+
+                $("#produtosJson").val(JSON.stringify(jsonData));
+
+                $("#produto").val(null).trigger('change');
+                $("#uom").val("");
+                $("#descricao").val("");
+                $("#quantidade").val("0");
+                $("#produto").focus();
+            }
+
+        }
+
+    };
+
+    function remove(data) {
+
+        Swal.fire({
+            title: "@Html.Raw(PCM.WEB.Properties.Resources.pcm)",
+            text: "@Html.Raw(PCM.WEB.Properties.Resources.question_delete_register)",
+            icon: "question",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+            denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                jsonData = jsonData.filter(function (item) {
+                    return item.codigoProduto !== data.codigoProduto
+                });
+
+                $("#produtosJson").val(JSON.stringify(jsonData));
+
+                table.clear().rows.add(jsonData).draw();
+
+            }
+        });
+
+    };
+
+    // Initialize when page loads
+    jQuery(function () {
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        $("#quantity").maskMoney({ prefix: '', thousands: '.', decimal: ',', precision: 0, allowNegative: false, 'placeholder': '' });
+    });
+
+</script>
+}

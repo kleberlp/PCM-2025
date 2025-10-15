@@ -1,0 +1,233 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.cadastro_basico</span>
+                <a class="breadcrumb-item" href="@Url.Action("TipoArCondicionadoIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.tipo_ar_condicionado</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.inserir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm("TipoArCondicionadoInsert", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "form", @id = "form"}))        
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadastrar</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("TipoArCondicionadoIndex", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.tipo</label>
+                                    <div><input type="text" class="form-control" id="tipo" name="tipo" maxlength="100"></div>
+                                </div>
+                                <div class="col-md-9">
+                                    <label>@PCM.WEB.Properties.Resources.descricao</label>
+                                    <div><input type="text" class="form-control" id="descricao" name="descricao" maxlength="200"></div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.periodicidade</label>
+                                    <div>@Html.DropDownList("periodicidade", null, "", new { @class = "form-control js-select2" })</div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.intervalo</label>
+                                    <div><input type="text" class="form-control" id="intervalo" name="intervalo" maxlength="3"></div>
+                                </div>
+                                <div class="col-md-7">
+                                    <label>@PCM.WEB.Properties.Resources.checklist</label>
+                                    <div>@Html.DropDownList("checklist", null, "", new { @class = "form-control js-select2" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.ativo</label>
+                                <div class="col-12">
+                                    <label class="css-control css-control-success css-switch">
+                                        <input type="checkbox" class="css-control-input" id="ativo" name="ativo" checked value="true">
+                                        <span class="css-control-indicator"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+        
+        $(document).ready(function () { $("#intervalo").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' }); });
+
+        $(function () {
+
+            var periodicidade = $("#periodicidade");
+
+            periodicidade.change(function () {
+                if (periodicidade.val() == "0" || periodicidade.val() == "") {
+                    $("#intervalo").val("0");
+                    $("#intervalo").prop("disabled", true);
+                } else {
+                    $("#intervalo").prop("disabled", false);
+                }
+            });
+
+        });
+
+        jQuery.validator.addMethod("tipo_bd", function (value, element) {
+
+            var dataString = {
+                "tipo": value,
+                "codigo": -1
+            };
+
+            var result = false;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "ValidaTipoArCondicionado",
+                async: false,
+                data: dataString,
+                dataType: "json",
+                success: function (return_data) {
+                    if (return_data == false) {
+                        result = false;
+                    } else if (return_data == true) {
+                        result = true;
+                    }
+                }
+            });
+
+            return result;
+
+        }, "");
+        
+        jQuery.validator.addMethod("checklist", function (value, element) {
+
+            if ($("#periodicidade").val() == "0") {
+                if (value == "") {
+                    return false
+                } else {
+                    return true
+                }
+            } else {
+                return true
+            }
+
+        }, "");
+        
+        jQuery.validator.addMethod("intervalo", function (value, element) {
+
+            if ($("#periodicidade").val() != "0") {
+                if (value == "") {
+                    return false
+                } else {
+                    return true
+                }
+            } else {
+                return true
+            }
+
+        }, "");
+
+        $('#form').validate({
+            ignore: [],
+            errorClass: 'invalid-feedback animated fadeInDown',
+            errorElement: 'div',
+            errorPlacement: function (error, e) {
+                jQuery(e).parents('.form-group > div').append(error);
+            },
+            highlight: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+            },
+            success: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                jQuery(e).remove();
+            },
+            rules: {
+                'tipo': {
+                    required: true,
+                    tipo_bd: true
+                },
+                'descricao': {
+                    required: true
+                },
+                'periodicidade': {
+                    required: true
+                },
+                'intervalo': {
+                    intervalo: true
+                },
+                'checklist': {
+                    checklist: true
+                }
+            },
+            messages: {
+                'tipo': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                    tipo_bd: '@PCM.WEB.Properties.Resources.valida_bd'
+                },
+                'descricao': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'periodicidade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'intervalo': {
+                    intervalo: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'checklist': {
+                    checklist: '@PCM.WEB.Properties.Resources.campo_requerido'
+                }
+            }
+        });
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+    </script>
+  
+}
+       

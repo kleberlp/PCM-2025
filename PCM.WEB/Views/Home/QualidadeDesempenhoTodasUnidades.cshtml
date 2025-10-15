@@ -1,0 +1,418 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content bg-white">
+
+        @using (Html.BeginForm("QualidadeDesempenho", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            //PRINT - HEADER
+            <div class="block d-print-normal p-10 m-10" style="display:none">
+                <div class="form-row">
+                    <div class="col-3">
+                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
+                    </div>
+                    <div class="col-6 text-center">
+                        <label class="h2">Qualidade - Desempenho das Unidades</label>
+                    </div>
+                    <div class="col-3 text-right">
+                        <label class="h4 font-w600">01/04</label>
+                    </div>
+                </div>
+                <hr />
+            </div>
+
+            //HEADER
+            <div class="block d-print-normal bg-white">
+
+                <div class="block-header block-header-default bg-secondary d-print-none">
+                    <h3 class="block-title-big text-white font-w600">Qualidade - Desempenho da Unidade</h3>
+                    <div class="block-options">
+                        <!-- Print Page functionality is initialized in Codebase() -> uiHelperPrint() -->
+                        <button type="button" class="btn-block-option text-white" onclick="Codebase.helpers('print-page');">
+                            <i class="si si-printer text-white"></i> @PCM.WEB.Properties.Resources.imprimir
+                        </button>
+                        <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                    </div>
+                </div>
+
+                <div class="row pt-20 pr-20 pl-20" data-toggle="appear">
+                    <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                        <label>@PCM.WEB.Properties.Resources.unidade</label>
+                        @Html.DropDownList("unidade", null, null, new { @class = "form-control material font-w600 js-select2" })
+                    </div>
+                    <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                        <label>@PCM.WEB.Properties.Resources.data</label>
+                        @Html.DropDownList("data", null, null, new { @class = "form-control material font-w600" })
+                    </div>
+                    <input type="hidden" name="nome_fantasia" id="nome_fantasia" value="@ViewBag.nome_fantasia" />
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@Session["codigo_unidade"]" />
+                </div>
+
+                <br />
+
+            </div>
+
+            //PRINT - HEADER - 2
+            <div class="block d-print-normal p-10 m-10" style="display:none">
+                <div class="form-row">
+                    <div class="col-3">
+                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
+                    </div>
+                    <div class="col-6 text-center">
+                        <label class="h2">Qualidade - Desempenho das Unidades</label>
+                    </div>
+                    <div class="col-3 text-right">
+                        <label class="h4 font-w600">02/04</label>
+                    </div>
+                </div>
+                <hr />
+            </div>
+
+
+            //PLANO DE AÇÃO - ANDAMENTO X JUSTIFICATIVA
+            <div class="block">
+
+                <div class="block-header block-header-default bg-secondary">
+                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.notas</h3>
+                </div>
+
+                <div class="block-content block-content-full pb-1 col-xl-12 col-md-12">
+
+
+                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total de Auditorias</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Auditorias Realizadas @ViewBag.mes</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total de Perguntas Checklist</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total Conformes</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total Não Conformes</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total N/A</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.media_nota</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in ViewBag.nota)
+                            {
+                            <tr>
+                                <td>@item.unidade</td>
+                                <td class="text-md-center" style="width: 150px;"><a href="@Url.Action("AuditoriaHistorico", "Qualidade", new { data_inicio = "SEM", data_termino = "SEM", unidade = item.codigo_unidade, status = 2 })">@item.quantidade_auditoria</a></td>
+                                <td class="text-md-center" style="width: 150px;"><a href="@Url.Action("AuditoriaHistorico", "Qualidade", new { data_inicio = @ViewBag.inicio_mes, data_termino = ViewBag.termino_mes, unidade = item.codigo_unidade, status = 2 })">@item.quantidade_concluida</a></td>
+                                <td class="text-md-center" style="width: 150px;">@item.total_perguntas</td>
+                                <td class="text-md-center" style="width: 150px;">@item.total_conformes</td>
+                                <td class="text-md-center" style="width: 150px;">@item.total_nao_conformes</td>
+                                <td class="text-md-center" style="width: 150px;">@item.total_na</td>
+                                <td class="text-md-center" style="width: 150px;">@item.media_nota</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+
+                <div>
+
+                    <div class="col-md-12">
+                        <div class="block block-rounded block-mode-loading-refresh">
+                            <div class="block-content block-content-full">
+                                <div class="pull-all pt-30 p-20">
+                                    <canvas id="chartNotas" height="70px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="block break-after"></div>
+
+
+            <div class="block d-print-normal p-10 m-10" style="display:none">
+                <div class="form-row">
+                    <div class="col-3">
+                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
+                    </div>
+                    <div class="col-6 text-center">
+                        <label class="h2">Qualidade - Desempenho das Unidades</label>
+                    </div>
+                    <div class="col-3 text-right">
+                        <label class="h4 font-w600">03/04</label>
+                    </div>
+                </div>
+                <hr />
+            </div>
+
+
+            <div class="block">
+
+                <div class="block-header block-header-default bg-secondary">
+                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.plano_acao</h3>
+                </div>
+
+                <div class="block-content block-content-full pb-1 col-xl-12 col-md-12">
+
+                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_concluida</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">PA EM ABERTO</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">PA ATRASADO</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">PA EM ANDAMENTO</th>
+                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.tempo_medio_em_andamento</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in ViewBag.plano_acao)
+                            {
+                                <tr>
+                                    <td>@item.unidade</td>
+                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_plano_acao</td>
+                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_concluido</td>
+                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_pendente</td>
+                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_atrasada</td>
+                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_em_andamento</td>
+                                    <td class="text-md-center" style="width: 150px;">@item.tempo_medio_em_andamento</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/plugins/gauge")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+
+    var colorNamesNotas = Object.keys(window.chartColors);
+
+    var configChartNotas = {
+            type: 'line',
+            options: {
+                responsive: true,
+                data: {
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                    }],
+                    labels: [],
+                    yRangeBegin: 0,
+                    yRangeEnd: 93.4
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    fontStyle: 'bold'
+                },
+                title: {
+                    display: false,
+                    text: "Evolução - Últimos 12 meses",
+                    fontSize: 20,
+                    padding: 30
+                },
+                animation: {
+                    animateScale: false,
+                    animateRotate: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            fontSize: 12,
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontSize: 12
+                        }
+                    }]
+                },
+                annotation: {
+                    events: ['click'],
+                    annotations: [
+                        {
+                            drawTime: 'beforeDatasetsDraw',
+                            type: 'box',
+                            yScaleID: 'y-axis-0',
+                            yMin: 85,
+                            yMax: 100,
+                            backgroundColor: 'rgba(34, 177, 76, 0.1)',
+                            borderWidth: 0,
+                            onClick: function (e) {
+                                console.log('Box', e.type, this);
+                            }
+                        },
+                        {
+                            drawTime: 'beforeDatasetsDraw',
+                            type: 'box',
+                            yScaleID: 'y-axis-0',
+                            yMin: 0,
+                            yMax: 85,
+                            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                            borderWidth: 0,
+                            onClick: function (e) {
+                                console.log('Box', e.type, this);
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+
+    $(function () {
+
+        $("#unidade").change(function () {
+            $("#form").submit();
+        });
+
+        $("#data").change(function () {
+            $("#form").submit();
+        });
+
+    });
+
+    function LoadChartNotas() {
+
+        //Obtém eixo X
+        $.post("@Url.Content("~/Dashboard/QualidadeDataMonth")", { "unidade": $("#unidade").val(), "data": $("#data").val() }, function (obj) {
+            $.each(obj, function (indice, result) {
+                configChartNotas.data.labels.push(result);
+            });
+            window.ChartNotas.update();
+        }, "json");
+
+        $.post("@Url.Content("~/Dashboard/QualidadeNotas")", { "data": $("#data").val() }, function (obj) {
+
+            if (obj.length == 0) {
+                configChartNotas.data.labels = [];
+                configChartNotas.data.datasets = [];
+                window.ChartNotas.update();
+            } else {
+                $.each(obj, function (indice, result) {
+
+                    var colorName = colorNamesNotas[configChartNotas.data.datasets.length % colorNamesNotas.length];
+                    var newColor = window.chartColors[colorName];
+                    var borderColor = window.chartBorderColors[colorName];
+
+                    var newDataset = {
+                        label: result.serie,
+                        backgroundColor: newColor,
+                        borderColor: borderColor,
+                        data: [],
+                        fill: false
+                    };
+
+                    for (var index = 0; index < result.valor.length; ++index) {
+                        newDataset.data.push(result.valor[index]);
+                    }
+
+                    configChartNotas.data.datasets.push(newDataset);
+                    window.ChartNotas.update();
+                });
+
+                //var newDataset = {
+                //    label: "META",
+                //    backgroundColor: 'rgba(255, 201, 14, 0.1)',
+                //    borderColor: 'rgba(255, 201, 14, 0.6)',
+                //    pointBorderColor: 'rgba(255, 201, 14, 0.6)',
+                //    data: [],
+                //    fill: true
+                //};
+
+                //for (var index = 0; index < configChartNotas.data.labels.length; ++index) {
+                //    newDataset.data.push("85.00");
+                //}
+
+                //configChartNotas.data.datasets.push(newDataset);
+                //window.ChartNotas.update();
+
+            }
+        }, "json");
+
+    };
+
+    var ctx = document.getElementById("chartNotas");
+
+    var lineSuperDraw = Chart.controllers.line.prototype.draw;
+    Chart.helpers.extend(Chart.controllers.line.prototype, {
+        draw: function () {
+            var chart = this.chart;
+            var ctx = chart.chart.ctx;
+
+            var yRangeBegin = chart.config.data.yRangeBegin;
+            var yRangeEnd = chart.config.data.yRangeEnd;
+
+            var xaxis = chart.scales['x-axis-0'];
+            var yaxis = chart.scales['y-axis-0'];
+
+            var yRangeBeginPixel = yaxis.getPixelForValue(yRangeBegin);
+            var yRangeEndPixel = yaxis.getPixelForValue(yRangeEnd);
+
+            ctx.save();
+
+            for (var yPixel = Math.min(yRangeBeginPixel, yRangeEndPixel); yPixel <= Math.max(yRangeBeginPixel, yRangeEndPixel); ++yPixel) {
+                ctx.beginPath();
+                ctx.moveTo(xaxis.left, yPixel);
+                ctx.strokeStyle = '#00ff00';
+                ctx.lineTo(xaxis.right, yPixel);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+
+            lineSuperDraw.apply(this, arguments);
+        }
+    });
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        var cChartNotas = document.getElementById('chartNotas').getContext('2d');
+        window.ChartNotas = new Chart(cChartNotas, configChartNotas);
+
+        LoadChartNotas();
+
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+    });
+
+
+    </script>
+}

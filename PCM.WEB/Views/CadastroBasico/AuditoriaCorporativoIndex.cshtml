@@ -1,0 +1,190 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.AuditoriaCorporativo>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.cadastro_basico</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.auditoria_corporativo</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">        
+
+        <!-- Listagem -->
+
+        @using (Html.BeginForm("AuditoriaCorporativoIndex", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data"  }))        
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+               
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.auditoria_corporativo</h3>
+                        @if(ViewBag.inserir)
+                        {
+                            <div class="block-options">
+                                <a href="@Url.Action("AuditoriaCorporativoInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo</a>
+                            </div>
+                        }                
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="block block-rounded border">
+
+            <div class="block-content block-content-full border">
+
+                <table class="table table-sm table-vcenter table-striped js-dataTable-list">
+
+                    <thead>
+                        <tr class="table-secondary">
+                            @if (Session["unidade"] == "")
+                            {
+                                <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
+                            }
+                            <th>@PCM.WEB.Properties.Resources.descricao</th>
+                            <th>@PCM.WEB.Properties.Resources.checklist</th>
+                            <th class="d-none d-sm-table-cell text-md-center" style="width: 80px;">@PCM.WEB.Properties.Resources.ativo </th>
+                            <th class="d-none d-sm-table-cell text-md-center" style="width: 120px;">@PCM.WEB.Properties.Resources.gerar_plano_acao</th>
+                            @if (ViewBag.editar || ViewBag.excluir)
+                            {
+                                <th class="text-md-center" style="width: 80px;" data-sortable="false"></th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            @if (Session["unidade"] == "")
+                            {
+                                <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                            }
+                            <td>@Html.DisplayFor(modelItem => item.descricao)</td>
+                            <td>@Html.DisplayFor(modelItem => item.checklist)</td>
+                            <td class="d-none d-sm-table-cell text-md-center" style="width: 80px;">
+                                <label class="css-control-sm css-control-secondary css-checkbox">
+                                    @Html.CheckBoxFor(modelItem => item.ativo, new { @class = "css-control-input", @disabled = "disabled" })
+                                    <span class="css-control-indicator"></span>
+                                </label>
+                            </td>
+                            <td class="d-none d-sm-table-cell text-md-center" style="width: 120px;">
+                                <label class="css-control-sm css-control-secondary css-checkbox">
+                                    @Html.CheckBoxFor(modelItem => item.gerar_plano_acao, new { @class = "css-control-input", @disabled = "disabled" })
+                                    <span class="css-control-indicator"></span>
+                                </label>
+                            </td>
+                            @if (ViewBag.editar || ViewBag.excluir)
+                            {
+                                <td class="text-md-center" style="width: 80px;">
+                                    <div class="btn-group">
+                                        @if (ViewBag.editar)
+                                        {<a href="@Url.Action("AuditoriaCorporativoEdit", "CadastroBasico", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
+                                        @if (ViewBag.excluir)
+                                        {<a href="@Url.Action("AuditoriaCorporativoDelete", "CadastroBasico", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+        
+    </div>
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {    
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript">
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: true,
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 15,
+                    columnDefs: [{ orderable: false, targets: [0] }], order: [1],
+                    autoWidth: false,
+                    scrollX: false,
+                    scrollColapse: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar' },
+                        {
+                            extend: 'print',
+                            text: 'Imprimir'
+                        },
+                        { extend: 'excel' },
+                        { extend: 'pdf', orientation: 'portrait' },
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+    </script>
+}

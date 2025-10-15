@@ -1,0 +1,332 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.estoque</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.receipt_approval</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("ReceiptIndex", "InventoryMaterial", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-secondary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.search</button>
+
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.receipt_approval</h3>
+                        @*@if (ViewBag.insert)
+                        {
+                            <div class="block-options">
+                                <a href="@Url.Action("PurchaseOrderInsert", "InventoryMaterial")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.create
+                                </a>
+                            </div>
+                        }*@
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.branch</label>
+                                        @Html.DropDownList("branch", null, "", new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.purchase_order</label>
+                                        <input type="text" class="form-control" id="purchase_order" name="purchase_order" value="@ViewBag.purchase_order" maxlength="50">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.document_num</label>
+                                        <input type="text" class="form-control" id="document_number" name="document_number" value="@ViewBag.document_number" maxlength="50">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>@PCM.WEB.Properties.Resources.supplier</label>
+                                        @Html.DropDownList("supplier", null, "", new { @class = "form-control js-select2" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.date</label>
+                                        <div class="input-daterange input-group" data-date-format="@PCM.WEB.Properties.Resources.format_date" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                            <input type="text" class="form-control" id="start_date" name="start_date" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.start_date">
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text font-w600">-</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="end_date" name="end_date" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.end_date">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.status</label>
+                                        @Html.DropDownList("status", null, "", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.search</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full border">
+
+                    <table class="table table-sm table-vcenter table-striped js-dataTable-list" id="tb_stock">
+
+                        <thead class="table-secondary">
+                            <tr>
+                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.document_num</th>
+                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.purchase_order</th>
+                                <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.received_date</th>
+                                <th>@PCM.WEB.Properties.Resources.supplier</th>
+                                <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.product</th>
+                                <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.quantity</th>
+                                <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.quantity_received</th>
+                                <th>@PCM.WEB.Properties.Resources.status</th>
+                                @if (ViewBag.delete)
+                                {
+                                    <th class="text-center" style="width: 15px;" data-sortable="false"></th>
+                                }
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(this)
+            .find('[data-fa-i2svg]')
+            .toggleClass('fa-minus-square')
+            .toggleClass('fa-plus-square');
+
+        Codebase.helpers(['table-tools', 'datepicker', 'maxlength', 'select2']);
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        var table = $('#tb_stock').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 15,
+            autoWidth: false,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadReceipt",
+                type: "POST",
+                datatype: "json",
+                data: {
+                    "branch": $("#branch").val(),
+                    "purchase_order": $("#purchase_order").val(),
+                    "document_number": $("#document_number").val(),
+                    "supplier": ($("#supplier").val() == "") ? -1: $("#supplier").val(),
+                    "start_date": $("#start_date").val(),
+                    "end_date": $("#end_date").val(),
+                    "status": ($("#status").val() == "") ? -1 : $("#status").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                { data: "document_number" },
+                { data: "purchase_order" },
+                { data: "document_date" },
+                { data: "supplier" },
+                { data: "product" },
+                { data: "quantity" },
+                { data: "quantity_received" },
+                { data: "status" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'><button type='button' id='btnCancel' class= 'btn btn-sm btn-secondary'><i class='fa fa-times'></i></button><button type='button' id='btnApproval' class= 'btn btn-sm btn-secondary'><i class='fa fa-check'></i></button></div>"
+                }
+            ],
+            columnDefs: [
+                {
+                    className: 'text-center', targets: [0, 1, 2, 4, 5, 6, 8]
+                },
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if (col == 7)
+                            $(td).addClass(rowData.css_class);
+                        if (col == 8 && rowData.status_id != 1) {
+                            $(td).find('#btnCancel').hide();
+                            $(td).find('#btnApproval').hide();
+                        }
+                    }, targets: [7, 8]
+                },
+                { width: '40px', targets: [8] }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: '@Html.Raw(PCM.WEB.Properties.Resources.copy)' },
+                {
+                    extend: 'print',
+                    text: '@Html.Raw(PCM.WEB.Properties.Resources.print)'
+                },
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+            language: {
+                "search": "@Html.Raw(PCM.WEB.Properties.Resources.search):",
+                "lengthMenu": "@Html.Raw(PCM.WEB.Properties.Resources.display) _MENU_ ",
+                //"zeroRecords": "@Html.Raw(PCM.WEB.Properties.Resources.zero_records)",
+                "info": "_MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)",
+                "infoEmpty": "@Html.Raw(PCM.WEB.Properties.Resources.zero_records)",
+                "infoFiltered": "@Html.Raw(PCM.WEB.Properties.Resources.filtered_from) _MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)"
+            }
+        });
+
+
+        $('#tb_stock tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+
+            if (this.id == "btnDelete") {
+                deleteRegister(data);
+            }
+
+        });
+
+        $('#tb_stock tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+
+            if (this.id == "btnCancel") {
+                cancelRegister(data);
+            } if (this.id == "btnApproval") {
+                approvalRegister(data);
+            }
+
+        });
+
+        function cancelRegister(data) {
+
+            Swal.fire({
+                title: "PCM",
+                 html: "<span class='h3'>@Html.Raw(PCM.WEB.Properties.Resources.question_cancel_register)</span><br><br><b>@Html.Raw(PCM.WEB.Properties.Resources.document_num):</b> " + data.document_number + "<br><b>@Html.Raw(PCM.WEB.Properties.Resources.product):</b> " + data.product,
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.yes)",
+                denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.no)",
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    jQuery.ajax({
+                        type: "POST",
+
+                        url: "UpdateReceiptStatus",
+                        async: false,
+                        data: {
+                            "receipt_id": data.id,
+                            "product_id": data.product_id,
+                            "branch": data.branch,
+                            "status": 3
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            Swal.fire({
+                                title: "PCM",
+                                html: "<span class='h4'>" + response + "</span>",
+                                showDenyButton: false,
+                                showCancelButton: false,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $("#form").submit();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+        }
+
+        function approvalRegister(data) {
+
+             Swal.fire({
+                 title: "PCM",
+                 html: "<span class='h3'>@Html.Raw(PCM.WEB.Properties.Resources.question_approval_record)</span><br><br><b>@Html.Raw(PCM.WEB.Properties.Resources.document_num):</b> " + data.document_number + "<br><b>@Html.Raw(PCM.WEB.Properties.Resources.product):</b> " + data.product,
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.yes)",
+                denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.no)",
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    jQuery.ajax({
+                        type: "POST",
+
+                        url: "UpdateReceiptStatus",
+                        async: false,
+                        data: {
+                            "receipt_id": data.id,
+                            "product_id": data.product_id,
+                            "branch": data.branch,
+                            "status": 2
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            Swal.fire({
+                                title: "PCM",
+                                html: "<span class='h4'>" + response + "</span>",
+                                showDenyButton: false,
+                                showCancelButton: false,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $("#form").submit();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+        }
+
+    });
+
+</script>
+}

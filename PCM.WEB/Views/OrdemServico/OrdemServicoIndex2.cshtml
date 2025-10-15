@@ -1,0 +1,1028 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.pcm</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.ordem_servico</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+
+    <div class="content">
+
+        <!-- Listagem -->
+        <div class="block block-rounded border">
+
+            @using (Html.BeginForm("OrdemServicoIndex2", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="empresa" id="empresa" value="@Session["empresa"]">
+                <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario">
+
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <div class="js-tasks-nav d-none d-md-block">
+                    <div>
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.ordem_servico </h3>
+
+                            @if (ViewBag.inserir)
+                            {
+                                <div class="block-options">
+                                    <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                        <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        <ul class="list-group push">
+                            @if (Session["unidade"] == "")
+                            {
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <input type="hidden" name="unidade" id="unidade" value="@Session["codigo_unidade"]">
+                            }
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                            <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text font-w600">-</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"><div><input type="text" id="ordem_servico" name="ordem_servico" value="@ViewBag.ordem_servico" placeholder="@PCM.WEB.Properties.Resources.ordem_servico" class="form-control"></div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("setor", null, PCM.WEB.Properties.Resources.setor, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("apartamento", null, PCM.WEB.Properties.Resources.apartamento, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("status", null, PCM.WEB.Properties.Resources.status, new { @class = "js-select2 form-control" })</div></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-4"><div>@Html.DropDownList("equipamento", null, PCM.WEB.Properties.Resources.equipamento, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("prioridade", null, PCM.WEB.Properties.Resources.prioridade, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("solicitante", null, PCM.WEB.Properties.Resources.solicitante, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("responsavel_apartamento", null, PCM.WEB.Properties.Resources.responsavel_apartamento, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div><input type="text" id="executor" name="executor" value="@ViewBag.executor" placeholder="@PCM.WEB.Properties.Resources.executor" class="form-control"></div></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-4"><div>@Html.DropDownList("justificativa_apontamento", null, PCM.WEB.Properties.Resources.justificativa_apontamento, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-4"><div>@Html.DropDownList("departamento", null, PCM.WEB.Properties.Resources.departamento_responsavel, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-4">
+                                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                            <input type="text" class="form-control" id="data_inicio_execucao" name="data_inicio_execucao" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio_execucao">
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text font-w600">-</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="data_termino_execucao" name="data_termino_execucao" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino_execucao">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="limpaFiltros();" name="clearFilter" id="clearFilter"><i class="fa fa-ban mr-5"></i>Limpar filtro</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+                <div class="block-content block-content-full">
+
+                    <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+
+                        <thead>
+                            <tr class="table-secondary">
+                                <th class="text-center"></th>
+                                <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.ordem_servico</th>
+                                <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data</th>
+                                @if (Session["unidade"] == "")
+                                {
+                                    <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
+                                }
+                                <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.local</th>
+                                <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.solicitante</th>
+                                <th class="d-none d-lg-table-cell">Colaborador Vinculado</th>
+                                <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.descricao</th>
+                                <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data_execucao</th>
+                                <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.prioridade</th>
+                                <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.prazo_execucao</th>
+                                <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.status</th>
+                                @if (ViewBag.editar || ViewBag.excluir || ViewBag.inserir)
+                                {
+                                    <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                }
+                            </tr>
+                        </thead>
+
+                    </table>
+
+                </div>
+
+            }
+        </div>
+    </div>
+
+    <!-- From Right Modal -->
+    <div class="modal fade" id="modalFuncionario" tabindex="-1" role="dialog" aria-labelledby="modalFuncionario" aria-hidden="true">
+        @using (Html.BeginForm("OrdemServicoIndex", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "form_funcionario", @id = "form_funcionario", enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" name="codigo_ordem_servico" id="codigo_ordem_servico" value="0">
+            <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="0">
+            <input type="hidden" name="codigo_status" id="codigo_status" value="0">
+            <input type="hidden" name="data_os" id="data_os" value="">
+            <div class="modal-dialog modal-dialog-fromright" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-15">
+                        <div class="block-header bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.funcionario</h3>
+                        </div>
+                        <div class="block-content">
+                            @Html.DropDownList("funcionario", null, "", new { @class = "js-select2 form-control h-75", @multiple = "multiple" })
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="confirmar" id="confirmar"><i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.confirmado</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <!-- END From Right Modal -->
+    <!-- From Right Modal -->
+    <div class="modal fade" id="modalCancelar" tabindex="-1" role="dialog" aria-labelledby="modalCancelar" aria-hidden="true">
+        @using (Html.BeginForm("OrdemServicoIndex", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "form_cancelar", @id = "form_cancelar", enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" name="codigo_ordem_servico_cancelar" id="codigo_ordem_servico_cancelar" value="0">
+            <input type="hidden" name="codigo_unidade_cancelar" id="codigo_unidade_cancelar" value="0">
+
+            <div class="modal-dialog modal-dialog-fromright" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-15">
+                        <div class="block-header bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.justificativa_cancelamento_ordem_servico</h3>
+                        </div>
+                        <div class="block-content">
+                            <div class="form-group">
+                                <div>
+                                    @Html.DropDownList("justificativa_cancelamento", null, "", new { @class = "form-control h-75" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="confirmar" id="confirmar"><i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.confirmado</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <!-- END From Right Modal -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript">
+
+    var row;
+    var tr;
+    var index;
+    var btnVincular;
+    var table;
+
+    function limpaFiltros() {
+        var unidade = $("#unidade");
+        var setor = $("#setor");
+        var equipamento = $("#equipamento");
+        var prioridade = $("#prioridade");
+        var apartamento = $("#apartamento");
+        var solicitante = $("#solicitante");
+        var departamento = $("#departamento");
+        var justificativa_apontamento = $("#justificativa_apontamento");
+        var status = $("#status");
+
+        $("#data_inicio").val("");
+        $("#data_termino").val("");
+        $("#ordem_servico").val("");
+        $("#setor").val("");
+        $("#apartamento").val("");
+        $("#status").val("");
+        $("#equipamento").val("");
+        $("#prioridade").val("");
+        $("#solicitante").val("");
+        $("#responsavel_apartamento").val("");
+        $("#executor").val("");
+        $("#justificativa_apontamento").val("");
+        $("#departamento").val("");
+
+        unidade.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.unidade)', allowClear: true});
+        setor.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true});
+        equipamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)', allowClear: true });
+        prioridade.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true});
+        apartamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true});
+        solicitante.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true});
+        departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento_responsavel)', allowClear: true });
+        justificativa_apontamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.justificativa_apontamento)', allowClear: true });
+        status.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.status)', allowClear: true });
+    }
+
+    $(function () {
+
+        var unidade = $("#unidade");
+        var setor = $("#setor");
+        var equipamento = $("#equipamento");
+        var prioridade = $("#prioridade");
+        var apartamento = $("#apartamento");
+        var solicitante = $("#solicitante");
+        var departamento = $("#departamento");
+        var status = $("#status");
+
+        apartamento.select2();
+        status.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.status)', allowClear: true});
+
+        if (unidade.val() == "" || unidade.val() == "-1") {
+            setor.prop( "disabled", true );
+            prioridade.prop( "disabled", true );
+            apartamento.prop( "disabled", true );
+            equipamento.prop( "disabled", true );
+            solicitante.prop("disabled", true);
+            departamento.prop("disabled", true);
+            prioridade.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true});
+            setor.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true});
+            apartamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true});
+            solicitante.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true});
+            equipamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)', allowClear: true });
+            departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento_responsavel)', allowClear: true });
+        }
+
+        unidade.change(function () {
+
+            if (unidade.val() == "") {
+
+                setor.empty();
+                prioridade.empty();
+                apartamento.empty();
+                equipamento.empty();
+                solicitante.empty();
+                departamento.empty();
+                setor.prop( "disabled", true );
+                prioridade.prop( "disabled", true );
+                apartamento.prop( "disabled", true );
+                equipamento.prop( "disabled", true );
+                solicitante.prop("disabled", true);
+                departamento.prop("disabled", true);
+                prioridade.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true});
+                setor.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true});
+                apartamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true});
+                solicitante.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true});
+                equipamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)', allowClear: true });
+                departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento_responsavel)', allowClear: true });
+
+            } else {
+
+                var request = { "unidade": unidade.val() };
+
+                $.post("LoadPrioridade", request, function (obj) {
+                    prioridade.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    prioridade.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        prioridade.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadSetor", request, function (obj) {
+                    setor.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    setor.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        setor.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadApartamento", request, function (obj) {
+                    apartamento.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    apartamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        apartamento.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadSolicitante", request, function (obj) {
+                    solicitante.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    solicitante.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        solicitante.append(option);
+                    });
+                }, "json");
+
+                setor.prop("disabled", false);
+                prioridade.prop("disabled", false);
+                apartamento.prop("disabled", false);
+                equipamento.prop("disabled", false);
+                solicitante.prop("disabled", false);
+                departamento.prop("disabled", false);
+                prioridade.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true});
+                setor.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.setor)', allowClear: true});
+                apartamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.apartamento)', allowClear: true});
+                solicitante.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true});
+                equipamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)', allowClear: true });
+                departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento_responsavel)', allowClear: true });
+
+            }
+
+        });
+
+        setor.change(function () {
+
+            if (setor.val() == "") {
+                equipamento.empty();
+                equipamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)' ,allowClear: true});
+                equipamento.prop( "disabled", true );
+
+                var request = { "unidade": unidade.val(), "setor": "-1" };
+
+                $.post("LoadApartamento", request, function (obj) {
+                    apartamento.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    apartamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        apartamento.append(option);
+                    });
+                }, "json");
+
+            }
+
+            else {
+
+                var request = { "unidade": unidade.val(), "setor": setor.val() };
+
+                $.post("LoadApartamento", request, function (obj) {
+                    apartamento.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    apartamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        apartamento.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadEquipamentoSetor", request, function (obj) {
+                    equipamento.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    equipamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        equipamento.append(option);
+                    });
+                }, "json");
+
+                equipamento.prop( "disabled", false );
+                equipamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)' ,allowClear: true});
+            }
+
+        });
+
+        apartamento.change(function () {
+
+            if (apartamento.val() == "") {
+                equipamento.empty();
+                equipamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)' ,allowClear: true});
+                equipamento.prop( "disabled", true );
+                if(setor.val() != ""){
+                    setor.trigger('change');
+                }
+            }
+
+            else{
+
+                var request = { "unidade": unidade.val(), "apartamento": apartamento.val() };
+
+                $.post("LoadEquipamentoApartamento", request, function (obj) {
+                    equipamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                    equipamento.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        equipamento.append(option);
+                    });
+                }, "json");
+
+                equipamento.prop( "disabled", false );
+                equipamento.select2({placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.equipamento)' ,allowClear: true});
+            }
+
+        });
+
+    });
+
+    $('#form_funcionario').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'funcionario': {
+                required: true
+            }
+        },
+        messages: {
+            'funcionario': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+
+            var funcionario = $("#funcionario").val().toString();
+            var funcionarios = $("#funcionario").select2('data');
+            var codigo = $("#codigo_ordem_servico").val();
+            var unidade = $("#codigo_unidade").val();
+            var status = $("#codigo_status").val();
+            var data = $("#data_os").val();
+            var fromDataOS = data.split("/");
+            var data_hoje = new Date();
+            data_hoje.setHours(0, 0, 0, 0);
+            var data_os = new Date(fromDataOS[2], fromDataOS[1] -1, fromDataOS[0]);
+
+            var funcionario_nome = "";
+
+            for(i = 0; i< funcionarios.length; i++)
+            {
+                if (funcionarios[i].selected) {
+                    funcionario_nome = funcionario_nome.concat((funcionario_nome == "")? "" : "; ", funcionarios[i].text);
+                }
+            }
+
+            var dataString = {
+                "codigo": codigo,
+                "unidade": unidade,
+                "status": status,
+                "funcionario": funcionario,
+                "funcionario_nome": funcionario_nome
+            };
+
+            $.post("VincularFuncionarioOS", dataString,
+                function (result) {
+                    if (result == "True") {
+                        row.status_descricao = "<span class='badge badge-info'>VINCULADA</span>";
+                        row.status = 5;
+                        row.executor = funcionario_nome;
+                        var cTable = $('#tb_main').DataTable();
+                        cTable.ajax.reload();
+                        //cTable.context[0].aoData[index]._aFilterData[13] = "<button type='button' id='btnDesvincularOS' name='btnDesvincularOS' class= 'btn btn-sm btn-danger'  title='Desvincular Ordem de Serviço a Usuário'><i class='si si-call-in'></i></button><button type='button' id='btnApontamento' name='btnApontamento' class='btn btn-sm btn-secondary' title='Inserir Apontamento'> <i class='fa fa-crosshairs'></i></button><button type='button' id='btnEditar' name='btnEditar' class='btn btn-sm btn-secondary' title='Editar Ordem de Serviço'> <i class='fa fa-pencil'></i></button><button type='button' id='btnExcluir' name='btnExcluir' class='btn btn-sm btn-secondary' title='Excluir Ordem de Serviço'> <i class='fa fa-times'></i></button><button type='button' id='btnView' name='btnView' class='btn btn-sm btn-secondary' title='Visualizar Ordem de Serviço'> <i class='fa fa-navicon'></i></button><button type='button' id='btnReabrirOS' name='btnReabrirOS' class='btn btn-sm btn-secondary' title='Reabrir Ordem de Serviço'> <i class='fa fa-unlock'></i></button>";
+                        //cTable.row(index).data(row).draw();
+                    }
+                });
+
+            $('#modalFuncionario').modal('hide');
+        }
+    });
+
+    $('#form_cancelar').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'justificativa_cancelamento': {
+                required: true
+            }
+        },
+        messages: {
+            'justificativa_cancelamento': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+
+            var codigo = $("#codigo_ordem_servico_cancelar").val();
+            var unidade = $("#codigo_unidade_cancelar").val();
+            var justificativa = $("#justificativa_cancelamento").val();
+
+            var dataString = {
+                "codigo": codigo,
+                "codigo_unidade": unidade,
+                "justificativa": justificativa
+            };
+
+            $.post("OrdemServicoCancelar", dataString,
+                function (result) {
+                    if (result == "True") {
+                        table.ajax.reload(null, false);
+                    }
+                });
+
+            $('#modalCancelar').modal('hide');
+        }
+    });
+
+    function format(data) {
+
+        var table_info = '';
+        var type = data.tipo;
+
+        jQuery.ajax({
+            type: "POST",
+            url: "LoadOrdemServicoApontamento",
+            async: false,
+            data: {
+                "empresa": $("#empresa").val(),
+                "unidade": data.codigo_unidade,
+                "codigo_ordem_servico": data.codigo
+            },
+            dataType: "json",
+            success: function (response) {
+
+                table_info = '<table class="table table-sm table-vcenter table-striped table-bordered js-dataTable-list"> ' +
+                    '<thead> ' +
+                    '<tr class="table-secondary">' +
+                    '<th class="text-center" style="width: 50px;"></th>' +
+                    '<th>@Html.Raw(PCM.WEB.Properties.Resources.executor)</th>' +
+                    '<th class="text-center" style="width: 250px;">@Html.Raw(PCM.WEB.Properties.Resources.justificativa_apontamento)</th>' +
+                    '<th class="text-center" style="width: 150px;">@Html.Raw(PCM.WEB.Properties.Resources.data_inicio)</th>' +
+                    '<th class="text-center" style = "width: 150px;">@Html.Raw(PCM.WEB.Properties.Resources.data_termino)</th>' +
+                    '<th class="text-center" style="width: 100px;">@Html.Raw(PCM.WEB.Properties.Resources.tempo_gasto)</th>' +
+                    '<th class="text-center" style="width: 300px;">Imagem</th>' +
+                    '</tr>' +
+                    '</thead> ' +
+                    '<tbody>';
+
+                for (var i = 0; i < response.length; i++) {
+
+                    table_info += '<tr class="bg-white"> ';
+                    table_info += '<td class="text-center">' + response[i].item + '</td>';
+                    table_info += '<td>';
+                    table_info += '<p class="font-w600 mb-5">' + response[i].executor + '</p>';
+                    table_info += '<div class="text-muted">' + response[i].solucao + '</div>';
+                    table_info += '</td>';
+                    table_info += '<td class="text-center">' + response[i].justificativa + '</td>';
+                    table_info += '<td class="text-center">' + response[i].data_inicio + '</td>';
+                    table_info += '<td class="text-center">' + response[i].data_termino + '</td>';
+                    table_info += '<td class="text-center">' + response[i].horas + '</td>';
+                    table_info += '<td class="text-center">';
+                    if (response[i].fotos.Count > 0)
+                    {
+                        table_info += '<div class="js-slider slick-nav-black slick-nav-hover" data-dots="true" data-arrows="true" data-slides-to-show="1" data-center-mode="true" data-autoplay="true" data-autoplay-speed="3000">';
+                        for (var j = 0; j < response[i].fotos.length; i++)
+                        {
+                            table_info += '<div class="mt-15">'
+                            table_info += '<img class="img-galery" src="' + response[i].fotos[j].filename + '" alt="">';
+                            table_info += '</div>';
+                        }
+                        table_info += '</div>';
+                    }
+                    table_info += '</td>';
+                    table_info += '</tr>';
+
+                }
+
+                table_info += '</tbody> ' +
+                    '</table>';
+
+            }
+        });
+
+        return table_info;
+
+    }
+
+    $('#form').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+            $('#btnSave').show();
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'data_inicio': {
+                required: true
+            },
+            'data_termino': {
+                required: true
+            }
+        },
+        messages: {
+            'data_inicio': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'data_termino': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        }
+    });
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+        $.fn.dataTable.moment('DD/MM/YYYY');
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        table = $('#tb_main').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            //scrollY: '400px',
+            //scrollCollapse: true,
+            paging: true,
+            //fixedHeader: true,
+            processing: true,   
+            searching: true,
+            lengthChange: false,
+            pageLength: 15,
+            autoWidth: false,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadOrdemServicoIndex",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.empresa = $("#empresa").val(),
+                    d.usuario = $("#usuario").val() == "" ? "-1" : $("#usuario").val(),
+                    d.unidade = $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                    d.departamento = $("#departamento").val() == "" ? "-1" : $("#departamento").val(),
+                    d.ordem_servico = $("#ordem_servico").val(),
+                    d.ordem_servico_cliente = "",
+                    d.data_inicio = $("#data_inicio").val(),
+                    d.data_termino = $("#data_termino").val(),
+                    d.setor = $("#setor").val() == "" ? "-1" : $("#setor").val(),
+                    d.prioridade = $("#prioridade").val() == "" ? "-1" : $("#prioridade").val(),
+                    d.equipamento = $("#equipamento").val() == "" ? "-1" : $("#equipamento").val(),
+                    d.solicitante = $("#solicitante").val() == "" ? "-1" : $("#solicitante").val(),
+                    d.responsavel_apartamento = $("#responsavel_apartamento").val() == "" ? "-1" : $("#responsavel_apartamento").val(),
+                    d.apartamento = $("#apartamento").val() == "" ? "-1" : $("#apartamento").val(),
+                    d.executor = $("#executor").val(),
+                    d.status = $("#status").val() == "" ? "-1" : $("#status").val(),
+                    d.justificativa_apontamento = $("#justificativa_apontamento").val() == "" ? "-1" : $("#justificativa_apontamento").val(),
+                    d.data_inicio_execucao = $("#data_inicio_execucao").val(),
+                    d.data_termino_execucao = $("#data_termino_execucao").val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    class: "details-control",
+                    orderable: false,
+                    data: null,
+                    defaultContent: "",
+                    render: function () {
+                        return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+                    },
+                    width: "15px"
+                },
+                { data: "numero_documento" },
+                { data: "data" },
+                { data: "unidade" },
+                { data: "local" },
+                { data: "solicitante" },
+                { data: "executor" },
+                { data: "descricao" },
+                { data: "data_execucao" },
+                { data: "prioridade" },
+                { data: "data_necessidade" },
+                { data: "status_descricao" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'> " +
+                        "<button type='button' id='btnVincularOS' name='btnVincularOS' class= 'btn btn-sm btn-secondary'  title='Vincular Ordem de Serviço a Usuário'><i class='si si-call-in'></i></button>" +
+                        "<button type='button' id='btnDesvincularOS' name='btnDesvincularOS' class= 'btn btn-sm btn-danger'  title='Desvincular Ordem de Serviço a Usuário'><i class='si si-call-in'></i></button>" +
+                        "<button type='button' id='btnApontamento' name='btnApontamento' class='btn btn-sm btn-secondary' title='Inserir Apontamento'> <i class='fa fa-crosshairs'></i></button>" +
+                        "<button type='button' id='btnEditar' name='btnEditar' class='btn btn-sm btn-secondary' title='Editar Ordem de Serviço'> <i class='fa fa-pencil'></i></button>" +
+                        "<button type='button' id='btnExcluir' name='btnExcluir' class='btn btn-sm btn-secondary' title='Excluir Ordem de Serviço'> <i class='fa fa-times'></i></button>" +
+                        "<button type='button' id='btnView' name='btnView' class='btn btn-sm btn-secondary' title='Visualizar Ordem de Serviço'> <i class='fa fa-navicon'></i></button>" +
+                        "<button type='button' id='btnReabrirOS' name='btnReabrirOS' class='btn btn-sm btn-secondary' title='Reabrir Ordem de Serviço'> <i class='fa fa-unlock'></i></button>"
+                }
+            ],
+            columnDefs: [
+                { className: 'text-center', targets: [0, 1, 2, 8, 9, 10, 11, 12] },
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+
+                        if (col == 3 && ("@Session["unidade"].ToString()" != "")) {
+                            $(td).hide();
+                        }
+
+                        if (col == 1) {
+                            $(td).addClass("font-w600");
+                        }
+
+                        if (col == 12 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 2 || rowData.status == 99)) {
+                            $(td).find('#btnVincularOS').hide();
+                        }
+
+                        if (col == 12 && ("@ViewBag.administrador_vincular" != "True" || rowData.status != 5 || rowData.status == 99)) {
+                            $(td).find('#btnDesvincularOS').hide();
+                        }
+
+                        if (col == 12 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 5 || rowData.status == 99)) {
+                            $(td).find('#btnVincularOS').hide();
+                        }
+
+                        if (col == 12 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 2 || rowData.status == 4 || rowData.status == 99)) {
+                            $(td).find('#btnDesvincularOS').hide();
+                        }
+                        if (col == 12 && ("@ViewBag.apontamento" != "True" || rowData.status == 2 || rowData.status == 99)) {
+                            $(td).find('#btnApontamento').hide();
+                        }
+                        if (col == 12 && ("@ViewBag.editar" != "True" || rowData.status == 99)) {
+                            $(td).find('#btnEditar').hide();
+                        }
+                        if (col == 12 && ("@ViewBag.excluir" != "True" || rowData.status == 99)) {
+                            $(td).find('#btnExcluir').hide();
+                        }
+                        if (col == 12 && ("@ViewBag.administrador" != "True" || rowData.status != 2 || rowData.status == 99)) {
+                            $(td).find('#btnReabrirOS').hide();
+                        }
+                        if (col == 12 && (rowData.status == 5 || rowData.status == 99)) {
+                            $(td).find('#btnVincularOS').addClass("btn-danger");
+                        }
+
+                        if (col == 10 && rowData.data_necessidade_inicial == "") {
+                            $(td).html(rowData.data_necessidade + "<br><span class='" + rowData.css_class + "'>" + rowData.dias + "</span>");
+                        }else if (col == 10 && rowData.data_necessidade_inicial != "") {
+                            $(td).html(rowData.data_necessidade + "<span class='text-danger font-w400'> **</span> <br><span class='" + rowData.css_class + "'>" + rowData.dias + "</span>");
+                        }
+
+                        if (col == 11 && rowData.status == 1) {
+                            $(td).html("<span class='badge badge-warning'>" + rowData.status_descricao + "</span>");
+                        } else if (col == 11 && rowData.status == 2) {
+                            $(td).html("<span class='badge badge-success'>" + rowData.status_descricao + "</span>");
+                        } else if (col == 11 && rowData.status == 3) {
+                            $(td).html("<span class='badge badge-danger'>" + rowData.status_descricao + "</span>");
+                        } else if (col == 11 && rowData.status == 4) {
+                            $(td).html("<span class='badge badge-primary'>" + rowData.status_descricao + "</span>");
+                        } else if (col == 11 && rowData.status == 5) {
+                            $(td).html("<span class='badge badge-info'>" + rowData.status_descricao + "</span>");
+                        } else if (col == 11 && rowData.status == 99) {
+                            $(td).html("<span class='badge badge-secondary'>" + rowData.status_descricao + "</span>");
+}
+
+                    }, targets: [1, 2, 3, 10, 11, 12]
+                },
+                { width: '80px', targets: 11 }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                {extend: 'print',text: 'Imprimir'},
+                {
+                    extend: 'excel',
+                    action: function (e, dt, node, config) {
+                        //alert("OrdemServicoExcel?empresa=" + $("#empresa").val() + "&usuario=" + ($("#usuario").val() == "" ? "-1" : $("#usuario").val()) + "&unidade=" + ($("#unidade").val() == "" ? "-1" : $("#unidade").val()) + "&departamento=" + ($("#departamento").val() == "" ? "-1" : $("#departamento").val()) + "&ordem_servico=" + $("#ordem_servico").val() + "&data_inicio=" + $("#data_inicio").val() + "&data_termino=" + $("#data_termino").val() + "&setor=" + ($("#setor").val() == "" ? "-1" : $("#setor").val()) + "&prioridade=" + ($("#prioridade").val() == "" ? "-1" : $("#prioridade").val()) + "&equipamento=" + ($("#equipamento").val() == "" ? "-1" : $("#equipamento").val()) + "&solicitante=" + ($("#solicitante").val() == "" ? "-1" : $("#solicitante").val()) + "&responsavel_apartamento=" + ($("#responsavel_apartamento").val() == "" ? "-1" : $("#responsavel_apartamento").val()) + "&apartamento=" + ($("#apartamento").val() == "" ? "-1" : $("#apartamento").val()) + "&executor=" + $("#executor").val() + "&status=" + ($("#status").val() == "" ? "-1" : $("#status").val()) + "&justificativa_apontamento=" + ($("#justificativa_apontamento").val() == "" ? "-1" : $("#justificativa_apontamento").val()));
+                        window.open("OrdemServicoExcel?empresa=" + $("#empresa").val() +
+                            "&usuario=" + ($("#usuario").val() == "" ? "-1" : $("#usuario").val()) +
+                            "&unidade=" + ($("#unidade").val() == "" ? "-1" : $("#unidade").val()) +
+                            "&departamento=" + ($("#departamento").val() == "" ? "-1" : $("#departamento").val()) +
+                            "&ordem_servico=" + $("#ordem_servico").val() +
+                            "&ordem_servico_cliente=" +
+                            "&data_inicio=" + $("#data_inicio").val() +
+                            "&data_termino=" + $("#data_termino").val() +
+                            "&setor=" + ($("#setor").val() == "" ? "-1" : $("#setor").val()) +
+                            "&prioridade=" + ($("#prioridade").val() == "" ? "-1" : $("#prioridade").val()) +
+                            "&equipamento=" + ($("#equipamento").val() == "" ? "-1" : $("#equipamento").val()) +
+                            "&solicitante=" + ($("#solicitante").val() == "" ? "-1" : $("#solicitante").val()) +
+                            "&responsavel_apartamento=" + ($("#responsavel_apartamento").val() == "" ? "-1" : $("#responsavel_apartamento").val()) +
+                            "&apartamento=" + ($("#apartamento").val() == "" ? "-1" : $("#apartamento").val()) +
+                            "&executor=" + $("#executor").val() +
+                            "&status=" + ($("#status").val() == "" ? "-1" : $("#status").val()) +
+                            "&justificativa_apontamento=" + ($("#justificativa_apontamento").val() == "" ? "-1" : $("#justificativa_apontamento").val()));
+                    }
+                },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+                language: {
+                "search": "Procurar:",
+                "lengthMenu": "Exibir _MENU_ ",
+                "info": "_MAX_ registro(s)",
+                "infoFiltered": "(filtrado de _MAX_ registro(s))"
+            }
+        });
+
+        $('#tb_main tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+            row = table.row($(this).closest('tr')).data();
+            tr = table.row($(this).closest('tr'))
+            index = table.row($(this).closest('tr')).index();
+
+            if (this.id == "btnVincularOS") {
+                btnVincular = this;
+                updateStatusOS(data.codigo, data.codigo_unidade, data.data, 5);
+            } else if (this.id == "btnDesvincularOS") {
+                updateStatusOS(data.codigo, data.codigo_unidade, data.data, 1);
+            } else if (this.id == "btnApontamento") {
+                apontamentoOS(data);
+            } else if (this.id == "btnEditar") {
+                editarOS(data);
+            } else if (this.id == "btnExcluir") {
+                deletarOS(data);
+            } else if (this.id == "btnView") {
+                viewOS(data);
+            } else if (this.id == "btnReabrirOS") {
+                reopenOS(data);
+            }
+
+        });
+
+
+        function apontamentoOS(data) {
+
+            window.open("../PCM/ApontamentoOS?codigo_pcm_ordem_servico=" + data.codigo + "&codigo_unidade=" + data.codigo_unidade + "&model=OrdemServico&page=OrdemServicoIndex2", "_self");
+
+        }
+
+        function editarOS(data) {
+
+            window.open("../OrdemServico/OrdemServicoEdit?codigo=" + data.codigo + "&unidade=" + data.codigo_unidade, "_self");
+
+        }
+
+        function deletarOS(data) {
+
+            //Seta Váriaveis
+            $("#codigo_ordem_servico_cancelar").val(data.codigo);
+            $("#codigo_unidade_cancelar").val(data.codigo_unidade);
+
+            //Abre Formulário
+            jQuery('#modalCancelar').modal('show');
+
+        }
+
+        function viewOS(data) {
+
+            window.open("../OrdemServico/OrdemServicoView?codigo=" + data.codigo + "&unidade=" + data.codigo_unidade, "_self");
+
+        }
+
+        function reopenOS(data) {
+
+            window.open("../OrdemServico/ReabrirOS?codigo_pcm_ordem_servico=" + data.codigo + "&unidade=" + data.codigo_unidade, "_self");
+
+        }
+
+        function updateStatusOS(codigo, unidade, data, status){
+
+            if('@ViewBag.administrador_vincular' == 'True' && (status == 5)){
+
+                //Seta Váriaveis
+                $("#codigo_ordem_servico").val(codigo);
+                $("#codigo_unidade").val(unidade);
+                $("#codigo_status").val(status);
+                $("#data_os").val(data);
+                $('#funcionario').val([]).trigger('change');
+
+                var funcionario = $('#funcionario');
+
+                var request = { "unidade": unidade};
+
+                $.post("LoadFuncionario", request, function (obj) {
+                    funcionario.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    $('#funcionario').append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        funcionario.append(option);
+                    });
+                }, "json");
+
+                //Abre Formulário
+                jQuery('#modalFuncionario').modal('show');
+
+            } else if('@Session["funcionario"]' != '' || (status != 5)) {
+
+                var fromDataOS = data.split("/");
+                var data_hoje = new Date();
+                data_hoje.setHours(0, 0, 0, 0);
+                var data_os = new Date(fromDataOS[2], fromDataOS[1] -1, fromDataOS[0]);
+
+                var dataString = {
+                    "codigo": codigo,
+                    "unidade": unidade,
+                    "status": status,
+                    "funcionario": (status == 5)? '@Session["codigo_funcionario"]': "",
+                    "funcionario_nome": (status == 5)? '@Session["funcionario"]': ""
+                };
+
+                $.post("VincularFuncionarioOS", dataString,
+                    function (result) {
+                        if (result == "True") {
+                            var cTable = $('#tb_main').DataTable();
+                            cTable.ajax.reload(null, false);
+                        }
+                    }
+                );
+
+            }
+        }
+
+
+        // Add event listener for opening and closing details
+        $('#tb_main tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var tdi = tr.find("i.fa");
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                tdi.first().removeClass('fa-minus-square');
+                tdi.first().addClass('fa-plus-square');
+                // tr.find('svg').attr('data-icon', 'plus-square');    // FontAwesome 5
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                tdi.first().removeClass('fa-plus-square');
+                tdi.first().addClass('fa-minus-square');
+                // tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
+            }
+        });
+
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
+
+        // Reload DataTable
+        $('#filtrar').click(function () {
+            table.ajax.reload(null, false);
+        });
+
+    });
+
+    </script>
+}

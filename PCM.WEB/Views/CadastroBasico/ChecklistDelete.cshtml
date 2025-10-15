@@ -1,0 +1,111 @@
+﻿@model List<PCM.WEB.MODELS.ChecklistItem>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.cadastro_basico</span>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistIndex", "CadastroBasico")">@PCM.WEB.Properties.Resources.checklist</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.excluir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input name="codigo" type="hidden" value="@ViewBag.checklist.codigo" id="codigo" />
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.deseja_excluir</h3>
+                            <div class="block-options">
+                                @if (ViewBag.erro == "")
+                                {
+                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                        <i class="si si-trash mr-5"></i>@PCM.WEB.Properties.Resources.excluir
+                                    </button>
+                                }
+                                <a href="@Url.Action("ChecklistIndex", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            @if (ViewBag.erro != "")
+                            {
+                                <div class="form-group row">
+                                    <i><label class="col-12 font-w600 text-danger">** @ViewBag.erro</label></i>
+                                </div>
+                            }
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.unidade: <span class="font-w400">@ViewBag.checklist.unidade</span></label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.tipo_checklist: <span class="font-w400">@ViewBag.checklist.tipo_checklist</span></label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.descricao: <span class="font-w400">@ViewBag.checklist.descricao</span></label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Dynamic Table Full Pagination -->
+                    <div class="block block-rounded">
+
+                        <table class="table table-bordered table-sm table-striped table-vcenter" id="table" name="table">
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th class="text-md-center" style="width: 150px;">@PCM.WEB.Properties.Resources.tipo_checklist</th>
+                                    <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.grupo_checklist</th>
+                                    <th class="text-md-center" style="width: 150px;">@PCM.WEB.Properties.Resources.codigo</th>
+                                    <th>@PCM.WEB.Properties.Resources.checklist</th>
+                                    <th class="d-none d-md-table-cell text-md-center" style="width: 100px;">@PCM.WEB.Properties.Resources.periodicidade</th>
+                                    <th class="d-none d-md-table-cell text-md-center" style="width: 100px;">@PCM.WEB.Properties.Resources.intervalo</th>
+                                    <th class="d-none d-md-table-cell text-md-center" style="width: 150px;">@PCM.WEB.Properties.Resources.tempo_estimado</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="table_linha" name="table_linha">
+
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr id='linha'>
+                                        <td class="text-md-center" style="width: 150px;">@Html.DisplayFor(m => m[i].tipo_item_checklist)</td>
+                                        <td class="d-none d-md-table-cell">@Html.DisplayFor(m => m[i].grupo)</td>
+                                        <td class="text-md-center" style="width: 150px;">@Html.DisplayFor(m => m[i].checklist)</td>
+                                        <td>@Html.DisplayFor(m => m[i].descricao)</td>
+                                        <td class="d-none d-md-table-cell text-md-center" style="width: 100px;">@Html.DisplayFor(m => m[i].periodicidade)</td>
+                                        <td class="d-none d-md-table-cell text-md-center" style="width: 100px;">@Html.DisplayFor(m => m[i].intervalo)</td>
+                                        <td class="d-none d-md-table-cell text-md-center" style="width: 150px;">@Html.DisplayFor(m => m[i].tempo_estimado)</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

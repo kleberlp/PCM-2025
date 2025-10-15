@@ -1,0 +1,118 @@
+﻿@model INTERACTI.WEB.MODELS.Unidade
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-5 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@INTERACTI.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("UnidadeIndex", "CadastroBasico")">@INTERACTI.WEB.Properties.Resources.unidade</a>
+                <span class="breadcrumb-item active">@INTERACTI.WEB.Properties.Resources.excluir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.codigo)
+
+                    <div class="block block-rounded block-themed">
+                        <div class="block-header bg-gd-primary">
+                            <h3 class="block-title">@INTERACTI.WEB.Properties.Resources.deseja_excluir</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-sm btn-alt-primary">
+                                    <i class="si si-trash mr-5"></i>@INTERACTI.WEB.Properties.Resources.excluir
+                                </button>
+                                <a href="@Url.Action("UnidadeIndex", "CadastroBasico")" class="btn btn-sm btn-alt-primary">
+                                    <i class="si si-action-undo mr-5"></i>@INTERACTI.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">                            
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.cnpj</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.cnpj)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.nome_fantasia</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.nome_fantasia)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.razao_social</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.razao_social)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.inscricao_estadual</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.inscricao_estadual)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.inscricao_municipal</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.inscricao_municipal)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.cep</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.cep)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.uf</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.uf)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.municipio</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.municipio)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.logradouro</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.logradouro)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.numero</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.numero)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.bairro</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.bairro)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.complemento</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.complemento)</div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-12">@INTERACTI.WEB.Properties.Resources.ativo</label>
+                            <div class="col-12">
+                                <label class="css-control css-control-success css-switch">                                    
+                                    @Html.CheckBoxFor(model => model.ativo, new { @class = "css-control-input"})
+                                    <span class="css-control-indicator"></span>
+                                </label>
+                            </div>
+                        </div>
+                        </div>                        
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/cookie")    
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/bundles/codebase")
+}

@@ -1,0 +1,565 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.CronogramaManutencaoPreventiva>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.preventiva</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("CronogramaManutencaoPreventiva", "PCM", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+            <!-- Collapsible Tasks Navigation -->
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="data">@PCM.WEB.Properties.Resources.unidade</label>
+                                        <div>@Html.DropDownList("unidade", null, null, new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="data">@PCM.WEB.Properties.Resources.modulo</label>
+                                        <div>@Html.DropDownList("modulo", null, PCM.WEB.Properties.Resources.modulo, new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="data">@PCM.WEB.Properties.Resources.status</label>
+                                        <div>@Html.DropDownList("status", null, PCM.WEB.Properties.Resources.status.ToUpper(), new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="data">@PCM.WEB.Properties.Resources.setor</label>
+                                        <div>@Html.DropDownList("setor", null, PCM.WEB.Properties.Resources.setor.ToUpper(), new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="data">@PCM.WEB.Properties.Resources.data</label>
+                                        <div><input type="text" class="js-datepicker form-control" id="data" name="data" data-date="02/2012" data-date-format="mm/yyyy" value="@ViewBag.data_filtro"></div>
+                                    </div>
+                                </div>
+                            <li class="list-group-item text-right">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+            <div class="block block-rounded border">
+                <div class="block-content block-content-full row">
+                    <div class="col-md-3 font-w600 text-center"><span class="badge badge-danger">N/E</span> Preventiva em Atraso</div>
+                    <div class="col-md-3 font-w600 text-center"><span class="badge badge-warning">R</span> Preventiva a Realizar no Mês corrente</div>
+                    <div class="col-md-3 font-w600 text-center"><span class="badge badge-primary">F</span> Preventiva a Realizar no Futuro</div>
+                    <div class="col-md-3 font-w600 text-center"><span class="badge badge-success">OK</span> Preventiva Realizada</div>
+                </div>
+            </div>
+
+            <div class="block block-rounded border">
+                <div class="block-content block-content-full border">
+
+                    <table class="table table-vcenter table-hover table-bordered js-dataTable-list table-responsive side-scroll">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>@PCM.WEB.Properties.Resources.manutencao</th>
+                                <th class="text-center" style="width:100px;">Última O.S.</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[0]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[1]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[2]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[3]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[4]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[5]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[6]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[7]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[8]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[9]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[10]</th>
+                                <th class="text-center" style="width:75px;">@ViewBag.data[11]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="text-middle">
+                                    <td><span class="font-w600">@Html.DisplayFor(modelItem => item.nome_fantasia)</span>@Html.DisplayFor(modelItem => item.manutencao)</td>
+                                    <td class="font-w600 text-center">@Html.DisplayFor(modelItem => item.data_ultima_manutencao)</td>
+                                    @if (item.mes_1 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_1 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_1 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_1 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_1 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_1 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_2 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_2 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_2 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_2 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_2 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_2 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_3 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_3 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_3 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_3 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_3 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_3 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_4 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_4 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_4 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_4 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_4 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_4 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_5 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_5 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_5 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_5 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_5 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_5 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_6 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_6 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_6 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_6 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_6 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_6 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_7 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_7 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_7 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_7 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_7 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_7 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_8 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_8 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_8 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_8 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_8 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_8 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_9 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_9 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_9 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_9 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_9 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_9 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_10 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_10 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_10 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_10 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_10 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_10 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_11 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_11 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_11 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_11 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_11 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_11 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                    @if (item.mes_12 == 0)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">F</span></td>
+                                    }
+                                    else if (item.mes_12 == -1)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("R", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-warning" })</td>
+                                    }
+                                    else if (item.mes_12 == -2)
+                                    {
+                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">N/E</span></td>
+                                    }
+                                    else if (item.mes_12 == -4)
+                                    {
+                                        <td class="text-center" style="width:75px;"></td>
+                                    }
+                                    else if (item.mes_12 == -5)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("N/E", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-danger" })</td>
+                                    }
+                                    else if (item.mes_12 > 0)
+                                    {
+                                        <td class="text-center" style="width:75px;">@Html.ActionLink("OK", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_preventiva" }, new { @class = "badge badge-success" })</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script>
+
+    $("#data").datepicker({
+        format: "mm/yyyy",
+        viewMode: "months",
+        minViewMode: "months"
+    });
+
+
+    $(function () {
+
+        var unidade = $("#unidade");
+        var setor = $("#setor");
+        $.ajaxSetup({ async: false });
+
+
+        if (unidade.val() == "" || unidade.val() == "-1") {
+            setor.prop("disabled", true);
+            setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+        }
+
+        unidade.change(function () {
+
+            if (unidade.val() == "") {
+                setor.empty();
+                setor.prop("disabled", true);
+                setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+
+            } else {
+
+                var request = { "unidade": unidade.val() };
+
+                $.post("LoadSetor", request, function (obj) {
+                    setor.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    setor.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        setor.append(option);
+                    });
+                }, "json");
+
+                setor.prop("disabled", false);
+                setor.select2({ placeholder: '@PCM.WEB.Properties.Resources.setor', allowClear: true });
+
+            }
+
+        });
+
+    });
+
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.list-group-item > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'data': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'data': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    var BeTableDatatables = function () {
+        // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+        var exDataTable = function () {
+            jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                sWrapper: "dataTables_wrapper dt-bootstrap4"
+            });
+        };
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        var initDataTableSimple = function () {
+            jQuery('.js-dataTable-list').dataTable({
+                fixedHeader: true,
+                searching: false,
+                lengthChange: false,
+                paging: false,
+                autoWidth: false,
+                columnDefs: [ {"targets": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], "orderable": false} ],
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'copy', text: 'Copiar' },
+                    {
+                        extend: 'print',
+                        text: 'Imprimir'
+                    },
+                    { extend: 'excel' },
+                    { extend: 'pdf', orientation: 'landscape' },
+                ],
+                language: {
+                    "search": "Procurar:",
+                    "lengthMenu": "Exibir _MENU_ ",
+                    "zeroRecords": "Nenhum Registro Encontrado",
+                    "info": "_MAX_ registro(s)",
+                    "infoEmpty": "Nenhum Registro encontrado",
+                    "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Override a few DataTable defaults
+                exDataTable();
+
+                // Init Datatables
+                initDataTableSimple();
+            }
+        };
+    }();
+
+
+    // Initialize when page loads
+    jQuery(function () {
+        FormValidation.init();
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init();
+        Codebase.helpers(['datepicker', 'select2']);
+    });
+
+</script>
+}

@@ -1,0 +1,377 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("RelatorioConsumoEnxovalDia", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="page landscape-parent">
+
+                <div class="block d-print-normal p-10 m-10" style="display:none">
+                    <div class="form-row">
+                        <div class="col-3">
+                            <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
+                        </div>
+                        <div class="col-6 text-center">
+                            <label class="h2">@PCM.WEB.Properties.Resources.relatorio_consumo_enxoval</label>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+
+                <div class="col-md-12 col-xl-12">
+                    <!-- Toggle Tasks Navigation on mobile -->
+                    <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                    <!-- Collapsible Tasks Navigation -->
+                    <div class="js-tasks-nav d-none d-md-block">
+                        <!-- Tasks Info -->
+                        <div class="block">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                            </div>
+                            <div class="block-content">
+                                <ul class="list-group push">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-6 col-lg-4 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                                <div>@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-4 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.data</label>
+                                                @Html.DropDownList("data", null, PCM.WEB.Properties.Resources.data, new { @class = "form-control" })
+                                            </div>
+                                            <div class="col-md-6 col-lg-4 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.forma_analise_consumo</label>
+                                                @Html.DropDownList("formaAnalise", null, PCM.WEB.Properties.Resources.forma_analise_consumo, new { @class = "form-control js-select2" })
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item text-right d-print-none">
+                                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END Tasks Info -->
+                    </div>
+                    <!-- END Collapsible Tasks Navigation -->
+
+                    <div class="block">
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.relatorio_consumo_enxoval</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-dark font-w600" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                            </div>
+                        </div>
+
+                        <div class="block-content">
+
+                            <!-- Table -->
+                            <div class="table-responsive table-sm push">
+                                <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th>@PCM.WEB.Properties.Resources.enxoval</th>
+                                            <th class="text-center">1</th>
+                                            <th class="text-center">2</th>
+                                            <th class="text-center">3</th>
+                                            <th class="text-center">4</th>
+                                            <th class="text-center">5</th>
+                                            <th class="text-center">6</th>
+                                            <th class="text-center">7</th>
+                                            <th class="text-center">8</th>
+                                            <th class="text-center">9</th>
+                                            <th class="text-center">10</th>
+                                            <th class="text-center">11</th>
+                                            <th class="text-center">12</th>
+                                            <th class="text-center">13</th>
+                                            <th class="text-center">14</th>
+                                            <th class="text-center">15</th>
+                                            <th class="text-center">16</th>
+                                            <th class="text-center">17</th>
+                                            <th class="text-center">18</th>
+                                            <th class="text-center">19</th>
+                                            <th class="text-center">20</th>
+                                            <th class="text-center">21</th>
+                                            <th class="text-center">22</th>
+                                            <th class="text-center">23</th>
+                                            <th class="text-center">24</th>
+                                            <th class="text-center">25</th>
+                                            <th class="text-center">26</th>
+                                            <th class="text-center">27</th>
+                                            <th class="text-center">28</th>
+                                            <th class="text-center">29</th>
+                                            <th class="text-center">30</th>
+                                            <th class="text-center">31</th>
+                                            <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <!-- END Table -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+
+    $(function () {
+
+        $.ajaxSetup({ async: false });
+
+        var unidade = $("#unidade")
+        var data = $("#data");
+
+        unidade.change(function () {
+
+            var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
+
+            $.post("LoadDataGovernanca", request, function (obj) {
+                data.empty();
+                option = $("<option>", { "value": "" }).text("");
+                data.append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    data.append(option);
+                });
+            }, "json");
+
+        });
+
+    });
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+        FormValidation.init();
+        Codebase.helpers(['datepicker', 'maxlength', 'select2', 'table-tools']);
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        table = $('#tb_main').DataTable({
+            info: false,
+            scrollCollapse: false,
+            scrollY: '40vh',
+            paging: false,
+            fixedHeader: true,
+            destroy: true,
+            searching: false,
+            paging: false,
+            lengthChange: false,
+            autoWidth: false,
+        ajax: {
+            url: "LoadRelatorioConsumoEnxovalDia",
+            type: "POST",
+            datatype: "json",
+            data: {
+                "data": $("#data").val(),
+                "unidade": $("#unidade").val() == "" ? -1 : $("#unidade").val(),
+                "formaAnalise": $("#formaAnalise").val() == "" ? -1 : $("#formaAnalise").val()
+            },
+            dataSrc: ""
+        },
+        columns: [
+            { data: "enxoval", className: "bg-light-secondary" },
+            { orderable: false, data: "dia1" },
+            { orderable: false, data: "dia2" },
+            { orderable: false, data: "dia3" },
+            { orderable: false, data: "dia4" },
+            { orderable: false, data: "dia5" },
+            { orderable: false, data: "dia6" },
+            { orderable: false, data: "dia7" },
+            { orderable: false, data: "dia8" },
+            { orderable: false, data: "dia9" },
+            { orderable: false, data: "dia10" },
+            { orderable: false, data: "dia11" },
+            { orderable: false, data: "dia12" },
+            { orderable: false,data: "dia13" },
+            { orderable: false, data: "dia14" },
+            { orderable: false, data: "dia15" },
+            { orderable: false, data: "dia16" },
+            { orderable: false, data: "dia17" },
+            { orderable: false, data: "dia18" },
+            { orderable: false, data: "dia19" },
+            { orderable: false, data: "dia20" },
+            { orderable: false, data: "dia21" },
+            { orderable: false, data: "dia22" },
+            { orderable: false, data: "dia23" },
+            { orderable: false, data: "dia24" },
+            { orderable: false, data: "dia25" },
+            { orderable: false, data: "dia26" },
+            { orderable: false, data: "dia27" },
+            { orderable: false, data: "dia28" },
+            { orderable: false, data: "dia29" },
+            { orderable: false, data: "dia30" },
+            { orderable: false, data: "dia31" },
+            { orderable: false, data: "total", className: "bg-light-secondary text-center font-w600" }
+        ],
+        columnDefs: [
+            { className: 'text-center', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32] },
+            { width: '350px', targets: 0 },
+            { width: '50px', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32] },
+            { className: 'text-center', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32] },
+            {
+                createdCell: function (td, cellData, rowData, row, col) {
+
+                    if ((col == 1 && rowData.dia1 > 0)) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if ((col == 2 && rowData.dia2 > 0)) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 3 && rowData.dia3 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 4 && rowData.dia4 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 5 && rowData.dia5 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 6 && rowData.dia6 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 7 && rowData.dia7 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 8 && rowData.dia8 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 9 && rowData.dia9 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 10 && rowData.dia10 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 11 && rowData.dia11 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 12 && rowData.dia12 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 13 && rowData.dia13 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 14 && rowData.dia14 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 15 && rowData.dia15 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 16 && rowData.dia16 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 17 && rowData.dia17 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 18 && rowData.dia18 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 19 && rowData.dia19 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 20 && rowData.dia20 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 21 && rowData.dia21 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 22 && rowData.dia22 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 23 && rowData.dia23 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 24 && rowData.dia24 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 25 && rowData.dia25 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 26 && rowData.dia26 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 27 && rowData.dia27 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 28 && rowData.dia28 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 29 && rowData.dia29 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 30 && rowData.dia30 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 31 && rowData.dia31 > 0) {
+                        $(td).addClass("bg-warning-light font-w600");
+                    } else if (col == 32 && rowData.total > 0) {
+                        $(td).addClass("bg-danger-light font-w600");
+                    }
+                }, targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+            },
+        ],
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: 'Copiar' },
+            {extend: 'print',text: 'Imprimir'},
+            {extend: 'excel', text: 'Excel'},
+            { extend: 'pdf', orientation: 'portrait' },
+        ],
+            language: {
+            "search": "Procurar:",
+            "lengthMenu": "Exibir _MENU_ ",
+            "info": "_MAX_ registro(s)",
+            "infoFiltered": "(filtrado de _MAX_ registro(s))"
+            }
+        });
+
+    });
+
+    var FormValidation = function () {
+        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+        var initValidationBootstrap = function () {
+            jQuery('.js-validation-bootstrap').validate({
+                ignore: [],
+                errorClass: 'invalid-feedback animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function (error, e) {
+                    jQuery(e).parents('.list-group-item > .row > div').append(error);
+                },
+                highlight: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid').addClass('is-invalid');
+                },
+                success: function (e) {
+                    jQuery(e).closest('.list-group-item').removeClass('is-invalid');
+                    jQuery(e).remove();
+                },
+                rules: {
+                    'data': {
+                        required: true
+                    },
+                    'formaAnalise': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'data': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    },
+                    'formaAnalise': {
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                    }
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                // Init Bootstrap Forms Validation
+                initValidationBootstrap();
+            }
+        };
+    }();
+
+    </script>
+}

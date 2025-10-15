@@ -1,0 +1,187 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("ManutencaoSolicitante", "Relatorio", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="col-md-12 col-xl-12">
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-6">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>
+                                        <div class="col-md-4">@Html.DropDownList("tipo", null, PCM.WEB.Properties.Resources.tipo, new { @class = "form-control" })</div>
+                                        <div class="col-md-2">@Html.DropDownList("ano", null, PCM.WEB.Properties.Resources.ano, new { @class = "form-control" })</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    @if (ViewBag.imprimir)
+                                    {
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+                <div class="block">
+
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.manutencao</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option text-dark font-w600" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                        </div>
+                    </div>
+
+                    <div class="block-content">
+
+                        <!-- Table -->
+                        <div class="table-responsive table-sm push">
+                            <table class="table table-bordered table-hover" id="tableMain" name="tableMain">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                        <th class="text-center" style="width: 80px;">Jan.</th>
+                                        <th class="text-center" style="width: 80px;">Fev.</th>
+                                        <th class="text-center" style="width: 80px;">Mar.</th>
+                                        <th class="text-center" style="width: 80px;">Abr.</th>
+                                        <th class="text-center" style="width: 80px;">Mai.</th>
+                                        <th class="text-center" style="width: 80px;">Jun.</th>
+                                        <th class="text-center" style="width: 80px;">Jul.</th>
+                                        <th class="text-center" style="width: 80px;">Ago.</th>
+                                        <th class="text-center" style="width: 80px;">Set.</th>
+                                        <th class="text-center" style="width: 80px;">Out.</th>
+                                        <th class="text-center" style="width: 80px;">Nov.</th>
+                                        <th class="text-center" style="width: 80px;">Dez.</th>
+                                        <th class="text-center" style="width: 100px;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Table -->
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/chart")
+
+    <script>
+
+    $(document).ready(function () {
+
+        var table = $('#tableMain').DataTable({
+            searching: false,
+            lengthChange: false,
+            paging: false,
+            processing: true,
+            serverSide: false,
+            ajax: {
+                url: "LoadManutencao",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.unidade = $('#unidade').val(),
+                        d.tipo = ($('#tipo').val() == "") ? "" : $("#tipo").val(),
+                        d.ano = $('#ano').val()
+                },
+                dataSrc: ""
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                { extend: 'print', text: 'Imprimir' },
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+            columns: [
+                { data: "descricao" },
+                { data: "janeiro" },
+                { data: "fevereiro" },
+                { data: "marco" },
+                { data: "abril" },
+                { data: "maio" },
+                { data: "junho" },
+                { data: "julho" },
+                { data: "agosto" },
+                { data: "setembro" },
+                { data: "outubro" },
+                { data: "novembro" },
+                { data: "dezembro" },
+                { data: "total"}
+            ],
+            language: {
+                emptyTable: "Nenhum registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+            },
+            columnDefs: [
+                { className: 'text-center', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] },
+                { width: '100px', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] },
+                { orderable: false, targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] },
+                {
+                    targets: 13,
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        $(td).addClass('bg-warning-light font-w600 text-dark text-center');
+                    }
+                }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                if (data.descricao === 'TOTAL') {
+                    $(row).addClass('bg-warning-light font-w600 text-dark'); // Aplica uma classe personalizada
+                }
+            }
+        });
+
+        // Reload DataTable
+        $('#filtrar').click(function () {
+            table.ajax.reload(null, false);
+        });
+
+    });
+
+    </script>
+}

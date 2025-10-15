@@ -1,0 +1,96 @@
+﻿@model List<PCM.WEB.MODELS.PreventivaMes>
+
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("PreventivaMes", "Relatorio", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="block">
+
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.preventiva_mes</h3>
+                </div>
+
+                <div class="block-content">
+
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+
+                        if (i == 0 || Model[i].codigo_unidade != Model[i - 1].codigo_unidade)
+                        {
+                            <div class="content-block border-b"></div>
+
+                            <div class="content-block mt-20 ">
+                                <h5 class="font-w600">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].unidade)</span></h5>
+                            </div>
+
+                            <div class="content-block border-b"></div>
+
+                            <div class="content-block mt-20 col-12">
+                                <h6 class="font-w600">@Html.DisplayFor(modelItem => modelItem[i].ano)</h6>
+                            </div>
+                        }
+
+                        if (i == 0 || Model[i].linha != Model[i - 1].linha)
+                        {
+                            @Html.Raw("<div class='row mt-20'>");
+                        }
+
+                        <div class="col-md-2 col-xl-1">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirPreventiva(@Model[i].codigo_unidade, @Model[i].mes, @Model[i].ano);">
+                                <div class="text-center">
+                                    <i class="fa fa-snowflake-o fa-2x text-success mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">@PCM.WEB.Properties.Resources.preventiva</h6>
+                                    <h6 class="mb-5"><small>@Model[i].descricao</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        if (i == (Model.Count - 1) || Model[i].linha != Model[i + 1].linha)
+                        {
+                            @Html.Raw("</div>");
+                        }
+
+                    }
+
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script>
+
+    function ImprimirPreventiva(unidade, mes, ano) {
+
+        window.open('PrintPreventivaMes' + '?unidade=' + unidade + '&mes=' + mes + '&ano=' + ano + '&report=RPT000000037', '_blank');
+    }
+
+    // Initialize when page loads
+    jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+    });
+
+</script>
+
+}

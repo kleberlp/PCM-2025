@@ -1,0 +1,194 @@
+﻿@model List<PCM.WEB.MODELS.Auditoria>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.auditoria</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.auditoria_corporativo</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Listagem -->
+        @using (Html.BeginForm("AuditoriaCorporativoIndex", "Auditoria", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.auditoria_corporativo</h3>
+                        @if (ViewBag.inserir)
+                        {
+                            <div class="block-options">
+                                <a href="@Url.Action("AuditoriaCorporativoInsert", "Auditoria")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <div class="col-md-4">
+                                            <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                            <div>@Html.DropDownList("unidade", null, @PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" id="unidade" name="unidade" value="@Session["codigo_unidade"]">
+                                    }
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.periodo</label>
+                                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                            <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text font-w600">-</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@PCM.WEB.Properties.Resources.auditoria_corporativo</label>
+                                        @Html.DropDownList("auditoria_corporativo", null, "", new { @class = "js-select2 form-control", @allowClear = "true" })
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item block-options text-right">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="block block-rounded border">
+
+            <div class="block-content">
+
+                @for (int i = 0; i < Model.Count; i++)
+                {
+
+                    if (i == 0 || Model[i].codigo_unidade != Model[i - 1].codigo_unidade)
+                    {
+                        <div class="content-block font-size-h2 border-b mb-15">@Html.DisplayFor(modelItem => Model[i].unidade)</div>
+                    }
+
+                    <div class="row border-b mt-15">
+                        <div class="col-md-12">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Apontamento", "Auditoria", new { codigo_unidade = Model[i].codigo_unidade, codigo_auditoria = Model[i].codigo_auditoria, codigo_auditoria_interna = Model[i].codigo_auditoria_interna, data = Model[i].data})">                                
+
+                                <div class="block-content block-content-full clearfix">
+                                    <div class="d-none d-sm-block float-md-right mt-100">
+                                        <div class="js-pie-chart pie-chart" data-percent="@Model[i].nota" data-line-width="4" data-size="120" data-bar-color="#5C5C5C" data-track-color="rgba(2,2,2,.25)" data-scale-color="rgba(2,2,2,.5)">
+                                            <span class="text-success font-size-h1 font-w600">@Model[i].nota</span>
+                                        </div>
+                                    </div>
+                                    <div class="font-size-h3 font-w600 text-uppercase @Model[i].css_class">@Model[i].descricao</div>
+                                    <div class="font-size-md font-w600 text-secundary">@Model[i].data</div>
+                                    <div class="font-size-md font-w600 text-secundary">@Model[i].usuario</div>
+                                    <hr />
+                                    <div class="font-size-md text-secundary"><b>Pontos Possíveis:</b> @Model[i].pontos_possiveis</div>
+                                    <div class="font-size-md text-secundary"><b>Pontos Realizados:</b> @Model[i].pontos_realizados</div>
+                                    <div class="font-size-md text-secundary"><b>Conformes:</b> @Model[i].conforme</div>
+                                    <div class="font-size-md text-secundary"><b>Não Conformidades:</b> @Model[i].nao_conforme</div>
+                                    <div class="font-size-md text-secundary"><b>Não Respondidos:</b> @Model[i].nao_respondido</div>
+                                    <div class="font-size-md text-secundary"><b>Não Aplicáveis:</b> @Model[i].nao_aplicavel</div>
+
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/easy_pie_chart")
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $.ajaxSetup({ async: false });
+
+            var unidade = $("#unidade")
+            var auditoria_corporativo = $("#auditoria_corporativo");
+
+            auditoria_corporativo.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.auditoria_corporativo' });
+
+            if (unidade.val() == "" || unidade.val() == "-1") {
+                auditoria_corporativo.prop("disabled", true);
+                auditoria_corporativo.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.auditoria_corporativo' });
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+                    auditoria_corporativo.prop("disabled", true);
+                    auditoria_corporativo.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.auditoria_corporativo' });
+                }
+                else
+                {
+
+                    var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
+
+                    $.post("LoadAuditoriaCorporativo", request, function (obj) {
+                        auditoria_corporativo.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        auditoria_corporativo.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            auditoria_corporativo.append(option);
+                        });
+                    }, "json");
+
+                    auditoria_corporativo.prop("disabled", false);
+                    auditoria_corporativo.select2({ allowClear: true, placeholder: '@PCM.WEB.Properties.Resources.auditoria_corporativo' });
+                }
+
+            });
+
+        });
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2', 'easy-pie-chart']);
+        });
+
+    </script>
+}

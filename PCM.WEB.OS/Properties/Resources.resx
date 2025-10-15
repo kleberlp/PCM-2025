@@ -1,0 +1,1419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="actionRole" xml:space="preserve">
+    <value>Ação</value>
+  </data>
+  <data name="active" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="additionalInfo" xml:space="preserve">
+    <value>Complemento</value>
+  </data>
+  <data name="address" xml:space="preserve">
+    <value>Endereço</value>
+  </data>
+  <data name="addressNumber" xml:space="preserve">
+    <value>Número</value>
+  </data>
+  <data name="alertType" xml:space="preserve">
+    <value>Tipo de alerta</value>
+  </data>
+  <data name="boardingDate" xml:space="preserve">
+    <value>Data embarque</value>
+  </data>
+  <data name="boardingUnit" xml:space="preserve">
+    <value>Un. de embarque</value>
+  </data>
+  <data name="branch" xml:space="preserve">
+    <value>Planta</value>
+  </data>
+  <data name="businessPartner" xml:space="preserve">
+    <value>Parceiro de negócio</value>
+  </data>
+  <data name="carrier" xml:space="preserve">
+    <value>Transportadora</value>
+  </data>
+  <data name="cellPhone" xml:space="preserve">
+    <value>Celular</value>
+  </data>
+  <data name="city" xml:space="preserve">
+    <value>Cidade</value>
+  </data>
+  <data name="calendarization" xml:space="preserve">
+    <value>Agendado</value>
+  </data>
+  <data name="clickToConfig" xml:space="preserve">
+    <value>Mostrar/ocultar colunas</value>
+  </data>
+  <data name="clickToCopy" xml:space="preserve">
+    <value>Copiar dados para a área de transferência</value>
+  </data>
+  <data name="clickToDelete" xml:space="preserve">
+    <value>Clique para excluir</value>
+  </data>
+  <data name="clickToEdit" xml:space="preserve">
+    <value>Clique para editar</value>
+  </data>
+  <data name="clickToExcel" xml:space="preserve">
+    <value>Exportar para Excel</value>
+  </data>
+  <data name="clickToPdf" xml:space="preserve">
+    <value>Exportar para PDF</value>
+  </data>
+  <data name="client" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="clientAddress" xml:space="preserve">
+    <value>Endereço do cliente</value>
+  </data>
+  <data name="code" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="codeProceda" xml:space="preserve">
+    <value>Código Proceda</value>
+  </data>
+  <data name="config" xml:space="preserve">
+    <value>Configuração</value>
+  </data>
+  <data name="day" xml:space="preserve">
+    <value>dia(s)</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="deliveryDays" xml:space="preserve">
+    <value>Dias para realizar entrega</value>
+  </data>
+  <data name="deliveryType" xml:space="preserve">
+    <value>Tipo de entrega</value>
+  </data>
+  <data name="departament" xml:space="preserve">
+    <value>Departamento</value>
+  </data>
+  <data name="description" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="district" xml:space="preserve">
+    <value>Bairro</value>
+  </data>
+  <data name="domain" xml:space="preserve">
+    <value>Domínio</value>
+  </data>
+  <data name="edi" xml:space="preserve">
+    <value>EDI</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="emptyTable" xml:space="preserve">
+    <value>Nenhum registro encontrado</value>
+  </data>
+  <data name="endDate" xml:space="preserve">
+    <value>Data término</value>
+  </data>
+  <data name="faxNumber" xml:space="preserve">
+    <value>Fax</value>
+  </data>
+  <data name="filter" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="find" xml:space="preserve">
+    <value>Procurar</value>
+  </data>
+  <data name="FKError" xml:space="preserve">
+    <value>Este registro não pode ser excluído, pois está em uso.</value>
+  </data>
+  <data name="folderBackup" xml:space="preserve">
+    <value>Pasta de backup dos arquivos</value>
+  </data>
+  <data name="folderOrigin" xml:space="preserve">
+    <value>Pasta de origem</value>
+  </data>
+  <data name="freightValue" xml:space="preserve">
+    <value>Valor do frete</value>
+  </data>
+  <data name="frequency" xml:space="preserve">
+    <value>Frequência</value>
+  </data>
+  <data name="friday" xml:space="preserve">
+    <value>Sexta</value>
+  </data>
+  <data name="groupDescription" xml:space="preserve">
+    <value>Módulo</value>
+  </data>
+  <data name="hour" xml:space="preserve">
+    <value>horas</value>
+  </data>
+  <data name="insert" xml:space="preserve">
+    <value>Inserir</value>
+  </data>
+  <data name="interface" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="interfaceEDI" xml:space="preserve">
+    <value>Interface EDI</value>
+  </data>
+  <data name="interfaceNFe" xml:space="preserve">
+    <value>Interface NFe</value>
+  </data>
+  <data name="invoice" xml:space="preserve">
+    <value>NFe</value>
+  </data>
+  <data name="invoiceNumber" xml:space="preserve">
+    <value>Nota Fiscal</value>
+  </data>
+  <data name="issueDate" xml:space="preserve">
+    <value>Data emissão</value>
+  </data>
+  <data name="leadTime" xml:space="preserve">
+    <value>Lead time</value>
+  </data>
+  <data name="mainData" xml:space="preserve">
+    <value>Dados principais</value>
+  </data>
+  <data name="management" xml:space="preserve">
+    <value>Administração</value>
+  </data>
+  <data name="masterData" xml:space="preserve">
+    <value>Cadastro básico</value>
+  </data>
+  <data name="minute" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="monday" xml:space="preserve">
+    <value>Seg.</value>
+  </data>
+  <data name="msgNotPossibleReverse" xml:space="preserve">
+    <value>Você não conseguirá reverter a exclusão!</value>
+  </data>
+  <data name="msgQuestionDelete" xml:space="preserve">
+    <value>Gostaria de excluir o registro selecionado?</value>
+  </data>
+  <data name="msgRegisterDeleted" xml:space="preserve">
+    <value>Registro excluído com sucesso!</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Novo</value>
+  </data>
+  <data name="nfe" xml:space="preserve">
+    <value>NFe</value>
+  </data>
+  <data name="no" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="notification" xml:space="preserve">
+    <value>Notificação</value>
+  </data>
+  <data name="occurrence" xml:space="preserve">
+    <value>Ocorrência</value>
+  </data>
+  <data name="occurrenceType" xml:space="preserve">
+    <value>Proceda</value>
+  </data>
+  <data name="partnerId" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="penalty" xml:space="preserve">
+    <value>Penalidade</value>
+  </data>
+  <data name="period" xml:space="preserve">
+    <value>Recorrência</value>
+  </data>
+  <data name="phoneNumber" xml:space="preserve">
+    <value>Telefone</value>
+  </data>
+  <data name="postalCode" xml:space="preserve">
+    <value>Cep</value>
+  </data>
+  <data name="productionUnit" xml:space="preserve">
+    <value>Un. de produção</value>
+  </data>
+  <data name="profile" xml:space="preserve">
+    <value>Perfil de usuário</value>
+  </data>
+  <data name="profileCarrier" xml:space="preserve">
+    <value>Perfil - Transportadora</value>
+  </data>
+  <data name="recurrence" xml:space="preserve">
+    <value>Recorrência</value>
+  </data>
+  <data name="recurring" xml:space="preserve">
+    <value>Recorrente</value>
+  </data>
+  <data name="requiredField" xml:space="preserve">
+    <value>Este campo é requerido.</value>
+  </data>
+  <data name="requiredSelectedRow" xml:space="preserve">
+    <value>Favor selecionar um ou mais registros.</value>
+  </data>
+  <data name="return" xml:space="preserve">
+    <value>Voltar</value>
+  </data>
+  <data name="roleAdmin" xml:space="preserve">
+    <value>Administrador</value>
+  </data>
+  <data name="roleDelete" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="roleInsert" xml:space="preserve">
+    <value>Inserir</value>
+  </data>
+  <data name="rolePrint" xml:space="preserve">
+    <value>Imprimir</value>
+  </data>
+  <data name="roleUpdate" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="roleView" xml:space="preserve">
+    <value>Visualizar</value>
+  </data>
+  <data name="saturday" xml:space="preserve">
+    <value>Sábado</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="search" xml:space="preserve">
+    <value>Filtros</value>
+  </data>
+  <data name="serie" xml:space="preserve">
+    <value>Série</value>
+  </data>
+  <data name="seriesNumber" xml:space="preserve">
+    <value>Série</value>
+  </data>
+  <data name="shipmentDate" xml:space="preserve">
+    <value>Data embarque</value>
+  </data>
+  <data name="shippingCompany" xml:space="preserve">
+    <value>Transportadora</value>
+  </data>
+  <data name="shippingDate" xml:space="preserve">
+    <value>Data embarque</value>
+  </data>
+  <data name="shippingType" xml:space="preserve">
+    <value>Tipo de envio</value>
+  </data>
+  <data name="shippingUnit" xml:space="preserve">
+    <value>Un. de Embarque</value>
+  </data>
+  <data name="startDate" xml:space="preserve">
+    <value>Data início</value>
+  </data>
+  <data name="state" xml:space="preserve">
+    <value>UF</value>
+  </data>
+  <data name="street" xml:space="preserve">
+    <value>Logradouro</value>
+  </data>
+  <data name="successfulTask" xml:space="preserve">
+    <value>Operação realizada com sucesso!</value>
+  </data>
+  <data name="sunday" xml:space="preserve">
+    <value>Domingo</value>
+  </data>
+  <data name="taxId" xml:space="preserve">
+    <value>CNPJ</value>
+  </data>
+  <data name="thursday" xml:space="preserve">
+    <value>Quinta</value>
+  </data>
+  <data name="timeToSolve" xml:space="preserve">
+    <value>Tempo para resolver</value>
+  </data>
+  <data name="transportType" xml:space="preserve">
+    <value>Tipo de transporte</value>
+  </data>
+  <data name="tuesday" xml:space="preserve">
+    <value>Terça</value>
+  </data>
+  <data name="upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="user" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="validCep" xml:space="preserve">
+    <value>Entre com um CEP válido.</value>
+  </data>
+  <data name="validCNPJ" xml:space="preserve">
+    <value>Entre com um CNPJ válido.</value>
+  </data>
+  <data name="validEmail" xml:space="preserve">
+    <value>Entre com um endereço de e-mail válido.</value>
+  </data>
+  <data name="validPK" xml:space="preserve">
+    <value>Este registro já se encontra cadastrado.</value>
+  </data>
+  <data name="warning" xml:space="preserve">
+    <value>Alerta</value>
+  </data>
+  <data name="wednesday" xml:space="preserve">
+    <value>Quarta</value>
+  </data>
+  <data name="workflow" xml:space="preserve">
+    <value>Workflow</value>
+  </data>
+  <data name="wwid" xml:space="preserve">
+    <value>WWID</value>
+  </data>
+  <data name="yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="calculationBasis" xml:space="preserve">
+    <value>Base de cálculo</value>
+  </data>
+  <data name="estimatedDelivery" xml:space="preserve">
+    <value>Previsão entrega LT</value>
+  </data>
+  <data name="deliveryDeadline" xml:space="preserve">
+    <value>Limite entrega</value>
+  </data>
+  <data name="originalDeliveryDeadline" xml:space="preserve">
+    <value>Limite entrega (orig.)</value>
+  </data>
+  <data name="deliveryDate" xml:space="preserve">
+    <value>Data entrega</value>
+  </data>
+  <data name="receiver" xml:space="preserve">
+    <value>Recebedor</value>
+  </data>
+  <data name="uploadDate" xml:space="preserve">
+    <value>Data baixa</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefone</value>
+  </data>
+  <data name="driverPhone" xml:space="preserve">
+    <value>Tel. Motorista</value>
+  </data>
+  <data name="driverName" xml:space="preserve">
+    <value>Motorista</value>
+  </data>
+  <data name="isSchedule" xml:space="preserve">
+    <value>Agendado</value>
+  </data>
+  <data name="isRedeliveryScheduled" xml:space="preserve">
+    <value>Reagendado</value>
+  </data>
+  <data name="document" xml:space="preserve">
+    <value>Documento</value>
+  </data>
+  <data name="invoiceType" xml:space="preserve">
+    <value>Tipo de NF</value>
+  </data>
+  <data name="weight" xml:space="preserve">
+    <value>Peso (kg)</value>
+  </data>
+  <data name="systemOrder" xml:space="preserve">
+    <value>Pedido (sistema)</value>
+  </data>
+  <data name="clientOrder" xml:space="preserve">
+    <value>Pedido (cliente)</value>
+  </data>
+  <data name="sellerOrder" xml:space="preserve">
+    <value>Pedido (vendedor)</value>
+  </data>
+  <data name="totalValue" xml:space="preserve">
+    <value>Valor Total</value>
+  </data>
+  <data name="romaneioNumber" xml:space="preserve">
+    <value>Romaneio</value>
+  </data>
+  <data name="manifesto" xml:space="preserve">
+    <value>Manifesto</value>
+  </data>
+  <data name="volume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="cubage" xml:space="preserve">
+    <value>Cubagem</value>
+  </data>
+  <data name="accessKey" xml:space="preserve">
+    <value>Chave de acesso</value>
+  </data>
+  <data name="salesOffice" xml:space="preserve">
+    <value>Escritório de venda</value>
+  </data>
+  <data name="transportZone" xml:space="preserve">
+    <value>Zona de transporte</value>
+  </data>
+  <data name="vehiclePlate" xml:space="preserve">
+    <value>Placa veículo</value>
+  </data>
+  <data name="unitVolume" xml:space="preserve">
+    <value>Volume Und.</value>
+  </data>
+  <data name="supplier" xml:space="preserve">
+    <value>Fornecimento</value>
+  </data>
+  <data name="allowance" xml:space="preserve">
+    <value>Abono</value>
+  </data>
+  <data name="rejectionOrderNumber" xml:space="preserve">
+    <value>Nr. Ordem recusa</value>
+  </data>
+  <data name="creditStatus" xml:space="preserve">
+    <value>Status crédito</value>
+  </data>
+  <data name="creditRequestNumber" xml:space="preserve">
+    <value>Nr. Pedido crédito</value>
+  </data>
+  <data name="creditCompletionDate" xml:space="preserve">
+    <value>Data de finalização do crédito</value>
+  </data>
+  <data name="product" xml:space="preserve">
+    <value>Produto</value>
+  </data>
+  <data name="unitValue" xml:space="preserve">
+    <value>Valor unitário</value>
+  </data>
+  <data name="quantity" xml:space="preserve">
+    <value>Quantidade</value>
+  </data>
+  <data name="comment" xml:space="preserve">
+    <value>Observação</value>
+  </data>
+  <data name="statusInvoice" xml:space="preserve">
+    <value>Status NFe</value>
+  </data>
+  <data name="schedulingDate" xml:space="preserve">
+    <value>Data agendamento</value>
+  </data>
+  <data name="modal" xml:space="preserve">
+    <value>Modal</value>
+  </data>
+  <data name="freightTable" xml:space="preserve">
+    <value>Tabela de frete</value>
+  </data>
+  <data name="origemProvince" xml:space="preserve">
+    <value>UF origem</value>
+  </data>
+  <data name="origemCity" xml:space="preserve">
+    <value>Cidade origem</value>
+  </data>
+  <data name="destineProvince" xml:space="preserve">
+    <value>UF destino</value>
+  </data>
+  <data name="destineCity" xml:space="preserve">
+    <value>Cidade destino</value>
+  </data>
+  <data name="urgent" xml:space="preserve">
+    <value>Urgente</value>
+  </data>
+  <data name="leadTimeMin" xml:space="preserve">
+    <value>Tempo mín.</value>
+  </data>
+  <data name="leadTimeMax" xml:space="preserve">
+    <value>Tempo máx.</value>
+  </data>
+  <data name="expirationDate" xml:space="preserve">
+    <value>Data validade</value>
+  </data>
+  <data name="km" xml:space="preserve">
+    <value>km</value>
+  </data>
+  <data name="distanceKm" xml:space="preserve">
+    <value>Distância</value>
+  </data>
+  <data name="origem" xml:space="preserve">
+    <value>Origem</value>
+  </data>
+  <data name="destine" xml:space="preserve">
+    <value>Destino</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="departamentDate" xml:space="preserve">
+    <value>Dados do departamento</value>
+  </data>
+  <data name="deliveryTypeDate" xml:space="preserve">
+    <value>Dados do tipo de entrega</value>
+  </data>
+  <data name="freightTableData" xml:space="preserve">
+    <value>Dados da tabela de frete</value>
+  </data>
+  <data name="addDetail" xml:space="preserve">
+    <value>Adicionar registro</value>
+  </data>
+  <data name="carrierData" xml:space="preserve">
+    <value>Dados da transportadora</value>
+  </data>
+  <data name="saveNFeSuccess" xml:space="preserve">
+    <value>Notas fiscais salvas com sucesso!</value>
+  </data>
+  <data name="msgQuestionSaveNFe" xml:space="preserve">
+    <value>Deseja salvar as NFes importadas?</value>
+  </data>
+  <data name="province" xml:space="preserve">
+    <value>UF</value>
+  </data>
+  <data name="cityData" xml:space="preserve">
+    <value>Dados da cidade</value>
+  </data>
+  <data name="holiday" xml:space="preserve">
+    <value>Feriado</value>
+  </data>
+  <data name="holidayData" xml:space="preserve">
+    <value>Dados do feriado</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="year" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="customer" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="customerData" xml:space="preserve">
+    <value>Dados do cliente</value>
+  </data>
+  <data name="freightType" xml:space="preserve">
+    <value>Tipo de frete</value>
+  </data>
+  <data name="freightTypeData" xml:space="preserve">
+    <value>Dados do tipo de frete</value>
+  </data>
+  <data name="municipalRegistration" xml:space="preserve">
+    <value>Inscrição municipal</value>
+  </data>
+  <data name="stateRegistration" xml:space="preserve">
+    <value>Inscrição estadual</value>
+  </data>
+  <data name="ICMSTaxPayer" xml:space="preserve">
+    <value>Paga ICMS</value>
+  </data>
+  <data name="branchData" xml:space="preserve">
+    <value>Dados da planta</value>
+  </data>
+  <data name="occurrenceTypeData" xml:space="preserve">
+    <value>Dados do proceda</value>
+  </data>
+  <data name="userData" xml:space="preserve">
+    <value>Dados do usuário</value>
+  </data>
+  <data name="profileData" xml:space="preserve">
+    <value>Dados do perfil</value>
+  </data>
+  <data name="profileCarrierData" xml:space="preserve">
+    <value>Dados do perfil - Transportadora</value>
+  </data>
+  <data name="notificationData" xml:space="preserve">
+    <value>Dados da notificação</value>
+  </data>
+  <data name="alertData" xml:space="preserve">
+    <value>Dados de alerta</value>
+  </data>
+  <data name="unitMeasure" xml:space="preserve">
+    <value>Unid. Medida</value>
+  </data>
+  <data name="netWeight" xml:space="preserve">
+    <value>Peso líquido</value>
+  </data>
+  <data name="grossWeight" xml:space="preserve">
+    <value>Peso bruto</value>
+  </data>
+  <data name="cubicMeasure" xml:space="preserve">
+    <value>Volume³</value>
+  </data>
+  <data name="accountingAccount" xml:space="preserve">
+    <value>Conta contábil</value>
+  </data>
+  <data name="costCenter" xml:space="preserve">
+    <value>Centro de custo</value>
+  </data>
+  <data name="stCreditICMS" xml:space="preserve">
+    <value>Crédito ICMS</value>
+  </data>
+  <data name="stCreditImp" xml:space="preserve">
+    <value>Credito Imposto</value>
+  </data>
+  <data name="cfop" xml:space="preserve">
+    <value>CFOP</value>
+  </data>
+  <data name="clickToSchedule" xml:space="preserve">
+    <value>Clique para agendamento</value>
+  </data>
+  <data name="schedulingDelivery" xml:space="preserve">
+    <value>Agendamento de entrega</value>
+  </data>
+  <data name="contact" xml:space="preserve">
+    <value>Contato</value>
+  </data>
+  <data name="msgQuestionScheduling" xml:space="preserve">
+    <value>Confirma o agendamento de entrega da nota fiscal?</value>
+  </data>
+  <data name="anotherInfo" xml:space="preserve">
+    <value>Demais informações</value>
+  </data>
+  <data name="freeFields" xml:space="preserve">
+    <value>Campos livres</value>
+  </data>
+  <data name="itens" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="schedulingHistory" xml:space="preserve">
+    <value>Histórico de agendamentos</value>
+  </data>
+  <data name="comments" xml:space="preserve">
+    <value>Observações</value>
+  </data>
+  <data name="deliveryNumber" xml:space="preserve">
+    <value>Nº Remessa</value>
+  </data>
+  <data name="productList" xml:space="preserve">
+    <value>Lista de produtos</value>
+  </data>
+  <data name="generalInfo" xml:space="preserve">
+    <value>Informações gerais</value>
+  </data>
+  <data name="documents" xml:space="preserve">
+    <value>Documentos</value>
+  </data>
+  <data name="deliveryData" xml:space="preserve">
+    <value>Dados da entrega</value>
+  </data>
+  <data name="deliveryForecast" xml:space="preserve">
+    <value>Previsão de entrega</value>
+  </data>
+  <data name="invoiceData" xml:space="preserve">
+    <value>Dados da Nota Fiscal</value>
+  </data>
+  <data name="customerGroup" xml:space="preserve">
+    <value>Grupo de clientes</value>
+  </data>
+  <data name="customerGroupData" xml:space="preserve">
+    <value>Dados do grupo de clientes</value>
+  </data>
+  <data name="customerChannel" xml:space="preserve">
+    <value>Canal de clientes</value>
+  </data>
+  <data name="customerChannelData" xml:space="preserve">
+    <value>Dados do canal de clientes</value>
+  </data>
+  <data name="responsibleScheduling" xml:space="preserve">
+    <value>Responsável pelo agendamento</value>
+  </data>
+  <data name="schedulingMethod" xml:space="preserve">
+    <value>Forma de agendamento</value>
+  </data>
+  <data name="schedulingDetails" xml:space="preserve">
+    <value>Detalhes do agendamento</value>
+  </data>
+  <data name="schedulingContact" xml:space="preserve">
+    <value>Contato agendamento</value>
+  </data>
+  <data name="schedulingMail" xml:space="preserve">
+    <value>E-mail agendamento</value>
+  </data>
+  <data name="schedulingPhone" xml:space="preserve">
+    <value>Telefone agendamento</value>
+  </data>
+  <data name="schedulingData" xml:space="preserve">
+    <value>Dados de Agendamento</value>
+  </data>
+  <data name="sendPDF" xml:space="preserve">
+    <value>Enviar PDF</value>
+  </data>
+  <data name="issuesNFD" xml:space="preserve">
+    <value>Emite NFD</value>
+  </data>
+  <data name="receiptData" xml:space="preserve">
+    <value>Dados do Recebimento</value>
+  </data>
+  <data name="receiptContact" xml:space="preserve">
+    <value>Contato recebimento</value>
+  </data>
+  <data name="receiptMail" xml:space="preserve">
+    <value>E-mail recebimento</value>
+  </data>
+  <data name="receiptPhone" xml:space="preserve">
+    <value>Telefone recebimento</value>
+  </data>
+  <data name="receiptInfo" xml:space="preserve">
+    <value>Informações do recebimento</value>
+  </data>
+  <data name="contactType" xml:space="preserve">
+    <value>Tipo de contato</value>
+  </data>
+  <data name="usuallyRetainsNFeStub" xml:space="preserve">
+    <value>Costuma reter canhoto?</value>
+  </data>
+  <data name="analistyCS" xml:space="preserve">
+    <value>Analista CS</value>
+  </data>
+  <data name="allowCarrier" xml:space="preserve">
+    <value>Liberado p/ Transportadora</value>
+  </data>
+  <data name="needProductInfo" xml:space="preserve">
+    <value>Necessita informações do Produto</value>
+  </data>
+  <data name="actionData" xml:space="preserve">
+    <value>Dados da ação a ser tomada</value>
+  </data>
+  <data name="actionDepartament" xml:space="preserve">
+    <value>Ação - Departamento</value>
+  </data>
+  <data name="occurrendeDate" xml:space="preserve">
+    <value>Data ocorrência</value>
+  </data>
+  <data name="validRegister" xml:space="preserve">
+    <value>Registro inválido</value>
+  </data>
+  <data name="occurrenceNeedProductInfo" xml:space="preserve">
+    <value>Este tipo de ocorrência necessita que se informe o(s) produto(s) relacionados.</value>
+  </data>
+  <data name="file" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="matriz" xml:space="preserve">
+    <value>Matriz</value>
+  </data>
+  <data name="carrierType" xml:space="preserve">
+    <value>Matriz / Filial</value>
+  </data>
+  <data name="carrierMatriz" xml:space="preserve">
+    <value>Matriz</value>
+  </data>
+  <data name="productInfoType" xml:space="preserve">
+    <value>Informações de produto</value>
+  </data>
+  <data name="sequence" xml:space="preserve">
+    <value>Sequência</value>
+  </data>
+  <data name="timeToAction" xml:space="preserve">
+    <value>Tempo para ação</value>
+  </data>
+  <data name="duplicateSequence" xml:space="preserve">
+    <value>Sequência já informada.</value>
+  </data>
+  <data name="validSequenceInfo" xml:space="preserve">
+    <value>Sequência não informada.</value>
+  </data>
+  <data name="sendDocuments" xml:space="preserve">
+    <value>Enviar documentos</value>
+  </data>
+  <data name="receiptWeekDay" xml:space="preserve">
+    <value>Dias p/ recebimento</value>
+  </data>
+  <data name="receiptHour" xml:space="preserve">
+    <value>Horário recebimento</value>
+  </data>
+  <data name="quantityReturned" xml:space="preserve">
+    <value>Qtde. devolvida</value>
+  </data>
+  <data name="occurrenceApproval" xml:space="preserve">
+    <value>Aprovação de Ocorrência</value>
+  </data>
+  <data name="statusOccurrence" xml:space="preserve">
+    <value>Status da ocorrência</value>
+  </data>
+  <data name="occurrenceDate" xml:space="preserve">
+    <value>Data da ocorrência</value>
+  </data>
+  <data name="msgRequiredProductReturn" xml:space="preserve">
+    <value>Favor informar o produto que está sendo devolvido.</value>
+  </data>
+  <data name="clickToApproval" xml:space="preserve">
+    <value>Clique para aprovar o registro.</value>
+  </data>
+  <data name="clickToReproval" xml:space="preserve">
+    <value>Clique para reprovar o registro.</value>
+  </data>
+  <data name="msgQuestionApprovalOccurrence" xml:space="preserve">
+    <value>Deseja aprovar a ocorrência?</value>
+  </data>
+  <data name="msgQuestionReprovalOccurrence" xml:space="preserve">
+    <value>Deseja reprovar a ocorrência?</value>
+  </data>
+  <data name="mesorregiao" xml:space="preserve">
+    <value>Mesorregião</value>
+  </data>
+  <data name="mesorregiaoDate" xml:space="preserve">
+    <value>Dados da mesorregião</value>
+  </data>
+  <data name="schedulingType" xml:space="preserve">
+    <value>Forma de Agendamento</value>
+  </data>
+  <data name="schedulingMethodData" xml:space="preserve">
+    <value>Dados da Forma de Agendamento</value>
+  </data>
+  <data name="region" xml:space="preserve">
+    <value>Região</value>
+  </data>
+  <data name="approvalOccurrence" xml:space="preserve">
+    <value>Aprovar ocorrência</value>
+  </data>
+  <data name="branchList" xml:space="preserve">
+    <value>Lista de plantas</value>
+  </data>
+  <data name="clickToViewBranch" xml:space="preserve">
+    <value>Clique para visualizar filial(is)</value>
+  </data>
+  <data name="exit" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="firstScheduleDate" xml:space="preserve">
+    <value>1ª Data agendamento</value>
+  </data>
+  <data name="lastScheduleDate" xml:space="preserve">
+    <value>Última data agendamento</value>
+  </data>
+  <data name="mesorregiaoData" xml:space="preserve">
+    <value>Dados da Mesorregião</value>
+  </data>
+  <data name="productType" xml:space="preserve">
+    <value>Tipo de produto</value>
+  </data>
+  <data name="report" xml:space="preserve">
+    <value>Relatório</value>
+  </data>
+  <data name="reprovalOccurrence" xml:space="preserve">
+    <value>Reprovar ocorrência</value>
+  </data>
+  <data name="xTrackCode" xml:space="preserve">
+    <value>Código xTrack</value>
+  </data>
+  <data name="searchMultipleInvoice" xml:space="preserve">
+    <value>Buscar NFe's em massa</value>
+  </data>
+  <data name="to" xml:space="preserve">
+    <value>até</value>
+  </data>
+  <data name="clearFilters" xml:space="preserve">
+    <value>Limpar filtros</value>
+  </data>
+  <data name="uploadedFrom" xml:space="preserve">
+    <value>Baixado por</value>
+  </data>
+  <data name="uploadedMethod" xml:space="preserve">
+    <value>Método de baixa</value>
+  </data>
+  <data name="casualtyData" xml:space="preserve">
+    <value>Dados de sinistro</value>
+  </data>
+  <data name="casualty" xml:space="preserve">
+    <value>Sinistro</value>
+  </data>
+  <data name="casualtyType" xml:space="preserve">
+    <value>Tipo de sinistro</value>
+  </data>
+  <data name="casualtyDate" xml:space="preserve">
+    <value>Data do sinistro</value>
+  </data>
+  <data name="productFinded" xml:space="preserve">
+    <value>Mercadoria encontrada</value>
+  </data>
+  <data name="issueBO" xml:space="preserve">
+    <value>BO emitido</value>
+  </data>
+  <data name="legalEntity" xml:space="preserve">
+    <value>Legal entity</value>
+  </data>
+  <data name="indemnifiedValue" xml:space="preserve">
+    <value>Valor indenizado</value>
+  </data>
+  <data name="casualtyCity" xml:space="preserve">
+    <value>Cidade sinistro</value>
+  </data>
+  <data name="casualtyProvince" xml:space="preserve">
+    <value>UF sinistro</value>
+  </data>
+  <data name="casualtyStatus" xml:space="preserve">
+    <value>Status sinistro</value>
+  </data>
+  <data name="clickToViewAlert" xml:space="preserve">
+    <value>Clique para visualizar alerta.</value>
+  </data>
+  <data name="uploadWarning" xml:space="preserve">
+    <value>Divergência(s) na carga de dados</value>
+  </data>
+  <data name="errorDescription" xml:space="preserve">
+    <value>Descrição da divergência</value>
+  </data>
+  <data name="freightTableUploadData" xml:space="preserve">
+    <value>Carga de dados - Lead time</value>
+  </data>
+  <data name="uploadFile" xml:space="preserve">
+    <value>Selecione o arquivo para carregar</value>
+  </data>
+  <data name="freightTableUploadInfo" xml:space="preserve">
+    <value>Para tabela de frete são aceitos somente arquivos txt</value>
+  </data>
+  <data name="casualtyTypeData" xml:space="preserve">
+    <value>Dados do Tipo de sinistro</value>
+  </data>
+  <data name="customerId" xml:space="preserve">
+    <value>Código Cliente</value>
+  </data>
+  <data name="customerName" xml:space="preserve">
+    <value>Nome Cliente</value>
+  </data>
+  <data name="invoiceValue" xml:space="preserve">
+    <value>Valor NFe</value>
+  </data>
+  <data name="scheduledAccordingCustomer" xml:space="preserve">
+    <value>Agendado conforme disponibilidade Cliente</value>
+  </data>
+  <data name="deliveryTrackingCode" xml:space="preserve">
+    <value>Código acompanhanto entrega</value>
+  </data>
+  <data name="lateDelivery" xml:space="preserve">
+    <value>Entrega com atraso</value>
+  </data>
+  <data name="OTDCarrierAllowance" xml:space="preserve">
+    <value>Abono OTD Transportador</value>
+  </data>
+  <data name="OTDCustomerAllowance" xml:space="preserve">
+    <value>Abono OTD Cliente</value>
+  </data>
+  <data name="reasonOTDCarrier" xml:space="preserve">
+    <value>Motivo penalização OTD Transp.</value>
+  </data>
+  <data name="reasonOTDCarrierAllowance" xml:space="preserve">
+    <value>Motivo abono OTD Transp.</value>
+  </data>
+  <data name="typeLoad" xml:space="preserve">
+    <value>Tipo de carga</value>
+  </data>
+  <data name="orderNumber" xml:space="preserve">
+    <value>N° Pedido</value>
+  </data>
+  <data name="orderCreateDate" xml:space="preserve">
+    <value>Data criação Pedido</value>
+  </data>
+  <data name="deliveryCreateDate" xml:space="preserve">
+    <value>Data criação Delivery</value>
+  </data>
+  <data name="casualtyValue" xml:space="preserve">
+    <value>Valor a ser indenizado</value>
+  </data>
+  <data name="reasonCode" xml:space="preserve">
+    <value>Tabela de motivos</value>
+  </data>
+  <data name="reasonCodeData" xml:space="preserve">
+    <value>Dados da tabela de motivos</value>
+  </data>
+  <data name="reasonCodeType" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="NFD" xml:space="preserve">
+    <value>NFD</value>
+  </data>
+  <data name="returnInvoice" xml:space="preserve">
+    <value>Nota fiscal de Devolução</value>
+  </data>
+  <data name="deliveryDelay" xml:space="preserve">
+    <value>Atraso na entrega</value>
+  </data>
+  <data name="deliveryTrackingTraceCode" xml:space="preserve">
+    <value>Código de Acompanhamento de Entrega</value>
+  </data>
+  <data name="reasonOTDCustomer" xml:space="preserve">
+    <value>Motivo penalização OTD Cliente</value>
+  </data>
+  <data name="reasonOTDCustomerAllowance" xml:space="preserve">
+    <value>Motivo do abono OTD Cliente</value>
+  </data>
+  <data name="casualtyCitationNumber" xml:space="preserve">
+    <value>Nº Aviso Citação</value>
+  </data>
+  <data name="casualtySummary" xml:space="preserve">
+    <value>Resumo do sinistro</value>
+  </data>
+  <data name="casualtyCompensationDate" xml:space="preserve">
+    <value>Data indenização</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="validation" xml:space="preserve">
+    <value>Validação</value>
+  </data>
+  <data name="invoiceEdit" xml:space="preserve">
+    <value>Edição de NF-e</value>
+  </data>
+  <data name="infoAdditional" xml:space="preserve">
+    <value>Informações adicionais</value>
+  </data>
+  <data name="deliveryTracking" xml:space="preserve">
+    <value>Código acompanhamento de entrega</value>
+  </data>
+  <data name="deliveryTrackingData" xml:space="preserve">
+    <value>Dados do código de acompanhamento de entrega</value>
+  </data>
+  <data name="codeFinalized" xml:space="preserve">
+    <value>Código finalizador</value>
+  </data>
+  <data name="casualtyResponsibleSendAC" xml:space="preserve">
+    <value>Responsável pelo envio AC</value>
+  </data>
+  <data name="casualtySendDateJE" xml:space="preserve">
+    <value>Data envio JE</value>
+  </data>
+  <data name="casualtyTicketJE" xml:space="preserve">
+    <value>Ticket JE</value>
+  </data>
+  <data name="casualtyDocumentNumber" xml:space="preserve">
+    <value>Nº Documento</value>
+  </data>
+  <data name="occurrenceTime" xml:space="preserve">
+    <value>Hora ocorrência</value>
+  </data>
+  <data name="clickToAction" xml:space="preserve">
+    <value>Clique para dar ação a ocorrência</value>
+  </data>
+  <data name="actionOccurrence" xml:space="preserve">
+    <value>Ação para ocorrência</value>
+  </data>
+  <data name="occurrenceAction" xml:space="preserve">
+    <value>Ação para ocorrência</value>
+  </data>
+  <data name="quantityNFe" xml:space="preserve">
+    <value>Quantidade NFe</value>
+  </data>
+  <data name="timeOpen" xml:space="preserve">
+    <value>Tempo em aberto</value>
+  </data>
+  <data name="penality" xml:space="preserve">
+    <value>Penalidade</value>
+  </data>
+  <data name="allowFreight" xml:space="preserve">
+    <value>Frete procedente</value>
+  </data>
+  <data name="helperDaily" xml:space="preserve">
+    <value>Ajudante / Diária</value>
+  </data>
+  <data name="msgQuestionConfirmAction" xml:space="preserve">
+    <value>Confirma a ação informada para a Ocorrência?</value>
+  </data>
+  <data name="nfeListSuccessUpload" xml:space="preserve">
+    <value>Lista de Notas Fiscais carregadas</value>
+  </data>
+  <data name="interfaceNFeInstruction" xml:space="preserve">
+    <value>Para interface NF-e são aceitos somente arquivos txt</value>
+  </data>
+  <data name="interfaceNFeSchedulingInstruction" xml:space="preserve">
+    <value>Para interface NF-e Agendamento é aceito somente arquivo Excel (xlsx).</value>
+  </data>
+  <data name="schedulingTime" xml:space="preserve">
+    <value>Hora agendada</value>
+  </data>
+  <data name="msgQuestionSaveNFeScheduling" xml:space="preserve">
+    <value>Deseja salvar os agendamentos importados?</value>
+  </data>
+  <data name="fileNotSent" xml:space="preserve">
+    <value>Nenhum arquivo foi enviado</value>
+  </data>
+  <data name="interfaceOccurrence" xml:space="preserve">
+    <value>Para interface Ocorrência são aceitos somente arquivos txt</value>
+  </data>
+  <data name="occurrenceListUploaded" xml:space="preserve">
+    <value>Losta de Ocorrências carregadas</value>
+  </data>
+  <data name="carrierName" xml:space="preserve">
+    <value>Nome Transportadora</value>
+  </data>
+  <data name="msgQuestionSaveOccurrence" xml:space="preserve">
+    <value>Deseja salvas as Ocorrências importadas?</value>
+  </data>
+  <data name="pleaseSelectFile" xml:space="preserve">
+    <value>Por favor, selecione um arquivo.</value>
+  </data>
+  <data name="errorOnSentFile" xml:space="preserve">
+    <value>Ocorreu um erro ao enviar o arquivo.</value>
+  </data>
+  <data name="uploadError" xml:space="preserve">
+    <value>Erro - Upload</value>
+  </data>
+  <data name="xlsx" xml:space="preserve">
+    <value>Excel</value>
+  </data>
+  <data name="carrierChildren" xml:space="preserve">
+    <value>Transportadora - Filiais</value>
+  </data>
+  <data name="interfaceCarrierChildrenInstruction" xml:space="preserve">
+    <value>Para interface Transportadora - Filiais são aceitos somente arquivos Excel (xlsx).</value>
+  </data>
+  <data name="carrierChildrenListSuccessUpload" xml:space="preserve">
+    <value>Lista de Filiais carregadas</value>
+  </data>
+  <data name="carrierChildrenUploadData" xml:space="preserve">
+    <value>Carga de dados - Transportadora - Filiais</value>
+  </data>
+  <data name="msgQuestionSaveCarrierChildren" xml:space="preserve">
+    <value>Deseja salvar as Filiais de Transportadora importadas?</value>
+  </data>
+  <data name="saveCarrierChildrenSuccess" xml:space="preserve">
+    <value>Filiais importadas com sucesso!</value>
+  </data>
+  <data name="saveNFeSchedulingSuccess" xml:space="preserve">
+    <value>Agendamento salvo com sucesso!</value>
+  </data>
+  <data name="scheduledComments" xml:space="preserve">
+    <value>Observação - Agendamento</value>
+  </data>
+  <data name="roleScheduling" xml:space="preserve">
+    <value>Agendamento - NFe</value>
+  </data>
+  <data name="clickToView" xml:space="preserve">
+    <value>Clique para visualizar</value>
+  </data>
+  <data name="invoiceScheduling" xml:space="preserve">
+    <value>Agendamento de NF-e</value>
+  </data>
+  <data name="invoiceOccurrence" xml:space="preserve">
+    <value>Ocorrência NF-e</value>
+  </data>
+  <data name="route" xml:space="preserve">
+    <value>Rota</value>
+  </data>
+  <data name="invoiceDays" xml:space="preserve">
+    <value>Dia de faturamento</value>
+  </data>
+  <data name="deliveryCreationDays" xml:space="preserve">
+    <value>Dia de criação Delivery</value>
+  </data>
+  <data name="deliveryInstruction" xml:space="preserve">
+    <value>Instrução de entrega</value>
+  </data>
+  <data name="deliveryTime" xml:space="preserve">
+    <value>Horário de entrega</value>
+  </data>
+  <data name="deliveryBI" xml:space="preserve">
+    <value>Delivery - BI</value>
+  </data>
+  <data name="interfaceInstruction" xml:space="preserve">
+    <value>Para interface são aceitos somente arquivos Excel (*.xlsx)</value>
+  </data>
+  <data name="soldToParty" xml:space="preserve">
+    <value>Sold to Party</value>
+  </data>
+  <data name="shipToParty" xml:space="preserve">
+    <value>Ship to Party</value>
+  </data>
+  <data name="msgQuestionSaveDelivery" xml:space="preserve">
+    <value>Deseja salvar as Deliverys importadas?</value>
+  </data>
+  <data name="saveDeliverySuccess" xml:space="preserve">
+    <value>Deliverys importadas com sucesso!</value>
+  </data>
+  <data name="groupCode" xml:space="preserve">
+    <value>Grupo</value>
+  </data>
+  <data name="planningDate" xml:space="preserve">
+    <value>Data planejamento</value>
+  </data>
+  <data name="status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="planning" xml:space="preserve">
+    <value>Planejamento</value>
+  </data>
+  <data name="creationDate" xml:space="preserve">
+    <value>Data criação</value>
+  </data>
+  <data name="shipment" xml:space="preserve">
+    <value>Shipment</value>
+  </data>
+  <data name="msgPlanningConfirm" xml:space="preserve">
+    <value>Planejamento confirmado com sucesso!</value>
+  </data>
+  <data name="msgQuestionConfirmPlanning" xml:space="preserve">
+    <value>Deseja confirmar o planejamento?</value>
+  </data>
+  <data name="clickToConfirmPlanning" xml:space="preserve">
+    <value>Clique para confirmar o Planejamento</value>
+  </data>
+  <data name="editGroup" xml:space="preserve">
+    <value>Editar grupo</value>
+  </data>
+  <data name="msgDeliveryAdd" xml:space="preserve">
+    <value>Delivery adicionada com sucesso!</value>
+  </data>
+  <data name="family" xml:space="preserve">
+    <value>Família</value>
+  </data>
+  <data name="quantityDiff1" xml:space="preserve">
+    <value>Qtde. diferente de 1</value>
+  </data>
+  <data name="acronym" xml:space="preserve">
+    <value>Sigla</value>
+  </data>
+  <data name="familyDate" xml:space="preserve">
+    <value>Dados da família</value>
+  </data>
+  <data name="classificationDate" xml:space="preserve">
+    <value>Dados da classificação</value>
+  </data>
+  <data name="classification" xml:space="preserve">
+    <value>Classificação</value>
+  </data>
+  <data name="reasonMovement" xml:space="preserve">
+    <value>Motivo da saída</value>
+  </data>
+  <data name="reasonMovementDate" xml:space="preserve">
+    <value>Dados do motivo da saída</value>
+  </data>
+  <data name="productDate" xml:space="preserve">
+    <value>Dados do produto</value>
+  </data>
+  <data name="sku" xml:space="preserve">
+    <value>SKU</value>
+  </data>
+  <data name="ean" xml:space="preserve">
+    <value>EAN</value>
+  </data>
+  <data name="uom" xml:space="preserve">
+    <value>Unidade Básica</value>
+  </data>
+  <data name="lensPacking" xml:space="preserve">
+    <value>Lentes Packing</value>
+  </data>
+  <data name="locationType" xml:space="preserve">
+    <value>Localização</value>
+  </data>
+  <data name="addressWh" xml:space="preserve">
+    <value>Localização Picking</value>
+  </data>
+  <data name="packing" xml:space="preserve">
+    <value>Embalagem</value>
+  </data>
+  <data name="packingData" xml:space="preserve">
+    <value>Dados da embalagem</value>
+  </data>
+  <data name="capacity" xml:space="preserve">
+    <value>Capacidade</value>
+  </data>
+  <data name="startNumber" xml:space="preserve">
+    <value>Nº Início</value>
+  </data>
+  <data name="endNumber" xml:space="preserve">
+    <value>Nº Término</value>
+  </data>
+</root>

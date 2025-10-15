@@ -1,0 +1,123 @@
+﻿@model List<PCM.WEB.MODELS.PCMRotina>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.rotina</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+
+    <!-- Page Content -->
+    <div class="content">   
+
+        <div class="row">
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoRotina", "PCM",  new { status = 3})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-calendar fa-2x text-pulse"></i></div>
+                        <div class="font-size-h5 font-w600 text-pulse"><span data-speed="1000" data-to="@ViewBag.status.atrasado" id="atrasado" name="atrasado">@ViewBag.status.atrasado</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoRotina", "PCM",  new { status = 1})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-calendar fa-2x text-warning"></i></div>
+                        <div class="font-size-h5 font-w600  text-warning" data-speed="1000" data-to="@ViewBag.status.pendente" id="pendente" name="pendente">@ViewBag.status.pendente</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoRotina", "PCM",  new { status = 4})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-settings fa-2x text-primary"></i></div>
+                        <div class="font-size-h5 font-w600 text-primary"><span data-speed="1000" data-to="@ViewBag.status.andamento" id="andamento" name="andamento">@ViewBag.status.andamento</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.em_andamento</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ManutencaoRotina", "PCM",  new { status = 2})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-calendar fa-2x text-earth-light"></i></div>
+                        <div class="font-size-h5 font-w600 text-earth"><span data-speed="1000" data-to="@ViewBag.status.concluido" id="concluido" name="concluido">@ViewBag.status.concluido</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+            <div class="block">
+                
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.rotina</h3>
+                <div class="block-options">
+                    <a href="@Url.Action("ManutencaoRotina2", "PCM")" class="btn btn-square btn-secondary min-width-200 h-75">
+                        <i class="si si-calendar mr-5"></i>Visualizar por Mês
+                    </a>
+                </div>
+            </div>            
+
+            <div class="block-content">
+                
+                @foreach (var item in Model)
+                {
+                    <div class="content-block"><b>@PCM.WEB.Properties.Resources.unidade:</b> @Html.DisplayFor(modelItem => item.unidade)</div>
+                    <hr />
+
+                    for (int i = 0; i < item.rotina.Count; i++)
+                    {            
+                        
+                        if(@item.rotina[i].status != 2)
+                        {                                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ApontamentoProgramada", "PCM", new { codigo_pcm_programada = @item.rotina[i].codigo_pcm_programada, codigo_unidade = @item.codigo_unidade, formulario="pcm_apontamento_rotina" })">
+                                        <div class="block-content block-content-full clearfix">
+                                            <div class="float-right mt-15 d-none d-sm-block @item.rotina[i].cor"><i class="si si-calendar fa-3x"></i></div>
+                                            <div class="font-size-h5 font-w600 text-uppercase @item.rotina[i].cor">@item.rotina[i].descricao</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.data_ultima_manutencao:</span> @item.rotina[i].dataUltimaManutencao</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.data_proxima_manutencao:</span> @item.rotina[i].data</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.periodicidade:</span> @item.rotina[i].intervalo - @item.rotina[i].periodicidade</div>
+                                        </div>
+                                    </a>
+                                </div> 
+                            </div>  
+                        }
+                        else
+                        {                                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoProgramada", "PCM", new { codigo_unidade = @item.codigo_unidade, codigo_pcm_programada_ordem_servico = @item.rotina[i].codigo_pcm_programada_ordem_servico, formulario="pcm_apontamento_rotina" })">
+                                        <div class="block-content block-content-full clearfix">
+                                            <div class="float-right mt-15 d-none d-sm-block @item.rotina[i].cor"><i class="si si-calendar fa-3x"></i></div>
+                                            <div class="font-size-h5 font-w600 text-uppercase @item.rotina[i].cor">@item.rotina[i].descricao</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.data_ultima_manutencao:</span> @item.rotina[i].dataUltimaManutencao</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.data_proxima_manutencao:</span> @item.rotina[i].data</div>
+                                            <div class="font-size-sm"><span class="font-weight-bold text-secondary">@PCM.WEB.Properties.Resources.periodicidade:</span> @item.rotina[i].intervalo - @item.rotina[i].periodicidade</div>
+                                        </div>
+                                    </a>
+                                </div> 
+                            </div>  
+                        }
+
+                    }
+                }
+
+            </div>
+        </div>
+    
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

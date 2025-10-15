@@ -1,0 +1,366 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.PMOCAno>
+
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("PMOCMes", "Relatorio", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="block">
+
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.pmoc_mensal</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="RefreshPMOC()"><i class="fa fa-save mr-5"></i>Gerar Relatório</button>
+                    </div>
+                </div>
+
+                <div class="block-content">
+
+                    @foreach (var item in Model)
+                    {
+                        <div class="content-block h5"><b>@PCM.WEB.Properties.Resources.ano:</b> @Html.DisplayFor(modelItem => item.ano)</div>
+                        foreach (var unidade in item.unidade)
+                        {
+                            <hr />
+                            <div class="content-block h6">@Html.DisplayFor(modelItem => unidade.unidade)</div>
+                            <div class="row">
+                                @foreach (var mes in unidade.mes)
+                                {
+                                    <div class="col-md-2 col-xl-1">
+                                        <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirPMOC(@unidade.codigo_unidade, @mes.mes, @item.ano);">
+                                            <div class="text-center">
+                                                <i class="fa fa-snowflake-o fa-2x text-success mt-5"></i>
+                                                <h6 class="font-w700 mb-5 mt-5">@PCM.WEB.Properties.Resources.pmoc</h6>
+                                                <h6 class="mb-5"><small>@mes.descricao</small></h6>
+                                            </div>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+<!-- From Right Modal -->
+<div class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-15">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.pmoc_mensal</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="si si-close font-w600"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content block-content-full">
+
+                    <div class="row">
+
+                        <div class="col-md-4 col-xl-4">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000030_DASHBOARD');">
+                                <div class="text-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Dashboard</h6>
+                                    <h6 class="mb-5"><small>1º Parte</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-4 col-xl-4">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000030_RESUMO_ATENDIMENTO');">
+                                <div class="text-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Resumo do Atendimento</h6>
+                                    <h6 class="mb-5"><small>2º Parte</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-4 col-xl-4">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000030_OCORRENCIAS_CORRETIVAS');">
+                                <div class="text-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Ocorrências Corretivas</h6>
+                                    <h6 class="mb-5"><small>4º Parte</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-xl-4">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000030_PMOC');">
+                                <div class="text-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">PMOC Agrupado</h6>
+                                    <h6 class="mb-5"><small>3º Parte</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-xl-4">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000036');">
+                                <div class="text-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">PMOC Detalhado</h6>
+                                    <h6 class="mb-5"><small>3º Parte</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-xl-4">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000037');">
+                                <div class="text-center">
+                                    <i class="fa fa-file-o fa-2x mt-5"></i>
+                                    <h6 class="font-w700 mb-5 mt-5">Preventivas</h6>
+                                    <h6 class="mb-5"><small>Outros</small></h6>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" name="unidade" id="unidade" value="">
+                    <input type="hidden" name="mes" id="mes" value="">
+                    <input type="hidden" name="ano" id="ano" value="">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+
+
+<!-- From Right Modal -->
+<div class="modal fade" id="modalReportRefresh" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+
+            @using (Html.BeginForm("PMOCMesRefresh", "Relatorio", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form_modal", @id = "form_modal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="block block-themed block-transparent mb-15">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.pmoc_mensal</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="si si-close font-w600"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full">
+
+                        <div class="row">
+
+
+                            <div class="col-md-12">
+                                <label>@PCM.WEB.Properties.Resources.unidade:</label>
+                                @Html.DropDownList("unidade_pmoc", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+
+                            <div class="col-md-6">
+                                <label>@PCM.WEB.Properties.Resources.data:</label>
+                                @Html.DropDownList("data_pmoc", null, PCM.WEB.Properties.Resources.data, new { @class = "form-control" })
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnConfirm" id="btnConfirm" onclick="$('#form_modal').submit();")><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnClose" id="btnClose" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                </div>
+            }
+            </div>
+    </div>
+</div>
+<!-- END From Right Modal -->
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script>
+
+    function ImprimirReport(report) {
+
+        var unidade = $("#unidade").val();
+        var mes = $("#mes").val();
+        var ano = $("#ano").val();
+
+        window.open('PrintPMOCMes' + '?unidade=' + unidade + '&mes=' + mes + '&ano=' + ano + '&report=' + report, '_blank');
+    }
+
+    $(function () {
+
+        $.ajaxSetup({ async: false });
+
+        var unidade = $("#unidade_pmoc");
+        var data = $("#data_pmoc");
+
+        if (unidade.val() == "" || unidade.val() == "-1") {
+            data.prop("disabled", true);
+        }
+
+        unidade.change(function () {
+
+            if (unidade.val() == "") {
+
+                data.empty();
+                data.prop("disabled", true);
+
+            } else {
+
+                var request = { "unidade": unidade.val() };
+
+                $.post("LoadDataPMOC", request, function (obj) {
+                    data.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    data.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        data.append(option);
+                    });
+                }, "json");
+
+                data.prop("disabled", false);
+
+            }
+
+        });
+    });
+
+    function ImprimirPMOC(unidade, mes, ano) {
+
+        $("#unidade").val(unidade);
+        $("#mes").val(mes);
+        $("#ano").val(ano);
+
+        //Abre Formulário
+        jQuery('#modalReport').modal('show');
+    }
+
+    function RefreshPMOC() {
+
+        //Abre Formulário
+        jQuery('#modalReportRefresh').modal('show');
+    }
+
+    $('#form_modal').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+            $('#btnSave').show();
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'unidade_pmoc': {
+                required: true
+            },
+            'data_pmoc': {
+                required: true
+            }
+        },
+        messages: {
+            'unidade_pmoc': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            },
+            'data_pmoc': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+            $('#btnConfirm').hide();
+            var unidade = $("#unidade_pmoc");
+            var data = $("#data_pmoc");
+            var formdata = new FormData();
+            jQuery('#modalReportRefresh').modal('hide');
+            Codebase.layout('header_loader_on');
+
+            formdata.append("unidade", unidade.val());
+            formdata.append("data", data.val());
+
+            //Creating an XMLHttpRequest and sending
+            var oXMLHttpRequest = new XMLHttpRequest();
+            oXMLHttpRequest.open('POST', 'RefreshReport')
+            oXMLHttpRequest.send(formdata);
+            oXMLHttpRequest.onreadystatechange = function () {
+
+                if (oXMLHttpRequest.readyState == 4 && oXMLHttpRequest.status == 200) {
+
+                    Codebase.layout('header_loader_off');
+                    swal.fire({
+                        title: "PCM by SIM",
+                        text: oXMLHttpRequest.response,
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: 'OK',
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }).then(function (result) {
+                        if (result.value) {
+                            window.location.href = "PMOCMes";
+                        }
+                    });
+
+                }
+            }
+
+            return false;
+        }
+    });
+
+
+    // Initialize when page loads
+    jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+    });
+
+</script>
+
+}

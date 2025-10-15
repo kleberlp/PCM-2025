@@ -1,0 +1,298 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.UHChecklistHistorico>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.uh_em_dia</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.checklist_historico</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">        
+
+        <!-- Listagem -->
+        <div class="block block-rounded border">
+            
+            @using (Html.BeginForm("ChecklistHistorico", "UH", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", @name = "form", @id = "form", }))
+            {
+                @Html.AntiForgeryToken()
+
+                    <!-- Collapsible Tasks Navigation -->
+                    <div class="js-tasks-nav d-none d-md-block">
+                        <!-- Tasks Info -->
+                        <div class="block block-rounded border">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>                           
+                            </div>
+                            <div class="block-content">
+                                <ul class="list-group push">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            @if(Session["unidade"] == "")
+                                            {
+                                                <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                            } else 
+                                            {
+                                                <input type="hidden" name="codigo_unidade" id="codigo_unidade" value='@Session["codigo_unidade"]'>
+                                            }
+                                            <div class="col-md-4">
+                                                <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                    <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                                    <div class="input-group-prepend input-group-append">
+                                                        <span class="input-group-text font-w600">-</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                                </div>
+                                            </div>                            
+                                            <div class="col-md-4">@Html.DropDownList("apartamento", null, PCM.WEB.Properties.Resources.apartamento, new { @class = "js-select2 form-control" })</div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item text-right">                                                    
+                                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar" ><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END Tasks Info -->
+                    </div>
+                    <!-- END Collapsible Tasks Navigation -->
+                          
+                <div class="col-md-12 col-xl-12">
+                    <!-- Toggle Tasks Navigation on mobile -->
+                    <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                    <div class="block-content block-content-full">
+
+                        <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
+                            <thead>
+                                <tr class="table-secondary">
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
+                                    }
+                                    <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.uh</th>
+                                    <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data_inicio</th>
+                                    <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data_termino</th>
+                                    <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.responsavel_vistoria</th>
+                                    <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.tempo_gasto</th>
+                                    @if (ViewBag.editar || ViewBag.imprimir)
+                                    {
+                                        <th data-sortable="false" class="text-center" style="width: 120px;"></th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>                       
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                    }
+                                    <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.apartamento)</td>
+                                    <td class="text-center d-md-table-cell">@Html.DisplayFor(modelItem => item.data_inicio)</td>
+                                    <td class="text-center d-md-table-cell">@Html.DisplayFor(modelItem => item.data_termino)</td>
+                                    <td class="d-none d-lg-table-cell">@Html.DisplayFor(modelItem => item.responsavel_vistoria)</td>
+                                    <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.tempo_gasto)</td>
+                                    @if (ViewBag.editar || ViewBag.imprimir)
+                                    {
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                @if (ViewBag.imprimir)
+                                                {<button type="button" class="btn btn-sm btn-secondary fa fa-print" onclick="ImprimirRelatorio('@item.unidade', @item.codigo_unidade, @item.codigo_apartamento, @item.codigo);"></button>}
+                                                @if (ViewBag.editar)
+                                                {@Html.ActionLink(" ", "../UH/ChecklistUHApontamento", new { codigo_apartamento = @item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_vistoria = @item.codigo, color = "text-earth", status = 2, page = "ChecklistHistorico", model = "UH" }, new { @class = "btn btn-sm btn-secondary fa fa-list-ul" })}
+                                                @if (ViewBag.excluir)
+                                                {<button type="button" class="btn btn-sm btn-secondary fa fa-times" name="excluir" id="excluir" onclick="DeleteUH(@item.codigo_unidade, @item.codigo_apartamento, @item.codigo);"></button>}
+                                                </div>
+                                        </td>
+
+                                    }
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            }        
+    </div>        
+    </div>           
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+        function ImprimirRelatorio(unidade, codigo_unidade, codigo_apartamento, codigo) {
+            window.open('PrintChecklist' + '?unidade=' + unidade + '&codigo_unidade=' + codigo_unidade + '&codigo_apartamento=' + codigo_apartamento + '&codigo=' + codigo, '_blank');
+        }
+
+        $(function () {
+
+            var unidade = $("#unidade");
+            var apartamento = $("#apartamento");
+
+            apartamento.select2();
+
+            $.ajaxSetup({async: false});
+
+            unidade.select2({placeholder: '@PCM.WEB.Properties.Resources.unidade', allowClear: true});
+            apartamento.select2({placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true});
+
+            if (unidade.val() == "" || unidade.val() == "-1") {
+                apartamento.prop( "disabled", true );
+                apartamento.select2({placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true});
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+                    apartamento.empty();
+                    apartamento.prop( "disabled", true );
+                    apartamento.select2({placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true});
+                }
+                else {
+
+                    var request = { "unidade": unidade.val() };
+
+                    $.post("LoadApartamento", request, function (obj) {
+                        apartamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        apartamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            apartamento.append(option);
+                        });
+                    }, "json");
+
+                    apartamento.prop( "disabled", false );
+                    apartamento.select2({placeholder: '@PCM.WEB.Properties.Resources.apartamento',allowClear: true});
+                }
+
+            });
+
+        });
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableSimple = function () {
+                jQuery('.js-dataTable-list').dataTable({
+                    fixedHeader: false,
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 15,
+                    autoWidth: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        { extend: 'copy', text: 'Copiar'},
+                        { extend: 'print',
+
+                            text: 'Imprimir'},
+                        { extend: 'excel'},
+                        { extend: 'pdf', orientation: 'landscape'},
+                    ],
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "_MAX_ registro(s)",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableSimple();
+                }
+            };
+        }();
+
+        function DeleteUH(codigo_unidade, codigo_apartamento, codigo) {
+
+            swal.fire({
+                title: "PCM",
+                text: 'Deseja excluir o Apontamento Selecionado?',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: 'Sim',
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function (result) {
+                if (result.value) {
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "DeleteUHApontamento",
+                        data: {
+                            "unidade": codigo_unidade,
+                            "apartamento": codigo_apartamento,
+                            "codigo": codigo
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            swal.fire({
+                                title: "PCM",
+                                text: "Apontamento excluido com Sucesso!",
+                                type: 'info',
+                                showCancelButton: false,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: 'OK',
+                                closeOnConfirm: false,
+                                closeOnCancel: false
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $("#form").submit();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+        }
+
+        // Initialize when page loads
+        jQuery(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss'); BeTableDatatables.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+</script>
+}

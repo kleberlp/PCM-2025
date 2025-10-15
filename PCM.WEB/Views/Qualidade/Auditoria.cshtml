@@ -1,0 +1,140 @@
+﻿@model List<PCM.WEB.MODELS.QAAuditoria>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.qualidade</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="row">
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Auditoria", "Qualidade",  new { status = 1})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-times-circle fa-2x text-warning"></i></div>
+                        <div class="font-size-h3 font-w600  text-warning" data-speed="1000" data-to="@ViewBag.status.pendente" id="pendente" name="pendente">@ViewBag.status.pendente</div>
+                        <div class="font-size-md font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Auditoria", "Qualidade",  new { status = 3})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-warning fa-2x text-danger"></i></div>
+                        <div class="font-size-h3 font-w600 text-danger"><span data-speed="1000" data-to="@ViewBag.status.atrasado" id="atrasado" name="atrasado">@ViewBag.status.atrasado</span></div>
+                        <div class="font-size-md font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Auditoria", "Qualidade",  new { status = 4})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-check-circle fa-2x text-primary"></i></div>
+                        <div class="font-size-h3 font-w600 text-primary"><span data-speed="1000" data-to="@ViewBag.status.em_andamento" id="concluido" name="concluido">@ViewBag.status.em_andamento</span></div>
+                        <div class="font-size-md font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.em_andamento</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-3 col-sm-12 col-md-3 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Auditoria", "Qualidade",  new { status = 2})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-check-circle fa-2x text-success"></i></div>
+                        <div class="font-size-h3 font-w600 text-success""><span data-speed="1000" data-to="@ViewBag.status.concluido" id="concluido" name="concluido">@ViewBag.status.concluido</span></div>
+                        <div class="font-size-md font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="block">
+
+            <div class="block-header block-header-default bg-gd-default mb-15">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.auditoria</h3>
+            </div>
+
+            <div class="block-content">
+
+                @foreach (var item in Model)
+                {
+                    <div class="content-block font-size-h2 border-b mb-15">@Html.DisplayFor(modelItem => item.unidade)</div>
+
+                    for (int i = 0; i < item.auditoria.Count; i++)
+                    {
+                        <div class="row border-b mt-15">
+                            <div class="col-md-9">
+                                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Apontamento", "Qualidade", new { codigo_unidade = @item.codigo_unidade, codigo_auditoria = @item.auditoria[i].codigo_auditoria, codigo_auditoria_interna =item.auditoria[i].codigo_auditoria_interna, data = item.auditoria[i].data, action_name = "Auditoria"})">
+                                    <div class="block-content block-content-full clearfix">
+                                        <div class="d-none d-sm-block float-md-right mt-100">
+                                            <div class="js-pie-chart pie-chart" data-percent="@item.auditoria[i].nota" data-line-width="4" data-size="120" data-bar-color="#5C5C5C" data-track-color="rgba(2,2,2,.25)" data-scale-color="rgba(2,2,2,.5)">
+                                                <span class="text-success font-size-h1 font-w600">@item.auditoria[i].nota</span>
+                                            </div>
+                                        </div>
+                                        <div class="font-size-h3 font-w600 text-uppercase @item.auditoria[i].css_class">@item.auditoria[i].descricao</div>
+                                        <div class="font-size-md font-w600 text-secundary">@item.auditoria[i].data</div>
+                                        <div class="font-size-md font-w600 text-secundary">@item.auditoria[i].usuario</div>
+                                        <hr />
+                                        <div class="font-size-md text-secundary"><b>Pontos Possíveis:</b> @item.auditoria[i].pontos_possiveis</div>
+                                        <div class="font-size-md text-secundary"><b>Pontos Realizados:</b> @item.auditoria[i].pontos_realizados</div>
+                                        <div class="font-size-md text-secundary"><b>Conformes:</b> @item.auditoria[i].conforme</div>
+                                        <div class="font-size-md text-secundary"><b>Não Conformidades:</b> @item.auditoria[i].nao_conforme</div>
+                                        <div class="font-size-md text-secundary"><b>Não Respondidos:</b> @item.auditoria[i].nao_respondido</div>
+                                        <div class="font-size-md text-secundary"><b>Não Aplicáveis:</b> @item.auditoria[i].nao_aplicavel</div>
+
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "Qualidade", new { unidade = @item.codigo_unidade, auditoria_interna = item.auditoria[i].codigo_auditoria_interna})">
+                                    <div class="block-content block-content-full clearfix">
+                                        <div class="float-right mt-15 d-none d-sm-block text-danger"><i class="fa fa-warning fa-3x"></i></div>
+                                        <div class="font-size-h3 font-w600 text-uppercase text-danger">@item.auditoria[i].nao_conforme</div>
+                                        <div class="font-size-md font-w600 text-secundary">PLANOS DE AÇÃO</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/easy_pie_chart")
+
+    <script type="text/javascript">
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2', 'easy-pie-chart']);
+        });
+
+    </script>
+}

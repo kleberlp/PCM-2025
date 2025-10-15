@@ -1,0 +1,314 @@
+﻿
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("Index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row invisible" data-toggle="appear">
+
+                <div class="col-6 col-sm-12 col-md-3 col-xl-3">
+                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("EmpresaInsert", "CadastroBasico")">
+                        <div class="block-content block-content-full clearfix">
+                            <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-building-o fa-2x"></i></div>
+                            <div class="font-size-h5 font-w600 text-primary">@PCM.ADM.WEB.Properties.Resources.empresa</div>
+                            <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.ADM.WEB.Properties.Resources.nova</div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="row invisible" data-toggle="appear">
+
+                <!-- CHART -->
+                <div class="col-md-6">
+                    <div class="block block-rounded block-mode-loading-refresh">
+                        <div class="block-header block-header-default bg-primary-dark">
+                            <h3 class="block-title text-white text-center font-w600">@PCM.ADM.WEB.Properties.Resources.grafico - @PCM.ADM.WEB.Properties.Resources.evolucao_faturamento</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="pull-all pt-50">
+                                <canvas id="chartEvolucaoFaturamento"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END CHART -->
+
+                <!-- CHART -->
+                <div class="col-md-6">
+                    <div class="block block-rounded block-mode-loading-refresh">
+                        <div class="block-header block-header-default bg-primary-dark">
+                            <h3 class="block-title text-white text-center font-w600">@PCM.ADM.WEB.Properties.Resources.grafico - @PCM.ADM.WEB.Properties.Resources.faturamento_seguimento</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="pull-all pt-50">
+                                <canvas id="chartFaturamentoSeguimento"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END CHART -->
+
+            </div>
+
+            <div class="row invisible" data-toggle="appear">
+
+                <!-- RESUMO POR CLIENTE -->
+                <div class="col-12">
+                    <div class="block-header block-header-default border-b bg-primary-dark">
+                        <h3 class="block-title text-white">@PCM.ADM.WEB.Properties.Resources.resumo_por_empresa</h3>
+                        <div class="dropdown float-right">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn btn-secondary" onclick="ResumoEmpresa(1);">Dia Anterior</button>
+                                <button type="button" class="btn btn-sm btn btn-secondary" onclick="ResumoEmpresa(2);">Semana</button>
+                                <button type="button" class="btn btn-sm btn btn-secondary" onclick="ResumoEmpresa(3);">Mês</button>
+                                <button type="button" class="btn btn-sm btn btn-secondary" onclick="ResumoEmpresa(4);">Ano</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <table class="table table-bordered table-striped" id="tb_resumo_empresa">
+                            <thead>
+                                <tr class="bg-gray">                                       
+                                    <th>@PCM.ADM.WEB.Properties.Resources.empresa</th>
+                                    <th>@PCM.ADM.WEB.Properties.Resources.unidade</th>
+                                    <th class="text-center">@PCM.ADM.WEB.Properties.Resources.numero_os_aberto</th>
+                                    <th class="text-center">@PCM.ADM.WEB.Properties.Resources.numero_os_concluido</th>
+                                    <th class="text-center">@PCM.ADM.WEB.Properties.Resources.saldo</th>
+                                    <th class="text-center">@PCM.ADM.WEB.Properties.Resources.horas_corretivas</th>
+                                    <th class="text-center">@PCM.ADM.WEB.Properties.Resources.horas_preventivas</th>
+                                    <th class="text-center">@PCM.ADM.WEB.Properties.Resources.horas_pmoc</th>
+                                    <th class="text-center">@PCM.ADM.WEB.Properties.Resources.horas_uh</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tb_resumo_empresa_body">
+                                @for(var i = 0; i< ViewBag.resumo_empresa.Count; i++)
+                                {
+                                <tr>
+                                    @if(i == 0)
+                                    {
+                                    <td class="font-w600 text-md-left table-warning" rowspan="@ViewBag.resumo_empresa[i].quantidade_unidade">@ViewBag.resumo_empresa[i].empresa</td>
+                                    } else if(@ViewBag.resumo_empresa[i].empresa != @ViewBag.resumo_empresa[i - 1].empresa)
+                                    {
+                                    <td class="font-w600 text-md-left table-warning" rowspan="@ViewBag.resumo_empresa[i].quantidade_unidade">@ViewBag.resumo_empresa[i].empresa</td>
+                                    }
+                                    <td class="font-w600">@ViewBag.resumo_empresa[i].unidade</td>
+                                    <td class="text-center">@ViewBag.resumo_empresa[i].numero_os_aberto</td>
+                                    <td class="text-center">@ViewBag.resumo_empresa[i].numero_os_concluido</td>
+                                    <td class="text-center">@ViewBag.resumo_empresa[i].saldo</td>
+                                    <td class="text-center">@ViewBag.resumo_empresa[i].horas_corretivas</td>
+                                    <td class="text-center">@ViewBag.resumo_empresa[i].horas_preventivas</td>
+                                    <td class="text-center">@ViewBag.resumo_empresa[i].horas_pmoc</td>
+                                    <td class="text-center">@ViewBag.resumo_empresa[i].horas_uh</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- END RESUMO POR CLIENTE -->
+
+            </div>
+        }
+
+    </div>
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
+    @Scripts.Render("~/plugins/gauge")
+
+    <script>
+        
+        var cEvolucaoFaturamento = Object.keys(window.chartColors);
+        var cFaturamentoSeguimento = Object.keys(window.chartColors);
+        var chrEvolucaoFaturamento = new Gauge(document.getElementById("chartEvolucaoFaturamento"));
+        var chrFaturamentoSeguimento = new Gauge(document.getElementById("chartFaturamentoSeguimento"));
+        
+        var configEvolucaoFaturamento = {
+            type: 'line',
+            options: {
+                responsive: true,
+                data: {
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                    }],
+                    labels: []
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                },
+                title: {
+                    display: false,
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        };
+
+        var configFaturamentoSeguimento = {
+            type: 'doughnut',
+            options: {
+                responsive: true,
+                data: {
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                    }],
+                    labels: []
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        padding: 20
+                    },
+                    position: 'bottom',
+                },
+                title: {
+                    display: false,
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                },
+                tooltips: {
+                    enabled: true
+                }
+            }
+        };
+
+        function LoadChartFaturamentoSeguimento() {
+
+            $.post("Home/chartFaturamentoSeguimento", function (obj) {
+
+                var newDataset = {
+                    label: [],
+                    data: [],
+                    backgroundColor: [],
+                    fill: false
+                };
+
+                $.each(obj, function (indice, result) {
+                    var colorName = cFaturamentoSeguimento[newDataset.data.length % cFaturamentoSeguimento.length];
+                    var newColor = window.chartColors[colorName];
+                    configFaturamentoSeguimento.data.labels.push(result.descricao);
+                    newDataset.data.push(Number(result.valor));
+                    newDataset.backgroundColor.push(newColor);
+                });
+
+                configFaturamentoSeguimento.data.datasets.push(newDataset);
+                window.FaturamentoSeguimento.update();
+
+            }, "json");
+        }
+
+        function LoadChartEvolucaoFaturamento() {
+
+            $.post("Home/chartEvolucaoFaturamento", function (obj) {
+
+                var Vendido = {
+                    label: 'vendido',
+                    data: [],
+                    fill: false,
+                    backgroundColor: 'rgba(255,25,40,0.5)',
+                    borderColor: 'rgba(255,25,40,0.5)',
+                    pointBorderColor: 'rgba(255,25,40,1)',
+                };
+
+                var Implantado = {
+                    label: 'implantado',
+                    data: [],
+                    fill: false,
+                    backgroundColor: 'rgba(0, 147, 133, 0.5)',
+                    borderColor: 'rgba(0, 147, 133, 0.5)',
+                    pointBorderColor: 'rgba(0, 147, 133, 1)',
+                };
+
+                $.each(obj, function (indice, result) {
+                    configEvolucaoFaturamento.data.labels.push(result.descricao);
+                    Vendido.data.push(result.valor);
+                });
+
+                configEvolucaoFaturamento.data.datasets.push(Vendido);
+                window.EvolucaoFaturamento.update();
+
+            }, "json");
+        }
+
+        function ResumoEmpresa(periodo) {
+
+            var dataString = { "periodo": periodo };
+            $("#tb_resumo_empresa_body").empty();
+
+            jQuery.ajax({
+                type: "POST",
+                url: "Home/ResumoEmpresa",
+                async: false,
+                data: dataString,
+                dataType: "json",
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        var newRowItem = $("<tr>");
+
+                        var colsItem = '';
+
+                        if (i == 0)
+                        {
+                            colsItem = '<td class="font-w600 text-md-left table-warning" rowspan=' + response[i].quantidade_unidade + '>' + response[i].empresa + '</td>';
+                        } else if (response[i].empresa != response[i - 1].empresa)
+                        {
+                            colsItem = '<td class="font-w600 text-md-left table-warning" rowspan=' + response[i].quantidade_unidade + '>' + response[i].empresa + '</td>';
+                        }                                    
+                        colsItem += '<td class="font-w600">' + response[i].unidade + '</td>';
+                        colsItem += '<td class="text-center">' + response[i].numero_os_aberto + '</td>';
+                        colsItem += '<td class="text-center">' + response[i].numero_os_concluido + '</td>';
+                        colsItem += '<td class="text-center">' + response[i].saldo + '</td>';
+                        colsItem += '<td class="text-center">' + response[i].horas_corretivas + '</td>';
+                        colsItem += '<td class="text-center">' + response[i].horas_preventivas + '</td>';
+                        colsItem += '<td class="text-center">' + response[i].horas_pmoc + '</td>';
+                        colsItem += '<td class="text-center">' + response[i].horas_uh + '</td>';
+                        newRowItem.append(colsItem);
+                        $("#tb_resumo_empresa_body").append(newRowItem);
+                    }
+                }
+            });
+        }
+
+        window.onload = function () {
+            var cFaturamentoSeguimento = document.getElementById('chartFaturamentoSeguimento').getContext('2d');
+            window.FaturamentoSeguimento = new Chart(cFaturamentoSeguimento, configFaturamentoSeguimento);
+            var cEvolucaoFaturamento = document.getElementById('chartEvolucaoFaturamento').getContext('2d');
+            window.EvolucaoFaturamento = new Chart(cEvolucaoFaturamento, configEvolucaoFaturamento);
+        };
+
+        // Initialize when page loads
+        jQuery(function () {
+            LoadChartEvolucaoFaturamento();
+            LoadChartFaturamentoSeguimento();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+    </script>
+}
+

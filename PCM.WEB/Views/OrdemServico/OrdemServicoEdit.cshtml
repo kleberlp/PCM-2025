@@ -1,0 +1,319 @@
+﻿@model PCM.WEB.MODELS.OrdemServico
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("OrdemServicoIndex2", "OrdemServico")">@PCM.WEB.Properties.Resources.ordem_servico</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.editar</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("OrdemServicoEdit", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.codigo)
+                    <input type="hidden" name="unidade_old" id="unidade_old" value="@ViewBag.codigo_unidade">
+                    <input type="hidden" name="unidade" id="unidade" value="@ViewBag.codigo_unidade">
+                    <input type="hidden" name="dataOriginal" id="dataOriginal" value="@ViewBag.data">
+                    <input type="hidden" name="change_imagem" id="change_imagem" value="">
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.editar</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <label class="col-12" for="unidade">@PCM.WEB.Properties.Resources.unidade</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.unidade)</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="unidade">@PCM.WEB.Properties.Resources.ordem_servico</label>
+                                <div class="col-12">@Html.DisplayFor(model => model.numero_documento)</div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.prazo_execucao</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data"></div>
+                                </div>
+                                <div class="col-md-6" id="divJustificativa">
+                                    <label>@PCM.WEB.Properties.Resources.justificativa</label>
+                                    <div>@Html.DropDownList("justificativaApontamento", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>@PCM.WEB.Properties.Resources.prioridade</label>
+                                    <div>@Html.DropDownList("prioridade", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.setor</label>
+                                    <div>@Html.DropDownList("setor", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.apartamento</label>
+                                    <div>@Html.DropDownList("apartamento", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </div>
+                            -                                <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.equipamento</label>
+                                <div class="col-12">@Html.DropDownList("equipamento", null, "", new { @class = "js-select2 form-control" })</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.descricao</label>
+                                <div class="col-12">@Html.TextAreaFor(model => model.descricao, new { @class = "form-control", @maxlength = "5000", @rows = "6" })</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
+                                <div class="col-12">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="imagem" name="imagem" onchange="Arquivo();" accept="image/*">
+                                        <label id="lblArquivo" class="custom-file-label" for="imagem">@ViewBag.arquivo</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    
+<script>
+
+        function Arquivo() {
+            document.getElementById("lblArquivo").textContent = document.getElementById("imagem").files[0].name;
+            document.getElementById("change_imagem").value = "change";
+        }
+
+        $(function () {
+
+            $("#divJustificativa").hide();
+            var unidade = $("#unidade");
+            var data = $("#data");
+            var setor = $("#setor");
+            var equipamento = $("#equipamento");
+            var prioridade = $("#prioridade");
+            var apartamento = $("#apartamento");
+            $.ajaxSetup({ async: false });
+
+
+            if (setor.val() == "") {
+                apartamento.prop("disabled", true);
+                equipamento.prop("disabled", true);
+                apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
+                equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
+            }
+
+            data.change(function () {
+
+                if ($("#data").val() != $("#dataOriginal").val()) {
+                    $("#divJustificativa").show();
+                }
+                else {
+                    $("justificativaApontamento").val("");
+                    $("#divJustificativa").hide();
+                }
+
+            });
+
+            setor.change(function () {
+
+                if (setor.val() == "") {
+                    apartamento.empty();
+                    equipamento.empty();
+                    apartamento.empty();
+                    equipamento.empty();
+                    apartamento.prop("disabled", true);
+                    equipamento.prop("disabled", true);
+                    apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
+                    equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
+                }
+                else {
+
+                    var request = { "unidade": unidade.val(), "setor": setor.val() };
+                    $.post("LoadEquipamentoSetor", request, function (obj) {
+                        equipamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        equipamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            equipamento.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadApartamento", request, function (obj) {
+                        apartamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        apartamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            apartamento.append(option);
+                        });
+                    }, "json");
+
+                    apartamento.prop("disabled", false);
+                    equipamento.prop("disabled", false);
+                    apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
+                    equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
+                }
+
+            });
+
+            apartamento.change(function () {
+
+                if (apartamento.val() == "") {
+
+                    var request = { "unidade": unidade.val(), "setor": setor.val() };
+                    $.post("LoadEquipamentoSetor", request, function (obj) {
+                        equipamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        equipamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            equipamento.append(option);
+                        });
+                    }, "json");
+
+                }
+                else {
+
+                    var request = { "unidade": unidade.val(), "apartamento": apartamento.val() };
+                    $.post("LoadEquipamentoApartamento", request, function (obj) {
+                        equipamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        equipamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            equipamento.append(option);
+                        });
+                    }, "json");
+                }
+            });
+
+        });
+
+        jQuery.validator.addMethod("minDate", function (value, element) {
+
+            if('@ViewBag.administrador' == 'True')
+            {
+                return this.optional(element) || true;
+            } else {
+                var curDate = new Date();
+                curDate.setDate(curDate.getDate());
+                curDate.setHours(0, 0, 0, 0);
+                var from = value.split("/");
+                var inputDate = new Date(from[2], from[1] - 1, from[0]);
+                if (inputDate >= curDate) {
+                    return this.optional(element) || true;
+                }
+                else {
+                    return this.optional(element) || false;
+                }
+            }
+        }, '');
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'data': {
+                            required: true,
+                            minDate: { minDate: true }
+                        },
+                        'prioridade': {
+                            required: true
+                        },
+                        'setor': {
+                            required: true
+                        },
+                        'descricao': {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        'data': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                            minDate: '@PCM.WEB.Properties.Resources.data_menor_permitida'
+                        },
+                        'prioridade': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'setor': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'descricao': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        }
+                    },
+                });
+            };
+
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            FormValidation.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+</script>
+}

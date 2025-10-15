@@ -1,0 +1,193 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.excel</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.plano_acao</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("PlanoAcaoQA", "Excel", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.plano_acao</h3>
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            @if (Session["unidade"] == "")
+                            {
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade.ToUpper(), new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                </li>
+                            }
+                            @if (Session["unidade"] != "")
+                            {
+                                <input type="hidden" name="unidade" id="unidade" value="@ViewBag.codigo_unidade">
+                            }
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                            <input type="text" class="form-control" id="data_inicio" name="data_inicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio">
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text font-w600">-</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"><div><input type="text" id="ordem_servico" name="ordem_servico" value="@ViewBag.ordem_servico" placeholder="@PCM.WEB.Properties.Resources.plano_acao" class="form-control"></div></div>
+                                    <div class="col-md-4"><div>@Html.DropDownList("auditoria", null, PCM.WEB.Properties.Resources.auditoria.ToUpper(), new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("status", null, PCM.WEB.Properties.Resources.status.ToUpper(), new { @class = "js-select2 form-control" })</div></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-4"><div>@Html.DropDownList("departamento", null, PCM.WEB.Properties.Resources.departamento.ToUpper(), new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("prioridade", null, PCM.WEB.Properties.Resources.prioridade.ToUpper(), new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-4"><div>@Html.DropDownList("solicitante", null, PCM.WEB.Properties.Resources.solicitante.ToUpper(), new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div><input type="text" id="executor" name="executor" value="@ViewBag.executor" placeholder="@PCM.WEB.Properties.Resources.executor" class="form-control"></div></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="fa fa-file-excel-o mr-5"></i>@PCM.WEB.Properties.Resources.excel</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+        }
+    </div>
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+        $(function () {
+
+            $.ajaxSetup({async: false});
+
+            var unidade = $("#unidade");
+            var auditoria = $("#auditoria");
+            var status = $("#status");
+            var departamento = $("#departamento");
+            var prioridade = $("#prioridade");
+            var solicitante = $("#solicitante");
+
+            unidade.select2({ placeholder: '@PCM.WEB.Properties.Resources.unidade.ToUpper()', allowClear: true });
+            auditoria.select2({ placeholder: '@PCM.WEB.Properties.Resources.auditoria.ToUpper()', allowClear: true });
+            status.select2({ placeholder: '@PCM.WEB.Properties.Resources.status.ToUpper()', allowClear: true });
+            departamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.departamento.ToUpper()', allowClear: true });
+            prioridade.select2({ placeholder: '@PCM.WEB.Properties.Resources.prioridade.ToUpper()', allowClear: true });
+            solicitante.select2({ placeholder: '@PCM.WEB.Properties.Resources.solicitante.ToUpper()', allowClear: true });
+
+            if (unidade.val() == "" || unidade.val() == "-1") {
+                auditoria.prop( "disabled", true );
+                solicitante.prop("disabled", true);
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+
+                    auditoria.empty();
+                    prioridade.empty();
+                    solicitante.empty();
+                    auditoria.prop( "disabled", true );
+                    prioridade.prop( "disabled", true );
+                    solicitante.prop( "disabled", true );
+                    unidade.select2({ placeholder: '@PCM.WEB.Properties.Resources.unidade.ToUpper()', allowClear: true });
+                    auditoria.select2({ placeholder: '@PCM.WEB.Properties.Resources.auditoria.ToUpper()', allowClear: true });
+                    status.select2({ placeholder: '@PCM.WEB.Properties.Resources.status.ToUpper()', allowClear: true });
+                    prioridade.select2({ placeholder: '@PCM.WEB.Properties.Resources.prioridade.ToUpper()', allowClear: true });
+                    solicitante.select2({ placeholder: '@PCM.WEB.Properties.Resources.solicitante.ToUpper()', allowClear: true });
+
+                } else {
+
+                    var request = { "unidade": unidade.val() };
+
+                    $.post("LoadAuditoriaQualidade", request, function (obj) {
+                        auditoria.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        auditoria.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            auditoria.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadPrioridade", request, function (obj) {
+                        prioridade.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        prioridade.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            prioridade.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadSolicitante", request, function (obj) {
+                        solicitante.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        solicitante.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            solicitante.append(option);
+                        });
+                    }, "json");
+
+                    auditoria.prop("disabled", false);
+                    prioridade.prop("disabled", false);
+                    solicitante.prop("disabled", false);
+
+                    unidade.select2({ placeholder: '@PCM.WEB.Properties.Resources.unidade.ToUpper()', allowClear: true });
+                    auditoria.select2({ placeholder: '@PCM.WEB.Properties.Resources.auditoria.ToUpper()', allowClear: true });
+                    status.select2({ placeholder: '@PCM.WEB.Properties.Resources.status.ToUpper()', allowClear: true });
+                    prioridade.select2({ placeholder: '@PCM.WEB.Properties.Resources.prioridade.ToUpper()', allowClear: true });
+                    solicitante.select2({ placeholder: '@PCM.WEB.Properties.Resources.solicitante.ToUpper()', allowClear: true });
+
+                }
+
+            });
+
+        });
+
+        // Initialize when page loads
+        jQuery(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+</script>
+}

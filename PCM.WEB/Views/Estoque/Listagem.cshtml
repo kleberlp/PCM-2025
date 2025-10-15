@@ -1,0 +1,190 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.EstoqueListagem>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.estoque</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.listagem</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+
+        @using (Html.BeginForm("Listagem", "Estoque", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Listagem -->
+                <input type="hidden" id="formulario" name="formulario" value="@ViewBag.formulario" />
+                <input type="hidden" id="empresa" name="empresa" value="@ViewBag.empresa" />
+                <input type="hidden" id="usuario" name="usuario" value="@ViewBag.usuario" />
+
+                <!-- Collapsible Tasks Navigation -->
+                <div class="js-tasks-nav d-none d-md-block">
+                    <!-- Tasks Info -->
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
+                                        <div class="col-md-4">@Html.DropDownList("produto", null, PCM.WEB.Properties.Resources.produto, new { @class = "js-select2 form-control" })</div>
+                                        <div class="col-md-4">@Html.DropDownList("status", null, PCM.WEB.Properties.Resources.status, new { @class = "js-select2 form-control" })</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Tasks Info -->
+                </div>
+                <!-- END Collapsible Tasks Navigation -->
+
+            <div class="block block-rounded border pt-10" id="tableProducts">
+
+                <table class="table table-sm table-vcenter table-striped js-dataTable-list" id="tbMain">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th>@PCM.WEB.Properties.Resources.produto</th>
+                            <th>@PCM.WEB.Properties.Resources.descricao</th>
+                            <th>@PCM.WEB.Properties.Resources.lote</th>
+                            <th>@PCM.WEB.Properties.Resources.quantidade_entrada</th>
+                            <th>@PCM.WEB.Properties.Resources.quantidade_saida</th>
+                            <th>@PCM.WEB.Properties.Resources.saldo</th>
+                            <th>@PCM.WEB.Properties.Resources.unidade_medida</th>
+                            <th>@PCM.WEB.Properties.Resources.localizacao</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        }
+    </div>
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+
+        $(function () {
+
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+
+            var empresa = $("#empresa");
+            var unidade = $("#unidade");
+            var produto = $("#produto");
+
+            unidade.change(function () {
+                if (unidade.val() == "") {
+                    produto.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.produto)', allowClear: true });
+                }
+                else {
+                    var request = { "empresa": empresa.val(), "unidade": unidade.val() };
+
+                    $.post("LoadProduto", request, function (obj) {
+                        produto.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        produto.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            produto.append(option);
+                        });
+                    }, "json");
+                }
+            });
+
+
+            var table = $('#tbMain').DataTable({
+                select: {
+                    selector: 'td:not(:first-child)',
+                    style: 'os'
+                },
+                fixedHeader: true,
+                searching: true,
+                lengthChange: false,
+                pageLength: 15,
+                autoWidth: false,
+                scrollX: false,
+                scrollColapse: true,
+                ajax: {
+                    url: "LoadListagem",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.empresa = @ViewBag.codigoEmpresa,
+                        d.usuario = @ViewBag.codigoUsuario,
+                            d.unidade = ($("#unidade").val() == "") ? -1 : $("#unidade").val(),
+                        d.produto = ($("#produto").val() == "") ? -1 : $("#produto").val(),
+                        d.status = ($("#status").val() == "") ? -1 : $("#status").val()
+                    },
+                    dataSrc: ""
+                },
+                columns: [
+                    { data: "produto", class: "font-w600 text-center" },
+                    { data: "descricaoProduto"},
+                    { data: "lote", class: "text-center" },
+                    { data: "quantidadeEntrada", class: "text-center" },
+                    { data: "quantidadeSaida", class: "text-center" },
+                    { data: "saldo", class: "text-center" },
+                    { data: "unidadeMedida", class: "text-center" },
+                    { data: "localizacao", class: "text-center" }
+                ],
+                columnDefs: [
+                    { width: '200px', targets: [0, 2, 7] },
+                    { width: '150px', targets: [3, 4, 5, 6] }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'copy', text: '@Html.Raw(PCM.WEB.Properties.Resources.copy)' },
+                    {
+                        extend: 'print',
+                        text: '@Html.Raw(PCM.WEB.Properties.Resources.print)'
+                    },
+                    { extend: 'excel' },
+                    { extend: 'pdf', orientation: 'portrait' },
+                ],
+                language: {
+                    emptyTable: "Nenhum registro encontrado",
+                    info: "",
+                    infoEmpty: "",
+                    infoFiltered: "",
+                }
+            });
+
+            $('#filtrar').click(function () {
+                table.ajax.reload(null, false);
+            });
+
+        });
+
+</script>
+}

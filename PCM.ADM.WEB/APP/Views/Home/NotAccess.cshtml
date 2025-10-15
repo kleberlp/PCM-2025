@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Profile";
+}
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><span data-i18n="body.permission">You don't have permission!</span></h5>
+                </div>
+                <div class="ibox-content">                    
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-actions no-color">
+                            @Html.ActionLink("Back to Home", "Index", null, new { @class = "btn btn-white" })
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,307 @@
+﻿
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("PlanoAcaoIndex", "PlanoAcao")">@PCM.WEB.Properties.Resources.plano_acao</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamento</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("ApontamentoPlanoAcao", "PlanoAcao", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="codigo_pcm_plano_acao" id="codigo_pcm_plano_acao" value="@ViewBag.apontamento.codigo">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.apontamento.codigo_unidade">
+                    
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("PlanoAcaoIndex", "PlanoAcao")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="block-content block-content-full">
+                            @if (Session["unidade"] == "")
+                            {
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@ViewBag.apontamento.unidade</span></div></div>
+                            }
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.plano_acao: <span class="text-primary">@ViewBag.apontamento.plano_acao</span></div></div>
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.prioridade: <span class="text-primary">@ViewBag.apontamento.prioridade</span></div></div>
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.departamento: <span class="text-primary">@ViewBag.apontamento.departamento</span></div></div>
+                            @if (ViewBag.apontamento.responsavel != ""){ 
+                                <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.responsavel_departamento: <span class="text-primary">@ViewBag.apontamento.responsavel</span></div></div> 
+                            }
+                            <div class="form-group row font-w600"><div class="col-12">@PCM.WEB.Properties.Resources.descricao: <span class="text-primary">@ViewBag.apontamento.descricao</span></div></div>
+                            <hr></hr>
+                            <div class="form-group row">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.data_inicio</label>
+                                <div class="col-3"><input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data"></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.descricao </label>
+                                <div class="col-12"><textarea class="form-control" id="descricao" name="descricao" maxlength="500" rows="6" value="@ViewBag.apontamento.descricao"></textarea></div>
+                            </div>
+                            <div class="form-group row">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.concluido?</label>
+                                <div class="col-12">
+                                    <label class="css-control css-control-success css-switch">
+                                        <input type="checkbox" class="css-control-input" id="concluido" name="concluido" value="true">
+                                        <span class="css-control-indicator"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="div_justificativa">
+                                <div class="form-group row">
+                                    <div class="col-md-9">
+                                        <label>@PCM.WEB.Properties.Resources.justificativa_apontamento</label>
+                                        <div>@Html.DropDownList("justificativa_apontamento", null, "", new { @class = "form-control js-select2" })</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>@PCM.WEB.Properties.Resources.percentual_atendido</label>
+                                        <div><input type="text" class="form-control" id="percentual" name="percentual" value="@ViewBag.apontamento.percentual"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.observacao</label>
+                                <div class="col-12"><textarea class="form-control" id="observacao" name="observacao" maxlength="500" rows="3"></textarea></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
+                                <div class="col-12">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="image/*">
+                                        <label id="lblArquivo" class="custom-file-label" for="imagem">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*<div class="block block-rounded" id="registros">
+                            <div class="block-header block-header-default bg-primary-light">
+                                <h3 class="block-title text-dark font-w600">@PCM.WEB.Properties.Resources.registros: <span class="text-danger" id="info_registros">0</span></h3>
+                                <div class="block-options">
+                                    <label class="css-control css-control-danger css-checkbox">
+                                        <input type="checkbox" name="barcode" id="barcode" class="css-control-input" value="true" onchange="productInput();" />
+                                        <span class="css-control-indicator"></span>
+                                        <span class="h5">@PCM.WEB.Properties.Resources.leitor_codigo_barras</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full">
+                                <div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2" id="input_barcode" style="display:none">
+                                            <label>@PCM.WEB.Properties.Resources.produto</label>
+                                            <input type="text" class="form-control" style="text-transform: uppercase;" id="produto" name="produto" autocomplete="off" placeholder="" value="" maxlength="20">
+                                        </div>
+                                        <div class="col-md-4" id="descricao_barcode" style="display:none">
+                                            <label>@PCM.WEB.Properties.Resources.descricao</label>
+                                            <input type="text" class="form-control" disabled style="text-transform: uppercase;" id="descricao" name="descricao" autocomplete="off" placeholder="" value="" maxlength="250">
+                                        </div>
+                                        <div class="col-md-6" id="input_combo">
+                                            <label>@PCM.WEB.Properties.Resources.produto</label>
+                                            <div>@Html.DropDownList("produto_combo", null, "", new { @class = "form-control js-select2" })</div>
+                                        </div>
+                                        <div class="col-md-2" id="div_lote" name="div_lote">
+                                            <label>@PCM.WEB.Properties.Resources.lote</label>
+                                            <div>@Html.DropDownList("lote", null, "", new { @class = "form-control js-select2" })</div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>@PCM.WEB.Properties.Resources.quantidade</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="quantidade" name="quantidade" value="" onkeypress="if (event.keyCode == 13) { adicionarProduto(); return false; }">
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" onclick="adicionarProduto();"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table table-bordered table-sm table-striped table-vcenter" id="table" name="table">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th class="text-center" style="width:200px">@PCM.WEB.Properties.Resources.produto</th>
+                                            <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                            <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.lote</th>
+                                            <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.quantidade</th>
+                                            <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table_linha" name="table_linha">
+                                        @for (int i = 0; i < Model.Count; i++)
+                                        {
+                                            <tr id='linha' style="display:none">
+                                                @Html.HiddenFor(m => m[i].codigo_produto)
+                                                @Html.HiddenFor(m => m[i].excluido)
+                                                @Html.HiddenFor(m => m[i].lote)
+                                                @Html.HiddenFor(m => m[i].quantidade)
+                                                <td class="text-center" style="width:200px">@Html.DisplayFor(m => m[i].produto)</td>
+                                                <td>@Html.DisplayFor(m => m[i].descricao_produto)</td>
+                                                <td class="text-center" style="width:150px" id="lote_@i" name="lote_@i">@Html.DisplayFor(m => m[i].lote)</td>
+                                                <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].quantidade)</td>
+                                                <td class="text-center">
+                                                    <div class="btn-group">
+                                                        <a href="#" onclick="remove(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>
+                                                        <a href="#" onclick="informacao(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-info-circle"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>*@
+
+                    </div>
+
+                }
+                <!-- END Basic Info -->
+            </div>
+            <!-- END Update Product -->
+        </div>
+        <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/select")
+
+<script>
+
+        $(document).ready(function () {
+            $("#data_inicio").mask("99/99/9999");
+            $("#percentual").maskMoney({prefix: '', thousands: '.', precision: 2, allowNegative: false, 'placeholder': ''});
+        });
+
+        function Arquivo() {
+            document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;
+        }
+
+        $(function () {
+
+            var concluido = $("#concluido");
+            var justificativa = $("#div_justificativa");
+            concluido.change(function () {
+                if(document.getElementById('concluido').checked){
+                    justificativa.hide();
+                    $('#percentual').val(100);
+                } else {
+                    justificativa.show();
+                    $('#percentual').val(@ViewBag.apontamento.percentual);
+                }
+            });
+
+        });
+
+        jQuery.validator.addMethod("justificativa_apontamento", function (funcionario, element) {
+
+            var concluido = document.getElementById('concluido').checked;
+            var justificativa_apontamento = $("#justificativa_apontamento").val();
+            if (!concluido) {
+                if(justificativa_apontamento != "")
+                    return true;
+                else
+                    return false;
+            }else {
+                return true;
+            }
+        }, '@PCM.WEB.Properties.Resources.campo_requerido');
+
+        var FormValidation = function () {
+            // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
+            var initValidationBootstrap = function () {
+                jQuery('.js-validation-bootstrap').validate({
+                    ignore: [],
+                    errorClass: 'invalid-feedback animated fadeInDown',
+                    errorElement: 'div',
+                    errorPlacement: function (error, e) {
+                        jQuery(e).parents('.form-group > div').append(error);
+                    },
+                    highlight: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+                    },
+                    success: function (e) {
+                        jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                        jQuery(e).remove();
+                    },
+                    rules: {
+                        'descricao': {
+                            required: true
+                        },
+                        'justificativa_apontamento': {
+                            justificativa_apontamento: true
+                        },
+                        'percentual': {
+                            justificativa_apontamento: true
+                        }
+                    },
+                    messages: {
+                        'descricao': {
+                            required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'justificativa_apontamento': {
+                            justificativa_apontamento: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'percentual': {
+                            justificativa_apontamento: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        }
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Init Bootstrap Forms Validation
+                    initValidationBootstrap();
+                }
+            };
+        }();
+
+        // Initialize when page loads
+        jQuery(function () {
+            FormValidation.init();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+</script>
+}

@@ -1,0 +1,158 @@
+﻿@model List<INTERACTI.WEB.MODELS.ApontamentoChecklist>
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-5 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@INTERACTI.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("Agenda", "PCM")">@INTERACTI.WEB.Properties.Resources.agenda_servico</a>
+                <span class="breadcrumb-item active">@INTERACTI.WEB.Properties.Resources.apontamento</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm("ApontamentoExcluir", "PCM", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data"  }))        
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="codigo_apontamento" id="codigo_apontamento" value="@ViewBag.apontamento.codigo_apontamento">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.apontamento.codigo_unidade">
+
+                    <div class="block block-rounded block-themed">
+                        <div class="block-header bg-gd-primary">
+                            <h3 class="block-title">@INTERACTI.WEB.Properties.Resources.informacoes</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-sm btn-alt-primary">
+                                    <i class="fa fa-save mr-5"></i>@INTERACTI.WEB.Properties.Resources.excluir
+                                </button>
+                                <a href="@Url.Action("Agenda", "PCM")" class="btn btn-sm btn-alt-primary">
+                                    <i class="si si-action-undo mr-5"></i>@INTERACTI.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">                             
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.unidade</label>
+                                <div class="col-12">@ViewBag.apontamento.unidade</div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.setor</label>
+                                <div class="col-12">@ViewBag.apontamento.setor</div>
+                            </div>                
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.equipamento</label>
+                                <div class="col-12">@ViewBag.apontamento.equipamento</div>
+                            </div>                
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.servico</label>
+                                <div class="col-12">@ViewBag.apontamento.servico</div>
+                            </div>       
+                            @if(ViewBag.apontamento.codigo_tipo_servico == 1)
+                            {         
+                                <div class="form-group row">
+                                    <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.funcionario</label>
+                                    <div class="col-12">@ViewBag.apontamento.funcionario</div>
+                                </div>                
+                            }
+                            @if(ViewBag.apontamento.codigo_tipo_servico == 2)
+                            {         
+                                <div class="form-group row">
+                                    <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.fornecedor</label>
+                                    <div class="col-12">@ViewBag.apontamento.fornecedor</div>
+                                </div>                
+                            }
+                            <div class="form-group row">
+                                <label class="col-12" for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.descricao</label>
+                                <div class="col-12">@ViewBag.apontamento.descricao_solucao</div>
+                            </div>  
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.data</label>
+                                    <div>@ViewBag.apontamento.data</div>
+                                </div>
+                                @if(ViewBag.apontamento.aponta_horas)
+                                {
+                                    <div class="col-4">
+                                        <label for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.hora_inicio</label>
+                                        <div>@ViewBag.apontamento.hora_inicio</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="ecom-product-name">@INTERACTI.WEB.Properties.Resources.hora_termino</label>
+                                        <div>@ViewBag.apontamento.hora_termino</div>
+                                    </div>
+                                }
+                            </div>               
+                        </div>                        
+                    </div>
+
+                    if (Model.Count > 0)
+                    {
+                        
+                        <!-- Dynamic Table Full Pagination -->
+                        <div class="block block-rounded block-themed">
+                            <div class="block-header bg-gd-primary">
+                                <h3 class="block-title">@INTERACTI.WEB.Properties.Resources.checklist</h3>                                
+                            </div>
+                            <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                            <table class="table table-bordered table-striped table-vcenter">
+                                <thead>
+                                    <tr>
+                                        <th >@INTERACTI.WEB.Properties.Resources.descricao </th>
+                                        <th class="text-center" style="width:150px">@INTERACTI.WEB.Properties.Resources.conforme</th>
+                                        <th>@INTERACTI.WEB.Properties.Resources.comentario</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>         
+                                @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                    <tr>    
+                                        @Html.HiddenFor(m => m[i].codigo)
+                                        <td>@Html.DisplayFor(m => m[i].descricao)</td>
+                                        <td class="text-center" style="width:150px">
+                                            <label class="css-control css-control-success css-switch">
+                                                @Html.CheckBoxFor(m => m[i].conforme, new { @class = "css-control-input"})
+                                                <span class="css-control-indicator"></span>
+                                            </label>
+                                        </td>    
+                                        <td>@Html.DisplayFor(m => m[i].comentario)</td>   
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END Dynamic Table Full Pagination -->
+                    }
+                }
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/cookie")    
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/bundles/codebase")
+
+}

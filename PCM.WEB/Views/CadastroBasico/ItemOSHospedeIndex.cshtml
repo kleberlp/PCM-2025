@@ -1,0 +1,248 @@
+﻿
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.cadastro_basico</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.itemOSHospede</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("ItemOSHospedeIndex", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" id="username" name="username" value="@ViewBag.username" />
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <button type="button" class="btn btn-block btn-square btn-secondary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.search</button>
+
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.itemOSHospede</h3>
+                        @if (ViewBag.inserir)
+                        {
+                            <div class="block-options">
+                                <a href="@Url.Action("ItemOSHospedeInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <div class="block-content">
+                        <ul class="list-group push">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label>@PCM.WEB.Properties.Resources.unidade </label>
+                                        <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label>@PCM.WEB.Properties.Resources.descricao</label>
+                                        <input type="text" class="form-control" id="descricao" name="descricao" value="@ViewBag.descricao" maxlength="100">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item text-right">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.search</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+            <!-- Listagem -->
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full">
+
+                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                    <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full table-sm" id="tb_main">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>@PCM.WEB.Properties.Resources.descricao</th>
+                                <th>@PCM.WEB.Properties.Resources.ativo</th>
+                                <th data-sortable="false"></th>
+                            </tr>
+                        </thead>
+
+                    </table>
+
+                </div>
+
+            </div>
+        }
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            Codebase.helpers(['table-tools', 'datepicker', 'maxlength', 'select2']);
+
+            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+            var table = $('#tb_main').DataTable({
+                select: {
+                    selector: 'td:not(:first-child)',
+                    style: 'os'
+                },
+                paging: true,
+                processing: true,
+                searching: true,
+                lengthChange: false,
+                pageLength: 15,
+                autoWidth: false,
+                scrollX: false,
+                scrollColapse: true,
+                ajax: {
+                    url: "LoadItemOSHospede",
+                    type: "POST",
+                    datatype: "json",
+                    data: {
+                        "unidade": $("#unidade").val(),
+                        "descricao": $("#descricao").val()
+                    },
+                    dataSrc: ""
+                },
+                columns: [
+                    { data: "descricao" },
+                    { data: "ativo" },
+                    {
+                        orderable: false,
+                        data: null,
+                        defaultContent: "<div class='btn-group'><button type='button' id='btnDelete' class= 'btn btn-sm btn-secondary'><i class='fa fa-times'></i></button><button type='button' id='btnEdit' class= 'btn btn-sm btn-secondary'> <i class='fa fa-pencil'></i></button></div > "
+                    }
+                ],
+                columnDefs: [
+                    {
+                        className: 'text-center', targets: [1, 2],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            if (col == 1 && rowData.ativo == true) {
+                                $(td).html("<label class='css-control css-control-success css-checkbox'><input type = 'checkbox' class='css-control-input' checked disabled><span class='css-control-indicator'></span></label >");
+                            }
+                            if (col == 1 && rowData.ativo == false) {
+                                $(td).html("<label class='css-control css-control-success css-checkbox'><input type = 'checkbox' class='css-control-input' disabled><span class='css-control-indicator'></span></label >");
+                            }
+                        },
+                    },
+                    {
+                        width: '40px', targets: [2]
+                    },
+                    {
+                        width: '150px', targets: [1]
+                    }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'copy', text: '@Html.Raw(PCM.WEB.Properties.Resources.copy)' },
+                    {
+                        extend: 'print',
+                        text: '@Html.Raw(PCM.WEB.Properties.Resources.print)'
+                    },
+                    { extend: 'excel' },
+                    { extend: 'pdf', orientation: 'portrait' },
+                ],
+                language: {
+                    "search": "@Html.Raw(PCM.WEB.Properties.Resources.search):",
+                    "lengthMenu": "@Html.Raw(PCM.WEB.Properties.Resources.display) _MENU_ ",
+                    //"zeroRecords": "@Html.Raw(PCM.WEB.Properties.Resources.zero_records)",
+                    "info": "_MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)",
+                    "infoEmpty": "@Html.Raw(PCM.WEB.Properties.Resources.zero_records)",
+                    "infoFiltered": "@Html.Raw(PCM.WEB.Properties.Resources.filtered_from) _MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)"
+                }
+            });
+
+            // Reload DataTable
+            $('#filtrar').click(function () {
+                table.ajax.reload(null, false);
+            });
+
+            $('#tb_main tbody').on('click', 'button', function () {
+
+                var data = table.row($(this).closest('tr')).data();
+
+                if (this.id == "btnDelete") {
+                    deleteRegister(data);
+                } if (this.id == "btnEdit") {
+                    editRegister(data);
+                }
+
+            });
+
+            function deleteRegister(data) {
+
+                Swal.fire({
+                    title: "PCM",
+                    html: "@Html.Raw(PCM.WEB.Properties.Resources.question_delete_register)<br><br><b>@Html.Raw(PCM.WEB.Properties.Resources.itemOSHospede):</b> " + data.descricao,
+                    icon: "question",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+                    denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        jQuery.ajax({
+                            type: "POST",
+                            url: "ItemOSHospedeDelete",
+                            async: false,
+                            data: {
+                                "codigo": data.codigo
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                Swal.fire({
+                                    title: "PCM",
+                                    html: response,
+                                    icon: "info",
+                                    showDenyButton: false,
+                                    showCancelButton: false,
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        table.ajax.reload(null, false);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+            }
+
+            function editRegister(data) {
+
+                window.location = 'ItemOSHospedeEdit?codigo=' + data.codigo;
+
+            }
+
+        });
+
+    </script>
+}

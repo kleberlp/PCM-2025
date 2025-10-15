@@ -1,0 +1,379 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.governancaApontamento</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="block block-rounded border">
+
+            <div class="block">
+
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.governancaApontamento - @ViewBag.lastUpdate</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onClick="history.go(-1);"><i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar</button>
+                    </div>
+                </div>
+
+                <div class="block-content">
+
+                    <!-- Table -->
+                    <div class="table-responsive table-sm push">
+
+                        <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
+
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th class="text-center"></th>
+                                    @if (Session["unidade"].ToString() == "")
+                                    {
+                                        <th>@PCM.WEB.Properties.Resources.unidade </th>
+                                    }
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.data</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.uh</th>
+                                    <th class="text-left">@PCM.WEB.Properties.Resources.camareira</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.hora_inicio</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.hora_termino</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.tempo_gasto</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.tipoGovernanca</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.nao_conformidade</th>
+                                    <th class="text-left">@PCM.WEB.Properties.Resources.responsavel_vistoria</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.dataHoraVistoria</th>
+                                    <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+
+                        </table>
+
+                    </div>
+                    <!-- END Table -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/maskedinput")
+
+<script>
+
+    var row;
+    var tr;
+    var index;
+    var btnVincular;
+    var table;
+
+    function format(data) {
+
+        var info = '';
+
+        $.ajax({
+            type: "POST",
+            url: "LoadGovernancaHistoricoDetails",
+            async: false,
+            data: {
+                "empresa": data.codigoEmpresa,
+                "unidade": data.codigoUnidade,
+                "codigo": data.codigo
+            },
+            dataType: "json",
+            success: function (response) {
+
+                if (response.grupo.length) {
+
+                    info = info + '<table class="table table-bordered table-vcenter table-striped table-sm js-dataTable-full" id="tbDetails"> ';
+                    info = info + '<thead> ';
+                    info = info + '<tr class="table-secondary"> ';
+                    info = info + '<th class="font-size-sm">@PCM.WEB.Properties.Resources.checklist</th> ';
+                    info = info + '<th class="text-center font-size-sm">@PCM.WEB.Properties.Resources.resultado</th> ';
+                    info = info + '<th class="font-size-sm">@PCM.WEB.Properties.Resources.observacao</th> ';
+                    info = info + '</tr> ';
+                    info = info + '</thead> ';
+                    info = info + '<tbody>';
+
+                    for (var i = 0; i < response.grupo.length; i++) {
+
+                        info = info + '<tr class="bg-primary-light"> ';
+                        info = info + '<td class="font-w600" colspan="3">' + response.grupo[i].grupo + '</td> ';
+                        info = info + '</tr> ';
+
+                        for (var j = 0; j < response.grupo[i].subgrupo.length; j++) {
+
+                            if (response.grupo[i].subgrupo[j].subgrupo != "") {
+                                info = info + '<tr class="bg-secondary-light"> ';
+                                info = info + '<td class="font-w600" colspan="3">' + response.grupo[i].subgrupo[j].subgrupo + '</td> ';
+                                info = info + '</tr> ';
+                            }
+
+                            for (var k = 0; k < response.grupo[i].subgrupo[j].checklist.length; k++) {
+
+                                info = info + '<tr class="bg-white"> ';
+                                info = info + '<td class="font-size-sm">' + response.grupo[i].subgrupo[j].checklist[k].checklist + '</td> ';
+                                info = info + '<td class="text-center font-size-sm ' + response.grupo[i].subgrupo[j].checklist[k].cssClass + '">' + response.grupo[i].subgrupo[j].checklist[k].resposta + '</td> ';
+                                info = info + '<td class="font-size-sm">' + response.grupo[i].subgrupo[j].checklist[k].observacao + '</td> ';
+                                info = info + '</tr> ';
+                            }
+
+                        }
+
+                    }
+
+                    info = info + '</tbody> ';
+
+                    info = info + '</table> ';
+
+                }
+
+                if (response.enxoval.length) {
+
+                    info = info + '<table class="table table-bordered table-vcenter table-striped table-sm js-dataTable-full" id="tbDetails"> ';
+                    info = info + '<thead> ';
+                    info = info + '<tr class="table-secondary"> ';
+                    info = info + '<th class="font-size-sm">@PCM.WEB.Properties.Resources.enxoval</th> ';
+                    info = info + '<th class="text-center font-size-sm">@PCM.WEB.Properties.Resources.quantidade</th> ';
+                    info = info + '<th class="text-center font-size-sm">@PCM.WEB.Properties.Resources.peso</th> ';
+                    info = info + '<th class="text-center font-size-sm">@PCM.WEB.Properties.Resources.total</th> ';
+                    info = info + '</tr> ';
+                    info = info + '</thead> ';
+                    info = info + '<tbody>';
+
+                    for (var i = 0; i < response.enxoval.length; i++) {
+
+                        info = info + '<tr class="bg-white"> ';
+                        info = info + '<td class="font-size-sm">' + response.enxoval[i].enxoval + '</td> ';
+                        info = info + '<td class="text-center font-size-sm" style="width:100px">' + response.enxoval[i].quantidade + '</td> ';
+                        info = info + '<td class="text-center font-size-sm" style="width:100px">' + response.enxoval[i].peso + '</td> ';
+                        info = info + '<td class="text-center font-size-sm" style="width:100px">' + response.enxoval[i].totalPeso + '</td> ';
+                        info = info + '</tr> ';
+                    }
+
+                    info = info + '</tbody> ';
+
+                    info = info + '</table> ';
+
+                }
+
+                return info;
+
+            },
+            error: function (data) {
+                Codebase.layout("header_loader_off");
+            }
+        });
+
+        return info;
+
+    }
+
+    // Initialize when page loads
+    jQuery(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
+        $.fn.dataTable.moment('DD/MM/YYYY');
+        Codebase.helpers(['js-tooltip', 'table-tools', 'datepicker', 'maxlength', 'select2', 'maxlength']);
+
+
+        // Init simple DataTable, for more examples you can check out https://www.datatables.net/
+        table = $('#tb_main').DataTable({
+            select: {
+                selector: 'td:not(:first-child)',
+                style: 'os'
+            },
+            //scrollY: '400px',
+            //scrollCollapse: true,
+            paging: true,
+            //fixedHeader: true,
+            searching: true,
+            lengthChange: false,
+            pageLength: 15,
+            autoWidth: false,
+            scrollX: false,
+            scrollColapse: true,
+            ajax: {
+                url: "LoadApontamentoHistorico",
+                type: "POST",
+                datatype: "json",
+                data: {
+                    "empresa": @ViewBag.codigoEmpresa,
+                    "unidade": @ViewBag.codigoUnidade,
+                    "dataInicio": @ViewBag.data,
+                    "dataTermino": @ViewBag.data,
+                    "camareira": @ViewBag.codigoFuncionario
+                },
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    class: "details-control",
+                    orderable: false,
+                    data: null,
+                    defaultContent: "",
+                    render: function () {
+                        return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+                    },
+                    width: "15px"
+                },
+                { data: "unidade" },
+                { data: "data" },
+                { data: "apartamento" },
+                { data: "camareira" },
+                { data: "horaInicio" },
+                { data: "horaTermino" },
+                { data: "tempoGasto" },
+                { data: "tipoGovernanca" },
+                { data: "naoConformidade" },
+                { data: "responsavelVistoria" },
+                { data: "horaVistoria" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'> " +
+                        "<button type='button' id='btnExcluir' name='btnExcluir' class='btn btn-sm btn-secondary' title='Excluir registro'> <i class='fa fa-times'></i></button>" +
+                        "<button type='button' id='btnView' name='btnView' class='btn btn-sm btn-secondary' title='Visualizar apontamento'> <i class='fa fa-navicon'></i></button> </div>"
+                }
+            ],
+            columnDefs: [
+                { className: 'text-center', targets: [0, 2, 3, 5, 6, 7, 8, 9, 11, 12] },
+                {
+                    createdCell: function (td, cellData, rowData, row, col) {
+
+                        if (col == 1 && ("@Session["unidade"].ToString()" != "")) {
+                            $(td).hide();
+                        }
+
+                        if (col == 12 && ("@ViewBag.excluir" != "True")) {
+                            $(td).find('#btnExcluir').hide();
+                        }
+                    }, targets: [1, 12]
+                },
+                { width: '20px', targets: [0,12] }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                { extend: 'print', text: 'Imprimir' },
+                { extend: 'excel', text: 'Excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
+                language: {
+                "search": "Procurar:",
+                "lengthMenu": "Exibir _MENU_ ",
+                "info": "_MAX_ registro(s)",
+                "infoFiltered": "(filtrado de _MAX_ registro(s))"
+            }
+        });
+
+        $('#tb_main tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+            row = table.row($(this).closest('tr')).data();
+            tr = table.row($(this).closest('tr'))
+            index = table.row($(this).closest('tr')).index();
+
+            if (this.id == "btnExcluir") {
+                deleteGovernanca(data.codigoEmpresa, data.codigoUnidade, data.codigo);
+            } else if (this.id == "btnView") {
+                viewGovernanca(data);
+            }
+
+        });
+
+        function deleteGovernanca(codigoEmpresa, codigoUnidade, codigo) {
+
+            swal.fire({
+                title: 'Deseja excluir a Auditoria?',
+                text: 'Esta registro não poderá ser recuperado!',
+                icon: 'question',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d26a5c',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function (result) {
+                if (result.value) {
+                    $.post("DeleteGovernanca", { "empresa": codigoEmpresa, "unidade": codigoUnidade, "codigo": codigo },
+                         function (resultDelete) {
+                             if (resultDelete) {
+                                 swal.fire('Registro excluído com Sucesso!', '', 'success').then(function (resultDelete) { window.location.href = '@Url.Action("Historico", "Governanca")'; });
+                            } else {
+                                swal.fire('Não foi possível excluir a registro!', '', 'error');
+                             };
+                        });
+                }
+            });
+
+        }
+
+        function viewGovernanca(data) {
+
+            window.open('GovernancaView' + '?empresa=' + data.codigoEmpresa + '&unidade=' + data.codigoUnidade + '&codigo=' + data.codigo, '_self');
+
+        }
+
+        // Add event listener for opening and closing details
+        $('#tb_main tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var tdi = tr.find("i.fa");
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                tdi.first().removeClass('fa-minus-square');
+                tdi.first().addClass('fa-plus-square');
+                tr.removeClass('bg-warning-light font-italic font-b');
+                // tr.find('svg').attr('data-icon', 'plus-square');    // FontAwesome 5
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                tdi.first().removeClass('fa-plus-square');
+                tdi.first().addClass('fa-minus-square');
+                tr.addClass('bg-warning-light font-italic font-b');
+                // tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
+            }
+        });
+
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
+
+    });
+
+</script>
+}

@@ -1,0 +1,334 @@
+﻿    
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("PlanoAcaoIndex", "PlanoAcao")">@PCM.WEB.Properties.Resources.plano_acao</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.inserir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm("PlanoAcaoInsert", "PlanoAcao", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id="form" , enctype = "multipart/form-data"  }))        
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadastrar</h3>
+                            <div class="block-options">
+                                <button type="button" onclick="$('#btnSave').hide(); $('#form').submit();" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                                </button>
+                                <a href="@Url.Action("PlanoAcaoIndex", "PlanoAcao")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.solicitante</label>
+                                    <div>@Html.DropDownList("solicitante", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.departamento</label>
+                                    <div>@Html.DropDownList("departamento", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.responsavel_departamento</label>
+                                    <div>@Html.DropDownList("responsavel", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.prazo_execucao</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data_necessidade" name="data_necessidade" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data_necessidade"></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>@PCM.WEB.Properties.Resources.prioridade</label>
+                                    <div>@Html.DropDownList("prioridade", null, "", new { @class = "js-select2 form-control" })</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.descricao</label>
+                                <div class="col-12"><textarea class="form-control" id="descricao" name="descricao" maxlength="5000" rows="6"></textarea></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
+                                <div class="col-12">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="fileInput" name="fileInput" onchange="Arquivo();">
+                                        <label id="lblArquivo" class="custom-file-label" for="imagem">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+    
+<script>
+
+        function Arquivo() {
+            document.getElementById("lblArquivo").textContent = document.getElementById("fileInput").files[0].name;
+        }
+
+        $(function () {
+
+            var unidade = $("#unidade");
+            var departamento = $("#departamento");
+            var prioridade = $("#prioridade");
+            var solicitante = $("#solicitante");
+            var responsavel = $("#responsavel");
+
+
+            if (unidade.val() == "" || unidade.val() == "-1") {
+                departamento.prop("disabled", true);
+                prioridade.prop("disabled", true);
+                solicitante.prop("disabled", true);
+                responsavel.prop("disabled", true);
+                departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento)', allowClear: true });
+                prioridade.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true });
+                solicitante.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true });
+                responsavel.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.responsavel_departamento)', allowClear: true });
+            }
+
+            unidade.change(function () {
+
+                if (unidade.val() == "") {
+
+                    departamento.empty();
+                    prioridade.empty();
+                    solicitante.empty();
+                    responsavel.empty();
+                    departamento.prop("disabled", true);
+                    prioridade.prop("disabled", true);
+                    solicitante.prop("disabled", true);
+                    responsavel.prop("disabled", true);
+                    departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento)', allowClear: true });
+                    prioridade.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true });
+                    solicitante.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true });
+                    responsavel.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.responsavel_departamento)', allowClear: true });
+
+                } else {
+
+                    var request = { "unidade": unidade.val() };
+
+                    $.post("LoadPrioridade", request, function (obj) {
+                        prioridade.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        prioridade.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            prioridade.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadDepartamento", request, function (obj) {
+                        departamento.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        departamento.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            departamento.append(option);
+                        });
+                    }, "json");
+
+                    $.post("LoadSolicitante", request, function (obj) {
+                        solicitante.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        solicitante.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            solicitante.append(option);
+                        });
+                    }, "json");
+
+                    departamento.prop("disabled", false);
+                    prioridade.prop("disabled", false);
+                    solicitante.prop("disabled", false);
+                    departamento.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.departamento)', allowClear: true });
+                    prioridade.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.prioridade)', allowClear: true });
+                    solicitante.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.solicitante)', allowClear: true });
+
+                }
+
+            });
+
+            departamento.change(function () {
+
+                if (departamento.val() == "") {
+
+                    responsavel.empty();
+                    responsavel.prop("disabled", true);
+                    responsavel.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.responsavel_departamento)', allowClear: true });
+
+                } else {
+
+                    var request = { "departamento": departamento.val() };
+
+                    $.post("LoadResponsavelDepartamento", request, function (obj) {
+                        responsavel.empty();
+                        option = $("<option>", { "value": "" }).text("");
+                        responsavel.append(option);
+                        $.each(obj, function (indice, result) {
+                            option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                            responsavel.append(option);
+                        });
+                    }, "json");
+
+                    responsavel.prop("disabled", false);
+                    responsavel.select2({ placeholder: '@Html.Raw(PCM.WEB.Properties.Resources.responsavel_departamento)', allowClear: true });
+
+                }
+
+            });
+
+        });
+
+    $('#form').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        invalidHandler: function (event, validator) {
+            $("#btnSave").show();
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+            rules: {
+                'unidade': {
+                    required: true
+                },
+                'data_necessidade': {
+                    required: true
+                },
+                'prioridade': {
+                    required: true
+                },
+                'departamento': {
+                    required: true
+                },
+                'descricao': {
+                    required: true
+                }
+            },
+            messages: {
+                'unidade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'data_necessidade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'prioridade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'departamento': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'descricao': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                }
+            },
+            submitHandler: function (form) {
+                $('#btnSave').hide();
+                var unidade = $("#unidade");
+                var solicitante = $("#solicitante");
+                var departamento = $("#departamento");
+                var responsavel = $("#responsavel");
+                var data_necessidade = $("#data_necessidade");
+                var descricao = $("#descricao");
+                var prioridade = $("#prioridade");
+
+                var formdata = new FormData();
+                var oFile = document.getElementById("fileInput");
+
+                for (i = 0; i < oFile.files.length; i++) {
+                    formdata.append(oFile.files[i].name, fileInput.files[i]);
+                }
+
+                //Creating an XMLHttpRequest and sending
+                var oXMLHttpRequest = new XMLHttpRequest();
+
+                var datastring = 'InsertPlanoAcao?unidade=' + unidade.val() + '&solicitante=' + solicitante.val() + '&departamento=' + departamento.val()
+                if (responsavel.val() == "") { datastring = datastring + '&responsavel=-1' } else {datastring = datastring + '&responsavel=' + responsavel.val()}
+                datastring = datastring + '&data_necessidade=' + data_necessidade.val() + '&descricao=' + descricao.val() + '&prioridade=' + prioridade.val()
+                oXMLHttpRequest.open('POST', datastring);
+                oXMLHttpRequest.send(formdata);
+                oXMLHttpRequest.onreadystatechange = function () {
+
+                    if (oXMLHttpRequest.readyState == 4 && oXMLHttpRequest.status == 200) {
+
+                        swal.fire({
+                            title: oXMLHttpRequest.response,
+                            text: 'Plano de Ação gerado com Sucesso!',
+                            type: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: 'OK',
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }).then(function (result) {
+                            if (result.value) {
+                                window.location.href = "PlanoAcaoIndex";
+                            }
+                        });
+                    }
+                }
+
+                $('#btnSave').show();
+                return false;
+            }
+        });
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+</script>
+}

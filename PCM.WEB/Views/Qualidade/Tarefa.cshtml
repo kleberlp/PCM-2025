@@ -1,0 +1,119 @@
+﻿@model List<PCM.WEB.MODELS.QATarefa>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.qualidade</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.tarefa</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <div class="row">
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Tarefa", "Qualidade",  new { status = 1})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-calendar fa-2x text-warning"></i></div>
+                        <div class="font-size-h5 font-w600  text-warning" data-speed="1000" data-to="@ViewBag.status.pendente" id="pendente" name="pendente">@ViewBag.status.pendente</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Tarefa", "Qualidade",  new { status = 3})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-calendar fa-2x text-pulse"></i></div>
+                        <div class="font-size-h5 font-w600 text-pulse"><span data-speed="1000" data-to="@ViewBag.status.atrasado" id="atrasado" name="atrasado">@ViewBag.status.atrasado</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.atrasado</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Tarefa", "Qualidade",  new { status = 4})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-calendar fa-2x text-primary"></i></div>
+                        <div class="font-size-h5 font-w600 text-primary"><span data-speed="1000" data-to="@ViewBag.status.em_andamento" id="em_andamento" name="em_andamento">@ViewBag.status.em_andamento</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.em_andamento</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Tarefa", "Qualidade",  new { status = 2})">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="si si-calendar fa-2x text-success"></i></div>
+                        <div class="font-size-h5 font-w600 text-success"><span data-speed="1000" data-to="@ViewBag.status.concluido" id="concluido" name="concluido">@ViewBag.status.concluido</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    <div class="block">
+
+        <div class="block-header block-header-default bg-gd-default">
+            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.qualidade - Tarefa</h3>
+            <div class="block-options">
+                <a href="@Url.Action("TarefaMes", "Qualidade", new { data = DateTime.Now.ToString("MM/yyyy") })" class="btn btn-square btn-secondary min-width-200 h-75">
+                    <i class="si si-calendar mr-5"></i>Visualizar por Mês
+                </a>
+            </div>
+        </div>
+
+        <div class="block-content">
+
+            @foreach (var item in Model)
+            {
+                <div class="content-block"><b>@PCM.WEB.Properties.Resources.unidade:</b> @Html.DisplayFor(modelItem => item.unidade)</div>
+                <hr />
+
+                for (int i = 0; i < item.tarefa.Count; i++)
+                {
+
+                    if (@item.tarefa[i].status != 2)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("TarefaApontamento", "Qualidade", new { codigo_qa_tarefa = @item.tarefa[i].codigo_qa_tarefa, codigo_unidade = @item.codigo_unidade , codigo_qa_tarefa_ordem_servico = @item.tarefa[i].codigo_qa_tarefa_ordem_servico })">
+                                    <div class="block-content block-content-full clearfix">
+                                        <div class="float-right mt-15 d-none d-sm-block @item.tarefa[i].cor"><i class="si si-calendar fa-3x"></i></div>
+                                        <div class="font-size-sm font-w600 text-secundary">@item.tarefa[i].data</div>
+                                        <div class="font-size-h5 font-w600 text-uppercase @item.tarefa[i].cor">@item.tarefa[i].descricao</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("TarefaOrdemServico", "Qualidade", new { codigo_unidade = @item.codigo_unidade, codigo_qa_tarefa_ordem_servico = @item.tarefa[i].codigo_qa_tarefa_ordem_servico })">
+                                    <div class="block-content block-content-full clearfix">
+                                        <div class="float-right mt-15 d-none d-sm-block @item.tarefa[i].cor"><i class="si si-calendar fa-3x"></i></div>
+                                        <div class="font-size-sm font-w600 text-secundary">@item.tarefa[i].data</div>
+                                        <div class="font-size-h5 font-w600 text-uppercase @item.tarefa[i].cor">@item.tarefa[i].descricao</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+                }
+            }
+
+        </div>
+    </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

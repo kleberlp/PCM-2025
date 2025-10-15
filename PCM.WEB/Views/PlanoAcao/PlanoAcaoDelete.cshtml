@@ -1,0 +1,102 @@
+﻿@model PCM.WEB.MODELS.PlanoAcao
+
+<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("PlanoAcaoIndex", "PlanoAcao")">@PCM.WEB.Properties.Resources.plano_acao</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.excluir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.codigo)
+                    @Html.HiddenFor(model => model.codigo_unidade)
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.deseja_excluir</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-trash mr-5"></i>@PCM.WEB.Properties.Resources.excluir
+                                </button>
+                                <a href="@Url.Action("PlanoAcaoIndex", "PlanoAcao")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.unidade</label>
+                                <div class="col-12">
+                                    @Html.DisplayFor(model => model.unidade)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.plano_acao</label>
+                                <div class="col-12">
+                                    @Html.DisplayFor(model => model.numero_documento)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.solicitante</label>
+                                <div class="col-12">
+                                    @Html.DisplayFor(model => model.solicitante)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.departamento</label>
+                                <div class="col-12">
+                                    @Html.DisplayFor(model => model.departamento)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.responsavel_departamento</label>
+                                <div class="col-12">
+                                    @Html.DisplayFor(model => model.responsavel)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.data_necessidade</label>
+                                <div class="col-12">
+                                    @Html.DisplayFor(model => model.data_necessidade)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.prioridade</label>
+                                <div class="col-12">
+                                    @Html.DisplayFor(model => model.prioridade)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.descricao</label>
+                                <div class="col-12">
+                                    @Html.DisplayFor(model => model.descricao)
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

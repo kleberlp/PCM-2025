@@ -1,0 +1,124 @@
+﻿@model IEnumerable<INTERACTI.WEB.MODELS.Apontamento>
+           
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Page Content -->
+    <div class="content">
+            
+        <div class="row invisible" data-toggle="appear">
+            <!-- Row #3 -->
+            <div class="col-md-12">
+
+                <!-- Dynamic Table Full Pagination -->
+                <div class="block">
+
+                    <div class="block-content block-content-full">
+                        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 100px;">@INTERACTI.WEB.Properties.Resources.data</th>
+                                    <th class="d-none d-sm-table-cell">@INTERACTI.WEB.Properties.Resources.equipamento</th>
+                                    <th>@INTERACTI.WEB.Properties.Resources.servico</th>
+                                    <th class="text-center" style="width: 100px;">@INTERACTI.WEB.Properties.Resources.status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>            
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center" style="width: 100px;">@item.data</td>
+                                    <td class="d-none d-sm-table-cell">@item.equipamento</td>
+                                    <td>@item.servico</td>                                    
+                                    @if(item.tipo == "U")
+                                    {
+                                        <td class="text-center"><span class="badge badge-warning">@INTERACTI.WEB.Properties.Resources.pendente_prioridade</span></td>
+                                    }
+                                    @if(item.tipo == "P")
+                                    {
+                                        <td class="text-center"><span class="badge badge-primary">@INTERACTI.WEB.Properties.Resources.pendente</span></td>
+                                    } 
+                                    @if(item.tipo == "R")
+                                    {
+                                        <td class="text-center"><span class="badge badge-success">@INTERACTI.WEB.Properties.Resources.realizado</span></td>
+                                    }                                            
+                                </tr>   
+                            }                             
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- END Row #3 -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/interacti")
+    @Scripts.Render("~/bundles/cookie")    
+    @Scripts.Render("~/plugins/datatables")
+    @Scripts.Render("~/plugins/chart")
+
+    <!-- Page JS Code -->
+    <script>
+
+        var BeTableDatatables = function () {
+            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
+            var exDataTable = function () {
+                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
+                    sWrapper: "dataTables_wrapper dt-bootstrap4"
+                });
+            };
+
+            // Init full extra DataTable, for more examples you can check out https://www.datatables.net/
+            var initDataTableFullPagination = function () {
+                jQuery('.js-dataTable-full-pagination').dataTable({
+                    searching: false,
+                    lengthChange: false,
+                    order: [[1, "asc"]],
+                    pageLength: 8,
+                    lengthMenu: [[5, 8, 15, 20], [5, 8, 15, 20]],
+                    autoWidth: false,
+                    language: {
+                        "search": "Procurar:",
+                        "lengthMenu": "Exibir _MENU_ ",
+                        "zeroRecords": "Nenhum Registro Encontrado",
+                        "info": "Exibir página _PAGE_ de _PAGES_",
+                        "infoEmpty": "Nenhum Registro encontrado",
+                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
+                    }
+                });
+            };
+
+            return {
+                init: function () {
+                    // Override a few DataTable defaults
+                    exDataTable();
+
+                    // Init Datatables
+                    initDataTableFullPagination();
+                }
+            };
+        }();
+
+        //// Initialize when page loads
+        //jQuery(function () {
+
+        //    BeCompCharts.init();
+
+        //    BeTableDatatables.init();
+
+        //});
+
+    </script>
+}

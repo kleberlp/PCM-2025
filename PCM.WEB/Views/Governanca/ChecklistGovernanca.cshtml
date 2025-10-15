@@ -1,0 +1,347 @@
+﻿@model List<PCM.WEB.MODELS.Governanca>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.governanca</a>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistGovernanca", "Governanca")">@PCM.WEB.Properties.Resources.checklist</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Toggle Tasks Navigation on mobile -->
+        <div class="block block-rounded border">
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist - @ViewBag.lastUpdate</h3>
+            </div>
+
+            <div class="block-content block-content-full">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <label>@PCM.WEB.Properties.Resources.unidade</label>
+                        @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
+                    </div>
+                    <div class="col-md-2">
+                        <label>@PCM.WEB.Properties.Resources.tipoGovernanca</label>
+                        @Html.DropDownList("tipoGovernanca", null, "", new { @class = "js-select2 form-control" })
+                    </div>
+                    <div class="col-md-2">
+                        <label>Status Front office</label>
+                        @Html.DropDownList("frontOfficeStatus", null, "", new { @class = "js-select2 form-control" })
+                    </div>
+                    <div class="col-md-2">
+                        <label>Status Quarto</label>
+                        @Html.DropDownList("roomStatus", null, "", new { @class = "js-select2 form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        <label>@PCM.WEB.Properties.Resources.funcionario</label>
+                        @Html.DropDownList("funcionario", null, "", new { @class = "js-select2 form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Collapsible Tasks Navigation -->
+
+        <div class="row">
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" onclick="reloadPage('1');">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-danger"></i></div>
+                        <div class="font-size-h5 font-w600 text-danger" data-speed="1000" data-to="@ViewBag.status.pendente" id="quantidade_indisponivel" name="quantidade_indisponivel">@ViewBag.status.pendente</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.pendente</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" onclick="reloadPage('2');">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-success"></i></div>
+                        <div class="font-size-h5 font-w600 text-success" data-speed="1000" data-to="@ViewBag.status.concluido" id="quantidade_manutencao" name="quantidade_manutencao">@ViewBag.status.concluido</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.concluido</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" onclick="reloadPage('3');">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-primary"></i></div>
+                        <div class="font-size-h5 font-w600 text-primary" data-speed="1000" data-to="@ViewBag.status.aguardandoLiberacao" id="quantidade_vistoria" name="quantidade_vistoria">@ViewBag.status.aguardandoLiberacao</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.aguardando_liberacao</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-12 col-md-6 col-xl-3">
+                <a class="block block-rounded block-bordered block-link-shadow" onclick="reloadPage('4');">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-warning"></i></div>
+                        <div class="font-size-h5 font-w600 text-warning"><span data-speed="1000" data-to="@ViewBag.status.retrabalho" id="quantidade_disponivel" name="quantidade_disponivel">@ViewBag.status.retrabalho</span></div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.retrabalho</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="block">
+
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">Lista de UH</h3>
+                <div class="block-options">
+                    <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
+                    <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
+                    <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                </div>
+            </div>
+
+            <div class="block-content" id="div_grid" style="display:block">
+                @{
+                    int aux = 0;
+
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+
+                        if (i == 0 || Model[i].unidade != Model[i - 1].unidade)
+                        {
+                            if (i > 0)
+                            {
+                                @Html.Raw("</div>");
+                                aux = 0;
+                            }
+                            <div class="content-block border-b"></div>
+                            <div class="content-block border-b pt-20">
+                                @if (Session["unidade"] == "")
+                                {<h5 class="font-size-h5">@PCM.WEB.Properties.Resources.unidade: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].unidade)</span></h5>}
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.bloco: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].bloco)</span></h6>
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                            </div>
+
+                        }
+                        else if (Model[i].bloco != Model[i - 1].bloco)
+                        {
+                            if (i > 0)
+                            {
+                                @Html.Raw("</div>");
+                                aux = 0;
+                            }
+                            <div class="content-block border-b"></div>
+                            <div class="content-block border-b pt-20">
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.bloco: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].bloco)</span></h6>
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                            </div>
+                        }
+                        else if (Model[i].andar != Model[i - 1].andar)
+                        {
+                            if (i > 0)
+                            {
+                                @Html.Raw("</div>");
+                                aux = 0;
+                            }
+                            <div class="content-block border-b"></div>
+                            <div class="content-block border-b pt-20">
+                                <h6 class="font-size-h5">@PCM.WEB.Properties.Resources.andar: <span class="text-primary">@Html.DisplayFor(modelItem => modelItem[i].andar)</span></h6>
+                            </div>
+                        }
+
+                        if (i == 0 || aux == 0)
+                        {
+                            @Html.Raw("<div class='row mt-20'>");
+                        }
+
+                        aux += 1;
+
+                        if ((int)Model[i].status == 2)
+                        {
+            <div class="col-md-2 col-xl-1">
+                <div class="block block-rounded block-bordered block-link-shadow">
+                    <div class="text-center">
+                        <i class="fa fa-hotel fa-2x @Model[i].css_class"></i>                        
+                        @if (Model[i].nao_perturbe)
+                        {
+                            <button type="button" class="btn-block-option">
+                                <i class="fa fa-pause-circle-o text-danger"></i>
+                            </button>
+
+                        }
+                        <h6 class="font-w700 mb-5">@Model[i].apartamento</h6>
+                        <h6 class="mb-5"><small>@Model[i].data_proxima</small></h6>
+                        <h6 class="mb-5 font-w600"><small class="font-w600 text-danger">@Model[i].front_office_status - @Model[i].room_status</small></h6>
+                    </div>
+                </div>
+            </div>
+
+                        }
+                        else if ((int)Model[i].status == 3)
+                        {
+            <div class="col-md-2 col-xl-1">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ChecklistGovernancaVistoria", "Governanca", new { codigo_apartamento = @Model[i].codigo_apartamento, codigo_unidade = @Model[i].codigo_unidade, codigo_vistoria = @Model[i].codigo_vistoria, status = @Model[i].status, codigo_tipo_governanca = @Model[i].codigo_tipo_governanca , codigo_checklist = @Model[i].codigo_checklist })">
+                    <div class="text-center">
+                        <i class="fa fa-hotel fa-2x @Model[i].css_class"></i>
+                        @if (Model[i].nao_perturbe)
+                        {
+                            <button type="button" class="btn-block-option">
+                                <i class="fa fa-pause-circle-o text-danger"></i>
+                            </button>
+
+                        }
+                        <h6 class="font-w700 mb-5">@Model[i].apartamento</h6>
+                        <h6 class="mb-5"><small>@Model[i].data_proxima</small></h6>
+                        <h6 class="mb-5 font-w600"><small class="font-w600 text-danger">@Model[i].front_office_status - @Model[i].room_status</small></h6>
+                    </div>
+                </a>
+            </div>
+
+                        }
+                        else
+                        {
+            <div class="col-md-2 col-xl-1">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ChecklistGovernancaApontamento", "Governanca", new { codigo_apartamento = @Model[i].codigo_apartamento, codigo_unidade = @Model[i].codigo_unidade, codigo_vistoria = @Model[i].codigo_vistoria, status = @Model[i].status, codigo_tipo_governanca = @Model[i].codigo_tipo_governanca , codigo_checklist = @Model[i].codigo_checklist })">
+                    <div class="text-center">
+                        <i class="fa fa-hotel fa-2x @Model[i].css_class"></i>
+                        @if (Model[i].nao_perturbe)
+                        {
+                            <button type="button" class="btn-block-option">
+                                <i class="fa fa-pause-circle-o text-danger"></i>
+                            </button>
+
+                        }
+
+                        <h6 class="font-w700 mb-5">@Model[i].apartamento</h6>
+                        <h6 class="mb-5"><small>@Model[i].data_proxima</small></h6>
+                        <h6 class="mb-5 font-w600"><small class="font-w600 text-danger">@Model[i].front_office_status - @Model[i].room_status</small></h6>
+                    </div>
+
+                </a>
+            </div>
+
+                        }
+
+
+                        if (i == (Model.Count - 1) || aux == 12)
+                        {
+                            @Html.Raw("</div>");
+                            aux = 0;
+                        }
+                    }
+                }
+
+            </div>
+
+
+            <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+
+                <div class="block-content block-content-full">
+
+                    <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
+                        <thead class="thead-pcm">
+                            <tr>
+                                @if (Session["unidade"] == "")
+                                {
+                                    <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
+                                }
+                                <th class="text-center">@PCM.WEB.Properties.Resources.bloco</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.andar</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.apartamento</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.data_proxima_vistoria</th>
+                                <th class="text-center">Status UH</th>
+								<th class="text-center">@PCM.WEB.Properties.Resources.status_uh</th>
+                                <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    @if (Session["unidade"] == "")
+                                    {
+                                        <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
+                                    }
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.bloco)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.andar)</td>
+                                    <td class="text-center @item.css_class">@Html.DisplayFor(modelItem => item.apartamento)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima)</td>
+									<td class="text-center">@Html.DisplayFor(modelItem => item.front_office_status)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.room_status)</td>
+                                    <td class="text-center d-print-none" style="width: 80px;">
+                                        <div class="btn-group">
+                                            @if ((item.status != 3))
+                                            {<a href="@Url.Action("ChecklistUHApontamento", "UH", new { codigo_apartamento = @item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_vistoria = @item.codigo_vistoria, status = @item.status })" class="btn btn-sm btn-secondary"><i class="fa fa-hotel"></i></a>}
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $.ajaxSetup({async: false});
+
+        $("#unidade").change(function () {
+            reloadPage("@ViewBag.status");
+        });
+
+        $("#tipoGovernanca").change(function () {
+            reloadPage("@ViewBag.status");
+        });
+
+        $("#funcionario").change(function () {
+            reloadPage("@ViewBag.status");
+        });
+
+        $("#frontOfficeStatus").change(function () {
+            reloadPage("@ViewBag.status");
+        });
+
+        $("#roomStatus").change(function () {
+            reloadPage("@ViewBag.status");
+        });
+
+    });
+
+    function reloadPage(status) {
+
+        valorUnidade = $("#unidade").val() != "" ? $("#unidade").val() : "-1";
+        valorTipoGovernanca = $("#tipoGovernanca").val() != "" ? $("#tipoGovernanca").val() : "-1";
+        valorFuncionario = $("#funcionario").val() != "" ? $("#funcionario").val() : "-1";
+        frontOfficeStatus = $("#frontOfficeStatus").val() != "" ? $("#frontOfficeStatus").val() : "";
+        roomStatus = $("#roomStatus").val() != "" ? $("#roomStatus").val() : "";
+
+        window.open("../Governanca/ChecklistGovernanca?unidade=" + valorUnidade + "&funcionario=" + valorFuncionario + "&tipoGovernanca=" + valorTipoGovernanca + "&status=" + @ViewBag.statusFilter + "&frontOfficeStatus=" + frontOfficeStatus + "&roomStatus=" + roomStatus, "_self");
+    }
+
+</script>
+}

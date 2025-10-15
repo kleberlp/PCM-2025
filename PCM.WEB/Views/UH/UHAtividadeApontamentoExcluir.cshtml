@@ -1,0 +1,173 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+   
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action(@ViewBag.page, @ViewBag.model)">@PCM.WEB.Properties.Resources.uh</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.atividade</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">                
+                @using (Html.BeginForm("UHAtividadeApontamentoExcluir", "UH", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data"  }))        
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="codigo_atividade" id="codigo_atividade" value="@ViewBag.apontamento.codigo_atividade">
+                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.apontamento.codigo_unidade">
+                    <input type="hidden" name="codigo_tipo_servico" id="codigo_tipo_servico" value="@ViewBag.apontamento.codigo_tipo_servico">
+                    <input type="hidden" name="codigo_apartamento" id="codigo_apartamento" value="@ViewBag.apontamento.codigo_apartamento">
+                    <input type="hidden" name="page" id="page" value="@ViewBag.page">
+                    <input type="hidden" name="model" id="model" value="@ViewBag.model">
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento_atividade</h3>
+                            <div class="block-options">
+                                <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-trash mr-5"></i>@PCM.WEB.Properties.Resources.excluir
+                                </button>
+                                <a href="@Url.Action("UHAtividade", "UH", new {unidade = ViewBag.apontamento.codigo_unidade, atividade = ViewBag.apontamento.codigo_atividade})" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full">   
+                            <div class="form-group row">
+                                <div class="col-md-2 col-xl-1">
+                                    <a class="block block-rounded block-bordered block-link-shadow">
+                                        <div class="text-center">
+                                            <i class="fa fa-hotel fa-2x @ViewBag.color"></i>                
+                                            <h6 class="font-w700 mb-5">@ViewBag.apontamento.apartamento</h6>
+                                        </div>
+                                    </a>
+                                </div>    
+                            </div>                                                          
+                            @if(Session["unidade"] == "")
+                            {
+                                <div class="form-group row">
+                                    <div class="col-12"><strong>@PCM.WEB.Properties.Resources.unidade: </strong>@ViewBag.apontamento.unidade</div>
+                                </div>        
+                            }
+                            <div class="form-group row">
+                                <div class="col-12"><strong>@PCM.WEB.Properties.Resources.atividade: </strong>@ViewBag.apontamento.atividade</div>
+                            </div>  
+                            <div class="form-group row">
+                                <div class="col-12"><strong>@PCM.WEB.Properties.Resources.descricao: </strong>@ViewBag.apontamento.descricao</div>
+                            </div>  
+                            <div class="form-group row">
+                                <div class="col-12"><strong>@PCM.WEB.Properties.Resources.categoria: </strong>@ViewBag.apontamento.categoria</div>
+                            </div>  
+                            @if(@ViewBag.apontamento.itens_gerais != "")
+                            {
+                                <div class="form-group row">
+                                    <div class="col-12"><strong>@PCM.WEB.Properties.Resources.itens_gerais: </strong>@ViewBag.apontamento.itens_gerais</div>
+                                </div>                
+                            }         
+                            <hr></hr>
+                            <div class="form-group row" id="div_funcionario">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.funcionario</label>
+                                <div class="col-12">@Html.DropDownList("funcionario", null, "", new { @class = "form-control js-select2", @multiple="multiple" })</div>        
+                            </div>       
+                            <div class="form-group row" id="div_fornecedor">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.fornecedor</label>
+                                <div class="col-12">@Html.DropDownList("fornecedor", null, "", new { @class = "form-control js-select2" })</div>
+                            </div>      
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.observacao</label>
+                                <div class="col-12"><textarea class="form-control" id="observacao" name="observacao" maxlength="5000" rows="6">@ViewBag.apontamento.observacao</textarea></div>
+                            </div>  
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label>@PCM.WEB.Properties.Resources.data_inicio</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data_inicio" name="data_inicio" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.apontamento.data_inicio"></div>
+                                </div>
+                                <div class="col-4 hora_termino" data-autoclose="true">
+                                    <label>@PCM.WEB.Properties.Resources.hora_inicio</label>
+                                    <div><input type="text" class="form-control" id="hora_inicio" name="hora_inicio" value="@ViewBag.apontamento.hora_inicio"></div>
+                                </div>                                        
+                            </div>  
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label>@PCM.WEB.Properties.Resources.data_termino</label>
+                                    <div><input type="text" class="js-datepicker form-control" id="data_termino" name="data_termino" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.apontamento.data_termino"></div>
+                                </div>
+                                <div class="col-4 hora_termino" data-autoclose="true">
+                                    <label>@PCM.WEB.Properties.Resources.hora_termino</label>
+                                    <div><input type="text" class="form-control" id="hora_termino" name="hora_termino" value="@ViewBag.apontamento.hora_termino"></div>
+                                </div>                                        
+                            </div>  
+                            <div class="form-group row">
+                                <label class="col-12">@PCM.WEB.Properties.Resources.status_uh</label>
+                                <div class="col-md-4">@Html.DropDownList("status_uh", null, "", new { @class = "form-control js-select2" })</div>        
+                            </div>     
+                        </div>                        
+                    </div>
+
+                }
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+
+        function verificaTipoServico() {
+
+            var funcionario = $("#div_funcionario");
+            var fornecedor = $("#div_fornecedor");
+
+            var codigo_tipo_servico = $("#codigo_tipo_servico").val();
+            if (codigo_tipo_servico == 1) {
+                fornecedor.hide();
+            }
+            else if (codigo_tipo_servico == 2) {
+                fornecedor.show();
+            }
+        }
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+            $("#observacao").prop("disabled", true);
+            $("#fornecedor").prop("disabled", true);
+            $("#data_inicio").prop("disabled", true);
+            $("#hora_inicio").prop("disabled", true);
+            $("#data_termino").prop("disabled", true);
+            $("#hora_termino").prop("disabled", true);
+            $("#status_uh").prop("disabled", true);
+            $('#funcionario').val(@ViewBag.apontamento.codigo_funcionario).trigger("change");
+            $("#funcionario").prop("disabled", true);
+            verificaTipoServico();
+        });
+
+    </script>
+}

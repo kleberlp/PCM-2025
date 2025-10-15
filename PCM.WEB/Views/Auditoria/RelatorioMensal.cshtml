@@ -1,0 +1,261 @@
+﻿@model IEnumerable<PCM.WEB.MODELS.PMOCUnidade>
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="#">@PCM.WEB.Properties.Resources.auditoria</a>
+                <span class="breadcrumb-item active">Relatório Mensal</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <div class="content">
+
+
+        <div class="block">
+
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.auditoria</h3>
+                <div class="block-options">
+                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                </div>
+            </div>
+
+            <div class="block-content">
+
+                <div class="content-block border-b"></div>
+                <div class="content-block mt-20 ">
+                    <h5 class="font-w600">Ano: <span class="text-primary">2018</span></h5>
+                </div>
+                <div class="content-block border-b"></div>
+                <div class="row mt-20">
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201812.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Dezembro</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content-block border-b"></div>
+                <div class="content-block mt-20 ">
+                    <h5 class="font-w600">Ano: <span class="text-primary">2019</span></h5>
+                </div>
+                <div class="content-block border-b"></div>
+                <div class="row mt-20">
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201901.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Janeiro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201902.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Fevereiro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201903.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Março</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201904.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Abril</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201905.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Maio</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201906.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Junho</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201907.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Julho</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201908.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Agosto</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201909.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Setembro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201910.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Outubro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201911.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Novembro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp201912.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Dezembro</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content-block border-b"></div>
+                <div class="content-block mt-20 ">
+                    <h5 class="font-w600">Ano: <span class="text-primary">2020</span></h5>
+                </div>
+                <div class="content-block border-b"></div>
+                <div class="row mt-20">
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202001.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Janeiro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202002.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Fevereiro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202003.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Março</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202004.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Abril</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202005.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Maio</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202006.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Junho</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202007.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Julho</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202008.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Agosto</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202009.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Setembro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202010.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Outubro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202011.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Novembro</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-xl-1">
+                        <a class="block block-rounded block-bordered block-link-shadow" href="~/Content/report/gjp202012.docx" target="_blank">
+                            <div class="text-md-center">
+                                <i class="fa fa-calendar fa-2x text-success mb-5 mt-5"></i>
+                                <h6 class="font-w700 mb-5">Dezembro</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->

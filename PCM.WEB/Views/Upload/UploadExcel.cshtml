@@ -1,0 +1,186 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.pcm</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.upload</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.cadastro_basico</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("UploadArCondicionado", "Upload", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "form", name = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="type" name="type" value="file" />
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadastro_basico</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.cadastro_basico</label>
+                                    <div>@Html.DropDownList("cadastro_basico", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label>@PCM.WEB.Properties.Resources.arquivo</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                        <label class="custom-file-label" for="arquivo"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.planilha</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="planilha" name="planilha" value="" maxlength="20">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-upload mr-5" id="btnUpload" name="btnUpload" disabled onclick="uploadExcel();"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+
+    <script>
+
+        var register = 0;
+
+        $(function () {
+
+            $(".custom-file-input").on('change', function () {
+                var filename = document.getElementById("arquivo").files[0].name;
+                $(this).next(".custom-file-label").addClass("selected").html(filename);
+            });
+
+            var unidade = $("#unidade");
+            var arquivo = $("#arquivo");
+            var cadastro_basico = $("#cadastro_basico");
+            var planilha = $("#planilha");
+
+            unidade.change(function () {
+
+                if (unidade.val() != "" && cadastro_basico.val() != "" && arquivo.val() != "" && planilha.val() != "") {
+                    $("#btnUpload").prop('disabled', false);
+                } else {
+                    $("#btnUpload").prop('disabled', true);
+                }
+
+            });
+
+            cadastro_basico.change(function () {
+
+                if (unidade.val() != "" && cadastro_basico.val() != "" && arquivo.val() != "" && planilha.val() != "") {
+                    $("#btnUpload").prop('disabled', false);
+                } else {
+                    $("#btnUpload").prop('disabled', true);
+                }
+
+            });
+
+            arquivo.change(function () {
+
+                if (unidade.val() != "" && cadastro_basico.val() != "" && arquivo.val() != "" && planilha.val() != "") {
+                    $("#btnUpload").prop('disabled', false);
+                } else {
+                    $("#btnUpload").prop('disabled', true);
+                }
+
+            });
+
+            planilha.change(function () {
+
+                if (unidade.val() != "" && cadastro_basico.val() != "" && arquivo.val() != "" && planilha.val() != "") {
+                    $("#btnUpload").prop('disabled', false);
+                } else {
+                    $("#btnUpload").prop('disabled', true);
+                }
+
+            });
+
+        });
+
+        function uploadExcel() {
+
+            Codebase.layout("header_loader_on");
+
+            var formData;
+            formData = new FormData();
+            formData.append('unidade', $("#unidade").val());
+            formData.append('planilha', $("#planilha").val());
+            formData.append('cadastro_basico', $("#cadastro_basico").val());
+            formData.append('arquivo', document.getElementById("arquivo").files[0]); // para apenas 1 arquivo
+
+            $.ajax({
+                url: 'UploadExcelPlanilha', // Url do lado server que vai receber o arquivo
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function (data) {
+                    swal.fire({
+                        title: 'PCM by SIM',
+                        text: data,
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: 'OK',
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }).then(function (result) {
+                        if (result.value) {
+                            window.location.href = "uploadExcel";
+                        }
+                    });
+                    Codebase.layout("header_loader_off");
+                }
+            });
+        };
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['maxlength']);
+        });
+
+    </script>
+
+}

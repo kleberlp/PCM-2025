@@ -1,0 +1,273 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.agenda</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.agenda</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Listagem -->
+        <div class="block block-rounded border">
+
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.agenda</h3>
+                @if (ViewBag.inserir)
+                {
+                    <div class="block-options">
+                        <a href="@Url.Action("AreaComumInsert", "Agenda")" class="btn btn-square btn-secondary min-width-100 h-75">
+                            <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <div class="block-content block-content-full">
+                <!-- Calendar and Events functionality is initialized in js/pages/be_comp_calendar.min.js which was auto compiled from _js/pages/be_comp_calendar.js -->
+                <!-- For more info and examples you can check out https://fullcalendar.io/ -->
+                <div class="block">
+                    <div class="block-content">
+                        <div class="row items-push">
+                            <div class="col-xl-4 d-none d-xl-block">
+
+                                <!-- Add Event Form -->
+                                <form name="form" id="form" method="post">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="form-text">Nome</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="nome" name="nome" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="form-text">Placa</label>
+                                            <input type="text" class="form-control" id="placa" name="placa" placeholder="">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-text">RG</label>
+                                            <input type="text" class="form-control" id="rg" name="rg" placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label>@PCM.WEB.Properties.Resources.data_inicio</label>
+                                            <input type="text" class="js-datepicker form-control" id="data_inicio" name="data_inicio" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>@PCM.WEB.Properties.Resources.hora_inicio</label>
+                                            <input type="text" class="form-control" id="hora_inicio" name="hora_inicio" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label>@PCM.WEB.Properties.Resources.data_termino</label>
+                                            <input type="text" class="js-datepicker form-control" id="data_termino" name="data_termino" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>@PCM.WEB.Properties.Resources.hora_termino</label>
+                                            <input type="text" class="form-control" id="hora_termino" name="hora_termino" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row float-right">
+                                        <div class="co-md-12 mr-15">
+                                            <button type="submit" class="btn btn-square btn-secondary min-width-100 min-height-30" name="btnSave" id="btnSave">
+                                                <i class="fa fa-plus-circle"></i>Adicionar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- END Event List -->
+                            </div>
+                            <div class="col-xl-8">
+                                <!-- Calendar Container -->
+                                <div id="js-calendar" name="js-calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Calendar -->
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/select")
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/fullcalendar")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/select")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/calendar")
+
+
+<script>
+
+    var calendar;
+
+    $(document).ready(function () {
+        $("#data_inicio").mask("99/99/9999");
+        $("#data_termino").mask("99/99/9999");
+        $("#hora_inicio").mask("99:99");
+        $("#hora_termino").mask("99:99");
+    });
+
+    $(function () {
+
+        $('.hora_inicio').clockpicker();
+        $('.hora_termino').clockpicker();
+
+        calendar = new FullCalendar.Calendar(document.getElementById('js-calendar'), {
+            themeSystem: 'bootstrap',
+            firstDay: 1,
+            editable: true,
+            droppable: true,
+            headerToolbar: {
+                left: 'title',
+                right: 'prev,next today dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            drop: function (info) {
+                info.draggedEl.parentNode.remove();
+            },
+            events: [
+            ]
+        });
+
+        calendar.render();
+
+    });
+
+        $('#form').validate({
+            ignore: [],
+            errorClass: 'invalid-feedback animated fadeInDown',
+            errorElement: 'div',
+            errorPlacement: function (error, e) {
+                jQuery(e).parents('.form-group > div').append(error);
+                $('#btnSave').show();
+            },
+            highlight: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+            },
+            success: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                jQuery(e).remove();
+            },
+            rules: {
+                'nome': {
+                    required: true
+                },
+                'rg': {
+                    required: true
+                },
+                'placa': {
+                    required: true
+                },
+                'data_inicio': {
+                    required: true
+                },
+                'hora_inicio': {
+                    required: true
+                },
+                'data_termino': {
+                    required: true
+                },
+                'hora_termino': {
+                    required: true
+                }
+            },
+            messages: {
+                'nome': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'rg': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'placa': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'data_inicio': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'hora_inicio': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'data_termino': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'hora_termino': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                }
+            },
+            submitHandler: function (form) {
+
+                let dStart = $("#data_inicio").val().substring(0, 2);
+                let mStart = $("#data_inicio").val().substring(3, 5);
+                let yStart = $("#data_inicio").val().substring(6, 10);
+                let hStart = $("#hora_inicio").val().substring(0, 2);
+                let minStart = $("#hora_inicio").val().substring(3, 5);
+
+                let dEnd = $("#data_termino").val().substring(0, 2);
+                let mEnd = $("#data_termino").val().substring(3, 5);
+                let yEnd = $("#data_termino").val().substring(6, 10);
+                let hEnd = $("#hora_termino").val().substring(0, 2);
+                let minEnd = $("#hora_termino").val().substring(3, 5);
+
+                $('#btnSave').hide();
+                var nome = $("#nome");
+                var rg = $("#rg");
+                var placa = $("#placa");
+
+                calendar.addEvent({
+                    title: nome.val().toUpperCase() + ' RG: ' + rg.val().toUpperCase() + ' PLACA: ' + placa.val().toUpperCase(),
+                    start: new Date(yStart, mStart - 1, dStart, hStart, minStart),
+                    end: new Date(yEnd, mEnd - 1, dEnd, hEnd, minEnd),
+                    color: '#82b54b'
+                });
+
+                calendar.render();
+
+                $("#nome").val("");
+                $("#placa").val("");
+                $("#rg").val("");
+                $("#data_inicio").val("");
+                $("#hora_inicio").val("");
+                $("#data_termino").val("");
+                $("#hora_termino").val("");
+                
+
+                $('#btnSave').show();
+
+                return false;
+            }
+
+        });
+
+        // Initialize when page loads
+        jQuery(function () {
+            Codebase.helpers(['datepicker', 'clockpicker']);
+        });
+
+</script>
+}
