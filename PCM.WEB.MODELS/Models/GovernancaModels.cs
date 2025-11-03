@@ -249,6 +249,23 @@ namespace PCM.WEB.MODELS
         public string statusRoom { get; set; }
     }
 
+    public class GovernancaPlanejamentoHistorico
+    {
+        public int codigoApartamento { get; set; }
+        public string data { get; set; }
+        public string tipoGovernanca { get; set; }
+        public string apartamento { get; set; }
+        public string tipoApartamento { get; set; }
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string quantidadeCama { get; set; }
+        public string camareira { get; set; }
+        public string executado { get; set; }
+        public string quantidadeNC { get; set; }
+        public string vistoriado { get; set; }
+
+    }
+
     public class GovernancaApontamentoApartamento
     {
         public int codigoApartamento { get; set; }

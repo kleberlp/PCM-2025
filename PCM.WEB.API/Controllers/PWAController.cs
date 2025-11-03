@@ -1176,7 +1176,7 @@ namespace PCM.WEB.API.Controllers
         // GET api/PWA/getChecklist
         [HttpGet]
         [Route("api/PWA/getChecklist")]
-        public IHttpActionResult getChecklist(int codigoEmpresa, int codigoUnidade, long codigoChecklist, string tipo, long codigoDocumento, int intervalo = -1)
+        public IHttpActionResult getChecklist(int codigoEmpresa, int codigoUnidade, long codigoChecklist, string tipo, long codigoDocumento, int intervalo = -1, long codigoEquipamento = -1)
         {
             pwaChecklist checklist = new pwaChecklist();
 
@@ -1405,6 +1405,40 @@ namespace PCM.WEB.API.Controllers
         [HttpPut]
         [Route("api/PWA/insertFileGuid")]
         public IHttpActionResult insertFileGuid([FromBody] pwaArquivoInsert arquivo)
+        {
+            pwaDefaultResponse response = new pwaDefaultResponse();
+            try
+            {
+
+                response = oAPI.insertFileGuid(iCodigoEmpresa: arquivo.codigoEmpresa,
+                                               iCodigoUnidade: arquivo.codigoUnidade,
+                                               iCodigoUsuario: arquivo.codigoUsuario,
+                                               lCodigoDocumento: arquivo.codigoDocumento,
+                                               sTipo: arquivo.tipo,
+                                               oArquivo: arquivo);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            finally
+            {
+                //GRAVA LOG
+                oAPI.insertLogAPI(iCodigoEmpresa: arquivo.codigoEmpresa,
+                                  iCodigoUnidade: arquivo.codigoUnidade,
+                                  iCodigoUsuario: arquivo.codigoUsuario,
+                                  sEndpoint: Request.RequestUri.PathAndQuery,
+                                  sRequestBody: oFunction.ConverteObjectParaJSon(arquivo),
+                                  sResponseBody: oFunction.ConverteObjectParaJSon(response));
+            }
+        }
+
+        // PUT api/PWA/insertFileGuid
+        [HttpPut]
+        [Route("api/PWA/insertFileGuid")]
+        public IHttpActionResult insertFileGuidError([FromBody] pwaArquivoInsert arquivo)
         {
             pwaDefaultResponse response = new pwaDefaultResponse();
             try

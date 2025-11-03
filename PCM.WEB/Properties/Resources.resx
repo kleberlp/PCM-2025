@@ -2076,4 +2076,16 @@
   <data name="logAlteracaoStatusGov" xml:space="preserve">
     <value>Log - Alteração de Status</value>
   </data>
+  <data name="planejamentoHistorico" xml:space="preserve">
+    <value>Planejamento - Histórico</value>
+  </data>
+  <data name="executado" xml:space="preserve">
+    <value>Executado</value>
+  </data>
+  <data name="quantidadeNC" xml:space="preserve">
+    <value>Qtde. NC</value>
+  </data>
+  <data name="vistoriado" xml:space="preserve">
+    <value>Vistoriado</value>
+  </data>
 </root>

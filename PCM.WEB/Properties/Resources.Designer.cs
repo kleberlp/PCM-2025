@@ -2158,6 +2158,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Executado.
+        /// </summary>
+        public static string executado {
+            get {
+                return ResourceManager.GetString("executado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Executor.
         /// </summary>
         public static string executor {
@@ -3787,6 +3796,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Planejamento - Histórico.
+        /// </summary>
+        public static string planejamentoHistorico {
+            get {
+                return ResourceManager.GetString("planejamentoHistorico", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Planilha.
         /// </summary>
         public static string planilha {
@@ -4287,6 +4305,15 @@ namespace PCM.WEB.Properties {
         public static string quantidadeInventario {
             get {
                 return ResourceManager.GetString("quantidadeInventario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Qtde. NC.
+        /// </summary>
+        public static string quantidadeNC {
+            get {
+                return ResourceManager.GetString("quantidadeNC", resourceCulture);
             }
         }
         
@@ -5898,6 +5925,15 @@ namespace PCM.WEB.Properties {
         public static string vistoria_efetuada {
             get {
                 return ResourceManager.GetString("vistoria_efetuada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Vistoriado.
+        /// </summary>
+        public static string vistoriado {
+            get {
+                return ResourceManager.GetString("vistoriado", resourceCulture);
             }
         }
         

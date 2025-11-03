@@ -2219,6 +2219,7 @@ namespace PCM.WEB.Controllers
             return File(arquivoNew, "application/vnd.ms-excel", arquivoNew);
         }
 
+        [HttpPost]
         public JsonResult UploadChecklist(int tipo_checklist)
         {
             string sFileName = "";

@@ -1,23 +1,24 @@
-﻿using System;
-using System.Web;
+﻿using Antlr.Runtime;
+using Microsoft.AspNet.Identity;
+using NPOI.SS.Formula.Functions;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using PCM.WEB.DAL;
+using PCM.WEB.MODELS;
+using PCM.WEB.MODELS.Models;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
-using PCM.WEB.MODELS;
-using PCM.WEB.DAL;
-using Microsoft.AspNet.Identity;
-using System.Collections.Generic;
-using NPOI.SS.Formula.Functions;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
-using Antlr.Runtime;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using System.Globalization;
 using static Google.Apis.Requests.BatchRequest;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using System.Collections;
-using System.IO;
-using PCM.WEB.MODELS.Models;
 
 namespace PCM.WEB.Controllers
 {
@@ -1279,17 +1280,17 @@ namespace PCM.WEB.Controllers
         }
 
         //JSON: /LIMPA PLANEJAMENTO
-        public JsonResult ClearPlanejamento(int unidade, int tipoGovernanca, string data, int funcionario)
+        public JsonResult ClearPlanejamento(int unidade, int usuario, string data, string json)
         {
 
             try
             {
 
+
                 oGovernanca.ClearPlanejamento(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                               codigoUnidade: unidade,
-                                              codigoTipoGovernanca: tipoGovernanca,
                                               data: data,
-                                              codigoFuncionario: funcionario);
+                                              json: json);
 
                 return Json(Properties.Resources.operacao_realizaca_sucesso);
 
@@ -1415,6 +1416,68 @@ namespace PCM.WEB.Controllers
             {
                 return Json(ex.Message.ToString());
             }
+
+        }
+
+        #endregion
+
+        #region ::: PLANEJAMENTO HISTÓRICO :::
+
+        // GET: INDEX
+        public ActionResult PlanejamentoHistorico()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "gov_planejamento_historico",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.usuario = User.Identity.GetUserName();
+                ViewBag.dataInicio = DateTime.Now.ToShortDateString();
+                ViewBag.dataTermino = DateTime.Now.ToShortDateString();
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                               iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                               bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
+                ViewBag.camareira = new SelectList(oCombo.FuncionarioGovernancaCamareira(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                         iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.tipoGovernanca = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", null);
+                ViewBag.bloco = new SelectList(oCombo.Bloco(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.andar = new SelectList(oCombo.Andar(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+
+                return View();
+
+            }
+        }
+
+        //JSON: /CARREGA PLANEJAMENTO
+        public JsonResult LoadPlanejamentoHistorico(int unidade, int tipoGovernanca, string dataInicio, string dataTermino, int camareira, string bloco, string andar, string apartamento)
+        {
+
+            return Json(oGovernanca.LoadPlanejamentoHistorico(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                              codigoUnidade: unidade,
+                                                              dataInicio: dataInicio,
+                                                              dataTermino: dataTermino,
+                                                              camareira: camareira,
+                                                              codigoTipoGovernanca: tipoGovernanca,
+                                                              bloco: bloco,
+                                                              andar: andar,
+                                                              apartamento: apartamento));
 
         }
 

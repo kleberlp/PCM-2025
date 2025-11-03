@@ -26,7 +26,9 @@
                 <div class="block-header block-header-default bg-gd-default">
                     <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.planejamento</h3>
                     <div class="block-options">
-
+                        <button type="button" id="btnClearPlanejamento" name="btnClearPlanejamento" class="btn btn-square btn-secondary min-width-100 h-75">
+                            <i class="fa fa-times mr-5"></i>Limpar planejamento
+                        </button>
                         <button type="button" id="btnSetTipoGovernanca" name="btnSetTipoGovernanca" class="btn btn-square btn-secondary min-width-100 h-75">
                             <i class="fa fa-hotel mr-5"></i>@PCM.WEB.Properties.Resources.definirTipoArrumacao
                         </button>
@@ -299,9 +301,34 @@
 
         });
 
+        $('#btnClearPlanejamento').click(function () {
+
+            clearPlanejamento();
+
+        });
+
     });
 
     function clearPlanejamento() {
+
+        let codigosSelecionados = [];
+
+        $("#tb_main input[type='checkbox']:checked").each(function () {
+            let codigo = $(this).val();
+            if (codigo && codigo !== "on") {
+                codigosSelecionados.push({
+                    codigoApartamento: codigo.trim()
+                });
+            }
+        });
+
+        if (codigosSelecionados.length === 0) {
+            Swal.fire("Nenhuma UH Selecionada!", "", "warning");
+            return;
+        }
+
+        // Serializa o array em uma string JSON
+        const jsonCodigos = JSON.stringify(codigosSelecionados);
 
         Swal.fire({
             title: "PCM",
@@ -320,10 +347,10 @@
                     url: "ClearPlanejamento",
                     async: false,
                     data: {
-                        "unidade": $("#unidade").val(),
-                        "tipoGovernanca": $("#tipoGovernanca").val(),
-                        "data": $("#data").val(),
-                        "funcionario": $("#funcionario").val()
+                        unidade: $("#unidade").val(),
+                        usuario: $("#usuario").val(),
+                        data: $("#data").val(),
+                        json: jsonCodigos
                     },
                     dataType: "json",
                     success: function (response) {
@@ -335,7 +362,7 @@
                             showCancelButton: false,
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                $("#form").submit();
+                                table.ajax.reload(null, false);
                             }
                         });
                     }

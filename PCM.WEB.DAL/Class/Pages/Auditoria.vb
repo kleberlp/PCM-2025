@@ -540,6 +540,56 @@ Public Class Auditoria
 
     End Sub
 
+    Public Sub ReopenAuditoriaCorporativo(ByVal iCodigoEmpresa As Integer,
+                                          ByVal iCodigoUsuario As Integer,
+                                          ByVal iCodigoUnidade As Integer,
+                                          ByVal lCodigo As Long)
+
+        'Variaveis Locais
+        Dim oSqlParameter(3) As SqlParameter
+        Dim i As Integer = 0
+
+        Try
+
+            'Seta Parametros - Código Empresa
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_empresa"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
+
+            'Seta Parametros - Usuário
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_usuario"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = iCodigoUsuario : i += 1
+
+            'Seta Parametros - Unidade
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_unidade"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = iCodigoUnidade : i += 1
+
+            'Seta Parametros - Código
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.BigInt
+            oSqlParameter(i).Value = lCodigo
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_auditoria_corporativo_reopen", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
 #End Region
 
 #Region "::: LAUDO :::"

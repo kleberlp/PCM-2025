@@ -24,6 +24,7 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="empresa" id="empresa" value="@Session["empresa"]">
                 <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario">
+                <input type="hidden" name="hospede" id="hospede" value="@ViewBag.hospede">
 
                 <!-- Toggle Tasks Navigation on mobile -->
                 <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
@@ -725,7 +726,8 @@
                     d.status = $("#status").val() == "" ? "-1" : $("#status").val(),
                     d.justificativa_apontamento = $("#justificativa_apontamento").val() == "" ? "-1" : $("#justificativa_apontamento").val(),
                     d.data_inicio_execucao = $("#data_inicio_execucao").val(),
-                    d.data_termino_execucao = $("#data_termino_execucao").val()
+                    d.data_termino_execucao = $("#data_termino_execucao").val(),
+                    d.hospede = $("#hospede").val()
                 },
                 dataSrc: ""
             },

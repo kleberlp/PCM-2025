@@ -25,7 +25,6 @@
                         @Html.DropDownList("data", null, null, new { @class = "form-control material font-w600 js-select2" })
                     </div>
                 </div>
-                <input type="hidden" name="nome_fantasia" id="nome_fantasia" value="@ViewBag.nome_fantasia" />
                 <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@Session["codigo_unidade"]" />
             </div>
 
@@ -568,7 +567,7 @@
                         <div class="block">
 
 
-                            @*<div class="col-md-12">
+                            <div class="col-md-12">
                                     <div class="block block-rounded block-mode-loading-refresh">
                                         <div class="block-content block-content-full">
                                             <div class="pull-all pt-30 p-20">
@@ -576,7 +575,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>*@
+                                </div>
 
                             <div class="col-md-12">
                                 <table class="table table-borderless table-striped" id="tbProdutividadeVistoriador">

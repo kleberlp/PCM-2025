@@ -492,6 +492,7 @@ Public Class Account
                 oFormularioVisualizar.governanca = IIf(IsDBNull(oSqlDataReader.Item("governanca")) = False AndAlso oSqlDataReader.Item("governanca") = "S", True, False)
                 oFormularioVisualizar.gov_funcionario = IIf(IsDBNull(oSqlDataReader.Item("gov_funcionario")) = False AndAlso oSqlDataReader.Item("gov_funcionario") = "S", True, False)
                 oFormularioVisualizar.gov_planejamento = IIf(IsDBNull(oSqlDataReader.Item("gov_planejamento")) = False AndAlso oSqlDataReader.Item("gov_planejamento") = "S", True, False)
+                oFormularioVisualizar.gov_planejamento_historico = IIf(IsDBNull(oSqlDataReader.Item("gov_planejamento_historico")) = False AndAlso oSqlDataReader.Item("gov_planejamento_historico") = "S", True, False)
                 oFormularioVisualizar.gov_historico = IIf(IsDBNull(oSqlDataReader.Item("gov_historico")) = False AndAlso oSqlDataReader.Item("gov_historico") = "S", True, False)
                 oFormularioVisualizar.gov_dashboard = IIf(IsDBNull(oSqlDataReader.Item("gov_dashboard")) = False AndAlso oSqlDataReader.Item("gov_dashboard") = "S", True, False)
                 oFormularioVisualizar.gov_apontamento = IIf(IsDBNull(oSqlDataReader.Item("gov_apontamento")) = False AndAlso oSqlDataReader.Item("gov_apontamento") = "S", True, False)

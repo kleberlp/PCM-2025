@@ -130,9 +130,9 @@ async function loadChartData(url, config, type) {
 
         if (type === "arrumadoxvistoriado") {
 
-            datasets.datasets.forEach(dataset => {
-                dataset.stack = 'Stack 0';
-            });
+            //datasets.datasets.forEach(dataset => {
+            //    dataset.stack = 'Stack 0';
+            //});
             updateChartConfig(config, datasets.labels, datasets.datasets);
             if (window.ArrumadoxVistoriado) {
                 window.ArrumadoxVistoriado.update();
@@ -197,7 +197,27 @@ async function loadChartData(url, config, type) {
     }
 }
 
-// Função para formatar datas para o formato 'YYYY-MM-DD'
+function normalizeForChart(payload) {
+    // 1) Datas em ISO (se seus labels vierem como dd/MM/yyyy)
+    const labels = (payload.labels || []).map(l => {
+        if (typeof l === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(l)) {
+            const [dd, mm, yyyy] = l.split('/');
+            return `${dd}/${mm}/${yyyy}`; // ISO para o eixo time
+        }
+        return l;
+    });
+
+    // 2) Coagir valores para Number, mantendo null
+    const datasets = (payload.datasets || []).map(ds => ({
+        ...ds,
+        data: (ds.data || []).map(v =>
+            v === null || v === undefined || v === '' ? null : Number(v)
+        )
+    }));
+
+    return { labels, datasets };
+}
+
 function formatDate(dateStr) {
     const [day, month, year] = dateStr.split('/');
     return `${year}-${month}-${day}`;
@@ -216,9 +236,8 @@ async function fetchChartData(url, params) {
         if (!response.ok) {
             throw new Error(`Erro ao buscar dados do gráfico: ${response.statusText}`);
         }
-
         const data = await response.json();
-        return data;
+        return normalizeForChart(data);
     } catch (error) {
         console.error("Erro ao buscar dados do gráfico:", error);
         throw error; // Relançar o erro para ser tratado onde a função foi chamada
@@ -258,24 +277,11 @@ function getChartConfigArrumadoxVistoriado() {
 
     return {
         type: 'bar',
-        data: {
-            labels: [],
-            datasets: []
-        },
         options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Chart.js Bar Chart - Stacked'
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom' // <-- Altera a legenda para o rodapé
-                }
-            },
             responsive: true,
             scales: {
                 y: {
+                    type: 'number',
                     beginAtZero: true
                 },
                 x: {
@@ -288,7 +294,48 @@ function getChartConfigArrumadoxVistoriado() {
                         tooltipFormat: 'DD/MM/YYYY'
                     }
                 }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom' // Aqui também
+                },
+                tooltip: {
+                    mode: 'nearest', // Alterado para 'nearest' em vez de 'index'
+                    intersect: true  // Certifique-se de que esteja definido para true
+                }
+            },
+            onClick: function (evt) {
+                const elements = this.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+
+                if (elements.length > 0) {
+                    const element = elements[0];
+                    const datasetIndex = element._datasetIndex;
+                    const index = element._index;
+
+                    const label = this.data.labels[index];
+                    const datasetLabel = this.data.datasets[datasetIndex].label;
+                    const value = this.data.datasets[datasetIndex].data[index];
+
+                    if (label && datasetLabel && typeof value !== 'undefined' && value != "0") {
+                        openModal({
+                            data: label,
+                            tipoGovernanca: datasetLabel,
+                            camareira: "",
+                            naoConformidade: ""
+                        });
+                    } else {
+                        console.error("Erro ao acessar os dados do ponto do gráfico.");
+                    }
+                } else {
+                    console.error("Nenhum elemento clicado foi encontrado.");
+                }
             }
+
+        },
+        data: {
+            labels: [],
+            datasets: []
         }
     };
 }

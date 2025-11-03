@@ -2674,18 +2674,16 @@ Public Class Governanca
 
     Public Sub ClearPlanejamento(ByVal codigoEmpresa As Integer,
                                  ByVal codigoUnidade As Integer,
-                                 ByVal codigoTipoGovernanca As Integer,
                                  ByVal data As String,
-                                 ByVal codigoFuncionario As Integer)
+                                 ByVal json As String)
 
         Try
 
             Dim oSqlParameter As SqlParameter() = {
                 CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
-                CriarParametro("codigo_tipo_governanca", SqlDbType.Int, codigoTipoGovernanca),
                 CriarParametro("data", SqlDbType.Date, IIf(IsDate(data), data, DBNull.Value)),
-                CriarParametro("codigo_funcionario", SqlDbType.Int, codigoFuncionario)
+                CriarParametro("json", SqlDbType.VarChar, json)
             }
 
             'Executa Query
@@ -2752,6 +2750,72 @@ Public Class Governanca
         End Try
 
     End Sub
+
+#End Region
+
+#Region "::: PLANEJAMENTO HISTÓRICO :::"
+
+    Public Function LoadPlanejamentoHistorico(ByVal codigoEmpresa As Integer,
+                                              ByVal codigoUnidade As Integer,
+                                              ByVal dataInicio As String,
+                                              ByVal dataTermino As String,
+                                              ByVal camareira As Integer,
+                                              ByVal codigoTipoGovernanca As Integer,
+                                              ByVal bloco As String,
+                                              ByVal andar As String,
+                                              ByVal apartamento As String) As List(Of GovernancaPlanejamentoHistorico)
+
+        Try
+
+            'Variaveis Locais
+            Dim oReturn As New List(Of GovernancaPlanejamentoHistorico)
+            Dim oSqlParameter As SqlParameter() = {
+                    CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                    CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                    CriarParametro("data_inicio", SqlDbType.Date, IIf(IsDate(dataInicio), dataInicio, DBNull.Value)),
+                    CriarParametro("data_termino", SqlDbType.Date, IIf(IsDate(dataTermino), dataTermino, DBNull.Value)),
+                    CriarParametro("codigo_tipo_governanca", SqlDbType.SmallInt, codigoTipoGovernanca),
+                    CriarParametro("codigo_camareira", SqlDbType.SmallInt, camareira),
+                    CriarParametro("bloco", SqlDbType.VarChar, bloco),
+                    CriarParametro("andar", SqlDbType.VarChar, andar),
+                    CriarParametro("apartamento", SqlDbType.VarChar, apartamento)
+                }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_planejamento_historico", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New GovernancaPlanejamentoHistorico With {
+                        .codigoApartamento = SafeGetLong(oSqlDataReader, "codigo_apartamento"),
+                        .data = SafeGetString(oSqlDataReader, "data"),
+                        .tipoGovernanca = SafeGetString(oSqlDataReader, "tipo_governanca"),
+                        .apartamento = SafeGetString(oSqlDataReader, "apartamento"),
+                        .tipoApartamento = SafeGetString(oSqlDataReader, "tipo_apartamento"),
+                        .bloco = SafeGetString(oSqlDataReader, "bloco"),
+                        .andar = SafeGetString(oSqlDataReader, "andar"),
+                        .quantidadeCama = SafeGetString(oSqlDataReader, "quantidade_cama"),
+                        .camareira = SafeGetString(oSqlDataReader, "camareira"),
+                        .executado = SafeGetString(oSqlDataReader, "executado"),
+                        .quantidadeNC = SafeGetString(oSqlDataReader, "quantidade_nc"),
+                        .vistoriado = SafeGetString(oSqlDataReader, "vistoriado")
+                    }
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            'Retorno da Função
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
 
 #End Region
 

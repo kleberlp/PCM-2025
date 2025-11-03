@@ -418,6 +418,7 @@
     <Content Include="Content\js\core\jquery.scrollLock.min.js" />
     <Content Include="Content\js\core\jquery.slimscroll.min.js" />
     <Content Include="Content\js\core\js.cookie.min.js" />
+    <Content Include="Content\js\pages\Governanca\planejamentoHistorico.js" />
     <Content Include="Content\js\pages\Governanca\dashboard.js" />
     <Content Include="Content\js\pages\sidebar.js" />
     <Content Include="Content\js\plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
@@ -2077,6 +2078,7 @@
     <Content Include="Views\CadastroBasico\ItemOSHospedeInsert.cshtml" />
     <Content Include="Views\Governanca\ApontamentoLavanderia.cshtml" />
     <Content Include="Views\Governanca\LogAlteracaoStatusGov.cshtml" />
+    <Content Include="Views\Governanca\PlanejamentoHistorico.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

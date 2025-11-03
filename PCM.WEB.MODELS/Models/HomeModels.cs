@@ -137,6 +137,7 @@ namespace PCM.WEB.MODELS
         public string type { get; set; }
         public int delay { get; set; }
         public int timer { get; set; }
+        public string url { get; set; }
     }
 
 }

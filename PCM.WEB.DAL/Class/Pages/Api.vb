@@ -432,7 +432,7 @@ Public Class Api
 
 
             'Executa Query
-            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_pwa_insert_pcm_picture_guid", oSqlParameter)
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_pwa_insert_pcm_picture_guid_error", oSqlParameter)
 
             oReturn.success = True
             oReturn.message = ""
@@ -1905,7 +1905,8 @@ Public Class Api
                                                    lCodigoChecklist:=oSqlDataReader.Item("codigo_checklist"),
                                                    sTipo:=sTipo,
                                                    lCodigoDocumento:=-1,
-                                                   iIntervalo:=-1)
+                                                   iIntervalo:=-1,
+                                                   lCodigoEquipamento:=-1)
 
                 End If
 
@@ -2187,7 +2188,8 @@ Public Class Api
                                                    lCodigoChecklist:=oSqlDataReader.Item("codigo_checklist"),
                                                    sTipo:="TAREFA",
                                                    lCodigoDocumento:=-1,
-                                                   iIntervalo:=-1)
+                                                   iIntervalo:=-1,
+                                                   lCodigoEquipamento:=-1)
 
                 End If
 
@@ -3176,7 +3178,6 @@ Public Class Api
                             .cssClass = oSqlDataReader.Item("status_opera_css_class")
                          }
                     }
-
 
                     If offline Then
 
@@ -4783,10 +4784,11 @@ Public Class Api
                                  ByVal lCodigoChecklist As Long,
                                  ByVal sTipo As String,
                                  ByVal lCodigoDocumento As Long,
-                                 ByVal iIntervalo As Integer) As pwaChecklist
+                                 ByVal iIntervalo As Integer,
+                                 Optional ByVal lCodigoEquipamento As Long = -1) As pwaChecklist
 
         'Variaveis Locais
-        Dim oSqlParameter(5) As SqlParameter
+        Dim oSqlParameter(6) As SqlParameter
         Dim oSqlDataReader As SqlDataReader
         Dim oReturn As New pwaChecklist
         Dim i As Integer = 0
@@ -4834,7 +4836,14 @@ Public Class Api
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).ParameterName = "intervalo"
             oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iIntervalo
+            oSqlParameter(i).Value = iIntervalo : i += 1
+
+            'Seta Parametros - Código Equipamento
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).ParameterName = "codigo_equipamento"
+            oSqlParameter(i).SqlDbType = SqlDbType.BigInt
+            oSqlParameter(i).Value = lCodigoEquipamento
 
             'Executa Query
             oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_pwa_select_pcm_checklist_grupo", oSqlParameter)
@@ -4866,7 +4875,8 @@ Public Class Api
                                                               iIntervalo:=iIntervalo,
                                                               iStatus:=oSqlDataReader.Item("status"),
                                                               iCodigoApartamento:=oSqlDataReader.Item("codigo_apartamento"),
-                                                              iCodigoTipoGovernanca:=oSqlDataReader.Item("codigo_tipo_governanca"))
+                                                              iCodigoTipoGovernanca:=oSqlDataReader.Item("codigo_tipo_governanca"),
+                                                              lCodigoEquipamento:=lCodigoEquipamento)
 
                     Else
 
@@ -4881,7 +4891,8 @@ Public Class Api
                                                            iIntervalo:=iIntervalo,
                                                            iStatus:=oSqlDataReader.Item("status"),
                                                            iCodigoApartamento:=oSqlDataReader.Item("codigo_apartamento"),
-                                                           iCodigoTipoGovernanca:=oSqlDataReader.Item("codigo_tipo_governanca"))
+                                                           iCodigoTipoGovernanca:=oSqlDataReader.Item("codigo_tipo_governanca"),
+                                                           lCodigoEquipamento:=lCodigoEquipamento)
 
                     End If
 
@@ -4915,10 +4926,11 @@ Public Class Api
                                          ByVal iIntervalo As Integer,
                                          ByVal iStatus As Integer,
                                          ByVal iCodigoApartamento As Integer,
-                                         ByVal iCodigoTipoGovernanca As Integer) As List(Of pwaChecklistSubGrupo)
+                                         ByVal iCodigoTipoGovernanca As Integer,
+                                         ByVal lCodigoEquipamento As Long) As List(Of pwaChecklistSubGrupo)
 
         'Variaveis Locais
-        Dim oSqlParameter(9) As SqlParameter
+        Dim oSqlParameter(10) As SqlParameter
         Dim oSqlDataReader As SqlDataReader
         Dim oReturn As New List(Of pwaChecklistSubGrupo)
         Dim i As Integer = 0
@@ -4995,7 +5007,14 @@ Public Class Api
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).ParameterName = "codigo_tipo_governanca"
             oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoTipoGovernanca
+            oSqlParameter(i).Value = iCodigoTipoGovernanca : i += 1
+
+            'Seta Parametros - Código Equipamento
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).ParameterName = "codigo_equipamento"
+            oSqlParameter(i).SqlDbType = SqlDbType.BigInt
+            oSqlParameter(i).Value = lCodigoEquipamento
 
             'Executa Query
             oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_pwa_select_pcm_checklist_subgrupo", oSqlParameter)
@@ -5017,7 +5036,8 @@ Public Class Api
                                                    iIntervalo:=iIntervalo,
                                                    iStatus:=iStatus,
                                                    iCodigoApartamento:=iCodigoApartamento,
-                                                   iCodigoTipoGovernanca:=iCodigoTipoGovernanca)
+                                                   iCodigoTipoGovernanca:=iCodigoTipoGovernanca,
+                                                   lCodigoEquipamento:=lCodigoEquipamento)
 
                 oReturn.Add(oInfo)
 
@@ -5047,10 +5067,11 @@ Public Class Api
                                      ByVal iIntervalo As Integer,
                                      ByVal iStatus As Integer,
                                      ByVal iCodigoApartamento As Integer,
-                                     ByVal iCodigoTipoGovernanca As Integer) As List(Of pwaChecklistItem)
+                                     ByVal iCodigoTipoGovernanca As Integer,
+                                     ByVal lCodigoEquipamento As Long) As List(Of pwaChecklistItem)
 
         'Variaveis Locais
-        Dim oSqlParameter(10) As SqlParameter
+        Dim oSqlParameter(11) As SqlParameter
         Dim oSqlDataReader As SqlDataReader
         Dim oReturn As New List(Of pwaChecklistItem)
         Dim i As Integer = 0
@@ -5135,7 +5156,14 @@ Public Class Api
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).ParameterName = "codigo_tipo_governanca"
             oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoTipoGovernanca
+            oSqlParameter(i).Value = iCodigoTipoGovernanca : i += 1
+
+            'Seta Parametros - Código Equipamento
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).ParameterName = "codigo_equipamento"
+            oSqlParameter(i).SqlDbType = SqlDbType.BigInt
+            oSqlParameter(i).Value = lCodigoEquipamento
 
             'Executa Query
             oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_pwa_select_pcm_checklist", oSqlParameter)

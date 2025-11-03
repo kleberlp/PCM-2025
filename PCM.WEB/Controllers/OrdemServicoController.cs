@@ -334,7 +334,7 @@ namespace PCM.WEB.Controllers
         #region ::: ORDEM DE SERVIÇO :::
 
         // GET: INDEX
-        public ActionResult OrdemServicoIndex2(int status = 1, int responsavel_apartamento = -1)
+        public ActionResult OrdemServicoIndex2(int status = 1, int responsavel_apartamento = -1, int hospede = -1)
         {
             if (Session["empresa"] == null)
             {
@@ -370,6 +370,7 @@ namespace PCM.WEB.Controllers
                                     sDireito: "inserir",
                                     bReturn: ref apontamento);
 
+                ViewBag.hospede = hospede;
 
                 if (Session["os_ordem_servico"] == null || status > 1)
                 {
@@ -388,7 +389,7 @@ namespace PCM.WEB.Controllers
                     ViewBag.ordem_servico = "";
                     ViewBag.apontamento = apontamento;
                     ViewBag.empresa = Session["empresa"].ToString();
-                    ViewBag.usuario = User.Identity.GetUserName();
+                    ViewBag.usuario = User.Identity.GetUserName();                    
                     ViewBag.codigo_unidade = Convert.ToInt32(Session["codigo_unidade"]);
                     ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                     iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
@@ -464,7 +465,7 @@ namespace PCM.WEB.Controllers
 
         // POST: INDEX
         [HttpPost]
-        public ActionResult OrdemServicoIndex2(int unidade = -1, int departamento = -1, int codigo_unidade = -1, string data_inicio = "", string data_termino = "", string ordem_servico = "", string ordem_servico_cliente = "", int setor = -1, int prioridade = -1, long equipamento = -1, int status = -1, int responsavel_apartamento = -1, string executor = "", int solicitante = -1, int apartamento = -1, int justificativa_apontamento = -1, string data_execucao_inicio = "", string data_execucao_termino = "")
+        public ActionResult OrdemServicoIndex2(int unidade = -1, int departamento = -1, int codigo_unidade = -1, string data_inicio = "", string data_termino = "", string ordem_servico = "", string ordem_servico_cliente = "", int setor = -1, int prioridade = -1, long equipamento = -1, int status = -1, int responsavel_apartamento = -1, string executor = "", int solicitante = -1, int apartamento = -1, int justificativa_apontamento = -1, string data_execucao_inicio = "", string data_execucao_termino = "", int hospede = -1)
         {
             if (Session["empresa"] == null)
             {
@@ -533,6 +534,7 @@ namespace PCM.WEB.Controllers
                 ViewBag.empresa = Session["empresa"].ToString();
                 ViewBag.usuario = User.Identity.GetUserName();
                 ViewBag.codigo_unidade = unidade;
+                ViewBag.hospede = hospede;
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                 bCadastro: false), "codigo", "descricao", (unidade == -1) ? codigo_unidade : unidade);
@@ -563,7 +565,7 @@ namespace PCM.WEB.Controllers
             }
         }
 
-        public JsonResult LoadOrdemServicoIndex(int empresa, int usuario, int unidade, int departamento, string ordem_servico, string ordem_servico_cliente, string data_inicio, string data_termino, int setor = -1, int prioridade = -1, int equipamento = -1, int solicitante = -1, int responsavel_apartamento = -1, int apartamento = -1, string executor = "", int status = -1, int justificativa_apontamento = -1, string data_execucao_inicio = "", string data_execucao_termino = "")
+        public JsonResult LoadOrdemServicoIndex(int empresa, int usuario, int unidade, int departamento, string ordem_servico, string ordem_servico_cliente, string data_inicio, string data_termino, int setor = -1, int prioridade = -1, int equipamento = -1, int solicitante = -1, int responsavel_apartamento = -1, int apartamento = -1, string executor = "", int status = -1, int justificativa_apontamento = -1, string data_execucao_inicio = "", string data_execucao_termino = "", int hospede = -1)
         {
             List<MODELS.OrdemServico> result = new List<MODELS.OrdemServico>();
 
@@ -583,7 +585,8 @@ namespace PCM.WEB.Controllers
                                                      iCodigoApartamento: apartamento,
                                                      sExecutor: executor,
                                                      iStatus: status,
-                                                     iCodigoJustificativaApontamento: justificativa_apontamento);
+                                                     iCodigoJustificativaApontamento: justificativa_apontamento,
+                                                     iHospede: hospede);
 
 
             var jsonResult = Json(result, JsonRequestBehavior.AllowGet);

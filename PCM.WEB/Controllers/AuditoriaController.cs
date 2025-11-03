@@ -462,8 +462,8 @@ namespace PCM.WEB.Controllers
 
         #region ::: AUDITORIA CORPORATIVA :::
 
-        // GET: INDEX
-        public ActionResult AuditoriaCorporativoIndex()
+            // GET: INDEX
+            public ActionResult AuditoriaCorporativoIndex()
             {
                 if (Session["empresa"] == null)
                 {
@@ -576,6 +576,26 @@ namespace PCM.WEB.Controllers
                 {
                     return Json(false);
                 }                
+            }
+
+            // POST: /DELETE
+            public JsonResult ReopenAuditoriaCorporativo(int codigo_empresa, int codigo_unidade, long codigo_auditoria)
+            {
+                try
+                {
+                    //Insere Registro no Banco de Dados
+                    oAuditoria.ReopenAuditoriaCorporativo(iCodigoEmpresa: codigo_empresa,
+                                                          iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                          iCodigoUnidade: codigo_unidade,
+                                                          lCodigo: codigo_auditoria);
+
+                    //Redireciona para Index
+                    return Json(true);
+                }
+                catch
+                {
+                    return Json(false);
+                }
             }
 
             // GET: /AUDITORIA INSERIR
@@ -750,7 +770,7 @@ namespace PCM.WEB.Controllers
 
                         oPicture.InsertPicture(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                iCodigoUnidade: codigo_unidade,
-                                               sTipo: "AUDITORIA",
+                                               sTipo: "AUDITORIA_CORPORATIVO",
                                                lCodigo: codigo_auditoria,
                                                iCodigoItemChecklist: codigo_item_checklist,
                                                sImagePath: Path.Combine(sPath, sFileName));
@@ -773,7 +793,7 @@ namespace PCM.WEB.Controllers
                 return Json(oPicture.PictureList(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                 iCodigoUnidade: codigo_unidade,
                                                 lCodigo: codigo_auditoria,
-                                                sTipo: "AUDITORIA",
+                                                sTipo: "AUDITORIA_CORPORATIVO",
                                                 iCodigoItemChecklist: codigo_item_checklist));
             }
 

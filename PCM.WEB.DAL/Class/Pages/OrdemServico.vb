@@ -644,14 +644,15 @@ Public Class OrdemServico
                                       Optional ByVal iStatus As Integer = 0,
                                       Optional ByVal iCodigoJustificativaApontamento As Integer = -1,
                                       Optional ByVal sDataInicioExecucao As String = "",
-                                      Optional ByVal sDataTerminoExecucao As String = "") As List(Of MODELS.OrdemServico)
+                                      Optional ByVal sDataTerminoExecucao As String = "",
+                                      Optional ByVal iHospede As Integer = -1) As List(Of MODELS.OrdemServico)
 
         Try
 
             'Váriaveis Locais
             Dim oOrdemServico As New List(Of MODELS.OrdemServico)
             Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(18) As SqlParameter
+            Dim oSqlParameter(19) As SqlParameter
             Dim i As Integer = 0
 
             'Seta Parametros - Código Empresa
@@ -768,6 +769,13 @@ Public Class OrdemServico
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
             oSqlParameter(i).Value = iStatus : i += 1
+
+            'Seta Parametros - Hóspede
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "hospede"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Bit
+            oSqlParameter(i).Value = IIf(iHospede = -1, DBNull.Value, IIf(iHospede = 1, True, False)) : i += 1
 
             'Seta Parametros - Código Justificativa - Apontamento
             oSqlParameter(i) = New SqlParameter

@@ -80,6 +80,7 @@ namespace PCM.WEB.MODELS
         public bool governanca { get; set; }
         public bool gov_funcionario { get; set; }
         public bool gov_planejamento { get; set; }
+        public bool gov_planejamento_historico { get; set; }
         public bool gov_historico { get; set; }
         public bool gov_dashboard { get; set; }
         public bool gov_apontamento { get; set; }

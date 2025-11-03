@@ -1,0 +1,124 @@
+﻿<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.governanca</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.planejamentoHistorico</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("PlanejamentoHistorico", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" id="codigo" name="codigo" value="" />
+
+            <!-- Toggle Tasks Navigation on mobile -->
+            <div class="block block-rounded border">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.planejamentoHistorico</h3>
+                </div>
+
+                <div class="block-content block-content-full">
+                    <input type="hidden" name="codigoApartamento" id="codigoApartamento" value="" />
+                    <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario" />
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            <label>@PCM.WEB.Properties.Resources.unidade</label>
+                            @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>@PCM.WEB.Properties.Resources.tipoGovernanca</label>
+                            @Html.DropDownList("tipoGovernanca", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                        <div class="col-md-4">
+                            <label>@PCM.WEB.Properties.Resources.data</label>
+                            <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
+                                <div class="input-group-prepend input-group-append">
+                                    <span class="input-group-text font-w600">-</span>
+                                </div>
+                                <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label>@PCM.WEB.Properties.Resources.camareira</label>
+                            @Html.DropDownList("camareira", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            <label>@PCM.WEB.Properties.Resources.bloco</label>
+                            @Html.DropDownList("bloco", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>@PCM.WEB.Properties.Resources.andar</label>
+                            @Html.DropDownList("andar", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>@PCM.WEB.Properties.Resources.apartamento</label>
+                            <input type="text" id="apartamento" name="apartamento" value="" class="form-control">
+                        </div>
+                        <li class="col-md-6 text-right">
+                            <button type="button" class="btn btn-square btn-secondary min-width-100 h-50 mt-20" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                        </li>
+                    </div>
+                </div>
+            </div>
+            <!-- END Collapsible Tasks Navigation -->
+
+            <div class="table-responsive table-sm push block block-content-full p-10">
+                <table class="table table-bordered table-hover js-dataTable-list" name="tbList" id="tb_main">
+
+                    <thead>
+                        <tr class="table-secondary">
+                            <th>@PCM.WEB.Properties.Resources.data</th>
+                            <th>@PCM.WEB.Properties.Resources.tipoGovernanca</th>
+                            <th>@PCM.WEB.Properties.Resources.apartamento</th>
+                            <th>@PCM.WEB.Properties.Resources.tipo_apartamento</th>
+                            <th>@PCM.WEB.Properties.Resources.bloco</th>
+                            <th>@PCM.WEB.Properties.Resources.andar</th>
+                            <th>@PCM.WEB.Properties.Resources.quantidade_cama</th>
+                            <th>@PCM.WEB.Properties.Resources.camareira</th>
+                            <th>@PCM.WEB.Properties.Resources.executado</th>
+                            <th>@PCM.WEB.Properties.Resources.quantidadeNC</th>
+                            <th>@PCM.WEB.Properties.Resources.vistoriado</th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+
+            <!-- END Page Content -->
+        }
+
+    </div>
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maxlenght")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script type="text/javascript" src="~/Content/js/pages/Governanca/planejamentoHistorico.js"></script>
+
+}
+

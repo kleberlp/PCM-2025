@@ -1064,7 +1064,6 @@ namespace PCM.WEB.Controllers
                     labels = result.Select(d => d.unidade).ToArray(),
                     datasets = new[]
                     {
-                        new { label = "UH's Pendentes", data = result.Select(d => d.quantidadeUHs).ToArray(), backgroundColor = "red" },
                         new { label = "UH's Vistoriados", data = result.Select(d => d.quantidadeVistoriados).ToArray(), backgroundColor = "green" },
                         new { label = "UH's Arrumados", data = result.Select(d => d.quantidadeArrumados).ToArray(), backgroundColor = "blue" }
                     }
@@ -1272,7 +1271,7 @@ namespace PCM.WEB.Controllers
                 return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-
+        
         #endregion
 
         #endregion

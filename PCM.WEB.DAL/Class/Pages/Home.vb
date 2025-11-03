@@ -659,6 +659,7 @@ Public Class Home
                     oInfo.type = SafeGetString(oSqlDataReader, "type")
                     oInfo.delay = SafeGetLong(oSqlDataReader, "delay")
                     oInfo.timer = SafeGetLong(oSqlDataReader, "timer")
+                    oInfo.url = SafeGetString(oSqlDataReader, "url")
 
                     oReturn.Add(oInfo)
 

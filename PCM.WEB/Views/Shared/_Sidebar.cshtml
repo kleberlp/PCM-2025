@@ -686,7 +686,21 @@
 
 
 
-                    @if ((bool)Session["gov_status_uh"] || (bool)Session["gov_lavanderia"] || (bool)Session["gov_apontamento"] || (bool)Session["gov_dashboard"] || (bool)Session["governanca"] || (bool)Session["gov_funcionario"] || (bool)Session["gov_log_alteracao_status_gov"] || (bool)Session["gov_planejamento"] || (bool)Session["gov_historico"] || (bool)Session["rel_consumo_enxoval"] || (bool)Session["rel_horas_trabalhadas_governanca"] || (bool)Session["rel_camareira_uh"] || (bool)Session["rel_responsavel_vistoria_uh"] || (bool)Session["rel_camareira_nc"])
+                    @if ((bool)Session["gov_status_uh"] || 
+                        (bool)Session["gov_lavanderia"] || 
+                        (bool)Session["gov_apontamento"] || 
+                        (bool)Session["gov_dashboard"] || 
+                        (bool)Session["governanca"] || 
+                        (bool)Session["gov_funcionario"] || 
+                        (bool)Session["gov_log_alteracao_status_gov"] || 
+                        (bool)Session["gov_planejamento"] || 
+                        (bool)Session["gov_planejamento_historico"] || 
+                        (bool)Session["gov_historico"] || 
+                        (bool)Session["rel_consumo_enxoval"] || 
+                        (bool)Session["rel_horas_trabalhadas_governanca"] || 
+                        (bool)Session["rel_camareira_uh"] || 
+                        (bool)Session["rel_responsavel_vistoria_uh"] || 
+                        (bool)Session["rel_camareira_nc"])
                     {
                         <li>
                             <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-hotel"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.governanca</span></a>
@@ -719,6 +733,12 @@
                                 {
                                     <li>
                                         <a class="@Html.IsSelected(action: "Planejamento2", cssClass: "active") font-size-sm" href="@Url.Action("Planejamento2", "Governanca")">@PCM.WEB.Properties.Resources.planejamento</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_planejamento_historico"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "PlanejamentoHistorico", cssClass: "active") font-size-sm" href="@Url.Action("PlanejamentoHistorico", "Governanca")">@PCM.WEB.Properties.Resources.planejamentoHistorico</a>
                                     </li>
                                 }
                                 @if ((bool)Session["gov_lavanderia"])

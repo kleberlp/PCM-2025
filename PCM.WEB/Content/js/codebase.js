@@ -53,22 +53,81 @@ function notifyOrdemServico() {
         success: function (response) {
             if (response != "") {
                 for (var i = 0; i < response.length; i++) {
-                    $.notify({
-                        message: response[i].message
-                    }, {
-                        type: response[i].type, // tipos: success, info, warning, danger
-                        allow_dismiss: true,
-                        placement: {
-                            from: "top",
-                            align: "right"
+
+                    const msg = response[i].message || "";
+                    const link = response[i].url || "";
+
+                    // 1) Cria a notificação e pega o handle retornado
+                    const n = $.notify(
+                        {
+                            message: msg,
+                            url: link,         // o plugin vai criar <a data-notify="url">
+                            target: "_self"    // ou "_blank" se preferir nova aba
                         },
-                        delay: 1000,
-                        timer: 1000,
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
+                        {
+                            type: response[i].type || "info",
+                            allow_dismiss: true,
+                            placement: { from: "top", align: "right" },
+                            delay: 6000,
+                            timer: 1000,
+                            animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" }
                         }
-                    });
+                    );
+
+                    // 2) Pega o elemento da notificação
+                    const $notify = n && n.$ele ? n.$ele : $(".alert[data-notify='container']").last();
+
+                    // 3) Garante que o anchor receba o link correto (algumas versões deixam "#")
+                    if (link) {
+                        const $a = $notify.find("[data-notify='url']");
+                        if ($a.length) {
+                            $a.attr("href", link).attr("target", "_self"); // "_blank" se quiser nova aba
+                        } else {
+                            // fallback: injeta o anchor se o template não tiver
+                            $notify.append($('<a data-notify="url">').attr("href", link).attr("target", "_self"));
+                        }
+
+                        // 4) Deixa toda a notificação clicável (sem interferir no botão de fechar)
+                        $notify.css("cursor", "pointer").on("click", function (e) {
+                            if ($(e.target).is("[data-notify='dismiss'], a")) return; // não intercepta o X nem cliques no <a>
+                            window.location.href = link; // ou window.open(link, "_blank");
+                        });
+                    }
+
+                    //$.notify({
+                    //    message: response[i].message
+                    //}, {
+                    //    type: response[i].type,
+                    //    allow_dismiss: true,
+                    //    placement: {
+                    //        from: "top",
+                    //        align: "right"
+                    //    },
+                    //    delay: 0, // <-- tempo total de exibição
+                    //    timer: 5000,
+                    //    url: response[i].url,
+                    //    animate: {
+                    //        enter: 'animated fadeInDown',
+                    //        exit: 'animated fadeOutUp'
+                    //    },
+                    //    onShown: function () {
+                    //        var $notify = $(".alert[data-notify='container']").last();
+
+                    //        // pega o link que o plugin adicionou
+                    //        var link = $notify.find("[data-notify='url']").attr("href");
+
+                    //        if (link && link !== "#") {
+
+                    //            $notify.css("cursor", "pointer");
+
+                    //            $notify.on("click", function (e) {
+                    //                e.preventDefault();
+                    //                window.location.href = link;
+                    //            });
+                    //        }
+                    //    }
+                    //});
+
                 }
             }
         }

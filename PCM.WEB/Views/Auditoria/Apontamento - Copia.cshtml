@@ -36,7 +36,7 @@
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento</h3>
                             <div class="block-options">
-                                @if (Model.status == 2)
+                                @if (Model.status != 2)
                                 {
                                     <button type="button" onclick="ReopenAuditoria(@Model.codigo_empresa, @Model.codigo_unidade, @Model.codigo_auditoria);" class="btn btn-square btn-secondary min-width-100 h-75">
                                         <i class="fa fa-unlock mr-5"></i>Reabrir Auditoria

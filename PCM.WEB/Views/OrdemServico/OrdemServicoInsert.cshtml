@@ -100,7 +100,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
     
-    <script>
+<script>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("fileInput").files[0].name;
@@ -223,7 +223,7 @@
                     apartamento.select2({ placeholder: '@PCM.WEB.Properties.Resources.apartamento', allowClear: true });
                     equipamento.select2({ placeholder: "Máquina / Equipamento / Itens Gerais", allowClear: true });
                 }
-                
+
             });
 
             apartamento.change(function () {
@@ -279,7 +279,7 @@
             }
         }, '');
 
-        jQuery.validator.addMethod("validate_ordem_servico", function (value, element) {          
+        jQuery.validator.addMethod("validate_ordem_servico", function (value, element) {
 
             if (value == "") {
                 return true
@@ -319,7 +319,7 @@
             errorElement: 'div',
             errorPlacement: function (error, e) {
                 jQuery(e).parents('.form-group > div').append(error);
-                $('#btnSave').show(); 
+                $('#btnSave').show();
             },
             highlight: function (e) {
                 jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
@@ -346,6 +346,7 @@
                     required: true
                 },
                 'equipamento': {
+                    required: true,
                     validate_ordem_servico: true
                 }
             },
@@ -367,6 +368,7 @@
                     required: '@PCM.WEB.Properties.Resources.campo_requerido'
                 },
                 'equipamento': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido',
                     validate_ordem_servico: '@PCM.WEB.Properties.Resources.ar_condicionado_nao_associado'
                 }
             },
@@ -428,5 +430,5 @@
             Codebase.helpers(['datepicker', 'maxlength', 'select2']);
         });
 
-    </script>
+</script>
 }

@@ -358,6 +358,7 @@ namespace PCM.WEB.Controllers
                 Session["governanca"] = formulario_visualizar.governanca;
                 Session["gov_funcionario"] = formulario_visualizar.gov_funcionario;
                 Session["gov_planejamento"] = formulario_visualizar.gov_planejamento;
+                Session["gov_planejamento_historico"] = formulario_visualizar.gov_planejamento_historico;
                 Session["gov_historico"] = formulario_visualizar.gov_historico;
                 Session["gov_dashboard"] = formulario_visualizar.gov_dashboard;
                 Session["gov_apontamento"] = formulario_visualizar.gov_apontamento;
@@ -836,6 +837,7 @@ namespace PCM.WEB.Controllers
                 Session["governanca"] = formulario_visualizar.governanca;
                 Session["gov_funcionario"] = formulario_visualizar.gov_funcionario;
                 Session["gov_planejamento"] = formulario_visualizar.gov_planejamento;
+                Session["gov_planejamento_historico"] = formulario_visualizar.gov_planejamento_historico;
                 Session["green_lancamento"] = formulario_visualizar.green_lancamento;
                 Session["gov_historico"] = formulario_visualizar.gov_historico;
                 Session["gov_dashboard"] = formulario_visualizar.gov_dashboard;
