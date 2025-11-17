@@ -1147,6 +1147,14 @@ namespace PCM.WEB.API.Controllers
         {
             pwaApontamentoResponse response = new pwaApontamentoResponse();
 
+            //GRAVA LOG
+            oAPI.insertLogAPI(iCodigoEmpresa: auditoriaCorporativo.codigoEmpresa,
+                              iCodigoUnidade: auditoriaCorporativo.codigoUnidade,
+                              iCodigoUsuario: auditoriaCorporativo.codigoUsuario,
+                              sEndpoint: Request.RequestUri.PathAndQuery,
+                              sRequestBody: oFunction.ConverteObjectParaJSon(auditoriaCorporativo),
+                              sResponseBody: oFunction.ConverteObjectParaJSon(response));
+
             try
             {
                 response = oAPI.insertAuditoriaCorporativoApontamento(oAuditoriaCorporativoApontamento: auditoriaCorporativo);

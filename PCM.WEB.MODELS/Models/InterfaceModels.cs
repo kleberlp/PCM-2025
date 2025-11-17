@@ -123,4 +123,31 @@ namespace PCM.WEB.MODELS.Models
         public string dataTermino { get; set; }
     }
 
+    public class interfaceRotina
+    {
+        public int page { get; set; }
+        public int totalPage { get; set; }
+        public int totalRegistros { get; set; }
+        public List<interfaceRotinaDetails> rotina { get; set; }
+    }
+
+    public class interfaceRotinaDetails
+    {
+        public long codigo { get; set; }
+        public string unidade { get; set; }
+        public string setor { get; set; }
+        public string rotina { get; set; }
+        public string categoria { get; set; }
+        public string tipoServico { get; set; }
+        public List<interfaceRotinaDetailsExecutor> apontamentos { get; set; }
+    }
+
+    public class interfaceRotinaDetailsExecutor
+    {
+        public string nome { get; set; }
+        public string inicio { get; set; }
+        public string termino { get; set; }
+        public string justificativa { get; set; }
+    }
+
 }

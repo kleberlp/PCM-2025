@@ -325,7 +325,7 @@ namespace PCM.WEB.Controllers
 
         // GET: INSERT
         [HttpPost]
-        public JsonResult LoadApartamento(int unidade, int responsavelApartamento, string bloco, string andar, int ativo)
+        public JsonResult LoadApartamentoTable(int unidade, int responsavelApartamento, string bloco, string andar, int ativo)
         {
             return Json(oCadastroBasico.LoadApartamento(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                         codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),

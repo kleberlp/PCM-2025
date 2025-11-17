@@ -77,7 +77,7 @@ Public Class InterfaceApi
 #Region "::: GREEN PLANET :::"
 
     Public Function GreenPlanet(ByVal iCodigoEmpresa As Integer,
-                                ByVal sHotelId As String,
+                                ByVal codigoUnidade As Integer,
                                 ByVal sItemMedicao As String,
                                 ByVal dStartDate As String,
                                 ByVal dEndDate As String) As List(Of InterfaceGreenPlanet)
@@ -100,10 +100,9 @@ Public Class InterfaceApi
             'Seta Parametros - Hotel Id
             oSqlParameter(i) = New SqlParameter
             oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).ParameterName = "hotel_id"
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 100
-            oSqlParameter(i).Value = sHotelId : i += 1
+            oSqlParameter(i).ParameterName = "codigo_unidade"
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = codigoUnidade : i += 1
 
             'Seta Parametros - Item Medição
             oSqlParameter(i) = New SqlParameter
@@ -346,6 +345,103 @@ Public Class InterfaceApi
                         .totalPage = SafeGetLong(oSqlDataReader, "totalPage")
                         .totalRegistros = SafeGetLong(oSqlDataReader, "totalRegistro")
                         .os = oDetails
+                    End With
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
+#Region "::: ROTINA :::"
+
+    Public Function Rotina(ByVal codigoEmpresa As Integer,
+                           ByVal codigoUnidade As Integer,
+                           ByVal dataInicio As String,
+                           ByVal dataTermino As String,
+                           ByVal page As Integer) As interfaceRotina
+
+
+        'Variaveis Locais
+        Dim oDetails As New List(Of interfaceRotinaDetails)
+        Dim oReturn As New interfaceRotina
+        Dim grupos As New Dictionary(Of String, interfaceRotinaDetails)(StringComparer.OrdinalIgnoreCase)
+
+        Try
+
+            Dim culture = Globalization.CultureInfo.GetCultureInfo("pt-BR")
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, If(dataInicio Is Nothing, DBNull.Value, CType(DateTime.ParseExact(dataInicio.Trim(), "dd/MM/yyyy", culture), Object))),
+                CriarParametro("data_termino", SqlDbType.Date, If(dataTermino Is Nothing, DBNull.Value, CType(DateTime.ParseExact(dataTermino.Trim(), "dd/MM/yyyy", culture), Object))),
+                CriarParametro("page", SqlDbType.SmallInt, page)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_interface_rotina", oSqlParameter)
+
+                oReturn.rotina = New List(Of interfaceRotinaDetails)
+
+                While oSqlDataReader.Read()
+
+                    Dim codigo As Long = SafeGetLong(oSqlDataReader, "codigo")
+                    Dim unidade As String = SafeGetString(oSqlDataReader, "unidade")
+                    Dim setor As String = SafeGetString(oSqlDataReader, "setor")
+                    Dim descricaoRotina As String = SafeGetString(oSqlDataReader, "rotina")
+                    Dim categoria As String = SafeGetString(oSqlDataReader, "categoria")
+                    Dim tipoServico As String = SafeGetString(oSqlDataReader, "tipo_servico")
+
+                    ' Chave do grupo
+                    Dim key As String = $"{codigo}"
+
+                    ' Cria o grupo se ainda não existir
+                    Dim detalhe As interfaceRotinaDetails = Nothing
+                    If Not grupos.TryGetValue(key, detalhe) Then
+                        detalhe = New interfaceRotinaDetails With {
+                            .codigo = codigo,
+                            .unidade = unidade,
+                            .setor = setor,
+                            .rotina = descricaoRotina,
+                            .categoria = categoria,
+                            .tipoServico = tipoServico,
+                            .apontamentos = New List(Of interfaceRotinaDetailsExecutor)
+                        }
+                        grupos.Add(key, detalhe)
+                    End If
+
+                    detalhe.apontamentos = New List(Of interfaceRotinaDetailsExecutor)
+
+                    'Só adiciona se houver algum dado relevante (opcional)
+                    detalhe.apontamentos.Add(New interfaceRotinaDetailsExecutor With {
+                        .nome = SafeGetString(oSqlDataReader, "nome"),
+                        .inicio = SafeGetString(oSqlDataReader, "data_inicio"),
+                        .termino = SafeGetString(oSqlDataReader, "data_termino"),
+                        .justificativa = SafeGetString(oSqlDataReader, "justificativa")})
+
+                    oReturn.rotina.Add(detalhe)
+
+                End While
+
+                oSqlDataReader.NextResult()
+
+                While oSqlDataReader.Read
+
+                    With oReturn
+                        .page = page
+                        .totalPage = SafeGetLong(oSqlDataReader, "totalPage")
+                        .totalRegistros = SafeGetLong(oSqlDataReader, "totalRegistro")
                     End With
 
                 End While

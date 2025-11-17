@@ -1530,6 +1530,7 @@ namespace PCM.WEB.Controllers
                                                           sDataInicio: data_inicio,
                                                           sDataTermino: data_termino,
                                                           iCodigoAuditoriaInterna: auditoria_qualidade,
+                                                          iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
                                                           iStatus: status));
             }
         }
@@ -1580,6 +1581,7 @@ namespace PCM.WEB.Controllers
                                                           sDataInicio: data_inicio,
                                                           sDataTermino: data_termino,
                                                           iCodigoAuditoriaInterna: auditoria_qualidade,
+                                                          iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
                                                           iStatus: status));
             }
         }

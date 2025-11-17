@@ -1688,14 +1688,15 @@ Public Class Auditoria
                                        ByVal sDataInicio As String,
                                        ByVal sDataTermino As String,
                                        ByVal iCodigoAuditoriaInterna As Integer,
-                                       ByVal iStatus As Integer) As List(Of QAAuditoriaHistorico)
+                                       ByVal iStatus As Integer,
+                                       ByVal iCodigoModulo As Integer) As List(Of QAAuditoriaHistorico)
 
         Try
 
             'Váriaveis Locais
             Dim oReturn As New List(Of MODELS.QAAuditoriaHistorico)
             Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(5) As SqlParameter
+            Dim oSqlParameter(6) As SqlParameter
             Dim i As Integer = 0
 
             'Seta Parametros - Código Empresa
@@ -1732,6 +1733,13 @@ Public Class Auditoria
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.Int
             oSqlParameter(i).Value = iCodigoAuditoriaInterna : i += 1
+
+            'Seta Parametros - Código Módulo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_modulo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = iCodigoModulo : i += 1
 
             'Seta Parametros - Status
             oSqlParameter(i) = New SqlParameter

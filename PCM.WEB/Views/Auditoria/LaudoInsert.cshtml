@@ -206,6 +206,18 @@
     });
 
     function Arquivo() {
+
+        //const file = document.getElementById("arquivo").files[0];
+        //if (!file) return;
+
+        //const sanitized = sanitizeFileName(file.name);
+
+        //if (sanitized !== file.name) {
+        //    const dt = new DataTransfer();
+        //    dt.items.add(new File([file], sanitized, { type: file.type }));
+        //    this.files = dt.files;
+        //}
+
         document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;
     }
 
@@ -223,6 +235,18 @@
         }
 
     }, '');
+
+    jQuery.validator.addMethod("maxFileSize", function (value, element, param) {
+        if (element.files.length === 0) return true; // sem arquivo
+        const maxSizeBytes = param;
+        return element.files[0].size <= maxSizeBytes;
+    }, "O arquivo excede o tamanho máximo permitido.");
+
+    function sanitizeFileName(fileName) {
+        return fileName
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9_.-]/g, "_");
+    }
 
     var FormValidation = function () {
         // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
@@ -262,7 +286,8 @@
                         required: true
                     },
                     'arquivo': {
-                        required: true
+                        required: true,
+                        maxFileSize: 10 * 1024 * 1024 // 5MB
                     }
                 },
                 messages: {
@@ -286,7 +311,8 @@
                         required: '@PCM.WEB.Properties.Resources.campo_requerido'
                     },
                     'arquivo': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                        maxFileSize: 'Tamanho do arquivo excedeu o máximo permitido (10 Mb).'
                     }
                 }
             });

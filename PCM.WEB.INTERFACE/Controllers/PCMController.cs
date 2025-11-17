@@ -68,15 +68,15 @@ namespace PCM.WEB.INTERFACE.Controllers
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("GreenPlanet")]
-        public IActionResult GreenPlanet(string hotelId, string startDate, string endDate, string itemMedicao = "") 
+        public IActionResult GreenPlanet(int codigoUnidade, string dataInicio, string dataTermino, string? itemMedicao = "") 
         {
 
             InterfaceApi interfaceApi = new InterfaceApi(sCon: _config["ConnectionString"].ToString());
 
             return Ok(interfaceApi.GreenPlanet(iCodigoEmpresa: Convert.ToInt32(User.FindFirst("codigoEmpresa").Value.ToString()),
-                                               sHotelId: hotelId,
-                                               dStartDate: startDate,
-                                               dEndDate: endDate,
+                                               codigoUnidade: codigoUnidade,
+                                               dStartDate: dataInicio,
+                                               dEndDate: dataTermino,
                                                sItemMedicao: itemMedicao));
 
         }
@@ -96,7 +96,7 @@ namespace PCM.WEB.INTERFACE.Controllers
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("PrincipaisOcorrencias")]
-        public IActionResult PrincipaisOcorrencias(string hotelId, string startDate, string endDate, int modulo = 1)
+        public IActionResult PrincipaisOcorrencias(string hotelId, string dataInicio, string dataTermino, int modulo = 1)
         {
 
             InterfaceApi interfaceApi = new InterfaceApi(sCon: _config["ConnectionString"].ToString());
@@ -104,15 +104,15 @@ namespace PCM.WEB.INTERFACE.Controllers
             return Ok(interfaceApi.PrincipaisOcorrencias(codigoEmpresa: Convert.ToInt32(User.FindFirst("codigoEmpresa").Value.ToString()),
                                                          hotelId: hotelId,
                                                          codigoModulo: modulo,
-                                                         startDate: startDate,
-                                                         endDate: endDate));
+                                                         startDate: dataInicio,
+                                                         endDate: dataTermino));
 
         }
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("RankingSLA")]
-        public IActionResult RankingSLA(string hotelId, string startDate, string endDate, int modulo = 1)
+        public IActionResult RankingSLA(string hotelId, string dataInicio, string dataTermino, int modulo = 1)
         {
 
             InterfaceApi interfaceApi = new InterfaceApi(sCon: _config["ConnectionString"].ToString());
@@ -120,8 +120,8 @@ namespace PCM.WEB.INTERFACE.Controllers
             return Ok(interfaceApi.PrincipaisOcorrencias(codigoEmpresa: Convert.ToInt32(User.FindFirst("codigoEmpresa")?.Value.ToString()),
                                                          hotelId: hotelId,
                                                          codigoModulo: modulo,
-                                                         startDate: startDate,
-                                                         endDate: endDate));
+                                                         startDate: dataInicio,
+                                                         endDate: dataTermino));
 
         }
 
@@ -147,6 +147,33 @@ namespace PCM.WEB.INTERFACE.Controllers
                                                 dataConclusaoOSTermino: dataConclusaoOSTermino,
                                                 status: status ?? string.Empty,
                                                 page: page));
+
+        }
+
+        [HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("Rotina")]
+        public IActionResult Rotina(int page,
+                                    int? codigoUnidade = null,
+                                    string? dataInicio = null,
+                                    string? dataTermino = null)
+        {
+
+            InterfaceApi interfaceApi = new InterfaceApi(sCon: _config["ConnectionString"].ToString());
+
+            try
+            {
+
+                return Ok(interfaceApi.Rotina(codigoEmpresa: Convert.ToInt32(User.FindFirst("codigoEmpresa")?.Value),
+                                              codigoUnidade: codigoUnidade ?? -1,
+                                              dataInicio: dataInicio,
+                                              dataTermino: dataTermino,
+                                              page: page));
+            } catch (Exception ex)
+            {
+                return Ok(ex.Message.ToString());
+            }
+
 
         }
 
