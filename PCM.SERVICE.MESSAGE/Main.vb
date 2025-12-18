@@ -48,11 +48,11 @@ Public Class Main
 
         While True
 
-            Try
-                Call SendMessageFirebase()
-            Catch ex As Exception
-                WriteLog("SendMessageFirebase:" & ex.Message)
-            End Try
+            'Try
+            '    Call SendMessageFirebase()
+            'Catch ex As Exception
+            '    WriteLog("SendMessageFirebase:" & ex.Message)
+            'End Try
 
             Try
                 Call PWASendMessageFirebase()

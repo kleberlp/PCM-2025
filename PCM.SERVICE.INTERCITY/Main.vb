@@ -123,7 +123,16 @@ Public Class Main
                     WriteLog("wish: " & ex.Message.ToString())
                 End Try
 
-                Thread.Sleep(_Minute)
+                If Now.Hour >= 20 Or Now.Hour <= 6 Then
+
+                    Thread.Sleep(_Minute * 15)
+
+                Else
+
+                    Thread.Sleep(_Minute)
+
+                End If
+
 
             End While
 

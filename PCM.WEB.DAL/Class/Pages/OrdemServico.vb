@@ -1290,6 +1290,7 @@ Public Class OrdemServico
                 oInfo.horas = oSqlDataReader.Item("horas")
                 oInfo.imagem_ordem_servico = oSqlDataReader.Item("imagem_ordem_servico")
                 oInfo.imagem_apontamento = oSqlDataReader.Item("imagem_apontamento")
+                oInfo.usuario = SafeGetString(oSqlDataReader, "usuario")
                 oInfo.fotos = oPicture.PictureList(iCodigoEmpresa:=iCodigoEmpresa,
                                                    iCodigoUnidade:=iCodigoUnidade,
                                                    lCodigo:=oSqlDataReader.Item("codigo_ordem_servico"),

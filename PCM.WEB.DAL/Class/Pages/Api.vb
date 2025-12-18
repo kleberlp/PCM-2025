@@ -2526,14 +2526,14 @@ Public Class Api
             oSqlParameter(i) = New SqlParameter
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).ParameterName = "data_inicio"
-            oSqlParameter(i).SqlDbType = SqlDbType.Date
+            oSqlParameter(i).SqlDbType = SqlDbType.DateTime
             oSqlParameter(i).Value = oPMOCApontamento.dataInicio : i += 1
 
             'Seta Parametros - Data Término
             oSqlParameter(i) = New SqlParameter
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).ParameterName = "data_termino"
-            oSqlParameter(i).SqlDbType = SqlDbType.Date
+            oSqlParameter(i).SqlDbType = SqlDbType.DateTime
             oSqlParameter(i).Value = oPMOCApontamento.dataTermino : i += 1
 
             'Seta Parametros - Observação
@@ -4642,12 +4642,24 @@ Public Class Api
                 oInfo.status = oStatus
 
                 oInfo.checklist = New pwaChecklist
-                oInfo.checklist = getCheckList(iCodigoEmpresa:=iCodigoEmpresa,
+
+                'If iCodigoEmpresa = 905 Then
+                oInfo.checklist = getCheckListFull(iCodigoEmpresa:=iCodigoEmpresa,
                                                    iCodigoUnidade:=iCodigoUnidade,
                                                    lCodigoChecklist:=oSqlDataReader.Item("codigo_checklist"),
                                                    sTipo:="AUDITORIA_CORPORATIVO",
                                                    lCodigoDocumento:=-1,
                                                    iIntervalo:=-1)
+
+                'Else
+                '    oInfo.checklist = getCheckList(iCodigoEmpresa:=iCodigoEmpresa,
+                '                                   iCodigoUnidade:=iCodigoUnidade,
+                '                                   lCodigoChecklist:=oSqlDataReader.Item("codigo_checklist"),
+                '                                   sTipo:="AUDITORIA_CORPORATIVO",
+                '                                   lCodigoDocumento:=-1,
+                '                                   iIntervalo:=-1)
+
+                'End If
 
                 oReturn.Add(oInfo)
 
@@ -4778,6 +4790,182 @@ Public Class Api
 #End Region
 
 #Region "::: PCM - CHECKLIST :::"
+
+    Public Function getCheckListFull(ByVal iCodigoEmpresa As Integer,
+                                     ByVal iCodigoUnidade As Integer,
+                                     ByVal lCodigoChecklist As Long,
+                                     ByVal sTipo As String,
+                                     ByVal lCodigoDocumento As Long,
+                                     ByVal iIntervalo As Integer,
+                                     Optional ByVal lCodigoEquipamento As Long = -1) As pwaChecklist
+
+        Dim oSqlParameter(6) As SqlParameter
+        Dim oReader As SqlDataReader = Nothing
+        Dim i As Integer = 0
+
+        Dim oReturn As New pwaChecklist With {
+        .codigoEmpresa = iCodigoEmpresa,
+        .codigoUnidade = iCodigoUnidade,
+        .codigoChecklist = lCodigoChecklist,
+        .grupo = New List(Of pwaChecklistGrupo)()
+    }
+
+        ' Dicionários para montagem rápida (sem loops chamando o banco)
+        Dim gruposMap As New Dictionary(Of String, pwaChecklistGrupo)(StringComparer.OrdinalIgnoreCase)
+        Dim subgruposMap As New Dictionary(Of String, pwaChecklistSubGrupo)(StringComparer.OrdinalIgnoreCase)
+        Dim arquivosPorItem As New Dictionary(Of Integer, List(Of pwaImagem))()
+
+        Try
+            ' Parametros
+            oSqlParameter(i) = New SqlParameter("codigo_empresa", SqlDbType.SmallInt) With {.Value = iCodigoEmpresa} : i += 1
+            oSqlParameter(i) = New SqlParameter("codigo_unidade", SqlDbType.Int) With {.Value = iCodigoUnidade} : i += 1
+            oSqlParameter(i) = New SqlParameter("codigo_checklist", SqlDbType.BigInt) With {.Value = lCodigoChecklist} : i += 1
+            oSqlParameter(i) = New SqlParameter("tipo", SqlDbType.VarChar, 50) With {.Value = sTipo} : i += 1
+            oSqlParameter(i) = New SqlParameter("codigo_documento", SqlDbType.BigInt) With {.Value = lCodigoDocumento} : i += 1
+            oSqlParameter(i) = New SqlParameter("intervalo", SqlDbType.SmallInt) With {.Value = iIntervalo} : i += 1
+            oSqlParameter(i) = New SqlParameter("codigo_equipamento", SqlDbType.BigInt) With {.Value = lCodigoEquipamento}
+
+            ' 1 ida ao banco, 4 resultsets
+            oReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_pwa_select_pcm_checklist_full", oSqlParameter)
+
+            ' ==========================================================
+            ' RESULTSET 1: GRUPOS
+            ' colunas esperadas:
+            ' descricao, possui_subgrupo, totalOk, total, status, codigo_apartamento, codigo_tipo_governanca
+            ' ==========================================================
+            While oReader.Read()
+                Dim desc As String = If(Convert.IsDBNull(oReader("descricao")), "", Convert.ToString(oReader("descricao")))
+
+                Dim g As New pwaChecklistGrupo With {
+                .descricao = desc,
+                .total = If(Convert.IsDBNull(oReader("total")), 0, Convert.ToInt32(oReader("total"))),
+                .totalOk = If(Convert.IsDBNull(oReader("totalOk")), 0, Convert.ToInt32(oReader("totalOk"))),
+                .subgrupo = New List(Of pwaChecklistSubGrupo)(),
+                .checklist = New List(Of pwaChecklistItem)()
+            }
+
+                oReturn.grupo.Add(g)
+                If Not gruposMap.ContainsKey(desc) Then gruposMap.Add(desc, g)
+            End While
+
+            ' Vai para o próximo resultset
+            If Not oReader.NextResult() Then Return oReturn
+
+            ' ==========================================================
+            ' RESULTSET 2: SUBGRUPOS
+            ' colunas esperadas:
+            ' grupo, subgrupo, totalOk, total
+            ' ==========================================================
+            While oReader.Read()
+                Dim grupoDesc As String = If(Convert.IsDBNull(oReader("grupo")), "", Convert.ToString(oReader("grupo")))
+                Dim subDesc As String = If(Convert.IsDBNull(oReader("subgrupo")), "", Convert.ToString(oReader("subgrupo")))
+
+                Dim s As New pwaChecklistSubGrupo With {
+                .descricao = subDesc,
+                .total = If(Convert.IsDBNull(oReader("total")), 0, Convert.ToInt32(oReader("total"))),
+                .totalOk = If(Convert.IsDBNull(oReader("totalOk")), 0, Convert.ToInt32(oReader("totalOk"))),
+                .checklist = New List(Of pwaChecklistItem)()
+            }
+
+                ' Adiciona no grupo pai
+                If gruposMap.ContainsKey(grupoDesc) Then
+                    gruposMap(grupoDesc).subgrupo.Add(s)
+                End If
+
+                ' Chave única do subgrupo (grupo|subgrupo) para localizar depois
+                Dim key As String = $"{grupoDesc}||{subDesc}"
+                If Not subgruposMap.ContainsKey(key) Then subgruposMap.Add(key, s)
+            End While
+
+            If Not oReader.NextResult() Then Return oReturn
+
+            ' ==========================================================
+            ' RESULTSET 3: ITENS
+            ' colunas esperadas:
+            ' grupo, subgrupo, codigo_tipo_checklist, codigo, checklist, descricao, numero_digitos,
+            ' allow_picture, uom, resultado, observacao, ordem_servico, prazo, color
+            ' ==========================================================
+            While oReader.Read()
+                Dim grupoDesc As String = If(Convert.IsDBNull(oReader("grupo")), "", Convert.ToString(oReader("grupo")))
+                Dim subDesc As String = If(Convert.IsDBNull(oReader("subgrupo")), "", Convert.ToString(oReader("subgrupo")))
+
+                Dim codigoItem As Integer = If(Convert.IsDBNull(oReader("codigo")), 0, Convert.ToInt32(oReader("codigo")))
+
+                Dim item As New pwaChecklistItem With {
+                .codigoTipoChecklist = If(Convert.IsDBNull(oReader("codigo_tipo_checklist")), 0, Convert.ToInt32(oReader("codigo_tipo_checklist"))),
+                .codigo = codigoItem,
+                .checklist = If(Convert.IsDBNull(oReader("checklist")), "", Convert.ToString(oReader("checklist"))),
+                .descricao = If(Convert.IsDBNull(oReader("descricao")), "", Convert.ToString(oReader("descricao"))),
+                .numeroDigitos = If(Convert.IsDBNull(oReader("numero_digitos")), 0, Convert.ToInt32(oReader("numero_digitos"))),
+                .allowPicture = If(Convert.IsDBNull(oReader("allow_picture")), 0, Convert.ToInt32(oReader("allow_picture"))),
+                .uom = If(Convert.IsDBNull(oReader("uom")), "", Convert.ToString(oReader("uom"))),
+                .resultado = If(Convert.IsDBNull(oReader("resultado")), "", Convert.ToString(oReader("resultado"))),
+                .observacao = If(Convert.IsDBNull(oReader("observacao")), "", Convert.ToString(oReader("observacao"))),
+                .ordemServico = If(Convert.IsDBNull(oReader("ordem_servico")), False, Convert.ToBoolean(oReader("ordem_servico"))),
+                .prazo = If(oReader.GetOrdinal("prazo") >= 0 AndAlso Not Convert.IsDBNull(oReader("prazo")), Convert.ToString(oReader("prazo")), ""),
+                .color = If(Convert.IsDBNull(oReader("color")), "#000000", Convert.ToString(oReader("color"))),
+                .arquivo = New List(Of pwaImagem)()
+            }
+
+                ' Alocar item no lugar certo:
+                ' - se tem subgrupo (subDesc <> ""), vai para subgrupo.checklist
+                ' - senão, vai para grupo.checklist
+                If Not String.IsNullOrWhiteSpace(subDesc) Then
+                    Dim key As String = $"{grupoDesc}||{subDesc}"
+                    If subgruposMap.ContainsKey(key) Then
+                        subgruposMap(key).checklist.Add(item)
+                    ElseIf gruposMap.ContainsKey(grupoDesc) Then
+                        ' fallback
+                        gruposMap(grupoDesc).checklist.Add(item)
+                    End If
+                Else
+                    If gruposMap.ContainsKey(grupoDesc) Then
+                        gruposMap(grupoDesc).checklist.Add(item)
+                    End If
+                End If
+
+                ' (opcional) já cria “slot” do dicionário de arquivos pra anexar depois sem if
+                If Not arquivosPorItem.ContainsKey(codigoItem) Then
+                    arquivosPorItem.Add(codigoItem, item.arquivo)
+                End If
+            End While
+
+            If Not oReader.NextResult() Then Return oReturn
+
+            ' ==========================================================
+            ' RESULTSET 4: ARQUIVOS
+            ' colunas esperadas:
+            ' codigo_item, url, extensao
+            ' ==========================================================
+            While oReader.Read()
+                Dim codigoItem As Integer = If(Convert.IsDBNull(oReader("codigo_item")), 0, Convert.ToInt32(oReader("codigo_item")))
+                If codigoItem <= 0 Then Continue While
+
+                Dim img As New pwaImagem With {
+                .url = If(Convert.IsDBNull(oReader("url")), "", Convert.ToString(oReader("url"))),
+                .extensao = If(Convert.IsDBNull(oReader("extensao")), "", Convert.ToString(oReader("extensao")))
+            }
+
+                If arquivosPorItem.ContainsKey(codigoItem) Then
+                    arquivosPorItem(codigoItem).Add(img)
+                End If
+            End While
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw
+        Catch ex As Exception
+            Throw
+        Finally
+            If oReader IsNot Nothing AndAlso Not oReader.IsClosed Then
+                oReader.Close()
+            End If
+            oReader = Nothing
+        End Try
+
+    End Function
+
 
     Public Function getCheckList(ByVal iCodigoEmpresa As Integer,
                                  ByVal iCodigoUnidade As Integer,

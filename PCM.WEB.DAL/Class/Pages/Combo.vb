@@ -3216,7 +3216,7 @@ Public Class Combo
 
     End Function
 
-    Public Function TipoChecklist(ByVal iCodigoEmpresa As Integer,
+    Public Function TipoChecklist2(ByVal iCodigoEmpresa As Integer,
                                   ByVal iCodigoUnidade As Integer) As List(Of ListCombo)
 
         'Váriaveis Locais
@@ -3269,12 +3269,13 @@ Public Class Combo
 
     End Function
 
-    Public Function TipoChecklist(ByVal iCodigoEmpresa As Integer) As List(Of ListCombo)
+    Public Function TipoChecklist(ByVal iCodigoEmpresa As Integer,
+                                  ByVal iCodigoUsuario As Integer) As List(Of ListCombo)
 
         'Váriaveis Locais
         Dim oCombo As New List(Of ListCombo)
         Dim oSqlDataReader As SqlDataReader
-        Dim oSqlParameter(0) As SqlParameter
+        Dim oSqlParameter(1) As SqlParameter
         Dim i As Integer = 0
 
         Try
@@ -3284,7 +3285,14 @@ Public Class Combo
             oSqlParameter(i).ParameterName = "codigo_empresa"
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoEmpresa
+            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
+
+            'Seta Parametros - Código Usuário
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_usuario"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = iCodigoUsuario
 
             'Executa Query
             oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_combo_static_tipo_checklist", oSqlParameter)

@@ -2284,6 +2284,8 @@ namespace PCM.WEB.Controllers
                 ViewBag.data = DateTime.Now.ToString("dd/MM/yyyy");
                 ViewBag.codigoEmpresa = Session["empresa"].ToString();
 
+                ViewBag.tipo = new SelectList(oCombo.LoadCombo("sp_select_combo_static_tipo_movimentacao"), "codigo", "descricao", (unidade == -1) ? Session["codigo_unidade"].ToString() : unidade.ToString());
+
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                 bCadastro: true), "codigo", "descricao", (unidade == -1) ? Session["codigo_unidade"].ToString(): unidade.ToString());
@@ -2293,11 +2295,14 @@ namespace PCM.WEB.Controllers
         }
 
         [HttpPost]
-        public ActionResult ApontamentoLavanderia(int empresa, int unidade, string data, string enxovalJson, string peso = "0")
+        public ActionResult ApontamentoLavanderia(int empresa, int unidade, int tipo, string data, string enxovalJson, string peso = "0", string quantidadeHospede = "0", string ocupacaoQuartos = "0")
         {
             oGovernanca.ApontamentoLavanderia(codigoEmpresa: empresa,
                                               codigoUnidade: unidade,
+                                              tipo: tipo,
                                               data: data,
+                                              quantidadeHospede: quantidadeHospede,
+                                              ocupacaoQuartos: ocupacaoQuartos,
                                               peso: peso,
                                               enxoval: enxovalJson,
                                               codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()));
@@ -2306,20 +2311,24 @@ namespace PCM.WEB.Controllers
         }
 
         [HttpPost]
-        public JsonResult ApontamentoLavanderiaInfo(int empresa, int unidade, string data)
+        public JsonResult ApontamentoLavanderiaInfo(int empresa, int unidade, int tipo, string data)
         {
             return Json(oGovernanca.LoadLavanderiaInfo(codigoEmpresa: empresa,
                                                        codigoUnidade: unidade,
+                                                       tipo: tipo,
                                                        data: data));
         }
 
         [HttpPost]
-        public JsonResult LoadLavanderiaEnxoval(int codigoEmpresa, int codigoUnidade, string data)
+        public JsonResult LoadLavanderiaEnxoval(int codigoEmpresa, int codigoUnidade, int tipo, string data, string dataInicio, string dataTermino)
         {
 
             return Json(oGovernanca.LoadEnxoval(codigoEmpresa: codigoEmpresa,
                                                 codigoUnidade: codigoUnidade,
-                                                data: data));
+                                                tipo: tipo,
+                                                data: data,
+                                                dataInicio: dataInicio,
+                                                dataTermino: dataTermino));
 
         }
 

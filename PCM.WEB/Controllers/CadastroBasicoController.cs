@@ -203,7 +203,7 @@ namespace PCM.WEB.Controllers
         //JSON: /TIPO CHECKLIST/
         public JsonResult LoadTipoChecklist(int unidade)
         {
-            return Json(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), 
+            return Json(oCombo.TipoChecklist2(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), 
                                              iCodigoUnidade: unidade));
         }
 
@@ -1867,7 +1867,7 @@ namespace PCM.WEB.Controllers
                 ViewBag.editar = editar;
                 ViewBag.excluir = excluir;
                 ViewBag.codigo_unidade = Session["codigo_unidade"].ToString();
-                ViewBag.tipo_checklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
+                ViewBag.tipo_checklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", null);
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                 bCadastro: false), "codigo", "descricao", Convert.ToInt32(Session["codigo_unidade"].ToString()));
@@ -1876,7 +1876,8 @@ namespace PCM.WEB.Controllers
                                                             iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
                                                             iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
                                                             iCodigoTipoChecklist: -1,
-                                                            sDescricao: ""));
+                                                            sDescricao: "",
+                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())));
             }
         }
 
@@ -1911,7 +1912,7 @@ namespace PCM.WEB.Controllers
                 ViewBag.excluir = excluir;
                 ViewBag.descricao = descricao;
                 ViewBag.codigo_unidade = Session["codigo_unidade"].ToString();
-                ViewBag.tipo_checklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", tipo_checklist);
+                ViewBag.tipo_checklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", tipo_checklist);
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                 bCadastro: false), "codigo", "descricao", unidade);
@@ -1920,7 +1921,8 @@ namespace PCM.WEB.Controllers
                                                             iCodigoUnidade: unidade,
                                                             iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
                                                             iCodigoTipoChecklist: tipo_checklist,
-                                                            sDescricao: descricao));
+                                                            sDescricao: descricao,
+                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())));
             }
         }
 
@@ -1936,7 +1938,7 @@ namespace PCM.WEB.Controllers
                 ViewBag.unidade_input = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                         iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                         bCadastro: false), "codigo", "descricao", null);
-                ViewBag.tipo_checklist_input = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
+                ViewBag.tipo_checklist_input = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", null);
                 ViewBag.tipo_checklist_item_input = new SelectList(oCombo.TipoItemChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
                 ViewBag.periodicidade_input = new SelectList(oCombo.Periodicidade(bChecklist: false), "codigo", "descricao", null);
                 ViewBag.auditado_input = new SelectList(oCombo.SimNao(), "codigo", "descricao", null);
@@ -2042,7 +2044,7 @@ namespace PCM.WEB.Controllers
                 ViewBag.unidade_input = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                         iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                         bCadastro: false), "codigo", "descricao", checklistHeader.codigo_unidade);
-                ViewBag.tipo_checklist_input = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", checklistHeader.codigo_tipo_checklist);
+                ViewBag.tipo_checklist_input = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", checklistHeader.codigo_tipo_checklist);
                 ViewBag.tipo_checklist_item_input = new SelectList(oCombo.TipoItemChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
                 ViewBag.periodicidade_input = new SelectList(oCombo.Periodicidade(bChecklist: false), "codigo", "descricao", null);
                 ViewBag.departamento = new SelectList(oCombo.Departamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
@@ -3009,7 +3011,7 @@ namespace PCM.WEB.Controllers
         // POST: /EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EquipamentoEdit(int codigo_unidade, string descricao, int departamento, int setor, string fabricante, string endereco_fabricante, string contato_fabricante, string modelo, string numero_fabricacao, string ano_fabricacao, string caracteristicas, long codigo, HttpPostedFileBase arquivo, string change_arquivo, string descricao_operacao, string instrucao_utilizacao, string procedimento_emergencia, string treinamento_operador, string condicao_seguranca, string indicacao_conclusiva, string[] laudo, string tag = "", bool ativo = false, bool aeb = false, int apartamento = -1, int familia = -1)
+        public ActionResult EquipamentoEdit(int codigo_unidade, string descricao, int setor, string fabricante, string endereco_fabricante, string contato_fabricante, string modelo, string numero_fabricacao, string ano_fabricacao, string caracteristicas, long codigo, HttpPostedFileBase arquivo, string change_arquivo, string descricao_operacao, string instrucao_utilizacao, string procedimento_emergencia, string treinamento_operador, string condicao_seguranca, string indicacao_conclusiva, string[] laudo, string tag = "", bool ativo = false, bool aeb = false, int apartamento = -1, int familia = -1, int departamento = -1)
         {
             if (Session["empresa"] == null)
             {
@@ -6032,7 +6034,7 @@ namespace PCM.WEB.Controllers
 
         // POST: INSERT
         [HttpPost, ValidateInput(false)]
-        public ActionResult LaudoInsert(int unidade, int categoria, string setor, string descricao, string valor_previsto, int quantidade_equipamento, int periodicidade, int intervalo, int tipo_servico, int tipo_ordem_servico, int modulo, string email, int dias_alerta = 0, bool ativo = false, bool envia_email = false, bool exige_laudo = false)
+        public ActionResult LaudoInsert(int unidade, int categoria, string setor, string descricao, int periodicidade, int intervalo, int tipo_servico, int tipo_ordem_servico, int modulo, string emailLaudo, int dias_alerta = 0, bool ativo = false, bool envia_email = false, bool exige_laudo = false, string valor_previsto = "", int quantidade_equipamento = 0)
         {
             if (Session["empresa"] == null)
             {
@@ -6042,24 +6044,24 @@ namespace PCM.WEB.Controllers
             {
                 //Insere Registro no Banco de Dados
                 oCadastroBasico.InsertProgramada(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                    iCodigoUnidade: unidade,
-                                                    iCodigoModulo: modulo,
-                                                    iCodigoCategoria: categoria,
-                                                    iCodigoSetor: (setor == "") ? -1 : Convert.ToInt32(setor),
-                                                    sDescricao: descricao,
-                                                    dValorPrevisto: valor_previsto,
-                                                    iQuantidadeEquipamento: quantidade_equipamento,
-                                                    iCodigoPeriodicidade: periodicidade,
-                                                    iIntervalo: intervalo,
-                                                    iCodigoTipoServico: tipo_servico,
-                                                    iCodigoTipoOrdemServico: tipo_ordem_servico,
-                                                    bAtivo: ativo,
-                                                    bExigeLaudo: exige_laudo,                                                     
-                                                    bRotina: false,
-                                                    bEnviaEmail: envia_email,
-                                                    sEmail: email,
-                                                    iDiasAlerta: dias_alerta);
+                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                 iCodigoUnidade: unidade,
+                                                 iCodigoModulo: modulo,
+                                                 iCodigoCategoria: categoria,
+                                                 iCodigoSetor: (setor == "") ? -1 : Convert.ToInt32(setor),
+                                                 sDescricao: descricao,
+                                                 dValorPrevisto: valor_previsto,
+                                                 iQuantidadeEquipamento: quantidade_equipamento,
+                                                 iCodigoPeriodicidade: periodicidade,
+                                                 iIntervalo: intervalo,
+                                                 iCodigoTipoServico: tipo_servico,
+                                                 iCodigoTipoOrdemServico: tipo_ordem_servico,
+                                                 bAtivo: ativo,
+                                                 bExigeLaudo: exige_laudo,                                                     
+                                                 bRotina: false,
+                                                 bEnviaEmail: envia_email,
+                                                 sEmail: emailLaudo,
+                                                 iDiasAlerta: dias_alerta);
 
                 return RedirectToAction("LaudoInsert");
             }
@@ -6103,7 +6105,7 @@ namespace PCM.WEB.Controllers
 
         // POST: /EDIT
         [HttpPost, ValidateInput(false)]
-        public ActionResult LaudoEdit(int codigo_unidade, int categoria, string setor, string equipamento, string descricao, string valor_previsto, int quantidade_equipamento, int periodicidade, int intervalo, int tipo_servico, long codigo, int unidade_old, int modulo, string email, int tipo_ordem_servico, long checklist = -1, int dias_alerta = 0, bool ativo = false, bool envia_email = false, bool exige_laudo = false)
+        public ActionResult LaudoEdit(int codigo_unidade, int categoria, string setor, string equipamento, string descricao, int periodicidade, int intervalo, int tipo_servico, long codigo, int unidade_old, int modulo, string emailLaudo, int tipo_ordem_servico, long checklist = -1, int dias_alerta = 0, bool ativo = false, bool envia_email = false, bool exige_laudo = false, string valor_previsto = "", int quantidade_equipamento = 0)
         {
             if (Session["empresa"] == null)
             {
@@ -6132,7 +6134,7 @@ namespace PCM.WEB.Controllers
                                                     lCodigo: codigo,
                                                     iCodigoUnidadeOld: unidade_old,
                                                     bEnviaEmail: envia_email,
-                                                    sEmail: email,
+                                                    sEmail: emailLaudo,
                                                     iDiasAlerta: dias_alerta);
 
             //Redireciona para Index

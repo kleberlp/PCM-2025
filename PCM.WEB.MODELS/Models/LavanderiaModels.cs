@@ -81,6 +81,8 @@ namespace PCM.WEB.MODELS
     {
         public string peso { get; set; } = "0";
         public bool impresso { get; set; } = false;
+        public int quantidadeHospede { get; set; } = 0;
+        public int ocupacaoQuartos { get; set; } = 0;
     }
 
     public class LavanderiaFuncionario

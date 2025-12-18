@@ -159,6 +159,7 @@ namespace PCM.WEB.MODELS
         public string horas { get; set; }
         public string imagem_ordem_servico { get; set; }
         public string imagem_apontamento { get; set; }
+        public string usuario { get; set; }
         public List<PictureModels> fotos { get; set; }
     }
 

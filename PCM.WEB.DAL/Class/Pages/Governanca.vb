@@ -3447,6 +3447,9 @@ Public Class Governanca
 
     Public Sub ApontamentoLavanderia(ByVal codigoEmpresa As Integer,
                                      ByVal codigoUnidade As Integer,
+                                     ByVal tipo As Integer,
+                                     ByVal quantidadeHospede As String,
+                                     ByVal ocupacaoQuartos As String,
                                      ByVal data As String,
                                      ByVal peso As String,
                                      ByVal enxoval As String,
@@ -3458,6 +3461,9 @@ Public Class Governanca
             Dim oSqlParameter As SqlParameter() = {
                 CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("tipo", SqlDbType.Int, tipo),
+                CriarParametro("quantidade_hospede", SqlDbType.Int, IIf(IsNumeric(quantidadeHospede), quantidadeHospede, DBNull.Value)),
+                CriarParametro("ocupacao_quartos", SqlDbType.Int, IIf(IsNumeric(ocupacaoQuartos), ocupacaoQuartos, DBNull.Value)),
                 CriarParametro("data", SqlDbType.Date, data),
                 CriarParametro("peso", SqlDbType.VarChar, peso.Replace(".", "").Replace(",", ".")),
                 CriarParametro("enxoval", SqlDbType.VarChar, enxoval),
@@ -3476,7 +3482,10 @@ Public Class Governanca
 
     Public Function LoadEnxoval(ByVal codigoEmpresa As Integer,
                                 ByVal codigoUnidade As Integer,
-                                ByVal data As String) As List(Of LavanderiaEnxoval)
+                                ByVal tipo As Integer,
+                                ByVal data As String,
+                                ByVal dataInicio As String,
+                                ByVal dataTermino As String) As List(Of LavanderiaEnxoval)
 
         Try
 
@@ -3486,7 +3495,10 @@ Public Class Governanca
             Dim oSqlParameter As SqlParameter() = {
                 CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
-                CriarParametro("data", SqlDbType.Date, data)
+                CriarParametro("tipo", SqlDbType.SmallInt, tipo),
+                CriarParametro("data", SqlDbType.Date, data),
+                CriarParametro("data_inicio", SqlDbType.Date, IIf(IsDate(dataInicio), dataInicio, DBNull.Value)),
+                CriarParametro("data_termino", SqlDbType.Date, IIf(IsDate(dataTermino), dataTermino, DBNull.Value))
             }
 
             Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_lavanderia_enxoval", oSqlParameter)
@@ -3517,6 +3529,7 @@ Public Class Governanca
 
     Public Function LoadLavanderiaInfo(ByVal codigoEmpresa As Integer,
                                        ByVal codigoUnidade As Integer,
+                                       ByVal tipo As Integer,
                                        ByVal data As String) As LavanderiaEnxovalInfo
 
         Try
@@ -3526,6 +3539,7 @@ Public Class Governanca
             Dim oSqlParameter As SqlParameter() = {
                 CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("tipo", SqlDbType.Int, tipo),
                 CriarParametro("data", SqlDbType.Date, data)
             }
 
@@ -3535,6 +3549,9 @@ Public Class Governanca
 
                     oReturn.peso = SafeGetString(oSqlDataReader, "peso").Replace(".", ",")
                     oReturn.impresso = SafeGetBoolean(oSqlDataReader, "impresso")
+                    oReturn.quantidadeHospede = SafeGetLong(oSqlDataReader, "quantidade_hospede")
+                    oReturn.ocupacaoQuartos = SafeGetLong(oSqlDataReader, "ocupacao_quartos")
+                    oReturn.impresso = SafeGetLong(oSqlDataReader, "impresso")
 
                 End While
 

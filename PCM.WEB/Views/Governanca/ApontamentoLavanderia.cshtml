@@ -27,6 +27,7 @@
                 <div class="block-header block-header-default bg-gd-primary">
                     <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento</h3>
                     <div class="block-options">
+                        <button type="button" id="btnData" name="btnData" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-calendar mr-5"></i>@PCM.WEB.Properties.Resources.periodo</button>
                         <button type="button" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
                         <button type="button" id="btnPrint" name="btnPrint" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-print mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
                     </div>
@@ -37,6 +38,10 @@
                             <label>@PCM.WEB.Properties.Resources.unidade</label>
                             <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
                         </div>
+                        <div class="col-md-4">
+                            <label>@PCM.WEB.Properties.Resources.tipo</label>
+                            <div>@Html.DropDownList("tipo", null, "", new { @class = "form-control" })</div>
+                        </div>
                         <div class="col-md-2">
                             <label>@PCM.WEB.Properties.Resources.data</label>
                             <div><input type="datetime" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data" autocomplete="off"></div>
@@ -46,7 +51,16 @@
                             <div><input type="text" class="form-control" id="peso" name="peso" value="" maxlength="20"></div>
                         </div>
                     </div>
-
+                    <div class="form-group row" id="divHospede" name="divHospede">
+                        <div class="col-2">
+                            <label>@PCM.WEB.Properties.Resources.quantidade_hospede</label>
+                            <div><input type="text" class="form-control" id="quantidade_hospede" name="quantidade_hospede" maxlength="5" value=""></div>
+                        </div>
+                        <div class="col-2">
+                            <label>@PCM.WEB.Properties.Resources.ocupacao_quartos</label>
+                            <div><input type="text" class="form-control" id="ocupacao_quartos" name="ocupacao_quartos" maxlength="5" value=""></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="block block-rounded border">
@@ -70,6 +84,39 @@
         }
     </div>
     <!-- END Basic Info -->
+
+    <!-- From Right Modal -->
+    <div class="modal fade modal-lg" id="modalPeriodo" tabindex="-1" role="dialog" aria-labelledby="modalPeriodo" aria-hidden="true">
+        @using (Html.BeginForm("OrdemServicoIndex", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "form_funcionario", @id = "form_funcionario", enctype = "multipart/form-data" }))
+        {
+            <div class="modal-dialog modal-dialog-fromright" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-15">
+                        <div class="block-header bg-gd-primary">
+                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.periodo</h3>
+                        </div>
+                        <div class="block-content">
+                            <label>@PCM.WEB.Properties.Resources.periodo</label>
+                            <div class="form-group">
+                                <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                    <input type="text" class="form-control" id="data_inicio_execucao" name="data_inicio_execucao" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="">
+                                    <div class="input-group-prepend input-group-append">
+                                        <span class="input-group-text font-w600">-</span>
+                                    </div>
+                                    <input type="text" class="form-control" id="data_termino_execucao" name="data_termino_execucao" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnConfirmar" id="btnConfirmar"><i class="fa fa-check mr-5"></i>Carregar dados</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
 </main>
 <!-- END Main Container -->
 
@@ -89,7 +136,7 @@
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
     $(document).ready(function () {
 
@@ -100,12 +147,49 @@
         Codebase.helpers(['table-tools', 'datepicker', 'maxlength', 'select2']);
         $("#data").mask("99/99/9999");
         $("#peso").maskMoney({ prefix: '', thousands: '.', decimal: ',', precision: 2, allowNegative: false, 'placeholder': '' });
+        $("#btnData").hide();
+        $("#divHospede").hide();
 
         $("#btnSave").on('click', function (e) {
             $("#form").submit();
         });
 
+        $("#btnData").click(function () {
+            $("#modalPeriodo").modal("show");
+        });
+
+        $("#btnConfirmar").click(function () {
+            tbEnxoval.ajax.reload(null, false);
+            $("#modalPeriodo").modal("hide"); 
+        });
+
         $("#unidade").change(function () {
+
+            $("#data_inicio_execucao").val("");
+            $("#data_termino_execucao").val("");
+            tbEnxoval.ajax.reload(null, false);
+            loadApontamentoInfo();
+
+        });
+
+        $("#tipo").change(function () {
+
+            $("#data_inicio_execucao").val("");
+            $("#data_termino_execucao").val("");
+            $("#quantidade_hospede").val("");
+            $("#ocupacao_quartos").val("");
+
+            if($("#tipo").val() == "1"){
+                $("#divHospede").show();
+            } else {
+                $("#divHospede").hide();
+            }
+
+            if ($("#tipo").val() == "2") {
+                $("#btnData").show();
+            } else {
+                $("#btnData").hide();
+            }
 
             tbEnxoval.ajax.reload(null, false);
             loadApontamentoInfo();
@@ -114,6 +198,8 @@
 
         $("#data").change(function () {
 
+            $("#data_inicio_execucao").val("");
+            $("#data_termino_execucao").val("");
             tbEnxoval.ajax.reload(null, false);
             loadApontamentoInfo();
 
@@ -139,7 +225,10 @@
                 data: function (d) {
                     d.codigoEmpresa = @ViewBag.codigoEmpresa,
                     d.codigoUnidade = ($("#unidade").val() == "") ? "-1" : $("#unidade").val(),
-                        d.data = ($("#data").val() == "") ? "" : $("#data").val()
+                    d.tipo = ($("#tipo").val() == "") ? "-1" : $("#tipo").val(),
+                    d.data = ($("#data").val() == "") ? "" : $("#data").val(),
+                    d.dataInicio = ($("#data_inicio_execucao").val() == "") ? "" : $("#data_inicio_execucao").val(),
+                    d.dataTermino = ($("#data_termino_execucao").val() == "") ? "" : $("#data_termino_execucao").val()
                 },
                 dataSrc: ""
             },
@@ -197,6 +286,9 @@
                 'unidade': {
                     required: true
                 },
+                'tipo': {
+                    required: true
+                },
                 'peso': {
                     required: true
                 },
@@ -206,6 +298,9 @@
             },
             messages: {
                 'unidade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'tipo': {
                     required: '@PCM.WEB.Properties.Resources.campo_requerido'
                 },
                 'peso': {
@@ -242,11 +337,14 @@
                 data: {
                     "empresa": $("#empresa").val(),
                     "unidade": ($("#unidade").val() == "") ? -1 : $("#unidade").val(),
+                    "tipo": ($("#tipo").val() == "") ? -1 : $("#tipo").val(),
                     "data": ($("#data").val() == "") ? "" : $("#data").val(),
                 },
                 dataType: "json",
                 success: function (returnData) {
-                    $("#peso").val(returnData.peso);
+                    $("#quantidade_hospede").val(returnData.quantidadeHospede);
+                    $("#ocupacao_quartos").val(returnData.ocupacaoQuartos);
+                    $("#peso").val(returnData.quantidadeFuncion);
                     $("#btnSave").prop("disabled", returnData.impresso);
                 }
             });
@@ -255,5 +353,5 @@
 
     });
 
-    </script>
+</script>
 }

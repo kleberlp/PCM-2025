@@ -1,4 +1,5 @@
-﻿using PCM.WEB.DAL;
+﻿using Microsoft.Ajax.Utilities;
+using PCM.WEB.DAL;
 using PCM.WEB.MODELS;
 using PCM.WEBAPI.Class;
 using System;
@@ -1184,19 +1185,36 @@ namespace PCM.WEB.API.Controllers
         // GET api/PWA/getChecklist
         [HttpGet]
         [Route("api/PWA/getChecklist")]
-        public IHttpActionResult getChecklist(int codigoEmpresa, int codigoUnidade, long codigoChecklist, string tipo, long codigoDocumento, int intervalo = -1, long codigoEquipamento = -1)
+        public IHttpActionResult getChecklist(int codigoEmpresa, int codigoUnidade, long codigoChecklist, string tipo, long codigoDocumento, int intervalo = -1, long codigoEquipamento = -1, long codigoArCondicionado = -1)
         {
             pwaChecklist checklist = new pwaChecklist();
 
             try
             {
 
-                checklist = oAPI.getCheckList(iCodigoEmpresa: codigoEmpresa,
-                                              iCodigoUnidade: codigoUnidade,
-                                              lCodigoChecklist: codigoChecklist,
-                                              sTipo: tipo,
-                                              lCodigoDocumento: codigoDocumento,
-                                              iIntervalo: intervalo);
+                //if (codigoEmpresa == 905)
+                //{
+                checklist = oAPI.getCheckListFull(iCodigoEmpresa: codigoEmpresa,
+                                                      iCodigoUnidade: codigoUnidade,
+                                                      lCodigoChecklist: codigoChecklist,
+                                                      sTipo: tipo,
+                                                      lCodigoDocumento: codigoDocumento,
+                                                      iIntervalo: intervalo,
+                                                      lCodigoEquipamento: (codigoArCondicionado == -1)? codigoEquipamento: codigoArCondicionado);
+
+                //}
+                //else
+                //{
+                //    checklist = oAPI.getCheckList(iCodigoEmpresa: codigoEmpresa,
+                //                                  iCodigoUnidade: codigoUnidade,
+                //                                  lCodigoChecklist: codigoChecklist,
+                //                                  sTipo: tipo,
+                //                                  lCodigoDocumento: codigoDocumento,
+                //                                  iIntervalo: intervalo,
+                //                                  lCodigoEquipamento: (codigoArCondicionado == -1) ? codigoEquipamento : codigoArCondicionado);
+
+                //}
+
 
                 return Ok(checklist);
 

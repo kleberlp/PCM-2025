@@ -601,6 +601,7 @@
                     '<th class="text-center" style="width: 150px;">@Html.Raw(PCM.WEB.Properties.Resources.data_inicio)</th>' +
                     '<th class="text-center" style = "width: 150px;">@Html.Raw(PCM.WEB.Properties.Resources.data_termino)</th>' +
                     '<th class="text-center" style="width: 100px;">@Html.Raw(PCM.WEB.Properties.Resources.tempo_gasto)</th>' +
+                    '<th>Apontado por</th>' +
                     '<th class="text-center" style="width: 300px;">Imagem</th>' +
                     '</tr>' +
                     '</thead> ' +
@@ -618,6 +619,7 @@
                     table_info += '<td class="text-center">' + response[i].data_inicio + '</td>';
                     table_info += '<td class="text-center">' + response[i].data_termino + '</td>';
                     table_info += '<td class="text-center">' + response[i].horas + '</td>';
+                    table_info += '<td>' + response[i].usuario + '</td>';
                     table_info += '<td class="text-center">';
                     if (response[i].fotos.Count > 0)
                     {

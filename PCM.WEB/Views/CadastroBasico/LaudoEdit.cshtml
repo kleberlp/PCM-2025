@@ -1,4 +1,4 @@
-﻿@model PCM.WEB.MODELS.Programada 
+﻿@model PCM.WEB.MODELS.Programada
 
 <!-- Main Container -->
 <main id="main-container">
@@ -29,6 +29,7 @@
                     @Html.HiddenFor(model => model.codigo_unidade)
                     <input type="hidden" name="unidade_old" id="unidade_old" value="@Model.codigo_unidade">
                     <input type="hidden" id="tipo_ordem_servico" name="tipo_ordem_servico" value="6" />
+                    <input type="hidden" id="emailLaudo" name="emailLaudo" value="@Model.email" />
 
                     <div class="block block-rounded border">
                         <div class="block-header block-header-default bg-gd-default">
@@ -86,9 +87,25 @@
                                     <label>@PCM.WEB.Properties.Resources.intervalo</label>
                                     <div>@Html.TextBoxFor(model => model.intervalo, new { @class = "form-control", @maxlength = "3" })</div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.tipo_servico</label>
                                     <div>@Html.DropDownList("tipo_servico", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.ativo</label>
+                                    <div>
+                                        <label class="css-control css-control-success css-switch">
+                                            @if (@Model.ativo)
+                                            {
+                                                <input type="checkbox" class="css-control-input" id="ativo" name="ativo" value="true" checked>
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" class="css-control-input" id="ativo" name="ativo" value="true">
+                                            }
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -109,35 +126,53 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-2" id="div_dias_alerta" style="display:none">
-                                    <label>@PCM.WEB.Properties.Resources.dias_alerta</label>
-                                    <div>@Html.TextBoxFor(model => model.dias_alerta, new { @class = "form-control", @maxlength = "3" })</div>
-                                </div>
-                                <div class="col-md-8" id="div_email" style="display:none">
-                                    <label>@PCM.WEB.Properties.Resources.lista_email</label>
-                                    <div>@Html.TextAreaFor(model => model.email, new { @class = "form-control", @maxlength = "2000", @rows = "6" })</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    <label>@PCM.WEB.Properties.Resources.ativo</label>
-                                    <div>
-                                        <label class="css-control css-control-success css-switch">
-                                            @if (@Model.ativo)
-                                            {
-                                                <input type="checkbox" class="css-control-input" id="ativo" name="ativo" value="true" checked>
-                                            }
-                                            else
-                                            {
-                                                <input type="checkbox" class="css-control-input" id="ativo" name="ativo" value="true">
-                                            }
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </div>
+                                <div class="col-md-2" id="div_dias_alerta">
+                                    <label>Receber alerta com quantos dias</label>
+                                    <div><input type="text" class="form-control" id="dias_alerta" name="dias_alerta" value=""></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                }
+
+                @using (Html.BeginForm("LaudoUpdate", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "formEmail", id = "formEmail" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="block block-rounded border mt-10" id="div_email">
+                        <div class="block block-rounded" id="registros" style="display:block">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.email</h3>
+                            </div>
+                            <div class="block-content block-content-full">
+                                <div class="form-group row">
+                                    <div class="col-md-8">
+                                        <label>@PCM.WEB.Properties.Resources.email</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" style="text-transform: lowercase;" id="email" name="email" autocomplete="off" placeholder="" value="">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" id="btnEmail" name="btnEmail"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table table-bordered table-sm table-striped table-vcenter" id="table" name="table">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>@PCM.WEB.Properties.Resources.email</th>
+                                        <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_linha" name="table_linha">
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
                     </div>
                 }
             </div>
@@ -153,9 +188,11 @@
 @section Styles {
     @Styles.Render("~/Content/datepicker")
     @Styles.Render("~/Content/select")
+    @Styles.Render("~/Content/dataTables")
 }
 
 @section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
     @Scripts.Render("~/plugins/ckeditor")
     @Scripts.Render("~/plugins/validation")
     @Scripts.Render("~/plugins/maskedinput")
@@ -165,145 +202,261 @@
 
 <script>
 
-    $(document).ready(function () {
+    var jsonData = [];
+    var jsonDataDelete = [];
+    var table;
+    var change_equipamento = false;
+    const basePath = window.location.pathname.split("/").slice(0, 3).join("/");
+
+    jQuery(function () {
+
+        Codebase.helpers(['datepicker', 'maxlength', 'select2', 'ckeditor']);
+
         $("#valor_previsto").maskMoney({ decimal: ",", thousands: "." });
         $("#quantidade_equipamento").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' });
         $("#intervalo").maskMoney({ thousands: ".", precision: 0, allowNegative: false });
-    });
 
-    var change_equipamento = false;
 
-    function verificaEnviaEmail() {
-        if (document.getElementById("envia_email").checked == true) {
-            $("#div_email").show();
-            $("#div_dias_alerta").show();
-        } else {
-            $("#div_email").hide();
-            $("#div_dias_alerta").hide();
-        }
-    }
+        // Reload DataTable
+        $('#btnEmail').click(function () {
+            $("#formEmail").submit();
+        });
 
-    jQuery.validator.addMethod("send_email", function (value, element) {
+        // Reload DataTable
+        $('#btnSave').click(function () {
+            $("#form").submit();
+        });
 
-        if (document.getElementById("envia_email").checked == false)
-            return true;
-        else if (value != "")
-            return true;
-        else
-            return false;
+        table = $('#table').DataTable({
+            fixedColumns: {
+                start: 0,
+                end: 1
+            },
+            autoWidth: false,          // <- IMPORTANTE
+            lengthChange: false,
+            pageLength: 15,
+            processing: true,
+            scrollX: true,
+            scrollCollapse: true,
+            serverSide: false,
+            data: jsonData,
+            searching: false,
+            columns: [
+                { data: "email" },
+                {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<div class='btn-group'> " +
+                        "<button type='button' class='btn btn-sm btn-secondary' title='Clique para excluir o registro' id='btnDelete' name='btnDelete'><i class='fa fa-times'></i></button>" +
+                        "</div> "
+                }
+            ],
+            language: {
+                emptyTable: "Nenhum registro encontrado",
+                info: "",
+                infoEmpty: "",
+                infoFiltered: "",
+            },
+            order: [[1, 'asc']],
+            columnDefs: [
+                { className: 'text-center', targets: [1] },
+                { width: '40px', targets: [1] }
+            ]
+        });
 
-    }, "");
+        $('#formEmail').validate({
+            ignore: [],
+            errorClass: 'invalid-feedback animated fadeInDown',
+            errorElement: 'div',
+            onkeyup: false,
+            onclick: false,
+            onfocusout: false,
+            errorPlacement: function (error, e) {
+                jQuery(e).parents('.form-group > div').append(error);
+            },
+            highlight: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+            },
+            success: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                jQuery(e).remove();
+            },
+            rules: {
+                'email': {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                'email': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido',
+                    email: '@PCM.WEB.Properties.Resources.valida_email'
+                }
+            },
+            submitHandler: function (form) {
 
-    var FormValidation = function () {
-        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
-        var initValidationBootstrap = function () {
-            jQuery('.js-validation-bootstrap').validate({
-                ignore: [],
-                errorClass: 'invalid-feedback animated fadeInDown',
-                errorElement: 'div',
-                errorPlacement: function (error, e) {
-                    jQuery(e).parents('.form-group > div').append(error);
-                },
-                highlight: function (e) {
-                    jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
-                },
-                success: function (e) {
-                    jQuery(e).closest('.form-group > div').removeClass('is-invalid');
-                    jQuery(e).remove();
-                },
-                rules: {
-                    'unidade': {
-                        required: true
-                    },
-                    'categoria': {
-                        required: true
-                    },
-                    'modulo': {
-                        required: true
-                    },
-                    'setor': {
-                        required: true
-                    },
-                    'descricao': {
-                        required: true
-                    },
-                    'valor_previsto': {
-                        required: true
-                    },
-                    'quantidade_equipamento': {
-                        required: true
-                    },
-                    'periodicidade': {
-                        required: true
-                    },
-                    'intervalo': {
-                        intervalo: true
-                    },
-                    'tipo_servico': {
-                        required: true
-                    },
-                    'dias_alerta': {
-                        send_email: true
-                    },
-                    'email': {
-                        send_email: true
-                    }
-                },
-                messages: {
-                    'unidade': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'categoria': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'modulo': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'setor': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'descricao': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'valor_previsto': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'quantidade_equipamento': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'periodicidade': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'intervalo': {
-                        intervalo: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'tipo_servico': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'dias_alerta': {
-                        send_email: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'email': {
-                        send_email: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    }
+                $("#btnEmail").prop('disabled', true);
+
+                var newRecord = {
+                    "email": document.querySelector("#email").value
+                };
+
+                jsonData.push(newRecord);
+
+                table.clear().rows.add(jsonData).draw();
+
+                $("#email").val("");
+                $("#email").focus();
+                $("#btnEmail").prop('disabled', false);
+            },
+            invalidHandler: function (e, validation) {
+                $("#btnEmail").prop('disabled', false);
+            }
+        });
+
+        $('#table tbody').on('click', 'button', function () {
+
+            var data = table.row($(this).closest('tr')).data();
+
+            if (this.id == "btnDelete") {
+                deleteRegister(data);
+            }
+
+        });
+
+        function deleteRegister(data) {
+
+            swal.fire({
+                title: "Gostaria de excluir o registro?",
+                text: "Esta operação não poderá ser desfeita",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                reverseButtons: true
+            }).then(function (result) {
+                if (result.value) {
+
+                    var jsonAux = [];
+
+                    jsonAux = jsonData.filter(function (item) {
+                        return item.email === data.email
+                    });
+
+                    jsonData = jsonData.filter(function (item) {
+                        return item.email !== data.email
+                    });
+
+                    jsonDataDelete = jsonDataDelete.concat(jsonAux);
+
+                    table.clear().rows.add(jsonData).draw();
                 }
             });
-        };
+        }
 
-        return {
-            init: function () {
-                // Init Bootstrap Forms Validation
-                initValidationBootstrap();
+        var jsonData = "@Model.email"
+            .split(";")                      // quebra pelos ";"
+            .map(e => e.trim())              // tira espaços
+            .filter(e => e !== "")           // remove vazios
+            .map(e => ({ email: e }));
+
+        table.clear().rows.add(jsonData).draw();
+
+        $('#form').validate({
+            ignore: [],
+            errorClass: 'invalid-feedback animated fadeInDown',
+            errorElement: 'div',
+            onkeyup: false,
+            onclick: false,
+            onfocusout: false,
+            errorPlacement: function (error, e) {
+                jQuery(e).parents('.form-group > div').append(error);
+            },
+            highlight: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+            },
+            success: function (e) {
+                jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+                jQuery(e).remove();
+            },
+            rules: {
+                'unidade': {
+                    required: true
+                },
+                'modulo': {
+                    required: true
+                },
+                'categoria': {
+                    required: true
+                },
+                'setor': {
+                    required: true
+                },
+                'descricao': {
+                    required: true
+                },
+                'valor_previsto': {
+                    required: false
+                },
+                'quantidade_equipamento': {
+                    required: false
+                },
+                'periodicidade': {
+                    required: true
+                },
+                'intervalo': {
+                    required: true
+                },
+                'tipo_servico': {
+                    required: true
+                }
+            },
+            messages: {
+                'unidade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'modulo': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'categoria': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'setor': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'descricao': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'valor_previsto': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'quantidade_equipamento': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'periodicidade': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'intervalo': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'tipo_servico': {
+                    required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                }
+            },
+            submitHandler: function (form) {
+
+                var emailList = jsonData.map(x => x.email).join(";");
+                $("#emailLaudo").val(emailList);
+
+                return true;
+            },
+            invalidHandler: function (e, validation) {
+                $("#btnSave").prop('disabled', false);
             }
-        };
-    }();
+        });
 
-    // Initialize when page loads
-    jQuery(function () {
-        FormValidation.init();
-        Codebase.helpers(['datepicker', 'maxlength', 'select2', 'ckeditor']);
-        verificaEnviaEmail();
     });
+
 
 </script>
 

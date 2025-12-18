@@ -3552,14 +3552,15 @@ Public Class CadastroBasico
                                    ByVal iCodigoUnidade As Integer,
                                    ByVal iCodigoModulo As Integer,
                                    ByVal iCodigoTipoChecklist As Integer,
-                                   ByVal sDescricao As String) As List(Of ChecklistHeader)
+                                   ByVal sDescricao As String,
+                                   ByVal iCodigoUsuario As Integer) As List(Of ChecklistHeader)
 
         Try
 
             'Váriaveis Locais
             Dim oReturn As New List(Of ChecklistHeader)
             Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(4) As SqlParameter
+            Dim oSqlParameter(5) As SqlParameter
             Dim i As Integer = 0
 
             'Seta Parametros - Código Unidade
@@ -3596,7 +3597,14 @@ Public Class CadastroBasico
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.VarChar
             oSqlParameter(i).Size = 100
-            oSqlParameter(i).Value = sDescricao
+            oSqlParameter(i).Value = sDescricao : i += 1
+
+            'Seta Parametros - Código Usuário
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_usuario"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = iCodigoUsuario
 
             'Executa Query
             oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist", oSqlParameter)
@@ -5521,7 +5529,7 @@ Public Class CadastroBasico
             oSqlParameter(i).ParameterName = "codigo_departamento"
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoDepartamento : i += 1
+            oSqlParameter(i).Value = IIf(iCodigoDepartamento = -1, DBNull.Value, iCodigoDepartamento) : i += 1
 
             'Seta Parametros - Código
             oSqlParameter(i) = New SqlParameter
