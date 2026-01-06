@@ -308,6 +308,8 @@ namespace PCM.WEB.Controllers
                     Session["gov_status_uh"] = formulario_visualizar.gov_status_uh;
                     Session["gov_lavanderia"] = formulario_visualizar.gov_lavanderia;
                     Session["gov_log_alteracao_status_gov"] = formulario_visualizar.gov_log_alteracao_status_gov;
+                    Session["gov_inventario_enxoval"] = formulario_visualizar.gov_inventario_enxoval;
+                    Session["gov_movimentacao_enxoval"] = formulario_visualizar.gov_movimentacao_enxoval;
 
                     Session["log_book"] = formulario_visualizar.log_book;
                     Session["ordem_servico"] = formulario_visualizar.ordem_servico;

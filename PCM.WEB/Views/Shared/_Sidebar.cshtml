@@ -686,21 +686,23 @@
 
 
 
-                    @if ((bool)Session["gov_status_uh"] || 
-                        (bool)Session["gov_lavanderia"] || 
-                        (bool)Session["gov_apontamento"] || 
-                        (bool)Session["gov_dashboard"] || 
-                        (bool)Session["governanca"] || 
-                        (bool)Session["gov_funcionario"] || 
-                        (bool)Session["gov_log_alteracao_status_gov"] || 
-                        (bool)Session["gov_planejamento"] || 
-                        (bool)Session["gov_planejamento_historico"] || 
-                        (bool)Session["gov_historico"] || 
-                        (bool)Session["rel_consumo_enxoval"] || 
-                        (bool)Session["rel_horas_trabalhadas_governanca"] || 
-                        (bool)Session["rel_camareira_uh"] || 
-                        (bool)Session["rel_responsavel_vistoria_uh"] || 
-                        (bool)Session["rel_camareira_nc"])
+                    @if ((bool)Session["gov_status_uh"] ||
+                        (bool)Session["gov_lavanderia"] ||
+                        (bool)Session["gov_apontamento"] ||
+                        (bool)Session["gov_dashboard"] ||
+                        (bool)Session["governanca"] ||
+                        (bool)Session["gov_funcionario"] ||
+                        (bool)Session["gov_log_alteracao_status_gov"] ||
+                        (bool)Session["gov_planejamento"] ||
+                        (bool)Session["gov_planejamento_historico"] ||
+                        (bool)Session["gov_historico"] ||
+                        (bool)Session["rel_consumo_enxoval"] ||
+                        (bool)Session["rel_horas_trabalhadas_governanca"] ||
+                        (bool)Session["rel_camareira_uh"] ||
+                        (bool)Session["rel_responsavel_vistoria_uh"] ||
+                        (bool)Session["rel_camareira_nc"] ||
+                        (bool)Session["gov_inventario_enxoval"] ||
+                        (bool)Session["gov_movimentacao_enxoval"])
                     {
                         <li>
                             <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-hotel"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.governanca</span></a>
@@ -745,6 +747,18 @@
                                 {
                                     <li>
                                         <a class="@Html.IsSelected(action: "ApontamentoLavanderia", cssClass: "active") font-size-sm" href="@Url.Action("ApontamentoLavanderia", "Governanca")">@PCM.WEB.Properties.Resources.lavanderia</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_inventario_enxoval"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "InventarioEnxoval", cssClass: "active") font-size-sm" href="@Url.Action("InventarioEnxoval", "Governanca")">@PCM.WEB.Properties.Resources.inventarioEnxoval</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_movimentacao_enxoval"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "MovimentacaoEnxoval", cssClass: "active") font-size-sm" href="@Url.Action("MovimentacaoEnxoval", "Governanca")">@PCM.WEB.Properties.Resources.movimentacaoEnxoval</a>
                                     </li>
                                 }
                                 @if ((bool)Session["gov_historico"])

@@ -17,7 +17,7 @@ namespace PCM.WEB.API.Controllers
     public class PWAController : ApiController
     {
 
-        Api oAPI = new Api(ConfigurationManager.ConnectionStrings["DefaultConnectionAPI"].ConnectionString);
+        Api oAPI = new Api(sCon: ConfigurationManager.ConnectionStrings["DefaultConnectionAPI"].ConnectionString, sConIntercity: ConfigurationManager.ConnectionStrings["DefaultConnectionIntercity"].ConnectionString);
 
         Function oFunction = new Function();
 
@@ -831,13 +831,18 @@ namespace PCM.WEB.API.Controllers
                     // Aguardando a conclusão do método assíncrono
                     response = await oAPI.updateUHStatusPost(uhStatus: uh);
                 }
+                else if(uh.codigoEmpresa == 926)
+                {
+                    // Aguardando a conclusão do método assíncrono
+                    response = oAPI.updateUHStatusIntercity(uhStatus: uh);
+                } 
                 else
                 {
                     // Aguardando a conclusão do método assíncrono
                     response = await oAPI.updateUHStatus(uhStatus: uh);
                 }
 
-                return Ok(response);
+                    return Ok(response);
             }
             catch (Exception ex)
             {

@@ -1,0 +1,147 @@
+﻿@using PCM.WEB.Properties
+@using Newtonsoft.Json
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@Resources.sistema</a>
+                <span class="breadcrumb-item">@Resources.governanca </span>
+                <span class="breadcrumb-item active">@Resources.inventarioEnxoval</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+
+    <div class="content">
+
+        @using (Html.BeginForm("InventarioEnxoval", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Listagem -->
+            <div class="block block-rounded border">
+
+                <input type="hidden" name="empresa" id="empresa" value="@Session["empresa"]">
+                <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario">
+
+                <!-- Toggle Tasks Navigation on mobile -->
+                <button type="button" class="btn btn-block btn-square btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@Resources.filtros</button>
+
+                <div class="js-tasks-nav d-none d-md-block">
+                    <div>
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@Resources.inventarioEnxoval</h3>
+                            <div class="block-options">
+                                @if (ViewBag.inserir)
+                                {
+                                    <a href="@Url.Action("InventarioEnxovalNovo", "Governanca")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                        <i class="fa fa-save mr-5"></i>@Resources.novo
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <ul class="list-group push">
+                                <li class="list-group-item">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label>@Resources.unidade</label>
+                                            @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>@Resources.periodo</label>
+                                            <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
+                                                <div class="input-group-prepend input-group-append">
+                                                    <span class="input-group-text font-w600">-</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>@Resources.status</label>
+                                            @Html.DropDownList("status", null, "", new { @class = "js-select2 form-control" })
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item text-right">
+                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnSearch" id="btnSearch"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END Collapsible Tasks Navigation -->
+
+            <div class="block block-content mt-5">
+
+                <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tableMain">
+
+                    <thead>
+                        <tr class="table-secondary">
+                            <th></th>
+                            <th>@Resources.unidade </th>
+                            <th>@Resources.data</th>
+                            <th>@Resources.contador</th>
+                            <th>@Resources.acuracidade</th>
+                            <th>@Resources.status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+
+            </div>
+
+        }
+    </div>
+
+</main>
+<!-- END Main Container -->
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        msgQuestionDelete = Resources.msgQuestionDelete,
+        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        yes = Resources.yes,
+        no = Resources.no,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig
+    }))'>
+</div>
+
+@section Styles {
+    @Styles.Render("~/Content/dataTables")
+}
+
+@section Scripts {
+
+    <script src="~/Content/js/pages/Governanca/jquery.inventarioEnxoval.init.js"></script>
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+}

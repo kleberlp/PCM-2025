@@ -375,4 +375,19 @@ namespace PCM.WEB.MODELS
         public string dataAlteracao { get; set; }
     }
 
+
+    public class GovernancaInventarioEnxoval
+    {
+        public long codigo { get; set; }
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public string unidade { get; set; }
+        public string data { get; set; }
+        public string contador { get; set; }
+        public string status { get; set; }
+        public string statusDescricao { get; set; }
+        public string acuracidade { get; set; }
+        public string cssClass { get; set; }
+    }
+
 }

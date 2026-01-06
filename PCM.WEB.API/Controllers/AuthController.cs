@@ -1,5 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using PCM.WEB.MODELS.Models;
+using PCM.WEB.MODELS;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

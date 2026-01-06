@@ -3284,6 +3284,102 @@ Public Class Governanca
 
 #End Region
 
+#Region "::: GOVERNANÇA - INVENTÁRIO - ENXOVAL :::"
+
+    Public Function LoadGovernancaInventarioEnxoval(ByVal codigoEmpresa As Integer,
+                                                    ByVal codigoUnidade As Integer,
+                                                    ByVal dataInicio As String,
+                                                    ByVal dataTermino As String,
+                                                    ByVal status As Integer) As List(Of GovernancaInventarioEnxoval)
+
+        Try
+
+
+            Dim oReturn As New List(Of GovernancaInventarioEnxoval)
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, IIf(IsDate(dataInicio), dataInicio, DBNull.Value)),
+                CriarParametro("data_termino", SqlDbType.Date, IIf(IsDate(dataTermino), dataTermino, DBNull.Value)),
+                CriarParametro("status", SqlDbType.SmallInt, status)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_inventario", oParameters)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New GovernancaInventarioEnxoval With {
+                        .codigo = SafeGetLong(oSqlDataReader, "codigo"),
+                        .codigoEmpresa = SafeGetLong(oSqlDataReader, "codigo_empresa"),
+                        .codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade"),
+                        .unidade = SafeGetString(oSqlDataReader, "unidade"),
+                        .data = SafeGetString(oSqlDataReader, "data"),
+                        .contador = SafeGetString(oSqlDataReader, "contador"),
+                        .status = SafeGetLong(oSqlDataReader, "status"),
+                        .statusDescricao = SafeGetString(oSqlDataReader, "status_descricao"),
+                        .acuracidade = SafeGetString(oSqlDataReader, "acuracidade"),
+                        .cssClass = SafeGetString(oSqlDataReader, "css_class")
+                    }
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Function LoadEnxoval(ByVal codigoEmpresa As Integer,
+                                ByVal codigoUnidade As Integer) As List(Of LavanderiaEnxoval)
+
+        Try
+
+            'Váriavies Locais
+            Dim oReturn As New List(Of LavanderiaEnxoval)
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_enxoval_inventario", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New LavanderiaEnxoval With {
+                        .codigoEnxoval = SafeGetLong(oSqlDataReader, "codigo_enxoval"),
+                        .descricao = SafeGetString(oSqlDataReader, "descricao"),
+                        .quantidade = SafeGetLong(oSqlDataReader, "quantidade")
+                    }
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
 #Region "::: STATUS UH :::"
 
     Public Sub UploadStatuUHExcel(ByVal codigoEmpresa As Integer,

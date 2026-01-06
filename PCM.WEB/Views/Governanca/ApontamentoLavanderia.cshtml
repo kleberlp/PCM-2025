@@ -150,6 +150,18 @@
         $("#btnData").hide();
         $("#divHospede").hide();
 
+        if ($("#tipo").val() == "1") {
+            $("#divHospede").show();
+        } else {
+            $("#divHospede").hide();
+        }
+
+        if ($("#tipo").val() == "2") {
+            $("#btnData").show();
+        } else {
+            $("#btnData").hide();
+        }
+
         $("#btnSave").on('click', function (e) {
             $("#form").submit();
         });
@@ -344,7 +356,7 @@
                 success: function (returnData) {
                     $("#quantidade_hospede").val(returnData.quantidadeHospede);
                     $("#ocupacao_quartos").val(returnData.ocupacaoQuartos);
-                    $("#peso").val(returnData.quantidadeFuncion);
+                    $("#peso").val(returnData.peso);
                     $("#btnSave").prop("disabled", returnData.impresso);
                 }
             });

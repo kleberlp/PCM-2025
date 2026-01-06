@@ -1751,6 +1751,106 @@ namespace PCM.WEB.Controllers
 
         #endregion
 
+        #region::: GOVERNANÇA - INVENTÁRIO ENXOVAL :::
+
+        // GET: CHECKLIST
+        public ActionResult InventarioEnxoval()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool imprimir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "govInventarioEnxoval",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bImprimir: ref imprimir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+                ViewBag.imprimir = imprimir;
+                ViewBag.dataInicio = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")).AddDays(-1).ToShortDateString();
+                ViewBag.dataTermino = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")).ToShortDateString();
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString());
+                ViewBag.status = new SelectList(oCombo.LoadCombo("sp_select_combo_static_status_inventario_governanca"), "codigo", "descricao", null);
+
+                return View();
+            }
+        }
+
+        public JsonResult LoadInventarioEnxoval(int empresa, string dataInicio, string dataTermino, int unidade = -1, int status = -1)
+        {
+
+            return Json(oGovernanca.LoadGovernancaInventarioEnxoval(codigoEmpresa: empresa,
+                                                                    codigoUnidade: unidade,
+                                                                    dataInicio: dataInicio,
+                                                                    dataTermino: dataTermino,
+                                                                    status: status));
+
+        }
+
+        public ActionResult InventarioEnxovalNovo(int unidade = -1)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "govInventarioEnxoval",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+                ViewBag.data = DateTime.Now.ToString("dd/MM/yyyy");
+                ViewBag.codigoEmpresa = Session["empresa"].ToString();
+
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: true), "codigo", "descricao", (unidade == -1) ? Session["codigo_unidade"].ToString() : unidade.ToString());
+
+                return View();
+            }
+        }
+
+        public JsonResult LoadEnxoval(int empresa, int unidade)
+        {
+
+            return Json(oGovernanca.LoadEnxoval(codigoEmpresa: empresa,
+                                                codigoUnidade: unidade));
+
+        }
+
+        #endregion
+
         #region "::: GOVERNANÇA - APONTAMENTO :::"
 
         // GET: INDEX

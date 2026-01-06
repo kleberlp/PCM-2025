@@ -1,0 +1,114 @@
+﻿@using PCM.WEB.Properties
+@using Newtonsoft.Json
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@Resources.nome_sistema</a>
+                <span class="breadcrumb-item">@Resources.governanca</span>
+                <span class="breadcrumb-item">@Resources.inventarioEnxoval</span>
+                <a class="breadcrumb-item active">@Resources.novo</a>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("InventarioEnxovalNovo", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", @name = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" id="empresa" name="empresa" value="@ViewBag.codigoEmpresa" />
+            <input type="hidden" id="enxovalJson" name="enxovalJson" value="" />
+
+            <div class="block block-rounded border">
+                <div class="block-header block-header-default bg-gd-primary">
+                    <h3 class="block-title text-white font-w600">@Resources.inventarioEnxoval</h3>
+                    <div class="block-options">
+                        <button type="button" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@Resources.salvar</button>
+                        <button type="button" id="btnVoltar" name="btnVoltar" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-undo mr-5"></i>@Resources.voltar</button>
+                    </div>
+                </div>
+                <div class="block-content block-content-full">
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label>@Resources.unidade</label>
+                            <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                        </div>
+                        <div class="col-md-2">
+                            <label>@Resources.data</label>
+                            <div><input type="datetime" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data" autocomplete="off"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="block block-content mt-5">
+
+                <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tableMain">
+
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>@Resources.enxoval</th>
+                            <th>@Resources.quantidade</th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+
+        }
+    </div>
+    <!-- END Basic Info -->
+</main>
+<!-- END Main Container -->
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        msgQuestionDelete = Resources.msgQuestionDelete,
+        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        requiredField = Resources.campo_requerido,
+        yes = Resources.yes,
+        no = Resources.no,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig
+    }))'>
+</div>
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+
+    <script src="~/Content/js/pages/Governanca/jquery.inventarioEnxovalNovo.init.js"></script>
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+}

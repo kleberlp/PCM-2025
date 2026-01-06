@@ -115,6 +115,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a % Acuracidade.
+        /// </summary>
+        public static string acuracidade {
+            get {
+                return ResourceManager.GetString("acuracidade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Adicionar.
         /// </summary>
         public static string adicionar {
@@ -1164,6 +1173,15 @@ namespace PCM.WEB.Properties {
         public static string contabiliza_hora {
             get {
                 return ResourceManager.GetString("contabiliza_hora", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Contador por.
+        /// </summary>
+        public static string contador {
+            get {
+                return ResourceManager.GetString("contador", resourceCulture);
             }
         }
         
@@ -2797,6 +2815,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Inventário - Enxoval.
+        /// </summary>
+        public static string inventarioEnxoval {
+            get {
+                return ResourceManager.GetString("inventarioEnxoval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Item - Medição.
         /// </summary>
         public static string item_medicao {
@@ -3252,6 +3279,15 @@ namespace PCM.WEB.Properties {
         public static string modulo_default {
             get {
                 return ResourceManager.GetString("modulo_default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Movimentação - Enxoval.
+        /// </summary>
+        public static string movimentacaoEnxoval {
+            get {
+                return ResourceManager.GetString("movimentacaoEnxoval", resourceCulture);
             }
         }
         

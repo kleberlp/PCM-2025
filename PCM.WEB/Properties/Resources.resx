@@ -2121,4 +2121,16 @@
   <data name="clickToConfig" xml:space="preserve">
     <value>Clique para configurar tabela</value>
   </data>
+  <data name="inventarioEnxoval" xml:space="preserve">
+    <value>Inventário - Enxoval</value>
+  </data>
+  <data name="contador" xml:space="preserve">
+    <value>Contador por</value>
+  </data>
+  <data name="acuracidade" xml:space="preserve">
+    <value>% Acuracidade</value>
+  </data>
+  <data name="movimentacaoEnxoval" xml:space="preserve">
+    <value>Movimentação - Enxoval</value>
+  </data>
 </root>

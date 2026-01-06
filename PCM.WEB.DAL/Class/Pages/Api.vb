@@ -1,4 +1,5 @@
-﻿Imports System.Data.SqlClient
+﻿Imports System.Configuration
+Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.IO
 Imports System.Net
@@ -10,15 +11,18 @@ Imports System.Text
 Imports System.Text.Json.Nodes
 Imports Newtonsoft.Json
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Numeric
+Imports Oracle.ManagedDataAccess.Client
 Imports PCM.WEB.DAL.SQLHelper
 Imports PCM.WEB.MODELS
 
 Public Class Api
 
     Private sConnection As String
+    Private sConnectionIntercity As String
 
-    Sub New(ByVal sCon As String)
+    Sub New(ByVal sCon As String, ByVal sConIntercity As String)
         sConnection = sCon
+        sConnectionIntercity = sConIntercity
     End Sub
 
 #Region "::: LOG :::"
@@ -3042,14 +3046,14 @@ Public Class Api
 
 
                     Dim handler = New HttpClientHandler() With {
-    .AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
-}
+                        .AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
+                    }
 
                     ' Força TLS 1.2
                     handler.SslProtocols = SslProtocols.Tls12
 
-                    ' ⚠️ Somente para teste: ignora validação de certificado.
-                    ' Remova em produção.
+                    'Somente para teste: ignora validação de certificado.
+                    'Remova em produção.
                     handler.ServerCertificateCustomValidationCallback = Function(sender, cert, chain, sslPolicyErrors) True
 
                     Using client As New HttpClient(handler)
@@ -3089,6 +3093,70 @@ Public Class Api
         Return oReturn
 
     End Function
+
+    Public Function updateUHStatusIntercity(ByVal uhStatus As pwaUHStatusUpdate) As pwaApontamentoResponse
+
+        'Variaveis Locais
+        Dim oReturn As New pwaApontamentoResponse
+
+        Dim oSqlParameter As SqlParameter() = {
+            CriarParametro("codigo_empresa", SqlDbType.Int, uhStatus.codigoEmpresa),
+            CriarParametro("codigo_unidade", SqlDbType.Int, uhStatus.codigoUnidade),
+            CriarParametro("codigo_usuario", SqlDbType.Int, uhStatus.codigoUsuario),
+            CriarParametro("codigo_apartamento", SqlDbType.BigInt, uhStatus.codigoApartamento),
+            CriarParametro("status", SqlDbType.VarChar, uhStatus.status)
+        }
+
+        Try
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_pwa_update_status_uh_intercity", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    oReturn.success = True
+                    oReturn.message = ""
+
+                    Call updateUHStatusGovernancaIntercity(SafeGetString(oSqlDataReader, "hotelId"),
+                                                           SafeGetString(oSqlDataReader, "uh"),
+                                                           SafeGetString(oSqlDataReader, "status"))
+
+                End While
+
+            End Using
+
+        Catch SqlEx As SqlException
+            oReturn.success = False
+            oReturn.message = SqlEx.Message.ToString()
+        Catch ex As Exception
+            oReturn.success = False
+            oReturn.message = ex.Message.ToString()
+        End Try
+
+        Return oReturn
+
+    End Function
+
+    Public Sub updateUHStatusGovernancaIntercity(hotelId As String, uh As String, status As String)
+
+        Using connection As New OracleConnection(sConnectionIntercity)
+            connection.Open()
+
+            Using command As New OracleCommand(
+                "UPDATE UH
+                 SET IDSTATUSGOV = :NovoStatus
+                 WHERE IDHOTEL = :HotelId
+                   AND LTRIM(RTRIM(CODUH)) = :CodUH",
+                connection)
+
+                command.Parameters.Add(New OracleParameter(":NovoStatus", status))
+                command.Parameters.Add(New OracleParameter(":HotelId", hotelId))
+                command.Parameters.Add(New OracleParameter(":CodUH", uh))
+
+                command.ExecuteNonQuery()
+            End Using
+        End Using
+
+    End Sub
 
     Public Sub updateUHStatusGovernanca(ByVal uhStatus As pwaUHStatusUpdate)
 

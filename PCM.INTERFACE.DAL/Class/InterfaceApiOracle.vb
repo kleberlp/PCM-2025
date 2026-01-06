@@ -54,13 +54,27 @@ Public Class InterfaceApiOracle
     Public Async Function GetStatusUH(codigoEmpresa As Integer, hotelId As String) As Task
 
         Try
+            ' ============================================
+            ' 1) Abre UMA ÚNICA conexão SQL Server
+            ' ============================================
+            Using sqlConn As New SqlConnection(_sqlHelper.ConnectionString)
+                Await sqlConn.OpenAsync()
 
-            Await _sqlHelper.ExecuteNonQueryAsync("sp_truncate_table_tb_interface_uh_status_stg", CommandType.StoredProcedure)
+                ' --------------------------------------------
+                ' TRUNCATE tabela de staging
+                ' --------------------------------------------
+                Using cmdTruncate As New SqlCommand("sp_truncate_table_tb_interface_uh_status_stg", sqlConn)
+                    cmdTruncate.CommandType = CommandType.StoredProcedure
+                    Await cmdTruncate.ExecuteNonQueryAsync()
+                End Using
 
-            Using oracleConn As New OracleConnection(_oracleConnectionString)
-                Await oracleConn.OpenAsync()
+                ' ============================================
+                ' 2) Abre conexão ORACLE
+                ' ============================================
+                Using oracleConn As New OracleConnection(_oracleConnectionString)
+                    Await oracleConn.OpenAsync()
 
-                Dim query As String =
+                    Dim query As String =
                 "SELECT DISTINCT
                     :CodigoEmpresa AS codigo_empresa,
                     U.IDHOTEL AS hotel_id,
@@ -75,21 +89,22 @@ Public Class InterfaceApiOracle
                    AND U.FLGATIVA = 'S'
                  ORDER BY 2,3,5"
 
-                Using oracleCmd As New OracleCommand(query, oracleConn)
-                    oracleCmd.BindByName = True
-                    oracleCmd.Parameters.Add(New OracleParameter("CodigoEmpresa", OracleDbType.Int32)).Value = codigoEmpresa
-                    oracleCmd.Parameters.Add(New OracleParameter("HotelId", OracleDbType.Varchar2)).Value = hotelId
+                    Using oracleCmd As New OracleCommand(query, oracleConn)
+                        oracleCmd.BindByName = True
+                        oracleCmd.Parameters.Add(New OracleParameter("CodigoEmpresa", OracleDbType.Int32)).Value = codigoEmpresa
+                        oracleCmd.Parameters.Add(New OracleParameter("HotelId", OracleDbType.Varchar2)).Value = hotelId
 
-                    Using reader As OracleDataReader = Await oracleCmd.ExecuteReaderAsync()
+                        Using reader As OracleDataReader = Await oracleCmd.ExecuteReaderAsync(CommandBehavior.SequentialAccess)
 
-                        Using sqlConn As New SqlConnection(_sqlHelper.ConnectionString)
-                            Await sqlConn.OpenAsync()
-
+                            ' --------------------------------------------
+                            ' BULK COPY (reutilizando a MESMA conexão SQL)
+                            ' --------------------------------------------
                             Using bulk As New SqlBulkCopy(sqlConn, SqlBulkCopyOptions.TableLock, Nothing)
                                 bulk.DestinationTableName = "dbo.tb_interface_uh_status_stg"
                                 bulk.BatchSize = 5000
                                 bulk.BulkCopyTimeout = 5000
 
+                                bulk.ColumnMappings.Clear()
                                 bulk.ColumnMappings.Add("codigo_empresa", "codigo_empresa")
                                 bulk.ColumnMappings.Add("hotel_id", "hotel_id")
                                 bulk.ColumnMappings.Add("uh", "uh")
@@ -98,25 +113,30 @@ Public Class InterfaceApiOracle
 
                                 Await bulk.WriteToServerAsync(reader)
                             End Using
-                        End Using
 
+                        End Using
                     End Using
                 End Using
+
+                ' --------------------------------------------
+                ' 3) Atualização final (MESMA conexão SQL)
+                ' --------------------------------------------
+                Using cmdUpdate As New SqlCommand("sp_update_interface_uh_status_stg", sqlConn)
+                    cmdUpdate.CommandType = CommandType.StoredProcedure
+                    cmdUpdate.Parameters.Add("@codigo_empresa", SqlDbType.Int).Value = codigoEmpresa
+                    cmdUpdate.Parameters.Add("@hotel_id", SqlDbType.VarChar, 20).Value = hotelId
+
+                    Await cmdUpdate.ExecuteNonQueryAsync()
+                End Using
+
             End Using
-
-            Dim parameters As New List(Of SqlParameter) From {
-                New SqlParameter("@codigo_empresa", SqlDbType.Int) With {.Value = codigoEmpresa},
-                New SqlParameter("@hotel_id", SqlDbType.VarChar, 20) With {.Value = hotelId}
-            }
-
-            Await _sqlHelper.ExecuteNonQueryAsync("sp_update_interface_uh_status_stg", CommandType.StoredProcedure, parameters)
 
         Catch ex As Exception
             _logger.LogError(ex, "Erro no GetStatusUH (Bulk). HotelId={hotelId}", hotelId)
+            Throw ' opcional: mantém stack trace
         End Try
 
     End Function
-
 
     ' ==========================================================
     ' OBTÉM RESERVAS UH (ORACLE → SQL SERVER)
@@ -124,13 +144,27 @@ Public Class InterfaceApiOracle
     Public Async Function GetReservasUH(codigoEmpresa As Integer, hotelId As String) As Task
 
         Try
+            ' ============================================
+            ' 1) Abre UMA ÚNICA conexão SQL Server
+            ' ============================================
+            Using sqlConn As New SqlConnection(_sqlHelper.ConnectionString)
+                Await sqlConn.OpenAsync()
 
-            Await _sqlHelper.ExecuteNonQueryAsync("sp_truncate_table_tb_interface_uh_reservas_stg", CommandType.StoredProcedure)
+                ' --------------------------------------------
+                ' TRUNCATE tabela de staging
+                ' --------------------------------------------
+                Using cmdTruncate As New SqlCommand("sp_truncate_table_tb_interface_uh_reservas_stg", sqlConn)
+                    cmdTruncate.CommandType = CommandType.StoredProcedure
+                    Await cmdTruncate.ExecuteNonQueryAsync()
+                End Using
 
-            Using oracleConn As New OracleConnection(_oracleConnectionString)
-                Await oracleConn.OpenAsync()
+                ' ============================================
+                ' 2) Abre conexão ORACLE
+                ' ============================================
+                Using oracleConn As New OracleConnection(_oracleConnectionString)
+                    Await oracleConn.OpenAsync()
 
-                Dim query As String =
+                    Dim query As String =
                 "SELECT 
                     :CodigoEmpresa AS codigo_empresa,
                     :HotelId AS hotel_id,
@@ -144,21 +178,23 @@ Public Class InterfaceApiOracle
                                    AND NVL(DATAPARTIDAREAL, DATAPARTPREVISTA)
                  GROUP BY CODUH"
 
-                Using oracleCmd As New OracleCommand(query, oracleConn)
-                    oracleCmd.BindByName = True
-                    oracleCmd.Parameters.Add(New OracleParameter("CodigoEmpresa", OracleDbType.Int32)).Value = codigoEmpresa
-                    oracleCmd.Parameters.Add(New OracleParameter("HotelId", OracleDbType.Varchar2)).Value = hotelId
+                    Using oracleCmd As New OracleCommand(query, oracleConn)
+                        oracleCmd.BindByName = True
+                        oracleCmd.Parameters.Add(New OracleParameter("CodigoEmpresa", OracleDbType.Int32)).Value = codigoEmpresa
+                        oracleCmd.Parameters.Add(New OracleParameter("HotelId", OracleDbType.Varchar2)).Value = hotelId
 
-                    Using reader As OracleDataReader = Await oracleCmd.ExecuteReaderAsync()
+                        Using reader As OracleDataReader = Await oracleCmd.ExecuteReaderAsync(CommandBehavior.SequentialAccess)
 
-                        Using sqlConn As New SqlConnection(_sqlHelper.ConnectionString)
-                            Await sqlConn.OpenAsync()
-
+                            ' --------------------------------------------
+                            ' BULK COPY (reutilizando a MESMA conexão SQL)
+                            ' --------------------------------------------
                             Using bulk As New SqlBulkCopy(sqlConn, SqlBulkCopyOptions.TableLock, Nothing)
                                 bulk.DestinationTableName = "dbo.tb_interface_uh_reservas_stg"
                                 bulk.BatchSize = 5000
                                 bulk.BulkCopyTimeout = 5000
+                                bulk.EnableStreaming = True
 
+                                bulk.ColumnMappings.Clear()
                                 bulk.ColumnMappings.Add("codigo_empresa", "codigo_empresa")
                                 bulk.ColumnMappings.Add("hotel_id", "hotel_id")
                                 bulk.ColumnMappings.Add("uh", "uh")
@@ -167,21 +203,27 @@ Public Class InterfaceApiOracle
 
                                 Await bulk.WriteToServerAsync(reader)
                             End Using
-                        End Using
 
+                        End Using
                     End Using
                 End Using
+
+                ' --------------------------------------------
+                ' 3) Atualização final (MESMA conexão SQL)
+                ' --------------------------------------------
+                Using cmdUpdate As New SqlCommand("sp_update_interface_uh_reservas_stg", sqlConn)
+                    cmdUpdate.CommandType = CommandType.StoredProcedure
+                    cmdUpdate.Parameters.Add("@codigo_empresa", SqlDbType.Int).Value = codigoEmpresa
+                    cmdUpdate.Parameters.Add("@hotel_id", SqlDbType.VarChar, 20).Value = hotelId
+
+                    Await cmdUpdate.ExecuteNonQueryAsync()
+                End Using
+
             End Using
-
-            Dim parameters As New List(Of SqlParameter) From {
-                New SqlParameter("@codigo_empresa", SqlDbType.Int) With {.Value = codigoEmpresa},
-                New SqlParameter("@hotel_id", SqlDbType.VarChar, 20) With {.Value = hotelId}
-            }
-
-            Await _sqlHelper.ExecuteNonQueryAsync("sp_update_interface_uh_reservas_stg", CommandType.StoredProcedure, parameters)
 
         Catch ex As Exception
             _logger.LogError(ex, "Erro no GetReservasUH (Bulk). HotelId={hotelId}", hotelId)
+            Throw ' mantém stack trace (recomendado em Worker)
         End Try
 
     End Function

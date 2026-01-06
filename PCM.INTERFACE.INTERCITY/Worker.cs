@@ -19,6 +19,8 @@ namespace PCM.INTERFACE.INTERCITY
             _timer = config.GetValue<int>("timer");
         }
 
+
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("PCM INTERCITY Worker iniciado.");
@@ -27,12 +29,11 @@ namespace PCM.INTERFACE.INTERCITY
             {
                 try
                 {
-                    // Carrega hotéis
                     List<string> hotelIds = await _apiOracle.LoadHotelIdAsync(_codigoEmpresa);
 
                     foreach (var hotel in hotelIds)
                     {
-                        ProcessHotel(hotel);
+                        await ProcessHotel(hotel);
                     }
                 }
                 catch (Exception ex)
@@ -43,6 +44,7 @@ namespace PCM.INTERFACE.INTERCITY
                 await Task.Delay(_timer, stoppingToken);
             }
         }
+
 
         private async Task ProcessHotel(string hotel)
         {
