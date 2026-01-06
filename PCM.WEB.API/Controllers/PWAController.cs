@@ -1192,9 +1192,9 @@ namespace PCM.WEB.API.Controllers
             try
             {
 
-                //if (codigoEmpresa == 905)
-                //{
-                checklist = oAPI.getCheckListFull(iCodigoEmpresa: codigoEmpresa,
+                if (codigoEmpresa == 905)
+                {
+                    checklist = oAPI.getCheckListFull(iCodigoEmpresa: codigoEmpresa,
                                                       iCodigoUnidade: codigoUnidade,
                                                       lCodigoChecklist: codigoChecklist,
                                                       sTipo: tipo,
@@ -1202,18 +1202,18 @@ namespace PCM.WEB.API.Controllers
                                                       iIntervalo: intervalo,
                                                       lCodigoEquipamento: (codigoArCondicionado == -1)? codigoEquipamento: codigoArCondicionado);
 
-                //}
-                //else
-                //{
-                //    checklist = oAPI.getCheckList(iCodigoEmpresa: codigoEmpresa,
-                //                                  iCodigoUnidade: codigoUnidade,
-                //                                  lCodigoChecklist: codigoChecklist,
-                //                                  sTipo: tipo,
-                //                                  lCodigoDocumento: codigoDocumento,
-                //                                  iIntervalo: intervalo,
-                //                                  lCodigoEquipamento: (codigoArCondicionado == -1) ? codigoEquipamento : codigoArCondicionado);
+                }
+                else
+                {
+                    checklist = oAPI.getCheckList(iCodigoEmpresa: codigoEmpresa,
+                                                  iCodigoUnidade: codigoUnidade,
+                                                  lCodigoChecklist: codigoChecklist,
+                                                  sTipo: tipo,
+                                                  lCodigoDocumento: codigoDocumento,
+                                                  iIntervalo: intervalo,
+                                                  lCodigoEquipamento: (codigoArCondicionado == -1) ? codigoEquipamento : codigoArCondicionado);
 
-                //}
+                }
 
 
                 return Ok(checklist);

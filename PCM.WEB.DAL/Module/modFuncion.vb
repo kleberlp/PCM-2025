@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Net.Mail
 Imports System.Security.Cryptography
 Imports System.Text
+Imports Oracle.ManagedDataAccess.Client
 Imports PCM.WEB.DAL.SQLHelper
 
 Module modFuncion
@@ -264,6 +265,16 @@ Module modFuncion
     End Function
 
     Public Function SafeGetString(ByVal reader As SqlDataReader, ByVal columnName As String) As String
+
+        If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
+            Return String.Empty
+        Else
+            Return reader.Item(reader.GetOrdinal(columnName)).ToString()
+        End If
+
+    End Function
+
+    Public Function SafeGetString(ByVal reader As OracleDataReader, ByVal columnName As String) As String
 
         If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
             Return String.Empty

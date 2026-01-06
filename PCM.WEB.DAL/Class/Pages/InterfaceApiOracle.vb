@@ -1,19 +1,175 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Xml
-Imports Newtonsoft.Json
 Imports Oracle.ManagedDataAccess.Client
 Imports PCM.WEB.DAL.SQLHelper
-Imports PCM.WEB.MODELS.Models
+Imports PCM.WEB.MODELS
 
 Public Class InterfaceApiOracle
 
     Private sConnection As String
+    Private sConnectionLocalBD As String
 
-    Sub New(ByVal sCon As String)
+    Sub New(ByVal sCon As String, ByVal sConLocalDB As String)
         sConnection = sCon
+        sConnectionLocalBD = sConLocalDB
     End Sub
 
 #Region "::: STATUS UH :::"
+
+    Public Function LoadHotelId(ByVal codigoEmpresa As Integer) As List(Of String)
+
+        Try
+
+            Dim oResult As New List(Of String)
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnectionLocalBD, CommandType.StoredProcedure, "sp_select_configuracao_interface_opera_all")
+
+                While oSqlDataReader.Read
+
+                    oResult.Add(SafeGetString(oSqlDataReader, "hotelId"))
+
+                End While
+
+            End Using
+
+            Return oResult
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Sub GetStatusUH(ByVal codigoEmpresa As Integer, ByVal hotelId As String)
+
+        Using connection As New OracleConnection(sConnection)
+
+            Dim query As String = "SELECT DISTINCT
+                U.IDHOTEL,         
+                LPAD (LTRIM (RTRIM (u.CODUH)), 8, ' ') AS CODUH,
+                SG.DESCSTATUSGOV,
+                SU.DESCSTATUSUH
+                FROM TIPOUH T,
+                     STATUSGOVFULL SG,
+                     STATUSUHFULL SU,
+                     UH U,
+                     RESERVASFRONT R,
+                     MOVIMENTOHOSPEDES M,
+                     HOSPEDE H,
+                     TIPOHOSPEDE TH,
+                     PARAMHOTEL PAR,
+                     BLOQUEIOUH BLOQ,
+                     PESSOA P,
+                     ROOMLISTVHF RL,
+                     RESERVAGRUPO G,
+                     orcamentoreserva o
+               WHERE U.IDHOTEL = :HotelId
+                     AND (U.UHPOOL = 'S')
+                     AND (RL.IDROOMLIST(+) = R.IDROOMLIST)
+                     AND (G.IDRESERVAGRUPO(+) = RL.IDRESERVAGRUPO)
+                     AND (T.IDHOTEL = U.IDHOTEL)
+                     AND (T.IDTIPOUH = U.IDTIPOUH)
+                     AND (SG.IDSTATUSGOV = U.IDSTATUSGOV)
+                     AND (SU.IDSTATUSUH = U.IDSTATUSUH)
+                     AND (PAR.IDHOTEL = U.IDHOTEL)
+                     AND (U.FLGATIVA = 'S')
+                     AND (BLOQ.IDHOTEL(+) = U.IDHOTEL)
+                     AND (R.STATUSRESERVA(+) <= 2)
+                     AND (R.IDHOTEL(+) = U.IDHOTEL)
+                     AND (R.CODUH(+) = U.CODUH)
+                     AND (M.IDHOTEL(+) = R.IDHOTEL)
+                     AND (M.IDRESERVASFRONT(+) = R.IDRESERVASFRONT)
+                     AND (H.IDHOSPEDE(+) = M.IDHOSPEDE)
+                     AND (TH.IDHOTEL(+) = M.IDHOTEL)
+                     AND (TH.IDTIPOHOSPEDE(+) = M.IDTIPOHOSPEDE)
+                     AND (P.IDPESSOA(+) = R.CLIENTERESERVANTE)
+                     AND (M.DATAPARTREAL IS NULL)
+                     AND (r.idreservasfront = o.idreservasfront(+))
+                     AND (O.DATA(+) =
+                             TO_DATE ('08/08/2024 00:00:00', 'DD/MM/YYYY HH24:MI:SS'))
+            ORDER BY 1,
+                     2,
+                     3"
+
+            connection.Open()
+
+            Using command As New OracleCommand(query, connection)
+
+                command.Parameters.Add(New OracleParameter(":HotelId", hotelId))
+
+                Using reader As OracleDataReader = command.ExecuteReader()
+
+                    While reader.Read()
+
+
+                        'Váriavies Locais
+                        Dim oSqlParameter As SqlParameter() = {
+                            CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                            CriarParametro("hotelId", SqlDbType.VarChar, SafeGetString(reader, "IDHOTEL")),
+                            CriarParametro("uh", SqlDbType.VarChar, SafeGetString(reader, "CODUH")),
+                            CriarParametro("status_uh", SqlDbType.VarChar, SafeGetString(reader, "DESCSTATUSUH")),
+                            CriarParametro("status_gov", SqlDbType.VarChar, SafeGetString(reader, "DESCSTATUSGOV"))
+                        }
+
+                        ExecuteNonQuery(sConnectionLocalBD, CommandType.StoredProcedure, "sp_interface_update_uh_status", oSqlParameter)
+
+                    End While
+
+                End Using
+
+            End Using
+
+        End Using
+
+    End Sub
+
+    Public Sub GetReservaUH(ByVal codigoEmpresa As Integer, ByVal hotelId As String)
+
+        Dim oResult As New List(Of ReservasUH)
+
+        Using connection As New OracleConnection(sConnection)
+            Dim query As String = "SELECT 
+                                    CODUH AS apartamento, 
+                                    MAX(NVL(DATACHEGADAREAL, DATACHEGPREVISTA)) AS dataChegada, 
+                                    MAX(NVL(DATAPARTIDAREAL, DATAPARTPREVISTA)) AS dataPartida
+                                FROM RESERVASFRONT
+                                WHERE IDHOTEL = :HotelId
+                                  AND CODUH IS NOT NULL
+                                  AND SYSDATE BETWEEN NVL(DATACHEGADAREAL, DATACHEGPREVISTA)
+                                                  AND NVL(DATAPARTIDAREAL, DATAPARTPREVISTA)
+                                GROUP BY
+                                CODUH"
+
+            connection.Open()
+
+            Using command As New OracleCommand(query, connection)
+                command.Parameters.Add(New OracleParameter(":HotelId", hotelId))
+
+                Using reader As OracleDataReader = command.ExecuteReader()
+
+                    While reader.Read()
+
+                        'Váriavies Locais
+                        Dim oSqlParameter As SqlParameter() = {
+                            CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                            CriarParametro("hotelId", SqlDbType.VarChar, SafeGetString(reader, "IDHOTEL")),
+                            CriarParametro("apartamento", SqlDbType.VarChar, SafeGetString(reader, "apartamento")),
+                            CriarParametro("data_chegada", SqlDbType.VarChar, SafeGetString(reader, "dataChegada")),
+                            CriarParametro("data_saida", SqlDbType.VarChar, SafeGetString(reader, "dataPartida"))
+                        }
+
+                        ExecuteNonQuery(sConnectionLocalBD, CommandType.StoredProcedure, "sp_interface_update_uh_reservas", oSqlParameter)
+
+                    End While
+
+                End Using
+
+            End Using
+
+        End Using
+
+    End Sub
+
 
     Public Function StatusUH(sHotelId As String) As InterfaceStatusUH
 
@@ -193,24 +349,26 @@ Public Class InterfaceApiOracle
 
     End Function
 
-    Public Sub UpdateStatusUH(sHotelId As String,
-                              sUH As String,
-                              sStatus As String)
+    Public Sub UpdateStatusUH(ByVal hotelId As String,
+                              ByVal uh As String,
+                              ByVal status As String)
 
         Using connection As New OracleConnection(sConnection)
-            Dim query As String = "UPDATE UH
-      SET IDSTATUSGOV = :NovoIDSTATUSGOV
-    WHERE IDHOTEL = :HotelId
-      AND (LTRIM(RTRIM(CODUH)) = :CodUH)"
+
+            Dim query As String = "UPDATE UH SET 
+                                   IDSTATUSGOV = :NovoIDSTATUSGOV
+                                   WHERE IDHOTEL = :HotelId
+                                   AND (LTRIM(RTRIM(CODUH)) = :CodUH)"
 
             connection.Open()
 
             Using command As New OracleCommand(query, connection)
-                command.Parameters.Add(New OracleParameter(":NovoIDSTATUSGOV", sStatus))
-                command.Parameters.Add(New OracleParameter(":HotelId", sHotelId))
-                command.Parameters.Add(New OracleParameter(":CodUH", sUH))
 
+                command.Parameters.Add(New OracleParameter(":NovoIDSTATUSGOV", status))
+                command.Parameters.Add(New OracleParameter(":HotelId", hotelId))
+                command.Parameters.Add(New OracleParameter(":CodUH", uh))
                 command.ExecuteNonQuery()
+
             End Using
 
         End Using

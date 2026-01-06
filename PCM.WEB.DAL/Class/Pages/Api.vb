@@ -4904,6 +4904,8 @@ Public Class Api
                 .ordemServico = If(Convert.IsDBNull(oReader("ordem_servico")), False, Convert.ToBoolean(oReader("ordem_servico"))),
                 .prazo = If(oReader.GetOrdinal("prazo") >= 0 AndAlso Not Convert.IsDBNull(oReader("prazo")), Convert.ToString(oReader("prazo")), ""),
                 .color = If(Convert.IsDBNull(oReader("color")), "#000000", Convert.ToString(oReader("color"))),
+                .associarEquipamento = SafeGetLong(oReader, "associar_equipamento"),
+                .codigoEquipamento = SafeGetLong(oReader, "codigo_equipamento"),
                 .arquivo = New List(Of pwaImagem)()
             }
 
@@ -5371,6 +5373,7 @@ Public Class Api
                 oInfo.observacao = oSqlDataReader.Item("observacao")
                 oInfo.ordemServico = oSqlDataReader.Item("ordem_servico")
                 oInfo.color = oSqlDataReader.Item("color")
+                oInfo.associarEquipamento = oSqlDataReader.Item("associar_equipamento")
                 oInfo.arquivo = getCheckListItemArquivo(iCodigoEmpresa:=iCodigoEmpresa,
                                                         iCodigoUnidade:=iCodigoUnidade,
                                                         lCodigoChecklist:=lCodigoChecklist,

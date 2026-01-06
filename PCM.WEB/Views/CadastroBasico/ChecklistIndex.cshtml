@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PCM.WEB.MODELS.ChecklistHeader>
+﻿@using PCM.WEB.Properties
+@using Newtonsoft.Json
 
 <!-- Main Container -->
 <main id="main-container">
@@ -14,7 +15,6 @@
         </div>
     </div>
     <!-- END Breadcrumb -->
-
     <!-- Page Content -->
     <div class="content">
 
@@ -27,7 +27,7 @@
 
 
                 <div class="js-tasks-nav d-none d-md-block">
-                    <div class="block block-rounded border">
+                    <div>
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist</h3>
                             @if (ViewBag.inserir)
@@ -43,142 +43,89 @@
                             <ul class="list-group push">
                                 <li class="list-group-item">
                                     <div class="row">
-                                        @if (Session["unidade"] == "")
-                                        {
-                                            <div class="col-md-4">@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "js-select2 form-control" })</div>
-                                        }
-                                        else
-                                        {
-                                            <input type="hidden" name="unidade" id="unidade" value="@ViewBag.codigo_unidade">
-                                        }
-                                        <div class="col-md-5"><div><input type="text" id="descricao" name="descricao" value="@ViewBag.descricao" placeholder="@PCM.WEB.Properties.Resources.descricao" class="form-control"></div></div>
-                                        <div class="col-md-3"><div>@Html.DropDownList("tipo_checklist", null, PCM.WEB.Properties.Resources.tipo_checklist, new { @class = "js-select2 form-control" })</div></div>
+                                        <div class="col-md-3">
+                                            <label class="form-label mb-2" for="unidade">@Resources.unidade</label>
+                                            @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label mb-2" for="descricao">@Resources.descricao</label>
+                                            <input type="text" id="descricao" name="descricao" value="" placeholder="" class="form-control">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label mb-2" for="tipoChecklist">@Resources.tipo_checklist</label>
+                                            @Html.DropDownList("tipoChecklist", null, "", new { @class = "js-select2 form-control" })
+                                        </div>
                                     </div>
                                 </li>
                                 <li class="list-group-item text-right">
-                                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnSearch" id="btnSearch"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <div class="block-content block-content-full">
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-sm table-vcenter table-striped js-dataTable-list">
-                        <thead>
-                            <tr class="table-secondary">
-                                @if (Session["unidade"] == "")
-                                {
-                                    <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
-                                }
-                                <th class="text-md-center" style="width: 200px;">@PCM.WEB.Properties.Resources.tipo_checklist</th>
-                                <th>@PCM.WEB.Properties.Resources.descricao</th>
-                                @if (ViewBag.editar || ViewBag.excluir)
-                                {
-                                    <th class="text-md-center" style="width: 80px;" data-sortable="false"></th>
-                                }
-                            </tr>
-                        </thead>
+            </div>
 
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    @if (Session["unidade"] == "")
-                                    {
-                                        <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
-                                    }
-                                    <td class="text-md-center" style="width: 200px;">@Html.DisplayFor(modelItem => item.tipo_checklist)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.descricao)</td>
-                                    @if (ViewBag.editar || ViewBag.excluir)
-                                    {
-                                        <td class="text-md-center" style="width: 80px;">
-                                            <div class="btn-group">
-                                                @if (ViewBag.editar)
-                                                {<a href="@Url.Action("ChecklistEdit", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
-                                                @if (ViewBag.excluir)
-                                                {<a href="@Url.Action("ChecklistDelete", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
-                                                <a href="@Url.Action("DownloadExcel", "CadastroBasico", new { codigo_tipo_checklist = item.codigo_tipo_checklist, codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-download"></i></a>
-                                            </div>
-                                        </td>
-                                    }
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
-                </div>
+            <div class="block block-content mt-5">
+                <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                <table class="table table-sm table-vcenter table-striped" id="tableMain" name="tableMain">
+                    <thead>
+                        <tr>
+                            <th>@Resources.unidade</th>
+                            <th>@Resources.tipo_checklist</th>
+                            <th>@Resources.descricao</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
 
             </div>
+
         }
-        </div>
+    </div>
     <!-- END Page Content -->
 </main>
 <!-- END Main Container -->
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        msgQuestionDelete = Resources.msgQuestionDelete,
+        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        yes = Resources.yes,
+        no = Resources.no,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig
+    }))'>
+</div>
 
 @section Styles {
     @Styles.Render("~/Content/dataTables")
 }
 
 @section Scripts {
-    @Scripts.Render("~/plugins/dataTables")
 
-    <script type="text/javascript">
+    <script src="~/Content/js/pages/CadastroBasico/jquery.checklist.init.js"></script>
 
-        var BeTableDatatables = function () {
-            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
-            var exDataTable = function () {
-                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
-                    sWrapper: "dataTables_wrapper dt-bootstrap4"
-                });
-            };
-
-            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
-            var initDataTableSimple = function () {
-                jQuery('.js-dataTable-list').dataTable({
-                    fixedHeader: true,
-                    searching: true,
-                    lengthChange: false,
-                    pageLength: 15,
-                    autoWidth: false,
-                    scrollX: false,
-                    scrollColapse: true,
-                    dom: 'Bfrtip',
-                    buttons: [
-                        { extend: 'copy', text: 'Copiar' },
-                        {
-                            extend: 'print',
-                            text: 'Imprimir'
-                        },
-                        { extend: 'excel' },
-                        { extend: 'pdf', orientation: 'portrait' },
-                    ],
-                    language: {
-                        "search": "Procurar:",
-                        "lengthMenu": "Exibir _MENU_ ",
-                        "zeroRecords": "Nenhum Registro Encontrado",
-                        "info": "_MAX_ registro(s)",
-                        "infoEmpty": "Nenhum Registro encontrado",
-                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
-                    }
-                });
-            };
-
-            return {
-                init: function () {
-                    // Override a few DataTable defaults
-                    exDataTable();
-
-                    // Init Datatables
-                    initDataTableSimple();
-                }
-            };
-        }();
-
-
-        // Initialize when page loads
-        jQuery(function () { $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init(); });
-
-    </script>
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
 }

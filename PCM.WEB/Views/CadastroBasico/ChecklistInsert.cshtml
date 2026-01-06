@@ -62,9 +62,6 @@
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist</h3>
                             <div class="block-options">
-                                <button type="button" id="btnSaveChecklist" onclick="$('#validation_type').val(2); $('#form').submit();" class="btn btn-square btn-secondary min-width-100 h-75">
-                                    <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.incluir
-                                </button>
                                 <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="adicionarChecklist();">
                                     <i class="fa fa-upload mr-5"></i>@PCM.WEB.Properties.Resources.arquivo
                                 </button>
@@ -82,14 +79,23 @@
                                     <table class="table table-bordered table-sm table-striped table-vcenter" id="table" name="table">
                                         <thead>
                                             <tr class="table-secondary">
-                                                <th class="text-md-center" style="width: 150px;">@PCM.WEB.Properties.Resources.tipo_checklist</th>
-                                                <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.grupo_checklist</th>
-                                                <th class="text-md-center" style="width: 150px;">@PCM.WEB.Properties.Resources.codigo</th>
+                                                <th>@PCM.WEB.Properties.Resources.tipo_checklist</th>
+                                                <th>@PCM.WEB.Properties.Resources.grupo_checklist</th>
+                                                <th>@PCM.WEB.Properties.Resources.subgrupo_checklist</th>
+                                                <th>@PCM.WEB.Properties.Resources.codigo</th>
                                                 <th>@PCM.WEB.Properties.Resources.checklist</th>
-                                                <th class="d-none d-md-table-cell text-md-center" style="width: 100px;">@PCM.WEB.Properties.Resources.periodicidade</th>
-                                                <th class="d-none d-md-table-cell text-md-center" style="width: 100px;">@PCM.WEB.Properties.Resources.intervalo</th>
-                                                <th class="d-none d-md-table-cell text-md-center" style="width: 150px;">@PCM.WEB.Properties.Resources.tempo_estimado</th>
-                                                <th class="text-md-center" style="width: 80px;" data-sortable="false"></th>
+                                                <th>@PCM.WEB.Properties.Resources.valor_minimo</th>
+                                                <th>@PCM.WEB.Properties.Resources.valor_maximo</th>
+                                                <th>@PCM.WEB.Properties.Resources.numero_digitos_leitor</th>
+                                                <th>@PCM.WEB.Properties.Resources.permite_foto</th>
+                                                <th>@PCM.WEB.Properties.Resources.auditado</th>
+                                                <th>@PCM.WEB.Properties.Resources.equipamento</th>
+                                                <th>@PCM.WEB.Properties.Resources.periodicidade</th>
+                                                <th>@PCM.WEB.Properties.Resources.intervalo</th>
+                                                <th>@PCM.WEB.Properties.Resources.unidade_medida</th>
+                                                <th>@PCM.WEB.Properties.Resources.peso</th>
+                                                <th>@PCM.WEB.Properties.Resources.peso - @PCM.WEB.Properties.Resources.grupo_checklist</th>
+                                                <th>@PCM.WEB.Properties.Resources.peso - @PCM.WEB.Properties.Resources.subgrupo_checklist</th>
                                             </tr>
                                         </thead>
                                     </table>

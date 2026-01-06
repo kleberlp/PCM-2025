@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PCM.WEB.MODELS.Models
+namespace PCM.WEB.MODELS
 {
     public class UserCredentials
     {

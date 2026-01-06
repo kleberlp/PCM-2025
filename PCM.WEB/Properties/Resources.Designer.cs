@@ -916,6 +916,60 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para configurar tabela.
+        /// </summary>
+        public static string clickToConfig {
+            get {
+                return ResourceManager.GetString("clickToConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para copiar os dados da tabela.
+        /// </summary>
+        public static string clickToCopy {
+            get {
+                return ResourceManager.GetString("clickToCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para excluir o registro.
+        /// </summary>
+        public static string clickToDelete {
+            get {
+                return ResourceManager.GetString("clickToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para editar o registro.
+        /// </summary>
+        public static string clickToEdit {
+            get {
+                return ResourceManager.GetString("clickToEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para exportar para excel.
+        /// </summary>
+        public static string clickToExcel {
+            get {
+                return ResourceManager.GetString("clickToExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para exportar PDF.
+        /// </summary>
+        public static string clickToPdf {
+            get {
+                return ResourceManager.GetString("clickToPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Cliente.
         /// </summary>
         public static string cliente {
@@ -1857,6 +1911,15 @@ namespace PCM.WEB.Properties {
         public static string empresa {
             get {
                 return ResourceManager.GetString("empresa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nenhum registro encontrado.
+        /// </summary>
+        public static string emptyTable {
+            get {
+                return ResourceManager.GetString("emptyTable", resourceCulture);
             }
         }
         
@@ -3193,6 +3256,24 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Esta operação não poderá ser desfeita.
+        /// </summary>
+        public static string msgNotPossibleReverse {
+            get {
+                return ResourceManager.GetString("msgNotPossibleReverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Gostaria de excluir o registro selecionado?.
+        /// </summary>
+        public static string msgQuestionDelete {
+            get {
+                return ResourceManager.GetString("msgQuestionDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Município.
         /// </summary>
         public static string municipio {
@@ -3270,6 +3351,15 @@ namespace PCM.WEB.Properties {
         public static string nao_respondido {
             get {
                 return ResourceManager.GetString("nao_respondido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não.
+        /// </summary>
+        public static string no {
+            get {
+                return ResourceManager.GetString("no", resourceCulture);
             }
         }
         
@@ -5961,6 +6051,15 @@ namespace PCM.WEB.Properties {
         public static string website {
             get {
                 return ResourceManager.GetString("website", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Sim.
+        /// </summary>
+        public static string yes {
+            get {
+                return ResourceManager.GetString("yes", resourceCulture);
             }
         }
         

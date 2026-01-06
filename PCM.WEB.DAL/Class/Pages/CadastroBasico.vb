@@ -3528,11 +3528,11 @@ Public Class CadastroBasico
 
                 oChecklistHeader = New ChecklistHeader
 
-                oChecklistHeader.codigo_unidade = oSqlDataReader.Item("codigo_unidade")
+                oChecklistHeader.codigoUnidade = oSqlDataReader.Item("codigo_unidade")
                 oChecklistHeader.unidade = oSqlDataReader.Item("unidade")
                 oChecklistHeader.codigo = oSqlDataReader.Item("codigo")
-                oChecklistHeader.codigo_tipo_checklist = oSqlDataReader.Item("codigo_tipo_checklist")
-                oChecklistHeader.tipo_checklist = oSqlDataReader.Item("tipo_checklist")
+                oChecklistHeader.codigoTipoChecklist = oSqlDataReader.Item("codigo_tipo_checklist")
+                oChecklistHeader.tipoChecklist = oSqlDataReader.Item("tipo_checklist")
                 oChecklistHeader.descricao = oSqlDataReader.Item("descricao")
 
             End While
@@ -3548,84 +3548,47 @@ Public Class CadastroBasico
 
     End Sub
 
-    Public Function IndexChecklist(ByVal iCodigoEmpresa As Integer,
-                                   ByVal iCodigoUnidade As Integer,
-                                   ByVal iCodigoModulo As Integer,
-                                   ByVal iCodigoTipoChecklist As Integer,
-                                   ByVal sDescricao As String,
-                                   ByVal iCodigoUsuario As Integer) As List(Of ChecklistHeader)
+    Public Function LoadChecklist(ByVal codigoEmpresa As Integer,
+                                  ByVal codigoUnidade As Integer,
+                                  ByVal codigoModulo As Integer,
+                                  ByVal codigoTipoChecklist As Integer,
+                                  ByVal descricao As String,
+                                  ByVal codigoUsuario As Integer) As List(Of ChecklistHeader)
 
         Try
 
-            'Váriaveis Locais
+
             Dim oReturn As New List(Of ChecklistHeader)
-            Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(5) As SqlParameter
-            Dim i As Integer = 0
-
-            'Seta Parametros - Código Unidade
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_unidade"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoUnidade : i += 1
-
-            'Seta Parametros - Código Empresa
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_empresa"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
-
-            'Seta Parametros - Código Módulo
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_modulo"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoModulo : i += 1
-
-            'Seta Parametros - Código Tipo Checklist
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_tipo_checklist"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoTipoChecklist : i += 1
-
-            'Seta Parametros - Descrição
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "descricao"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 100
-            oSqlParameter(i).Value = sDescricao : i += 1
-
-            'Seta Parametros - Código Usuário
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_usuario"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoUsuario
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo_modulo", SqlDbType.Int, codigoModulo),
+                CriarParametro("codigo_tipo_checklist", SqlDbType.SmallInt, codigoTipoChecklist),
+                CriarParametro("descricao", SqlDbType.VarChar, descricao),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
 
             'Executa Query
-            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist", oSqlParameter)
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist", oSqlParameter)
 
-            While oSqlDataReader.Read
 
-                Dim oInfo As New ChecklistHeader
+                While oSqlDataReader.Read
 
-                oInfo.codigo_unidade = oSqlDataReader.Item("codigo_unidade")
-                oInfo.unidade = oSqlDataReader.Item("unidade")
-                oInfo.codigo = oSqlDataReader.Item("codigo")
-                oInfo.descricao = oSqlDataReader.Item("descricao")
-                oInfo.codigo_tipo_checklist = oSqlDataReader.Item("codigo_tipo_checklist")
-                oInfo.tipo_checklist = oSqlDataReader.Item("tipo_checklist")
+                    Dim oInfo As New ChecklistHeader
 
-                oReturn.Add(oInfo)
+                    oInfo.codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade")
+                    oInfo.unidade = SafeGetString(oSqlDataReader, "unidade")
+                    oInfo.codigo = SafeGetLong(oSqlDataReader, "codigo")
+                    oInfo.descricao = SafeGetString(oSqlDataReader, "descricao")
+                    oInfo.codigoTipoChecklist = SafeGetLong(oSqlDataReader, "codigo_tipo_checklist")
+                    oInfo.tipoChecklist = SafeGetString(oSqlDataReader, "tipo_checklist")
 
-            End While
+                    oReturn.Add(oInfo)
 
-            'Fecha o oSqlDataReader
-            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+                End While
+
+
+            End Using
 
             'Retorno da Função
             Return oReturn

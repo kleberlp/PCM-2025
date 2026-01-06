@@ -1866,64 +1866,26 @@ namespace PCM.WEB.Controllers
                 ViewBag.inserir = inserir;
                 ViewBag.editar = editar;
                 ViewBag.excluir = excluir;
-                ViewBag.codigo_unidade = Session["codigo_unidade"].ToString();
-                ViewBag.tipo_checklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", null);
+                ViewBag.tipoChecklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", null);
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                 bCadastro: false), "codigo", "descricao", Convert.ToInt32(Session["codigo_unidade"].ToString()));
 
-                return View(oCadastroBasico.IndexChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), 
-                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                            iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
-                                                            iCodigoTipoChecklist: -1,
-                                                            sDescricao: "",
-                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())));
+                return View();
             }
         }
 
         // POST: INDEX
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChecklistIndex(int unidade = -1, int tipo_checklist = -1, string descricao = "")
+        public JsonResult LoadChecklist(int unidade = -1, int tipoChecklist = -1, string descricao = "")
         {
-            if (Session["empresa"] == null)
-            {
-                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-            }
-            else
-            {
-
-                //Váriaveis
-                bool editar = false;
-                bool inserir = false;
-                bool excluir = false;
-                bool administrador = false;
-
-                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                    sFormulario: "cad_checklist",
-                                    bInserir: ref inserir,
-                                    bEditar: ref editar,
-                                    bExcluir: ref excluir,
-                                    bAdministrador: ref administrador);
-
-                ViewBag.inserir = inserir;
-                ViewBag.editar = editar;
-                ViewBag.excluir = excluir;
-                ViewBag.descricao = descricao;
-                ViewBag.codigo_unidade = Session["codigo_unidade"].ToString();
-                ViewBag.tipo_checklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", tipo_checklist);
-                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                bCadastro: false), "codigo", "descricao", unidade);
-
-                return View(oCadastroBasico.IndexChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                            iCodigoUnidade: unidade,
-                                                            iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
-                                                            iCodigoTipoChecklist: tipo_checklist,
-                                                            sDescricao: descricao,
-                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())));
-            }
+         
+                return Json(oCadastroBasico.LoadChecklist(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                          codigoUnidade: unidade,
+                                                          codigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
+                                                          codigoTipoChecklist: tipoChecklist,
+                                                          descricao: descricao,
+                                                          codigoUsuario: Convert.ToInt32(User.Identity.GetUserName())));            
         }
 
         // GET: INSERT
@@ -2043,8 +2005,8 @@ namespace PCM.WEB.Controllers
 
                 ViewBag.unidade_input = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                         iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                        bCadastro: false), "codigo", "descricao", checklistHeader.codigo_unidade);
-                ViewBag.tipo_checklist_input = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", checklistHeader.codigo_tipo_checklist);
+                                                                        bCadastro: false), "codigo", "descricao", checklistHeader.codigoUnidade);
+                ViewBag.tipo_checklist_input = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", checklistHeader.codigoTipoChecklist);
                 ViewBag.tipo_checklist_item_input = new SelectList(oCombo.TipoItemChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
                 ViewBag.periodicidade_input = new SelectList(oCombo.Periodicidade(bChecklist: false), "codigo", "descricao", null);
                 ViewBag.departamento = new SelectList(oCombo.Departamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),

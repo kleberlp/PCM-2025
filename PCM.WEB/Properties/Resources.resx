@@ -2088,4 +2088,37 @@
   <data name="vistoriado" xml:space="preserve">
     <value>Vistoriado</value>
   </data>
+  <data name="emptyTable" xml:space="preserve">
+    <value>Nenhum registro encontrado</value>
+  </data>
+  <data name="yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="no" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="msgQuestionDelete" xml:space="preserve">
+    <value>Gostaria de excluir o registro selecionado?</value>
+  </data>
+  <data name="msgNotPossibleReverse" xml:space="preserve">
+    <value>Esta operação não poderá ser desfeita</value>
+  </data>
+  <data name="clickToPdf" xml:space="preserve">
+    <value>Clique para exportar PDF</value>
+  </data>
+  <data name="clickToExcel" xml:space="preserve">
+    <value>Clique para exportar para excel</value>
+  </data>
+  <data name="clickToEdit" xml:space="preserve">
+    <value>Clique para editar o registro</value>
+  </data>
+  <data name="clickToDelete" xml:space="preserve">
+    <value>Clique para excluir o registro</value>
+  </data>
+  <data name="clickToCopy" xml:space="preserve">
+    <value>Clique para copiar os dados da tabela</value>
+  </data>
+  <data name="clickToConfig" xml:space="preserve">
+    <value>Clique para configurar tabela</value>
+  </data>
 </root>

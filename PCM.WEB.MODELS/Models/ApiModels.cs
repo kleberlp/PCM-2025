@@ -750,6 +750,8 @@ namespace PCM.WEB.MODELS
         public bool ordemServico { get; set; }
         public string prazo { get; set; }
         public string color { get; set; }
+        public int associarEquipamento { get; set; }
+        public long codigoEquipamento { get; set; }
         public List<pwaImagem> arquivo { get; set; }
     }
 

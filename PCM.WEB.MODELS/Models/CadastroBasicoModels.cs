@@ -153,11 +153,11 @@ namespace PCM.WEB.MODELS
 
     public class ChecklistHeader
     {
-        public int codigo_unidade { get; set; }
+        public int codigoUnidade { get; set; }
         public string unidade { get; set; }
         public int codigo { get; set; }
-        public int codigo_tipo_checklist { get; set; }
-        public string tipo_checklist { get; set; }
+        public int codigoTipoChecklist { get; set; }
+        public string tipoChecklist { get; set; }
         public string descricao { get; set; }
     }
 
