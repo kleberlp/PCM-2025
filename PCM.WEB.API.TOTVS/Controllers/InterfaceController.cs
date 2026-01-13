@@ -1,6 +1,6 @@
 ﻿using PCM.WEB.DAL;
 using PCM.WEB.MODELS;
-using PCM.WEB.MODELS.Models;
+using PCM.WEB.MODELS;
 using System;
 using System.Configuration;
 using System.Web.Http;
@@ -69,9 +69,9 @@ namespace PCM.WEB.API.Controllers
 
             try
             {
-                interfaceApi.UpdateStatusUH(sHotelId: status.hotelId,
-                                            sUH: status.uh,
-                                            sStatus: status.status);
+                interfaceApi.UpdateStatusUH(hotelId: status.hotelId,
+                                            uh: status.uh,
+                                            status: status.status);
                 return Ok();
 
             }

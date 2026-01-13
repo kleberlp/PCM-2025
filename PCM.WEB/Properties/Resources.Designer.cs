@@ -394,6 +394,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Aquisições.
+        /// </summary>
+        public static string aquisicoes {
+            get {
+                return ResourceManager.GetString("aquisicoes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Ar Condicionado.
         /// </summary>
         public static string ar_condicionado {
@@ -925,6 +934,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para aprovar.
+        /// </summary>
+        public static string clickToApproval {
+            get {
+                return ResourceManager.GetString("clickToApproval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para configurar tabela.
         /// </summary>
         public static string clickToConfig {
@@ -975,6 +993,15 @@ namespace PCM.WEB.Properties {
         public static string clickToPdf {
             get {
                 return ResourceManager.GetString("clickToPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para reprovar.
+        /// </summary>
+        public static string clickToReproval {
+            get {
+                return ResourceManager.GetString("clickToReproval", resourceCulture);
             }
         }
         
@@ -1969,6 +1996,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Entradas (Lavanderia).
+        /// </summary>
+        public static string entradaLavanderia {
+            get {
+                return ResourceManager.GetString("entradaLavanderia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Envia e-mail?.
         /// </summary>
         public static string envia_email {
@@ -2109,6 +2145,15 @@ namespace PCM.WEB.Properties {
         public static string estSaida {
             get {
                 return ResourceManager.GetString("estSaida", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Evasões.
+        /// </summary>
+        public static string evasoes {
+            get {
+                return ResourceManager.GetString("evasoes", resourceCulture);
             }
         }
         
@@ -3301,11 +3346,29 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Gostaria de aprovar a contagem de inventário?.
+        /// </summary>
+        public static string msgQuestionApprovalInventory {
+            get {
+                return ResourceManager.GetString("msgQuestionApprovalInventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Gostaria de excluir o registro selecionado?.
         /// </summary>
         public static string msgQuestionDelete {
             get {
                 return ResourceManager.GetString("msgQuestionDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Gostaria de reprovar a contagem de inventário?.
+        /// </summary>
+        public static string msgQuestionReprovalInventory {
+            get {
+                return ResourceManager.GetString("msgQuestionReprovalInventory", resourceCulture);
             }
         }
         
@@ -3846,6 +3909,24 @@ namespace PCM.WEB.Properties {
         public static string percentual_pendente_gerado {
             get {
                 return ResourceManager.GetString("percentual_pendente_gerado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a % Evasão.
+        /// </summary>
+        public static string percentualEvasao {
+            get {
+                return ResourceManager.GetString("percentualEvasao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Perdas declaradas.
+        /// </summary>
+        public static string perdasDeclaradas {
+            get {
+                return ResourceManager.GetString("perdasDeclaradas", resourceCulture);
             }
         }
         
@@ -4417,6 +4498,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Qtde. em Uso.
+        /// </summary>
+        public static string quantidadeEmUso {
+            get {
+                return ResourceManager.GetString("quantidadeEmUso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Qtde. Estoque.
         /// </summary>
         public static string quantidadeEstoque {
@@ -4431,6 +4521,15 @@ namespace PCM.WEB.Properties {
         public static string quantidadeInventario {
             get {
                 return ResourceManager.GetString("quantidadeInventario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Qtde. Lavanderia.
+        /// </summary>
+        public static string quantidadeLavanderia {
+            get {
+                return ResourceManager.GetString("quantidadeLavanderia", resourceCulture);
             }
         }
         
@@ -4471,11 +4570,29 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Qtde. Rouparia.
+        /// </summary>
+        public static string quantidadeRouparia {
+            get {
+                return ResourceManager.GetString("quantidadeRouparia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Qtde. Trânsito.
         /// </summary>
         public static string quantidadeTransito {
             get {
                 return ResourceManager.GetString("quantidadeTransito", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Qtde. em Uso.
+        /// </summary>
+        public static string quantidadeUso {
+            get {
+                return ResourceManager.GetString("quantidadeUso", resourceCulture);
             }
         }
         
@@ -4813,6 +4930,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Saídas (Lavanderia).
+        /// </summary>
+        public static string saidaLavanderia {
+            get {
+                return ResourceManager.GetString("saidaLavanderia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Sair.
         /// </summary>
         public static string sair {
@@ -4845,6 +4971,15 @@ namespace PCM.WEB.Properties {
         public static string saldo_os_pendente {
             get {
                 return ResourceManager.GetString("saldo_os_pendente", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Saldo (Lavanderia).
+        /// </summary>
+        public static string saldoLavanderia {
+            get {
+                return ResourceManager.GetString("saldoLavanderia", resourceCulture);
             }
         }
         
@@ -5250,6 +5385,15 @@ namespace PCM.WEB.Properties {
         public static string tipoGovernanca {
             get {
                 return ResourceManager.GetString("tipoGovernanca", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Tipo de movimentação.
+        /// </summary>
+        public static string tipoMovimentacao {
+            get {
+                return ResourceManager.GetString("tipoMovimentacao", resourceCulture);
             }
         }
         

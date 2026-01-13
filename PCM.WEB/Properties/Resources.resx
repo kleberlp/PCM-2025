@@ -2133,4 +2133,52 @@
   <data name="movimentacaoEnxoval" xml:space="preserve">
     <value>Movimentação - Enxoval</value>
   </data>
+  <data name="clickToApproval" xml:space="preserve">
+    <value>Clique para aprovar</value>
+  </data>
+  <data name="clickToReproval" xml:space="preserve">
+    <value>Clique para reprovar</value>
+  </data>
+  <data name="msgQuestionReprovalInventory" xml:space="preserve">
+    <value>Gostaria de reprovar a contagem de inventário?</value>
+  </data>
+  <data name="msgQuestionApprovalInventory" xml:space="preserve">
+    <value>Gostaria de aprovar a contagem de inventário?</value>
+  </data>
+  <data name="quantidadeRouparia" xml:space="preserve">
+    <value>Qtde. Rouparia</value>
+  </data>
+  <data name="quantidadeEmUso" xml:space="preserve">
+    <value>Qtde. em Uso</value>
+  </data>
+  <data name="quantidadeLavanderia" xml:space="preserve">
+    <value>Qtde. Lavanderia</value>
+  </data>
+  <data name="quantidadeUso" xml:space="preserve">
+    <value>Qtde. em Uso</value>
+  </data>
+  <data name="saidaLavanderia" xml:space="preserve">
+    <value>Saídas (Lavanderia)</value>
+  </data>
+  <data name="entradaLavanderia" xml:space="preserve">
+    <value>Entradas (Lavanderia)</value>
+  </data>
+  <data name="saldoLavanderia" xml:space="preserve">
+    <value>Saldo (Lavanderia)</value>
+  </data>
+  <data name="perdasDeclaradas" xml:space="preserve">
+    <value>Perdas declaradas</value>
+  </data>
+  <data name="aquisicoes" xml:space="preserve">
+    <value>Aquisições</value>
+  </data>
+  <data name="evasoes" xml:space="preserve">
+    <value>Evasões</value>
+  </data>
+  <data name="percentualEvasao" xml:space="preserve">
+    <value>% Evasão</value>
+  </data>
+  <data name="tipoMovimentacao" xml:space="preserve">
+    <value>Tipo de movimentação</value>
+  </data>
 </root>

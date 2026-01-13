@@ -284,7 +284,7 @@ Module modFuncion
 
     End Function
 
-    Public Function SafeGetFloat(ByVal reader As SqlDataReader, ByVal columnName As String) As Double
+    Public Function SafeGetLong(ByVal reader As SqlDataReader, ByVal columnName As String) As Long
 
         If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
             Return 0
@@ -294,7 +294,27 @@ Module modFuncion
 
     End Function
 
-    Public Function SafeGetLong(ByVal reader As SqlDataReader, ByVal columnName As String) As Long
+    Public Function SafeGetDate(ByVal reader As SqlDataReader, ByVal columnName As String) As String
+
+        If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
+            Return String.Empty
+        Else
+            Return CType(reader.Item(reader.GetOrdinal(columnName)), DateTime).ToString("dd/MM/yyyy")
+        End If
+
+    End Function
+
+    Public Function SafeGetTime(ByVal reader As SqlDataReader, ByVal columnName As String) As String
+
+        If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
+            Return String.Empty
+        Else
+            Return CType(reader.Item(reader.GetOrdinal(columnName)), DateTime).ToString("HH:mm")
+        End If
+
+    End Function
+
+    Public Function SafeGetFloat(ByVal reader As SqlDataReader, ByVal columnName As String) As Double
 
         If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
             Return 0

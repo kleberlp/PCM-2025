@@ -24,13 +24,13 @@
             @Html.AntiForgeryToken()
 
             <input type="hidden" id="empresa" name="empresa" value="@ViewBag.codigoEmpresa" />
-            <input type="hidden" id="enxovalJson" name="enxovalJson" value="" />
+            <input type="hidden" id="jsonEnxoval" name="jsonEnxoval" value="" />
 
             <div class="block block-rounded border">
                 <div class="block-header block-header-default bg-gd-primary">
                     <h3 class="block-title text-white font-w600">@Resources.inventarioEnxoval</h3>
                     <div class="block-options">
-                        <button type="button" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@Resources.salvar</button>
+                        <button type="button" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5 "></i>@Resources.salvar</button>
                         <button type="button" id="btnVoltar" name="btnVoltar" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-undo mr-5"></i>@Resources.voltar</button>
                     </div>
                 </div>
@@ -56,7 +56,8 @@
                     <thead class="table-secondary">
                         <tr>
                             <th>@Resources.enxoval</th>
-                            <th>@Resources.quantidade</th>
+                            <th>@Resources.quantidadeRouparia</th>
+                            <th>@Resources.quantidadeEmUso</th>
                         </tr>
                     </thead>
 

@@ -748,6 +748,7 @@
     <Content Include="Content\js\moment.js" />
     <Content Include="Content\js\notification.js" />
     <Content Include="Content\js\pages\CadastroBasico\jquery.checklist.init.js" />
+    <Content Include="Content\js\pages\Governanca\jquery.movimentacaoEnxoval.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.inventarioEnxovalNovo.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.inventarioEnxoval.init.js" />
     <Content Include="Content\js\pages\Governanca\planejamentoHistorico.js" />
@@ -2553,6 +2554,7 @@
     <Content Include="Views\Governanca\PlanejamentoHistorico.cshtml" />
     <Content Include="Views\Governanca\InventarioEnxoval.cshtml" />
     <Content Include="Views\Governanca\InventarioEnxovalNovo.cshtml" />
+    <Content Include="Views\Governanca\MovimentacaoEnxoval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

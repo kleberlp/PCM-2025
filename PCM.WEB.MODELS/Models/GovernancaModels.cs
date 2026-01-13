@@ -375,7 +375,6 @@ namespace PCM.WEB.MODELS
         public string dataAlteracao { get; set; }
     }
 
-
     public class GovernancaInventarioEnxoval
     {
         public long codigo { get; set; }
@@ -388,6 +387,51 @@ namespace PCM.WEB.MODELS
         public string statusDescricao { get; set; }
         public string acuracidade { get; set; }
         public string cssClass { get; set; }
+    }
+
+    public class GovernancaInventarioEnxovalDetalhe
+    {
+        public string enxoval { get; set; }
+        public int quantidadeContabil { get; set; }
+        public int quantidadeInventario { get; set; }
+        public int quantidadeUso { get; set; }
+        public int quantidadeLavanderia { get; set; }
+        public int total { get; set; }
+        public int divergencia { get; set; }
+    }
+
+    public class GovernancaInventarioChangeStatusResponse
+    {
+        public bool success { get; set; }
+        public string message { get; set; }
+    }
+
+    public class GovernancaMovimentacaoEnxoval
+    {
+        public long codigo { get; set; }
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public int codigoEnxoval { get; set; }
+        public string enxoval { get; set; }
+        public int quantidade { get; set; }
+        public int quantidadeHotel { get; set; }
+        public int saidaLavanderia { get; set; }
+        public int entradaLavanderia { get; set; }
+        public int saldoLavanderia { get; set; }
+        public int perdasDeclaradas { get; set; }
+        public int aquisicoes { get; set; }
+        public int evasoes { get; set; }
+        public string percentualEvasao { get; set; }
+    }
+
+    public class GovernancaMovimentacaoEnxovalDetalhe
+    {
+        public string data { get; set; }
+        public string tipoMovimentacao { get; set; }
+        public string quantidade { get; set; }
+        public string usuario { get; set; }
+        public string local { get; set; }
+        public string saldo { get; set; }
     }
 
 }

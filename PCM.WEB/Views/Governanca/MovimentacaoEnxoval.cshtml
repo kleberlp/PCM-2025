@@ -64,8 +64,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-3">
-                                            <label>@Resources.status</label>
-                                            @Html.DropDownList("status", null, "", new { @class = "js-select2 form-control" })
+                                            <label>@Resources.enxoval</label>
+                                            @Html.DropDownList("enxoval", null, "", new { @class = "js-select2 form-control" })
                                         </div>
                                     </div>
                                 </li>
@@ -87,12 +87,16 @@
                     <thead>
                         <tr class="table-secondary">
                             <th></th>
-                            <th>@Resources.unidade </th>
-                            <th>@Resources.data</th>
-                            <th>@Resources.contador</th>
-                            <th>@Resources.acuracidade</th>
-                            <th>@Resources.status</th>
-                            <th></th>
+                            <th>@Resources.enxoval</th>
+                            <th>@Resources.quantidade</th>
+                            <th>@Resources.quantidadeRouparia</th>
+                            <th>@Resources.saidaLavanderia</th>
+                            <th>@Resources.entradaLavanderia</th>
+                            <th>@Resources.saldoLavanderia</th>
+                            <th>@Resources.perdasDeclaradas</th>
+                            <th>@Resources.aquisicoes</th>
+                            <th>@Resources.evasoes</th>
+                            <th>@Resources.percentualEvasao</th>
                         </tr>
                     </thead>
 
@@ -130,7 +134,12 @@
         quantidadeRouparia = Resources.quantidadeRouparia,
         quantidadeUso = Resources.quantidadeUso,
         quantidadeLavanderia = Resources.quantidadeLavanderia,
-        divergencia = Resources.divergencia
+        divergencia = Resources.divergencia,
+        data = Resources.data,
+        tipoMovimentacao = Resources.tipoMovimentacao,
+        usuario = Resources.usuario,
+        local = Resources.local,
+        saldo = Resources.saldo
     }))'>
 </div>
 
@@ -140,7 +149,7 @@
 
 @section Scripts {
 
-    <script src="~/Content/js/pages/Governanca/jquery.inventarioEnxoval.init.js"></script>
+    <script src="~/Content/js/pages/Governanca/jquery.movimentacaoEnxoval.init.js"></script>
 
     <script src="~/Content/js/lib/datatables/dataTables.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>

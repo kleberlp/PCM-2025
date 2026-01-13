@@ -73,6 +73,12 @@ $(document).ready(function () {
                     return `<input type="text" name="quantidade" class="form-control text-center" value="${data}" data-rowindex="${meta.row}" />`;
                 }
             },
+            {
+                data: "quantidadeUso",
+                render: function (data, type, row, meta) {
+                    return `<input type="text" name="quantidadeUso" class="form-control text-center" value="${data}" data-rowindex="${meta.row}" />`;
+                }
+            },
         ],
         language: {
             emptyTable: messages.emptyTable,
@@ -80,10 +86,10 @@ $(document).ready(function () {
             infoEmpty: "",
             infoFiltered: "",
         },
-        order: [[1, 'asc']],
+        order: [[0, 'asc']],
         columnDefs: [
-            { className: 'text-center', targets: [1] },
-            { width: '150px', targets: [1] }
+            { className: 'text-center', targets: [1, 2] },
+            { width: '150px', targets: [1, 2] }
         ],
     });
 
@@ -135,7 +141,7 @@ $(document).ready(function () {
 
             let dataArrayEnxoval = table.rows().data().toArray();
             let jsonStringEnxoval = JSON.stringify(dataArrayEnxoval);
-            $('#enxovalJson').val(jsonStringEnxoval);
+            $('#jsonEnxoval').val(jsonStringEnxoval);
 
             return true;
 

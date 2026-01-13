@@ -75,6 +75,9 @@ namespace PCM.WEB.MODELS
         public long codigoEnxoval { get; set; } = 0;
         public int quantidade { get; set; } = 0;
         public int quantidadeRelave { get; set; } = 0;
+        public int quantidadeUso { get; set; } = 0;
+        public int quantidadeLavanderia { get; set; } = 0;
+        public int quantidadeContabil { get; set; } = 0;
     }
 
     public class LavanderiaEnxovalInfo

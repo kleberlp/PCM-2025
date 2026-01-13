@@ -1805,6 +1805,20 @@ namespace PCM.WEB.Controllers
 
         }
 
+        public JsonResult LoadGovernancaInventarioEnxovalDetalhe(long codigoInventarioGovernanca)
+        {
+
+            return Json(oGovernanca.LoadGovernancaInventarioEnxovalDetalhe(codigoInventarioGovernanca: codigoInventarioGovernanca));
+
+        }
+
+        public JsonResult ChangeStatusInventarioEnxoval(long codigoInventarioGovernanca, int status)
+        {            
+            return Json(oGovernanca.ChangeStatusInventarioEnxoval(codigoInventarioGovernanca: codigoInventarioGovernanca, 
+                                                                  status: status,
+                                                                  codigoUsuario: Convert.ToInt32(User.Identity.GetUserName())));
+        }
+
         public ActionResult InventarioEnxovalNovo(int unidade = -1)
         {
             if (Session["empresa"] == null)
@@ -1841,11 +1855,102 @@ namespace PCM.WEB.Controllers
             }
         }
 
-        public JsonResult LoadEnxoval(int empresa, int unidade)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult InventarioEnxovalNovo(int unidade, string data, string jsonEnxoval)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {                
+                
+                oGovernanca.InsertInventarioEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"]),
+                                                    codigoUnidade: unidade,
+                                                    codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                    data: data,
+                                                    jsonEnxoval: jsonEnxoval);
+
+                return RedirectToAction("InventarioEnxoval", "Governanca");
+            }
+        }
+
+        public JsonResult LoadEnxoval(int empresa, int unidade, string data)
         {
 
             return Json(oGovernanca.LoadEnxoval(codigoEmpresa: empresa,
-                                                codigoUnidade: unidade));
+                                                codigoUnidade: unidade,
+                                                data: data));
+
+        }
+
+        #endregion
+
+        #region::: GOVERNANÇA - MOVIMENTAÇÃO ENXOVAL :::
+
+        // GET: CHECKLIST
+        public ActionResult MovimentacaoEnxoval()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool imprimir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "govMovimentacaoEnxoval",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bImprimir: ref imprimir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+                ViewBag.imprimir = imprimir;
+                ViewBag.dataInicio = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")).AddDays(-1).ToShortDateString();
+                ViewBag.dataTermino = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")).ToShortDateString();
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString());
+                ViewBag.enxoval = new SelectList(oCombo.LoadCombo("sp_select_combo_cadastro_basico_enxoval",
+                                                                  codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                  codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+
+                return View();
+            }
+        }
+
+        public JsonResult LoadMovimentacaoEnxoval(int empresa, string dataInicio, string dataTermino, int unidade = -1, int enxoval = -1)
+        {
+
+            return Json(oGovernanca.LoadMovimentacaoEnxoval(codigoEmpresa: empresa,
+                                                            codigoUnidade: unidade,
+                                                            dataInicio: dataInicio,
+                                                            dataTermino: dataTermino,
+                                                            enxoval: enxoval));
+
+        }
+
+        public JsonResult LoadMovimentacaoEnxovalDetalhe(int empresa, string dataInicio, string dataTermino, int unidade, int enxoval)
+        {
+
+            return Json(oGovernanca.LoadMovimentacaoEnxovalDetalhe(codigoEmpresa: empresa,
+                                                                   codigoUnidade: unidade,
+                                                                   dataInicio: dataInicio,
+                                                                   dataTermino: dataTermino,
+                                                                   enxoval: enxoval));
 
         }
 
