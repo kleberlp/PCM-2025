@@ -501,6 +501,7 @@ Public Class Account
                 oFormularioVisualizar.gov_log_alteracao_status_gov = IIf(IsDBNull(oSqlDataReader.Item("gov_log_alteracao_status_gov")) = False AndAlso oSqlDataReader.Item("gov_log_alteracao_status_gov") = "S", True, False)
                 oFormularioVisualizar.gov_inventario_enxoval = IIf(IsDBNull(oSqlDataReader.Item("govInventarioEnxoval")) = False AndAlso oSqlDataReader.Item("govInventarioEnxoval") = "S", True, False)
                 oFormularioVisualizar.gov_movimentacao_enxoval = IIf(IsDBNull(oSqlDataReader.Item("govMovimentacaoEnxoval")) = False AndAlso oSqlDataReader.Item("govMovimentacaoEnxoval") = "S", True, False)
+                oFormularioVisualizar.gov_cad_tipo_perda = IIf(IsDBNull(oSqlDataReader.Item("govCadTipoPerda")) = False AndAlso oSqlDataReader.Item("govCadTipoPerda") = "S", True, False)
 
                 oFormularioVisualizar.log_book = IIf(IsDBNull(oSqlDataReader.Item("log_book")) = False AndAlso oSqlDataReader.Item("log_book") = "S", True, False)
                 oFormularioVisualizar.ordem_servico = IIf(IsDBNull(oSqlDataReader.Item("ordem_servico")) = False AndAlso oSqlDataReader.Item("ordem_servico") = "S", True, False)

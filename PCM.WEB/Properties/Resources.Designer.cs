@@ -5407,6 +5407,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Tipo de perda de enxoval.
+        /// </summary>
+        public static string tipoPerdaEnxoval {
+            get {
+                return ResourceManager.GetString("tipoPerdaEnxoval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a PCM by SIM.
         /// </summary>
         public static string title {

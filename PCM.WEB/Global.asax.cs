@@ -25,7 +25,7 @@ namespace PCM.WEB
         }
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
-        {
+            {
             if (HttpContext.Current.Session != null && Session["language"] != null)
             {
                 string langName = Session["language"].ToString();

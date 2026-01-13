@@ -367,6 +367,7 @@ namespace PCM.WEB.Controllers
                 Session["gov_log_alteracao_status_gov"] = formulario_visualizar.gov_log_alteracao_status_gov;
                 Session["gov_inventario_enxoval"] = formulario_visualizar.gov_inventario_enxoval;
                 Session["gov_movimentacao_enxoval"] = formulario_visualizar.gov_movimentacao_enxoval;
+                Session["gov_cad_tipo_perda"] = formulario_visualizar.gov_cad_tipo_perda;
 
                 Session["green_lancamento"] = formulario_visualizar.green_lancamento;
                 Session["log_book"] = formulario_visualizar.log_book;
@@ -849,6 +850,7 @@ namespace PCM.WEB.Controllers
                 Session["gov_log_alteracao_status_gov"] = formulario_visualizar.gov_log_alteracao_status_gov;
                 Session["gov_inventario_enxoval"] = formulario_visualizar.gov_inventario_enxoval;
                 Session["gov_movimentacao_enxoval"] = formulario_visualizar.gov_movimentacao_enxoval;
+                Session["gov_cad_tipo_perda"] = formulario_visualizar.gov_cad_tipo_perda;
 
                 Session["log_book"] = formulario_visualizar.log_book;
                 Session["ordem_servico"] = formulario_visualizar.ordem_servico;

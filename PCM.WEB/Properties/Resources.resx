@@ -2181,4 +2181,7 @@
   <data name="tipoMovimentacao" xml:space="preserve">
     <value>Tipo de movimentação</value>
   </data>
+  <data name="tipoPerdaEnxoval" xml:space="preserve">
+    <value>Tipo de perda de enxoval</value>
+  </data>
 </root>

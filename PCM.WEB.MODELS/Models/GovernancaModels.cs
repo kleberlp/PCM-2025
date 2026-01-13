@@ -434,4 +434,15 @@ namespace PCM.WEB.MODELS
         public string saldo { get; set; }
     }
 
+    public class TipoPerdaEnxoval
+    {
+        public int codigo { get; set; }
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public string unidade { get; set; }
+        public string descricao { get; set; }
+        public string ativo { get; set; }
+        public int ativoValue { get; set; }
+    }
+
 }

@@ -701,7 +701,8 @@
                         (bool)Session["rel_responsavel_vistoria_uh"] ||
                         (bool)Session["rel_camareira_nc"] ||
                         (bool)Session["gov_inventario_enxoval"] ||
-                        (bool)Session["gov_movimentacao_enxoval"])
+                        (bool)Session["gov_movimentacao_enxoval"] ||
+                        (bool)Session["gov_cad_tipo_perda"])
                     {
                         <li>
                             <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-hotel"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.governanca</span></a>
@@ -777,6 +778,12 @@
                                 {
                                     <li>
                                         <a class="@Html.IsSelected(action: "MovimentacaoEnxoval", cssClass: "active") font-size-sm" href="@Url.Action("MovimentacaoEnxoval", "Governanca")">@PCM.WEB.Properties.Resources.movimentacaoEnxoval</a>
+                                    </li>
+                                }
+                                @if ((bool)Session["gov_cad_tipo_perda"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "TipoPerda", cssClass: "active") font-size-sm" href="@Url.Action("TipoPerda", "Governanca")">@PCM.WEB.Properties.Resources.tipoPerdaEnxoval</a>
                                     </li>
                                 }
                                 @if ((bool)Session["gov_historico"])

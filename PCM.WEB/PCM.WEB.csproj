@@ -748,6 +748,8 @@
     <Content Include="Content\js\moment.js" />
     <Content Include="Content\js\notification.js" />
     <Content Include="Content\js\pages\CadastroBasico\jquery.checklist.init.js" />
+    <Content Include="Content\js\pages\Governanca\jquery.tipoPerdaInsert.init.js" />
+    <Content Include="Content\js\pages\Governanca\jquery.tipoPerda.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.movimentacaoEnxoval.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.inventarioEnxovalNovo.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.inventarioEnxoval.init.js" />
@@ -2555,6 +2557,9 @@
     <Content Include="Views\Governanca\InventarioEnxoval.cshtml" />
     <Content Include="Views\Governanca\InventarioEnxovalNovo.cshtml" />
     <Content Include="Views\Governanca\MovimentacaoEnxoval.cshtml" />
+    <Content Include="Views\Governanca\TipoPerda.cshtml" />
+    <Content Include="Views\Governanca\TipoPerdaInsert.cshtml" />
+    <Content Include="Views\Governanca\TipoPerdaEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

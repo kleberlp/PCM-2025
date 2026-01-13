@@ -3284,7 +3284,7 @@ Public Class Governanca
 
 #End Region
 
-#Region "::: GOVERNANÇA - INVENTÁRIO - ENXOVAL :::"
+#Region "::: INVENTÁRIO - ENXOVAL :::"
 
     Public Function LoadGovernancaInventarioEnxoval(ByVal codigoEmpresa As Integer,
                                                     ByVal codigoUnidade As Integer,
@@ -3491,7 +3491,7 @@ Public Class Governanca
 
 #End Region
 
-#Region "::: GOVERNANÇA - MOVIMENTAÇÃO - ENXOVAL :::"
+#Region "::: MOVIMENTAÇÃO - ENXOVAL :::"
 
     Public Function LoadMovimentacaoEnxoval(ByVal codigoEmpresa As Integer,
                                             ByVal codigoUnidade As Integer,
@@ -3891,7 +3891,6 @@ Public Class Governanca
 
 #Region "::: LOG HISTÓRIO ALTERAÇÃO STATUS UH :::"
 
-
     Public Function LoadLogAlteracaoStatusGov(ByVal codigoEmpresa As Integer,
                                               ByVal codigoUnidade As Integer,
                                               ByVal dataInicio As String,
@@ -3938,6 +3937,195 @@ Public Class Governanca
 
             'Retorno da Função
             Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
+#Region "::: CADASTRO - TIPO DE PERDA ENXOVAL :::"
+
+    Public Function LoadTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
+                                         ByVal codigoUnidade As Integer,
+                                         ByVal descricao As String) As List(Of TipoPerdaEnxoval)
+
+        Try
+
+
+            Dim oReturn As New List(Of TipoPerdaEnxoval)
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("descricao", SqlDbType.VarChar, descricao)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_tipo_perda_enxoval", oParameters)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New TipoPerdaEnxoval With {
+                        .codigo = SafeGetLong(oSqlDataReader, "codigo"),
+                        .codigoEmpresa = SafeGetLong(oSqlDataReader, "codigo_empresa"),
+                        .codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade"),
+                        .unidade = SafeGetString(oSqlDataReader, "unidade"),
+                        .ativo = SafeGetBooleanSimNao(oSqlDataReader, "ativo")
+                    }
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Sub InsertTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
+                                      ByVal codigoUnidade As Integer,
+                                      ByVal descricao As String,
+                                      ByVal ativo As Integer,
+                                      ByVal codigoUsuario As Integer)
+
+        Try
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("descricao", SqlDbType.VarChar, descricao),
+                CriarParametro("ativo", SqlDbType.Bit, ativo),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_cadastro_basico_tipo_perda_enxoval", oParameters)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    Public Function LoadTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
+                                         ByVal codigo As Integer) As TipoPerdaEnxoval
+
+        Try
+
+
+            Dim oReturn As New TipoPerdaEnxoval
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo", SqlDbType.Int, codigo)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_tipo_perda_enxoval_info", oParameters)
+
+                While oSqlDataReader.Read
+
+                    oReturn.codigoEmpresa = SafeGetLong(oSqlDataReader, "codigo_empresa")
+                    oReturn.codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade")
+                    oReturn.descricao = SafeGetString(oSqlDataReader, "descricao")
+                    oReturn.ativoValue = SafeGetLong(oSqlDataReader, "ativo")
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Sub UpdateTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
+                                      ByVal codigoUnidade As Integer,
+                                      ByVal descricao As String,
+                                      ByVal ativo As Integer,
+                                      ByVal codigoUsuario As Integer,
+                                      ByVal codigo As Integer)
+
+        Try
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo", SqlDbType.Int, codigo),
+                CriarParametro("descricao", SqlDbType.VarChar, descricao),
+                CriarParametro("ativo", SqlDbType.Bit, ativo),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_cadastro_basico_tipo_perda_enxoval", oParameters)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    Public Function DeleteTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
+                                           ByVal codigoUsuario As Integer,
+                                           ByVal codigo As Integer) As defaultResponse
+
+        Try
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo", SqlDbType.Int, codigo),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_cadastro_basico_tipo_perda_enxoval", oParameters)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Function ValidaTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
+                                           ByVal codigoUnidade As Integer,
+                                           ByVal descricao As String,
+                                           ByVal codigo As Integer) As Boolean
+
+        Try
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo", SqlDbType.Int, codigo),
+                CriarParametro("descricao", SqlDbType.VarChar, descricao)
+            }
+
+            'Executa Query
+            Return IIf(Convert.ToInt32(ExecuteScalar(sConnection, CommandType.StoredProcedure, "sp_validate_cadastro_basico_tipo_perda_enxoval", oParameters)) > 0, False, True)
 
         Catch SqlEx As SqlException
             Throw SqlEx

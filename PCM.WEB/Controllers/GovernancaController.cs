@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using NPOI.HSSF.Model;
 using PCM.WEB.DAL;
 using PCM.WEB.MODELS;
 using System;
@@ -1956,7 +1957,7 @@ namespace PCM.WEB.Controllers
 
         #endregion
 
-        #region "::: GOVERNANÇA - APONTAMENTO :::"
+        #region ::: GOVERNANÇA - APONTAMENTO :::
 
         // GET: INDEX
         public ActionResult GovernancaApontamento(int codigoUnidade, string data, int codigoFuncionario = -1)
@@ -1992,6 +1993,181 @@ namespace PCM.WEB.Controllers
 
                 return View();
             }
+        }
+
+        #endregion
+
+        #region::: CADASTRO BÁSICO - TIPO DE PERDA ENXOVAL :::
+
+        public ActionResult TipoPerda()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool imprimir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "govCadTipoPerda",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bImprimir: ref imprimir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+                ViewBag.imprimir = imprimir;
+                ViewBag.usuario = User.Identity.GetUserName();
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString());
+
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadTipoPerda(int empresa, int unidade, string descricao)
+        {
+
+            return Json(oGovernanca.LoadTipoPerdaEnxoval(codigoEmpresa: empresa,
+                                                         codigoUnidade: unidade,
+                                                         descricao: descricao));
+
+        }
+
+        public ActionResult TipoPerdaInsert()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool imprimir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "govCadTipoPerda",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bImprimir: ref imprimir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+                ViewBag.imprimir = imprimir;
+                ViewBag.usuario = User.Identity.GetUserName();
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString()); ;
+                ViewBag.ativo = new SelectList(oCombo.SimNao(), "codigo", "descricao", 1);
+
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult TipoPerdaInsert(int unidade, string descricao, int ativo, int usuario)
+        {
+            oGovernanca.InsertTipoPerdaEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                               codigoUnidade: unidade,
+                                               descricao: descricao,
+                                               ativo: ativo,
+                                               codigoUsuario: usuario);
+
+            return RedirectToAction("TipoPerda");
+        }
+
+        public ActionResult TipoPerdaEdit(int codigo)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool imprimir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "govCadTipoPerda",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bImprimir: ref imprimir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+                ViewBag.imprimir = imprimir;
+                ViewBag.usuario = User.Identity.GetUserName();
+
+                TipoPerdaEnxoval tipoPerdaEnxoval = oGovernanca.LoadTipoPerdaEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                     codigo: codigo);
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString()); ;
+                ViewBag.ativo = new SelectList(oCombo.SimNao(), "codigo", "descricao", 1);
+
+                return View(tipoPerdaEnxoval);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult TipoPerdaEdit(int unidade, string descricao, int ativo, int usuario, int codigo)
+        {
+            oGovernanca.UpdateTipoPerdaEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                               codigoUnidade: unidade,
+                                               descricao: descricao,
+                                               ativo: ativo,
+                                               codigoUsuario: usuario,
+                                               codigo: codigo);
+
+            return RedirectToAction("TipoPerda");
+        }
+
+        [HttpPost]
+        public JsonResult TipoPerdaDelete(int usuario, int codigo)
+        {
+            return Json(oGovernanca.DeleteTipoPerdaEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                           codigoUsuario: usuario,
+                                                           codigo: codigo));            
+        }
+
+        [HttpPost]
+        public JsonResult ValidaTipoPerda(int unidade, string descricao, int codigo)
+        {
+            return Json(oGovernanca.ValidaTipoPerdaEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                           codigoUnidade: unidade,
+                                                           descricao: descricao,
+                                                           codigo: codigo));
         }
 
         #endregion

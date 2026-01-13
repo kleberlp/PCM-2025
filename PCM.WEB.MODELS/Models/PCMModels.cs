@@ -673,4 +673,10 @@ namespace PCM.WEB.MODELS
         public List<PictureModels> fotos { get; set; }
     }
 
+    public class defaultResponse
+    {
+        public bool success { get; set; }
+        public string message { get; set; }       
+    }
+
 }
