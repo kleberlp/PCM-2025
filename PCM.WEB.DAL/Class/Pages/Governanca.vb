@@ -3773,6 +3773,7 @@ Public Class Governanca
                                      ByVal data As String,
                                      ByVal peso As String,
                                      ByVal enxoval As String,
+                                     ByVal tipoPerdaEnxoval As Integer,
                                      ByVal codigoUsuario As Integer)
 
         Try
@@ -3787,6 +3788,7 @@ Public Class Governanca
                 CriarParametro("data", SqlDbType.Date, data),
                 CriarParametro("peso", SqlDbType.VarChar, peso.Replace(".", "").Replace(",", ".")),
                 CriarParametro("enxoval", SqlDbType.VarChar, enxoval),
+                CriarParametro("codigo_tipo_perda_enxoval", SqlDbType.Int, IIf(tipoPerdaEnxoval = -1, DBNull.Value, tipoPerdaEnxoval)),
                 CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
             }
 
@@ -3830,6 +3832,8 @@ Public Class Governanca
                     oInfo.codigoEnxoval = oSqlDataReader.Item("codigo_enxoval")
                     oInfo.descricao = oSqlDataReader.Item("descricao")
                     oInfo.quantidade = oSqlDataReader.Item("quantidade")
+                    oInfo.quantidadeLavanderia = 0
+                    oInfo.quantidadeUso = 0
 
                     oReturn.Add(oInfo)
 
@@ -3975,6 +3979,7 @@ Public Class Governanca
                         .codigoEmpresa = SafeGetLong(oSqlDataReader, "codigo_empresa"),
                         .codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade"),
                         .unidade = SafeGetString(oSqlDataReader, "unidade"),
+                        .descricao = SafeGetString(oSqlDataReader, "descricao"),
                         .ativo = SafeGetBooleanSimNao(oSqlDataReader, "ativo")
                     }
 
@@ -4042,7 +4047,8 @@ Public Class Governanca
                     oReturn.codigoEmpresa = SafeGetLong(oSqlDataReader, "codigo_empresa")
                     oReturn.codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade")
                     oReturn.descricao = SafeGetString(oSqlDataReader, "descricao")
-                    oReturn.ativoValue = SafeGetLong(oSqlDataReader, "ativo")
+                    oReturn.ativoValue = IIf(SafeGetBoolean(oSqlDataReader, "ativo") = True, 1, 0)
+                    oReturn.codigo = SafeGetLong(oSqlDataReader, "codigo")
 
                 End While
 
@@ -4059,7 +4065,6 @@ Public Class Governanca
     End Function
 
     Public Sub UpdateTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
-                                      ByVal codigoUnidade As Integer,
                                       ByVal descricao As String,
                                       ByVal ativo As Integer,
                                       ByVal codigoUsuario As Integer,
@@ -4069,7 +4074,6 @@ Public Class Governanca
 
             Dim oParameters As SqlParameter() = {
                 CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
-                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
                 CriarParametro("codigo", SqlDbType.Int, codigo),
                 CriarParametro("descricao", SqlDbType.VarChar, descricao),
                 CriarParametro("ativo", SqlDbType.Bit, ativo),
@@ -4087,9 +4091,9 @@ Public Class Governanca
 
     End Sub
 
-    Public Function DeleteTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
+    Public Sub DeleteTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
                                            ByVal codigoUsuario As Integer,
-                                           ByVal codigo As Integer) As defaultResponse
+                                           ByVal codigo As Integer)
 
         Try
 
@@ -4100,7 +4104,7 @@ Public Class Governanca
             }
 
             'Executa Query
-            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_cadastro_basico_tipo_perda_enxoval", oParameters)
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_delete_cadastro_basico_tipo_perda_enxoval", oParameters)
 
         Catch SqlEx As SqlException
             Throw SqlEx
@@ -4108,7 +4112,7 @@ Public Class Governanca
             Throw ex
         End Try
 
-    End Function
+    End Sub
 
     Public Function ValidaTipoPerdaEnxoval(ByVal codigoEmpresa As Integer,
                                            ByVal codigoUnidade As Integer,

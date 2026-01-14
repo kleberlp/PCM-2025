@@ -69,8 +69,8 @@ $(document).ready(function () {
                 orderable: false,
                 data: null,
                 defaultContent: "<div class='btn-group'> " +
-                    "<button type='button' class='btn btn-sm btn-secondary bg-success' title='" + messages.clickToEdit + "' id='btnEdit' name='btnEdit'><i class='fa fa-check'></i></button> " +
-                    "<button type='button' class='btn btn-sm btn-secondary bg-danger' title='" + messages.clickToDelete + "' id='btnDelete' name='btnDelete'><i class='fa fa-times'></i></button> " +
+                    "<button type='button' class='btn btn-sm btn-secondary' title='" + messages.clickToEdit + "' id='btnEdit' name='btnEdit'><i class='fa fa-pencil'></i></button> " +
+                    "<button type='button' class='btn btn-sm btn-secondary' title='" + messages.clickToDelete + "' id='btnDelete' name='btnDelete'><i class='fa fa-times'></i></button> " +
                     "</div> "
             }
         ],
@@ -125,11 +125,11 @@ $(document).ready(function () {
             if (result.value) {
                 jQuery.ajax({
                     method: "POST",
-                    url: `${basePath}/DeleteTipoPerda`,
+                    url: `${basePath}/TipoPerdaDelete`,
                     async: false,
                     data: {
                         "codigo": data.codigo,
-                        "codigoUsuario": $("#usuario").val()
+                        "usuario": $("#usuario").val()
                     },
                     dataType: "json",
                     success: function (response) {
@@ -140,11 +140,8 @@ $(document).ready(function () {
                                 icon: "success",
                                 showDenyButton: false,
                                 showCancelButton: false,
-                            }).then((result) => {
-                                if (result) {
-                                    table.ajax.reload(null, false);
-                                }
-                            });
+                            })
+                            table.ajax.reload(null, false);
 
                         } else {
                             Swal.fire({

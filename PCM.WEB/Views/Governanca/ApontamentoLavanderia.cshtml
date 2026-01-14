@@ -61,6 +61,12 @@
                             <div><input type="text" class="form-control" id="ocupacao_quartos" name="ocupacao_quartos" maxlength="5" value=""></div>
                         </div>
                     </div>
+                    <div class="form-group row" id="divPerda" name="divPerda">
+                        <div class="col-4">
+                            <label>@PCM.WEB.Properties.Resources.tipoPerdaEnxoval</label>
+                            <div>@Html.DropDownList("tipoPerdaEnxoval", null, "", new { @class = "form-control" })</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="block block-rounded border">
@@ -140,6 +146,8 @@
 
     $(document).ready(function () {
 
+        const basePath = window.location.pathname.split("/").slice(0, 2).join("/");
+
         loadApontamentoInfo();
 
         var jsonData = [];
@@ -149,6 +157,7 @@
         $("#peso").maskMoney({ prefix: '', thousands: '.', decimal: ',', precision: 2, allowNegative: false, 'placeholder': '' });
         $("#btnData").hide();
         $("#divHospede").hide();
+        $("#divPerda").hide();
 
         if ($("#tipo").val() == "1") {
             $("#divHospede").show();
@@ -162,6 +171,13 @@
             $("#btnData").hide();
         }
 
+        if ($("#tipo").val() == "4") {
+            $("#divPerda").show();
+        } else {
+            $("#divPerda").hide();
+        }
+
+
         $("#btnSave").on('click', function (e) {
             $("#form").submit();
         });
@@ -172,7 +188,11 @@
 
         $("#btnConfirmar").click(function () {
             tbEnxoval.ajax.reload(null, false);
-            $("#modalPeriodo").modal("hide"); 
+            $("#modalPeriodo").modal("hide");
+        });
+
+        $("#btnPrint").click(function () {
+            window.location = `${basePath}/RolLavanderia?empresa=` + $("#empresa").val() + `&unidade=` + $("#unidade").val() + `&tipo=` + $("#tipo").val() + `&data=` + $("#data").val();
         });
 
         $("#unidade").change(function () {
@@ -182,6 +202,29 @@
             tbEnxoval.ajax.reload(null, false);
             loadApontamentoInfo();
 
+            if ($("#unidade").val() == "") {
+
+                $("#tipoPerdaProduto").empty();
+                $("#tipoPerdaEnxoval").prop("disabled", true);
+
+            } else {
+
+                var request = { "unidade": $("#unidade").val() };
+
+                $.post("LoadComboTipoPerdaEnxoval", request, function (obj) {
+                    $("#tipoPerdaEnxoval").empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    $("#tipoPerdaEnxoval").append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        $("#tipoPerdaEnxoval").append(option);
+                    });
+                }, "json");
+
+                $("#tipoPerdaEnxoval").prop("disabled", false);
+
+            }
+
         });
 
         $("#tipo").change(function () {
@@ -190,6 +233,7 @@
             $("#data_termino_execucao").val("");
             $("#quantidade_hospede").val("");
             $("#ocupacao_quartos").val("");
+            $("#tipoPerdaEnxoval").val("");
 
             if($("#tipo").val() == "1"){
                 $("#divHospede").show();
@@ -199,10 +243,17 @@
 
             if ($("#tipo").val() == "2") {
                 $("#btnData").show();
+                $("#btnPrint").show();
             } else {
                 $("#btnData").hide();
+                $("#btnPrint").hide();
             }
 
+            if ($("#tipo").val() == "4") {
+                $("#divPerda").show();
+            } else {
+                $("#divPerda").hide();
+            }
             tbEnxoval.ajax.reload(null, false);
             loadApontamentoInfo();
 
@@ -275,8 +326,31 @@
                     allowNegative: false,
                     placeholder: ''
                 });
+                // Aplica a máscara no campo quantidade após a tabela ser renderizada ou atualizada
+                $('#tbEnxoval input[name="quantidade"]').maskMoney({
+                    prefix: '',
+                    thousands: '.',
+                    decimal: ',',
+                    precision: 0,
+                    allowNegative: false,
+                    placeholder: ''
+                });
             }
         });
+
+        jQuery.validator.addMethod("perda", function (value, element) {
+
+            var result = false;
+
+            if ($("#tipo").val() == "4" && value == "") {
+                result = false;
+            } else {
+                result = true;
+            }
+
+            return result;
+
+        }, "");
 
         $('#form').validate({
             onkeyup: false,
@@ -306,6 +380,9 @@
                 },
                 'data': {
                     required: true
+                },
+                'tipoPerdaEnxoval': {
+                    perda: true
                 }
             },
             messages: {
@@ -320,6 +397,9 @@
                 },
                 'data': {
                     required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                },
+                'tipoPerdaEnxoval': {
+                    perda: '@PCM.WEB.Properties.Resources.campo_requerido'
                 }
             },
             submitHandler: function (form) {

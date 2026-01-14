@@ -70,13 +70,13 @@ $(document).ready(function () {
             {
                 data: "quantidade",
                 render: function (data, type, row, meta) {
-                    return `<input type="text" name="quantidade" class="form-control text-center" value="${data}" data-rowindex="${meta.row}" />`;
+                    return `<input type="text" name="quantidade" id="quantidade" class="form-control text-center" value="${data}" data-rowindex="${meta.row}" />`;
                 }
             },
             {
                 data: "quantidadeUso",
                 render: function (data, type, row, meta) {
-                    return `<input type="text" name="quantidadeUso" class="form-control text-center" value="${data}" data-rowindex="${meta.row}" />`;
+                    return `<input type="text" name="quantidadeUso" id="quantidadeUso" class="form-control text-center" value="${data}" data-rowindex="${meta.row}" />`;
                 }
             },
         ],
@@ -135,7 +135,9 @@ $(document).ready(function () {
             table.rows().every(function () {
                 let rowDataEnxoval = this.data();
                 let quantidadeEnxoval = $(this.node()).find('input[type="text"][name="quantidade"]').val();
+                let quantidadeUso = $(this.node()).find('input[type="text"][name="quantidadeUso"]').val();
                 rowDataEnxoval.quantidade = quantidadeEnxoval;
+                rowDataEnxoval.quantidadeUso = quantidadeUso;
                 this.data(rowDataEnxoval);
             });
 

@@ -2,6 +2,7 @@
 using NPOI.HSSF.Model;
 using PCM.WEB.DAL;
 using PCM.WEB.MODELS;
+using PCM.WEB.Properties;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static Google.Apis.Requests.BatchRequest;
 
 namespace PCM.WEB.Controllers
 {
@@ -84,6 +86,14 @@ namespace PCM.WEB.Controllers
         {
             return Json(oCombo.StatusRoom(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                           iCodigoUnidade: unidade));
+        }
+
+        //JSON: /ANDAR/
+        public JsonResult LoadComboTipoPerdaEnxoval(int unidade)
+        {
+            return Json(oCombo.LoadCombo(storedProcedure: "sp_select_combo_cadastro_basico_tipo_perda_enxoval",
+                                         codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                         codigoUnidade: unidade));
         }
 
         #endregion
@@ -2133,18 +2143,17 @@ namespace PCM.WEB.Controllers
                                                                                      codigo: codigo);
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString()); ;
-                ViewBag.ativo = new SelectList(oCombo.SimNao(), "codigo", "descricao", 1);
+                                                                bCadastro: true), "codigo", "descricao", tipoPerdaEnxoval.codigoUnidade); ;
+                ViewBag.ativo = new SelectList(oCombo.SimNao(), "codigo", "descricao", tipoPerdaEnxoval.ativoValue);
 
                 return View(tipoPerdaEnxoval);
             }
         }
 
         [HttpPost]
-        public ActionResult TipoPerdaEdit(int unidade, string descricao, int ativo, int usuario, int codigo)
+        public ActionResult TipoPerdaEdit(string descricao, int ativo, int usuario, int codigo)
         {
             oGovernanca.UpdateTipoPerdaEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                               codigoUnidade: unidade,
                                                descricao: descricao,
                                                ativo: ativo,
                                                codigoUsuario: usuario,
@@ -2156,9 +2165,26 @@ namespace PCM.WEB.Controllers
         [HttpPost]
         public JsonResult TipoPerdaDelete(int usuario, int codigo)
         {
-            return Json(oGovernanca.DeleteTipoPerdaEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                           codigoUsuario: usuario,
-                                                           codigo: codigo));            
+            defaultResponse response = new defaultResponse();
+
+            try
+            {                
+                oGovernanca.DeleteTipoPerdaEnxoval(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                   codigoUsuario: usuario,
+                                                   codigo: codigo);
+
+                response.success = true;
+                response.message = Resources.register_deleted;
+
+            } 
+            catch (Exception ex)
+            {
+                response.success = false;
+                response.message = ex.Message;
+            }
+
+            return Json(response);
+
         }
 
         [HttpPost]
@@ -2656,7 +2682,9 @@ namespace PCM.WEB.Controllers
                 ViewBag.codigoEmpresa = Session["empresa"].ToString();
 
                 ViewBag.tipo = new SelectList(oCombo.LoadCombo("sp_select_combo_static_tipo_movimentacao"), "codigo", "descricao", (unidade == -1) ? Session["codigo_unidade"].ToString() : unidade.ToString());
-
+                ViewBag.tipoPerdaEnxoval = new SelectList(oCombo.LoadCombo(storedProcedure: "sp_select_combo_cadastro_basico_tipo_perda_enxoval",
+                                                                           codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                           codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                 bCadastro: true), "codigo", "descricao", (unidade == -1) ? Session["codigo_unidade"].ToString(): unidade.ToString());
@@ -2666,7 +2694,7 @@ namespace PCM.WEB.Controllers
         }
 
         [HttpPost]
-        public ActionResult ApontamentoLavanderia(int empresa, int unidade, int tipo, string data, string enxovalJson, string peso = "0", string quantidadeHospede = "0", string ocupacaoQuartos = "0")
+        public ActionResult ApontamentoLavanderia(int empresa, int unidade, int tipo, string data, string enxovalJson, string peso = "0", string quantidadeHospede = "0", string ocupacaoQuartos = "0", int tipoPerdaEnxoval = -1)
         {
             oGovernanca.ApontamentoLavanderia(codigoEmpresa: empresa,
                                               codigoUnidade: unidade,
@@ -2676,6 +2704,7 @@ namespace PCM.WEB.Controllers
                                               ocupacaoQuartos: ocupacaoQuartos,
                                               peso: peso,
                                               enxoval: enxovalJson,
+                                              tipoPerdaEnxoval: tipoPerdaEnxoval,
                                               codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()));
 
             return RedirectToAction("ApontamentoLavanderia", "Governanca", new { unidade = unidade});
@@ -2701,6 +2730,13 @@ namespace PCM.WEB.Controllers
                                                 dataInicio: dataInicio,
                                                 dataTermino: dataTermino));
 
+        }
+
+        [HttpPost]
+        public ActionResult RolLavanderia(int empresa, int unidade, int tipo, string data)
+        {
+
+            return View();
         }
 
         #endregion

@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Relatório de Fechamento - Sintético";
+}
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content content-full">
+
+        <div class="block block-rounded">
+
+            <!-- HEADER -->
+            <div class="block-content pb-15">
+                <div class="row align-items-center border-bottom pb-10">
+
+                    <!-- Logo -->
+                    <div class="col-2">
+                        <img src="@Session["imagem_sidebar"]"
+                             alt="Logo"
+                             style="max-height:70px" />
+                    </div>
+
+                    <!-- Título -->
+                    <div class="col-8 text-center">
+                        <div class="h2 font-w700 mb-5">
+                            Relatório de Fechamento - Sintético
+                        </div>
+                        <div>
+                            <b>Cliente:</b> 
+                        </div>
+                        <div>
+                            <b>Período:</b> 
+                        </div>
+                    </div>
+
+                    <!-- Data -->
+                    <div class="col-2 text-right text-muted">
+                        @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TABELA -->
+            <div class="block-content">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+
+                        <thead class="bg-body-light">
+                            <tr>
+                                <th>Enxoval</th>
+                                <th class="text-center" style="width:150px;">Quantidade</th>
+                            </tr>
+                        </thead>
+
+                        <!--<tbody>
+                            @foreach (var item in Model.Itens)
+                            {
+                                <tr>
+                                    <td>@item.Enxoval</td>
+                                    <td class="text-center font-w600">
+                                        @item.Quantidade.ToString("N0")
+                                    </td>
+                                </tr>
+                            }-->
+
+                            <!-- TOTAL -->
+                            <!--<tr class="table-primary font-w700">
+                                <td class="text-right">Total</td>
+                                <td class="text-center">
+                                    @Model.TotalQuantidade.ToString("N0")
+                                </td>
+                            </tr>
+                        </tbody>-->
+
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- ASSINATURA -->
+            <div class="block-content pt-30">
+                <div class="row">
+
+                    <div class="col-md-6 text-center">
+                        <div class="border-top pt-10">
+                            Assinatura do Responsável
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 text-center">
+                        <div class="border-top pt-10">
+                            Data
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+
+</main>
+<!-- END Main Container -->
+
+@section Styles {
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
+        body {
+            font-size: 12px;
+        }
+
+        table {
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+    </style>
+}

@@ -31,7 +31,7 @@
 
                     <div class="block block-rounded border">
                         <div class="block-header block-header-default bg-gd-default">
-                            <h3 class="block-title text-white font-w600">@Resources.cadastrar</h3>
+                            <h3 class="block-title text-white font-w600">@Resources.inserir</h3>
                             <div class="block-options">
                                 <button type="button" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@Resources.salvar</button>
                                 <a href="@Url.Action("TipoPerda", "Governanca")" class="btn btn-square btn-secondary min-width-100 h-75">
@@ -95,10 +95,6 @@
         validaBancoDados = Resources.valida_bd
     }))'>
 </div>
-
-@section Styles {
-    @Styles.Render("~/Content/dataTables")
-}
 
 @section Scripts {
 

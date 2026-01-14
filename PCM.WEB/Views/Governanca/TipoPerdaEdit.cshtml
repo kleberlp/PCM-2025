@@ -1,5 +1,6 @@
 ﻿@using PCM.WEB.Properties;
 @using Newtonsoft.Json;
+@model PCM.WEB.MODELS.TipoPerdaEnxoval
 
 <!-- Main Container -->
 <main id="main-container">
@@ -11,7 +12,7 @@
                 <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
                 <span class="breadcrumb-item">@Resources.governanca</span>
                 <a class="breadcrumb-item" href="@Url.Action("TipoPerda", "Governanca")">@Resources.tipoPerdaEnxoval</a>
-                <span class="breadcrumb-item active">@Resources.inserir</span>
+                <span class="breadcrumb-item active">@Resources.editar</span>
             </nav>
         </div>
     </div>
@@ -23,38 +24,42 @@
         <div class="row gutters-tiny">
             <!-- Basic Info -->
             <div class="col-md-12">
-                @using (Html.BeginForm("TipoPerdaInsert", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", name = "form", id = "form" }))
+                @using (Html.BeginForm("TipoPerdaEdit", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", name = "form", id = "form" }))
                 {
                     @Html.AntiForgeryToken()
 
-                    <div class="block block-rounded border">
-                        <div class="block-header block-header-default bg-gd-default">
-                            <h3 class="block-title text-white font-w600">@Resources.cadastrar</h3>
-                            <div class="block-options">
-                                <button type="button" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@Resources.salvar</button>
-                                <a href="@Url.Action("TipoPerda", "Governanca")" class="btn btn-square btn-secondary min-width-100 h-75">
-                                    <i class="si si-action-undo mr-5"></i>@Resources.voltar
-                                </a>
-                            </div>
+                <div class="block block-rounded border">
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@Resources.editar</h3>
+                        <div class="block-options">
+                            <button type="button" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@Resources.salvar</button>
+                            <a href="@Url.Action("TipoPerda", "Governanca")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                <i class="si si-action-undo mr-5"></i>@Resources.voltar
+                            </a>
                         </div>
-                        <div class="block-content block-content-full">
-                            <div class="form-group row">
-                                <div class="col-md-4">
-                                    <label>@Resources.unidade</label>
-                                    @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
-                                </div>
-                                <div class="col-md-6">
-                                    <label>@Resources.descricao</label>
-                                    <div><input type="text" class="form-control" id="descricao" name="descricao" value="" maxlength="100"></div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label>@Resources.ativo</label>
-                                    @Html.DropDownList("ativo", null, "", new { @class = "form-control" })
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario">
+                    @Html.HiddenFor(model => model.codigo)
+
+                    <div class="block-content block-content-full">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resources.unidade</label>
+                                @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control", @disabled = "true" })
+                            </div>
+                            <div class="col-md-6">
+                                <label>@Resources.descricao</label>
+                                <div><input type="text" class="form-control" id="descricao" name="descricao" value="@Model.descricao" maxlength="100"></div>
+                            </div>
+                            <div class="col-md-2">
+                                <label>@Resources.ativo</label>
+                                @Html.DropDownList("ativo", null, "", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 }
             </div>
             <!-- END Basic Info -->
@@ -90,17 +95,14 @@
         quantidadeUso = Resources.quantidadeUso,
         quantidadeLavanderia = Resources.quantidadeLavanderia,
         divergencia = Resources.divergencia,
-        validaBancoDados = Resources.valida_bd
+        validaBancoDados = Resources.valida_bd,
+        codigoUnidade = Model.codigoUnidade
     }))'>
 </div>
 
-@section Styles {
-    @Styles.Render("~/Content/dataTables")
-}
-
 @section Scripts {
 
-    <script src="~/Content/js/pages/Governanca/jquery.tipoPerdaInsert.init.js"></script>
+    <script src="~/Content/js/pages/Governanca/jquery.tipoPerdaEdit.init.js"></script>
 
     <script src="~/Content/js/lib/datatables/dataTables.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
