@@ -25,14 +25,14 @@ namespace PCM.WEB.MODELS
     public class dashboardGovernancaChartArrumacaoDia
     {
         public string camareira { get; set; }
-        public string quantidade { get; set; }
+        public int quantidade { get; set; }
         public string data { get; set; }
     }
 
     public class dashboardGovernancaChartVistoriaDia
     {
         public string vistoriador { get; set; }
-        public string quantidade { get; set; }
+        public int quantidade { get; set; }
         public string data { get; set; }
     }
 
@@ -48,7 +48,7 @@ namespace PCM.WEB.MODELS
     public class dashboardGovernancaNCDia
     {
         public string unidade { get; set; }
-        public string quantidadeNC { get; set; }
+        public float quantidadeNC { get; set; }
         public string data { get; set; }
     }
 
@@ -68,7 +68,7 @@ namespace PCM.WEB.MODELS
     public class dashboardGovernancaChartUHxCamareira
     {
         public string camareira { get; set; }
-        public string quantidade { get; set; }
+        public float quantidade { get; set; }
         public string data { get; set; }
     }
 
@@ -112,7 +112,7 @@ namespace PCM.WEB.MODELS
     {
         public string item { get; set; }
         public string descricao { get; set; }
-        public string quantidade { get; set; }
+        public float quantidade { get; set; }
     }
 
     public class Governanca

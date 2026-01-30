@@ -133,7 +133,19 @@
                                                 <td class="text-center">@Model.checklist[i].prazo</td>
                                                 <td style="width:50px">
                                                     <div class="btn-group">
-                                                        <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+
+                                                        @if (Model.checklist[i].possui_foto)
+                                                        {
+                                                        <div class="btn-group">
+                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                        </div>
+                                                        }
+                                                        else
+                                                        {
+                                                        <div class="btn-group">
+                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                        </div>
+                                                        }
                                                     </div>
                                                 </td>
                                             </tr>
@@ -237,9 +249,18 @@
                                                 <td>
                                                     @if (Model.checklist[i].allow_picture)
                                                     {
-                                                        <div class="btn-group">
-                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
-                                                        </div>
+                                                        if (Model.checklist[i].possui_foto)
+                                                        {
+                                                            <div class="btn-group">
+                                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="btn-group">
+                                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                            </div>
+                                                        }
                                                     }
                                                 </td>
                                             </tr>

@@ -1,8 +1,11 @@
 ﻿@using PCM.WEB.Properties
 @using Newtonsoft.Json
 
+<base href="@Url.Content("~/")">
+
 <!-- Main Container -->
 <main id="main-container">
+
 
     <!-- Breadcrumb -->
     <div class="bg-body-light border-b">
@@ -103,7 +106,10 @@
         clickToCopy = Resources.clickToCopy,
         clickToExcel = Resources.clickToExcel,
         clickToPdf = Resources.clickToPdf,
-        clickToConfig = Resources.clickToConfig
+        clickToConfig = Resources.clickToConfig,
+        loadChecklist = @Url.Action("LoadChecklist", "CadastroBasico"),
+        checklistEdit = @Url.Action("ChecklistEdit", "CadastroBasico"),
+        deleteChecklist = @Url.Action("deleteChecklist", "CadastroBasico"),
     }))'>
 </div>
 

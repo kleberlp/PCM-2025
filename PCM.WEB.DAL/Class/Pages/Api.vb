@@ -3244,6 +3244,16 @@ Public Class Api
                             .codigo = oSqlDataReader.Item("status_opera_codigo"),
                             .descricao = oSqlDataReader.Item("status_opera_descricao"),
                             .cssClass = oSqlDataReader.Item("status_opera_css_class")
+                         },
+                         .statusGovernanca = New pwaStatus With {
+                            .codigo = oSqlDataReader.Item("status_governanca_codigo"),
+                            .descricao = oSqlDataReader.Item("status_governanca_descricao"),
+                            .cssClass = oSqlDataReader.Item("status_governanca_css_class")
+                         },
+                         .statusUH = New pwaStatus With {
+                            .codigo = oSqlDataReader.Item("status_uh_codigo"),
+                            .descricao = oSqlDataReader.Item("status_uh_descricao"),
+                            .cssClass = oSqlDataReader.Item("status_uh_css_class")
                          }
                     }
 

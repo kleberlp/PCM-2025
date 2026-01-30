@@ -5,6 +5,12 @@ const basePath = window.location.pathname.split("/").slice(0, 2).join("/");
 
 $(document).ready(function () {
 
+    $('.js-datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        weekStart: 1,
+        autoclose: true,
+        todayHighlight: true
+    });
 
     function format(data) {
 

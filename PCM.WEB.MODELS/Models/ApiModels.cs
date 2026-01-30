@@ -467,6 +467,8 @@ namespace PCM.WEB.MODELS
         public string dataUltimaGovernaca { get; set; }
         public pwaStatus status { get; set; }
         public pwaStatus statusOpera { get; set; }
+        public pwaStatus statusGovernanca { get; set; }
+        public pwaStatus statusUH { get; set; }
         public pwaChecklist checklist { get; set; }
     }
 

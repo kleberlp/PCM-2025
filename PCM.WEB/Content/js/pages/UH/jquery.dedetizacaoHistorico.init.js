@@ -1,23 +1,47 @@
 
 const messagesData = document.getElementById('resource-messages').getAttribute('data-messages');
 const messages = JSON.parse(messagesData);
-
-const { origin, pathname } = window.location;
-
-const segments = pathname.split('/').filter(Boolean);
-
-const basePath = document.baseURI.replace(/\/$/, '');
-
-//const basePath = window.location.pathname.split("/").slice(0, 2).join("/");
+const basePath = window.location.pathname.split("/").slice(0, 2).join("/");
 
 $(document).ready(function () {
+
+    $('.js-datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        weekStart: 1,
+        autoclose: true,
+        todayHighlight: true
+    });
+
+    $("#unidade").change(function () {
+
+        if ($("#unidade").val() == "") {
+
+            $("#apartamento").empty();
+
+        } else {
+
+            var request = { "unidade": $("#unidade").val() };
+
+            $.post("LoadApartamento", request, function (obj) {
+                $("#apartamento").empty();
+                option = $("<option>", { "value": "" }).text("");
+                $("#apartamento").append(option);
+                $.each(obj, function (indice, result) {
+                    option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                    $("#apartamento").append(option);
+                });
+            }, "json");
+
+        }
+
+    });
 
     var table = $('#tableMain').DataTable({
         select: {
             selector: 'td:not(:first-child)',
             style: 'os'
         },
-        searching: true,
+        searching: false,
         fixedColumns: {
             start: 0,
             end: 1
@@ -28,13 +52,15 @@ $(document).ready(function () {
         scrollCollapse: false,
         serverSide: false,
         ajax: {
-            url: messages.loadChecklist,
+            url: `${basePath}/LoadDedetizacaoHistorico`,
             type: "POST",
             datatype: "json",
             data: function (d) {
-                d.unidade = $('#unidade').val(),
-                d.tipoChecklist = $('#tipoChecklist').val(),
-                d.descricao = $('#descricao').val()
+                d.empresa = $('#empresa').val(),
+                d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                d.dataInicio = $('#dataInicio').val(),
+                d.dataTermino = $('#dataTermino').val(),
+                d.apartamento = ($('#apartamento').val() == "") ? -1 : $('#apartamento').val()
             },
             dataSrc: ""
         },
@@ -65,19 +91,21 @@ $(document).ready(function () {
                 text: "<i class='fa fa-columns text-black'></i>",
                 titleAttr: messages.clickToConfig,
                 className: 'btn btn-sm btn-outline-light waves-light waves-effect dropdown-toggle tippy-btn mb-2',
-                columns: [0, 1, 2]
+                columns: [1, 2, 3, 4]
             }
         ],
         columns: [
             { data: "unidade" },
-            { data: "tipoChecklist" },
-            { data: "descricao" },
+            { data: "data" },
+            { data: "apartamento" },
+            { data: "colaborador" },
+            { data: "observacao" },
             {
                 orderable: false,
                 data: null,
                 defaultContent: "<div class='btn-group'> " +
                     "<button type='button' class='btn btn-sm btn-secondary' title='" + messages.clickToDelete + "' id='btnDelete' name='btnDelete'><i class='fa fa-times'></i></button> " +
-                    "<button type='button' class='btn btn-sm btn-secondary' title='" + messages.clickToEdit + "' id='btnEdit' name='btnEdit'><i class='fa fa-pencil'></i></button></div> "
+                    "</div> "
             }
         ],
         language: {
@@ -86,11 +114,22 @@ $(document).ready(function () {
             infoEmpty: "",
             infoFiltered: "",
         },
-        order: [[1, 'asc']],
+        order: [[0, 'asc']],        
         columnDefs: [
-            { className: 'text-center', targets: [0, 1, 3] },
-            { width: '40px', targets: [3] },
+            { className: 'text-center', targets: [1, 2, 5] },
+            { width: '40px', targets: [5] },
+            { width: '150px', targets: [1, 2] },
+            {
+                createdCell: function (td, cellData, rowData, row, col) {
+
+                    if (col == 5 && messages.diretoExcluir == false) {
+                        $(td).find('#btnDelete').hide();
+                    }
+
+                }, targets: [5]
+            }
         ],
+
     });
 
     // Reload DataTable
@@ -104,15 +143,9 @@ $(document).ready(function () {
 
         if (this.id == "btnDelete") {
             deleteRegister(data);
-        } if (this.id == "btnEdit") {
-            editRegister(data);
         }
 
     });
-
-    function editRegister(data) {
-        window.location = `${messages.checklistEdit}?codigo=` + data.codigo;
-    }
 
     function deleteRegister(data) {
 
@@ -128,10 +161,14 @@ $(document).ready(function () {
             if (result.value) {
                 jQuery.ajax({
                     method: "POST",
-                    url: `${messages.deleteChecklist}`,
+                    url: `${basePath}/DeleteDedetizacao`,
                     async: false,
                     data: {
-                        "codigo": data.codigo
+                        "codigoEmpresa": data.codigoEmpresa,
+                        "codigoUnidade": data.codigoUnidade,
+                        "codigoUHAtividade": data.codigoUHAtividade,
+                        "codigo": data.codigo,
+                        "usuario": $("#usuario").val()
                     },
                     dataType: "json",
                     success: function (response) {
@@ -142,11 +179,8 @@ $(document).ready(function () {
                                 icon: "success",
                                 showDenyButton: false,
                                 showCancelButton: false,
-                            }).then((result) => {
-                                if (result) {
-                                    table.ajax.reload(null, false);
-                                }
-                            });
+                            })
+                            table.ajax.reload(null, false);
 
                         } else {
                             Swal.fire({

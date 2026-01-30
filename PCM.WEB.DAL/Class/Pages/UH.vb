@@ -2184,4 +2184,174 @@ Public Class UH
 
 #End Region
 
+#Region "::: DEDETIZAÇÃO - HISTÓRICO :::"
+
+    Public Function LoadDedetizacaoHistorico(ByVal codigoEmpresa As Integer,
+                                             ByVal codigoUnidade As Integer,
+                                             ByVal dataInicio As String,
+                                             ByVal dataTermino As String,
+                                             ByVal codigoApartamento As Integer) As List(Of UHDedetizacaoHistorico)
+
+        Try
+
+
+            Dim oReturn As New List(Of UHDedetizacaoHistorico)
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, IIf(IsDate(dataInicio), dataInicio, DBNull.Value)),
+                CriarParametro("data_termino", SqlDbType.Date, IIf(IsDate(dataTermino), dataTermino, DBNull.Value)),
+                CriarParametro("codigo_apartamento", SqlDbType.Int, codigoApartamento)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_uh_dedetizacao_historico", oParameters)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New UHDedetizacaoHistorico With {
+                        .codigo = SafeGetLong(oSqlDataReader, "codigo"),
+                        .codigoEmpresa = SafeGetLong(oSqlDataReader, "codigo_empresa"),
+                        .codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade"),
+                        .codigoUHAtividade = SafeGetLong(oSqlDataReader, "codigo_uh_atividade"),
+                        .unidade = SafeGetString(oSqlDataReader, "unidade"),
+                        .data = SafeGetDate(oSqlDataReader, "data"),
+                        .apartamento = SafeGetString(oSqlDataReader, "apartamento"),
+                        .colaborador = SafeGetString(oSqlDataReader, "colaborador"),
+                        .observacao = SafeGetString(oSqlDataReader, "observacao")
+                    }
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Sub DeleteDedetizacao(ByVal codigoEmpresa As Integer,
+                                 ByVal codigoUnidade As Integer,
+                                 ByVal codigoUHAtividade As Integer,
+                                 ByVal codigo As Long,
+                                 ByVal codigoUsuario As Integer)
+
+        Try
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo_uh_atividade", SqlDbType.Int, codigoUHAtividade),
+                CriarParametro("codigo", SqlDbType.BigInt, codigo),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_delete_uh_dedetizacao", oParameters)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+#End Region
+
+#Region "::: MAPA DE MANUTENÇÃO - HISTÓRICO :::"
+
+    Public Function LoadMapaManutencaoHistorico(ByVal codigoEmpresa As Integer,
+                                                ByVal codigoUnidade As Integer,
+                                                ByVal codigoAtividade As Integer,
+                                                ByVal dataInicio As String,
+                                                ByVal dataTermino As String,
+                                                ByVal codigoApartamento As Integer) As List(Of UHMapaManutencaoHistorico)
+
+        Try
+
+
+            Dim oReturn As New List(Of UHMapaManutencaoHistorico)
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo_atividade", SqlDbType.Int, codigoAtividade),
+                CriarParametro("data_inicio", SqlDbType.Date, IIf(IsDate(dataInicio), dataInicio, DBNull.Value)),
+                CriarParametro("data_termino", SqlDbType.Date, IIf(IsDate(dataTermino), dataTermino, DBNull.Value)),
+                CriarParametro("codigo_apartamento", SqlDbType.Int, codigoApartamento)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_uh_mapa_manutencao_historico", oParameters)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New UHMapaManutencaoHistorico With {
+                        .codigo = SafeGetLong(oSqlDataReader, "codigo"),
+                        .codigoEmpresa = SafeGetLong(oSqlDataReader, "codigo_empresa"),
+                        .codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade"),
+                        .codigoApartamento = SafeGetLong(oSqlDataReader, "codigo_apartamento"),
+                        .unidade = SafeGetString(oSqlDataReader, "unidade"),
+                        .data = SafeGetDate(oSqlDataReader, "data"),
+                        .dataPrevisaoTermino = SafeGetDate(oSqlDataReader, "data_previsao_termino"),
+                        .descricao = SafeGetString(oSqlDataReader, "descricao"),
+                        .apartamento = SafeGetString(oSqlDataReader, "apartamento"),
+                        .colaborador = SafeGetString(oSqlDataReader, "colaborador"),
+                        .observacao = SafeGetString(oSqlDataReader, "observacao")
+                    }
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Sub DeleteMapaManutencao(ByVal codigoEmpresa As Integer,
+                                    ByVal codigoUnidade As Integer,
+                                    ByVal codigoApartamento As Integer,
+                                    ByVal codigo As Long,
+                                    ByVal codigoUsuario As Integer)
+
+        Try
+
+            Dim oParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo_apartamento", SqlDbType.Int, codigoApartamento),
+                CriarParametro("codigo", SqlDbType.BigInt, codigo),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_delete_uh_mapa_manutencao", oParameters)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+#End Region
+
 End Class

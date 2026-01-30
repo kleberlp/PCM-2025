@@ -9,6 +9,13 @@ $(document).ready(function () {
         table.ajax.reload(null, false);
     });
 
+    $('.js-datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        weekStart: 1,
+        autoclose: true,
+        todayHighlight: true
+    });
+
     var table = $('#tableMain').DataTable({
         select: {
             selector: 'td:not(:first-child)',
@@ -31,7 +38,8 @@ $(document).ready(function () {
             datatype: "json",
             data: function (d) {
                 d.empresa = $('#empresa').val(),
-                d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val()
+                d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                d.data = $('#data').val()
             },
             dataSrc: ""
         },
@@ -95,6 +103,11 @@ $(document).ready(function () {
 
     // Reload DataTable
     $('#btnSave').click(function () {
+        $("#form").submit();
+    });
+
+    // Voltar
+    $('#btnVoltar').click(function () {
         $("#form").submit();
     });
 

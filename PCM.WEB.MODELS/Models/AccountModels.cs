@@ -142,9 +142,13 @@ namespace PCM.WEB.MODELS
         public bool rel_camareira_uh { get; set; }
         public bool rel_camareira_nc { get; set; }
         public bool rel_responsavel_vistoria_uh { get; set; }
+
         public bool uh_checklist { get; set; }
         public bool uh_checklist_historico { get; set; }
         public bool uh_dedetizacao { get; set; }
+        public bool uhDedetizacaoHistorico { get; set; }
+        public bool uhMapaManutencaoHistorico { get; set; }
+
         public bool excel_ordem_servico { get; set; }
         public bool excel_plano_acao_qa { get; set; }
 

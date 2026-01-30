@@ -74,10 +74,7 @@
                         <table class="table table-vcenter table-sm table-bordered table-hover js-dataTable-list">
                             <thead>
                                 <tr class="table-secondary">
-                                    @if (Session["unidade"] == "")
-                                    {
-                                        <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
-                                    }
+                                    <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
                                     <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.uh</th>
                                     <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data_inicio</th>
                                     <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data_termino</th>
@@ -94,10 +91,7 @@
                                 @foreach (var item in Model)
                                 {
                                 <tr>
-                                    @if (Session["unidade"] == "")
-                                    {
-                                        <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
-                                    }
+                                    <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
                                     <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.apartamento)</td>
                                     <td class="text-center d-md-table-cell">@Html.DisplayFor(modelItem => item.data_inicio)</td>
                                     <td class="text-center d-md-table-cell">@Html.DisplayFor(modelItem => item.data_termino)</td>

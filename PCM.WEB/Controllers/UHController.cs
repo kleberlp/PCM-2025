@@ -1,16 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Web;
-using System.Configuration;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-using PCM.WEB.MODELS;
-using PCM.WEB.DAL;
-using Microsoft.AspNet.Identity;
-using System.Collections.Generic;
-using CrystalDecisions.CrystalReports.Engine;
+﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
+using Microsoft.AspNet.Identity;
+using PCM.WEB.DAL;
+using PCM.WEB.MODELS;
+using PCM.WEB.Properties;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace PCM.WEB.Controllers
 {
@@ -925,6 +924,175 @@ namespace PCM.WEB.Controllers
 
                 }
             }
+
+        #endregion
+
+        #region::: DEDETIZAÇÃO - HISTÓRICO :::
+
+        public ActionResult DedetizacaoHistorico()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool imprimir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "uhDedetizacaoHistorico",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bImprimir: ref imprimir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+                ViewBag.imprimir = imprimir;
+                ViewBag.usuario = User.Identity.GetUserName();
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString());
+                ViewBag.apartamento = new SelectList(oCombo.Apartamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                        iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadDedetizacaoHistorico(int empresa, int unidade, string dataInicio, string dataTermino, int apartamento)
+        {
+
+            return Json(oUH.LoadDedetizacaoHistorico(codigoEmpresa: empresa,
+                                                     codigoUnidade: unidade,
+                                                     dataInicio: dataInicio,
+                                                     dataTermino: dataTermino,
+                                                     codigoApartamento: apartamento));
+
+        }
+
+        [HttpPost]
+        public JsonResult DeleteDedetizacao(int usuario, int codigoEmpresa, int codigoUnidade, int codigoUHAtividade, long codigo)
+        {
+            defaultResponse response = new defaultResponse();
+
+            try
+            {
+                oUH.DeleteDedetizacao(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                      codigoUnidade: codigoUnidade,
+                                      codigoUHAtividade: codigoUHAtividade,
+                                      codigo: codigo,        
+                                      codigoUsuario: usuario);
+
+                response.success = true;
+                response.message = Resources.register_deleted;
+
+            }
+            catch (Exception ex)
+            {
+                response.success = false;
+                response.message = ex.Message;
+            }
+
+            return Json(response);
+
+        }
+
+        #endregion
+
+        #region::: MAPA DE MANUTENÇÃO - HISTÓRICO :::
+
+        public ActionResult MapaManutencaoHistorico()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool imprimir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "uhMapaManutencaoHistorico",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bImprimir: ref imprimir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+                ViewBag.imprimir = imprimir;
+                ViewBag.usuario = User.Identity.GetUserName();
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString());
+                ViewBag.apartamento = new SelectList(oCombo.Apartamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                        iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.atividade = new SelectList(oCombo.Atividade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadMapaManutencaoHistorico(int empresa, int unidade, int atividade, string dataInicio, string dataTermino, int apartamento)
+        {
+
+            return Json(oUH.LoadMapaManutencaoHistorico(codigoEmpresa: empresa,
+                                                        codigoUnidade: unidade,
+                                                        codigoAtividade: atividade,
+                                                        dataInicio: dataInicio,
+                                                        dataTermino: dataTermino,
+                                                        codigoApartamento: apartamento));
+
+        }
+
+        [HttpPost]
+        public JsonResult DeleteMapaManutencao(int usuario, int codigoEmpresa, int codigoUnidade, int codigoApartamento, long codigo)
+        {
+            defaultResponse response = new defaultResponse();
+
+            try
+            {
+                oUH.DeleteMapaManutencao(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                         codigoUnidade: codigoUnidade,
+                                         codigoApartamento: codigoApartamento,
+                                         codigo: codigo,
+                                         codigoUsuario: usuario);
+
+                response.success = true;
+                response.message = Resources.register_deleted;
+
+            }
+            catch (Exception ex)
+            {
+                response.success = false;
+                response.message = ex.Message;
+            }
+
+            return Json(response);
+
+        }
 
         #endregion
 

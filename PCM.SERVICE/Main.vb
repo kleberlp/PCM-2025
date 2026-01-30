@@ -607,7 +607,52 @@ Public Class Main
 
             Dim requestMessage As HttpRequestMessage
 
-            requestMessage = New HttpRequestMessage(HttpMethod.Post, sHostname & "/busca-uh?uh=&idhotel=" + sHotelID)
+            requestMessage = New HttpRequestMessage(IIf(iCodigoEmpresa = 933, HttpMethod.Get, HttpMethod.Post), sHostname & "idhotel=" + sHotelID)
+
+            ' Adiciona a autenticação Basic no cabeçalho
+            Dim byteArray As Byte() = Encoding.UTF8.GetBytes(sUsername & ":" & sPassword)
+
+            Dim credentials As String = Convert.ToBase64String(Encoding.ASCII.GetBytes(sUsername & ":" & sPassword))
+
+            requestMessage.Headers.Authorization = New AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray))
+
+            Dim result = Await client.SendAsync(requestMessage)
+
+            If result.IsSuccessStatusCode Then
+
+                ' Lida com a resposta da API de acordo com o conteúdo retornado
+                Dim content = Await result.Content.ReadAsStringAsync()
+
+                Call InterfaceHotelRooms(iCodigoEmpresa:=iCodigoEmpresa,
+                                         sHotelID:=sHotelID,
+                                         sJSON:=content,
+                                         sType:="WISH")
+
+            Else
+
+                Return False
+
+            End If
+
+            Return True
+
+        End Using
+
+    End Function
+
+    Public Async Function GetHotelsViale(ByVal sHostname As String,
+                                         ByVal sUsername As String,
+                                         ByVal sPassword As String,
+                                         ByVal iCodigoEmpresa As Integer,
+                                         ByVal sHotelID As String) As Task(Of Boolean)
+
+        Using client As New HttpClient()
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+
+            Dim requestMessage As HttpRequestMessage
+
+            requestMessage = New HttpRequestMessage(HttpMethod.Get, sHostname & "idhotel=" + sHotelID)
 
             ' Adiciona a autenticação Basic no cabeçalho
             Dim byteArray As Byte() = Encoding.UTF8.GetBytes(sUsername & ":" & sPassword)

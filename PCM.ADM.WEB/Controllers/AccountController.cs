@@ -262,6 +262,8 @@ namespace PCM.ADM.WEB.Controllers
             Session["uh_checklist"] = null;
             Session["uh_checklist_historico"] = null;
             Session["uh_dedetizacao"] = null;
+            Session["uhDedetizacaoHistorico"] = null;
+            Session["uhMapaManutencaoHistorico"] = null;
             Session["excel_ordem_servico"] = null;
             Session["checklist"] = null;
             Session["est_listagem"] = null;

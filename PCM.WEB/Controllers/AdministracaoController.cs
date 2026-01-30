@@ -421,9 +421,13 @@ namespace PCM.WEB.Controllers
                 Session["rel_camareira_uh"] = formulario_visualizar.rel_camareira_uh;
                 Session["rel_responsavel_vistoria_uh"] = formulario_visualizar.rel_responsavel_vistoria_uh;
                 Session["rel_camareira_nc"] = formulario_visualizar.rel_camareira_nc;
+                
                 Session["uh_checklist"] = formulario_visualizar.uh_checklist;
                 Session["uh_checklist_historico"] = formulario_visualizar.uh_checklist_historico;
                 Session["uh_dedetizacao"] = formulario_visualizar.uh_dedetizacao;
+                Session["uhDedetizacaoHistorico"] = formulario_visualizar.uhDedetizacaoHistorico;
+                Session["uhMapaManutencaoHistorico"] = formulario_visualizar.uhMapaManutencaoHistorico;
+
                 Session["excel_ordem_servico"] = formulario_visualizar.excel_ordem_servico;
                 Session["excel_plano_acao_qa"] = formulario_visualizar.excel_plano_acao_qa;
 
@@ -901,9 +905,13 @@ namespace PCM.WEB.Controllers
                 Session["rel_camareira_uh"] = formulario_visualizar.rel_camareira_uh;
                 Session["rel_responsavel_vistoria_uh"] = formulario_visualizar.rel_responsavel_vistoria_uh;
                 Session["rel_camareira_nc"] = formulario_visualizar.rel_camareira_nc;
+                
                 Session["uh_checklist"] = formulario_visualizar.uh_checklist;
                 Session["uh_checklist_historico"] = formulario_visualizar.uh_checklist_historico;
                 Session["uh_dedetizacao"] = formulario_visualizar.uh_dedetizacao;
+                Session["uhDedetizacaoHistorico"] = formulario_visualizar.uhDedetizacaoHistorico;
+                Session["uhMapaManutencaoHistorico"] = formulario_visualizar.uhMapaManutencaoHistorico;
+
                 Session["excel_ordem_servico"] = formulario_visualizar.excel_ordem_servico;
                 Session["excel_plano_acao_qa"] = formulario_visualizar.excel_plano_acao_qa;
 

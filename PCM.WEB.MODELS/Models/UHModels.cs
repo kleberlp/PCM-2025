@@ -238,4 +238,32 @@ namespace PCM.WEB.MODELS
         public string descricao { get; set; }
     }
 
+    public class UHDedetizacaoHistorico
+    {
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public int codigoUHAtividade { get; set; }
+        public long codigo { get; set; }
+        public string unidade { get; set; }
+        public string colaborador { get; set; }
+        public string apartamento { get; set; }
+        public string data { get; set; }
+        public string observacao { get; set; }
+    }
+
+    public class UHMapaManutencaoHistorico
+    {
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public int codigoApartamento { get; set; }
+        public long codigo { get; set; }
+        public string unidade { get; set; }
+        public string colaborador { get; set; }
+        public string apartamento { get; set; }
+        public string descricao { get; set; }
+        public string data { get; set; }
+        public string dataPrevisaoTermino { get; set; }
+        public string observacao { get; set; }
+    }
+
 }

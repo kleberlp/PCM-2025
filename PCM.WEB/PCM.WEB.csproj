@@ -757,6 +757,8 @@
     <Content Include="Content\js\pages\Governanca\planejamentoHistorico.js" />
     <Content Include="Content\js\pages\Governanca\dashboard.js" />
     <Content Include="Content\js\pages\sidebar.js" />
+    <Content Include="Content\js\pages\UH\jquery.mapaManutencaoHistorico.init.js" />
+    <Content Include="Content\js\pages\UH\jquery.dedetizacaoHistorico.init.js" />
     <Content Include="Content\js\plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
     <Content Include="Content\js\plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css" />
     <Content Include="Content\js\plugins\bootstrap-colorpicker\img\bootstrap-colorpicker\alpha-horizontal.png" />
@@ -2499,7 +2501,7 @@
     <Content Include="Views\Governanca\FuncionarioEdit.cshtml" />
     <Content Include="Views\Governanca\FuncionarioIndex.cshtml" />
     <Content Include="Views\Governanca\FuncionarioInsert.cshtml" />
-    <Content Include="Views\Governanca\Planejamento2.cshtml" />
+    <Content Include="Views\Governanca\Planejamento.cshtml" />
     <Content Include="Views\PMOC\PMOCAndar.cshtml" />
     <Content Include="Views\Upload\UploadPMOC.cshtml" />
     <Content Include="Views\Relatorio\PMOCBimestral.cshtml" />
@@ -2562,6 +2564,8 @@
     <Content Include="Views\Governanca\TipoPerdaInsert.cshtml" />
     <Content Include="Views\Governanca\TipoPerdaEdit.cshtml" />
     <Content Include="Views\Governanca\RolLavanderia.cshtml" />
+    <Content Include="Views\UH\DedetizacaoHistorico.cshtml" />
+    <Content Include="Views\UH\MapaManutencaoHistorico.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

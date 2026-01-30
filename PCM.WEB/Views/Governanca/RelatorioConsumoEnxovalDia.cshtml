@@ -72,7 +72,7 @@
                         <div class="block-content">
 
                             <!-- Table -->
-                            <div class="table-responsive table-sm push">
+                            <div class="table-sm push">
                                 <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main">
                                     <thead>
                                         <tr class="table-secondary">
@@ -144,7 +144,7 @@
     @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+<script>
 
     $(function () {
 
@@ -182,7 +182,12 @@
         table = $('#tb_main').DataTable({
             info: false,
             scrollCollapse: false,
+            fixedColumns: {
+                start: 1,
+                end: 1
+            },
             scrollY: '40vh',
+            scrollX: true,
             paging: false,
             fixedHeader: true,
             destroy: true,
@@ -373,5 +378,5 @@
         };
     }();
 
-    </script>
+</script>
 }

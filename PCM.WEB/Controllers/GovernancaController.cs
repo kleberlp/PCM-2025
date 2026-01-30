@@ -1152,6 +1152,29 @@ namespace PCM.WEB.Controllers
 
         #region ::: PLANEJAMENTO :::
 
+        //JSON: /LIMPA PLANEJAMENTO
+        public JsonResult ClearPlanejamento(int unidade, int usuario, string data, string json)
+        {
+
+            try
+            {
+
+
+                oGovernanca.ClearPlanejamento(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                              codigoUnidade: unidade,
+                                              data: data,
+                                              json: json);
+
+                return Json(Properties.Resources.operacao_realizaca_sucesso);
+
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message.ToString());
+            }
+
+        }
+
         // GET: INDEX
         public ActionResult Planejamento()
         {
@@ -1208,169 +1231,18 @@ namespace PCM.WEB.Controllers
             }
         }
 
-        // GET: INDEX
-        [HttpPost]
-        public ActionResult Planejamento(int unidade, int tipoGovernanca, string data, int funcionario, int uhAssociada, string codigoApartamento, string bloco, string andar, string frontOfficeStatus, string roomStatus)
-        {
-            //Váriaveis
-            long codigo = 0;
-
-            oGovernanca.InsertPlanejamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                           iCodigoUnidade: unidade,
-                                           iCodigoTipoGovernanca: tipoGovernanca,
-                                           sData: data,
-                                           iCodigoFuncionario: funcionario,
-                                           iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                           lCodigo: ref codigo);
-
-            if (codigoApartamento != "")
-            {
-
-                foreach (string item in codigoApartamento.Split(','))
-                {
-                    if (item != "-1")
-                    {
-                        oGovernanca.InsertPlanejamentoUH(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                         lCodigoPlanejamento: codigo,
-                                                         iCodigoApartamento: int.Parse(item));
-
-                    }
-                }
-
-            }
-
-            ViewBag.inserir = true;
-            ViewBag.data = data;
-            ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                           iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                           bCadastro: false), "codigo", "descricao", unidade);
-            ViewBag.funcionario = new SelectList(oCombo.FuncionarioGovernanca(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                              iCodigoUnidade: unidade), "codigo", "descricao", funcionario);
-            ViewBag.uhAssociada = new SelectList(oCombo.SimNao(), "codigo", "descricao", uhAssociada);
-            ViewBag.bloco = new SelectList(oCombo.Bloco(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        iCodigoUnidade: unidade), "codigo", "descricao", bloco);
-            ViewBag.andar = new SelectList(oCombo.Andar(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        iCodigoUnidade: unidade), "codigo", "descricao", andar);
-            ViewBag.tipoGovernanca = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", tipoGovernanca);
-
-            ViewBag.frontOfficeStatus = new SelectList(oCombo.StatusFrontOffice(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                iCodigoUnidade: unidade), "codigo", "descricao", frontOfficeStatus);
-            ViewBag.roomStatus = new SelectList(oCombo.StatusRoom(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  iCodigoUnidade: unidade), "codigo", "descricao", roomStatus);
-            ViewBag.lastUpdate = oGovernanca.LoadLastUploadStatus(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
-
-            return View();
-        }
-
         //JSON: /CARREGA PLANEJAMENTO
-        public JsonResult LoadPlanejamento(int unidade, int tipoGovernanca, string data, int funcionario, int uhAssociada, string bloco, string andar, string frontOfficeStatus, string roomStatus)
+        public JsonResult LoadPlanejamento(int unidade, int tipoGovernanca, string data, string bloco, string andar, string frontOfficeStatus, string roomStatus)
         {
 
-            return Json(oGovernanca.LoadPlanejamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                     iCodigoUnidade: unidade,
-                                                     iCodigoTipoGovernanca: tipoGovernanca,
-                                                     sData: data,
-                                                     iCodigoFuncionario: funcionario,
-                                                     iUHAssociada: uhAssociada,
-                                                     sBloco: bloco,
-                                                     sAndar: andar,
-                                                     sStatusFrontOffice: frontOfficeStatus,
-                                                     sStatusRoom: roomStatus));
-
-        }
-
-        //JSON: /LIMPA PLANEJAMENTO
-        public JsonResult ClearPlanejamento(int unidade, int usuario, string data, string json)
-        {
-
-            try
-            {
-
-
-                oGovernanca.ClearPlanejamento(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                              codigoUnidade: unidade,
-                                              data: data,
-                                              json: json);
-
-                return Json(Properties.Resources.operacao_realizaca_sucesso);
-
-            }
-            catch (Exception ex)
-            {
-                return Json(ex.Message.ToString());
-            }
-
-        }
-
-        // GET: INDEX
-        public ActionResult Planejamento2()
-        {
-            if (Session["empresa"] == null)
-            {
-                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-            }
-            else
-            {
-                //Váriaveis
-                bool editar = false;
-                bool inserir = false;
-                bool excluir = false;
-                bool administrador = false;
-
-                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                    sFormulario: "gov_funcionario",
-                                    bInserir: ref inserir,
-                                    bEditar: ref editar,
-                                    bExcluir: ref excluir,
-                                    bAdministrador: ref administrador);
-
-                ViewBag.inserir = inserir;
-                ViewBag.editar = editar;
-                ViewBag.excluir = excluir;
-
-                ViewBag.usuario = User.Identity.GetUserName();
-                ViewBag.data = DateTime.Now.ToShortDateString();
-                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                               iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                               bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
-                ViewBag.camareira = new SelectList(oCombo.FuncionarioGovernancaCamareira(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                         iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
-                ViewBag.funcionario = new SelectList(oCombo.FuncionarioGovernanca(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                  iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
-                ViewBag.uhAssociada = new SelectList(oCombo.SimNao(), "codigo", "descricao", 0);
-                ViewBag.bloco = new SelectList(oCombo.Bloco(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
-                ViewBag.andar = new SelectList(oCombo.Andar(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
-                ViewBag.frontOfficeStatus = new SelectList(oCombo.StatusFrontOffice(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
-                ViewBag.roomStatus = new SelectList(oCombo.StatusRoom(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                      iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
-                ViewBag.tipoGovernanca = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", null);
-                ViewBag.tipoGovernancaAssociar = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", null);
-
-                ViewBag.lastUpdate = oGovernanca.LoadLastUploadStatus(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                      codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
-
-                return View();
-
-            }
-        }
-
-        //JSON: /CARREGA PLANEJAMENTO
-        public JsonResult LoadPlanejamento2(int unidade, int tipoGovernanca, string data, string bloco, string andar, string frontOfficeStatus, string roomStatus)
-        {
-
-            return Json(oGovernanca.LoadPlanejamento2(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                      codigoUnidade: unidade,
-                                                      codigoTipoGovernanca: tipoGovernanca,
-                                                      data: data,
-                                                      bloco: bloco,
-                                                      andar: andar,
-                                                      statusFrontOffice: frontOfficeStatus,
-                                                      statusRoom: roomStatus));
+            return Json(oGovernanca.LoadPlanejamento(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                     codigoUnidade: unidade,
+                                                     codigoTipoGovernanca: tipoGovernanca,
+                                                     data: data,
+                                                     bloco: bloco,
+                                                     andar: andar,
+                                                     statusFrontOffice: frontOfficeStatus,
+                                                     statusRoom: roomStatus));
 
         }
 
@@ -1513,12 +1385,14 @@ namespace PCM.WEB.Controllers
                 ViewBag.editar = editar;
                 ViewBag.excluir = excluir;
 
+                ViewBag.usuario = User.Identity.GetUserName();
                 ViewBag.data = DateTime.Now.ToShortDateString();
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
-                ViewBag.funcionario = new SelectList(oCombo.FuncionarioGovernancaCamareira(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                           iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.camareira = new SelectList(oCombo.FuncionarioGovernancaCamareira(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                         iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.uhAssociada = new SelectList(oCombo.SimNao(), "codigo", "descricao", 0);
                 ViewBag.bloco = new SelectList(oCombo.Bloco(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                             iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
                 ViewBag.andar = new SelectList(oCombo.Andar(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
@@ -1527,74 +1401,54 @@ namespace PCM.WEB.Controllers
                                                                                     iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
                 ViewBag.roomStatus = new SelectList(oCombo.StatusRoom(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                       iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
-                ViewBag.tipoGovernanca = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", null);
-
                 ViewBag.lastUpdate = oGovernanca.LoadLastUploadStatus(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                       codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
+                ViewBag.tipoGovernanca = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", null);
+                ViewBag.tipoGovernancaAssociar = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", null);
 
                 return View();
 
             }
         }
 
-        // GET: INDEX
-        [HttpPost]
-        public ActionResult Apontamento(int unidade, int tipoGovernanca, string data, int funcionario, string codigoApartamento, string bloco, string andar, string frontOfficeStatus, string roomStatus)
+        //JSON: /CARREGA PLANEJAMENTO
+        public JsonResult LoadApontamento(int unidade, int tipoGovernanca, string data, string bloco, string andar, string frontOfficeStatus, string roomStatus, int uhInicio = -1, int uhTermino = -1)
         {
 
-            foreach (string item in codigoApartamento.Split(','))
-            {
-                if (item != "-1")
-                {
+            return Json(oGovernanca.LoadApontamento(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                    codigoUnidade: unidade,
+                                                    codigoTipoGovernanca: tipoGovernanca,
+                                                    data: data,
+                                                    bloco: bloco,
+                                                    andar: andar,
+                                                    statusFrontOffice: frontOfficeStatus,
+                                                    statusRoom: roomStatus,
+                                                    uhInicio: uhInicio,
+                                                    uhTermino: uhTermino));
 
-                    oGovernanca.InsertApontamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                  iCodigoUnidade: unidade,
-                                                  iCodigoTipoGovernanca: tipoGovernanca,
-                                                  sData: data,
-                                                  iCodigoFuncionario: funcionario,
-                                                  iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                  iCodigoApartamento: int.Parse(item));
-
-                }
-            }
-
-            ViewBag.inserir = true;
-            ViewBag.data = data;
-            ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                           iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                           bCadastro: false), "codigo", "descricao", unidade);
-            ViewBag.funcionario = new SelectList(oCombo.FuncionarioGovernancaCamareira(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                           iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
-            ViewBag.bloco = new SelectList(oCombo.Bloco(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        iCodigoUnidade: unidade), "codigo", "descricao", bloco);
-            ViewBag.andar = new SelectList(oCombo.Andar(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        iCodigoUnidade: unidade), "codigo", "descricao", andar);
-            ViewBag.tipoGovernanca = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", tipoGovernanca);
-
-            ViewBag.frontOfficeStatus = new SelectList(oCombo.StatusFrontOffice(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                iCodigoUnidade: unidade), "codigo", "descricao", frontOfficeStatus);
-            ViewBag.roomStatus = new SelectList(oCombo.StatusRoom(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  iCodigoUnidade: unidade), "codigo", "descricao", roomStatus);
-
-            ViewBag.lastUpdate = oGovernanca.LoadLastUploadStatus(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  codigoUnidade: unidade);
-
-            return View();
         }
 
-        //JSON: /VALIDA
-        public JsonResult LoadApontamento(int unidade, int tipoGovernanca, string data, int funcionario, string bloco, string andar, string frontOfficeStatus, string roomStatus)
+        //JSON: /UPDATE CAMAREIRA
+        public JsonResult ApontamentoCamareira(int unidade, string data, int camareira, string json, int usuario)
         {
 
-            return Json(oGovernanca.LoadApontamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                    iCodigoUnidade: unidade,
-                                                    iCodigoTipoGovernanca: tipoGovernanca,
-                                                    sData: data,
-                                                    iCodigoFuncionario: funcionario,
-                                                    sBloco: bloco,
-                                                    sAndar: andar,
-                                                    sStatusFrontOffice: frontOfficeStatus,
-                                                    sStatusRoom: roomStatus));
+            try
+            {
+
+                oGovernanca.insertGovernancaApontamentoCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                 codigoUnidade: unidade,
+                                                                 data: data,
+                                                                 codigoCamareira: camareira,
+                                                                 codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                 json: json);
+
+                return Json(Properties.Resources.operacao_realizaca_sucesso);
+
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message.ToString());
+            }
 
         }
 
@@ -2732,11 +2586,17 @@ namespace PCM.WEB.Controllers
 
         }
 
-        [HttpPost]
         public ActionResult RolLavanderia(int empresa, int unidade, int tipo, string data)
         {
 
-            return View();
+            ViewBag.data = data;
+
+            return View(oGovernanca.LoadEnxoval(codigoEmpresa: empresa,
+                                                codigoUnidade: unidade,
+                                                tipo: tipo,
+                                                data: data,
+                                                dataInicio:"",
+                                                dataTermino: ""));
         }
 
         #endregion

@@ -192,7 +192,18 @@
         });
 
         $("#btnPrint").click(function () {
-            window.location = `${basePath}/RolLavanderia?empresa=` + $("#empresa").val() + `&unidade=` + $("#unidade").val() + `&tipo=` + $("#tipo").val() + `&data=` + $("#data").val();
+            const url =
+                `${basePath}/RolLavanderia` +
+                `?empresa=${$("#empresa").val()}` +
+                `&unidade=${$("#unidade").val()}` +
+                `&tipo=${$("#tipo").val()}` +
+                `&data=${$("#data").val()}`;
+
+            window.open(
+                url,
+                '_blank',
+                'width=900,height=650,scrollbars=yes,resizable=yes'
+            );
         });
 
         $("#unidade").change(function () {

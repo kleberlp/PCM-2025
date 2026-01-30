@@ -281,8 +281,17 @@ function getChartConfigArrumadoxVistoriado() {
             responsive: true,
             scales: {
                 y: {
-                    type: 'number',
-                    beginAtZero: true
+                    type: 'linear',
+                    min: 0,
+                    beginAtZero: true,
+                    bounds: 'ticks',
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function (value) {
+                            return Number.isInteger(value) ? value : '';
+                        }
+                    }
                 },
                 x: {
                     type: 'time',
@@ -341,13 +350,23 @@ function getChartConfigArrumadoxVistoriado() {
 }
 
 function getChartConfigArrumacaoDia() {
+
     return {
         type: 'bar',
         options: {
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: true
+                    type: 'linear',
+                    min: 0,
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function (value) {
+                            return Number.isInteger(value) ? value : null;
+                        }
+                    }
                 },
                 x: {
                     type: 'time',
@@ -412,7 +431,17 @@ function getChartConfigVistoriaDia() {
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: true
+                    type: 'linear',
+                    min: 0,
+                    beginAtZero: true,
+                    bounds: 'ticks', 
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function (value) {
+                            return Number.isInteger(value) ? value : '';
+                        }
+                    }
                 },
                 x: {
                     type: 'time',
@@ -476,7 +505,17 @@ function getChartConfigProdutividadeCamareira() {
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: true
+                    type: 'linear',
+                    min: 0,
+                    beginAtZero: true,
+                    bounds: 'ticks',
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function (value) {
+                            return Number.isInteger(value) ? value : '';
+                        }
+                    }
                 },
                 x: {
                     type: 'time',
@@ -540,7 +579,17 @@ function getChartConfigProdutividadeVistoriador() {
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: true
+                    type: 'linear',
+                    min: 0,
+                    beginAtZero: true,
+                    bounds: 'ticks',
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function (value) {
+                            return Number.isInteger(value) ? value : '';
+                        }
+                    }
                 },
                 x: {
                     type: 'time',
@@ -604,7 +653,17 @@ function getChartConfigNCDia() {
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: true
+                    type: 'linear',
+                    min: 0,
+                    beginAtZero: true,
+                    bounds: 'ticks',
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function (value) {
+                            return Number.isInteger(value) ? value : '';
+                        }
+                    }
                 },
                 x: {
                     type: 'time',
@@ -738,6 +797,19 @@ function getChartConfigNaoConformidadeTipo() {
 function updateChartConfig(config, labels, dataSeries) {
     config.data.labels = labels;
     config.data.datasets = dataSeries;
+
+    // FORÇA eixo Y começar em 0 após carregar dados
+    if (config.options && config.options.scales && config.options.scales.y) {
+        config.options.scales.y.min = 0;
+        config.options.scales.y.beginAtZero = true;
+
+        if (!config.options.scales.y.ticks) {
+            config.options.scales.y.ticks = {};
+        }
+
+        config.options.scales.y.ticks.precision = 0;
+        config.options.scales.y.ticks.stepSize = 1;
+    }
 }
 
 function format(data) {

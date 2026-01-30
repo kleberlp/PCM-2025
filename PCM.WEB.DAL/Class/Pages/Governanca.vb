@@ -1279,6 +1279,35 @@ Public Class Governanca
 
     End Function
 
+    Public Sub insertGovernancaApontamentoCamareira(ByVal codigoEmpresa As Integer,
+                                                    ByVal codigoUnidade As Integer,
+                                                    ByVal data As String,
+                                                    ByVal codigoCamareira As Integer,
+                                                    ByVal codigoUsuario As Integer,
+                                                    ByVal json As String)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data", SqlDbType.Date, IIf(IsDate(data), data, DBNull.Value)),
+                CriarParametro("codigo_camareira", SqlDbType.Int, codigoCamareira),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario),
+                CriarParametro("json", SqlDbType.VarChar, json)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_governanca_apontamento_camareira", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
     Public Sub InsertGovernancaApontamento(ByVal iCodigoEmpresa As Integer,
                                            ByVal iCodigoUsuario As Integer,
                                            ByVal iCodigoUnidade As Integer,
@@ -2477,146 +2506,14 @@ Public Class Governanca
 
     End Sub
 
-    Public Function LoadPlanejamento(ByVal iCodigoEmpresa As Integer,
-                                     ByVal iCodigoUnidade As Integer,
-                                     ByVal iCodigoTipoGovernanca As Integer,
-                                     ByVal sData As String,
-                                     ByVal iCodigoFuncionario As Integer,
-                                     ByVal iUHAssociada As Integer,
-                                     ByVal sBloco As String,
-                                     ByVal sAndar As String,
-                                     ByVal sStatusFrontOffice As String,
-                                     ByVal sStatusRoom As String) As List(Of GovernancaPlanejamento)
-
-        Try
-
-            'Váriaveis Locais
-            Dim oSqlParameter(9) As SqlParameter
-            Dim oSqlDataReader As SqlDataReader
-            Dim oReturn As New List(Of GovernancaPlanejamento)
-            Dim i As Integer = 0
-
-            'Seta Parametros - Código Empresa
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_empresa"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
-
-            'Seta Parametros - Código Unidade
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_unidade"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoUnidade : i += 1
-
-            'Seta Parametros - Código Tipo Governança
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_tipo_governanca"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoTipoGovernanca : i += 1
-
-            'Seta Parametros - Data
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "data"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Date
-            oSqlParameter(i).Value = IIf(IsDate(sData), sData, DBNull.Value) : i += 1
-
-            'Seta Parametros - Código Funcionário
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_funcionario"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoFuncionario : i += 1
-
-            'Seta Parametros - UH Associada
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "uh_associada"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iUHAssociada : i += 1
-
-            'Seta Parametros - Bloco
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "bloco"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 20
-            oSqlParameter(i).Value = sBloco : i += 1
-
-            'Seta Parametros - Andar
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "andar"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 20
-            oSqlParameter(i).Value = sAndar : i += 1
-
-            'Seta Parametros - Front Office Status
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "front_office_status"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 50
-            oSqlParameter(i).Value = sStatusFrontOffice : i += 1
-
-            'Seta Parametros - Room Status
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "room_status"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 50
-            oSqlParameter(i).Value = sStatusRoom
-
-            'Executa Query
-            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_planejamento", oSqlParameter)
-
-            While oSqlDataReader.Read
-
-                Dim oInfo As New GovernancaPlanejamento
-
-                oInfo.codigoApartamento = oSqlDataReader("codigo_apartamento")
-                oInfo.apartamento = oSqlDataReader("apartamento")
-                oInfo.tipoApartamento = oSqlDataReader("tipo_apartamento")
-                oInfo.tipoCama = oSqlDataReader("tipo_cama")
-                oInfo.bloco = oSqlDataReader("bloco")
-                oInfo.andar = oSqlDataReader("andar")
-                oInfo.quantidadeCama = oSqlDataReader("quantidade_cama")
-                oInfo.funcionario = oSqlDataReader("funcionario")
-                oInfo.selecionado = IIf(oSqlDataReader("selecionado"), "checked", "")
-                oInfo.statusFrontOffice = oSqlDataReader("front_office_status")
-                oInfo.tipoGovernanca = oSqlDataReader("tipo_governanca")
-                oInfo.cssClassTipoGovernaca = oSqlDataReader("css_class_tipo_governanca")
-                oInfo.statusRoom = oSqlDataReader("room_status")
-
-                oReturn.Add(oInfo)
-
-            End While
-
-            'Fecha o oSqlDataReader
-            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
-
-            'Retorno da Função
-            Return oReturn
-
-        Catch SqlEx As SqlException
-            Throw SqlEx
-        Catch ex As Exception
-            Throw ex
-        End Try
-
-    End Function
-
-    Public Function LoadPlanejamento2(ByVal codigoEmpresa As Integer,
-                                      ByVal codigoUnidade As Integer,
-                                      ByVal data As String,
-                                      ByVal codigoTipoGovernanca As Integer,
-                                      ByVal bloco As String,
-                                      ByVal andar As String,
-                                      ByVal statusFrontOffice As String,
-                                      ByVal statusRoom As String) As List(Of GovernancaPlanejamento)
+    Public Function LoadPlanejamento(ByVal codigoEmpresa As Integer,
+                                     ByVal codigoUnidade As Integer,
+                                     ByVal data As String,
+                                     ByVal codigoTipoGovernanca As Integer,
+                                     ByVal bloco As String,
+                                     ByVal andar As String,
+                                     ByVal statusFrontOffice As String,
+                                     ByVal statusRoom As String) As List(Of GovernancaPlanejamento)
 
         Try
 
@@ -2633,7 +2530,7 @@ Public Class Governanca
                     CriarParametro("room_status", SqlDbType.VarChar, statusRoom)
                 }
 
-            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_planejamento2", oSqlParameter)
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_planejamento", oSqlParameter)
 
                 While oSqlDataReader.Read
 
@@ -2895,118 +2792,61 @@ Public Class Governanca
 
     End Sub
 
-    Public Function LoadApontamento(ByVal iCodigoEmpresa As Integer,
-                                    ByVal iCodigoUnidade As Integer,
-                                    ByVal iCodigoTipoGovernanca As Integer,
-                                    ByVal sData As String,
-                                    ByVal iCodigoFuncionario As Integer,
-                                    ByVal sBloco As String,
-                                    ByVal sAndar As String,
-                                    ByVal sStatusFrontOffice As String,
-                                    ByVal sStatusRoom As String) As List(Of GovernancaApontamentoApartamento)
+    Public Function LoadApontamento(ByVal codigoEmpresa As Integer,
+                                    ByVal codigoUnidade As Integer,
+                                    ByVal data As String,
+                                    ByVal codigoTipoGovernanca As Integer,
+                                    ByVal bloco As String,
+                                    ByVal andar As String,
+                                    ByVal statusFrontOffice As String,
+                                    ByVal statusRoom As String,
+                                    ByVal uhInicio As Integer,
+                                    ByVal uhTermino As Integer) As List(Of GovernancaPlanejamento)
 
         Try
 
-            'Váriaveis Locais
-            Dim oSqlParameter(8) As SqlParameter
-            Dim oSqlDataReader As SqlDataReader
-            Dim oReturn As New List(Of GovernancaApontamentoApartamento)
-            Dim i As Integer = 0
+            'Variaveis Locais
+            Dim oReturn As New List(Of GovernancaPlanejamento)
+            Dim oSqlParameter As SqlParameter() = {
+                    CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                    CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                    CriarParametro("data", SqlDbType.Date, data),
+                    CriarParametro("codigo_tipo_governanca", SqlDbType.SmallInt, codigoTipoGovernanca),
+                    CriarParametro("bloco", SqlDbType.VarChar, bloco),
+                    CriarParametro("andar", SqlDbType.VarChar, andar),
+                    CriarParametro("front_office_status", SqlDbType.VarChar, statusFrontOffice),
+                    CriarParametro("room_status", SqlDbType.VarChar, statusRoom),
+                    CriarParametro("uhInicio", SqlDbType.Int, uhInicio),
+                    CriarParametro("uhTermino", SqlDbType.Int, uhTermino)
+                }
 
-            'Seta Parametros - Código Empresa
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_empresa"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_apontamento", oSqlParameter)
 
-            'Seta Parametros - Código Unidade
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_unidade"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoUnidade : i += 1
+                While oSqlDataReader.Read
 
-            'Seta Parametros - Código Tipo Governança
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_tipo_governanca"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoTipoGovernanca : i += 1
+                    Dim oInfo As New GovernancaPlanejamento
 
-            'Seta Parametros - Data
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "data"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Date
-            oSqlParameter(i).Value = IIf(IsDate(sData), sData, DBNull.Value) : i += 1
+                    oInfo.codigoApartamento = SafeGetLong(oSqlDataReader, "codigo_apartamento")
+                    oInfo.apartamento = SafeGetString(oSqlDataReader, "apartamento")
+                    oInfo.tipoApartamento = SafeGetString(oSqlDataReader, "tipo_apartamento")
+                    oInfo.tipoCama = SafeGetString(oSqlDataReader, "tipo_cama")
+                    oInfo.bloco = SafeGetString(oSqlDataReader, "bloco")
+                    oInfo.andar = SafeGetString(oSqlDataReader, "andar")
+                    oInfo.quantidadeCama = SafeGetString(oSqlDataReader, "quantidade_cama")
+                    oInfo.funcionario = SafeGetString(oSqlDataReader, "funcionario")
+                    oInfo.selecionado = SafeGetString(oSqlDataReader, "selecionado")
+                    oInfo.statusFrontOffice = SafeGetString(oSqlDataReader, "front_office_status")
+                    oInfo.tipoGovernanca = SafeGetString(oSqlDataReader, "tipo_governanca")
+                    oInfo.dataChegada = SafeGetString(oSqlDataReader, "data_chegada")
+                    oInfo.dataSaida = SafeGetString(oSqlDataReader, "data_saida")
+                    oInfo.cssClassTipoGovernaca = SafeGetString(oSqlDataReader, "css_class_tipo_governanca")
+                    oInfo.statusRoom = SafeGetString(oSqlDataReader, "room_status")
 
-            'Seta Parametros - Código Funcionário
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "codigo_funcionario"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoFuncionario : i += 1
+                    oReturn.Add(oInfo)
 
-            'Seta Parametros - Bloco
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "bloco"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 20
-            oSqlParameter(i).Value = sBloco : i += 1
+                End While
 
-            'Seta Parametros - Andar
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "andar"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 20
-            oSqlParameter(i).Value = sAndar : i += 1
-
-            'Seta Parametros - Front Office Status
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "front_office_status"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 50
-            oSqlParameter(i).Value = sStatusFrontOffice : i += 1
-
-            'Seta Parametros - Room Status
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).ParameterName = "room_status"
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
-            oSqlParameter(i).Size = 50
-            oSqlParameter(i).Value = sStatusRoom
-
-            'Executa Query
-            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_apontamento", oSqlParameter)
-
-            While oSqlDataReader.Read
-
-                Dim oInfo As New GovernancaApontamentoApartamento
-
-                oInfo.codigoApartamento = oSqlDataReader("codigo_apartamento")
-                oInfo.apartamento = oSqlDataReader("apartamento")
-                oInfo.tipoApartamento = oSqlDataReader("tipo_apartamento")
-                oInfo.tipoCama = oSqlDataReader("tipo_cama")
-                oInfo.bloco = oSqlDataReader("bloco")
-                oInfo.andar = oSqlDataReader("andar")
-                oInfo.quantidadeCama = oSqlDataReader("quantidade_cama")
-                oInfo.funcionario = oSqlDataReader("funcionario")
-                oInfo.selecionado = IIf(oSqlDataReader("selecionado"), "checked", "")
-                oInfo.statusFrontOffice = oSqlDataReader("front_office_status")
-                oInfo.tipoGovernanca = oSqlDataReader("tipo_governanca")
-                oInfo.cssClassTipoGovernaca = oSqlDataReader("css_class_tipo_governanca")
-                oInfo.statusRoom = oSqlDataReader("room_status")
-
-                oReturn.Add(oInfo)
-
-            End While
-
-            'Fecha o oSqlDataReader
-            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+            End Using
 
             'Retorno da Função
             Return oReturn

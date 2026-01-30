@@ -24,40 +24,31 @@
             <!-- Toggle Tasks Navigation on mobile -->
             <div class="block block-rounded border">
                 <div class="block-header block-header-default bg-gd-default">
-                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.planejamento - @ViewBag.lastUpdate</h3>
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.planejamento</h3>
                     <div class="block-options">
-
-                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
-                            <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
-                        </button>
                         <button type="button" id="btnClearPlanejamento" name="btnClearPlanejamento" class="btn btn-square btn-secondary min-width-100 h-75">
-                            <i class="fa fa-times mr-5"></i>@PCM.WEB.Properties.Resources.clear_planejamento
+                            <i class="fa fa-times mr-5"></i>Limpar planejamento
+                        </button>
+                        <button type="button" id="btnSetTipoGovernanca" name="btnSetTipoGovernanca" class="btn btn-square btn-secondary min-width-100 h-75">
+                            <i class="fa fa-hotel mr-5"></i>@PCM.WEB.Properties.Resources.definirTipoArrumacao
+                        </button>
+                        <button type="button" id="btnSetCamareira" name="btnSetCamareira" class="btn btn-square btn-secondary min-width-100 h-75">
+                            <i class="fa fa-users mr-5"></i>@PCM.WEB.Properties.Resources.definirCamareira
                         </button>
                     </div>
                 </div>
 
                 <div class="block-content block-content-full">
                     <input type="hidden" name="codigoApartamento" id="codigoApartamento" value="" />
+                    <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario" />
                     <div class="form-group row">
                         <div class="col-md-2">
                             <label>@PCM.WEB.Properties.Resources.unidade</label>
                             @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
                         </div>
                         <div class="col-md-2">
-                            <label>@PCM.WEB.Properties.Resources.tipoGovernanca</label>
-                            @Html.DropDownList("tipoGovernanca", null, "", new { @class = "js-select2 form-control" })
-                        </div>
-                        <div class="col-md-2">
                             <label>@PCM.WEB.Properties.Resources.data</label>
                             <input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data">
-                        </div>
-                        <div class="col-md-4">
-                            <label>@PCM.WEB.Properties.Resources.funcionario</label>
-                            @Html.DropDownList("funcionario", null, "", new { @class = "js-select2 form-control" })
-                        </div>
-                        <div class="col-md-2">
-                            <label>@PCM.WEB.Properties.Resources.somenteUHsAssociados'</label>
-                            @Html.DropDownList("uhAssociada", null, "", new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -84,6 +75,10 @@
                             <label>Status Quarto</label>
                             @Html.DropDownList("roomStatus", null, "", new { @class = "js-select2 form-control" })
                         </div>
+                        <div class="col-md-2">
+                            <label>@PCM.WEB.Properties.Resources.tipoGovernanca</label>
+                            @Html.DropDownList("tipoGovernanca", null, "", new { @class = "js-select2 form-control" })
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,15 +90,17 @@
                         <tr class="table-secondary">
                             <th class="text-md-center" style="width: 20px;" data-sortable="false"></th>
                             <th class="text-center">@PCM.WEB.Properties.Resources.apartamento</th>
+                            <th class="text-center">@PCM.WEB.Properties.Resources.tipoGovernanca</th>
+                            <th>Data Chegada</th>
+                            <th>Data Saída</th>
                             <th class="text-center">Status Front Office</th>
                             <th class="text-center">Status Quarto</th>
                             <th class="text-center">@PCM.WEB.Properties.Resources.bloco</th>
                             <th class="text-center">@PCM.WEB.Properties.Resources.andar</th>
-                            <th >@PCM.WEB.Properties.Resources.tipo_apartamento</th>
-                            <th >@PCM.WEB.Properties.Resources.tipo_cama</th>
+                            <th>@PCM.WEB.Properties.Resources.tipo_apartamento</th>
+                            <th>@PCM.WEB.Properties.Resources.tipo_cama</th>
                             <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_cama</th>
-                            <th class="text-center">@PCM.WEB.Properties.Resources.tipoGovernanca</th>
-                            <th >@PCM.WEB.Properties.Resources.funcionario</th>
+                            <th>@PCM.WEB.Properties.Resources.funcionario</th>
                         </tr>
                     </thead>
 
@@ -117,6 +114,59 @@
 
 </main>
 <!-- END Main Container -->
+<!-- From Right Modal -->
+<div class="modal fade" id="modCamareira" tabindex="-1" role="dialog" aria-labelledby="modCamareira" aria-hidden="true">
+    @using (Html.BeginForm("OrdemServicoIndex", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", @name = "formCamareira", @id = "formCamareira", enctype = "multipart/form-data" }))
+    {
+        <div class="modal-dialog modal-dialog-fromright" role="document">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent">
+                    <div class="block-header bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.camareira</h3>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="form-group">
+                        <div>
+                            @Html.DropDownList("camareira", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="btnSalveCamareira" id="btnSalveCamareira"><i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.confirmado</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- From Right Modal -->
+<div class="modal fade" id="modTipoGovernaca" tabindex="-1" role="dialog" aria-labelledby="modCamareira" aria-hidden="true">
+    @using (Html.BeginForm("OrdemServicoIndex", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", @name = "formTipoGovernanca", @id = "formTipoGovernanca", enctype = "multipart/form-data" }))
+    {
+        <div class="modal-dialog modal-dialog-fromright" role="document">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent">
+                    <div class="block-header bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.tipoGovernanca </h3>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="form-group">
+                        <div>
+                            @Html.DropDownList("tipoGovernancaAssociar", null, "", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="btnSaveTipoGovernanca" id="btnSaveTipoGovernanca"><i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.confirmado</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- END From Right Modal -->
 
 @section Styles {
     @Styles.Render("~/Content/datepicker")
@@ -132,18 +182,16 @@
     @Scripts.Render("~/plugins/select")
 
 <script type="text/javascript">
+    const currentDate = new Date().toLocaleDateString('pt-BR');
 
     $(function () {
-
-        $("#btnClearPlanejamento").hide();
 
         $.ajaxSetup({async: false});
 
         var unidade = $("#unidade");
         var tipoGovernanca = $("#tipoGovernanca");
         var data = $("#data");
-        var funcionario = $("#funcionario");
-        var uhAssociada = $("#uhAssociada");
+        var camareira = $("#camareira");
         var bloco = $("#bloco");
         var andar = $("#andar");
         var roomStatus = $("#roomStatus");
@@ -154,20 +202,20 @@
             if (unidade.val() == "") {
                 bloco.empty();
                 andar.empty();
-                funcionario.empty();
+                camareira.empty();
                 frontOfficeStatus.empty();
                 roomStatus.empty();
             }
             else {
                 var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
 
-                $.post("LoadComboFuncionario", request, function (obj) {
-                    funcionario.empty();
+                $.post("LoadComboCamareira", request, function (obj) {
+                    camareira.empty();
                     option = $("<option>", { "value": "" }).text("");
-                    funcionario.append(option);
+                    camareira.append(option);
                     $.each(obj, function (indice, result) {
                         option = $("<option>", { "value": result.codigo }).text(result.descricao);
-                        funcionario.append(option);
+                        camareira.append(option);
                     });
                 }, "json");
 
@@ -213,46 +261,6 @@
 
             }
 
-            if (unidade.val() == "" || tipoGovernanca.val() == "" || data.val() == "" || funcionario.val() == "") {
-                $("#btnClearPlanejamento").hide();
-            } else {
-                $("#btnClearPlanejamento").show();
-            }
-
-            table.ajax.reload(null, false);
-        });
-
-        tipoGovernanca.change(function () {
-            table.ajax.reload(null, false);
-
-            if (unidade.val() == "" || tipoGovernanca.val() == "" || data.val() == "" || funcionario.val() == "") {
-                $("#btnClearPlanejamento").hide();
-            } else {
-                $("#btnClearPlanejamento").show();
-            }
-        });
-
-        data.change(function () {
-            table.ajax.reload(null, false);
-
-            if (unidade.val() == "" || tipoGovernanca.val() == "" || data.val() == "" || funcionario.val() == "") {
-                $("#btnClearPlanejamento").hide();
-            } else {
-                $("#btnClearPlanejamento").show();
-            }
-        });
-
-        funcionario.change(function () {
-            table.ajax.reload(null, false);
-
-            if (unidade.val() == "" || tipoGovernanca.val() == "" || data.val() == "" || funcionario.val() == "") {
-                $("#btnClearPlanejamento").hide();
-            } else {
-                $("#btnClearPlanejamento").show();
-            }
-        });
-
-        uhAssociada.change(function () {
             table.ajax.reload(null, false);
         });
 
@@ -272,56 +280,96 @@
             table.ajax.reload(null, false);
         });
 
-        $("#btnClearPlanejamento").click(function () {
-            clearPlanejamento();
+        tipoGovernanca.change(function () {
+            table.ajax.reload(null, false);
         });
 
         loadPlanejamento();
 
-        FormValidation.init();
+        $('#btnSetCamareira').click(function () {
+
+            $("#camareira").val("");
+
+            $("#modCamareira").modal("show");
+
+        });
+
+        $('#btnSetTipoGovernanca').click(function () {
+
+            $("#tipoGovernancaAssociar").val("");
+
+            $("#modTipoGovernaca").modal("show");
+
+        });
+
+        $('#btnClearPlanejamento').click(function () {
+
+            clearPlanejamento();
+
+        });
+
     });
 
     function clearPlanejamento() {
 
-                Swal.fire({
-                    title: "PCM",
-                    html: "Deseja limpar o planejamento efetuado?",
-                    icon: "question",
-                    showDenyButton: true,
-                    showCancelButton: false,
-                    confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
-                    denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
+        let codigosSelecionados = [];
 
-                        jQuery.ajax({
-                            type: "POST",
-                            url: "ClearPlanejamento",
-                            async: false,
-                            data: {
-                                "unidade": $("#unidade").val(),
-                                "tipoGovernanca": $("#tipoGovernanca").val(),
-                                "data": $("#data").val(),
-                                "funcionario": $("#funcionario").val()
-                            },
-                            dataType: "json",
-                            success: function (response) {
-                                Swal.fire({
-                                    title: "@PCM.WEB.Properties.Resources.pcm",
-                                    html: response,
-                                    icon: "info",
-                                    showDenyButton: false,
-                                    showCancelButton: false,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $("#form").submit();
-                                    }
-                                });
+        $("#tb_main input[type='checkbox']:checked").each(function () {
+            let codigo = $(this).val();
+            if (codigo && codigo !== "on") {
+                codigosSelecionados.push({
+                    codigoApartamento: codigo.trim()
+                });
+            }
+        });
+
+        if (codigosSelecionados.length === 0) {
+            Swal.fire("Nenhuma UH Selecionada!", "", "warning");
+            return;
+        }
+
+        // Serializa o array em uma string JSON
+        const jsonCodigos = JSON.stringify(codigosSelecionados);
+
+        Swal.fire({
+            title: "PCM",
+            html: "Deseja limpar o planejamento efetuado?",
+            icon: "question",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+            denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "ClearPlanejamento",
+                    async: false,
+                    data: {
+                        unidade: $("#unidade").val(),
+                        usuario: $("#usuario").val(),
+                        data: $("#data").val(),
+                        json: jsonCodigos
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        Swal.fire({
+                            title: "@PCM.WEB.Properties.Resources.pcm",
+                            html: response,
+                            icon: "info",
+                            showDenyButton: false,
+                            showCancelButton: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                table.ajax.reload(null, false);
                             }
                         });
                     }
                 });
+            }
+        });
 
     }
 
@@ -333,7 +381,7 @@
                 selector: 'td:not(:first-child)',
                 style: 'os'
             },
-            order: [[1, 'asc']],
+            order: [[1, 'desc']],
             info: false,
             scrollCollapse: false,
             scrollY: '50vh',
@@ -373,6 +421,9 @@
                         "</td >"
                 },
                 { data: "apartamento" },
+                { data: "tipoGovernanca" },
+                { data: "dataChegada" },
+                { data: "dataSaida" },
                 { data: "statusFrontOffice" },
                 { data: "statusRoom" },
                 { data: "bloco" },
@@ -380,13 +431,12 @@
                 { data: "tipoApartamento" },
                 { data: "tipoCama" },
                 { data: "quantidadeCama" },
-                { data: "tipoGovernanca" },
                 { data: "funcionario" }
             ],
             columnDefs: [
-                { className: 'text-center', targets: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
-                { width: '140px', targets: [1, 4, 5, 8] },
-                { width: '200px', targets: [2, 3, 6, 7, 9] },
+                { className: 'text-center', targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+                { width: '140px', targets: [1, 4, 5, 8, 9, 10, 11] },
+                { width: '200px', targets: [2, 3, 6, 7] },
                 {
                     targets: 0, // Index of the column starting from 0
                     type: 'html',
@@ -402,16 +452,38 @@
                 {
                     createdCell: function (td, cellData, rowData, row, col) {
 
-                        if (col == 1 && rowData.funcionario != "") {
+                        if (col === 1 && rowData.funcionario !== "") {
                             $(td).addClass("bg-warning-light");
                         }
 
-                        if (col == 9) {
+                        if (col === 2) {
                             $(td).addClass(rowData.cssClassTipoGovernaca);
                         }
 
-                    }, targets: [1, 9]
-                },
+                        if (col === 3 && rowData.dataChegada === currentDate) {
+                            $(td).addClass("bg-danger-light");
+                        }
+
+                        if (col === 4 && rowData.dataSaida === currentDate) {
+                            $(td).addClass("bg-danger-light");
+                        }
+
+                        if ((col === 3 || col === 4) &&
+                            rowData.dataChegada === currentDate &&
+                            rowData.dataSaida === currentDate)
+                        {
+                            td.style.fontWeight = 'bold';
+                        }
+
+                        if ((col === 6) &&
+                            rowData.statusRoom === 'RES. P/ HOJE') {
+                            $(td).addClass("bg-danger-light");
+                            td.style.fontWeight = 'bold';
+                        }
+
+                    },
+                    targets: [1, 2, 3, 4, 6]
+                }
             ],
             language: {
                 "search": "@Html.Raw(PCM.WEB.Properties.Resources.search):",
@@ -434,77 +506,151 @@
 
     $('#tb_main thead th:eq(0)').append(selectAllCheckbox);
 
-    var FormValidation = function () {
-        // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
-        var initValidationBootstrap = function () {
-            jQuery('.js-validation-bootstrap').validate({
-                ignore: [],
-                errorClass: 'invalid-feedback animated fadeInDown',
-                errorElement: 'div',
-                errorPlacement: function (error, e) {
-                    jQuery(e).parents('.form-group > div').append(error);
-                },
-                highlight: function (e) {
-                    jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
-                },
-                success: function (e) {
-                    jQuery(e).closest('.form-group > div').removeClass('is-invalid');
-                    jQuery(e).remove();
-                },
-                rules: {
-                    'unidade': {
-                        required: true
-                    },
-                    'tipoGovernanca': {
-                        required: true
-                    },
-                    'data': {
-                        required: true
-                    },
-                    'funcionario': {
-                        required: true
-                    }
-                },
-                messages: {
-                    'unidade': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'tipoGovernanca': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'data': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    },
-                    'funcionario': {
-                        required: '@PCM.WEB.Properties.Resources.campo_requerido'
-                    }
-                },
-                submitHandler: function (form) {
-                    objetos = [];
-                    $('input[type=checkbox]').each(function () {
-                        if (this.checked) {
-                            objetos.push(this.value);
-                        }
+    $('#formTipoGovernanca').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'tipoGovernancaAssociar': {
+                required: true
+            }
+        },
+        messages: {
+            'tipoGovernancaAssociar': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+
+            let codigosSelecionados = [];
+
+            $("#tb_main input[type='checkbox']:checked").each(function () {
+                let codigo = $(this).val();
+                if (codigo && codigo !== "on") {
+                    codigosSelecionados.push({
+                        codigoApartamento: codigo.trim()
                     });
-
-                    if (objetos.length > 0) {
-                        $('#codigoApartamento').val(objetos.join(','));
-                    } else {
-                        $('#codigoApartamento').val("");
-                    }
-
-                    return true;
                 }
             });
-        };
 
-        return {
-            init: function () {
-                // Init Bootstrap Forms Validation
-                initValidationBootstrap();
+            if (codigosSelecionados.length === 0) {
+                Swal.fire("Nenhuma UH Selecionada!", "", "warning");
+                return;
             }
-        };
-    }();
+
+            // Serializa o array em uma string JSON
+            const jsonCodigos = JSON.stringify(codigosSelecionados);
+
+            // Envia via Ajax como parâmetros
+            $.ajax({
+                url: "/Governanca/UpdateTipoGovernanca",
+                type: "POST",
+                data: {
+                    unidade: $("#unidade").val(),
+                    data: $("#data").val(),
+                    tipoGovernanca: $("#tipoGovernancaAssociar").val(),
+                    usuario: $("#usuario").val(),
+                    json: jsonCodigos
+                },
+                success: function (response) {
+                    Swal.fire("Sucesso!", response, "success");
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire("Erro!", "Erro ao salvar.", "error");
+                    console.error(error);
+                }
+            });
+
+            table.ajax.reload(null, false);
+            $('#modTipoGovernaca').modal('hide');
+
+            return false;
+
+        }
+    });
+
+    $('#formCamareira').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'camareira': {
+                required: true
+            }
+        },
+        messages: {
+            'camareira': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+
+            let codigosSelecionados = [];
+
+            $("#tb_main input[type='checkbox']:checked").each(function () {
+                let codigo = $(this).val();
+                if (codigo && codigo !== "on") {
+                    codigosSelecionados.push({
+                        codigoApartamento: codigo.trim()
+                    });
+                }
+            });
+
+            if (codigosSelecionados.length === 0) {
+                Swal.fire("Nenhuma UH selecionada!", "", "warning");
+                return;
+            }
+
+            // Serializa o array em uma string JSON
+            const jsonCodigos = JSON.stringify(codigosSelecionados);
+
+            // Envia via Ajax como parâmetros
+            $.ajax({
+                url: "/Governanca/UpdateCamareira",
+                type: "POST",
+                data: {
+                    unidade: $("#unidade").val(),
+                    data: $("#data").val(),
+                    camareira: $("#camareira").val(),
+                    usuario: $("#usuario").val(),
+                    json: jsonCodigos
+                },
+                success: function (response) {
+                    Swal.fire("Sucesso!", response, "success");
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire("Erro!", "Erro ao salvar.", "error");
+                    console.error(error);
+                }
+            });
+
+            table.ajax.reload(null, false);
+            $('#modCamareira').modal('hide');
+
+            return false;
+
+        }
+    });
 
 </script>
 }

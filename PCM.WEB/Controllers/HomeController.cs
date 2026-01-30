@@ -782,7 +782,10 @@ namespace PCM.WEB.Controllers
                 DateTime primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
                 DateTime ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
 
-                    ViewBag.data = new SelectList(oCombo.DataGovernanca(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                string dataInicio = primeiroDia.ToShortDateString();
+                string dataTermino = ultimoDia.ToShortDateString();
+
+                ViewBag.data = new SelectList(oCombo.DataGovernanca(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                     iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", ultimoDia.ToString("dd/MM/yyyy"));
                 ViewBag.InfoOrdemServico = oHome.InfoOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                   iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
@@ -793,9 +796,6 @@ namespace PCM.WEB.Controllers
                                                                 bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
                 ViewBag.modulo = new SelectList(oCombo.Modulo(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", Session["codigo_modulo"].ToString());
-
-                string dataInicio = DateTime.Now.AddDays(-7).ToShortDateString();
-                string dataTermino = DateTime.Now.ToShortDateString();
 
                 ViewBag.nome_fantasia = Session["unidade"].ToString();
                 ViewBag.dashboard_info = oGovernanca.DashboardInfo(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),

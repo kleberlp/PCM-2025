@@ -552,9 +552,13 @@ Public Class Account
                 oFormularioVisualizar.rel_camareira_uh = IIf(IsDBNull(oSqlDataReader.Item("rel_camareira_uh")) = False AndAlso oSqlDataReader.Item("rel_camareira_uh") = "S", True, False)
                 oFormularioVisualizar.rel_responsavel_vistoria_uh = IIf(IsDBNull(oSqlDataReader.Item("rel_responsavel_vistoria_uh")) = False AndAlso oSqlDataReader.Item("rel_responsavel_vistoria_uh") = "S", True, False)
                 oFormularioVisualizar.rel_camareira_nc = IIf(IsDBNull(oSqlDataReader.Item("rel_camareira_nc")) = False AndAlso oSqlDataReader.Item("rel_camareira_nc") = "S", True, False)
+
                 oFormularioVisualizar.uh_checklist = IIf(IsDBNull(oSqlDataReader.Item("uh_checklist")) = False AndAlso oSqlDataReader.Item("uh_checklist") = "S", True, False)
                 oFormularioVisualizar.uh_checklist_historico = IIf(IsDBNull(oSqlDataReader.Item("uh_checklist_historico")) = False AndAlso oSqlDataReader.Item("uh_checklist_historico") = "S", True, False)
                 oFormularioVisualizar.uh_dedetizacao = IIf(IsDBNull(oSqlDataReader.Item("uh_dedetizacao")) = False AndAlso oSqlDataReader.Item("uh_dedetizacao") = "S", True, False)
+                oFormularioVisualizar.uhDedetizacaoHistorico = IIf(IsDBNull(oSqlDataReader.Item("uhDedetizacaoHistorico")) = False AndAlso oSqlDataReader.Item("uhDedetizacaoHistorico") = "S", True, False)
+                oFormularioVisualizar.uhMapaManutencaoHistorico = IIf(IsDBNull(oSqlDataReader.Item("uhMapaManutencaoHistorico")) = False AndAlso oSqlDataReader.Item("uhMapaManutencaoHistorico") = "S", True, False)
+
                 oFormularioVisualizar.excel_ordem_servico = IIf(IsDBNull(oSqlDataReader.Item("excel_ordem_servico")) = False AndAlso oSqlDataReader.Item("excel_ordem_servico") = "S", True, False)
                 oFormularioVisualizar.excel_plano_acao_qa = IIf(IsDBNull(oSqlDataReader.Item("excel_plano_acao_qa")) = False AndAlso oSqlDataReader.Item("excel_plano_acao_qa") = "S", True, False)
 

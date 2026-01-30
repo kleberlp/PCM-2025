@@ -9,8 +9,8 @@
         <div class="content py-0 text-center">
             <nav class="breadcrumb bg-body-light mb-0">
                 <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">@Resources.sistema</a>
-                <span class="breadcrumb-item">@Resources.governanca </span>
-                <span class="breadcrumb-item active">@Resources.inventarioEnxoval</span>
+                <span class="breadcrumb-item">@Resources.uh</span>
+                <span class="breadcrumb-item active">@Resources.uhMapaManutencaoHistorico</span>
             </nav>
         </div>
     </div>
@@ -19,7 +19,7 @@
 
     <div class="content">
 
-        @using (Html.BeginForm("InventarioEnxoval", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
+        @using (Html.BeginForm("DedetizacaoHistorico", "UH", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", enctype = "multipart/form-data", name = "form", id = "form" }))
         {
             @Html.AntiForgeryToken()
 
@@ -35,11 +35,11 @@
                 <div class="js-tasks-nav d-none d-md-block">
                     <div>
                         <div class="block-header block-header-default bg-gd-default">
-                            <h3 class="block-title text-white font-w600">@Resources.inventarioEnxoval</h3>
+                            <h3 class="block-title text-white font-w600">@Resources.uhMapaManutencaoHistorico</h3>
                             <div class="block-options">
                                 @if (ViewBag.inserir)
                                 {
-                                    <a href="@Url.Action("InventarioEnxovalNovo", "Governanca")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <a href="@Url.Action("TipoPerdaInsert", "Governanca")" class="btn btn-square btn-secondary min-width-100 h-75">
                                         <i class="fa fa-save mr-5"></i>@Resources.novo
                                     </a>
                                 }
@@ -49,9 +49,13 @@
                             <ul class="list-group push">
                                 <li class="list-group-item">
                                     <div class="form-row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label>@Resources.unidade</label>
                                             @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>@Resources.atividade</label>
+                                            @Html.DropDownList("atividade", null, "", new { @class = "js-select2 form-control" })
                                         </div>
                                         <div class="col-md-4">
                                             <label>@Resources.periodo</label>
@@ -64,9 +68,9 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>@Resources.status</label>
-                                            @Html.DropDownList("status", null, "", new { @class = "js-select2 form-control" })
+                                        <div class="col-md-2">
+                                            <label>@Resources.apartamento</label>
+                                            @Html.DropDownList("apartamento", null, "", new { @class = "js-select2 form-control" })
                                         </div>
                                     </div>
                                 </li>
@@ -87,12 +91,13 @@
 
                     <thead>
                         <tr class="table-secondary">
-                            <th></th>
-                            <th>@Resources.unidade </th>
-                            <th>@Resources.data</th>
-                            <th>@Resources.contador</th>
-                            <th>@Resources.acuracidade</th>
-                            <th>@Resources.status</th>
+                            <th>@Resources.unidade</th>
+                            <th>@Resources.descricao</th>
+                            <th>@Resources.data_previsao_termino</th>
+                            <th>@Resources.data_execucao</th>
+                            <th>@Resources.apartamento</th>
+                            <th>@Resources.funcionario</th>
+                            <th>@Resources.observacao</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -131,7 +136,8 @@
         quantidadeRouparia = Resources.quantidadeRouparia,
         quantidadeUso = Resources.quantidadeUso,
         quantidadeLavanderia = Resources.quantidadeLavanderia,
-        divergencia = Resources.divergencia
+        divergencia = Resources.divergencia,
+        diretoExcluir = ViewBag.excluir
     }))'>
 </div>
 
@@ -146,7 +152,8 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/clockpicker")
 
-    <script src="~/Content/js/pages/Governanca/jquery.inventarioEnxoval.init.js"></script>
+
+    <script src="~/Content/js/pages/UH/jquery.mapaManutencaoHistorico.init.js"></script>
 
     <script src="~/Content/js/lib/datatables/dataTables.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>

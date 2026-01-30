@@ -1591,6 +1591,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Histórico - Dedetização.
+        /// </summary>
+        public static string dedetizacaoHistorico {
+            get {
+                return ResourceManager.GetString("dedetizacaoHistorico", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Definir Camareira.
         /// </summary>
         public static string definirCamareira {
@@ -5538,6 +5547,24 @@ namespace PCM.WEB.Properties {
         public static string uh_vistoria {
             get {
                 return ResourceManager.GetString("uh_vistoria", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Dedetização - Histórico.
+        /// </summary>
+        public static string uhDedetizacaoHistorico {
+            get {
+                return ResourceManager.GetString("uhDedetizacaoHistorico", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Mapa de Manutenção - Histórico.
+        /// </summary>
+        public static string uhMapaManutencaoHistorico {
+            get {
+                return ResourceManager.GetString("uhMapaManutencaoHistorico", resourceCulture);
             }
         }
         

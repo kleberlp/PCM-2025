@@ -2184,4 +2184,13 @@
   <data name="tipoPerdaEnxoval" xml:space="preserve">
     <value>Tipo de perda de enxoval</value>
   </data>
+  <data name="dedetizacaoHistorico" xml:space="preserve">
+    <value>Histórico - Dedetização</value>
+  </data>
+  <data name="uhMapaManutencaoHistorico" xml:space="preserve">
+    <value>Mapa de Manutenção - Histórico</value>
+  </data>
+  <data name="uhDedetizacaoHistorico" xml:space="preserve">
+    <value>Dedetização - Histórico</value>
+  </data>
 </root>
