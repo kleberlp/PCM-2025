@@ -4777,6 +4777,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Relatório - U.H. x NC.
+        /// </summary>
+        public static string relatorio_uh_nc {
+            get {
+                return ResourceManager.GetString("relatorio_uh_nc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Relatório - Vistoriador x UH.
         /// </summary>
         public static string relatorioVistoriadorUH {

@@ -2193,4 +2193,7 @@
   <data name="uhDedetizacaoHistorico" xml:space="preserve">
     <value>Dedetização - Histórico</value>
   </data>
+  <data name="relatorio_uh_nc" xml:space="preserve">
+    <value>Relatório - U.H. x NC</value>
+  </data>
 </root>

@@ -3235,6 +3235,8 @@ Public Class Api
                         .tipoGovernanca = oSqlDataReader.Item("tipo_governanca"),
                         .naoPerturbe = oSqlDataReader.Item("nao_perturbe"),
                         .dataUltimaGovernaca = oSqlDataReader.Item("data_ultima_governanca"),
+                        .alertaCheckInOut = oSqlDataReader.Item("alert_checkin_out"),
+                        .poolCondominio = IIf(oSqlDataReader.Item("pool_condominio") = 2, "P", "C"),
                         .status = New pwaStatus With {
                             .codigo = oSqlDataReader.Item("status_codigo"),
                             .descricao = oSqlDataReader.Item("status_descricao"),

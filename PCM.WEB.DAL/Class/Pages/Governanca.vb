@@ -1107,6 +1107,31 @@ Public Class Governanca
 
 #Region "::: APONTAMENTO :::"
 
+    Public Sub ClearApontamento(ByVal codigoEmpresa As Integer,
+                                ByVal codigoUnidade As Integer,
+                                ByVal data As String,
+                                ByVal json As String)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data", SqlDbType.Date, IIf(IsDate(data), data, DBNull.Value)),
+                CriarParametro("json", SqlDbType.VarChar, json)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_governanca_apontamento_clear", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
     Public Function LoadGovernancaApontamento(ByVal iCodigoEmpresa As Integer,
                                               ByVal iCodigoUnidade As Integer,
                                               ByVal iCodigoApartamento As Integer,

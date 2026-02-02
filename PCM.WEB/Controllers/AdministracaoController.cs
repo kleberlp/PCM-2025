@@ -421,6 +421,7 @@ namespace PCM.WEB.Controllers
                 Session["rel_camareira_uh"] = formulario_visualizar.rel_camareira_uh;
                 Session["rel_responsavel_vistoria_uh"] = formulario_visualizar.rel_responsavel_vistoria_uh;
                 Session["rel_camareira_nc"] = formulario_visualizar.rel_camareira_nc;
+                Session["rel_uh_nc"] = formulario_visualizar.rel_uh_nc;
                 
                 Session["uh_checklist"] = formulario_visualizar.uh_checklist;
                 Session["uh_checklist_historico"] = formulario_visualizar.uh_checklist_historico;
@@ -905,6 +906,7 @@ namespace PCM.WEB.Controllers
                 Session["rel_camareira_uh"] = formulario_visualizar.rel_camareira_uh;
                 Session["rel_responsavel_vistoria_uh"] = formulario_visualizar.rel_responsavel_vistoria_uh;
                 Session["rel_camareira_nc"] = formulario_visualizar.rel_camareira_nc;
+                Session["rel_uh_nc"] = formulario_visualizar.rel_uh_nc;
                 
                 Session["uh_checklist"] = formulario_visualizar.uh_checklist;
                 Session["uh_checklist_historico"] = formulario_visualizar.uh_checklist_historico;

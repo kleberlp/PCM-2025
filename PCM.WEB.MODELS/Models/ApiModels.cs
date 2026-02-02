@@ -465,6 +465,8 @@ namespace PCM.WEB.MODELS
         public string tipoGovernanca { get; set; }
         public bool naoPerturbe { get; set; }
         public string dataUltimaGovernaca { get; set; }
+        public string poolCondominio { get; set; }
+        public bool alertaCheckInOut { get; set; }
         public pwaStatus status { get; set; }
         public pwaStatus statusOpera { get; set; }
         public pwaStatus statusGovernanca { get; set; }

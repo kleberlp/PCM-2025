@@ -141,6 +141,7 @@ namespace PCM.WEB.MODELS
         public bool rel_horas_trabalhadas_governanca { get; set; }
         public bool rel_camareira_uh { get; set; }
         public bool rel_camareira_nc { get; set; }
+        public bool rel_uh_nc { get; set; }
         public bool rel_responsavel_vistoria_uh { get; set; }
 
         public bool uh_checklist { get; set; }

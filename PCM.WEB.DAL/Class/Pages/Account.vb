@@ -552,6 +552,7 @@ Public Class Account
                 oFormularioVisualizar.rel_camareira_uh = IIf(IsDBNull(oSqlDataReader.Item("rel_camareira_uh")) = False AndAlso oSqlDataReader.Item("rel_camareira_uh") = "S", True, False)
                 oFormularioVisualizar.rel_responsavel_vistoria_uh = IIf(IsDBNull(oSqlDataReader.Item("rel_responsavel_vistoria_uh")) = False AndAlso oSqlDataReader.Item("rel_responsavel_vistoria_uh") = "S", True, False)
                 oFormularioVisualizar.rel_camareira_nc = IIf(IsDBNull(oSqlDataReader.Item("rel_camareira_nc")) = False AndAlso oSqlDataReader.Item("rel_camareira_nc") = "S", True, False)
+                oFormularioVisualizar.rel_uh_nc = IIf(IsDBNull(oSqlDataReader.Item("rel_uh_nc")) = False AndAlso oSqlDataReader.Item("rel_uh_nc") = "S", True, False)
 
                 oFormularioVisualizar.uh_checklist = IIf(IsDBNull(oSqlDataReader.Item("uh_checklist")) = False AndAlso oSqlDataReader.Item("uh_checklist") = "S", True, False)
                 oFormularioVisualizar.uh_checklist_historico = IIf(IsDBNull(oSqlDataReader.Item("uh_checklist_historico")) = False AndAlso oSqlDataReader.Item("uh_checklist_historico") = "S", True, False)

@@ -5146,4 +5146,73 @@ Public Class Relatorio
 
 #End Region
 
+#Region "::: RELATORIO UH NC :::"
+
+    Public Function RelatorioUHNC(ByVal codigoEmpresa As Integer,
+                                  ByVal codigoUnidade As Integer,
+                                  ByVal data As String,
+                                  ByVal codigoApartamento As Integer,
+                                  ByVal tipoNC As Integer,
+                                  ByVal viewReportNC As Integer) As List(Of RelatorioApartamentoNC)
+
+        Try
+
+            'Váriaveis Locais
+            Dim oReturn As New List(Of RelatorioApartamentoNC)
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data", SqlDbType.Date, IIf(IsDate(data), data, DBNull.Value)),
+                CriarParametro("codigo_apartamento", SqlDbType.Int, codigoApartamento),
+                CriarParametro("tipoNC", SqlDbType.Int, tipoNC),
+                CriarParametro("viewReportNC", SqlDbType.Int, viewReportNC)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_report_governanca_uh_nc", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New RelatorioApartamentoNC
+
+                    oInfo.apartamento = oSqlDataReader.Item("apartamento")
+                    oInfo.naoConformidade = oSqlDataReader.Item("nao_conformidade")
+
+                    Dim lTotal As Long = 0
+
+                    ' Soma dinâmica das propriedades dia*
+                    For day As Integer = 1 To 31
+
+                        Dim diaPropertyName As String = $"dia{day}"
+                        Dim diaProperty As Object = Nothing
+
+                        If Not IsDBNull(oSqlDataReader.Item(day.ToString())) Then
+                            diaProperty = oSqlDataReader.Item(day.ToString())
+                            oInfo.GetType().GetProperty(diaPropertyName).SetValue(oInfo, diaProperty.ToString())
+                            lTotal += Convert.ToInt32(diaProperty)
+                        End If
+
+                    Next
+
+                    oInfo.total = lTotal
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            'Retorno da Função
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
 End Class

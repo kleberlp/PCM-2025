@@ -700,6 +700,7 @@
                         (bool)Session["rel_camareira_uh"] ||
                         (bool)Session["rel_responsavel_vistoria_uh"] ||
                         (bool)Session["rel_camareira_nc"] ||
+                        (bool)Session["rel_uh_nc"] ||
                         (bool)Session["gov_inventario_enxoval"] ||
                         (bool)Session["gov_movimentacao_enxoval"] ||
                         (bool)Session["gov_cad_tipo_perda"])
@@ -754,6 +755,7 @@
                                            @Html.IsSelected(action: "RelatorioCamareiraUH", cssClass: "active")
                                            @Html.IsSelected(action: "RelatorioVistoriadorUH", cssClass: "active")
                                            @Html.IsSelected(action: "RelatorioCamareiraNC", cssClass: "active")
+                                           @Html.IsSelected(action: "RelatorioUHNC", cssClass: "active")
                                            @Html.IsSelected(action: "LogAlteracaoStatusGov", cssClass: "active")">
                                     <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" aria-haspopup="true" aria-expanded="true" href="#">
                                         <span class="sidebar-mini-hide">Relatório</span>
@@ -787,6 +789,12 @@
                                         {
                                             <li>
                                                 <a class="@Html.IsSelected(action: "RelatorioCamareiraNC", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioCamareiraNC", "Governanca")">@PCM.WEB.Properties.Resources.relatorio_camareira_nc</a>
+                                            </li>
+                                        }
+                                        @if ((bool)Session["rel_uh_nc"])
+                                        {
+                                            <li>
+                                                <a class="@Html.IsSelected(action: "RelatorioUHNC", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioUHNC", "Governanca")">@PCM.WEB.Properties.Resources.relatorio_uh_nc</a>
                                             </li>
                                         }
                                         @if ((bool)Session["gov_log_alteracao_status_gov"])

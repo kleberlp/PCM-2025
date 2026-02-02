@@ -24,8 +24,14 @@
             <!-- Toggle Tasks Navigation on mobile -->
             <div class="block block-rounded border">
                 <div class="block-header block-header-default bg-gd-default">
-                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento</h3>
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento - @ViewBag.lastUpdate</h3>
                     <div class="block-options">
+                        <button type="button" id="btnClearApontamento" name="btnClearApontamento" class="btn btn-square btn-secondary min-width-100 h-75 bg-danger-light">
+                            <i class="fa fa-times mr-5"></i>Excluir apontamento
+                        </button>
+                        <button type="button" id="btnClearPlanejamento" name="btnClearPlanejamento" class="btn btn-square btn-secondary min-width-100 h-75">
+                            <i class="fa fa-times mr-5"></i>Limpar planejamento
+                        </button>
                         <button type="button" id="btnSetTipoGovernanca" name="btnSetTipoGovernanca" class="btn btn-square btn-secondary min-width-100 h-75">
                             <i class="fa fa-hotel mr-5"></i>Definir tipo de limpeza
                         </button>
@@ -190,6 +196,12 @@
 <script type="text/javascript">
     const currentDate = new Date().toLocaleDateString('pt-BR');
 
+    $(window).on('resize', function () {
+        if ($.fn.DataTable.isDataTable('#tb_main')) {
+            table.columns.adjust().draw(false);
+        }
+    });
+
     $(function () {
 
         $.ajaxSetup({async: false});
@@ -318,7 +330,147 @@
 
         });
 
+        $('#btnClearApontamento').click(function () {
+
+            clearApontamento();
+
+        });
+
+        $('#btnClearPlanejamento').click(function () {
+
+            clearPlanejamento();
+
+        });
+
     });
+
+    function clearPlanejamento() {
+
+        let codigosSelecionados = [];
+
+        table.rows().every(function () {
+            let rowData = this.data();
+            let node = this.node();
+
+            let checkbox = $(node).find('input[type="checkbox"]');
+
+            if (checkbox.prop('checked') === true && rowData.funcionario === "" && rowData.tipoGovernanca !== "") {
+                codigosSelecionados.push(rowData);
+            }
+        });
+
+        if (codigosSelecionados.length === 0) {
+            Swal.fire("Nenhuma U.H. válida foi Selecionada!", "", "warning");
+            return;
+        }
+
+        // Serializa o array em uma string JSON
+        const jsonCodigos = JSON.stringify(codigosSelecionados);
+
+        Swal.fire({
+            title: "PCM",
+            html: "Deseja limpar o planejamento efetuado?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+            cancelButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "ClearPlanejamento",
+                    async: false,
+                    data: {
+                        unidade: $("#unidade").val(),
+                        usuario: $("#usuario").val(),
+                        data: $("#data").val(),
+                        json: jsonCodigos
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        Swal.fire({
+                            title: "@PCM.WEB.Properties.Resources.pcm",
+                            html: response,
+                            icon: "info",
+                            showDenyButton: false,
+                            showCancelButton: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                table.ajax.reload(null, false);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    }
+
+    function clearApontamento() {
+
+        let codigosSelecionados = [];
+
+        table.rows().every(function () {
+            let rowData = this.data();
+            let node = this.node();
+
+            let checkbox = $(node).find('input[type="checkbox"]');
+
+            if (checkbox.prop('checked') === true && rowData.funcionario !== "") {
+                codigosSelecionados.push(rowData);
+            }
+        });
+
+        if (codigosSelecionados.length === 0) {
+            Swal.fire("Nenhuma U.H. válida foi Selecionada!", "", "warning");
+            return;
+        }
+
+        // Serializa o array em uma string JSON
+        const jsonCodigos = JSON.stringify(codigosSelecionados);
+
+        Swal.fire({
+            title: "PCM",
+            html: "Deseja excluir o apontamento efetuado?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+            cancelButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "ClearApontamento",
+                    async: false,
+                    data: {
+                        unidade: $("#unidade").val(),
+                        usuario: $("#usuario").val(),
+                        data: $("#data").val(),
+                        json: jsonCodigos
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        Swal.fire({
+                            title: "@PCM.WEB.Properties.Resources.pcm",
+                            html: response,
+                            icon: "info",
+                            showDenyButton: false,
+                            showCancelButton: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                table.ajax.reload(null, false);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    }
 
     function loadApontamento() {
 
@@ -328,17 +480,17 @@
                 selector: 'td:not(:first-child)',
                 style: 'os'
             },
-            order: [[1, 'desc']],
-            info: false,
-            scrollCollapse: false,
+            order: [[1, 'asc']],
             scrollY: '50vh',
-            paging: false,
+            scrollX: true,
+            scrollCollapse: true,
             fixedHeader: true,
-            destroy: true,
-            searching: false,
-            paging: false,
-            lengthChange: false,
             autoWidth: false,
+            paging: false,
+            searching: false,
+            info: false,
+            lengthChange: false,
+            destroy: true,
             ajax: {
                 url: "loadApontamento",
                 type: "POST",
@@ -441,6 +593,14 @@
                 "info": "_MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)",
                 "infoEmpty": "",
                 "infoFiltered": "@Html.Raw(PCM.WEB.Properties.Resources.filtered_from) _MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)"
+            },
+            initComplete: function () {
+                let api = this.api();
+
+                // pequeno delay garante que o DOM terminou
+                setTimeout(function () {
+                    api.columns.adjust().draw(false);
+                }, 50);
             }
         });
 
