@@ -5,10 +5,13 @@ namespace PCM.WEB.MODELS
 
     public class dashboardGovernancaArrumadoxVistoriado
     {
-        public string unidade { get; set; }
-        public float quantidadeUHs { get; set; }
-        public float quantidadeVistoriados { get; set; }
-        public float quantidadeArrumados { get; set; }
+        public string data { get; set; }
+        public int qtdeSaida { get; set; }
+        public int qtdePermanencia { get; set; }
+        public int qtdeManutencao { get; set; }
+        public int meta { get; set; }
+        public int total { get; set; }
+        public int percentualVistoriado { get; set; }
     }
 
     public class dashboardGovernanca
@@ -20,6 +23,7 @@ namespace PCM.WEB.MODELS
         public string hhUtilizado { get; set; }
         public string quantidateUHsGovernanca { get; set; }
         public string quantidadeOSGerada { get; set; }
+        public string quantidadeTrocaStatus { get; set; }
     }
 
     public class dashboardGovernancaChartArrumacaoDia
@@ -36,13 +40,22 @@ namespace PCM.WEB.MODELS
         public string data { get; set; }
     }
 
-    public class dashboardGovernancaChartProdutividade
+    public class dashboardGovernancaChartProdutividadeCamareira
     {
         public string unidade { get; set; }
+        public string totalUHArrumada { get; set; }
+        public string totalUHSaida { get; set; }
+        public string totalUHPermanencia { get; set; }
+        public string totalUHManutencao { get; set; }
         public string percentual { get; set; }
-        public string quantidadePendente { get; set; }
-        public string quantidadeOK { get; set; }
-        public string total { get; set; }
+    }
+
+    public class dashboardGovernancaChartProdutividadeVistoriador
+    {
+        public string unidade { get; set; }
+        public string totalUHVistoriada { get; set; }
+        public string percentualTotal { get; set; }
+        public string percentualMeta { get; set; }
     }
 
     public class dashboardGovernancaNCDia

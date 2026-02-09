@@ -1,0 +1,264 @@
+/* ===============================
+   DASHBOARD GOVERNANÇA - MODERNO
+   =============================== */
+
+/* Fundo geral */
+body {
+    background-color: #f8f9fb;
+}
+
+/* Containers principais */
+.dashboard-section {
+    margin-bottom: 24px;
+}
+
+/* Títulos de seção */
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+/* ===============================
+   CARDS / KPIs
+   =============================== */
+
+.dashboard-card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    padding: 16px;
+    height: 100%;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-2px);
+        transition: all .2s ease;
+    }
+
+/* KPI */
+.dashboard-section,
+.dashboard-card,
+.kpi-card {
+    font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.dashboard-section {
+    overflow-x: auto;
+}
+.dashboard-section > .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.dashboard-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.kpi-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.kpi-value {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #111827;
+}
+
+.kpi-subtitle {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-bottom: 6px;
+}
+
+.kpi-gauge-value {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* Easy Pie Chart (gauges) */
+.easy-pie-chart {
+    margin: 0 auto 8px;
+    transform: scale(1.05);
+}
+
+    .easy-pie-chart canvas {
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,.1));
+    }
+
+/* ===============================
+   GRÁFICOS
+   =============================== */
+
+.chart-card {
+    padding: 16px;
+}
+
+    .chart-card canvas {
+        max-height: 280px;
+    }
+
+/* ===============================
+   TABELAS / RANKING
+   =============================== */
+
+.table {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+    .table thead {
+        background: #f3f4f6;
+    }
+
+    .table th {
+        font-size: .85rem;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: #374151;
+        border-bottom: none;
+    }
+
+    .table td {
+        font-size: .95rem;
+    }
+
+    /* Linhas do ranking */
+    .table tbody tr:hover {
+        background-color: #f9fafb;
+    }
+
+/* Badges leves */
+.badge-soft {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 600;
+}
+
+.badge-success {
+    background: #ecfdf5;
+    color: #065f46;
+}
+
+.badge-warning {
+    background: #fffbeb;
+    color: #92400e;
+}
+
+.badge-danger {
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.first-ranking {
+    color: #ffca28 !important;
+}
+
+.second-ranking {
+    color: #212529 !important;
+}
+
+.third-ranking {
+    color: #ef5350 !important;
+}
+
+/* ===============================
+   MODAL / DETALHES
+   =============================== */
+
+.modal-content {
+    border-radius: 14px;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* ===== DADOS DA UNIDADE ===== */
+
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Bloco de linhas dentro do card */
+.dashboard-card .kpi-line {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+    .dashboard-card .kpi-line:last-child {
+        margin-bottom: 0;
+    }
+
+/* Número principal */
+.dashboard-card .kpi-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.2;
+}
+
+/* Label */
+.dashboard-card .kpi-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #6b7280;
+}
+
+/* ===== PRODUTIVIDADE (TABELAS GRANDES) ===== */
+
+.dashboard-card table {
+    width: 100% !important;
+    font-size: 12px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.dashboard-card table thead th {
+    background-color: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.dashboard-card table tbody td {
+    color: #374151;
+    padding: 6px 10px;
+    vertical-align: middle;
+}
+
+.dashboard-card .dataTables_wrapper {
+    padding: 12px;
+}
+
+.dashboard-card .dataTables_paginate {
+    margin-top: 8px;
+}

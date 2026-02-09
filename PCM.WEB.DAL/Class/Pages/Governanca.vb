@@ -250,6 +250,7 @@ Public Class Governanca
                     oReturn.hhUtilizado = oSqlDataReader.Item("hhUtilizado")
                     oReturn.quantidateUHsGovernanca = oSqlDataReader.Item("quantidateUHsGovernanca")
                     oReturn.quantidadeOSGerada = oSqlDataReader.Item("quantidadeOSGerada")
+                    oReturn.quantidadeTrocaStatus = oSqlDataReader.Item("quantidadeTrocaStatus")
 
                 End While
 
@@ -262,6 +263,7 @@ Public Class Governanca
                 oReturn.hhUtilizado = "00:00"
                 oReturn.quantidateUHsGovernanca = "0"
                 oReturn.quantidadeOSGerada = "0"
+                oReturn.quantidadeTrocaStatus = "0"
 
             End If
 
@@ -282,8 +284,8 @@ Public Class Governanca
 
     Public Function LoadChartArrumadoxVistoriado(ByVal codigoEmpresa As Integer,
                                                  ByVal codigoUnidade As Integer,
-                                                 ByVal dataInicio As String,
-                                                 ByVal dataTermino As String) As List(Of dashboardGovernancaArrumadoxVistoriado)
+                                                 ByVal dataInicio As DateTime,
+                                                 ByVal dataTermino As DateTime) As List(Of dashboardGovernancaArrumadoxVistoriado)
 
         Try
 
@@ -305,10 +307,12 @@ Public Class Governanca
 
                         Dim oInfo As New dashboardGovernancaArrumadoxVistoriado
 
-                        oInfo.unidade = oSqlDataReader.Item("unidade")
-                        oInfo.quantidadeUHs = oSqlDataReader.Item("quantidade_uh")
-                        oInfo.quantidadeArrumados = oSqlDataReader.Item("quantidade_arrumado")
-                        oInfo.quantidadeVistoriados = oSqlDataReader.Item("quantidade_vistoriado")
+                        oInfo.data = SafeGetString(oSqlDataReader, "data")
+                        oInfo.qtdeSaida = SafeGetLong(oSqlDataReader, "quantidade_saida")
+                        oInfo.qtdePermanencia = SafeGetLong(oSqlDataReader, "quantidade_permanencia")
+                        oInfo.qtdeManutencao = SafeGetLong(oSqlDataReader, "quantidade_manutencao")
+                        oInfo.meta = SafeGetLong(oSqlDataReader, "meta")
+                        oInfo.percentualVistoriado = SafeGetFloat(oSqlDataReader, "percentual_vistoriado")
 
                         oReturn.Add(oInfo)
 
@@ -427,13 +431,13 @@ Public Class Governanca
 
     Public Function LoadChartProdutividadeCamareira(ByVal codigoEmpresa As Integer,
                                                     ByVal codigoUnidade As Integer,
-                                                    ByVal dataInicio As String,
-                                                    ByVal dataTermino As String) As List(Of dashboardGovernancaChartProdutividade)
+                                                    ByVal dataInicio As DateTime,
+                                                    ByVal dataTermino As DateTime) As List(Of dashboardGovernancaChartProdutividadeCamareira)
 
         Try
 
             'Váriaveis Locais
-            Dim oReturn As New List(Of dashboardGovernancaChartProdutividade)
+            Dim oReturn As New List(Of dashboardGovernancaChartProdutividadeCamareira)
             Dim oSqlParameter As SqlParameter() = {
                 CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
@@ -442,19 +446,20 @@ Public Class Governanca
             }
 
             'Executa Query
-            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_dashboard_governanca_chart_produtividade_camareira", oSqlParameter)
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_dashboard_governanca_chart_produtividade_camareira_v2", oSqlParameter)
 
                 If oSqlDataReader.HasRows Then
 
                     While oSqlDataReader.Read
 
-                        Dim oInfo As New dashboardGovernancaChartProdutividade
+                        Dim oInfo As New dashboardGovernancaChartProdutividadeCamareira
 
-                        oInfo.unidade = oSqlDataReader.Item("unidade")
-                        oInfo.percentual = oSqlDataReader.Item("percentual")
-                        oInfo.quantidadePendente = oSqlDataReader.Item("quantidade_pendente")
-                        oInfo.quantidadeOK = oSqlDataReader.Item("quantidade_ok")
-                        oInfo.total = oSqlDataReader.Item("quantidade_ok") + oSqlDataReader.Item("quantidade_pendente")
+                        oInfo.unidade = SafeGetString(oSqlDataReader, "unidade")
+                        oInfo.percentual = SafeGetString(oSqlDataReader, "percentual")
+                        oInfo.totalUHArrumada = SafeGetString(oSqlDataReader, "total_uh_arrumada")
+                        oInfo.totalUHSaida = SafeGetString(oSqlDataReader, "total_uh_saida")
+                        oInfo.totalUHPermanencia = SafeGetString(oSqlDataReader, "total_uh_permanencia")
+                        oInfo.totalUHManutencao = SafeGetString(oSqlDataReader, "total_uh_manutencao")
 
                         oReturn.Add(oInfo)
 
@@ -477,13 +482,13 @@ Public Class Governanca
 
     Public Function LoadChartProdutividadeVistoriador(ByVal codigoEmpresa As Integer,
                                                       ByVal codigoUnidade As Integer,
-                                                      ByVal dataInicio As String,
-                                                      ByVal dataTermino As String) As List(Of dashboardGovernancaChartProdutividade)
+                                                      ByVal dataInicio As DateTime,
+                                                      ByVal dataTermino As DateTime) As List(Of dashboardGovernancaChartProdutividadeVistoriador)
 
         Try
 
             'Váriaveis Locais
-            Dim oReturn As New List(Of dashboardGovernancaChartProdutividade)
+            Dim oReturn As New List(Of dashboardGovernancaChartProdutividadeVistoriador)
             Dim oSqlParameter As SqlParameter() = {
                 CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
@@ -492,19 +497,18 @@ Public Class Governanca
             }
 
             'Executa Query
-            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_dashboard_governanca_chart_produtividade_vistoriador", oSqlParameter)
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_dashboard_governanca_chart_produtividade_vistoriador_v2", oSqlParameter)
 
                 If oSqlDataReader.HasRows Then
 
                     While oSqlDataReader.Read
 
-                        Dim oInfo As New dashboardGovernancaChartProdutividade
+                        Dim oInfo As New dashboardGovernancaChartProdutividadeVistoriador
 
                         oInfo.unidade = oSqlDataReader.Item("unidade")
-                        oInfo.percentual = oSqlDataReader.Item("percentual")
-                        oInfo.quantidadePendente = oSqlDataReader.Item("quantidade_pendente")
-                        oInfo.quantidadeOK = oSqlDataReader.Item("quantidade_ok")
-                        oInfo.total = oSqlDataReader.Item("quantidade_ok") + oSqlDataReader.Item("quantidade_pendente")
+                        oInfo.totalUHVistoriada = oSqlDataReader.Item("total_uh_vistoriada")
+                        oInfo.percentualTotal = oSqlDataReader.Item("percentual_total")
+                        oInfo.percentualMeta = oSqlDataReader.Item("percentual_meta")
 
                         oReturn.Add(oInfo)
 
@@ -629,8 +633,8 @@ Public Class Governanca
 
     Public Function LoadNCCamareira(ByVal codigoEmpresa As Integer,
                                     ByVal codigoUnidade As Integer,
-                                    ByVal dataInicio As String,
-                                    ByVal dataTermino As String) As List(Of dashboardGovernancaNCCamareira)
+                                    ByVal dataInicio As DateTime,
+                                    ByVal dataTermino As DateTime) As List(Of dashboardGovernancaNCCamareira)
 
         Try
 
@@ -678,8 +682,8 @@ Public Class Governanca
 
     Public Function RankingCamareira(ByVal codigoEmpresa As Integer,
                                      ByVal codigoUnidade As Integer,
-                                     ByVal dataInicio As String,
-                                     ByVal dataTermino As String) As List(Of dashboardRankingCamareira)
+                                     ByVal dataInicio As DateTime,
+                                     ByVal dataTermino As DateTime) As List(Of dashboardRankingCamareira)
 
         Try
 
@@ -732,8 +736,8 @@ Public Class Governanca
 
     Public Function LoadNCDetalhado(ByVal codigoEmpresa As Integer,
                                     ByVal codigoUnidade As Integer,
-                                    ByVal dataInicio As String,
-                                    ByVal dataTermino As String) As List(Of dashboardGovernancaNCDetalhado)
+                                    ByVal dataInicio As DateTime,
+                                    ByVal dataTermino As DateTime) As List(Of dashboardGovernancaNCDetalhado)
 
         Try
 

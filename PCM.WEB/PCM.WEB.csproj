@@ -368,6 +368,7 @@
   <ItemGroup>
     <Content Include="Content\css\codebase.css" />
     <Content Include="Content\css\codebase.min.css" />
+    <Content Include="Content\css\pages\home\dashboard-governanca.css" />
     <Content Include="Content\css\themes\corporate.min.css" />
     <Content Include="Content\css\themes\earth.min.css" />
     <Content Include="Content\css\themes\elegance.min.css" />
@@ -2567,6 +2568,7 @@
     <Content Include="Views\UH\DedetizacaoHistorico.cshtml" />
     <Content Include="Views\UH\MapaManutencaoHistorico.cshtml" />
     <Content Include="Views\Governanca\RelatorioUHNC.cshtml" />
+    <Content Include="Views\Home\IndexGovernanca_old.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

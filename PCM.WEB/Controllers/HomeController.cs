@@ -798,6 +798,7 @@ namespace PCM.WEB.Controllers
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", Session["codigo_modulo"].ToString());
 
                 ViewBag.nome_fantasia = Session["unidade"].ToString();
+
                 ViewBag.dashboard_info = oGovernanca.DashboardInfo(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                    codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
                                                                    dataInicio: dataInicio,
@@ -807,35 +808,10 @@ namespace PCM.WEB.Controllers
                                                       iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
                                                       iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()));
 
-                ViewBag.ProdutividadeCamareira = oGovernanca.LoadChartProdutividadeCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                             codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                                             dataInicio: dataInicio,
-                                                                                             dataTermino: dataTermino);
-
-                ViewBag.ProdutividadeVistoriador = oGovernanca.LoadChartProdutividadeVistoriador(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                                 codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                                                 dataInicio: dataInicio,
-                                                                                                 dataTermino: dataTermino);
-
                 ViewBag.AtendimentoOS = oGovernanca.LoadAtendimentoOrdemServico(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                 codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
                                                                                 dataInicio: dataInicio,
                                                                                 dataTermino: dataTermino);
-
-                ViewBag.NCCamareira = oGovernanca.LoadNCCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                  dataInicio: dataInicio,
-                                                                  dataTermino: dataTermino);
-
-                ViewBag.NCDetalhado = oGovernanca.LoadNCDetalhado(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                  dataInicio: dataInicio,
-                                                                  dataTermino: dataTermino);
-
-                ViewBag.RankingCamareira = oGovernanca.RankingCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                        dataInicio: dataInicio,
-                                                                        dataTermino: dataTermino);
 
                 ViewBag.dataInicio = dataInicio;
                 ViewBag.dataTermino = dataTermino;
@@ -1003,35 +979,10 @@ namespace PCM.WEB.Controllers
                                                       iCodigoUnidade: unidade,
                                                       iCodigoModulo: modulo);
 
-                ViewBag.ProdutividadeCamareira = oGovernanca.LoadChartProdutividadeCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                             codigoUnidade: unidade,
-                                                                                             dataInicio: dataInicio,
-                                                                                             dataTermino: dataTermino);
-
-                ViewBag.ProdutividadeVistoriador = oGovernanca.LoadChartProdutividadeVistoriador(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                                 codigoUnidade: unidade,
-                                                                                                 dataInicio: dataInicio,
-                                                                                                 dataTermino: dataTermino);
-
                 ViewBag.AtendimentoOS = oGovernanca.LoadAtendimentoOrdemServico(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                 codigoUnidade: unidade,
                                                                                 dataInicio: dataInicio,
                                                                                 dataTermino: dataTermino);
-
-                ViewBag.NCCamareira = oGovernanca.LoadNCCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  codigoUnidade: unidade,
-                                                                  dataInicio: dataInicio,
-                                                                  dataTermino: dataTermino);
-
-                ViewBag.NCDetalhado = oGovernanca.LoadNCDetalhado(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  codigoUnidade: unidade,
-                                                                  dataInicio: dataInicio,
-                                                                  dataTermino: dataTermino);
-
-                ViewBag.RankingCamareira = oGovernanca.RankingCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                        dataInicio: dataInicio,
-                                                                        dataTermino: dataTermino);
 
                 ViewBag.nome_fantasia = Session["unidade"].ToString();
 
@@ -1041,6 +992,176 @@ namespace PCM.WEB.Controllers
                 return View();
             }
 
+        }
+
+        [HttpPost]
+        public JsonResult LoadProdutividadeCamareira(int empresa, int unidade, string data)
+        {
+            try
+            {
+
+                DateTime primeiroDia;
+                DateTime ultimoDia;
+
+                if (data == "")
+                {
+                    DateTime currentDate = DateTime.Now;
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+                else
+                {
+                    DateTime currentDate = DateTime.ParseExact(data, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+
+                return Json(oGovernanca.LoadChartProdutividadeCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                        codigoUnidade: unidade,
+                                                                        dataInicio: primeiroDia,
+                                                                        dataTermino: ultimoDia));
+            }
+            catch (Exception ex)
+            {
+                // Tratamento de erro para lidar com formatos inválidos ou exceções
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadProdutividadeVistoriador(int empresa, int unidade, string data)
+        {
+            try
+            {
+
+                DateTime primeiroDia;
+                DateTime ultimoDia;
+
+                if (data == "")
+                {
+                    DateTime currentDate = DateTime.Now;
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+                else
+                {
+                    DateTime currentDate = DateTime.ParseExact(data, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+
+                return Json(oGovernanca.LoadChartProdutividadeVistoriador(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                          codigoUnidade: unidade,
+                                                                          dataInicio: primeiroDia,
+                                                                          dataTermino: ultimoDia));
+            }
+            catch (Exception ex)
+            {
+                // Tratamento de erro para lidar com formatos inválidos ou exceções
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadNCCamareira(int empresa, int unidade, string data)
+        {
+            try
+            {
+
+                DateTime primeiroDia;
+                DateTime ultimoDia;
+
+                if (data == "")
+                {
+                    DateTime currentDate = DateTime.Now;
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+                else
+                {
+                    DateTime currentDate = DateTime.ParseExact(data, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+
+                return Json(oGovernanca.LoadNCCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                        codigoUnidade: unidade,
+                                                        dataInicio: primeiroDia,
+                                                        dataTermino: ultimoDia));
+            }
+            catch (Exception ex)
+            {
+                // Tratamento de erro para lidar com formatos inválidos ou exceções
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadNCDetalhado(int empresa, int unidade, string data)
+        {
+            try
+            {
+
+                DateTime primeiroDia;
+                DateTime ultimoDia;
+
+                if (data == "")
+                {
+                    DateTime currentDate = DateTime.Now;
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+                else
+                {
+                    DateTime currentDate = DateTime.ParseExact(data, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+
+                return Json(oGovernanca.LoadNCDetalhado(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                        codigoUnidade: unidade,
+                                                        dataInicio: primeiroDia,
+                                                        dataTermino: ultimoDia));
+            }
+            catch (Exception ex)
+            {
+                // Tratamento de erro para lidar com formatos inválidos ou exceções
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadRankingCamareira(int empresa, int unidade, string data)
+        {
+            try
+            {
+
+                DateTime primeiroDia;
+                DateTime ultimoDia;
+
+                if (data == "")
+                {
+                    DateTime currentDate = DateTime.Now;
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+                else
+                {
+                    DateTime currentDate = DateTime.ParseExact(data, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
+                    ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                }
+
+                return Json(oGovernanca.RankingCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                         codigoUnidade: unidade,
+                                                         dataInicio: primeiroDia,
+                                                         dataTermino: ultimoDia));
+            }
+            catch (Exception ex)
+            {
+                // Tratamento de erro para lidar com formatos inválidos ou exceções
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         #region ::: CHART :::
@@ -1057,19 +1178,10 @@ namespace PCM.WEB.Controllers
                 // Gerando as datas entre o intervalo
                 List<dashboardGovernancaArrumadoxVistoriado> result = oGovernanca.LoadChartArrumadoxVistoriado(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                                                codigoUnidade: unidade,
-                                                                                                               dataInicio: dataInicio,
-                                                                                                               dataTermino: dataTermino);
-                var chartData = new
-                {
-                    labels = result.Select(d => d.unidade).ToArray(),
-                    datasets = new[]
-                    {
-                        new { label = "UH's Vistoriados", data = result.Select(d => d.quantidadeVistoriados).ToArray(), backgroundColor = "green" },
-                        new { label = "UH's Arrumados", data = result.Select(d => d.quantidadeArrumados).ToArray(), backgroundColor = "blue" }
-                    }
-                };
+                                                                                                               dataInicio: startDate,
+                                                                                                               dataTermino: endDate);
 
-                return Json(chartData, JsonRequestBehavior.AllowGet);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -1194,83 +1306,83 @@ namespace PCM.WEB.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult ChartProdutividadeCamareira(int unidade, string dataInicio, string dataTermino)
-        {
-            try
-            {
-                // Convertendo as strings para DateTime
-                DateTime startDate = DateTime.ParseExact(dataInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                DateTime endDate = DateTime.ParseExact(dataTermino, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        //[HttpPost]
+        //public JsonResult ChartProdutividadeCamareira(int unidade, string dataInicio, string dataTermino)
+        //{
+        //    try
+        //    {
+        //        // Convertendo as strings para DateTime
+        //        DateTime startDate = DateTime.ParseExact(dataInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        //        DateTime endDate = DateTime.ParseExact(dataTermino, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                // Gerando as datas entre o intervalo
-                List<dashboardGovernancaChartProdutividade> result = oGovernanca.LoadChartProdutividadeCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                                                 codigoUnidade: unidade,
-                                                                                                                 dataInicio: dataInicio,
-                                                                                                                 dataTermino: dataTermino);
-                var chartData = new
-                {
-                    labels = result.Select(r => r.unidade).ToArray(), // Eixo X: Unidade
-                    datasets = new[]
-                    {
-                        new {
-                            label = "Percentual de Produtividade (%)",
-                            data = result.Select(r => decimal.TryParse(r.percentual, out var val) ? val : 0).ToArray(),
-                            backgroundColor = "rgba(54, 162, 235, 0.5)",
-                            borderColor = "rgba(54, 162, 235, 1)",
-                            borderWidth = 1
-                        }
-                    }
-                };
+        //        // Gerando as datas entre o intervalo
+        //        List<dashboardGovernancaChartProdutividade> result = oGovernanca.LoadChartProdutividadeCamareira(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+        //                                                                                                         codigoUnidade: unidade,
+        //                                                                                                         dataInicio: dataInicio,
+        //                                                                                                         dataTermino: dataTermino);
+        //        var chartData = new
+        //        {
+        //            labels = result.Select(r => r.unidade).ToArray(), // Eixo X: Unidade
+        //            datasets = new[]
+        //            {
+        //                new {
+        //                    label = "Percentual de Produtividade (%)",
+        //                    data = result.Select(r => decimal.TryParse(r.percentual, out var val) ? val : 0).ToArray(),
+        //                    backgroundColor = "rgba(54, 162, 235, 0.5)",
+        //                    borderColor = "rgba(54, 162, 235, 1)",
+        //                    borderWidth = 1
+        //                }
+        //            }
+        //        };
 
-                return Json(chartData, JsonRequestBehavior.AllowGet);
+        //        return Json(chartData, JsonRequestBehavior.AllowGet);
 
-            }
-            catch (Exception ex)
-            {
-                // Tratamento de erro para lidar com formatos inválidos ou exceções
-                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Tratamento de erro para lidar com formatos inválidos ou exceções
+        //        return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
-        [HttpPost]
-        public JsonResult ChartProdutividadeVistoriador(int unidade, string dataInicio, string dataTermino)
-        {
-            try
-            {
-                // Convertendo as strings para DateTime
-                DateTime startDate = DateTime.ParseExact(dataInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                DateTime endDate = DateTime.ParseExact(dataTermino, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        //[HttpPost]
+        //public JsonResult ChartProdutividadeVistoriador(int unidade, string dataInicio, string dataTermino)
+        //{
+        //    try
+        //    {
+        //        // Convertendo as strings para DateTime
+        //        DateTime startDate = DateTime.ParseExact(dataInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        //        DateTime endDate = DateTime.ParseExact(dataTermino, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                // Gerando as datas entre o intervalo
-                List<dashboardGovernancaChartProdutividade> result = oGovernanca.LoadChartProdutividadeVistoriador(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                                                   codigoUnidade: unidade,
-                                                                                                                   dataInicio: dataInicio,
-                                                                                                                   dataTermino: dataTermino);
-                var chartData = new
-                {
-                    labels = result.Select(r => r.unidade).ToArray(),
-                    datasets = new[]
-                    {
-                        new {
-                            label = "Percentual de Produtividade (%)",
-                            data = result.Select(r => decimal.TryParse(r.percentual, out var val) ? val : 0).ToArray(),
-                            backgroundColor = "rgba(54, 162, 235, 0.5)",
-                            borderColor = "rgba(54, 162, 235, 1)",
-                            borderWidth = 1
-                        }
-                    }
-                };
+        //        // Gerando as datas entre o intervalo
+        //        List<dashboardGovernancaChartProdutividade> result = oGovernanca.LoadChartProdutividadeVistoriador(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+        //                                                                                                           codigoUnidade: unidade,
+        //                                                                                                           dataInicio: dataInicio,
+        //                                                                                                           dataTermino: dataTermino);
+        //        var chartData = new
+        //        {
+        //            labels = result.Select(r => r.unidade).ToArray(),
+        //            datasets = new[]
+        //            {
+        //                new {
+        //                    label = "Percentual de Produtividade (%)",
+        //                    data = result.Select(r => decimal.TryParse(r.percentual, out var val) ? val : 0).ToArray(),
+        //                    backgroundColor = "rgba(54, 162, 235, 0.5)",
+        //                    borderColor = "rgba(54, 162, 235, 1)",
+        //                    borderWidth = 1
+        //                }
+        //            }
+        //        };
 
-                return Json(chartData, JsonRequestBehavior.AllowGet);
+        //        return Json(chartData, JsonRequestBehavior.AllowGet);
 
-            }
-            catch (Exception ex)
-            {
-                // Tratamento de erro para lidar com formatos inválidos ou exceções
-                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Tratamento de erro para lidar com formatos inválidos ou exceções
+        //        return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
         
         #endregion
 

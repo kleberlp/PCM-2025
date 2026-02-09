@@ -14,6 +14,10 @@ namespace PCM.WEB
                         "~/Content/css/codebase.css",
                         "~/Content/js/plugins/sweetalert2/sweetalert2.min.css"));
 
+            // dashboard
+            bundles.Add(new StyleBundle("~/Content/dashboard").Include(
+                        "~/Content/css/pages/home/dashboard-governanca.css"));
+
             bundles.Add(new StyleBundle("~/Content/datepicker").Include(
                         "~/Content/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"));
 

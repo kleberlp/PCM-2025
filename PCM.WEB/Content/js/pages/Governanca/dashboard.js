@@ -1,22 +1,19 @@
-﻿// Obtendo URL da API do atributo data
+﻿const messagesData = document.getElementById('resource-messages').getAttribute('data-messages');
+const messages = JSON.parse(messagesData);
+
+// Obtendo URL da API do atributo data
 var apiUrls = document.getElementById("api-urls");
 var chartArrumadoxVistoriadoUrl = apiUrls.getAttribute("data-chart-arrumado-vistoriado");
-var chartArrumacaoDiaUrl = apiUrls.getAttribute("data-chart-arrumacao-dia");
-var chartVistoriaDiaUrl = apiUrls.getAttribute("data-chart-vistoria-dia");
-//var chartProdutividadeCamareiraUrl = apiUrls.getAttribute("data-chart-produtividade-camareira");
-//var chartProdutividadeVistoriadorUrl = apiUrls.getAttribute("data-chart-produtividade-vistoriador");
-var chartNaoConformidadeTipoUrl = apiUrls.getAttribute("data-chart-nao-conformidade-tipo");
 var chartNaoConformidadeDiaUrl = apiUrls.getAttribute("data-chart-nao-conformidade-dia");
 var table;
 var day = 30;
 
+let chartArr = null;
+let chartNC = null;
+
 // Inicializando os gráficos
-var cArrumadoxVistoriado = document.getElementById('chartArrumadoxVistoriado').getContext('2d');
-var cArrumacaoDia = document.getElementById('chartArrumacaoDia').getContext('2d');
-var cVistoriaDia = document.getElementById('chartVistoriaDia').getContext('2d');
-//var cProdutividadeCamareira = document.getElementById('chartProdutividadeCamareira').getContext('2d');
-//var cProdutividadeVistoriador = document.getElementById('chartProdutividadeVistoriador').getContext('2d');
-var cNCDia = document.getElementById('chartNCDia').getContext('2d'); 
+const ctxArr = document.getElementById('chartArrumadoxVistoriado')?.getContext('2d');
+const ctxNC = document.getElementById('chartNCDia')?.getContext('2d');
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -27,70 +24,311 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Inicialização do gráfico Arrumado x Vistoriado
-    if (cArrumadoxVistoriado) {
-        window.ArrumadoxVistoriado = new Chart(cArrumadoxVistoriado, getChartConfigArrumadoxVistoriado());
-        console.log("Gráfico Arrumado x Vistoriado:", window.ArrumadoxVistoriado);
-        loadChartData(chartArrumadoxVistoriadoUrl, window.ArrumadoxVistoriado.config, "arrumadoxvistoriado");
+    if (ctxArr) {
+        //window.ArrumadoxVistoriado = new Chart(cArrumadoxVistoriado, getChartConfigArrumadoxVistoriado());
+        //console.log("Gráfico Arrumado x Vistoriado:", window.ArrumadoxVistoriado);
+        loadChartData(chartArrumadoxVistoriadoUrl, "arrumadoxvistoriado");
     } else {
         console.error("Erro: Elemento de gráfico Arrumado x Vistoriado não encontrado.");
     }
 
-    // Inicialização do gráfico Arrumação Dia
-    if (cArrumacaoDia) {
-        window.ArrumacaoDia = new Chart(cArrumacaoDia, getChartConfigArrumacaoDia());
-        console.log("Gráfico Nº Arrumação Dia:", window.ArrumacaoDia);
-        loadChartData(chartArrumacaoDiaUrl, window.ArrumacaoDia.config, "arrumacaoDia");
-    } else {
-        console.error("Erro: Elemento de gráfico Arrumação Dia não encontrado.");
-    }
-
-    // Inicialização do gráfico Vistoria Dia
-    if (cVistoriaDia) {
-        window.VistoriaDia = new Chart(cVistoriaDia, getChartConfigVistoriaDia());
-        console.log("Gráfico Nº Vistoria Dia:", window.VistoriaDia);
-        loadChartData(chartVistoriaDiaUrl, window.VistoriaDia.config, "vistoriaDia");
-    } else {
-        console.error("Erro: Elemento de gráfico Vistoria Dia não encontrado.");
-    }
-
-    //// Inicialização do gráfico Produtividade Camareira
-    //if (cProdutividadeCamareira) {
-    //    window.ProdutividadeCamareira = new Chart(cProdutividadeCamareira, getChartConfigProdutividadeCamareira());
-    //    console.log("Gráfico Produtividade (Camareira):", window.ProdutividadeCamareira);
-    //    loadChartData(chartProdutividadeCamareiraUrl, window.ProdutividadeCamareira.config, "produtividadeCamareira");
-    //} else {
-    //    console.error("Erro: Elemento de gráfico Produtividade Camareira não encontrado.");
-    //}
-
-    //// Inicialização do gráfico Produtividade Vistoriador
-    //if (cProdutividadeVistoriador) {
-    //    window.ProdutividadeVistoriador = new Chart(cProdutividadeVistoriador, getChartConfigProdutividadeVistoriador());
-    //    console.log("Gráfico Produtividade (Vistoriador):", window.ProdutividadeVistoriador);
-    //    loadChartData(chartProdutividadeVistoriadorUrl, window.ProdutividadeVistoriador.config, "produtividadeVistoriador");
-    //} else {
-    //    console.error("Erro: Elemento de gráfico Produtividade Vistoriador não encontrado.");
-    //}
-
     // Inicialização do gráfico NC Dia
-    if (cNCDia) {
-        window.NCDia = new Chart(cNCDia, getChartConfigNCDia());
-        console.log("Gráfico NC Dia:", window.NCDia);
-        loadChartData(chartNaoConformidadeDiaUrl, window.NCDia.config, "ncDia");
+    if (ctxNC) {
+        //window.NCDia = new Chart(cNCDia, getChartConfigNCDia());
+        //console.log("Gráfico NC Dia:", window.NCDia);
+        loadChartData(chartNaoConformidadeDiaUrl, "ncDia");
     } else {
         console.error("Erro: Elemento de gráfico NC Dia não encontrado.");
     }
 
+    var tableProdutividade = $('#tbProdutividadeCamareira').DataTable({
+        select: {
+            selector: 'td:not(:first-child)',
+            style: 'os'
+        },
+        searching: false,
+        fixedColumns: {
+            start: 0,
+            end: 1
+        },
+        scrollX: false,
+        autoWidth: false,
+        lengthChange: false,
+        pageLength: 15,
+        processing: true,
+        scrollCollapse: true,
+        serverSide: false,
+        ajax: {
+            url: "LoadProdutividadeCamareira",
+            type: "POST",
+            datatype: "json",
+            data: function (d) {
+                d.empresa = $('#empresa').val(),
+                d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                d.data = $('#data').val()
+            },
+            dataSrc: ""
+        },        
+        columns: [
+            { data: "unidade" },
+            { data: "totalUHArrumada" },
+            { data: "totalUHSaida" },
+            { data: "totalUHPermanencia" },
+            { data: "totalUHManutencao" },
+            { data: "percentual" }
+        ],
+        language: {
+            emptyTable: messages.emptyTable,
+            info: "",
+            infoEmpty: "",
+            infoFiltered: "",
+        },
+        columnDefs: [
+            { className: 'text-center', targets: [1, 2, 3, 4, 5] },
+            { width: '150px', targets: [1, 2, 3, 4, 5] },
+        ],
 
-    //// Inicialização do gráfico Não Conformidade
-    //if (cNaoConformidadeTipo) {
-    //    window.NaoConformidadeTipo = new Chart(cNaoConformidadeTipo, getChartConfigNaoConformidadeTipo());
-    //    console.log("Gráfico Camareira criado:", window.NaoConformidadeTipo);
-    //    loadChartData(chartNaoConformidadeTipoUrl, window.NaoConformidadeTipo.config, "nao-conformidade-tipo");
-    //} else {
-    //    console.error("Erro: Elemento de gráfico Não Conformidade não encontrado.");
-    //}
+    });
 
-    //loadNaoConformidade(30)
+    var tbProdutividadeVistoriador = $('#tbProdutividadeVistoriador').DataTable({
+        select: {
+            selector: 'td:not(:first-child)',
+            style: 'os'
+        },
+        searching: false,
+        fixedColumns: {
+            start: 0,
+            end: 1
+        },
+        scrollX: false,
+        autoWidth: false,
+        lengthChange: false,
+        pageLength: 15,
+        processing: true,
+        scrollCollapse: true,
+        serverSide: false,
+        ajax: {
+            url: "LoadProdutividadeVistoriador",
+            type: "POST",
+            datatype: "json",
+            data: function (d) {
+                d.empresa = $('#empresa').val(),
+                    d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.data = $('#data').val()
+            },
+            dataSrc: ""
+        },
+        columns: [
+            { data: "unidade" },
+            { data: "totalUHVistoriada" },
+            { data: "percentualTotal" },
+            { data: "percentualMeta" }
+        ],
+        language: {
+            emptyTable: messages.emptyTable,
+            info: "",
+            infoEmpty: "",
+            infoFiltered: "",
+        },
+        columnDefs: [
+            { className: 'text-center', targets: [1, 2, 3] },
+            { width: '150px', targets: [1, 2, 3] },
+        ],
+
+    });
+
+    var tbNCDetalhado = $('#tbNCDetalhado').DataTable({
+        select: {
+            selector: 'td:not(:first-child)',
+            style: 'os'
+        },
+        searching: false,
+        fixedColumns: {
+            start: 0,
+            end: 1
+        },
+        scrollX: false,
+        autoWidth: false,
+        lengthChange: false,
+        pageLength: 15,
+        processing: true,
+        scrollCollapse: true,
+        serverSide: false,
+        ajax: {
+            url: "LoadNCDetalhado",
+            type: "POST",
+            datatype: "json",
+            data: function (d) {
+                d.empresa = $('#empresa').val(),
+                    d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.data = $('#data').val()
+            },
+            dataSrc: ""
+        },
+        columns: [
+            { data: "ocorrencia" },
+            { data: "quantidadeNC" },
+            { data: "mediaMovel30Dias" },
+            { data: "tendencia" }
+        ],
+        order: [[1, 'desc']],
+        language: {
+            emptyTable: messages.emptyTable,
+            info: "",
+            infoEmpty: "",
+            infoFiltered: "",
+        },
+        columnDefs: [
+            { className: 'text-center', targets: [1, 2, 3] },
+            { width: '150px', targets: [1, 2, 3] },
+            {
+                targets: 3,
+                className: 'text-center',
+                render: function (data) {
+                    if (!data) return '-';
+
+                    const value = data.toLowerCase();
+
+                    if (value.includes('aumento'))
+                        return '<span class="text-danger"><i class="fa fa-arrow-up"></i> Aumento</span>';
+
+                    if (value.includes('diminuição'))
+                        return '<span class="text-success"><i class="fa fa-arrow-down"></i> Queda</span>';
+
+                    if (value.includes('estável'))
+                        return '<span class="text-secondary"><i class="fa fa-minus"></i> Estável</span>';
+
+                    return data;
+                }
+            }
+        ],
+
+    });
+
+    var tbNCCamareira = $('#tbNCCamareira').DataTable({
+        select: {
+            selector: 'td:not(:first-child)',
+            style: 'os'
+        },
+        searching: false,
+        fixedColumns: {
+            start: 0,
+            end: 1
+        },
+        scrollX: false,
+        autoWidth: false,
+        lengthChange: false,
+        pageLength: 15,
+        processing: true,
+        scrollCollapse: true,
+        serverSide: false,
+        ajax: {
+            url: "LoadNCCamareira",
+            type: "POST",
+            datatype: "json",
+            data: function (d) {
+                d.empresa = $('#empresa').val(),
+                    d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.data = $('#data').val()
+            },
+            dataSrc: ""
+        },
+        columns: [
+            { data: "camareira" },
+            { data: "quantidadeNC" },
+            { data: "mediaMovel30Dias" },
+            { data: "tendencia" }
+        ],
+        order: [[1, 'desc']],
+        language: {
+            emptyTable: messages.emptyTable,
+            info: "",
+            infoEmpty: "",
+            infoFiltered: "",
+        },
+        columnDefs: [
+            { className: 'text-center', targets: [1, 2, 3] },
+            { width: '150px', targets: [1, 2, 3] },
+            {
+                targets: 3,
+                className: 'text-center',
+                render: function (data) {
+                    if (!data) return '-';
+
+                    const value = data.toLowerCase();
+
+                    if (value.includes('aumento'))
+                        return '<span class="text-danger"><i class="fa fa-arrow-up"></i> Aumento</span>';
+
+                    if (value.includes('diminuição'))
+                        return '<span class="text-success"><i class="fa fa-arrow-down"></i> Queda</span>';
+
+                    if (value.includes('estável'))
+                        return '<span class="text-secondary"><i class="fa fa-minus"></i> Estável</span>';
+
+                    return data;
+                }
+            }
+        ],
+
+    });
+
+    var tbRankingCamareira = $('#tbRankingCamareira').DataTable({
+        select: {
+            selector: 'td:not(:first-child)',
+            style: 'os'
+        },
+        searching: false,
+        fixedColumns: {
+            start: 0,
+            end: 1
+        },
+        scrollX: false,
+        autoWidth: false,
+        lengthChange: false,
+        pageLength: 15,
+        processing: true,
+        scrollCollapse: true,
+        serverSide: false,
+        ajax: {
+            url: "LoadRankingCamareira",
+            type: "POST",
+            datatype: "json",
+            data: function (d) {
+                d.empresa = $('#empresa').val(),
+                    d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.data = $('#data').val()
+            },
+            dataSrc: ""
+        },
+        columns: [
+            { data: "ranking" },
+            { data: "camareira" },
+            { data: "qtdeNC" },
+            { data: "qtdeNCRetrabalho" },
+            { data: "pesoNCRetrabalho" },
+            { data: "qtdeUH" },
+            { data: "percentualNC" }
+        ],
+        order: [[0, 'asc']],
+        language: {
+            emptyTable: messages.emptyTable,
+            info: "",
+            infoEmpty: "",
+            infoFiltered: "",
+        },
+        columnDefs: [
+            { className: 'text-center', targets: [0, 2, 3, 4, 5, 6] },
+            { width: '150px', targets: [2, 3, 4, 5, 6] },
+            { width: '20px', targets: [0] },
+            {
+                createdCell: function (td, cellData, rowData, row, col) {
+                    $(td).addClass(rowData.cssClass);
+                }, targets: [0]
+            }
+        ],
+
+    });
 
 });
 
@@ -114,7 +352,7 @@ $("#data").change(function () {
     $("#form").submit();
 });
 
-async function loadChartData(url, config, type) {
+async function loadChartData(url, type) {
 
     const unidade = document.getElementById("unidade").value;
     const data = document.getElementById("data").value;
@@ -124,77 +362,104 @@ async function loadChartData(url, config, type) {
 
     try {
 
-        const datasets = await fetchChartData(url, { unidade, dataInicio, dataTermino });
-
-        console.log(`Dados recebidos para o gráfico ${type}:`, datasets);
-
         if (type === "arrumadoxvistoriado") {
 
-            //datasets.datasets.forEach(dataset => {
-            //    dataset.stack = 'Stack 0';
-            //});
-            updateChartConfig(config, datasets.labels, datasets.datasets);
-            if (window.ArrumadoxVistoriado) {
-                window.ArrumadoxVistoriado.update();
-            } else {
-                console.error("Erro: Arrumado x Vistoriado não foi inicializado corretamente.");
-            }
+            const payload = await fetchChartArrumadoxVistoriado(url, { unidade, dataInicio, dataTermino });
+            console.log(payload);
+            const cfg = normalizeChartConfig(getChartConfigArrumadoxVistoriado());
+            applyArrumadoxVistoriadoData(cfg, payload);
 
-        } else if (type === "arrumacaoDia") {
+            console.log(cfg);
 
-            updateChartConfig(config, datasets.labels, datasets.datasets);
+            if (chartArr) chartArr.destroy();
 
-            if (window.ArrumacaoDia) {
-                window.ArrumacaoDia.update();
-            } else {
-                console.error("Erro: Arrumação x Dia não foi inicializado corretamente.");
-            }
-
-        } else if (type === "vistoriaDia") {
-
-            updateChartConfig(config, datasets.labels, datasets.datasets);
-
-            if (window.VistoriaDia) {
-                window.VistoriaDia.update();
-            } else {
-                console.error("Erro: Gráfico de Vistoria x Dia não foi inicializado corretamente.");
-            }
-
-        } else if (type === "produtividadeCamareira") {
-
-            updateChartConfig(config, datasets.labels, datasets.datasets);
-
-            if (window.ProdutividadeCamareira) {
-                window.ProdutividadeCamareira.update();
-            } else {
-                console.error("Erro: Gráfico de Produtividade x Camareira não foi inicializado corretamente.");
-            }
-
-        } else if (type === "produtividadeVistoriador") {
-
-            updateChartConfig(config, datasets.labels, datasets.datasets);
-
-            if (window.ProdutividadeVistoriador) {
-                window.ProdutividadeVistoriador.update();
-            } else {
-                console.error("Erro: Gráfico de Produtividade x Vistoriador não foi inicializado corretamente.");
-            }
+            chartArr = new Chart(ctxArr, cfg);
 
         } else if (type === "ncDia") {
 
-            updateChartConfig(config, datasets.labels, datasets.datasets);
+            const ds = await fetchChartData(url, { unidade, dataInicio, dataTermino });
 
-            if (window.NCDia) {
-                window.NCDia.update();
-            } else {
-                console.error("Erro: Gráfico de NC Dia não foi inicializado corretamente.");
-            }
+            const cfg = getChartConfigNCDia();
+            cfg.data.labels = ds.labels;
+            cfg.data.datasets = ds.datasets;
 
+            if (chartNC) chartNC.destroy();
+            chartNC = new Chart(ctxNC, cfg);
         }
 
     } catch (error) {
         console.error("Erro ao carregar dados do gráfico:", error);
     }
+}
+
+function normalizeChartConfig(cfg) {
+    if (!cfg || typeof cfg !== 'object') {
+        throw new Error('Chart config inválido');
+    }
+
+    // GARANTE estrutura mínima exigida pelo Chart.js
+    cfg.options ??= {};
+    cfg.options.plugins ??= {};
+    cfg.options.scales ??= {};
+
+    return cfg;
+}
+
+function applyArrumadoxVistoriadoData(cfg, payload) {
+
+    const labels = payload.map(x => x.data);
+
+    const saida = payload.map(x => Number(x.qtdeSaida ?? 0));
+    const permanencia = payload.map(x => Number(x.qtdePermanencia ?? 0));
+    const manutencao = payload.map(x => Number(x.qtdeManutencao ?? 0));
+    const meta = payload.map(x => Number(x.meta ?? 0));
+    const qtdeVistoriado = payload.map(x => Number(x.percentualVistoriado ?? 0));
+
+    cfg.data.labels = labels;
+
+    cfg.data.datasets = [
+        {
+            type: 'line',
+            label: 'Meta',
+            data: meta,
+            borderColor: '#2c3e50',
+            borderDash: [1, 1],
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false
+        },
+        {
+            type: 'line',
+            label: 'Qtde. Vistoriado',
+            data: qtdeVistoriado,
+            borderColor: '#27ae60',
+            borderWidth: 2,
+            pointRadius: 3,
+            fill: false
+        },
+        {
+            type: 'bar',
+            label: 'Qtde. Saída',
+            data: saida,
+            backgroundColor: '#e74c3c',
+            stack: 'total'
+        },
+        {
+            type: 'bar',
+            label: 'Qtde. Permanência',
+            data: permanencia,
+            backgroundColor: '#3498db',
+            stack: 'total'
+        },
+        {
+            type: 'bar',
+            label: 'Qtde. Manutenção',
+            data: manutencao,
+            backgroundColor: '#f1c40f',
+            stack: 'total'
+        }
+
+    ];
 }
 
 function normalizeForChart(payload) {
@@ -244,404 +509,52 @@ async function fetchChartData(url, params) {
     }
 }
 
-function processChartDataNaoConformidadeTipo(datasets) {
-    const labels = datasets.map(item => item.naoConformidadeTipo);
-    const dataSeries = datasets.map(item => Number(item.quantidade));
+async function fetchChartArrumadoxVistoriado(url, params) {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params)
+    });
 
-    return {
-        labels: labels,
-        dataSeries: [{
-            data: dataSeries,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    };
+    if (!response.ok) {
+        throw new Error(`Erro ao buscar dados: ${response.statusText}`);
+    }
+
+    return await response.json();
 }
 
 function getChartConfigArrumadoxVistoriado() {
-
     return {
         type: 'bar',
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    type: 'linear',
-                    min: 0,
-                    beginAtZero: true,
-                    bounds: 'ticks',
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0,
-                        callback: function (value) {
-                            return Number.isInteger(value) ? value : '';
-                        }
-                    }
-                },
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        displayFormats: {
-                            day: 'DD/MM/YYYY'
-                        },
-                        tooltipFormat: 'DD/MM/YYYY'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom' // Aqui também
-                },
-                tooltip: {
-                    mode: 'nearest', // Alterado para 'nearest' em vez de 'index'
-                    intersect: true  // Certifique-se de que esteja definido para true
-                }
-            },
-            onClick: function (evt) {
-                const elements = this.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
-
-                if (elements.length > 0) {
-                    const element = elements[0];
-                    const datasetIndex = element._datasetIndex;
-                    const index = element._index;
-
-                    const label = this.data.labels[index];
-                    const datasetLabel = this.data.datasets[datasetIndex].label;
-                    const value = this.data.datasets[datasetIndex].data[index];
-
-                    if (label && datasetLabel && typeof value !== 'undefined' && value != "0") {
-                        openModal({
-                            data: label,
-                            tipoGovernanca: datasetLabel,
-                            camareira: "",
-                            naoConformidade: ""
-                        });
-                    } else {
-                        console.error("Erro ao acessar os dados do ponto do gráfico.");
-                    }
-                } else {
-                    console.error("Nenhum elemento clicado foi encontrado.");
-                }
-            }
-
-        },
         data: {
             labels: [],
             datasets: []
-        }
-    };
-}
-
-function getChartConfigArrumacaoDia() {
-
-    return {
-        type: 'bar',
+        },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
+
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+
+            legend: {
+                position: 'top'
+            },
             scales: {
-                y: {
-                    type: 'linear',
-                    min: 0,
-                    beginAtZero: true,
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true,
                     ticks: {
-                        stepSize: 1,
-                        precision: 0,
-                        callback: function (value) {
-                            return Number.isInteger(value) ? value : null;
-                        }
+                        beginAtZero: true,
+                        precision: 0
                     }
-                },
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        displayFormats: {
-                            day: 'DD/MM/YYYY'
-                        },
-                        tooltipFormat: 'DD/MM/YYYY'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom' // Aqui também
-                },
-                tooltip: {
-                    mode: 'nearest', // Alterado para 'nearest' em vez de 'index'
-                    intersect: true  // Certifique-se de que esteja definido para true
-                }
-            },
-            onClick: function (evt) {
-                const elements = this.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
-
-                if (elements.length > 0) {
-                    const element = elements[0];
-                    const datasetIndex = element._datasetIndex;
-                    const index = element._index;
-
-                    const label = this.data.labels[index];
-                    const datasetLabel = this.data.datasets[datasetIndex].label;
-                    const value = this.data.datasets[datasetIndex].data[index];
-
-                    if (label && datasetLabel && typeof value !== 'undefined' && value != "0") {
-                        openModal({
-                            data: label,
-                            tipoGovernanca: datasetLabel,
-                            camareira: "",
-                            naoConformidade: ""
-                        });
-                    } else {
-                        console.error("Erro ao acessar os dados do ponto do gráfico.");
-                    }
-                } else {
-                    console.error("Nenhum elemento clicado foi encontrado.");
-                }
+                }]
             }
 
-        },
-        data: {
-            labels: [],
-            datasets: []
-        }
-    };
-}
-
-function getChartConfigVistoriaDia() {
-    return {
-        type: 'bar',
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    type: 'linear',
-                    min: 0,
-                    beginAtZero: true,
-                    bounds: 'ticks', 
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0,
-                        callback: function (value) {
-                            return Number.isInteger(value) ? value : '';
-                        }
-                    }
-                },
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        displayFormats: {
-                            day: 'DD/MM/YYYY'
-                        },
-                        tooltipFormat: 'DD/MM/YYYY'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true
-                },
-                tooltip: {
-                    mode: 'nearest', // Alterado para 'nearest' em vez de 'index'
-                    intersect: true  // Certifique-se de que esteja definido para true
-                }
-            },
-            onClick: function (evt) {
-                const elements = this.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
-
-                if (elements.length > 0) {
-                    const element = elements[0];
-                    const datasetIndex = element._datasetIndex;
-                    const index = element._index;
-
-                    const label = this.data.labels[index];
-                    const datasetLabel = this.data.datasets[datasetIndex].label;
-                    const value = this.data.datasets[datasetIndex].data[index];
-
-                    if (label && datasetLabel && typeof value !== 'undefined' && value != "0") {
-                        openModal({
-                            data: label,
-                            tipoGovernanca: datasetLabel,
-                            camareira: "",
-                            naoConformidade: ""
-                        });
-                    } else {
-                        console.error("Erro ao acessar os dados do ponto do gráfico.");
-                    }
-                } else {
-                    console.error("Nenhum elemento clicado foi encontrado.");
-                }
-            }
-
-        },
-        data: {
-            labels: [],
-            datasets: []
-        }
-    };
-}
-
-function getChartConfigProdutividadeCamareira() {
-    return {
-        type: 'bar',
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    type: 'linear',
-                    min: 0,
-                    beginAtZero: true,
-                    bounds: 'ticks',
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0,
-                        callback: function (value) {
-                            return Number.isInteger(value) ? value : '';
-                        }
-                    }
-                },
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        displayFormats: {
-                            day: 'DD/MM/YYYY'
-                        },
-                        tooltipFormat: 'DD/MM/YYYY'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true
-                },
-                tooltip: {
-                    mode: 'nearest', // Alterado para 'nearest' em vez de 'index'
-                    intersect: true  // Certifique-se de que esteja definido para true
-                }
-            },
-            onClick: function (evt) {
-                const elements = this.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
-
-                if (elements.length > 0) {
-                    const element = elements[0];
-                    const datasetIndex = element._datasetIndex;
-                    const index = element._index;
-
-                    const label = this.data.labels[index];
-                    const datasetLabel = this.data.datasets[datasetIndex].label;
-                    const value = this.data.datasets[datasetIndex].data[index];
-
-                    if (label && datasetLabel && typeof value !== 'undefined' && value != "0") {
-                        openModal({
-                            data: label,
-                            tipoGovernanca: datasetLabel,
-                            camareira: "",
-                            naoConformidade: ""
-                        });
-                    } else {
-                        console.error("Erro ao acessar os dados do ponto do gráfico.");
-                    }
-                } else {
-                    console.error("Nenhum elemento clicado foi encontrado.");
-                }
-            }
-
-        },
-        data: {
-            labels: [],
-            datasets: []
-        }
-    };
-}
-
-function getChartConfigProdutividadeVistoriador() {
-    return {
-        type: 'bar',
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    type: 'linear',
-                    min: 0,
-                    beginAtZero: true,
-                    bounds: 'ticks',
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0,
-                        callback: function (value) {
-                            return Number.isInteger(value) ? value : '';
-                        }
-                    }
-                },
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        displayFormats: {
-                            day: 'DD/MM/YYYY'
-                        },
-                        tooltipFormat: 'DD/MM/YYYY'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true
-                },
-                tooltip: {
-                    mode: 'nearest', // Alterado para 'nearest' em vez de 'index'
-                    intersect: true  // Certifique-se de que esteja definido para true
-                }
-            },
-            onClick: function (evt) {
-                const elements = this.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
-
-                if (elements.length > 0) {
-                    const element = elements[0];
-                    const datasetIndex = element._datasetIndex;
-                    const index = element._index;
-
-                    const label = this.data.labels[index];
-                    const datasetLabel = this.data.datasets[datasetIndex].label;
-                    const value = this.data.datasets[datasetIndex].data[index];
-
-                    if (label && datasetLabel && typeof value !== 'undefined' && value != "0") {
-                        openModal({
-                            data: label,
-                            tipoGovernanca: datasetLabel,
-                            camareira: "",
-                            naoConformidade: ""
-                        });
-                    } else {
-                        console.error("Erro ao acessar os dados do ponto do gráfico.");
-                    }
-                } else {
-                    console.error("Nenhum elemento clicado foi encontrado.");
-                }
-            }
-
-        },
-        data: {
-            labels: [],
-            datasets: []
         }
     };
 }
@@ -651,68 +564,43 @@ function getChartConfigNCDia() {
         type: 'line',
         options: {
             responsive: true,
-            scales: {
-                y: {
-                    type: 'linear',
-                    min: 0,
-                    beginAtZero: true,
-                    bounds: 'ticks',
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0,
-                        callback: function (value) {
-                            return Number.isInteger(value) ? value : '';
-                        }
-                    }
-                },
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        displayFormats: {
-                            day: 'DD/MM/YYYY'
-                        },
-                        tooltipFormat: 'DD/MM/YYYY'
-                    }
-                }
-            },
+            maintainAspectRatio: false,
+
+            interaction: { mode: 'index', intersect: false },
+
             plugins: {
                 legend: {
-                    display: true,
-                    position: 'bottom'
-                },
-                tooltip: {
-                    mode: 'nearest', // Alterado para 'nearest' em vez de 'index'
-                    intersect: true  // Certifique-se de que esteja definido para true
-                }
-            },
-            onClick: function (evt) {
-                const elements = this.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
-
-                if (elements.length > 0) {
-                    const element = elements[0];
-                    const datasetIndex = element._datasetIndex;
-                    const index = element._index;
-
-                    const label = this.data.labels[index];
-                    const datasetLabel = this.data.datasets[datasetIndex].label;
-                    const value = this.data.datasets[datasetIndex].data[index];
-
-                    if (label && datasetLabel && typeof value !== 'undefined' && value != "0") {
-                        openModal({
-                            data: label,
-                            tipoGovernanca: datasetLabel,
-                            camareira: "",
-                            naoConformidade: ""
-                        });
-                    } else {
-                        console.error("Erro ao acessar os dados do ponto do gráfico.");
+                    position: 'top',
+                    labels: {
+                        boxWidth: 12,
+                        boxHeight: 12,
+                        font: { family: 'Inter, Segoe UI, Arial, sans-serif', size: 12, weight: '600' }
                     }
-                } else {
-                    console.error("Nenhum elemento clicado foi encontrado.");
+                },
+                tooltip: { mode: 'index', intersect: false }
+            },
+
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 8,
+                        maxRotation: 0,
+                        minRotation: 0,
+                        padding: 8,
+                        font: { family: 'Inter, Segoe UI, Arial, sans-serif', size: 11 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                        font: { family: 'Inter, Segoe UI, Arial, sans-serif', size: 11 }
+                    },
+                    grid: { color: 'rgba(0,0,0,.05)' }
                 }
             }
-
         },
         data: {
             labels: [],
@@ -721,94 +609,37 @@ function getChartConfigNCDia() {
     };
 }
 
-function getChartConfigNaoConformidadeTipo() {
-    return {
-        type: 'doughnut',
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            return `${label}: ${value}`;
-                        }
-                    }
-                }
-            },
-            onClick: function (evt) {
-                const elements = this.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+function updateChartConfig(chart, labels, newDatasets) {
 
-                if (elements.length > 0) {
-                    const element = elements[0];
-                    const datasetIndex = element._datasetIndex;
-                    const index = element._index;
+    // labels OK
+    chart.data.labels = labels;
 
-                    const label = this.data.labels[index];
-                    const datasetLabel = this.data.datasets[datasetIndex].label;
-                    const value = this.data.datasets[datasetIndex].data[index];
+    // se ainda não existem datasets, cria
+    if (!chart.data.datasets || chart.data.datasets.length === 0) {
+        chart.data.datasets = newDatasets;
+        return;
+    }
 
-                    if (label && datasetLabel && typeof value !== 'undefined' && value != "0") {
-                        openModal({
-                            data: label,
-                            tipoGovernanca: "",
-                            camareira: "",
-                            naoConformidade: datasetLabel
-                        });
-                    } else {
-                        console.error("Erro ao acessar os dados do ponto do gráfico.");
-                    }
-                } else {
-                    console.error("Nenhum elemento clicado foi encontrado.");
-                }
-            }
-        },
-        data: {
-            labels: [], // Tipos de Não Conformidade
-            datasets: [{
-                data: [], // Quantidades
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
+    // atualiza dataset por dataset
+    newDatasets.forEach((ds, i) => {
+        if (!chart.data.datasets[i]) {
+            chart.data.datasets[i] = ds;
+        } else {
+            chart.data.datasets[i].data = ds.data;
+            chart.data.datasets[i].label = ds.label;
         }
-    };
-}
+    });
 
-function updateChartConfig(config, labels, dataSeries) {
-    config.data.labels = labels;
-    config.data.datasets = dataSeries;
+    // remove datasets extras
+    chart.data.datasets.length = newDatasets.length;
 
-    // FORÇA eixo Y começar em 0 após carregar dados
-    if (config.options && config.options.scales && config.options.scales.y) {
-        config.options.scales.y.min = 0;
-        config.options.scales.y.beginAtZero = true;
-
-        if (!config.options.scales.y.ticks) {
-            config.options.scales.y.ticks = {};
-        }
-
-        config.options.scales.y.ticks.precision = 0;
-        config.options.scales.y.ticks.stepSize = 1;
+    // eixo Y seguro
+    if (chart.options?.scales?.y) {
+        chart.options.scales.y.beginAtZero = true;
+        chart.options.scales.y.min = 0;
+        chart.options.scales.y.ticks ??= {};
+        chart.options.scales.y.ticks.precision = 0;
+        chart.options.scales.y.ticks.stepSize = 1;
     }
 }
 
@@ -1093,3 +924,82 @@ function loadNaoConformidade() {
     });
 
 }
+
+function buildArrumadoxVistoriadoChart(chart, payload) {
+
+    console.group('DEBUG PAYLOAD');
+
+    console.log('Payload length:', payload.length);
+    console.log('Sample row:', payload[0]);
+
+    console.log('Saída:', payload.map(x => x.qtdeSaida));
+    console.log('Permanência:', payload.map(x => x.qtdePermanencia));
+    console.log('Manutenção:', payload.map(x => x.qtdeManutencao));
+    console.log('Meta:', payload.map(x => x.meta));
+    console.log('% Vistoriado:', payload.map(x => x.percentualVistoriado));
+
+    console.groupEnd();
+    const labels = payload.map(x => x.data);
+
+    const saida = payload.map(x => x.qtdeSaida);
+    const permanencia = payload.map(x => x.qtdePermanencia);
+    const manutencao = payload.map(x => x.qtdeManutencao);
+    const meta = payload.map(x => x.meta);
+    const percentualVistoriado = payload.map(x => x.percentualVistoriado);
+
+    chart.data.labels = labels;
+    chart.data.datasets = [
+
+        {
+            type: 'bar',
+            label: 'Qtde. Saída',
+            data: saida,
+            backgroundColor: '#e74c3c',
+            stack: 'total',
+            yAxisID: 'y'
+        },
+
+        {
+            type: 'bar',
+            label: 'Qtde. Permanência',
+            data: permanencia,
+            backgroundColor: '#3498db',
+            stack: 'total',
+            yAxisID: 'y'
+        },
+
+        {
+            type: 'bar',
+            label: 'Qtde. Manutenção',
+            data: manutencao,
+            backgroundColor: '#f1c40f',
+            stack: 'total',
+            yAxisID: 'y'
+        },
+
+        {
+            type: 'line',
+            label: 'Meta',
+            data: meta,
+            borderColor: '#2c3e50',
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false,
+            yAxisID: 'yMeta' 
+        },
+
+        {
+            type: 'line',
+            label: '% Vistoriado',
+            data: percentualVistoriado,
+            borderColor: '#27ae60',
+            borderDash: [6, 4],
+            borderWidth: 2,
+            pointRadius: 3,
+            yAxisID: 'yPercent'
+        }
+    ];
+
+
+}
+
