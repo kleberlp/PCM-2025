@@ -23,19 +23,15 @@ document.addEventListener("DOMContentLoaded", function () {
         $("#arrumacaoCamareira").hide();
     }
 
-    // Inicialização do gráfico Arrumado x Vistoriado
+    // Arrumado x Vistoriado
     if (ctxArr) {
-        //window.ArrumadoxVistoriado = new Chart(cArrumadoxVistoriado, getChartConfigArrumadoxVistoriado());
-        //console.log("Gráfico Arrumado x Vistoriado:", window.ArrumadoxVistoriado);
         loadChartData(chartArrumadoxVistoriadoUrl, "arrumadoxvistoriado");
     } else {
         console.error("Erro: Elemento de gráfico Arrumado x Vistoriado não encontrado.");
     }
 
-    // Inicialização do gráfico NC Dia
+    // NC DIA
     if (ctxNC) {
-        //window.NCDia = new Chart(cNCDia, getChartConfigNCDia());
-        //console.log("Gráfico NC Dia:", window.NCDia);
         loadChartData(chartNaoConformidadeDiaUrl, "ncDia");
     } else {
         console.error("Erro: Elemento de gráfico NC Dia não encontrado.");
@@ -120,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         columns: [
             { data: "unidade" },
+            { data: "totalUHSaida" },
             { data: "totalUHVistoriada" },
             { data: "percentualTotal" },
             { data: "percentualMeta" }
@@ -131,8 +128,8 @@ document.addEventListener("DOMContentLoaded", function () {
             infoFiltered: "",
         },
         columnDefs: [
-            { className: 'text-center', targets: [1, 2, 3] },
-            { width: '150px', targets: [1, 2, 3] },
+            { className: 'text-center', targets: [1, 2, 3, 4] },
+            { width: '150px', targets: [1, 2, 3, 4] },
         ],
 
     });
@@ -369,8 +366,8 @@ async function loadChartData(url, type) {
             const cfg = normalizeChartConfig(getChartConfigArrumadoxVistoriado());
             applyArrumadoxVistoriadoData(cfg, payload);
 
-            console.log(cfg);
-
+            //ajustarLayoutGraficoArrumado(payload.length);
+            
             if (chartArr) chartArr.destroy();
 
             chartArr = new Chart(ctxArr, cfg);
@@ -389,6 +386,29 @@ async function loadChartData(url, type) {
 
     } catch (error) {
         console.error("Erro ao carregar dados do gráfico:", error);
+    }
+}
+
+function ajustarLayoutGraficoArrumado(labelsCount) {
+
+    const colArrumado = document.getElementById("col-chart-arrumado");
+    const colNC = document.getElementById("col-chart-nc");
+
+    if (labelsCount > 6 && $("#unidade").val() === "-1") {
+        // Gráfico principal ocupa a linha inteira
+        colArrumado.classList.remove("col-md-6");
+        colArrumado.classList.add("col-md-12");
+
+        // Segundo gráfico desce para a linha de baixo
+        colNC.classList.remove("col-md-6");
+        colNC.classList.add("col-md-12");
+    } else {
+        // Volta ao layout 50/50
+        colArrumado.classList.remove("col-md-12");
+        colArrumado.classList.add("col-md-6");
+
+        colNC.classList.remove("col-md-12");
+        colNC.classList.add("col-md-6");
     }
 }
 

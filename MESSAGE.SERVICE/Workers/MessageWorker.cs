@@ -31,7 +31,6 @@ namespace MESSAGE.SERVICE.Workers
 
             while (!stoppingToken.IsCancellationRequested)
             {
-
                 var messages = await _repo.GetPendingMessagesAsync();
 
                 foreach (var msg in messages)

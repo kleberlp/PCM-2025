@@ -19,7 +19,7 @@ namespace MESSAGE.SERVICE.Services
             string remetente = _settings.From;
             MailMessage mail = new MailMessage();
 
-            if (cc != "" && cc != null)
+            if (to != "" && to != null)
             {
                 foreach (string email in to.Split(','))
                 {

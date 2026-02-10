@@ -10,6 +10,7 @@ body {
 /* Containers principais */
 .dashboard-section {
     margin-bottom: 24px;
+    overflow: visible;
 }
 
 /* Títulos de seção */
@@ -35,10 +36,14 @@ body {
     height: 100%;
 }
 
-    .dashboard-card:hover {
+/*    .dashboard-card:hover {
         transform: translateY(-2px);
         transition: all .2s ease;
-    }
+    }*/
+.dashboard-grid {
+    padding-left: 12px;
+    padding-right: 12px;
+}
 
 /* KPI */
 .dashboard-section,
@@ -47,9 +52,6 @@ body {
     font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-.dashboard-section {
-    overflow-x: auto;
-}
 .dashboard-section > .row {
     margin-left: 0;
     margin-right: 0;
@@ -196,9 +198,13 @@ body {
 /* ===== DADOS DA UNIDADE ===== */
 
 .dashboard-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    background: #ffffff;
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Bloco de linhas dentro do card */
@@ -262,3 +268,25 @@ body {
 .dashboard-card .dataTables_paginate {
     margin-top: 8px;
 }
+
+.chart-card {
+    height: 380px;
+    position: relative;
+}
+
+/* Scroll SOMENTE no primeiro gráfico */
+.chart-scroll-x {
+    overflow-x: auto;
+}
+
+/* Wrapper controla a largura, NÃO o canvas */
+.chart-inner {
+    width: max-content;
+    min-width: 1400px; /* ajuste conforme nº de labels */
+    height: 100%;
+}
+
+    /* Canvas ocupa o wrapper corretamente */
+    .chart-inner canvas {
+        height: 100% !important;
+    }

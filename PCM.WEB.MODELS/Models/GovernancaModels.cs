@@ -54,6 +54,7 @@ namespace PCM.WEB.MODELS
     {
         public string unidade { get; set; }
         public string totalUHVistoriada { get; set; }
+        public string totalUHSaida { get; set; }
         public string percentualTotal { get; set; }
         public string percentualMeta { get; set; }
     }

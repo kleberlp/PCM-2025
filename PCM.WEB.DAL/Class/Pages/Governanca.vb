@@ -507,6 +507,7 @@ Public Class Governanca
 
                         oInfo.unidade = oSqlDataReader.Item("unidade")
                         oInfo.totalUHVistoriada = oSqlDataReader.Item("total_uh_vistoriada")
+                        oInfo.totalUHSaida = oSqlDataReader.Item("total_uh_saida")
                         oInfo.percentualTotal = oSqlDataReader.Item("percentual_total")
                         oInfo.percentualMeta = oSqlDataReader.Item("percentual_meta")
 

@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2","OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
                             <div class="kpi-header">
                                 <i class="fa fa-gear kpi-icon text-danger"></i>
                                 <div class="kpi-title">@Resources.quantidade_atrasada</div>
@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2","OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
                             <div class="kpi-header">
                                 <i class="fa fa-gear kpi-icon text-warning"></i>
                                 <div class="kpi-title">@Resources.quantidade_pendente</div>
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2","OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
                             <div class="kpi-header">
                                 <i class="fa fa-gear kpi-icon text-info"></i>
                                 <div class="kpi-title">@Resources.quantidade_vinculada</div>
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2","OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
                             <div class="kpi-header">
                                 <i class="fa fa-gear kpi-icon text-primary-light"></i>
                                 <div class="kpi-title">@Resources.quantidade_andamento</div>
@@ -82,7 +82,7 @@
                     </div>
 
                     <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2","OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
                             <div class="kpi-header">
                                 <i class="fa fa-gear kpi-icon text-earth-light"></i>
                                 <div class="kpi-title">@Resources.quantidade_realizada</div>
@@ -242,7 +242,7 @@
 
             <!-- ================= DADOS DA UNIDADE ================= -->
             <div class="dashboard-section">
-                <div class="section-title">Dados da Unidade</div>
+                <div class="section-title col-12">Dados da Unidade</div>
 
                 <div class="row invisible" data-toggle="appear">
                     <div class="col-md-3">
@@ -312,9 +312,8 @@
             </div>
 
             <!-- ================= RANKING ================= -->
-            <div class="dashboard-section">
+            <div class="dashboard-section col-12">
                 <div class="section-title">@Resources.ranking</div>
-
                 <div class="block dashboard-card">
                     <table class="table table-striped" id="tbRankingCamareira" name="tbRankingCamareira">
                         <thead>
@@ -333,109 +332,133 @@
             </div>
 
             <!-- ================= GRÁFICOS ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Indicadores</div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="block dashboard-card chart-card">
-                            <canvas id="chartArrumadoxVistoriado"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="block dashboard-card chart-card">
-                            <canvas id="chartNCDia"></canvas>
-                        </div>
+            <div class="dashboard-section col-12">
+                <div class="section-title">Arrumado x Vistoriado </div>
+                <div class="block dashboard-card">
+                    <div class="block dashboard-card chart-card">
+                        <canvas id="chartArrumadoxVistoriado"></canvas>
                     </div>
                 </div>
             </div>
 
             <!-- ================= PRODUTIVIDADE ================= -->
             <div class="dashboard-section">
+                <div class="row">
+                    <div class="col-6">
+                        <!-- PRODUTIVIDADE POR CAMAREIRA -->
+                        <div class="section-title">Produtividade por Camareira</div>
+                        <div class="block dashboard-card">
+                            <table class="table table-striped" id="tbProdutividadeCamareira" name="tbProdutividadeCamareira">
+                                <thead>
+                                    <tr>
+                                        @{ if (Session["codigo_unidade"].ToString() == "-1")
+                                            {
+                                                <th>Unidade</th>
+                                            }
+                                            else
+                                            {
+                                                <th>Camareira</th>
+                                            }
+                                        }
+                                        <th>UH's Arrumadas</th>
+                                        <th>UH's Saída</th>
+                                        <th>UH's Permanência</th>
+                                        <th>UH's Manutenção</th>
+                                        <th>% Arrumado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- preenchido via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                <!-- PRODUTIVIDADE POR CAMAREIRA -->
-                <div class="section-title">Produtividade por Camareira</div>
-
-                <div class="block dashboard-card">
-                    <table class="table table-striped" id="tbProdutividadeCamareira" name="tbProdutividadeCamareira">
-                        <thead>
-                            <tr>
-                                <th>Camareira</th>
-                                <th>UH's Arrumadas</th>
-                                <th>UH's Saída</th>
-                                <th>UH's Permanência</th>
-                                <th>UH's Manutenção</th>
-                                <th>% Arrumado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- preenchido via JS -->
-                        </tbody>
-                    </table>
+                    <div class="col-6">
+                        <!-- PRODUTIVIDADE POR VISTORIADOR -->
+                        <div class="section-title">Produtividade por Vistoriador</div>
+                        <div class="block dashboard-card">
+                            <table class="table table-striped" id="tbProdutividadeVistoriador" name="tbProdutividadeVistoriador">
+                                <thead>
+                                    <tr>
+                                        @{ if (Session["codigo_unidade"].ToString() == "-1")
+                                            {
+                                                <th>Unidade</th>
+                                            }
+                                            else
+                                            {
+                                                <th>Vistoriador</th>
+                                            }
+                                        }
+                                        <th>UH's Saídas</th>
+                                        <th>UH's Vistoriadas</th>
+                                        <th>% Vistoriado Saídas</th>
+                                        <th>% Vistoriado Meta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- preenchido via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <!-- PRODUTIVIDADE POR VISTORIADOR -->
-                <div class="section-title mt-4">Produtividade por Vistoriador</div>
+            <div class="row mt-4 mb-4"></div>
 
+            <div class="dashboard-section col-12">
+                <div class="section-title">Não Conformidade</div>
                 <div class="block dashboard-card">
-                    <table class="table table-striped" id="tbProdutividadeVistoriador" name="tbProdutividadeVistoriador">
-                        <thead>
-                            <tr>
-                                <th>Vistoriador</th>
-                                <th>UH's Vistoriadas</th>
-                                <th>% Total</th>
-                                <th>% Meta</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- preenchido via JS -->
-                        </tbody>
-                    </table>
+                    <div class="block dashboard-card chart-card">
+                        <canvas id="chartNCDia"></canvas>
+                    </div>
                 </div>
-
             </div>
 
             <!-- ================= NÃO CONFORMIDADE ================= -->
             <div class="dashboard-section">
+                <div class="row">
+                    <div class="col-6">
+                        <!-- NC DETALHADO-->
+                        <div class="section-title">NÃO CONFORMIDADE - DETALHADO</div>
+                        <div class="block dashboard-card">
+                            <table class="table table-striped" id="tbNCDetalhado" name="tbNCDetalhado">
+                                <thead>
+                                    <tr>
+                                        <th>OCORRÊNCIA</th>
+                                        <th>QUANTIDADE NC</th>
+                                        <th>MÉDIA MÓVEL</th>
+                                        <th>TENDÊNCIA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- preenchido via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                <!-- NC DETALHADO-->
-                <div class="section-title">NÃO CONFORMIDADE - DETALHADO</div>
-
-                <div class="block dashboard-card">
-                    <table class="table table-striped" id="tbNCDetalhado" name="tbNCDetalhado">
-                        <thead>
-                            <tr>
-                                <th>OCORRÊNCIA</th>
-                                <th>QUANTIDADE NC</th>
-                                <th>MÉDIA MÓVEL</th>
-                                <th>TENDÊNCIA</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- preenchido via JS -->
-                        </tbody>
-                    </table>
+                    <!-- PRODUTIVIDADE POR VISTORIADOR -->
+                    <div class="col-6">
+                        <div class="section-title">NÃO CONFORMIDADE CAMAREIRA</div>
+                        <div class="block dashboard-card">
+                            <table class="table table-striped" id="tbNCCamareira" name="tbNCCamareira">
+                                <thead>
+                                    <tr>
+                                        <th>CAMAREIRA</th>
+                                        <th>QUANTIDADE NC</th>
+                                        <th>MÉDIA MÓVEL</th>
+                                        <th>TENDÊNCIA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- preenchido via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- PRODUTIVIDADE POR VISTORIADOR -->
-                <div class="section-title mt-4">NÃO CONFORMIDADE CAMAREIRA</div>
-
-                <div class="block dashboard-card">
-                    <table class="table table-striped" id="tbNCCamareira" name="tbNCCamareira">
-                        <thead>
-                            <tr>
-                                <th>CAMAREIRA</th>
-                                <th>QUANTIDADE NC</th>
-                                <th>MÉDIA MÓVEL</th>
-                                <th>TENDÊNCIA</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- preenchido via JS -->
-                        </tbody>
-                    </table>
-                </div>
-
             </div>
 
 
