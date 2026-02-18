@@ -1,22 +1,12 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.Shared;
-using System;
-using System.Web;
-using System.Configuration;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-using PCM.WEB.MODELS;
+﻿using Microsoft.AspNet.Identity;
 using PCM.WEB.DAL;
-using System.Net.Mail;
-using Microsoft.AspNet.Identity;
+using PCM.WEB.MODELS;
+using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Configuration;
 using System.IO;
-using System.Collections;
-using Newtonsoft.Json;
-using OfficeOpenXml.ConditionalFormatting;
-using SYSPACK.WEB.MODELS;
+using System.Web;
+using System.Web.Mvc;
 
 namespace PCM.WEB.Controllers
 {
@@ -824,7 +814,7 @@ namespace PCM.WEB.Controllers
         
         // GET: /Download Excel
         [HttpGet]
-        public virtual ActionResult StockInventoryDownloadExcel()
+        public virtual ActionResult InventarioDownloadExcel()
         {
 
             string nome_relatorio = "INV_PRODUTO.xlsx";

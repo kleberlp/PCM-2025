@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Reflection.Emit;
+using System.Text.RegularExpressions;
 
 namespace PCM.WEB.MODELS
 {
@@ -19,7 +23,7 @@ namespace PCM.WEB.MODELS
         public string tipo_logradouro { get; set; }
         public string logradouro { get; set; }
         public string bairro { get; set; }
-        public string uf { get; set; }        
+        public string uf { get; set; }
         public string municipio { get; set; }
     }
 
@@ -43,7 +47,7 @@ namespace PCM.WEB.MODELS
         public string tipo_cama { get; set; }
         public int quantidade_cama { get; set; }
         public string room_status { get; set; }
-        public string front_office_status { get; set; }        
+        public string front_office_status { get; set; }
         public float metragem { get; set; }
         public float carga_termica { get; set; }
         public string descricao_atividade { get; set; }
@@ -159,6 +163,50 @@ namespace PCM.WEB.MODELS
         public int codigoTipoChecklist { get; set; }
         public string tipoChecklist { get; set; }
         public string descricao { get; set; }
+    }
+
+    public class ChecklistInfo
+    {
+        public int codigo { get; set; }
+        public string uniqueId { get; set; }
+        public int codigoUnidade { get; set; }
+        public int codigoTipoChecklist { get; set; }
+        public string descricao { get; set; }
+    }
+
+    public class ChecklistResponse
+    {
+        public List<ColumnStructure> columns { get; set; }
+        public List<Dictionary<string, object>> data { get; set; }
+        public List<GroupDefinition> groupBy { get; set; }
+
+        public ChecklistResponse()
+        {
+            columns = new List<ColumnStructure>();
+            data = new List<Dictionary<string, object>>();
+            groupBy = new List<GroupDefinition>();
+        }
+    }
+
+    public class ColumnStructure
+    {
+        public string Data { get; set; }
+        public string Title { get; set; }
+        public bool Visible { get; set; }
+        public string Width { get; set; }
+        public string Align { get; set; }
+        public bool Frozen { get; set; }
+        public bool Orderable { get; set; }
+        public bool Wrap { get; set; }
+    }
+
+    public class GroupDefinition
+    {
+        public string Column { get; set; }
+        public int Level { get; set; }
+        public bool Collapsible { get; set; }
+        public bool ShowCount { get; set; }
+        public string CssClass { get; set; }
     }
 
     public class ChecklistItem
@@ -560,7 +608,7 @@ namespace PCM.WEB.MODELS
         public int numero_pessoas_fixas { get; set; }
         public int numero_pessoas_volantes { get; set; }
         public bool ativo { get; set; }
-        public List <SetorLocal> local { get; set; }
+        public List<SetorLocal> local { get; set; }
     }
 
     public class SetorLocal
@@ -613,7 +661,7 @@ namespace PCM.WEB.MODELS
         public long codigo_checklist_governanca_manutencao_vistoria { get; set; }
         public string checklist_governanca_permanencia { get; set; }
         public string checklist_governanca_saida { get; set; }
-        public string checklist_governanca_manutencao { get; set; }        
+        public string checklist_governanca_manutencao { get; set; }
     }
 
     public class TipoArCondicionado

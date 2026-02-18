@@ -91,7 +91,7 @@ $(document).ready(function () {
         scrollCollapse: false,
         serverSide: false,
         ajax: {
-            url: `${basePath}/LoadInventarioEnxoval`,
+            url: `LoadInventarioEnxoval`,
             type: "POST",
             datatype: "json",
             data: function (d) {
@@ -235,7 +235,7 @@ $(document).ready(function () {
 
 
     function editRegister(data) {
-        window.location = `${basePath}/inventarioEnxovalEdit?codigo=` + data.codigo;
+        window.location = `inventarioEnxovalEdit?codigo=` + data.codigo;
     }
 
     function approvalRegister(data, status) {
@@ -252,7 +252,7 @@ $(document).ready(function () {
             if (result.value) {
                 jQuery.ajax({
                     method: "POST",
-                    url: `${basePath}/ChangeStatusInventarioEnxoval`,
+                    url: `ChangeStatusInventarioEnxoval`,
                     async: false,
                     data: {
                         "codigoInventarioGovernanca": data.codigo,

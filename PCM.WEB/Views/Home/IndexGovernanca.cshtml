@@ -29,69 +29,197 @@
 
             <!-- ================= KPIs – ORDEM DE SERVIÇO ================= -->
             <div class="dashboard-section">
-                <div class="row invisible" data-toggle="appear">
 
-                    <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="block block-rounded block-link-shadow dashboard-card kpi-card">
-                            <div class="kpi-header">
-                                <i class="si si-wrench kpi-icon text-primary"></i>
-                                <div class="kpi-title">@Resources.ordem_servico</div>
-                            </div>
-                            <div class="kpi-value">@Resources.nova</div>
-                        </a>
+                @if ((int)ViewBag.codigo_tipo_unidade == 2)
+                {
+                    <div class="row invisible" data-toggle="appear">
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="block block-rounded block-link-shadow dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="si si-wrench kpi-icon text-primary"></i>
+                                    <div class="kpi-title">@Resources.ordem_servico</div>
+                                </div>
+                                <div class="kpi-value">@Resources.nova</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-danger"></i>
+                                    <div class="kpi-title">@Resources.quantidade_atrasada</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_atrasada_condo">@ViewBag.InfoOrdemServico.quantidade_atrasada_condo</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-warning"></i>
+                                    <div class="kpi-title">@Resources.quantidade_pendente</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_pendente_condo">@ViewBag.InfoOrdemServico.quantidade_pendente_condo</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-info"></i>
+                                    <div class="kpi-title">@Resources.quantidade_vinculada</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_pendente_condo">@ViewBag.InfoOrdemServico.quantidade_vinculada_condo</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-primary-light"></i>
+                                    <div class="kpi-title">@Resources.quantidade_andamento</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_andamento_condo">@ViewBag.InfoOrdemServico.quantidade_andamento_condo</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-earth-light"></i>
+                                    <div class="kpi-title">@Resources.quantidade_realizada</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_realizada_condo">@ViewBag.InfoOrdemServico.quantidade_concluida_condo</div>
+                            </a>
+                        </div>
+
                     </div>
 
-                    <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
-                            <div class="kpi-header">
-                                <i class="fa fa-gear kpi-icon text-danger"></i>
-                                <div class="kpi-title">@Resources.quantidade_atrasada</div>
-                            </div>
-                            <div class="kpi-value" id="quantidade_atrasada_condo">@ViewBag.InfoOrdemServico.quantidade_atrasada_condo</div>
-                        </a>
+                    <div class="row invisible" data-toggle="appear">
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-danger"></i>
+                                    <div class="kpi-title">@Resources.quantidade_atrasada POOL</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_atrasada_pool">@ViewBag.InfoOrdemServico.quantidade_atrasada_pool</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-warning"></i>
+                                    <div class="kpi-title">@Resources.quantidade_pendente POOL</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_pendente_pool">@ViewBag.InfoOrdemServico.quantidade_pendente_pool</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-info"></i>
+                                    <div class="kpi-title">@Resources.quantidade_vinculada POOL</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_pendente_pool">@ViewBag.InfoOrdemServico.quantidade_vinculada_pool</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-primary-light"></i>
+                                    <div class="kpi-title">@Resources.quantidade_andamento POOL</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_andamento_pool">@ViewBag.InfoOrdemServico.quantidade_andamento_pool</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-earth-light"></i>
+                                    <div class="kpi-title">@Resources.quantidade_realizada POOL</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_realizada_pool">@ViewBag.InfoOrdemServico.quantidade_concluida_pool</div>
+                            </a>
+                        </div>
+
                     </div>
 
-                    <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
-                            <div class="kpi-header">
-                                <i class="fa fa-gear kpi-icon text-warning"></i>
-                                <div class="kpi-title">@Resources.quantidade_pendente</div>
-                            </div>
-                            <div class="kpi-value" id="quantidade_pendente_condo">@ViewBag.InfoOrdemServico.quantidade_pendente_condo</div>
-                        </a>
-                    </div>
+                }
+                else
+                {
+                    <div class="row invisible" data-toggle="appear">
 
-                    <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
-                            <div class="kpi-header">
-                                <i class="fa fa-gear kpi-icon text-info"></i>
-                                <div class="kpi-title">@Resources.quantidade_vinculada</div>
-                            </div>
-                            <div class="kpi-value" id="quantidade_pendente_condo">@ViewBag.InfoOrdemServico.quantidade_vinculada_condo</div>
-                        </a>
-                    </div>
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="block block-rounded block-link-shadow dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="si si-wrench kpi-icon text-primary"></i>
+                                    <div class="kpi-title">@Resources.ordem_servico</div>
+                                </div>
+                                <div class="kpi-value">@Resources.nova</div>
+                            </a>
+                        </div>
 
-                    <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
-                            <div class="kpi-header">
-                                <i class="fa fa-gear kpi-icon text-primary-light"></i>
-                                <div class="kpi-title">@Resources.quantidade_andamento</div>
-                            </div>
-                            <div class="kpi-value" id="quantidade_andamento_condo">@ViewBag.InfoOrdemServico.quantidade_andamento_condo</div>
-                        </a>
-                    </div>
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-danger"></i>
+                                    <div class="kpi-title">@Resources.quantidade_atrasada</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_atrasada_pool">@ViewBag.InfoOrdemServico.quantidade_atrasada_pool</div>
+                            </a>
+                        </div>
 
-                    <div class="col-xl-2 col-md-4 col-6">
-                        <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="block dashboard-card kpi-card">
-                            <div class="kpi-header">
-                                <i class="fa fa-gear kpi-icon text-earth-light"></i>
-                                <div class="kpi-title">@Resources.quantidade_realizada</div>
-                            </div>
-                            <div class="kpi-value" id="quantidade_realizada_condo">@ViewBag.InfoOrdemServico.quantidade_concluida_condo</div>
-                        </a>
-                    </div>
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-warning"></i>
+                                    <div class="kpi-title">@Resources.quantidade_pendente</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_pendente_pool">@ViewBag.InfoOrdemServico.quantidade_pendente_pool</div>
+                            </a>
+                        </div>
 
-                </div>
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-info"></i>
+                                    <div class="kpi-title">@Resources.quantidade_vinculada</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_pendente_pool">@ViewBag.InfoOrdemServico.quantidade_vinculada_pool</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-primary-light"></i>
+                                    <div class="kpi-title">@Resources.quantidade_andamento</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_andamento_pool">@ViewBag.InfoOrdemServico.quantidade_andamento_pool</div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-6">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="block dashboard-card kpi-card">
+                                <div class="kpi-header">
+                                    <i class="fa fa-gear kpi-icon text-earth-light"></i>
+                                    <div class="kpi-title">@Resources.quantidade_realizada</div>
+                                </div>
+                                <div class="kpi-value" id="quantidade_realizada_pool">@ViewBag.InfoOrdemServico.quantidade_concluida_pool</div>
+                            </a>
+                        </div>
+
+                    </div>
+                }
             </div>
 
             <!-- ================= KPIs – GAUGES ================= -->
@@ -346,20 +474,13 @@
                 <div class="row">
                     <div class="col-6">
                         <!-- PRODUTIVIDADE POR CAMAREIRA -->
-                        <div class="section-title">Produtividade por Camareira</div>
+                        <div class="section-title">Produtividade por @(Session["codigo_unidade"].ToString() == "-1"? "Unidade": "Camareira")</div>
+
                         <div class="block dashboard-card">
                             <table class="table table-striped" id="tbProdutividadeCamareira" name="tbProdutividadeCamareira">
                                 <thead>
                                     <tr>
-                                        @{ if (Session["codigo_unidade"].ToString() == "-1")
-                                            {
-                                                <th>Unidade</th>
-                                            }
-                                            else
-                                            {
-                                                <th>Camareira</th>
-                                            }
-                                        }
+                                        <th>@(Session["codigo_unidade"].ToString() == "-1"? "Unidade": "Camareira")</th>
                                         <th>UH's Arrumadas</th>
                                         <th>UH's Saída</th>
                                         <th>UH's Permanência</th>
@@ -376,20 +497,12 @@
 
                     <div class="col-6">
                         <!-- PRODUTIVIDADE POR VISTORIADOR -->
-                        <div class="section-title">Produtividade por Vistoriador</div>
+                        <div class="section-title">Produtividade por @(Session["codigo_unidade"].ToString() == "-1"? "Unidade": "Vistoriador")</div>
                         <div class="block dashboard-card">
                             <table class="table table-striped" id="tbProdutividadeVistoriador" name="tbProdutividadeVistoriador">
                                 <thead>
                                     <tr>
-                                        @{ if (Session["codigo_unidade"].ToString() == "-1")
-                                            {
-                                                <th>Unidade</th>
-                                            }
-                                            else
-                                            {
-                                                <th>Vistoriador</th>
-                                            }
-                                        }
+                                        <th>@(Session["codigo_unidade"].ToString() == "-1"? "Unidade": "Vistoriador")</th>
                                         <th>UH's Saídas</th>
                                         <th>UH's Vistoriadas</th>
                                         <th>% Vistoriado Saídas</th>
@@ -441,12 +554,14 @@
 
                     <!-- PRODUTIVIDADE POR VISTORIADOR -->
                     <div class="col-6">
-                        <div class="section-title">NÃO CONFORMIDADE CAMAREIRA</div>
+
+                        <div class="section-title">Não Conformidade - @(Session["codigo_unidade"].ToString() == "-1"? "Unidade": "Camareira")</div>
+
                         <div class="block dashboard-card">
                             <table class="table table-striped" id="tbNCCamareira" name="tbNCCamareira">
                                 <thead>
                                     <tr>
-                                        <th>CAMAREIRA</th>
+                                        <th>@(Session["codigo_unidade"].ToString() == "-1"? "Unidade": "Camareira")</th>
                                         <th>QUANTIDADE NC</th>
                                         <th>MÉDIA MÓVEL</th>
                                         <th>TENDÊNCIA</th>

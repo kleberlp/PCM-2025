@@ -8,6 +8,7 @@ using PCM.WEB.MODELS;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -334,6 +335,34 @@ namespace PCM.WEB.Controllers
                                                         bloco: bloco,
                                                         andar: andar,
                                                         ativo: ativo));
+        }
+
+        // GET: /EDIT
+        public ActionResult ApartamentoInsert()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                    bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString());
+                ViewBag.bloco = new SelectList(oCombo.Bloco(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.responsavel_apartamento = new SelectList(oCombo.ResponsavelApartamento(), "codigo", "descricao", null);
+                ViewBag.setor = new SelectList(oCombo.Setor(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.andar = new SelectList(oCombo.Andar(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.tipo_apartamento = new SelectList(oCombo.TipoApartamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.tipo_cama = new SelectList(oCombo.TipoCama(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                
+                return View();
+            }
         }
 
         // POST: INSERT
@@ -1888,6 +1917,19 @@ namespace PCM.WEB.Controllers
                                                           codigoUsuario: Convert.ToInt32(User.Identity.GetUserName())));            
         }
 
+        // POST: INDEX
+        [HttpPost]
+        public JsonResult LoadChecklistItem(int tipoChecklist = -1, int codigoUnidade = -1, long codigoChecklist = -1)
+        {
+
+            return Json(oCadastroBasico.LoadChecklistItem(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                          codigoUnidade: codigoUnidade,
+                                                          codigoChecklist: codigoChecklist,
+                                                          codigoTipoChecklist: tipoChecklist,
+                                                          codigoUsuario: Convert.ToInt32(User.Identity.GetUserName())));
+
+        }
+
         // GET: INSERT
         public ActionResult ChecklistInsert()
         {
@@ -1980,6 +2022,97 @@ namespace PCM.WEB.Controllers
                 }
 
                 return RedirectToAction("ChecklistInsert");
+            }
+        }
+
+        // GET: INSERT
+        public ActionResult ChecklistInsert2()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                ViewBag.codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString());
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: false), "codigo", "descricao", null);
+                ViewBag.tipoChecklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", null);
+                
+                return View();
+            }
+        }
+
+        // POST: INSERT
+        [HttpPost]
+        public ActionResult ChecklistInsert2(int tipoChecklist, string descricao, string uniqueId, int unidade = -1)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+
+                //Insere Registro no Banco de Dados
+                oCadastroBasico.InsertChecklist(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                codigoUnidade: unidade,
+                                                codigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
+                                                codigoTipoChecklist: tipoChecklist,
+                                                descricao: descricao,
+                                                uniqueId: uniqueId,
+                                                codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()));
+
+                return RedirectToAction("ChecklistInsert2");
+            }
+        }
+
+        // GET: INSERT
+        public ActionResult ChecklistEdit2(long codigo)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                ChecklistInfo info = oCadastroBasico.LoadChecklistInfo(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                       codigo: codigo,
+                                                                       codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()));
+
+                ViewBag.codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString());
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: false), "codigo", "descricao", info.codigoUnidade);
+                ViewBag.tipoChecklist = new SelectList(oCombo.TipoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", info.codigoTipoChecklist);
+                ViewBag.info = info;
+
+                return View();
+            }
+        }
+
+        // POST: /EDIT
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChecklistEdit2(string descricao, long codigo, string uniqueId, int unidade = -1)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                //Insere Registro no Banco de Dados
+                oCadastroBasico.UpdateChecklist(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                codigoUnidade: unidade,
+                                                codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                uniqueId: uniqueId,
+                                                descricao: descricao.ToUpper(),
+                                                codigo: codigo);
+
+                //Redireciona para Index
+                return RedirectToAction("ChecklistIndex");
             }
         }
 
@@ -2110,33 +2243,33 @@ namespace PCM.WEB.Controllers
             }
         }
 
-        // POST: /DELETE
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChecklistDelete(int codigo)
-        {
-            if (Session["empresa"] == null)
-            {
-                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-            }
-            else
-            {
-                try
-                {
-                    //Insere Registro no Banco de Dados
-                    oCadastroBasico.DeleteChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                    iCodigo: codigo);
-                    //Redireciona para Index
-                    return RedirectToAction("ChecklistIndex");
-                }
-                catch
-                {
-                    return ChecklistDelete(codigo: codigo,
-                                            erro: PCM.WEB.Properties.Resources.valida_excluir);
-                }
-            }
-        }
+        //// POST: /DELETE
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult ChecklistDelete(int codigo)
+        //{
+        //    if (Session["empresa"] == null)
+        //    {
+        //        return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+        //    }
+        //    else
+        //    {
+        //        try
+        //        {
+        //            //Insere Registro no Banco de Dados
+        //            oCadastroBasico.DeleteChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+        //                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+        //                                            iCodigo: codigo);
+        //            //Redireciona para Index
+        //            return RedirectToAction("ChecklistIndex");
+        //        }
+        //        catch
+        //        {
+        //            return ChecklistDelete(codigo: codigo,
+        //                                    erro: PCM.WEB.Properties.Resources.valida_excluir);
+        //        }
+        //    }
+        //}
 
         //JSON: /VALIDA FUNÇÃO
         public JsonResult ValidaChecklist(string descricao, int codigo)
@@ -2207,6 +2340,89 @@ namespace PCM.WEB.Controllers
             {
                 return Json(ex.Message);
             }                
+        }
+
+        [HttpPost]
+        public ActionResult DownloadChecklistExcel(int tipoChecklist, int codigoUnidade = -1, string uniqueId = "")
+        {
+            var estrutura = oCadastroBasico.LoadInterfaceExcel(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                               tipoChecklist: tipoChecklist);
+
+            DataSet dataSet = null;
+
+            if (uniqueId != "")
+            {
+                dataSet = oCadastroBasico.LoadChecklistExcel(uniqueId: uniqueId,
+                                                             codigoTipoChecklist: tipoChecklist);
+            }
+
+            var excelBytes = ExcelHelper.GerarExcelChecklist(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                             codigoUnidade: codigoUnidade,
+                                                             estrutura: estrutura,
+                                                             dataSet: dataSet);
+
+            return File(
+                excelBytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "ChecklistTemplate.xlsx"
+            );
+        }
+
+        [HttpPost]
+        public JsonResult ImportChecklistExcel(HttpPostedFileBase file, int codigoUnidade, string tipoChecklist)
+        {
+            try
+            {
+                if (file == null || file.ContentLength == 0)
+                    return Json(new { success = false, message = "Arquivo não enviado." });
+
+                var uniqueId = Guid.NewGuid().ToString("N");
+
+                var ext = Path.GetExtension(file.FileName);
+                if (string.IsNullOrWhiteSpace(ext) || (ext.ToLower() != ".xlsx" && ext.ToLower() != ".xls"))
+                    return Json(new { success = false, message = "Formato inválido. Envie .xlsx ou .xls" });
+
+                var path = Server.MapPath("~/uploads/checklist");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                var filePath = Path.Combine(path, uniqueId + ext);
+
+                file.SaveAs(filePath);
+
+                var codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString());
+                var codigoUsuario = Convert.ToInt32(User.Identity.GetUserName());
+
+                oCadastroBasico.BulkInsertChecklistExcel(uniqueId: uniqueId,
+                                                         filePath: filePath,
+                                                         codigoEmpresa: codigoEmpresa,
+                                                         codigoUnidade: codigoUnidade, 
+                                                         interfaceName: tipoChecklist,
+                                                         codigoUsuario: codigoUsuario,
+                                                         tabelaInsert: "dbo.tb_chk_checklist_item_tmp");
+
+                System.IO.File.Delete(filePath);
+
+                return Json(new
+                {
+                    success = true,
+                    message = "",
+                    uniqueId = uniqueId
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message, uniqueId = "" });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadChecklistItemTmp(string uniqueId, int tipoChecklist)
+        {
+            return Json(oCadastroBasico.LoadChecklistItemTmp(uniqueId: uniqueId,
+                                                             codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                             codigoTipoChecklist: tipoChecklist));
+
         }
 
         #endregion

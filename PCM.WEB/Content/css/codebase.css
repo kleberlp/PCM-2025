@@ -22556,50 +22556,58 @@ ul.notes li div {
   }
 }
 @media only screen and (min-width: 1170px) {
-  .center-orientation .vertical-timeline-content {
-    margin-left: 0;
-    padding: 1.6em;
-    width: 45%;
-  }
-  .center-orientation .vertical-timeline-content::before {
-    top: 24px;
-    left: 100%;
-    border-color: transparent;
-    border-left-color: white;
-  }
-  .center-orientation .vertical-timeline-content .btn {
-    float: left;
-  }
-  .center-orientation .vertical-timeline-content .vertical-date {
-    position: absolute;
-    width: 100%;
-    left: 122%;
-    top: 2px;
-    font-size: 14px;
-  }
-  .center-orientation .vertical-timeline-block:nth-child(even) .vertical-timeline-content {
-    float: right;
-  }
-  .center-orientation .vertical-timeline-block:nth-child(even) .vertical-timeline-content::before {
-    top: 24px;
-    left: auto;
-    right: 100%;
-    border-color: transparent;
-    border-right-color: white;
-  }
-  .center-orientation .vertical-timeline-block:nth-child(even) .vertical-timeline-content .btn {
-    float: right;
-  }
-  .center-orientation .vertical-timeline-block:nth-child(even) .vertical-timeline-content .vertical-date {
-    left: auto;
-    right: 122%;
-    text-align: right;
-  }
-  .center-orientation .cssanimations .vertical-timeline-content.is-hidden {
-    visibility: hidden;
-  }
+    .center-orientation .vertical-timeline-content {
+        margin-left: 0;
+        padding: 1.6em;
+        width: 45%;
+    }
 
-  #chartjs-tooltip {
+        .center-orientation .vertical-timeline-content::before {
+            top: 24px;
+            left: 100%;
+            border-color: transparent;
+            border-left-color: white;
+        }
+
+        .center-orientation .vertical-timeline-content .btn {
+            float: left;
+        }
+
+        .center-orientation .vertical-timeline-content .vertical-date {
+            position: absolute;
+            width: 100%;
+            left: 122%;
+            top: 2px;
+            font-size: 14px;
+        }
+
+    .center-orientation .vertical-timeline-block:nth-child(even) .vertical-timeline-content {
+        float: right;
+    }
+
+        .center-orientation .vertical-timeline-block:nth-child(even) .vertical-timeline-content::before {
+            top: 24px;
+            left: auto;
+            right: 100%;
+            border-color: transparent;
+            border-right-color: white;
+        }
+
+        .center-orientation .vertical-timeline-block:nth-child(even) .vertical-timeline-content .btn {
+            float: right;
+        }
+
+        .center-orientation .vertical-timeline-block:nth-child(even) .vertical-timeline-content .vertical-date {
+            left: auto;
+            right: 122%;
+            text-align: right;
+        }
+
+    .center-orientation .cssanimations .vertical-timeline-content.is-hidden {
+        visibility: hidden;
+    }
+
+    #chartjs-tooltip {
         opacity: 1;
         position: absolute;
         color: black;
@@ -22609,13 +22617,70 @@ ul.notes li div {
         pointer-events: none;
         -webkit-transform: translate(-50%, 0);
         transform: translate(-50%, 0);
-  }
+    }
 
-  .chartjs-tooltip-key {
+    .chartjs-tooltip-key {
         display: inline-block;
         width: 10px;
         height: 10px;
         margin-right: 10px;
-  }
+    }
+}
 
+#tableDynamic thead th {
+    background-color: #d6d8db !important; /* secondary */
+    /*color: white !important;
+    border-color: rgba(255,255,255,.15);*/
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: .5px;
+}
+
+/* Linha de grupo */
+#tableDynamic tbody tr.dt-group-row td.dt-group-cell {
+    background: #f3f6fb;
+    font-weight: 600;
+    border-top: 1px solid #e6e9ee;
+    border-bottom: 1px solid #e6e9ee;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Ícones */
+#tableDynamic tbody tr.dt-group-row .dt-group-icon {
+    width: 14px;
+    opacity: 0.85;
+}
+
+#tableDynamic tbody tr.dt-group-row .dt-group-icon-disabled {
+    opacity: 0.35;
+}
+
+/* Hover para grupo */
+#tableDynamic tbody tr.dt-group-row:hover td.dt-group-cell {
+    background: #e9f2ff;
+}
+
+/* Um “ramo” visual (opcional) */
+#tableDynamic tbody tr.dt-group-row td.dt-group-cell {
+    position: relative;
+}
+
+#tableDynamic tbody tr.dt-group-row td.dt-group-cell:before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(0,0,0,0.04);
+}
+
+tr.dt-group-row.level-0 {
+    background-color: #8bc8f9;
+    font-weight: 600;
+}
+
+tr.dt-group-row.level-1 {
+    background-color: #fcf7e6;
 }

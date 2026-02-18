@@ -23550,3 +23550,55 @@ ul.notes li {
         margin-right: 10px;
     }
 }
+
+/* Linha de grupo */
+#tableDynamic tbody tr.dt-group-row td.dt-group-cell {
+    background: #f3f6fb;
+    font-weight: 600;
+    border-top: 1px solid #e6e9ee;
+    border-bottom: 1px solid #e6e9ee;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Ícones */
+#tableDynamic tbody tr.dt-group-row .dt-group-icon {
+    width: 14px;
+    opacity: 0.85;
+}
+
+#tableDynamic tbody tr.dt-group-row .dt-group-icon-disabled {
+    opacity: 0.35;
+}
+
+/* Hover para grupo */
+#tableDynamic tbody tr.dt-group-row:hover td.dt-group-cell {
+    background: #e9f2ff;
+}
+
+/* Um “ramo” visual (opcional) */
+#tableDynamic tbody tr.dt-group-row td.dt-group-cell {
+    position: relative;
+}
+
+#tableDynamic tbody tr.dt-group-row td.dt-group-cell:before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(0,0,0,0.04);
+}
+
+
+tr.dt-group-row.level-0 {
+    background-color: #8bc8f9;
+    color: #fff;
+    font-weight: 600;
+}
+
+tr.dt-group-row.level-1 {
+    background-color: #fcf7e6;
+    color: #fff;
+}

@@ -95,4 +95,16 @@ namespace PCM.WEB.MODELS
         public string auditoria { get; set; }
     }
 
+    public class InterfaceExcelColumn
+    {
+        public string ColunaExcel { get; set; }
+        public string DataMember { get; set; }
+        public bool Obrigatorio { get; set; }
+        public bool Visivel { get; set; }
+        public int Linha { get; set; }
+        public int Coluna { get; set; }
+        public string Largura { get; set; }
+        public string TipoValidacao { get; set; }
+        public string FonteLista { get; set; }
+    }
 }

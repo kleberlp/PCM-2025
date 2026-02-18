@@ -3275,6 +3275,8 @@ Public Class Api
 
                 End While
 
+                oSqlDataReader.NextResult()
+
                 While oSqlDataReader.Read
 
                     Dim oStatusUH As New pwaStatusUH With {

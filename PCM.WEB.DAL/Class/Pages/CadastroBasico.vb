@@ -1,14 +1,16 @@
-﻿Imports PCM.WEB.MODELS
+﻿Imports System.Data.OleDb
+Imports System.Data.SqlClient
 Imports System.DirectoryServices
 Imports System.DirectoryServices.ActiveDirectory
-Imports PCM.WEB.DAL.SQLHelper
-Imports System.Data.SqlClient
-Imports System.Text
-Imports System.Net
 Imports System.IO
-Imports System.Data.OleDb
+Imports System.Net
+Imports System.Net.WebRequestMethods
+Imports System.Text
 Imports MS.Internal.Text.TextInterface
+Imports OfficeOpenXml
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions
+Imports PCM.WEB.DAL.SQLHelper
+Imports PCM.WEB.MODELS
 
 Public Class CadastroBasico
 
@@ -3601,6 +3603,94 @@ Public Class CadastroBasico
 
     End Function
 
+    Public Function LoadChecklistItem(ByVal codigoEmpresa As Integer,
+                                      ByVal codigoUnidade As Integer,
+                                      ByVal codigoChecklist As Long,
+                                      ByVal codigoTipoChecklist As Integer,
+                                      ByVal codigoUsuario As Integer) As ChecklistResponse
+
+        Try
+
+            Dim oReturn As New ChecklistResponse
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo_checklist", SqlDbType.Int, codigoChecklist),
+                CriarParametro("codigo_tipo_checklist", SqlDbType.SmallInt, codigoTipoChecklist),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist_item_v2", oSqlParameter)
+
+                'Estrutura
+                While oSqlDataReader.Read()
+
+                    Dim col As New ColumnStructure()
+
+                    col.Data = oSqlDataReader("dataMember").ToString()
+                    col.Title = oSqlDataReader("colunaExcel").ToString()
+                    col.Visible = Convert.ToBoolean(oSqlDataReader("visivel"))
+                    col.Width = If(IsDBNull(oSqlDataReader("largura")), Nothing, oSqlDataReader("largura").ToString())
+                    col.Align = If(IsDBNull(oSqlDataReader("alinhamento")), Nothing, oSqlDataReader("alinhamento").ToString())
+                    col.Frozen = Convert.ToBoolean(oSqlDataReader("frozen"))
+                    col.Orderable = Convert.ToBoolean(oSqlDataReader("ordenavel"))
+                    col.Wrap = Convert.ToBoolean(oSqlDataReader("quebraLinha"))
+
+                    oReturn.columns.Add(col)
+
+                End While
+
+                ' Ir para o próximo result set
+                oSqlDataReader.NextResult()
+
+                'Dados
+                While oSqlDataReader.Read()
+
+                    Dim row As New Dictionary(Of String, Object)
+
+                    For i As Integer = 0 To oSqlDataReader.FieldCount - 1
+                        row(oSqlDataReader.GetName(i)) =
+                        If(oSqlDataReader.IsDBNull(i), Nothing, oSqlDataReader.GetValue(i))
+                    Next
+
+                    oReturn.data.Add(row)
+
+                End While
+
+                ' Ir para o próximo result set
+                oSqlDataReader.NextResult()
+
+                'Dados
+                While oSqlDataReader.Read()
+
+                    Dim group As New GroupDefinition()
+
+                    group.Column = oSqlDataReader("column").ToString()
+                    group.Level = oSqlDataReader("level").ToString()
+                    group.Collapsible = Convert.ToBoolean(oSqlDataReader("collapsible"))
+                    group.ShowCount = Convert.ToBoolean(oSqlDataReader("showCount"))
+                    group.CssClass = oSqlDataReader("cssClass").ToString()
+
+                    oReturn.groupBy.Add(group)
+
+                End While
+
+
+            End Using
+
+            'Retorno da Função
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     Public Function IndexChecklistItem(ByVal iCodigoEmpresa As Integer,
                                        ByVal lCodigoChecklist As Long) As List(Of ChecklistItem)
 
@@ -3674,6 +3764,8 @@ Public Class CadastroBasico
 
     End Function
 
+
+
     Public Function ValidaChecklist(ByVal iCodigoEmpresa As Integer,
                                     ByVal sDescricao As String,
                                     ByVal iCodigo As Integer) As Boolean
@@ -3721,64 +3813,420 @@ Public Class CadastroBasico
 
     End Function
 
+    Public Function LoadInterfaceExcel(ByVal codigoEmpresa As Integer,
+                                       ByVal tipoChecklist As Integer) As List(Of InterfaceExcelColumn)
 
-    'Public Sub LoadChecklist(ByVal iCodigoEmpresa As Integer,
-    '                         ByVal lCodigo As Long,
-    '                         ByVal iCodigoTipoChecklist As Integer)
+        Dim oReturn As New List(Of InterfaceExcelColumn)
 
-    '    'Variaveis Locais
-    '    Dim oSqlParameter(1) As SqlParameter
-    '    Dim oSqlDataReader As SqlDataReader
-    '    Dim i As Integer = 0
+        Dim oSqlParameter As SqlParameter() = {
+            CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+            CriarParametro("codigo_tipo_checklist", SqlDbType.SmallInt, tipoChecklist)
+        }
 
-    '    Try
+        Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_interface_excel_checklist", oSqlParameter)
 
-    '        'Seta Parametros - Código Empresa
-    '        oSqlParameter(i) = New SqlParameter
-    '        oSqlParameter(i).ParameterName = "codigo_empresa"
-    '        oSqlParameter(i).Direction = ParameterDirection.Input
-    '        oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-    '        oSqlParameter(i).Value = iCodigoEmpresa : i += 1
+            While oSqlDataReader.Read()
 
-    '        'Seta Parametros - Código
-    '        oSqlParameter(i) = New SqlParameter
-    '        oSqlParameter(i).ParameterName = "codigo"
-    '        oSqlParameter(i).Direction = ParameterDirection.Input
-    '        oSqlParameter(i).SqlDbType = SqlDbType.BigInt
-    '        oSqlParameter(i).Value = lCodigo
+                Dim col As New InterfaceExcelColumn()
 
-    '        'Executa Query
-    '        oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist_dados", oSqlParameter)
+                col.ColunaExcel = SafeGetString(oSqlDataReader, "colunaExcel").ToString()
+                col.DataMember = SafeGetString(oSqlDataReader, "dataMember")
+                col.Obrigatorio = SafeGetBoolean(oSqlDataReader, "obrigatorio")
+                col.Visivel = SafeGetBoolean(oSqlDataReader, "visivel")
+                col.Linha = SafeGetLong(oSqlDataReader, "linha")
+                col.Coluna = SafeGetLong(oSqlDataReader, "coluna")
+                col.Largura = SafeGetString(oSqlDataReader, "largura")
+                col.TipoValidacao = SafeGetString(oSqlDataReader, "tipoValidacao")
+                col.FonteLista = SafeGetString(oSqlDataReader, "fonteLista")
 
-    '        If oSqlDataReader.HasRows Then
+                oReturn.Add(col)
 
-    '            Dim oExcel As Object
-    '            Dim oBook As Object
-    '            Dim oSheet As Object
+            End While
 
-    '        End If
+        End Using
 
-    '        oChecklistHeader = New ChecklistHeader
+        Return oReturn
 
-    '            oChecklistHeader.codigo_unidade = oSqlDataReader.Item("codigo_unidade")
-    '            oChecklistHeader.unidade = oSqlDataReader.Item("unidade")
-    '            oChecklistHeader.codigo = oSqlDataReader.Item("codigo")
-    '            oChecklistHeader.codigo_tipo_checklist = oSqlDataReader.Item("codigo_tipo_checklist")
-    '            oChecklistHeader.tipo_checklist = oSqlDataReader.Item("tipo_checklist")
-    '            oChecklistHeader.descricao = oSqlDataReader.Item("descricao")
+    End Function
 
-    '        End While
+    Public Sub BulkInsertChecklistExcel(ByVal uniqueId As String,
+                                        ByVal filePath As String,
+                                        ByVal codigoEmpresa As Integer,
+                                        ByVal codigoUnidade As Integer,
+                                        ByVal interfaceName As String,
+                                        ByVal codigoUsuario As Integer,
+                                        ByVal tabelaInsert As String,
+                                        Optional ByVal storedProcedureUpdate As String = "")
 
-    '        'Fecha o SqlDataReader
-    '        If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+        Dim query As String = ""
+        Dim rowDelete As String = ""
+        Dim columnDelete As String = ""
+        Dim worksheetImport As New List(Of String)
+        Dim structureExcel As New List(Of InterfaceExcelColumn)
 
-    '    Catch SqlEx As SqlException
-    '        Throw SqlEx
-    '    Catch ex As Exception
-    '        Throw ex
-    '    End Try
+        Try
 
-    'End Sub
+
+            Dim oQueryParameters As SqlParameter() = {
+                CriarParametro("uniqueId", SqlDbType.VarChar, uniqueId),
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario),
+                CriarParametro("worksheet", SqlDbType.VarChar, "[$WORKSHEET]"),
+                CriarParametro("interface", SqlDbType.VarChar, interfaceName)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_interface_query_excel", oQueryParameters)
+
+                ' Resultset 1: query e deletes
+                While oSqlDataReader.Read()
+                    query = SafeGetString(oSqlDataReader, "query")
+                    query = query.Replace(vbCrLf, "").Replace(vbTab, "").Replace(vbLf, "")
+                    rowDelete = SafeGetString(oSqlDataReader, "rowDelete")
+                    columnDelete = SafeGetString(oSqlDataReader, "columnDelete")
+                End While
+
+                ' Resultset 2: estrutura
+                oSqlDataReader.NextResult()
+
+                While oSqlDataReader.Read()
+                    Dim info As New InterfaceExcelColumn
+                    info.Linha = SafeGetLong(oSqlDataReader, "linha")
+                    info.Coluna = SafeGetLong(oSqlDataReader, "coluna")
+                    info.ColunaExcel = SafeGetString(oSqlDataReader, "colunaExcel")
+                    info.DataMember = SafeGetString(oSqlDataReader, "dataMember")
+                    info.Visivel = SafeGetBoolean(oSqlDataReader, "visivel")
+                    structureExcel.Add(info)
+                End While
+
+            End Using
+
+            If String.IsNullOrEmpty(query) Then
+                Throw New Exception("Query de importação não encontrada.")
+            End If
+
+            If structureExcel.Count = 0 Then
+                Throw New Exception("Estrutura de importação não encontrada.")
+            End If
+
+            Dim oDelParams As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario),
+                CriarParametro("tabela", SqlDbType.VarChar, tabelaInsert)
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_delete_interface_table_tmp", oDelParams)
+
+            ExcelPackage.License.SetNonCommercialOrganization("<ACTI>")
+
+            Using oExcelPackage As New ExcelPackage(New FileInfo(filePath))
+
+                For Each oWorksheet As ExcelWorksheet In oExcelPackage.Workbook.Worksheets
+
+                    Dim worksheetFound As Boolean = True
+
+                    ' Aplica deletes se existirem
+                    If (rowDelete <> "") Then
+                        For Each r In rowDelete.Split(","c)
+                            Dim rr As Integer
+                            If Integer.TryParse(r, rr) Then oWorksheet.DeleteRow(rr)
+                        Next
+                    End If
+
+                    If (columnDelete <> "") Then
+                        For Each c In columnDelete.Split(","c)
+                            Dim cc As Integer
+                            If Integer.TryParse(c, cc) Then oWorksheet.DeleteColumn(cc)
+                        Next
+                    End If
+
+                    ' Confere header
+                    For Each wsStructure As InterfaceExcelColumn In structureExcel.Where(Function(x) x.Visivel)
+
+                        Dim cellValue As String = ""
+                        If oWorksheet.Cells(wsStructure.Linha, wsStructure.Coluna).Value IsNot Nothing Then
+                            cellValue = oWorksheet.Cells(wsStructure.Linha, wsStructure.Coluna).Value.ToString()
+                        End If
+
+                        If cellValue.Trim().ToUpper() <> wsStructure.ColunaExcel.Replace("[", "").Replace("]", "").Trim().ToUpper() Then
+                            worksheetFound = False
+                            Exit For
+                        End If
+
+                    Next
+
+                    If worksheetFound Then
+                        worksheetImport.Add(oWorksheet.Name)
+                    End If
+
+                Next
+
+            End Using
+
+            If worksheetImport.Count = 0 Then
+                Throw New Exception("Nenhuma aba do Excel corresponde à estrutura esperada.")
+            End If
+
+            ' Para cada worksheet encontrada, BulkCopy
+            For Each worksheetName As String In worksheetImport
+
+                Dim querySheet As String = query.Replace("$WORKSHEET", worksheetName & "$")
+
+                Using oOleDbConnection As New OleDbConnection(
+                "Provider=Microsoft.ACE.OLEDB.16.0;Data Source=" & filePath &
+                ";Extended Properties='Excel 12.0 Xml;HDR=YES;IMEX=1';")
+
+                    oOleDbConnection.Open()
+
+                    Using oSqlConnection As New SqlConnection(sConnection),
+                      oOleDbCommand As New OleDbCommand(querySheet, oOleDbConnection),
+                      oOleDbReader As OleDbDataReader = oOleDbCommand.ExecuteReader(),
+                      oBulk As New SqlBulkCopy(oSqlConnection)
+
+                        oSqlConnection.Open()
+
+                        oBulk.DestinationTableName = tabelaInsert
+                        oBulk.BulkCopyTimeout = 5000
+
+                        ' Mapeamento fixo (campos de controle)
+                        'oBulk.ColumnMappings.Add("codigo_empresa", "codigo_empresa")
+                        'oBulk.ColumnMappings.Add("uniqueId", "uniqueId")
+                        'oBulk.ColumnMappings.Add("codigo_usuario", "codigo_usuario")
+
+                        '' Mapeamento dinâmico baseado na estrutura
+                        'For Each s In structureExcel
+                        '    oBulk.ColumnMappings.Add(s.ColunaExcel.Replace("[", "").Replace("]", ""), s.DataMember)
+                        'Next
+
+                        oBulk.WriteToServer(oOleDbReader)
+
+                    End Using
+
+                End Using
+
+            Next
+
+            ' Atualiza campos de controle que não vêm do Excel (uniqueId, usuario, etc)
+            If (storedProcedureUpdate <> "") Then
+
+                Dim oUpdParams As SqlParameter() = {
+                    CriarParametro("uniqueId", SqlDbType.VarChar, uniqueId)
+                }
+
+                ExecuteNonQuery(sConnection, CommandType.StoredProcedure, storedProcedureUpdate, oUpdParams)
+
+            End If
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    Public Function LoadChecklistItemTmp(ByVal uniqueId As String, ByVal codigoEmpresa As Integer, ByVal codigoTipoChecklist As Integer) As ChecklistResponse
+
+        Dim oReturn As New ChecklistResponse()
+
+        Try
+
+            Dim oQueryParameters As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("uniqueId", SqlDbType.VarChar, uniqueId),
+                CriarParametro("codigo_tipo_checklist", SqlDbType.SmallInt, codigoTipoChecklist)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist_item_tmp", oQueryParameters)
+
+                'Estrutura
+                While oSqlDataReader.Read()
+
+                    Dim col As New ColumnStructure()
+
+                    col.Data = oSqlDataReader("dataMember").ToString()
+                    col.Title = oSqlDataReader("colunaExcel").ToString()
+                    col.Visible = Convert.ToBoolean(oSqlDataReader("visivel"))
+                    col.Width = If(IsDBNull(oSqlDataReader("largura")), Nothing, oSqlDataReader("largura").ToString())
+                    col.Align = If(IsDBNull(oSqlDataReader("alinhamento")), Nothing, oSqlDataReader("alinhamento").ToString())
+                    col.Frozen = Convert.ToBoolean(oSqlDataReader("frozen"))
+                    col.Orderable = Convert.ToBoolean(oSqlDataReader("ordenavel"))
+                    col.Wrap = Convert.ToBoolean(oSqlDataReader("quebraLinha"))
+
+                    oReturn.columns.Add(col)
+
+                End While
+
+                ' Ir para o próximo result set
+                oSqlDataReader.NextResult()
+
+                'Dados
+                While oSqlDataReader.Read()
+
+                    Dim row As New Dictionary(Of String, Object)
+
+                    For i As Integer = 0 To oSqlDataReader.FieldCount - 1
+                        row(oSqlDataReader.GetName(i)) =
+                        If(oSqlDataReader.IsDBNull(i), Nothing, oSqlDataReader.GetValue(i))
+                    Next
+
+                    oReturn.data.Add(row)
+
+                End While
+
+                ' Ir para o próximo result set
+                oSqlDataReader.NextResult()
+
+                'Dados
+                While oSqlDataReader.Read()
+
+                    Dim group As New GroupDefinition()
+
+                    group.Column = oSqlDataReader("column").ToString()
+                    group.Level = oSqlDataReader("level").ToString()
+                    group.Collapsible = Convert.ToBoolean(oSqlDataReader("collapsible"))
+                    group.ShowCount = Convert.ToBoolean(oSqlDataReader("showCount"))
+                    group.CssClass = oSqlDataReader("cssClass").ToString()
+
+                    oReturn.groupBy.Add(group)
+
+                End While
+
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Function LoadChecklistExcel(ByVal uniqueId As String,
+                                       ByVal codigoTipoChecklist As Integer) As DataSet
+
+        Dim oReturn As DataSet
+
+        Try
+
+            Dim oQueryParameters As SqlParameter() = {
+                CriarParametro("uniqueId", SqlDbType.VarChar, uniqueId),
+                CriarParametro("codigo_tipo_checklist", SqlDbType.Int, codigoTipoChecklist)
+            }
+
+            oReturn = ExecuteDataset(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist_item_excel", oQueryParameters)
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Sub InsertChecklist(ByVal codigoEmpresa As Integer,
+                               ByVal codigoUnidade As Integer,
+                               ByVal codigoModulo As Integer,
+                               ByVal codigoTipoChecklist As Integer,
+                               ByVal descricao As String,
+                               ByVal uniqueId As String,
+                               ByVal codigoUsuario As Integer)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, IIf(codigoUnidade = -1, DBNull.Value, codigoUnidade)),
+                CriarParametro("codigo_modulo", SqlDbType.Int, codigoModulo),
+                CriarParametro("codigo_tipo_checklist", SqlDbType.SmallInt, codigoTipoChecklist),
+                CriarParametro("descricao", SqlDbType.VarChar, descricao),
+                CriarParametro("uniqueId", SqlDbType.VarChar, uniqueId),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_cadastro_basico_checklist_v2", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    Public Sub UpdateChecklist(ByVal codigoEmpresa As Integer,
+                               ByVal codigoUnidade As Integer,
+                               ByVal descricao As String,
+                               ByVal uniqueId As String,
+                               ByVal codigoUsuario As Integer,
+                               ByVal codigo As Long)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, IIf(codigoUnidade = -1, DBNull.Value, codigoUnidade)),
+                CriarParametro("codigo", SqlDbType.BigInt, codigo),
+                CriarParametro("descricao", SqlDbType.VarChar, descricao),
+                CriarParametro("uniqueId", SqlDbType.VarChar, uniqueId),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_cadastro_basico_checklist_v2", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    Public Function LoadChecklistInfo(ByVal codigoEmpresa As Integer,
+                                      ByVal codigo As Long,
+                                      ByVal codigoUsuario As Integer) As ChecklistInfo
+
+        Try
+
+            Dim oReturn As New ChecklistInfo
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo", SqlDbType.BigInt, codigo),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist_dados", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    With oReturn
+                        .codigo = SafeGetLong(oSqlDataReader, "codigo")
+                        .uniqueId = SafeGetString(oSqlDataReader, "uniqueId")
+                        .codigoUnidade = SafeGetLong(oSqlDataReader, "codigo_unidade")
+                        .codigoTipoChecklist = SafeGetLong(oSqlDataReader, "codigo_tipo_checklist")
+                        .descricao = SafeGetString(oSqlDataReader, "descricao")
+                    End With
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
 
 #End Region
 

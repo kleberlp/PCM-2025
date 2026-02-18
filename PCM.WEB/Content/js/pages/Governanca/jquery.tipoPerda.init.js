@@ -21,7 +21,7 @@ $(document).ready(function () {
         scrollCollapse: false,
         serverSide: false,
         ajax: {
-            url: `${basePath}/LoadTipoPerda`,
+            url: `LoadTipoPerda`,
             type: "POST",
             datatype: "json",
             data: function (d) {
@@ -108,7 +108,7 @@ $(document).ready(function () {
     });
 
     function editRegister(data) {
-        window.location = `${basePath}/tipoPerdaEdit?codigo=` + data.codigo;
+        window.location = `tipoPerdaEdit?codigo=` + data.codigo;
     }
 
     function deleteRegister(data) {
@@ -125,7 +125,7 @@ $(document).ready(function () {
             if (result.value) {
                 jQuery.ajax({
                     method: "POST",
-                    url: `${basePath}/TipoPerdaDelete`,
+                    url: `TipoPerdaDelete`,
                     async: false,
                     data: {
                         "codigo": data.codigo,

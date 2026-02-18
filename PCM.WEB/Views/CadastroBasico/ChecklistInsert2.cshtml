@@ -1,0 +1,157 @@
+﻿@using PCM.WEB.Properties
+@using Newtonsoft.Json
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
+                <span class="breadcrumb-item">@Resources.cadastro_basico</span>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistIndex", "CadastroBasico")">@Resources.checklist</a>
+                <span class="breadcrumb-item active">@Resources.inserir</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+
+        <!-- Update Product -->
+        <div class="row gutters-tiny">
+            <!-- Basic Info -->
+            <div class="col-md-12">
+                @using (Html.BeginForm("ChecklistInsert2", "CadastroBasico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "form", @id = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="uniqueId" name="uniqueId" value="" />
+
+                    <div class="block block-rounded border">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@Resources.cadastrar</h3>
+                            <div class="block-options">
+                                <button type="button" id="btnSave" onclick="$('#validation_type').val(1); $('#form').submit();" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="fa fa-save mr-5"></i>@Resources.salvar
+                                </button>
+                                <a href="@Url.Action("ChecklistIndex", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <i class="si si-action-undo mr-5"></i>@Resources.voltar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resources.unidade</label>
+                                    <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@Resources.tipo_checklist</label>
+                                    <div>@Html.DropDownList("tipoChecklist", null, "", new { @class = "form-control" })</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@Resources.descricao</label>
+                                    <div><input type="text" class="form-control" id="descricao" name="descricao" value="" maxlength="100"></div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">@Resources.arquivo</label>                                
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input ignore-validation" id="inputFile" name="inputFile" accept=".xlsx, .xls">
+                                            <span class="custom-file-label">@Resources.selecione_arquivo</span>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-upload mr-5" id="btnUpload" name="btnUpload" disabled data-url="@Url.Action("ImportChecklistExcel", "CadastroBasico")"></button>
+                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-download mr-5" id="btnDownload" name="btnDownload" disabled></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="block block-rounded border" id="checklistView">
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">@Resources.checklist</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+
+                            <div class="form-group row">
+                                <div class="col-12  ">
+                                    <table class="table table-bordered table-sm" id="tableDynamic" name="tableDynamic">
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <!-- END Basic Info -->
+            <!-- END Basic Info -->
+        </div>
+        <!-- END Update Product -->
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        msgQuestionDelete = Resources.msgQuestionDelete,
+        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        yes = Resources.yes,
+        no = Resources.no,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig,
+        loadChecklist = @Url.Action("LoadChecklistItemTmp", "CadastroBasico"),
+        downloadChecklistExcel = @Url.Action("DownloadChecklistExcel", "CadastroBasico"),
+        clickToApproval = Resources.clickToApproval,
+        clickToReproval = Resources.clickToReproval,
+        enxoval = Resources.enxoval,
+        quantidade = Resources.quantidade,
+        quantidadeInventario = Resources.quantidadeInventario,
+        quantidadeRouparia = Resources.quantidadeRouparia,
+        quantidadeUso = Resources.quantidadeUso,
+        quantidadeLavanderia = Resources.quantidadeLavanderia,
+        divergencia = Resources.divergencia,
+        validaBancoDados = Resources.valida_bd,
+        campoObrigatorio = Resources.campo_requerido
+    }))'>
+</div>
+
+@section Styles {
+    @Styles.Render("~/Content/dataTables")
+    <link href="~/Content/js/lib/datatables/css/rowGroup.dataTables.css" rel="stylesheet" />
+}
+
+@section Scripts {
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.rowGroup.js"></script>
+
+    <script src="~/Content/js/pages/CadastroBasico/jquery.checklistInsert.init.js"></script>
+
+}

@@ -424,4 +424,33 @@ Public Class Excel
 
 #End Region
 
+#Region "::: EXCEL HELPER :::"
+
+    Public Function LoadValidacaoExcel(ByVal codigoEmpresa As Integer,
+                                       ByVal codigoUnidade As Integer,
+                                       ByVal storedProcedure As String) As List(Of String)
+
+        Dim oReturn As New List(Of String)
+
+        Dim oSqlParameter As SqlParameter() = {
+            CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+            CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade)
+        }
+
+        Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, storedProcedure, oSqlParameter)
+
+            While oSqlDataReader.Read()
+
+                oReturn.Add(oSqlDataReader.Item("descricao"))
+
+            End While
+
+        End Using
+
+        Return oReturn
+
+    End Function
+
+#End Region
+
 End Class

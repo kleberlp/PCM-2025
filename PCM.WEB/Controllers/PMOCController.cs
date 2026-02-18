@@ -1,18 +1,14 @@
-﻿        using CrystalDecisions.CrystalReports.Engine;
+﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using System;
-using System.Web;
-using System.Configuration;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-using PCM.WEB.MODELS;
-using PCM.WEB.DAL;
 using Microsoft.AspNet.Identity;
+using PCM.WEB.DAL;
+using PCM.WEB.MODELS;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
-using System.Configuration.Internal;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using System.Web;
+using System.Web.Mvc;
 
 namespace PCM.WEB.Controllers
 {

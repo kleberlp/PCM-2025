@@ -104,11 +104,13 @@ body {
    =============================== */
 
 .chart-card {
+    height: 380px;
+    position: relative;
     padding: 16px;
 }
 
     .chart-card canvas {
-        max-height: 280px;
+        display: block;
     }
 
 /* ===============================
@@ -269,24 +271,18 @@ body {
     margin-top: 8px;
 }
 
-.chart-card {
-    height: 380px;
-    position: relative;
-}
-
 /* Scroll SOMENTE no primeiro gráfico */
 .chart-scroll-x {
     overflow-x: auto;
 }
 
-/* Wrapper controla a largura, NÃO o canvas */
 .chart-inner {
-    width: max-content;
-    min-width: 1400px; /* ajuste conforme nº de labels */
+    position: relative;
+    width: 100%;
     height: 100%;
 }
 
-    /* Canvas ocupa o wrapper corretamente */
-    .chart-inner canvas {
-        height: 100% !important;
-    }
+.chart-inner canvas {
+    width: 100% !important;
+    height: 100% !important;
+}

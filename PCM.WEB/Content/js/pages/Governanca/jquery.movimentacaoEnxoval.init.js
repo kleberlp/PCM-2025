@@ -85,7 +85,7 @@ $(document).ready(function () {
         scrollCollapse: false,
         serverSide: false,
         ajax: {
-            url: `${basePath}/LoadMovimentacaoEnxoval`,
+            url: `LoadMovimentacaoEnxoval`,
             type: "POST",
             datatype: "json",
             data: function (d) {

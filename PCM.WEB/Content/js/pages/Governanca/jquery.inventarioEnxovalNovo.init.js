@@ -33,7 +33,7 @@ $(document).ready(function () {
         scrollCollapse: false,
         serverSide: false,
         ajax: {
-            url: `${basePath}/LoadEnxoval`,
+            url: `LoadEnxoval`,
             type: "POST",
             datatype: "json",
             data: function (d) {
