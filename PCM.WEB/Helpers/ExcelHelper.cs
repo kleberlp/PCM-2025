@@ -43,7 +43,7 @@ public static class ExcelHelper
             }
 
             // Liberar edição apenas linhas 2+ 
-            ws.Cells[2, 1, 500, lastColumn].Style.Locked = false;
+            ws.Cells[2, 1, 2000, lastColumn].Style.Locked = false;
 
             // Filtro
             ws.Cells[1, 1, 1, lastColumn].AutoFilter = true;
@@ -72,6 +72,8 @@ public static class ExcelHelper
             ws.Protection.AllowSelectUnlockedCells = true;
             ws.Protection.AllowAutoFilter = true;
             ws.Protection.AllowSort = true;
+            ws.Protection.AllowFormatColumns = true;
+            ws.Protection.AllowFormatRows = true;
 
             ws.Protection.IsProtected = true;
 
@@ -102,7 +104,7 @@ public static class ExcelHelper
                                                     InterfaceExcelColumn col)
     {
         var validation = ws.DataValidations.AddCustomValidation(
-            ws.Cells[2, col.Coluna, 500, col.Coluna].Address
+            ws.Cells[2, col.Coluna, 2000, col.Coluna].Address
         );
 
         validation.Formula.ExcelFormula = $"LEN(TRIM({GetColumnLetter(col.Coluna)}2))>0";
@@ -137,7 +139,7 @@ public static class ExcelHelper
         if (col.TipoValidacao == "LISTA_FIXA")
         {
             var validation = ws.DataValidations.AddListValidation(
-                ws.Cells[2, col.Coluna, 500, col.Coluna].Address
+                ws.Cells[2, col.Coluna, 2000, col.Coluna].Address
             );
 
             AplicarListaFixa(validation, col);
@@ -161,8 +163,8 @@ public static class ExcelHelper
     {
         if (col.FonteLista == "SIM_NAO")
         {
-            validation.Formula.Values.Add("Sim");
-            validation.Formula.Values.Add("Não");
+            validation.Formula.Values.Add("SIM");
+            validation.Formula.Values.Add("NÃO");
         }
 
         validation.ShowErrorMessage = true;
@@ -191,7 +193,7 @@ public static class ExcelHelper
         package.Workbook.Names.Add(namedRange, range);
 
         var validation = ws.DataValidations.AddListValidation(
-            ws.Cells[2, col.Coluna, 500, col.Coluna].Address
+            ws.Cells[2, col.Coluna, 2000, col.Coluna].Address
         );
 
         validation.Formula.ExcelFormula = namedRange;

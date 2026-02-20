@@ -7,6 +7,7 @@ Imports System.Net
 Imports System.Net.WebRequestMethods
 Imports System.Text
 Imports MS.Internal.Text.TextInterface
+Imports Newtonsoft.Json
 Imports OfficeOpenXml
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions
 Imports PCM.WEB.DAL.SQLHelper
@@ -3972,7 +3973,7 @@ Public Class CadastroBasico
                 Dim querySheet As String = query.Replace("$WORKSHEET", worksheetName & "$")
 
                 Using oOleDbConnection As New OleDbConnection(
-                "Provider=Microsoft.ACE.OLEDB.16.0;Data Source=" & filePath &
+                "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & filePath &
                 ";Extended Properties='Excel 12.0 Xml;HDR=YES;IMEX=1';")
 
                     oOleDbConnection.Open()
@@ -4065,8 +4066,16 @@ Public Class CadastroBasico
                     Dim row As New Dictionary(Of String, Object)
 
                     For i As Integer = 0 To oSqlDataReader.FieldCount - 1
-                        row(oSqlDataReader.GetName(i)) =
-                        If(oSqlDataReader.IsDBNull(i), Nothing, oSqlDataReader.GetValue(i))
+
+                        Dim columnName As String = oSqlDataReader.GetName(i)
+
+                        If columnName = "errorData" Then
+                            Dim errorJson As String = If(oSqlDataReader.IsDBNull(i), "[]", oSqlDataReader.GetString(i))
+                            row("errorData") = JsonConvert.DeserializeObject(Of List(Of InterfaceError))(errorJson)
+                        Else
+                            row(columnName) = If(oSqlDataReader.IsDBNull(i), Nothing, oSqlDataReader.GetValue(i))
+                        End If
+
                     Next
 
                     oReturn.data.Add(row)
@@ -4104,7 +4113,8 @@ Public Class CadastroBasico
 
     End Function
 
-    Public Function LoadChecklistExcel(ByVal uniqueId As String,
+    Public Function LoadChecklistExcel(ByVal codigoEmpresa As Integer,
+                                       ByVal uniqueId As String,
                                        ByVal codigoTipoChecklist As Integer) As DataSet
 
         Dim oReturn As DataSet
@@ -4113,7 +4123,8 @@ Public Class CadastroBasico
 
             Dim oQueryParameters As SqlParameter() = {
                 CriarParametro("uniqueId", SqlDbType.VarChar, uniqueId),
-                CriarParametro("codigo_tipo_checklist", SqlDbType.Int, codigoTipoChecklist)
+                CriarParametro("codigo_tipo_checklist", SqlDbType.Int, codigoTipoChecklist),
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa)
             }
 
             oReturn = ExecuteDataset(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_checklist_item_excel", oQueryParameters)
@@ -4576,7 +4587,6 @@ Public Class CadastroBasico
         End Try
 
     End Sub
-
 
     Public Sub InsertClienteEnxoval(ByVal codigoEmpresa As Integer,
                                     ByVal codigoUnidade As Integer,

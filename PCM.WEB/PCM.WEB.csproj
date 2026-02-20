@@ -422,6 +422,7 @@
     <Content Include="Content\img\photos\PRODIGY.png" />
     <Content Include="Content\img\photos\WISH.png" />
     <Content Include="Content\js\bootstrap.bundle.min.js" />
+    <Content Include="Content\js\pcm.js" />
     <Content Include="Content\js\codebase.js" />
     <Content Include="Content\js\core\bootstrap-notify.min.js" />
     <Content Include="Content\js\core\bootstrap.bundle.min - Cópia .js" />

@@ -228,6 +228,8 @@ namespace PCM.WEB.Controllers
                                               sExecutor: executor,
                                               iStatus: status);
 
+                ExcelPackage.License.SetNonCommercialOrganization("<ACTI>");
+
                 ExcelPackage excel = new ExcelPackage();
                 var workSheet = excel.Workbook.Worksheets.Add("Plan1");
                 workSheet.Cells["A1"].LoadFromCollection(Collection: data, PrintHeaders: true);

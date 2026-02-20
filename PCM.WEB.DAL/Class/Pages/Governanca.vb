@@ -3522,7 +3522,7 @@ Public Class Governanca
 
                 If iChangeFile = 1 Then
 
-                    'ExcelPackage.LicenseContext = LicenseContext.NonCommercial
+                    ExcelPackage.License.SetNonCommercialOrganization("<ACTI>")
 
                     Using oExcelPackage As New ExcelPackage(New FileInfo(file))
 

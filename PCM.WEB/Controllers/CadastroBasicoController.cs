@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using NPOI.Util;
 using PCM.WEB.DAL;
 using PCM.WEB.MODELS;
+using PCM.WEB.Properties;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -2214,62 +2215,32 @@ namespace PCM.WEB.Controllers
             }
         }
 
-        // GET: /DELETE
-        public ActionResult ChecklistDelete(int codigo, string erro = "")
+        // POST: /DELETE
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public JsonResult ChecklistDelete(int codigo)
         {
-            if (Session["empresa"] == null)
+
+            defaultResponse response = new defaultResponse();
+
+            try
             {
-                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+                oCadastroBasico.DeleteChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                iCodigo: codigo);
+
+                response.success = true;
+                response.message = Resources.register_deleted;
+
             }
-            else
+            catch (Exception ex)
             {
-                ChecklistHeader checklistHeader = null;
-
-                oCadastroBasico.InfoChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                lCodigo: codigo,
-                                                oChecklistHeader: ref checklistHeader);
-
-                if (checklistHeader == null)
-                {
-                    return HttpNotFound();
-                }
-
-                ViewBag.checklist = checklistHeader;
-                ViewBag.erro = erro;
-
-                return View(oCadastroBasico.IndexChecklistItem(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                lCodigoChecklist: codigo));
-                
+                response.success = false;
+                response.message = ex.Message;
             }
+
+            return Json(response);
         }
-
-        //// POST: /DELETE
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult ChecklistDelete(int codigo)
-        //{
-        //    if (Session["empresa"] == null)
-        //    {
-        //        return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-        //    }
-        //    else
-        //    {
-        //        try
-        //        {
-        //            //Insere Registro no Banco de Dados
-        //            oCadastroBasico.DeleteChecklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-        //                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-        //                                            iCodigo: codigo);
-        //            //Redireciona para Index
-        //            return RedirectToAction("ChecklistIndex");
-        //        }
-        //        catch
-        //        {
-        //            return ChecklistDelete(codigo: codigo,
-        //                                    erro: PCM.WEB.Properties.Resources.valida_excluir);
-        //        }
-        //    }
-        //}
 
         //JSON: /VALIDA FUNÇÃO
         public JsonResult ValidaChecklist(string descricao, int codigo)
@@ -2352,7 +2323,8 @@ namespace PCM.WEB.Controllers
 
             if (uniqueId != "")
             {
-                dataSet = oCadastroBasico.LoadChecklistExcel(uniqueId: uniqueId,
+                dataSet = oCadastroBasico.LoadChecklistExcel(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()), 
+                                                             uniqueId: uniqueId,
                                                              codigoTipoChecklist: tipoChecklist);
             }
 

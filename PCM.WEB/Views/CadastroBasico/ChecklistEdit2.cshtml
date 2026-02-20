@@ -102,6 +102,33 @@
     <!-- END Page Content -->
 </main>
 <!-- END Main Container -->
+<div class="modal fade" id="modWarningInfo" tabindex="-1" role="dialog" aria-labelledby="modWarningInfo" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-fromright modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-15">
+                <div class="block-header bg-gd-primary">
+                    <h3 class="block-title text-white font-w600">Lista de Erros</h3>
+                </div>
+                <div class="block-content">
+                    <div class="form-group">
+                        <table class="table table-bordered table-sm w-100" id="tableWarning">
+                            <thead>
+                                <tr>
+                                    <th>Mensagem</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="resource-messages"
      data-messages='@Html.Raw(JsonConvert.SerializeObject(new
@@ -152,6 +179,7 @@
     <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.rowGroup.js"></script>
+    <script src="~/Content/js/pcm.js"></script>
 
     <script src="~/Content/js/pages/CadastroBasico/jquery.checklistEdit.init.js"></script>
 

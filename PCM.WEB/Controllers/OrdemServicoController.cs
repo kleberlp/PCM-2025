@@ -597,6 +597,8 @@ namespace PCM.WEB.Controllers
         public void OrdemServicoExcel(int empresa, int usuario, int unidade, int departamento, string ordem_servico, string ordem_servico_cliente, string data_inicio, string data_termino, int setor = -1, int prioridade = -1, int equipamento = -1, int solicitante = -1, int responsavel_apartamento = -1, int apartamento = -1, string executor = "", int status = -1, int justificativa_apontamento = -1)
         {
 
+            ExcelPackage.License.SetNonCommercialOrganization("<ACTI>");
+
             ExcelPackage excel = oOrdemServico.ExcelOrdemServico(iCodigoEmpresa: empresa,
                                                                  iCodigoUsuario: usuario,
                                                                  iCodigoUnidade: unidade,

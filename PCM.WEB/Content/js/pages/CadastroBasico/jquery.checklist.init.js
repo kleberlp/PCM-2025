@@ -12,6 +12,19 @@ const basePath = document.baseURI.replace(/\/$/, '');
 
 $(document).ready(function () {
 
+
+    //function loadGrid() {
+
+    //    var data = {
+    //        unidade: $("#unidade").val(),
+    //        tipoChecklist: $("#tipoChecklist").val(),
+    //        descricao: $("#descricao").val()
+    //    }
+
+    //    loadGridMain(table, data, messages.loadChecklist, true, true);
+    //}
+
+
     var table = $('#tableMain').DataTable({
         select: {
             selector: 'td:not(:first-child)',

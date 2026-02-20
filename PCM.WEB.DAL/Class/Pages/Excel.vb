@@ -58,6 +58,8 @@ Public Class Excel
             'Executa Query
             Dim oDataset As DataSet = ExecuteDataset(sConnection, CommandType.StoredProcedure, "sp_select_excel_ordem_servico", oSqlParameter)
 
+            ExcelPackage.License.SetNonCommercialOrganization("<ACTI>")
+
             Using oExcelPackage As New ExcelPackage()
 
                 Dim oExcelExport = oExcelPackage.Workbook.Worksheets.Add("DETALHADO")

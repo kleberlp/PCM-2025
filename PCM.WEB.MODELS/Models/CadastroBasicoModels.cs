@@ -200,6 +200,11 @@ namespace PCM.WEB.MODELS
         public bool Wrap { get; set; }
     }
 
+    public class InterfaceError
+    {
+        public string message { get; set; }
+    }
+
     public class GroupDefinition
     {
         public string Column { get; set; }

@@ -873,6 +873,9 @@ Public Class OrdemServico
                                       Optional ByVal iCodigoJustificativaApontamento As Integer = -1) As ExcelPackage
         Try
 
+
+            ExcelPackage.License.SetNonCommercialOrganization("<ACTI>")
+
             'Váriaveis Locais
             Dim oDataSet As DataSet
             Dim oSqlParameter(16) As SqlParameter
