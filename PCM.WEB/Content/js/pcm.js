@@ -354,6 +354,7 @@ function loadGridMain(table, data, endpoint, editAction = false, deleteAction = 
         }
     });
 }
+
 function showWarning(data) {
 
     if ($.fn.DataTable.isDataTable('#tableWarning')) {
@@ -383,4 +384,24 @@ function showWarning(data) {
     $("#modWarningInfo").modal("show");
 }
 
+function gridHasErrors() {
+
+    if (!$.fn.DataTable.isDataTable('#tableDynamic'))
+        return false;
+
+    var table = $('#tableDynamic').DataTable();
+    var data = table.rows().data().toArray();
+
+    for (var i = 0; i < data.length; i++) {
+
+        if (data[i].errorData &&
+            Array.isArray(data[i].errorData) &&
+            data[i].errorData.length > 0) {
+
+            return true;
+        }
+    }
+
+    return false;
+}
 

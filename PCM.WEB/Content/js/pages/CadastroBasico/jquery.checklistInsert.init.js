@@ -187,6 +187,18 @@ $(document).ready(function () {
             }
         },
         submitHandler: function (form) {
+            if (gridHasErrors()) {
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: "Atenção",
+                    text: "Este Checklist possui inconsistência.", // crie essa mensagem no resx
+                    confirmButtonText: 'OK'
+                });
+
+                return false;
+            }
+
             return true;
         },
         invalidHandler: function (e, validation) {
