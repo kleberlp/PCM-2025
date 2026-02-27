@@ -738,21 +738,16 @@ namespace PCM.WEB.API.Controllers
                         // Aguarda a conclusão do método assíncrono
                         responseStatus = await oAPI.updateUHStatusPost(uhStatus: statusUpdate);
 
-                        //if (responseStatus.success)
-                        //{
-                        //    oAPI.updateUHStatusGovernanca(uhStatus: statusUpdate);
-                        //}
-
+                    }
+                    else if (governanca.codigoEmpresa == 926)
+                    {
+                        // Aguardando a conclusão do método assíncrono
+                        response = oAPI.updateUHStatusIntercity(uhStatus: statusUpdate);
                     }
                     else
                     {
                         // Aguarda a conclusão do método assíncrono
                         responseStatus = await oAPI.updateUHStatus(uhStatus: statusUpdate);
-
-                        //if (responseStatus.success)
-                        //{
-                        //    oAPI.updateUHStatusGovernanca(uhStatus: statusUpdate);
-                        //}
 
                     }
 
