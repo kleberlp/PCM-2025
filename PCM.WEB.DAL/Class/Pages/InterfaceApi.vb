@@ -363,6 +363,80 @@ Public Class InterfaceApi
 
 #End Region
 
+#Region "::: GOVERNANÇA :::"
+
+    Public Function Governanca(ByVal codigoEmpresa As Integer,
+                               ByVal codigoUnidade As Integer,
+                               ByVal dataInicio As String,
+                               ByVal dataTermino As String,
+                               ByVal page As Integer) As interfaceGovernanca
+
+
+        'Variaveis Locais
+        Dim oDetails As New List(Of interfaceGovernancaDetails)
+        Dim oReturn As New interfaceGovernanca
+
+        Try
+
+            Dim culture = Globalization.CultureInfo.GetCultureInfo("pt-BR")
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, If(dataInicio Is Nothing, DBNull.Value, CType(DateTime.ParseExact(dataInicio.Trim(), "dd/MM/yyyy", culture), Object))),
+                CriarParametro("data_termino", SqlDbType.Date, If(dataTermino Is Nothing, DBNull.Value, CType(DateTime.ParseExact(dataTermino.Trim(), "dd/MM/yyyy", culture), Object))),
+                CriarParametro("page", SqlDbType.SmallInt, page)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_interface_governanca", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New interfaceGovernancaDetails With {
+                        .unidade = SafeGetString(oSqlDataReader, "unidade"),
+                        .dataInput = SafeGetString(oSqlDataReader, "data_input"),
+                        .apartamento = SafeGetString(oSqlDataReader, "apartamento"),
+                        .camareira = SafeGetString(oSqlDataReader, "camareira"),
+                        .vistoriador = SafeGetString(oSqlDataReader, "vistoriador"),
+                        .itemCheklist = SafeGetString(oSqlDataReader, "descricao"),
+                        .grupoChecklist = SafeGetString(oSqlDataReader, "grupo_checklist"),
+                        .subGrupoChecklist = SafeGetString(oSqlDataReader, "subgrupo_checklist"),
+                        .resposta = SafeGetString(oSqlDataReader, "resposta"),
+                        .observacao = SafeGetString(oSqlDataReader, "observacao")
+                    }
+
+                    oDetails.Add(oInfo)
+
+                End While
+
+                oSqlDataReader.NextResult()
+
+                While oSqlDataReader.Read
+
+                    With oReturn
+                        .page = page
+                        .totalPage = SafeGetLong(oSqlDataReader, "totalPage")
+                        .totalRegistros = SafeGetLong(oSqlDataReader, "totalRegistro")
+                        .apontamentos = oDetails
+                    End With
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
 #Region "::: ROTINA :::"
 
     Public Function Rotina(ByVal codigoEmpresa As Integer,

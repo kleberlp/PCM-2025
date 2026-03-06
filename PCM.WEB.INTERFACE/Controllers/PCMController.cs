@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PCM.WEB.DAL;
-using PCM.WEB.MODELS.Models;
+using PCM.WEB.MODELS;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -147,6 +147,25 @@ namespace PCM.WEB.INTERFACE.Controllers
                                                 dataConclusaoOSTermino: dataConclusaoOSTermino,
                                                 status: status ?? string.Empty,
                                                 page: page));
+
+        }
+
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("Governanca")]
+        public IActionResult Governanca(int page,
+                                        int? codigoUnidade = null,
+                                        string? dataInicio = null,
+                                        string? dataTermino = null)
+        {
+
+            InterfaceApi interfaceApi = new InterfaceApi(sCon: _config["ConnectionString"].ToString());
+
+            return Ok(interfaceApi.Governanca(codigoEmpresa: Convert.ToInt32(User.FindFirst("codigoEmpresa")?.Value),
+                                              codigoUnidade: codigoUnidade ?? -1,
+                                              dataInicio: dataInicio,
+                                              dataTermino: dataTermino,
+                                              page: page));
 
         }
 

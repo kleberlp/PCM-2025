@@ -123,6 +123,28 @@ namespace PCM.WEB.MODELS
         public string dataTermino { get; set; }
     }
 
+    public class interfaceGovernanca
+    {
+        public int page { get; set; }
+        public int totalPage { get; set; }
+        public int totalRegistros { get; set; }
+        public List<interfaceGovernancaDetails> apontamentos { get; set; }
+    }
+
+    public class interfaceGovernancaDetails
+    {
+        public string unidade { get; set; }
+        public string dataInput { get; set; }
+        public string apartamento { get; set; }
+        public string camareira { get; set; }
+        public string vistoriador { get; set; }
+        public string itemCheklist { get; set; }
+        public string grupoChecklist { get; set; }
+        public string subGrupoChecklist { get; set; }
+        public string resposta { get; set; }
+        public string observacao { get; set; }
+    }
+
     public class interfaceRotina
     {
         public int page { get; set; }
