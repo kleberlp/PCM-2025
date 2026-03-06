@@ -298,9 +298,19 @@
                                             <td style="width:40px">
                                                 @if (Model[i].allow_picture)
                                                 {
-                                                    <div class="btn-group">
-                                                        <button type="button" onclick="$('#codigo_item_checklist').val(@Model[i].codigo); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
-                                                    </div>
+
+                                                    if (Model[i].possui_foto)
+                                                    {
+                                                        <div class="btn-group">
+                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model[i].codigo); LoadArquivo();" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="btn-group">
+                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model[i].codigo); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                        </div>
+                                                    }
                                                 }
                                             </td>
                                         </tr>
@@ -348,7 +358,7 @@
                         <input type="hidden" id="codigo_auditoria" value="@Model.codigo " />
                         <input type="hidden" id="data" value="@ViewBag.data" />*@
                         <input type="hidden" id="codigo_item_checklist" />
-                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo(); $(this).next('.custom-file-label').addClass('selected').html('');"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo();"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
                         <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$(this).next('.custom-file-label').addClass('selected').html('');" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
                     </div>
                 </div>
@@ -370,7 +380,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/clockpicker")
 
-    <script>
+<script>
 
         $(document).ready(function () { $("#data_inicio").mask("99/99/9999"); });
         $(document).ready(function () { $("#data_termino").mask("99/99/9999"); });
@@ -378,7 +388,12 @@
         $(document).ready(function () { $("#hora_termino").mask("99:99"); });
         $(document).ready(function () { $("#quantidade_equipamento").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' }); });
         $(document).ready(function () { $("#valor_manutencao").maskMoney({ prefix: 'R$ ', thousands: '.', decimal: ",", precision: 2, allowNegative: false, 'placeholder': '' }); });
-        
+
+        $(".custom-file-input").on('change', function () {
+            var filename = document.getElementById("arquivo").files[0].name;
+            $(this).next(".custom-file-label").addClass("selected").html(filename);
+        });
+
         function setResultado(id, value) {
             $("input[name$='[" + id + "].resultado']").val(value);
         };
@@ -396,7 +411,7 @@
 
             //Creating an XMLHttpRequest and sending
             var oXMLHttpRequest = new XMLHttpRequest();
-            oXMLHttpRequest.open('POST', 'UploadFoto?codigo_unidade=' + $("#codigo_unidade").val() + '&codigo_auditoria=' + $("#codigo_auditoria").val() + '&codigo_item_checklist=' + $("#codigo_item_checklist").val());
+            oXMLHttpRequest.open('POST', 'UploadFoto?codigo_unidade=' + $("#codigo_unidade").val() + '&codigo=@ViewBag.ordem_servico.codigo&codigo_item_checklist=' + $("#codigo_item_checklist").val() + '&tipo=@ViewBag.pcm_tipo');
             oXMLHttpRequest.send(formdata);
             oXMLHttpRequest.onreadystatechange = function () {
 
@@ -422,6 +437,7 @@
                             }
                         });
 
+                        $(this).next(".custom-file-label").addClass("selected").html("");
                         Codebase.layout('header_loader_off');
 
                     } else {
@@ -678,7 +694,7 @@
                     }
                 });
             };
-        
+
             return {
                 init: function () {
                     // Init Bootstrap Forms Validation
@@ -714,8 +730,8 @@
                             tr.fadeOut(400, function () { tr.remove(); });
                             return false;
                         }
-                    });                 
-                } 
+                    });
+                }
             });
         };
 
@@ -725,5 +741,5 @@
             Codebase.helpers(['datepicker', 'maxlength', 'select2', 'masked-inputs']);
         });
 
-    </script>
+</script>
 }

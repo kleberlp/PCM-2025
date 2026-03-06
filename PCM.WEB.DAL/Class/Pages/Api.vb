@@ -3314,68 +3314,6 @@ Public Class Api
 
     End Function
 
-    Public Function getListGovernanca(ByVal iCodigoEmpresa As Integer,
-                                      ByVal iCodigoUnidade As Integer,
-                                      ByVal iCodigoFuncionario As Integer,
-                                      ByVal iPage As Integer,
-                                      ByVal bOffline As Boolean) As List(Of pwaGovernanca)
-
-        'Variaveis Locais
-        Dim oSqlParameter(3) As SqlParameter
-        Dim oSqlDataReader As SqlDataReader
-        Dim oReturn As New List(Of pwaGovernanca)
-        Dim i As Integer = 0
-
-        Try
-
-            'Seta Parametros - Código Empresa
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).ParameterName = "codigo_empresa"
-            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
-
-            'Seta Parametros - Código Unidade
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).ParameterName = "codigo_unidade"
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoUnidade : i += 1
-
-            'Seta Parametros - Código Funcionário
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).ParameterName = "codigo_funcionario"
-            oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigoFuncionario : i += 1
-
-            'Seta Parametros - Página
-            oSqlParameter(i) = New SqlParameter
-            oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).ParameterName = "page"
-            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-            oSqlParameter(i).Value = iPage
-
-            'Executa Query
-            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_pwa_select_governanca", oSqlParameter)
-
-
-
-
-            'Fecha o SqlDataReader
-            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
-
-            'Retorno
-            Return oReturn
-
-        Catch SqlEx As SqlException
-            Throw SqlEx
-        Catch ex As Exception
-            Throw ex
-        End Try
-
-    End Function
-
     Public Function insertGovernancaApontamento(ByVal oGovernanca As pwaGovernancaApontamento) As pwaApontamentoResponse
 
         'Variaveis Locais

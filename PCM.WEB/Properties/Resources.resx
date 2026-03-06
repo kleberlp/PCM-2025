@@ -2196,4 +2196,13 @@
   <data name="relatorio_uh_nc" xml:space="preserve">
     <value>Relatório - U.H. x NC</value>
   </data>
+  <data name="apontamentoCamareira" xml:space="preserve">
+    <value>Apontamento - Camareira</value>
+  </data>
+  <data name="checklistPreenchido" xml:space="preserve">
+    <value>Checklist preenchido</value>
+  </data>
+  <data name="maisUmaLocacaoDia" xml:space="preserve">
+    <value>Mais de uma locação dia?</value>
+  </data>
 </root>

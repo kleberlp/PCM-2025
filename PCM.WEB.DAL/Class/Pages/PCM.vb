@@ -3579,6 +3579,7 @@ Public Class PCM
                 oInfo.unidade_medida = oSqlDataReader.Item("unidade_medida")
                 oInfo.observacao = oSqlDataReader.Item("observacao")
                 oInfo.allow_picture = oSqlDataReader.Item("allow_picture")
+                oInfo.possui_foto = oSqlDataReader.Item("possui_foto")
 
                 oReturn.Add(oInfo)
 

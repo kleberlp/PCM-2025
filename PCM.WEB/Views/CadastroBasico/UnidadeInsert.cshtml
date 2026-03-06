@@ -1,7 +1,6 @@
-﻿
-<!-- Main Container -->
+﻿<!-- Main Container -->
 <main id="main-container">
-   
+
     <!-- Breadcrumb -->
     <div class="bg-body-light border-b">
         <div class="content py-0 text-center">
@@ -13,7 +12,6 @@
         </div>
     </div>
     <!-- END Breadcrumb -->
-
     <!-- Page Content -->
     <div class="content">
 
@@ -193,7 +191,57 @@
                                             </div>
                                         </div>
                                     }
+                                    <div class="col-lg-2">
+                                        <label>@PCM.WEB.Properties.Resources.checklistPreenchido</label>
+                                        <div>
+                                            <label class="css-control css-control-success css-switch">
+                                                <input type="checkbox" class="css-control-input" id="checklistPreenchido" name="checklistPreenchido" checked value="true">
+                                                <span class="css-control-indicator"></span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
+                                @if (Session["governanca"].ToString() == "True")
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-lg-2">
+                                            <label>@PCM.WEB.Properties.Resources.apontamentoCamareira</label>
+                                            <div>
+                                                <label class="css-control css-control-success css-switch">
+                                                    <input type="checkbox" class="css-control-input" id="apontamentoCamareira" name="apontamentoCamareira" checked value="true">
+                                                    <span class="css-control-indicator"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <label>@PCM.WEB.Properties.Resources.maisUmaLocacaoDia</label>
+                                            <div>
+                                                <label class="css-control css-control-success css-switch">
+                                                    <input type="checkbox" class="css-control-input" id="maisUmaLocacaoDia" name="maisUmaLocacaoDia" checked value="true">
+                                                    <span class="css-control-indicator"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <label>@PCM.WEB.Properties.Resources.mantemVistoriaPendente</label>
+                                            <div>
+                                                <label class="css-control css-control-success css-switch">
+                                                    <input type="checkbox" class="css-control-input" id="mantemVistoriaPendente" name="mantemVistoriaPendente" checked value="true">
+                                                    <span class="css-control-indicator"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <label>@PCM.WEB.Properties.Resources.checklistPreenchido - Gov</label>
+                                            <div>
+                                                <label class="css-control css-control-success css-switch">
+                                                    <input type="checkbox" class="css-control-input" id="checklistPreenchidoGov" name="checklistPreenchidoGov" checked value="true">
+                                                    <span class="css-control-indicator"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         }
                         <div class="block-header block-mode-loading-repeat block-header-default bg-gd-default">
@@ -234,8 +282,9 @@
     @Scripts.Render("~/plugins/validation")
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
-    
-    <script>       
+
+    <script>
+
 
         function LogoMin() {
             document.getElementById("lblLogoMin").textContent = document.getElementById("logoMin").files[0].name;
@@ -405,7 +454,7 @@
                         jQuery(e).closest('.form-group > div').removeClass('is-invalid');
                         jQuery(e).remove();
                     },
-                    rules: {                        
+                    rules: {
                         'tipo_unidade': {
                             required: true
                         },
@@ -496,7 +545,7 @@
                                 }
                             });
                         }
-                            
+
 
 
                     }
@@ -514,7 +563,7 @@
         // Initialize when page loads
         jQuery(function () {
             FormValidation.init();
-            Codebase.helpers(['maxlength']);            
+            Codebase.helpers(['maxlength']);
         });
 
     </script>

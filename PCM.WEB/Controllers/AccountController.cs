@@ -20,7 +20,7 @@ namespace PCM.WEB.Controllers
         private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
-        #region "::: MESSAGE :::"
+        #region ::: MESSAGE :::
 
         public void SendMessage2(String ordem_servico, String descricao, string to)
         {
@@ -450,6 +450,13 @@ namespace PCM.WEB.Controllers
                         decodedUrl.Contains("/UH") ||
                         decodedUrl.Contains("/Upload")))
                     {
+                        if (decodedUrl.Contains("/Governanca") || decodedUrl.Contains("IndexGovernanca"))
+                        {
+                            Session["codigo_modulo"] = 2;
+                            Session["modulo"] = "GOVERNANÇA";
+                        }
+
+
                         return Redirect(decodedUrl);
                     }
                     else

@@ -385,6 +385,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Apontamento - Camareira.
+        /// </summary>
+        public static string apontamentoCamareira {
+            get {
+                return ResourceManager.GetString("apontamentoCamareira", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Aprovar.
         /// </summary>
         public static string aprovar {
@@ -912,6 +921,15 @@ namespace PCM.WEB.Properties {
         public static string checklist_uh_dia {
             get {
                 return ResourceManager.GetString("checklist_uh_dia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Checklist preenchido.
+        /// </summary>
+        public static string checklistPreenchido {
+            get {
+                return ResourceManager.GetString("checklistPreenchido", resourceCulture);
             }
         }
         
@@ -3135,6 +3153,15 @@ namespace PCM.WEB.Properties {
         public static string maio {
             get {
                 return ResourceManager.GetString("maio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Mais de uma locação dia?.
+        /// </summary>
+        public static string maisUmaLocacaoDia {
+            get {
+                return ResourceManager.GetString("maisUmaLocacaoDia", resourceCulture);
             }
         }
         

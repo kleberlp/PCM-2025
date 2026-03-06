@@ -39,16 +39,17 @@ namespace MESSAGE.SERVICE.Workers
                     {
                         switch (msg.Type)
                         {
-                            case MessageType.WhatsApp:
+                            case "whatsapp":
                                 await _whatsApp.SendAsync(msg.Phone!, msg.Body);
+                                await _repo.MarkAsSentAsync(msg.Id);
                                 break;
 
-                            case MessageType.Email:
+                            case "email":
                                 _email.Send(msg.Email!, msg.Subject!, msg.Body);
+                                await _repo.MarkAsSentAsync(msg.Id);
                                 break;
                         }
 
-                        await _repo.MarkAsSentAsync(msg.Id);
                     }
                     catch (Exception ex)
                     {

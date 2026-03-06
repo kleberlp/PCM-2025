@@ -79,6 +79,7 @@ namespace PCM.WEB.MODELS
         public string checklist { get; set; }
         public string descricao { get; set; }
         public bool allow_picture { get; set; }
+        public bool possui_foto { get; set; }
         public float valor_minimo { get; set; }
         public float valor_maximo { get; set; }
         public string unidade_medida { get; set; }
