@@ -1207,7 +1207,6 @@ Public Class Combo
             oSqlParameter(i).ParameterName = "codigo_empresa"
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
-
             oSqlParameter(i).Value = iCodigoEmpresa : i += 1
 
             'Seta Parametros - Código Unidade
