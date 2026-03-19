@@ -36,6 +36,7 @@ namespace PCM.WEB.MODELS
         public List<pwaEndpoint> endpoint { get; set; }
         public bool success { get; set; }
         public string message { get; set; }
+        public string version { get; set; }
     }
 
     public class pwaEndpoint
@@ -781,6 +782,7 @@ namespace PCM.WEB.MODELS
     {
         public string message { get; set; }
         public bool success { get; set; }
+        public string version { get; set; }
         public List<pwaListaNotificacao> results { get; set; }
     }
 

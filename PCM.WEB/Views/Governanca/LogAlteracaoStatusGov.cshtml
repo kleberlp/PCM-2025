@@ -105,6 +105,7 @@
                                             <th>@PCM.WEB.Properties.Resources.andar</th>
                                             <th>@PCM.WEB.Properties.Resources.apartamento</th>
                                             <th>@PCM.WEB.Properties.Resources.status</th>
+                                            <th>Origem</th>
                                             <th>@PCM.WEB.Properties.Resources.usuario</th>
                                         </tr>
                                     </thead>
@@ -162,7 +163,7 @@
             paging: false,
             fixedHeader: true,
             destroy: true,
-            searching: false,
+            searching: true,
             paging: false,
             lengthChange: false,
             autoWidth: false,
@@ -179,6 +180,16 @@
                 },
                 dataSrc: ""
             },
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                {
+                    extend: 'print',
+                    text: 'Imprimir'
+                },
+                { extend: 'excel' },
+                { extend: 'pdf', orientation: 'portrait' },
+            ],
             columns: [
                 { data: "unidade" },
                 { data: "dataAlteracao" },
@@ -186,18 +197,19 @@
                 { data: "andar" },
                 { data: "apartamento" },
                 { data: "status" },
+                { data: "origem" },
                 { data: "usuario" }
             ],
             columnDefs: [
-                { className: 'text-center', targets: [1, 2, 3, 4] },
-                { width: '140px', targets: [1, 2, 3, 4] },
-                { width: '200px', targets: [6] },
+                { className: 'text-center', targets: [1, 2, 3, 4, 6] },
+                { width: '140px', targets: [1, 2, 3, 4, 6] },
+                { width: '200px', targets: [7] },
                 {
                     createdCell: function (td, cellData, rowData, row, col) {
-                        if (col == 5) {
+                        if (col == 6) {
                             $(td).addClass(rowData.cssClass);
                         }
-                    }, targets: [5]
+                    }, targets: [6]
                 },
             ],
             language: {

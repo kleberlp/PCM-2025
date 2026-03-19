@@ -581,6 +581,7 @@ Public Class Api
                                                                 iCodigoUnidade:=oSqlDataReader.Item("codigo_unidade"))
                     oReturn.success = oSqlDataReader.Item("success")
                     oReturn.message = oSqlDataReader.Item("message")
+                    oReturn.version = oSqlDataReader.Item("versao")
 
                 Else
 

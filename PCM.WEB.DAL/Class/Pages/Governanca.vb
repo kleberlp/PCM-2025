@@ -3798,6 +3798,7 @@ Public Class Governanca
                         .andar = SafeGetString(oSqlDataReader, "andar"),
                         .apartamento = SafeGetString(oSqlDataReader, "apartamento"),
                         .status = SafeGetString(oSqlDataReader, "status"),
+                        .origem = SafeGetString(oSqlDataReader, "origem"),
                         .usuario = SafeGetString(oSqlDataReader, "usuario"),
                         .dataAlteracao = SafeGetString(oSqlDataReader, "data_alteracao")
                     }

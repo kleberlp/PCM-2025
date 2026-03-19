@@ -385,6 +385,7 @@ namespace PCM.WEB.MODELS
         public string andar { get; set; }
         public string apartamento { get; set; }
         public string status { get; set; }
+        public string origem { get; set; }
         public string usuario { get; set; }
         public string dataAlteracao { get; set; }
     }
