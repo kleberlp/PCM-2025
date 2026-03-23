@@ -2205,4 +2205,19 @@
   <data name="maisUmaLocacaoDia" xml:space="preserve">
     <value>Mais de uma locação dia?</value>
   </data>
+  <data name="asset" xml:space="preserve">
+    <value>Ativo Fixo</value>
+  </data>
+  <data name="numeroSerie" xml:space="preserve">
+    <value>Nº Série</value>
+  </data>
+  <data name="dataCompra" xml:space="preserve">
+    <value>Data compra</value>
+  </data>
+  <data name="valorCompra" xml:space="preserve">
+    <value>Valor compra</value>
+  </data>
+  <data name="responsavel" xml:space="preserve">
+    <value>Responsável</value>
+  </data>
 </root>

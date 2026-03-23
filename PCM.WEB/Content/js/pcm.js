@@ -1,12 +1,16 @@
-/*
- *  Document   : codebase.js
- *  Author     : pixelcave
- *  Description: Codebase - UI Framework Custom Functionality
- *
- */
-
 'use strict';
-function loadGridMain(table, data, endpoint, editAction = false, deleteAction = false, warningAction = false) {
+
+$(document).ajaxSend(function (e, xhr) {
+
+    var token = $('form input[name="__RequestVerificationToken"]').first().val();
+
+    if (token) {
+        xhr.setRequestHeader('RequestVerificationToken', token);
+    }
+
+});
+
+function loadGridMain(table, data, endpoint, editAction = false, deleteAction = false, warningAction = false, grupo = "") {
 
     localStorage.clear();
 
@@ -15,10 +19,17 @@ function loadGridMain(table, data, endpoint, editAction = false, deleteAction = 
         table = null;
     }
 
+    var token = $('form input[name="__RequestVerificationToken"]').first().val();
+
+    data.__RequestVerificationToken = token;
+
     $.ajax({
         url: endpoint,
         type: "POST",
         data: data,
+        headers: {
+            'RequestVerificationToken': token
+        },
         success: function (response) {
 
             var data = response.data || [];
@@ -104,7 +115,7 @@ function loadGridMain(table, data, endpoint, editAction = false, deleteAction = 
             }
 
             // estado por checklist
-            currentStateKey = "dt_group_state:" + window.location.pathname + ":tipo=" + ($("#tipoChecklist").val() || "");
+            var currentStateKey = "dt_group_state:" + window.location.pathname + ":grupo=" + (grupo || "");
 
             function readState() {
                 try { return JSON.parse(localStorage.getItem(currentStateKey) || "{}"); }
@@ -289,7 +300,7 @@ function loadGridMain(table, data, endpoint, editAction = false, deleteAction = 
             }
 
             // DataTable config
-            currentConfig = {
+            var currentConfig = {
                 data: data,
                 columns: dynamicColumns,
                 searching: false,
@@ -403,5 +414,51 @@ function gridHasErrors() {
     }
 
     return false;
+}
+
+function validateDB(url, dataFn) {
+
+    var token = $('form input[name="__RequestVerificationToken"]').first().val();
+
+    return {
+        url: url,
+        type: "POST",
+        data: Object.assign(dataFn(), {
+            __RequestVerificationToken: token
+        }),
+        success: function (response) {
+            return response;
+        }
+    };
+
+}
+
+function loadCombo(url, dataFn, targetSelector, valueField = "codigo", textField = "descricao") {
+
+    var token = $('form input[name="__RequestVerificationToken"]').first().val();
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: Object.assign(dataFn(), {
+            __RequestVerificationToken: token
+        }),
+        success: function (response) {
+
+            var $target = $(targetSelector);
+
+            $target.empty();
+            $target.append('<option value=""></option>');
+
+            if (!response) return;
+
+            $.each(response, function (i, item) {
+                $target.append(`<option value="${item[valueField]}">${item[textField]}</option>`);
+            });
+
+            $target.trigger('change'); // importante para select2
+
+        }
+    });
 }
 

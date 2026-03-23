@@ -462,6 +462,8 @@ namespace PCM.WEB.Controllers
                 Session["lav_historico"] = formulario_visualizar.lav_historico;
                 Session["rel_lav_controle"] = formulario_visualizar.rel_lav_controle;
 
+                Session["cad_asset"] = formulario_visualizar.cad_asset;
+
                 //Redireciona para Index
                 return RedirectToAction("UsuarioIndex");
             }
@@ -950,6 +952,8 @@ namespace PCM.WEB.Controllers
                 Session["lav_apontamento"] = formulario_visualizar.lav_apontamento;
                 Session["lav_historico"] = formulario_visualizar.lav_historico;
                 Session["rel_lav_controle"] = formulario_visualizar.rel_lav_controle;
+
+                Session["cad_asset"] = formulario_visualizar.cad_asset;
 
                 //Redireciona para Index
                 return RedirectToAction("PerfilIndex");

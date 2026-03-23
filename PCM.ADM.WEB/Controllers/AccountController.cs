@@ -278,6 +278,8 @@ namespace PCM.ADM.WEB.Controllers
             Session["aeb_normas_procedimentos"] = null;
             Session["aeb_auditoria_externa"] = null;
 
+            Session["cad_asset"] = null;
+
             System.Web.Security.FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
         }

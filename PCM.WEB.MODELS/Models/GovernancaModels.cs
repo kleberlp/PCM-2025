@@ -2,6 +2,10 @@
 
 namespace PCM.WEB.MODELS
 {
+    public class apartamentoList
+    {
+        public string codigoApartamento { get; set; }
+    }
 
     public class dashboardGovernancaArrumadoxVistoriado
     {

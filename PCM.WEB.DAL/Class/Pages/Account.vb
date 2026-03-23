@@ -597,6 +597,8 @@ Public Class Account
                 oFormularioVisualizar.lav_apontamento = IIf(IsDBNull(oSqlDataReader.Item("lav_apontamento")) = False AndAlso oSqlDataReader.Item("lav_apontamento") = "S", True, False)
                 oFormularioVisualizar.rel_lav_controle = IIf(IsDBNull(oSqlDataReader.Item("rel_lav_controle")) = False AndAlso oSqlDataReader.Item("rel_lav_controle") = "S", True, False)
 
+                oFormularioVisualizar.cad_asset = IIf(IsDBNull(oSqlDataReader.Item("cad_asset")) = False AndAlso oSqlDataReader.Item("cad_asset") = "S", True, False)
+
             End If
 
             'Fecha o SqlDataReader

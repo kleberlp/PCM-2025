@@ -736,18 +736,18 @@ namespace PCM.WEB.API.Controllers
                     if (governanca.codigoEmpresa == 1)
                     {
                         // Aguarda a conclusão do método assíncrono
-                        responseStatus = await oAPI.updateUHStatusPost(uhStatus: statusUpdate);
+                        responseStatus = await oAPI.updateUHStatusPost(uhStatus: statusUpdate, origem: "CHECKLIST");
 
                     }
                     else if (governanca.codigoEmpresa == 926)
                     {
                         // Aguardando a conclusão do método assíncrono
-                        response = oAPI.updateUHStatusIntercity(uhStatus: statusUpdate);
+                        response = oAPI.updateUHStatusIntercity(uhStatus: statusUpdate, origem: "CHECKLIST");
                     }
                     else
                     {
                         // Aguarda a conclusão do método assíncrono
-                        responseStatus = await oAPI.updateUHStatus(uhStatus: statusUpdate);
+                        responseStatus = await oAPI.updateUHStatus(uhStatus: statusUpdate, origem: "CHECKLIST");
 
                     }
 
@@ -824,17 +824,17 @@ namespace PCM.WEB.API.Controllers
                 if (uh.codigoEmpresa == 1)
                 {
                     // Aguardando a conclusão do método assíncrono
-                    response = await oAPI.updateUHStatusPost(uhStatus: uh);
+                    response = await oAPI.updateUHStatusPost(uhStatus: uh, origem: "STATUS");
                 }
                 else if(uh.codigoEmpresa == 926)
                 {
                     // Aguardando a conclusão do método assíncrono
-                    response = oAPI.updateUHStatusIntercity(uhStatus: uh);
+                    response = oAPI.updateUHStatusIntercity(uhStatus: uh, origem: "STATUS");
                 } 
                 else
                 {
                     // Aguardando a conclusão do método assíncrono
-                    response = await oAPI.updateUHStatus(uhStatus: uh);
+                    response = await oAPI.updateUHStatus(uhStatus: uh, origem: "STATUS");
                 }
 
                     return Ok(response);

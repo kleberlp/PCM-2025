@@ -68,20 +68,20 @@ namespace PCM.WEB.Controllers
 
         //JSON: /CHECKLIST/
         public JsonResult LoadChecklist(int unidade, int codigo_tipo_checklist = -1)
-                {
-                    return Json(oCombo.Checklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                    iCodigoUnidade: unidade,
-                                                    iCodigoTipoChecklist: codigo_tipo_checklist));
-                }
+        {
+            return Json(oCombo.Checklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                            iCodigoUnidade: unidade,
+                                            iCodigoTipoChecklist: codigo_tipo_checklist));
+        }
 
         //JSON: /ATUALIZA DATA DA ORDEM DE SERVIÇO/
         public bool UpdateDataOrdemServico(long codigo, int unidade, string data = "")
         {
             return oOrdemServico.UpdateOrdemServicoDataNecessidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                    lCodigo: codigo,
-                                                                    iCodigoUnidade: unidade,
-                                                                    sDataNecessidade: data);
+                                                                   iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                   lCodigo: codigo,
+                                                                   iCodigoUnidade: unidade,
+                                                                   sDataNecessidade: data);
         }
 
         //JSON: /PRIORIDADE/

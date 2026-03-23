@@ -251,6 +251,15 @@
             }
         }, '');
 
+        jQuery.validator.addMethod("justificativa", function (value, element) {
+
+            if ($('#divJustificativa').is(':visible') && value === "") {
+                return false;
+            } else {
+                return true;
+            }
+        }, '');
+
         var FormValidation = function () {
             // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation
             var initValidationBootstrap = function () {
@@ -276,6 +285,9 @@
                         'prioridade': {
                             required: true
                         },
+                        'justificativaApontamento': {
+                            justificativa: true
+                        },
                         'setor': {
                             required: true
                         },
@@ -293,6 +305,9 @@
                         },
                         'prioridade': {
                             required: '@PCM.WEB.Properties.Resources.campo_requerido'
+                        },
+                        'justificativaApontamento': {
+                            justificativa: '@PCM.WEB.Properties.Resources.campo_requerido'
                         },
                         'setor': {
                             required: '@PCM.WEB.Properties.Resources.campo_requerido'

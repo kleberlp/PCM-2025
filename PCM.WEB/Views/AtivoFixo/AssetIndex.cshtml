@@ -1,0 +1,164 @@
+﻿@using PCM.WEB.Properties
+@using Newtonsoft.Json
+
+@section styles {
+    <!-- Table css -->
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+}
+
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@Resources.pcm</a>
+                <span class="breadcrumb-item">@Resources.cadastro_basico</span>
+                <span class="breadcrumb-item active">@Resources.asset</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="content">
+
+        @using (Html.BeginForm("AssetIndex", "Asset", FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Mobile -->
+            <button type="button" class="btn btn-block btn-square btn-secondary d-md-none mb-10"
+                    data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">
+                Buscar
+            </button>
+
+            <!-- FILTROS -->
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+
+                    <div class="block-header block-header-default bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">@Resources.asset</h3>
+
+                        @if (ViewBag.inserir)
+                        {
+                            <div class="block-options">
+                                <a href="@Url.Action("AssetInsert", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-plus mr-5"></i>@Resources.novo</a>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="block-content">
+                        <ul class="list-group push">
+
+                            <li class="list-group-item">
+                                <div class="row">
+
+                                    <div class="col-md-2">
+                                        <label>@Resources.unidade</label>
+                                        @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label>@Resources.codigo</label>
+                                        <input type="text" class="form-control" id="assetCode">
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label>@Resources.descricao</label>
+                                        <input type="text" class="form-control" id="descricao">
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label>@Resources.status</label>
+                                        <select id="status" class="form-control">
+                                            <option value="">Todos</option>
+                                            <option value="1">Ativo</option>
+                                            <option value="2">Manutenção</option>
+                                            <option value="3">Baixado</option>
+                                            <option value="4">Transferido</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label>@Resources.localizacao</label>
+                                        <input type="text" class="form-control" id="localizacao">
+                                    </div>
+
+                                </div>
+                            </li>
+
+                            <li class="list-group-item text-right">
+                                <button type="button" id="filtrar" name="filtrar" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- GRID -->
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full">
+
+                    <table id="tableDynamic" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+</main>
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        msgQuestionDelete = Resources.msgQuestionDelete,
+        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        yes = Resources.yes,
+        no = Resources.no,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig,
+        editar = ViewBag.editar,
+        excluir = ViewBag.excluir,
+        urlLoadAsset = Url.Action("LoadAsset")
+    }))'>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+    <script src="~/Content/js/pcm.js"></script>
+
+    <!-- Page-->
+    <script src="~/Content/js/pages/AtivoFixo/jquery.assetIndex.init.js"></script>
+    <!--Datatables-->
+
+}

@@ -287,6 +287,20 @@
                             </ul>
                         </li>
                     }
+                    @if ((bool)Session["cad_asset"])
+                    {
+                        <li>
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-shopping-basket"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.aeb</span></a>
+                            <ul>
+                                @if ((bool)Session["cad_asset"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AssetIndex", cssClass: "active") font-size-sm" href="@Url.Action("AssetIndex", "AtivoFixo")">@PCM.WEB.Properties.Resources.asset</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
                     @if ((bool)Session["cad_apartamento"] ||
                         (bool)Session["cad_ar_condicionado"] ||
                         (bool)Session["cad_auditoria_corporativo"] ||

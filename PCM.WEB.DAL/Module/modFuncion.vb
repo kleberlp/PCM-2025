@@ -294,6 +294,55 @@ Module modFuncion
 
     End Function
 
+    Public Function SafeGetInt64(ByVal reader As SqlDataReader, ByVal columnName As String) As Int64
+
+        If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
+            Return 0
+        Else
+            Return reader.Item(reader.GetOrdinal(columnName))
+        End If
+
+    End Function
+
+    Public Function SafeGetInt32(ByVal reader As SqlDataReader, ByVal columnName As String) As Int32
+
+        If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
+            Return 0
+        Else
+            Return reader.Item(reader.GetOrdinal(columnName))
+        End If
+
+    End Function
+
+    Public Function SafeGetInt16(ByVal reader As SqlDataReader, ByVal columnName As String) As Int16
+
+        If reader.IsDBNull(reader.GetOrdinal(columnName)) Then
+            Return 0
+        Else
+            Return reader.Item(reader.GetOrdinal(columnName))
+        End If
+
+    End Function
+
+    Public Function SafeGetNullableInt32(ByVal reader As IDataReader,
+                                         ByVal columnName As String) As Integer?
+
+        Try
+
+            Dim ordinal As Integer = reader.GetOrdinal(columnName)
+
+            If reader.IsDBNull(ordinal) Then
+                Return Nothing
+            End If
+
+            Return Convert.ToInt32(reader.GetValue(ordinal))
+
+        Catch ex As Exception
+            Return Nothing
+        End Try
+
+    End Function
+
     Public Function SafeGetDate(ByVal reader As SqlDataReader, ByVal columnName As String) As String
 
         If reader.IsDBNull(reader.GetOrdinal(columnName)) Then

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
-using NPOI.HSSF.Model;
+using Newtonsoft.Json;
 using PCM.WEB.DAL;
 using PCM.WEB.MODELS;
 using PCM.WEB.Properties;
@@ -9,9 +9,10 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using static Google.Apis.Requests.BatchRequest;
 
 namespace PCM.WEB.Controllers
 {
@@ -20,8 +21,9 @@ namespace PCM.WEB.Controllers
         private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private DAL.Governanca oGovernanca = new DAL.Governanca(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private DAL.Relatorio oRelatorio = new DAL.Relatorio(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.Api oAPI = new DAL.Api(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, sConIntercity: ConfigurationManager.ConnectionStrings["DefaultConnectionIntercity"].ConnectionString);
         private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-
+      
         #region ::: JSON :::
 
         //JSON: /UNIDADE/
@@ -1300,6 +1302,8 @@ namespace PCM.WEB.Controllers
                                                                                     iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
                 ViewBag.roomStatus = new SelectList(oCombo.StatusRoom(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                       iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.statusGovernanca = new SelectList(oCombo.StatusFrontOffice(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                   iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
                 ViewBag.lastUpdate = oGovernanca.LoadLastUploadStatus(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                       codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
                 ViewBag.tipoGovernanca = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", null);
@@ -1372,6 +1376,55 @@ namespace PCM.WEB.Controllers
                 return Json(ex.Message.ToString());
             }
 
+        }
+
+        //JSON: /STATUS GOVERNANÇA
+        public async Task<JsonResult> StatusGovernanca(int unidade, string data, string statusGovernanca, string json, int usuario)
+        {
+
+            pwaApontamentoResponse responseStatus = new pwaApontamentoResponse();
+
+            try
+            {
+                    var lista = System.Text.Json.JsonSerializer.Deserialize<List<apartamentoList>>(json);
+
+                    foreach (apartamentoList apto in lista)
+                    {
+                        pwaUHStatusUpdate statusUpdate = new pwaUHStatusUpdate
+                        {
+                            codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString()),
+                            codigoUnidade = unidade,
+                            codigoUsuario = usuario,
+                            codigoApartamento = Convert.ToInt64(apto.codigoApartamento),
+                            status = statusGovernanca
+                        };
+
+                        if (statusUpdate.codigoEmpresa == 1)
+                        {
+                            // Aguarda a conclusão do método assíncrono
+                            responseStatus = await oAPI.updateUHStatusPost(uhStatus: statusUpdate, origem: "SITE");
+
+                        }
+                        else if (statusUpdate.codigoEmpresa == 926)
+                        {
+                            // Aguardando a conclusão do método assíncrono
+                            responseStatus = oAPI.updateUHStatusIntercity(uhStatus: statusUpdate, origem: "SITE");
+                        }
+                        else
+                        {
+                            // Aguarda a conclusão do método assíncrono
+                            responseStatus = await oAPI.updateUHStatus(uhStatus: statusUpdate, origem: "SITE");
+
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                responseStatus.success = false;
+                responseStatus.message = ex.Message.ToString();
+            }
+
+            return Json(responseStatus);
         }
 
         #endregion

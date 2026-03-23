@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AgendaModels.cs" />
+    <Compile Include="Models\AtivoFixoModels.cs" />
     <Compile Include="Models\ConfiguracaoModels.cs" />
     <Compile Include="Models\InterfaceModels.cs" />
     <Compile Include="Models\LavanderiaModels.cs" />

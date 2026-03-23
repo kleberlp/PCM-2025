@@ -2947,7 +2947,8 @@ Public Class Api
 
     End Function
 
-    Public Async Function updateUHStatus(ByVal uhStatus As pwaUHStatusUpdate) As Task(Of pwaApontamentoResponse)
+    Public Async Function updateUHStatus(ByVal uhStatus As pwaUHStatusUpdate,
+                                         ByVal origem As String) As Task(Of pwaApontamentoResponse)
 
         'Variaveis Locais
         Dim oReturn As New pwaApontamentoResponse
@@ -2957,7 +2958,8 @@ Public Class Api
             CriarParametro("codigo_unidade", SqlDbType.Int, uhStatus.codigoUnidade),
             CriarParametro("codigo_usuario", SqlDbType.Int, uhStatus.codigoUsuario),
             CriarParametro("codigo_apartamento", SqlDbType.BigInt, uhStatus.codigoApartamento),
-            CriarParametro("status", SqlDbType.VarChar, uhStatus.status)
+            CriarParametro("status", SqlDbType.VarChar, uhStatus.status),
+            CriarParametro("origem", SqlDbType.VarChar, origem)
         }
 
         Try
@@ -3023,7 +3025,8 @@ Public Class Api
 
     End Function
 
-    Public Async Function updateUHStatusPost(ByVal uhStatus As pwaUHStatusUpdate) As Task(Of pwaApontamentoResponse)
+    Public Async Function updateUHStatusPost(ByVal uhStatus As pwaUHStatusUpdate,
+                                             ByVal origem As String) As Task(Of pwaApontamentoResponse)
 
         'Variaveis Locais
         Dim oReturn As New pwaApontamentoResponse
@@ -3033,7 +3036,8 @@ Public Class Api
             CriarParametro("codigo_unidade", SqlDbType.Int, uhStatus.codigoUnidade),
             CriarParametro("codigo_usuario", SqlDbType.Int, uhStatus.codigoUsuario),
             CriarParametro("codigo_apartamento", SqlDbType.BigInt, uhStatus.codigoApartamento),
-            CriarParametro("status", SqlDbType.VarChar, uhStatus.status)
+            CriarParametro("status", SqlDbType.VarChar, uhStatus.status),
+            CriarParametro("origem", SqlDbType.VarChar, origem)
         }
 
         Try
@@ -3095,7 +3099,8 @@ Public Class Api
 
     End Function
 
-    Public Function updateUHStatusIntercity(ByVal uhStatus As pwaUHStatusUpdate) As pwaApontamentoResponse
+    Public Function updateUHStatusIntercity(ByVal uhStatus As pwaUHStatusUpdate,
+                                            ByVal origem As String) As pwaApontamentoResponse
 
         'Variaveis Locais
         Dim oReturn As New pwaApontamentoResponse
@@ -3105,7 +3110,8 @@ Public Class Api
             CriarParametro("codigo_unidade", SqlDbType.Int, uhStatus.codigoUnidade),
             CriarParametro("codigo_usuario", SqlDbType.Int, uhStatus.codigoUsuario),
             CriarParametro("codigo_apartamento", SqlDbType.BigInt, uhStatus.codigoApartamento),
-            CriarParametro("status", SqlDbType.VarChar, uhStatus.status)
+            CriarParametro("status", SqlDbType.VarChar, uhStatus.status),
+            CriarParametro("origem", SqlDbType.VarChar, origem)
         }
 
         Try

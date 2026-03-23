@@ -7,7 +7,7 @@
             <nav class="breadcrumb bg-body-light mb-0">
                 <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
                 <a class="breadcrumb-item">@PCM.WEB.Properties.Resources.governanca</a>
-                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.planejamento</span>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.apontamentoCamareira</span>
             </nav>
         </div>
     </div>
@@ -37,6 +37,9 @@
                         </button>
                         <button type="button" id="btnApontarAprovacao" name="btnApontarAprovacao" class="btn btn-square btn-secondary min-width-100 h-75">
                             <i class="fa fa-save mr-5"></i>Apontar arrumação
+                        </button>
+                        <button type="button" id="btnStatusGovernanca" name="btnStatusGovernanca" class="btn btn-square btn-secondary min-width-100 h-75">
+                            <i class="fa fa-hotel mr-5"></i>Alterar status Governança
                         </button>
                     </div>
                 </div>
@@ -179,6 +182,33 @@
         </div>
     }
 </div>
+
+<!-- From Right Modal -->
+<div class="modal fade" id="modStatusGovernaca" tabindex="-1" role="dialog" aria-labelledby="modStatusGov" aria-hidden="true">
+    @using (Html.BeginForm("OrdemServicoIndex", "OrdemServico", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", @name = "formStatusGovernanca", @id = "formStatusGovernanca", enctype = "multipart/form-data" }))
+    {
+        <div class="modal-dialog modal-dialog-fromright" role="document">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent">
+                    <div class="block-header bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">Status - Governança</h3>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="form-group">
+                        <div>
+                            @Html.DropDownList("statusGovernanca", null, "", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="btnSaveStatusGovernanca" id="btnSaveStatusGovernanca"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 <!-- END From Right Modal -->
 @section Styles {
     @Styles.Render("~/Content/datepicker")
@@ -194,11 +224,26 @@
     @Scripts.Render("~/plugins/select")
 
 <script type="text/javascript">
+
     const currentDate = new Date().toLocaleDateString('pt-BR');
+    let selectedApartamentos = new Set();
+    let codigosSelecionados = [];
 
     $(window).on('resize', function () {
         if ($.fn.DataTable.isDataTable('#tb_main')) {
             table.columns.adjust().draw(false);
+        }
+    });
+
+    $(document).on("change", "#tb_main input[type='checkbox']", function () {
+        let codigo = $(this).val();
+
+        if (!codigo || codigo === "on") return;
+
+        if ($(this).is(":checked")) {
+            selectedApartamentos.add(codigo);
+        } else {
+            selectedApartamentos.delete(codigo);
         }
     });
 
@@ -216,6 +261,7 @@
         var frontOfficeStatus = $("#frontOfficeStatus");
         var uhInicio = $("#uhInicio");
         var uhTermino = $("#uhTermino");
+        var statusGovernanca = $("#statusGovernanca");
 
         unidade.change(function () {
 
@@ -225,6 +271,7 @@
                 camareira.empty();
                 frontOfficeStatus.empty();
                 roomStatus.empty();
+                statusGovernanca.empty();
             }
             else {
                 var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val() };
@@ -276,6 +323,16 @@
                     $.each(obj, function (indice, result) {
                         option = $("<option>", { "value": result.codigo }).text(result.descricao);
                         roomStatus.append(option);
+                    });
+                }, "json");
+
+                $.post("LoadComboStatusRoom", request, function (obj) {
+                    statusGovernanca.empty();
+                    option = $("<option>", { "value": "" }).text("");
+                    statusGovernanca.append(option);
+                    $.each(obj, function (indice, result) {
+                        option = $("<option>", { "value": result.codigo }).text(result.descricao);
+                        statusGovernanca.append(option);
                     });
                 }, "json");
 
@@ -339,6 +396,30 @@
         $('#btnClearPlanejamento').click(function () {
 
             clearPlanejamento();
+
+        });
+
+        $('#btnStatusGovernanca').click(function () {
+
+            codigosSelecionados = []
+
+            $("#tb_main input[type='checkbox']:checked").each(function () {
+                let codigo = $(this).val();
+                if (codigo && codigo !== "on") {
+                    codigosSelecionados.push({
+                        codigoApartamento: codigo.trim()
+                    });
+                }
+            });
+
+            if (codigosSelecionados.length === 0) {
+                Swal.fire("Nenhuma UH Selecionada!", "", "warning");
+                return;
+            }
+
+            $("#statusGovernanca").val("");
+
+            $("#modStatusGovernaca").modal("show");
 
         });
 
@@ -586,6 +667,13 @@
                     targets: [1, 2, 3, 4, 6]
                 }
             ],
+            rowCallback: function (row, data) {
+                let checkbox = $(row).find("input[type='checkbox']");
+
+                if (selectedApartamentos.has(data.codigoApartamento.toString())) {
+                    checkbox.prop("checked", true);
+                }
+            },
             language: {
                 "search": "@Html.Raw(PCM.WEB.Properties.Resources.search):",
                 "lengthMenu": "@Html.Raw(PCM.WEB.Properties.Resources.display) _MENU_ ",
@@ -604,6 +692,10 @@
             }
         });
 
+    }
+
+    function clearSelection() {
+        selectedApartamentos.clear();
     }
 
     // Add "Select All" checkbox in the header
@@ -755,6 +847,63 @@
 
             table.ajax.reload(null, false);
             $('#modTipoGovernaca').modal('hide');
+
+            return false;
+
+        }
+    });
+
+    $('#formStatusGovernanca').validate({
+        ignore: [],
+        errorClass: 'invalid-feedback animated fadeInDown',
+        errorElement: 'div',
+        errorPlacement: function (error, e) {
+            jQuery(e).parents('.form-group > div').append(error);
+        },
+        highlight: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid').addClass('is-invalid');
+        },
+        success: function (e) {
+            jQuery(e).closest('.form-group > div').removeClass('is-invalid');
+            jQuery(e).remove();
+        },
+        rules: {
+            'statusGovernanca': {
+                required: true
+            }
+        },
+        messages: {
+            'statusGovernanca': {
+                required: '@PCM.WEB.Properties.Resources.campo_requerido'
+            }
+        },
+        submitHandler: function (form) {
+
+            // Serializa o array em uma string JSON
+            const jsonCodigos = JSON.stringify(codigosSelecionados);
+
+            // Envia via Ajax como parâmetros
+            $.ajax({
+                url: "/Governanca/StatusGovernanca",
+                type: "POST",
+                data: {
+                    unidade: $("#unidade").val(),
+                    data: $("#data").val(),
+                    statusGovernanca: $("#statusGovernanca").val(),
+                    usuario: $("#usuario").val(),
+                    json: jsonCodigos
+                },
+                success: function (response) {
+                    Swal.fire("Sucesso!", response, "success");
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire("Erro!", "Erro ao salvar.", "error");
+                    console.error(error);
+                }
+            });
+
+            table.ajax.reload(null, false);
+            $('#modStatusGovernaca').modal('hide');
 
             return false;
 

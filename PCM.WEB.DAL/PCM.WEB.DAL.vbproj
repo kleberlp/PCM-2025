@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\Pages\AEB.vb" />
+    <Compile Include="Class\Pages\AtivoFixo.vb" />
     <Compile Include="Class\Pages\Agenda.vb" />
     <Compile Include="Class\Pages\InterfaceApi.vb" />
     <Compile Include="Class\Pages\Configuracao.vb" />

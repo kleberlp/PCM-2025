@@ -406,6 +406,8 @@ namespace PCM.WEB.Controllers
                     Session["lav_historico"] = formulario_visualizar.lav_historico;
                     Session["rel_lav_controle"] = formulario_visualizar.rel_lav_controle;
 
+                    Session["cad_asset"] = formulario_visualizar.cad_asset;
+
                     Session["app_ios"] = IsRequestFromIOS();
 
                     Session["modulo"] = sModuloDescricao;
@@ -755,6 +757,8 @@ namespace PCM.WEB.Controllers
             Session["lav_apontamento"] = null;
             Session["lav_historico"] = null;
             Session["rel_lav_controle"] = null;
+
+            Session["cad_asset"] = null;
 
             System.Web.Security.FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");

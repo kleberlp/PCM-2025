@@ -475,6 +475,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ativo Fixo.
+        /// </summary>
+        public static string asset {
+            get {
+                return ResourceManager.GetString("asset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Atendimento Ordem de Serviço.
         /// </summary>
         public static string atendimento_ordem_servico {
@@ -1578,6 +1587,15 @@ namespace PCM.WEB.Properties {
         public static string data_validade {
             get {
                 return ResourceManager.GetString("data_validade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Data compra.
+        /// </summary>
+        public static string dataCompra {
+            get {
+                return ResourceManager.GetString("dataCompra", resourceCulture);
             }
         }
         
@@ -3706,6 +3724,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nº Série.
+        /// </summary>
+        public static string numeroSerie {
+            get {
+                return ResourceManager.GetString("numeroSerie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Observação.
         /// </summary>
         public static string observacao {
@@ -4872,6 +4899,15 @@ namespace PCM.WEB.Properties {
         public static string resetar_senha {
             get {
                 return ResourceManager.GetString("resetar_senha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Responsável.
+        /// </summary>
+        public static string responsavel {
+            get {
+                return ResourceManager.GetString("responsavel", resourceCulture);
             }
         }
         
@@ -6222,6 +6258,15 @@ namespace PCM.WEB.Properties {
         public static string valor_previsto {
             get {
                 return ResourceManager.GetString("valor_previsto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Valor compra.
+        /// </summary>
+        public static string valorCompra {
+            get {
+                return ResourceManager.GetString("valorCompra", resourceCulture);
             }
         }
         
