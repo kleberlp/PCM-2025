@@ -84,10 +84,7 @@
                         <thead>
                             <tr class="table-secondary">
                                 <th class="text-center"></th>
-                                @if (Session["unidade"].ToString() == "")
-                                {
-                                    <th>@PCM.WEB.Properties.Resources.unidade </th>
-                                }
+                                <th>@PCM.WEB.Properties.Resources.unidade </th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.data</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.uh</th>
                                 <th class="text-left">@PCM.WEB.Properties.Resources.camareira</th>
@@ -96,6 +93,7 @@
                                 <th class="text-center">@PCM.WEB.Properties.Resources.tempo_gasto</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.tipoGovernanca</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.nao_conformidade</th>
+                                <th class="text-center">Qtde. OS</th>
                                 <th class="text-left">@PCM.WEB.Properties.Resources.responsavel_vistoria</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.dataHoraVistoria</th>
                                 <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
@@ -218,6 +216,7 @@
                     info = info + '<th class="font-size-sm">@PCM.WEB.Properties.Resources.checklist</th> ';
                     info = info + '<th class="text-center font-size-sm">@PCM.WEB.Properties.Resources.resultado</th> ';
                     info = info + '<th class="font-size-sm">@PCM.WEB.Properties.Resources.observacao</th> ';
+                    info = info + '<th class="font-size-sm text-center">@PCM.WEB.Properties.Resources.ordem_servico</th> ';
                     info = info + '</tr> ';
                     info = info + '</thead> ';
                     info = info + '<tbody>';
@@ -225,14 +224,14 @@
                     for (var i = 0; i < response.grupo.length; i++) {
 
                         info = info + '<tr class="bg-primary-light"> ';
-                        info = info + '<td class="font-w600" colspan="3">' + response.grupo[i].grupo + '</td> ';
+                        info = info + '<td class="font-w600" colspan="4">' + response.grupo[i].grupo + '</td> ';
                         info = info + '</tr> ';
 
                         for (var j = 0; j < response.grupo[i].subgrupo.length; j++) {
 
                             if (response.grupo[i].subgrupo[j].subgrupo != "") {
                                 info = info + '<tr class="bg-secondary-light"> ';
-                                info = info + '<td class="font-w600" colspan="3">' + response.grupo[i].subgrupo[j].subgrupo + '</td> ';
+                                info = info + '<td class="font-w600" colspan="4">' + response.grupo[i].subgrupo[j].subgrupo + '</td> ';
                                 info = info + '</tr> ';
                             }
 
@@ -242,6 +241,14 @@
                                 info = info + '<td class="font-size-sm">' + response.grupo[i].subgrupo[j].checklist[k].checklist + '</td> ';
                                 info = info + '<td class="text-center font-size-sm ' + response.grupo[i].subgrupo[j].checklist[k].cssClass + '">' + response.grupo[i].subgrupo[j].checklist[k].resposta + '</td> ';
                                 info = info + '<td class="font-size-sm">' + response.grupo[i].subgrupo[j].checklist[k].observacao + '</td> ';
+
+                                var item = response.grupo[i].subgrupo[j].checklist[k];
+
+                                if (response.grupo[i].subgrupo[j].checklist[k].link !== "") {
+                                    info += '<td class="font-size-sm text-center">' + '<a href="' + response.grupo[i].subgrupo[j].checklist[k].link + '" target="_blank">' + response.grupo[i].subgrupo[j].checklist[k].ordemServico + '</a></td>';
+                                } else {
+                                    info += '<td class="font-size-sm"></td>';
+                                }
                                 info = info + '</tr> ';
                             }
 
@@ -312,7 +319,7 @@
         },
         rules: {
             'unidade': {
-                required: true
+                required: false
             },
             'dataInicio': {
                 required: true
@@ -393,6 +400,7 @@
                 { data: "tempoGasto" },
                 { data: "tipoGovernanca" },
                 { data: "naoConformidade" },
+                { data: "quantidadeOS" },
                 { data: "responsavelVistoria" },
                 { data: "horaVistoria" },
                 {
@@ -404,21 +412,17 @@
                 }
             ],
             columnDefs: [
-                { className: 'text-center', targets: [0, 2, 3, 5, 6, 7, 8, 9, 11, 12] },
+                { className: 'text-center', targets: [0, 2, 3, 5, 6, 7, 8, 9, 10, 12, 13] },
                 {
                     createdCell: function (td, cellData, rowData, row, col) {
-
-                        if (col == 1 && ("@Session["unidade"].ToString()" != "")) {
-                            $(td).hide();
-                        }
-
-                        if (col == 12 && ("@ViewBag.excluir" != "True")) {
+                        if (col == 13 && ("@ViewBag.excluir" != "True")) {
                             $(td).find('#btnExcluir').hide();
                         }
-                    }, targets: [1, 12]
+                    }, targets: [1, 13]
                 },
-                { width: '20px', targets: [0,12] }
+                { width: '20px', targets: [0,13] }
             ],
+            order: [2,'desc'],
             dom: 'Bfrtip',
             buttons: [
                 { extend: 'copy', text: 'Copiar' },
@@ -433,6 +437,12 @@
                 "infoFiltered": "(filtrado de _MAX_ registro(s))"
             }
         });
+
+
+        if ("@Session["unidade"].ToString()" != "") {
+            table.column(1).visible(false);
+        }
+
 
         $('#tb_main tbody').on('click', 'button', function () {
 

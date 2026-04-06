@@ -407,4 +407,80 @@ Module modFuncion
 
     End Function
 
+    Public Function LoadDynamicGrid(ByVal connection As String,
+                                    ByVal procedureName As String,
+                                    ByVal parameters As SqlParameter()) As Object
+
+        Try
+
+            Dim oData As New List(Of Object)
+            Dim oColumns As New List(Of Object)
+            Dim oGroupBy As New List(Of Object)
+
+            Using oReader As SqlDataReader = ExecuteReader(connection, CommandType.StoredProcedure, procedureName, parameters)
+
+                ' DATA (DINÂMICO)
+                While oReader.Read()
+
+                    Dim oRow As New Dictionary(Of String, Object)
+
+                    For i As Integer = 0 To oReader.FieldCount - 1
+                        Dim columnName As String = oReader.GetName(i)
+                        oRow(columnName) = If(oReader.IsDBNull(i), Nothing, oReader.GetValue(i))
+                    Next
+
+                    oData.Add(oRow)
+
+                End While
+
+                ' COLUMNS
+                If oReader.NextResult() Then
+
+                    While oReader.Read()
+
+                        oColumns.Add(New With {
+                            .Data = SafeGetString(oReader, "Data"),
+                            .Title = SafeGetString(oReader, "Title"),
+                            .Visible = SafeGetBoolean(oReader, "Visible"),
+                            .Orderable = SafeGetBoolean(oReader, "Orderable"),
+                            .Align = SafeGetString(oReader, "Align")
+                        })
+
+                    End While
+
+                End If
+
+                ' GROUP BY
+                If oReader.NextResult() Then
+
+                    While oReader.Read()
+
+                        oGroupBy.Add(New With {
+                            .Column = SafeGetString(oReader, "ColumnName"),
+                            .Level = SafeGetLong(oReader, "Level"),
+                            .Collapsible = SafeGetBoolean(oReader, "Collapsible"),
+                            .ShowCount = SafeGetBoolean(oReader, "ShowCount"),
+                            .CssClass = SafeGetString(oReader, "CssClass")
+                        })
+
+                    End While
+
+                End If
+
+            End Using
+
+            Return New With {
+            .data = oData,
+            .columns = oColumns,
+            .groupBy = oGroupBy
+        }
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
 End Module

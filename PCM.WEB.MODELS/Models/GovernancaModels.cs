@@ -315,6 +315,7 @@ namespace PCM.WEB.MODELS
         public string tempoGasto { get; set; }
         public string tipoGovernanca { get; set; }
         public int naoConformidade { get; set; }
+        public int quantidadeOS { get; set; }
         public string responsavelVistoria { get; set; }
         public string horaVistoria { get; set; }
         public string status { get; set; }
@@ -345,6 +346,8 @@ namespace PCM.WEB.MODELS
         public string checklist { get; set; }
         public string resposta { get; set; }
         public string observacao { get; set; }
+        public string ordemServico { get; set; }
+        public string link { get; set; }
         public bool foto { get; set; }
         public string cssClass { get; set; }
     }

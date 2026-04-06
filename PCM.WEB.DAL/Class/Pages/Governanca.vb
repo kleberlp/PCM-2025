@@ -2975,6 +2975,7 @@ Public Class Governanca
                 oInfo.horaInicio = oSqlDataReader("hora_inicio")
                 oInfo.horaTermino = oSqlDataReader("hora_termino")
                 oInfo.tempoGasto = oSqlDataReader("tempo_gasto")
+                oInfo.quantidadeOS = oSqlDataReader("quantidade_os")
                 oInfo.tipoGovernanca = oSqlDataReader("tipo_governanca")
                 oInfo.naoConformidade = oSqlDataReader("nao_conformidade")
                 oInfo.responsavelVistoria = oSqlDataReader("responsavel_vistoria")
@@ -3072,6 +3073,8 @@ Public Class Governanca
                 oInfoChecklist.checklist = oSqlDataReader.Item("checklist")
                 oInfoChecklist.resposta = oSqlDataReader.Item("resultado")
                 oInfoChecklist.observacao = oSqlDataReader.Item("observacao")
+                oInfoChecklist.ordemServico = oSqlDataReader.Item("ordem_servico")
+                oInfoChecklist.link = oSqlDataReader.Item("link")
                 oInfoChecklist.foto = oSqlDataReader.Item("foto")
                 oInfoChecklist.cssClass = oSqlDataReader.Item("css_class")
 

@@ -407,6 +407,9 @@ namespace PCM.WEB.Controllers
                     Session["rel_lav_controle"] = formulario_visualizar.rel_lav_controle;
 
                     Session["cad_asset"] = formulario_visualizar.cad_asset;
+                    Session["assetMovement"] = formulario_visualizar.assetMovement;
+                    Session["assetInventory"] = formulario_visualizar.assetInventory;
+                    Session["assetInventoryMng"] = formulario_visualizar.assetInventoryMng;
 
                     Session["app_ios"] = IsRequestFromIOS();
 
@@ -759,6 +762,9 @@ namespace PCM.WEB.Controllers
             Session["rel_lav_controle"] = null;
 
             Session["cad_asset"] = null;
+            Session["assetMovement"] = null;
+            Session["assetInventory"] = null;
+            Session["assetInventoryMng"] = null;
 
             System.Web.Security.FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");

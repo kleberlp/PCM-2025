@@ -189,6 +189,8 @@ namespace PCM.WEB.MODELS
         public bool cad_item_os_hospede { get; set; }
 
         public bool cad_asset { get; set; }
-
+        public bool assetMovement { get; set; }
+        public bool assetInventory { get; set; }
+        public bool assetInventoryMng { get; set; }
     }
 }

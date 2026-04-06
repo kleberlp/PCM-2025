@@ -463,6 +463,9 @@ namespace PCM.WEB.Controllers
                 Session["rel_lav_controle"] = formulario_visualizar.rel_lav_controle;
 
                 Session["cad_asset"] = formulario_visualizar.cad_asset;
+                Session["assetMovement"] = formulario_visualizar.assetMovement;
+                Session["assetInventory"] = formulario_visualizar.assetInventory;
+                Session["assetInventoryMng"] = formulario_visualizar.assetInventoryMng;
 
                 //Redireciona para Index
                 return RedirectToAction("UsuarioIndex");
@@ -954,6 +957,9 @@ namespace PCM.WEB.Controllers
                 Session["rel_lav_controle"] = formulario_visualizar.rel_lav_controle;
 
                 Session["cad_asset"] = formulario_visualizar.cad_asset;
+                Session["assetMovement"] = formulario_visualizar.assetMovement;
+                Session["assetInventory"] = formulario_visualizar.assetInventory;
+                Session["assetInventoryMng"] = formulario_visualizar.assetInventoryMng;
 
                 //Redireciona para Index
                 return RedirectToAction("PerfilIndex");

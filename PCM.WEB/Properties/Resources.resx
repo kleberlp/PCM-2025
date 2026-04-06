@@ -2220,4 +2220,22 @@
   <data name="responsavel" xml:space="preserve">
     <value>Responsável</value>
   </data>
+  <data name="assetInventory" xml:space="preserve">
+    <value>Inventário</value>
+  </data>
+  <data name="assetMovement" xml:space="preserve">
+    <value>Movimentação</value>
+  </data>
+  <data name="closeInventory" xml:space="preserve">
+    <value>Finalizar inventário</value>
+  </data>
+  <data name="startInventory" xml:space="preserve">
+    <value>Iniciar inventário</value>
+  </data>
+  <data name="viewCount" xml:space="preserve">
+    <value>Visualizar contagem</value>
+  </data>
+  <data name="assetInventoryMng" xml:space="preserve">
+    <value>Gestão de Inventário</value>
+  </data>
 </root>

@@ -279,6 +279,9 @@ namespace PCM.ADM.WEB.Controllers
             Session["aeb_auditoria_externa"] = null;
 
             Session["cad_asset"] = null;
+            Session["assetMovement"] = null;
+            Session["assetInventory"] = null;
+            Session["assetInventoryMng"] = null;
 
             System.Web.Security.FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");

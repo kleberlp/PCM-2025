@@ -433,6 +433,9 @@
     <Content Include="Content\img\photos\PRODIGY.png" />
     <Content Include="Content\img\photos\WISH.png" />
     <Content Include="Content\js\bootstrap.bundle.min.js" />
+    <Content Include="Content\js\pages\AtivoFixo\jquery.assetIEdit.init.js" />
+    <Content Include="Content\js\pages\AtivoFixo\jquery.assetInventoryMng.init.js" />
+    <Content Include="Content\js\pages\AtivoFixo\jquery.assetMovement.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetInsert.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetIndex.init.js" />
     <Content Include="Content\js\pcm.js" />
@@ -2602,6 +2605,9 @@
     <Content Include="Views\CadastroBasico\ChecklistEdit2.cshtml" />
     <Content Include="Views\AtivoFixo\AssetIndex.cshtml" />
     <Content Include="Views\AtivoFixo\AssetInsert.cshtml" />
+    <Content Include="Views\AtivoFixo\AssetMovement.cshtml" />
+    <Content Include="Views\AtivoFixo\AssetEdit.cshtml" />
+    <Content Include="Views\AtivoFixo\assetInventoryMng.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -287,15 +287,36 @@
                             </ul>
                         </li>
                     }
-                    @if ((bool)Session["cad_asset"])
+                    @if ((bool)Session["cad_asset"] || (bool)Session["assetMovement"] || (bool)Session["assetInventoryMng"] || (bool)Session["assetInventory"])
                     {
                         <li>
-                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-shopping-basket"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.aeb</span></a>
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-bank"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.asset</span></a>
                             <ul>
                                 @if ((bool)Session["cad_asset"])
                                 {
                                     <li>
                                         <a class="@Html.IsSelected(action: "AssetIndex", cssClass: "active") font-size-sm" href="@Url.Action("AssetIndex", "AtivoFixo")">@PCM.WEB.Properties.Resources.asset</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["assetMovement"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "assetMovement", cssClass: "active") font-size-sm" href="@Url.Action("assetMovement", "AtivoFixo")">@PCM.WEB.Properties.Resources.assetMovement</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["assetInventoryMng"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "assetInventoryMng", cssClass: "active") font-size-sm" href="@Url.Action("assetInventoryMng", "AtivoFixo")">@PCM.WEB.Properties.Resources.assetInventoryMng</a>
+                                    </li>
+                                }
+
+                                @if ((bool)Session["assetInventory"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "assetInventory", cssClass: "active") font-size-sm" href="@Url.Action("assetInventory", "AtivoFixo")">@PCM.WEB.Properties.Resources.assetInventory</a>
                                     </li>
                                 }
                             </ul>

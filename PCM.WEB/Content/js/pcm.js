@@ -1,367 +1,361 @@
 'use strict';
 
-$(document).ajaxSend(function (e, xhr) {
+$.ajaxPrefilter(function (options, originalOptions, xhr) {
 
-    var token = $('form input[name="__RequestVerificationToken"]').first().val();
+    const isExternal = options.url.startsWith("http");
 
-    if (token) {
-        xhr.setRequestHeader('RequestVerificationToken', token);
+    if (!isExternal) {
+
+        const token = $('input[name="__RequestVerificationToken"]').val();
+
+        if (token) {
+            xhr.setRequestHeader("RequestVerificationToken", token);
+        }
     }
-
 });
 
-function loadGridMain(table, data, endpoint, editAction = false, deleteAction = false, warningAction = false, grupo = "") {
+function loadGridMain({
+    tableId = "#tableDynamic",
+    table = null,
+    data = {},
+    endpoint,
+    editAction = false,
+    deleteAction = false,
+    warningAction = false,
+    grupo = "",
+    onEdit = null,
+    onDelete = null,
+    onWarning = null,
 
-    localStorage.clear();
+    enablePaging = true,
+    pageLength = 10,
+    enableSearch = true,
+    enableExport = true,
+    textSearch = "Pesquisar:",
+    textNothingRegister = "Nenhum registro encontrado...",
 
-    if (table) {
-        table.destroy();
-        table = null;
+    // CHILD
+    enableChild = false,
+    childRender = null
+}) {
+
+    // =========================
+    // RESET TABLE
+    // =========================
+    if ($.fn.DataTable.isDataTable(tableId)) {
+        $(tableId).DataTable().destroy();
+        $(tableId).empty();
     }
 
-    var token = $('form input[name="__RequestVerificationToken"]').first().val();
+    const token = $('input[name="__RequestVerificationToken"]').val();
 
-    data.__RequestVerificationToken = token;
-
+    // =========================
+    // AJAX LOAD
+    // =========================
     $.ajax({
         url: endpoint,
         type: "POST",
-        data: data,
-        headers: {
-            'RequestVerificationToken': token
+        data: {
+            ...data,
+            __RequestVerificationToken: token
         },
         success: function (response) {
 
-            var data = response.data || [];
-            var columnsResponse = response.columns || [];
+            const rows = response.data || [];
+            const columnsResponse = response.columns || [];
+            const groupDefs = response.groupBy || [];
 
-            var groupDefsAll = (response.groupBy || [])
-                .slice()
-                .sort(function (a, b) { return (a.Level || 0) - (b.Level || 0); });
+            // =========================
+            // COLUMNS
+            // =========================
+            let dynamicColumns = columnsResponse.map(col => ({
+                data: col.data,
+                title: col.title,
+                visible: col.visible ?? true,
+                orderable: col.orderable ?? true,
+                width: col.width ?? "",
+                className: col.align ? "text-" + col.align : "",
+                defaultContent: ""
+            }));
 
-            // remove datatable antigo + DOM
-            if ($.fn.DataTable.isDataTable('#tableDynamic')) {
-                $('#tableDynamic').DataTable().destroy();
-                $('#tableDynamic').empty();
-            }
-
-            // --- helpers ---
-            function normalize(v) {
-                if (v === null || v === undefined) return "";
-                return v.toString().trim().replace(/\s+/g, " ").toUpperCase();
-            }
-
-            // níveis efetivos: só considera nível se existir algum valor preenchido no dataset
-            var groupDefs = groupDefsAll.filter(function (g) {
-                return data.some(function (row) {
-                    return normalize(row[g.Column]) !== "";
-                });
-            });
-
-            var groupColumns = groupDefs.map(function (g) { return g.Column; });
-
-            // frozen
-            var frozenCount = 0;
-
-            // columns
-            var dynamicColumns = columnsResponse.map(function (col) {
-                if (col.Frozen) frozenCount++;
-
-                var isGrouped = groupColumns.indexOf(col.Data) >= 0;
-
-                return {
-                    data: col.Data,
-                    title: col.Title,
-                    visible: isGrouped ? false : !!col.Visible, // grouped sempre invisível
-                    width: col.Width || null,
-                    orderable: col.Orderable !== false,
-                    className: col.Align ? "text-" + col.Align : "",
-                    defaultContent: ""
-                };
-            });
-
-            if (editAction === true || deleteAction === true) {
-
-                dynamicColumns.push({
+            // =========================
+            // CHILD CONTROL (+ / -)
+            // =========================
+            if (enableChild) {
+                dynamicColumns.unshift({
+                    className: "details-control text-center",
                     orderable: false,
                     data: null,
-                    width: "40px",
-                    className: "text-center",
-                    defaultContent:
-                        "<div class='btn-group'>" +
-                            (editAction === true) ? "<button type='button' class='btn btn-sm btn-secondary btn-edit' title='" + messages.clickToEdit + "'><i class='fa fa-pencil'></i></button>" : "" +
-                                (deleteAction === true) ? "<button type='button' class='btn btn-sm btn-secondary btn-delete' title='" + messages.clickToDelete + "'><i class='fa fa-times'></i></button>" : "" +
-                        "</div>"
+                    width: "30px",
+                    defaultContent: "<i class='fa fa-plus'></i>"
                 });
-
             }
 
-            if (warningAction === true) {
+            // =========================
+            // ACTIONS
+            // =========================
+            if (editAction || deleteAction || warningAction) {
+
+                let buttons = "";
+
+                if (editAction) {
+                    buttons += `<button type="button" class='btn btn-sm btn-primary btn-edit'><i class='fa fa-pencil-alt'></i></button>`;
+                }
+
+                if (deleteAction) {
+                    buttons += `<button type="button" class='btn btn-sm btn-danger btn-delete'><i class='fa fa-times'></i></button>`;
+                }
+
+                if (warningAction) {
+                    buttons += `<button type="button" class='btn btn-sm btn-outline-secondary btn-warning-view'><i class='fa fa-warning text-warning'></i></button>`;
+                }
 
                 dynamicColumns.push({
-                    orderable: false,
                     data: null,
-                    width: "40px",
+                    orderable: false,
+                    width: "80px",
                     className: "text-center",
-                    defaultContent:
-                        "<div class='btn-group'>" +
-                        "<button type='button' class='btn btn-sm btn-outline-secondary btn-warning-view' " +
-                        "title='Clique para visualizar o alerta'>" +
-                        "<i class='fa fa-warning text-warning'></i>" +
-                        "</button>" +
-                        "</div>"
-                });
-
-            }
-
-            // estado por checklist
-            var currentStateKey = "dt_group_state:" + window.location.pathname + ":grupo=" + (grupo || "");
-
-            function readState() {
-                try { return JSON.parse(localStorage.getItem(currentStateKey) || "{}"); }
-                catch (e) { return {}; }
-            }
-
-            function writeState(obj) {
-                localStorage.setItem(currentStateKey, JSON.stringify(obj));
-            }
-
-            function buildKey(level, path) {
-                return "L" + level + "|" + path.slice(0, level + 1).join("||");
-            }
-
-            function getPath(row) {
-                // NÃO remove níveis (não usa filter)
-                // Regra: se nível N estiver vazio, a hierarquia para ali.
-                var path = groupColumns.map(function (col) {
-                    return normalize(row[col]);
-                });
-                return path;
-            }
-
-            function countDirect(rowsData, level, parentPath) {
-
-                // Último nível de agrupamento -> contar linhas (perguntas) dentro do grupo
-                if (level >= groupColumns.length - 1) {
-                    var count = 0;
-
-                    for (var i = 0; i < rowsData.length; i++) {
-                        var p = getPath(rowsData[i]);
-
-                        // precisa bater o prefixo do parentPath
-                        var ok = true;
-                        for (var j = 0; j < parentPath.length; j++) {
-                            if (p[j] !== parentPath[j]) { ok = false; break; }
-                        }
-
-                        if (ok) count++;
-                    }
-
-                    return count;
-                }
-
-                // Níveis intermediários -> contar filhos diretos distintos (próximo nível)
-                var nextLevel = level + 1;
-                var set = {};
-
-                for (var i = 0; i < rowsData.length; i++) {
-                    var p = getPath(rowsData[i]);
-
-                    // prefixo
-                    var ok = true;
-                    for (var j = 0; j < parentPath.length; j++) {
-                        if (p[j] !== parentPath[j]) { ok = false; break; }
-                    }
-                    if (!ok) continue;
-
-                    // conta o valor do nível filho (se existir)
-                    if (p.length > nextLevel) {
-                        set[p[nextLevel]] = true;
-                    }
-                }
-
-                return Object.keys(set).length;
-            }
-
-
-            function applyCollapse(api, animate) {
-                var state = readState();
-
-                api.rows({ page: 'current' }).every(function () {
-                    var row = this.data();
-                    var node = this.node();
-
-                    var path = getPath(row);
-
-                    var hidden = false;
-
-                    for (var level = 0; level < path.length; level++) {
-                        var key = buildKey(level, path.slice(0, level + 1));
-                        if (state[key] === true) { hidden = true; break; }
-                    }
-
-                    if (hidden) {
-                        if (animate) $(node).stop(true, true).fadeOut(120);
-                        else node.style.display = "none";
-                    } else {
-                        if (animate) $(node).stop(true, true).fadeIn(120);
-                        else node.style.display = "";
-                    }
+                    defaultContent: `<div class='btn-group'>${buttons}</div>`
                 });
             }
 
-            function renderGroups(api) {
+            // =========================
+            // EXPORT BUTTONS (ORIGINAL)
+            // =========================
+            let buttonsConfig = [];
 
-                $('#tableDynamic tbody tr.dt-group-row').remove();
-                if (!groupColumns.length) return;
-
-                var state = readState();
-                var rowsData = api.rows({ page: 'current' }).data().toArray();
-                var rowsNodes = api.rows({ page: 'current' }).nodes();
-
-                var lastPath = [];
-
-                for (var i = 0; i < rowsData.length; i++) {
-
-                    var row = rowsData[i];
-                    var node = rowsNodes[i];
-
-                    var path = getPath(row);
-
-                    for (var level = 0; level < path.length; level++) {
-
-                        var currentValue = path[level];
-
-                        // compara nível por nível
-                        if (lastPath[level] !== currentValue) {
-
-                            // reset níveis abaixo (essencial)
-                            lastPath = lastPath.slice(0, level);
-                            lastPath[level] = currentValue;
-
-                            var def = groupDefs[level] || {};
-                            var parentPath = path.slice(0, level + 1);
-                            var key = buildKey(level, parentPath);
-
-                            var collapsed = state[key] === true;
-
-                            var icon = def.Collapsible
-                                ? (collapsed ? "<i class='fa fa-chevron-right'></i>" : "<i class='fa fa-chevron-down'></i>")
-                                : "<i class='fa fa-angle-right'></i>";
-
-                            var indent = level * 18;
-
-                            var countText = "";
-                            if (def.ShowCount) {
-                                var qtd = countDirect(rowsData, level, parentPath);
-                                countText = " <span class='text-muted'>(" + qtd + ")</span>";
-                            }
-
-                            var css = def.CssClass || "";
-
-                            var $tr = $("<tr/>")
-                                .addClass("dt-group-row")
-                                .addClass("level-" + level)
-                                .attr("data-key", key)
-                                .attr("data-level", level)
-                                .attr("data-collapsible", def.Collapsible ? "1" : "0");
-
-                            var $td = $("<td/>")
-                                .attr("colspan", dynamicColumns.length)
-                                .css("padding-left", (12 + indent) + "px")
-                                .html(
-                                    "<span class='dt-group-icon' style='display:inline-block;width:18px;'>" + icon + "</span>" +
-                                    "<strong>" + currentValue + "</strong>" + countText
-                                );
-
-                            $tr.append($td);
-                            $(node).before($tr);
-                        }
+            if (enableExport) {
+                buttonsConfig = [
+                    {
+                        extend: 'copy',
+                        text: "<i class='fas fa-copy text-primary'></i>",
+                        titleAttr: messages.clickToCopy,
+                        className: 'btn btn-sm btn-outline-light mb-2'
+                    },
+                    {
+                        extend: 'excel',
+                        text: "<i class='fas fa-file-excel text-success'></i>",
+                        titleAttr: messages.clickToExcel,
+                        className: 'btn btn-sm btn-outline-light mb-2'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: "<i class='fas fa-file-pdf text-danger'></i>",
+                        titleAttr: messages.clickToPdf,
+                        className: 'btn btn-sm btn-outline-light mb-2'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: "<i class='fas fa-columns text-dark'></i>",
+                        titleAttr: messages.clickToConfig,
+                        className: 'btn btn-sm btn-outline-light mb-2'
                     }
-                }
-
-                // toggle collapse
-                $('#tableDynamic tbody tr.dt-group-row').off('click').on('click', function () {
-
-                    var collapsible = $(this).data("collapsible") == 1;
-                    if (!collapsible) return;
-
-                    var key = $(this).data("key");
-                    var st = readState();
-                    st[key] = !st[key];
-                    writeState(st);
-
-                    // atualiza ícone sem redesenhar tudo
-                    var isCollapsed = st[key] === true;
-                    $(this).find(".dt-group-icon").html(isCollapsed ? "<i class='fa fa-chevron-right'></i>" : "<i class='fa fa-chevron-down'></i>");
-
-                    applyCollapse(api, true);
-                });
+                ];
             }
 
-            // DataTable config
-            var currentConfig = {
-                data: data,
+            // =========================
+            // DATATABLE
+            // =========================
+            const dt = $(tableId).DataTable({
+                data: rows,
                 columns: dynamicColumns,
-                searching: false,
-                paging: false,
-                processing: false,
-                ordering: false,            // importante: DOM previsível
+
+                paging: enablePaging,
+                pageLength: pageLength,
+                searching: enableSearch,
+                ordering: false,
                 autoWidth: false,
-                scrollX: frozenCount > 0,   // se tiver frozen, precisa scrollX
                 deferRender: true,
-                fixedColumns: frozenCount > 0 ? { leftColumns: frozenCount } : false,
+
+                // LAYOUT ORIGINAL
+                dom: enableExport
+                    ? "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+                    : "<'row'<'col-sm-12'tr>>",
+
+                buttons: buttonsConfig,
+
+                // LANGUAGE ORIGINAL
+                language: {
+                    info: "",
+                    infoEmpty: "",
+                    lengthMenu: "",
+                    zeroRecords: textNothingRegister,
+                    search: textSearch
+                },
+
                 drawCallback: function () {
-                    var api = this.api();
-                    renderGroups(api);         // SEM bloqueio _groupRendered
-                    applyCollapse(api, false); // idempotente
-
-                    if (warningAction === true) {
-
-                        api.rows().every(function () {
-
-                            var rowData = this.data();
-                            var node = this.node();
-                            var $btn = $(node).find('.btn-warning-view');
-
-                            var hasError =
-                                rowData.errorData &&
-                                Array.isArray(rowData.errorData) &&
-                                rowData.errorData.length > 0;
-
-                            if (!hasError) {
-                                $btn.hide();
-                            } else {
-                                $(node).addClass("text-danger");
-                            }
-
-                        });
-                    }
+                    const api = this.api();
+                    renderGroups(api, groupDefs, dynamicColumns.length, tableId);
+                    applyCollapse(api, groupDefs[0]?.column, tableId);
                 }
-            };
+            });
 
-            table = $('#tableDynamic').DataTable(currentConfig);
+            // =========================
+            // EVENTS (EDIT / DELETE / WARNING)
+            // =========================
+            bindGridEvents(dt, { onEdit, onDelete, onWarning }, tableId);
 
-            $('#tableDynamic tbody')
-                .off('click', '.btn-delete')
-                .on('click', '.btn-delete', function () {
-                    var rowData = table.row($(this).closest('tr')).data();
-                    console.log("Excluir:", rowData);
+            // =========================
+            // CHILD EVENT (+ / -)
+            // =========================
+            if (enableChild) {
+
+                $(`${tableId} tbody`).off('click', 'td.details-control');
+
+                $(`${tableId} tbody`).on('click', 'td.details-control', function () {
+
+                    const tr = $(this).closest('tr');
+                    const row = dt.row(tr);
+                    const icon = $(this).find("i");
+
+                    if (row.child.isShown()) {
+
+                        row.child.hide();
+                        tr.removeClass('shown');
+                        icon.removeClass('fa-minus').addClass('fa-plus');
+
+                    } else {
+
+                        let content = "";
+
+                        if (childRender) {
+                            content = childRender(row.data());
+                        } else {
+                            content = "<div class='p-2'>No child content</div>";
+                        }
+
+                        row.child(content).show();
+                        tr.addClass('shown');
+                        icon.removeClass('fa-plus').addClass('fa-minus');
+                    }
                 });
+            }
+        }
+    });
+}
 
-            $('#tableDynamic tbody')
-                .off('click', '.btn-edit')
-                .on('click', '.btn-edit', function () {
-                    var rowData = table.row($(this).closest('tr')).data();
-                    console.log("Editar:", rowData);
-                });
+function renderGroups(api, groupDefs, colspan, tableId) {
 
-            $('#tableDynamic tbody')
-                .off('click', '.btn-warning-view')
-                .on('click', '.btn-warning-view', function () {
-                    var rowData = table.row($(this).closest('tr')).data();
-                    showWarning(rowData);
-                });
+    $(`${tableId} tbody tr.dt-group-row`).remove();
+
+    if (!groupDefs.length) return;
+
+    let lastValue = null;
+
+    api.rows({ page: 'current' }).every(function () {
+
+        const row = this.data();
+        const groupValue = row[groupDefs[0].column];
+
+        if (groupValue !== lastValue) {
+
+            const $tr = $("<tr/>")
+                .addClass("dt-group-row")
+                .attr("data-group", groupValue);
+
+            const $td = $("<td/>")
+                .attr("colspan", colspan)
+                .html(`<strong>${groupValue}</strong>`);
+
+            $tr.append($td);
+            $(this.node()).before($tr);
+
+            lastValue = groupValue;
+        }
+    });
+
+    $(`${tableId} tbody tr.dt-group-row`)
+        .off('click')
+        .on('click', function () {
+
+            const stateKey = "dt-group-collapse:" + window.location.pathname;
+
+            let state = JSON.parse(localStorage.getItem(stateKey)) || {};
+
+            const group = $(this).data("group");
+            const collapsed = $(this).hasClass("collapsed");
+
+            state[group] = !collapsed;
+
+            localStorage.setItem(stateKey, JSON.stringify(state));
+
+            $(this).toggleClass("collapsed");
+
+            const api = $(tableId).DataTable();
+
+            api.rows().every(function () {
+
+                const row = this.data();
+
+                if (row[groupDefs[0].column] === group) {
+                    $(this.node()).toggle(!collapsed);
+                }
+            });
+        });
+}
+
+function applyCollapse(api, groupColumn, tableId) {
+
+    if (!groupColumn) return;
+
+    const stateKey = "dt-group-collapse:" + window.location.pathname;
+
+    let state = JSON.parse(localStorage.getItem(stateKey)) || {};
+
+    api.rows({ page: 'current' }).every(function () {
+
+        const row = this.data();
+        const node = this.node();
+
+        if (state[row[groupColumn]]) {
+            node.style.display = "none";
+        } else {
+            node.style.display = "";
+        }
+    });
+
+    $(`${tableId} tbody tr.dt-group-row`).each(function () {
+
+        const group = $(this).data("group");
+        $(this).toggleClass("collapsed", !!state[group]);
+    });
+}
+
+function bindGridEvents(table, callbacks, tableId) {
+
+    const { onEdit, onDelete, onWarning } = callbacks;
+
+    const $tbody = $(`${tableId} tbody`);
+
+    $tbody.off('click');
+
+    $tbody.on('click', 'button', function (e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const $tr = $(this).closest('tr');
+
+        if ($tr.hasClass('dt-group-row')) return;
+
+        const row = table.row($tr);
+
+        if (!row.node()) return;
+
+        const rowData = row.data();
+
+        if ($(this).hasClass('btn-edit') && onEdit) {
+            onEdit(rowData);
+        }
+
+        if ($(this).hasClass('btn-delete') && onDelete) {
+            onDelete(rowData);
+        }
+
+        if ($(this).hasClass('btn-warning-view') && onWarning) {
+            onWarning(rowData);
         }
     });
 }
@@ -462,3 +456,257 @@ function loadCombo(url, dataFn, targetSelector, valueField = "codigo", textField
     });
 }
 
+async function rfConfirm({
+    title = "Confirm",
+    message = "",
+    confirmButtonText = "Yes",
+    cancelButtonText = "No",
+    icon = "question"
+}) {
+
+    const result = await Swal.fire({
+        title: title,
+        text: message,
+        icon: icon,
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText
+    });
+
+    return result.value;
+}
+
+async function rfAlert({
+    title = "",
+    message = "",
+    icon = "info",
+    confirmButtonText = "Ok"
+}) {
+
+    const result = await Swal.fire({
+        title: title,
+        text: message,
+        icon: icon,
+        confirmButtonText: confirmButtonText
+    });
+
+    return result;
+
+}
+
+async function rfAskNumber(title, maxNumber, placeholder, msgRequiredValue, msgInvalidValue, msgMaxAllowed, confirmButtonText = "OK", cancelButtonText = "Cancel", minNumber = 1, equalNumber = 0) {
+
+    const result = await Swal.fire({
+        title: title,
+        html: `<input id="swal-value" type="number" class="rf-input-barcode" placeholder="${placeholder}" min="${minNumber}" max="${maxNumber}">`,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText,
+        allowEnterKey: true,
+
+        onOpen: () => {
+            const input = document.getElementById('swal-value');
+
+            input.focus();
+
+            input.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    e.stopPropagation(); // importante no SweetAlert
+                    Swal.clickConfirm();
+                }
+            });
+        },
+
+        preConfirm: () => {
+
+            const input = document.getElementById('swal-value');
+            const value = input.value;
+
+            // remove erro anterior
+            input.classList.remove("rf-input-error");
+
+            const oldError = document.getElementById("rf-error");
+            if (oldError) oldError.remove();
+
+            if (!value) {
+                showError(input, msgRequiredValue);
+                return false;
+            }
+
+            const qty = parseFloat(value);
+
+            if (isNaN(qty) || qty <= 0) {
+                showError(input, msgInvalidValue);
+                return false;
+            }
+
+            if (qty > maxNumber) {
+                showError(input, msgInvalidValue);
+                return false;
+            }
+
+            if (qty < minNumber) {
+                showError(input, msgInvalidValue);
+                return false;
+            }
+
+            return qty;
+        }
+    });
+
+    if (result.qty !== "") {
+        return result.value;
+    }
+
+    return null;
+}
+
+async function rfAskInfo(title, placeholder, msgRequiredValue, msgInvalidValue, confirmButtonText = "OK", cancelButtonText = "Cancel", valueConfirmed = "", validateAsync = null) {
+
+    const result = await Swal.fire({
+        title: title,
+        html: `<input id="swal-info" type="text" class="rf-input-barcode" placeholder="${placeholder}" autocomplete="off" >`,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText,
+        allowEnterKey: true,
+
+        onOpen: () => {
+            const input = document.getElementById('swal-info');
+
+            input.focus();
+
+            input.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    e.stopPropagation(); // importante no SweetAlert
+                    Swal.clickConfirm();
+                }
+            });
+        },
+
+        preConfirm: async () => {
+
+            const input = document.getElementById('swal-info');
+            const value = input.value;
+
+            // remove erro anterior
+            input.classList.remove("rf-input-error");
+
+            const oldError = document.getElementById("rf-error");
+            if (oldError) oldError.remove();
+
+            if (!value) {
+                showError(input, msgRequiredValue);
+                return false;
+            }
+
+            if (valueConfirmed !== "" && (valueConfirmed !== value)) {
+                showError(input, msgInvalidValue);
+                return false;
+            }
+
+            if (validateAsync) {
+                try {
+                    const response = await validateAsync(value);
+
+                    if (!response.success) {
+                        showError(input, response.message);
+                        return false;
+                    }
+
+                } catch (err) {
+                    Swal.showValidationMessage("Error validating data");
+                    return false;
+                }
+            }
+
+
+            return value;
+        }
+    });
+
+    if (result.value !== "") {
+        return result.value;
+    }
+
+    return null;
+}
+
+function showError(input, message) {
+
+    input.classList.add("rf-input-error");
+
+    const error = document.createElement("div");
+    error.id = "rf-error";
+    error.className = "rf-error-message";
+    error.innerHTML = `
+        <i class="fas fa-exclamation-circle"></i>
+        <span>${message}</span>
+    `;
+
+    input.parentNode.appendChild(error);
+    input.focus();
+
+    // REMOVE ERRO AO DIGITAR
+    input.addEventListener("input", function handler() {
+        input.classList.remove("rf-input-error");
+
+        const oldError = document.getElementById("rf-error");
+        if (oldError) oldError.remove();
+
+        // remove o listener depois de executar uma vez
+        input.removeEventListener("input", handler);
+    });
+}
+
+function consultCEP({
+    cep,
+    street,
+    district,
+    city,
+    province
+}) {
+
+    const cleanCep = (cep || "").replace(/\D/g, '');
+
+    // limpa campos
+    $(street).val("");
+    $(district).val("");
+    $(city).val("");
+    $(province).val("");
+
+    if (cleanCep.length === 0) return;
+
+    if (cleanCep.length !== 8) {
+        rfAlert(messages.warning, messages.validCep, "warning", "OK");
+        return;
+    }
+
+    $.ajax({
+        url: `https://viacep.com.br/ws/${cleanCep}/json/`,
+        type: 'GET',
+        dataType: 'json',
+        headers: {},
+        success: function (data) {
+
+            if (!data.erro) {
+
+                $(street).val(data.logradouro);
+                $(district).val(data.bairro);
+                $(city).val(data.localidade);
+                $(province).val(data.uf);
+
+            } else {
+                rfAlert("ERROR", messages.validCep, "error", "OK");
+            }
+        },
+
+        error: function () {
+            rfAlert("ERROR", messages.validCep, "error", "OK");
+        }
+    });
+}

@@ -598,6 +598,9 @@ Public Class Account
                 oFormularioVisualizar.rel_lav_controle = IIf(IsDBNull(oSqlDataReader.Item("rel_lav_controle")) = False AndAlso oSqlDataReader.Item("rel_lav_controle") = "S", True, False)
 
                 oFormularioVisualizar.cad_asset = IIf(IsDBNull(oSqlDataReader.Item("cad_asset")) = False AndAlso oSqlDataReader.Item("cad_asset") = "S", True, False)
+                oFormularioVisualizar.assetMovement = IIf(IsDBNull(oSqlDataReader.Item("assetMovement")) = False AndAlso oSqlDataReader.Item("assetMovement") = "S", True, False)
+                oFormularioVisualizar.assetInventory = IIf(IsDBNull(oSqlDataReader.Item("assetInventory")) = False AndAlso oSqlDataReader.Item("assetInventory") = "S", True, False)
+                oFormularioVisualizar.assetInventoryMng = IIf(IsDBNull(oSqlDataReader.Item("assetInventoryMng")) = False AndAlso oSqlDataReader.Item("assetInventoryMng") = "S", True, False)
 
             End If
 

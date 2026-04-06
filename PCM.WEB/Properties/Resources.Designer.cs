@@ -484,6 +484,33 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Inventário.
+        /// </summary>
+        public static string assetInventory {
+            get {
+                return ResourceManager.GetString("assetInventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Gestão de Inventário.
+        /// </summary>
+        public static string assetInventoryMng {
+            get {
+                return ResourceManager.GetString("assetInventoryMng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Movimentação.
+        /// </summary>
+        public static string assetMovement {
+            get {
+                return ResourceManager.GetString("assetMovement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Atendimento Ordem de Serviço.
         /// </summary>
         public static string atendimento_ordem_servico {
@@ -1047,6 +1074,15 @@ namespace PCM.WEB.Properties {
         public static string cliente_integracao {
             get {
                 return ResourceManager.GetString("cliente_integracao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Finalizar inventário.
+        /// </summary>
+        public static string closeInventory {
+            get {
+                return ResourceManager.GetString("closeInventory", resourceCulture);
             }
         }
         
@@ -5245,6 +5281,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Iniciar inventário.
+        /// </summary>
+        public static string startInventory {
+            get {
+                return ResourceManager.GetString("startInventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Status.
         /// </summary>
         public static string status {
@@ -6276,6 +6321,15 @@ namespace PCM.WEB.Properties {
         public static string valorUnitario {
             get {
                 return ResourceManager.GetString("valorUnitario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Visualizar contagem.
+        /// </summary>
+        public static string viewCount {
+            get {
+                return ResourceManager.GetString("viewCount", resourceCulture);
             }
         }
         

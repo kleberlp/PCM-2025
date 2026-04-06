@@ -1544,7 +1544,7 @@ namespace PCM.WEB.API.Controllers
                                               iCodigoUnidade: codigoUnidade,
                                               iCodigoUsuario: codigoUsuario);
 
-                notificacao.version = "2.22";
+                notificacao.version = "2.23";
                 notificacao.success = true;
                 notificacao.message = "";
                 notificacao.results = results;

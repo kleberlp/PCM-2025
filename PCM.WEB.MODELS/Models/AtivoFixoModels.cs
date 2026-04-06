@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace PCM.WEB.MODELS
 {
-
     public class AssetModel
     {
         public long codigo { get; set; }
@@ -29,4 +28,5 @@ namespace PCM.WEB.MODELS
         public int? codigoUsuarioInput { get; set; }
         public int? codigoUsuarioUpdate { get; set; }
     }
+
 }

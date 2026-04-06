@@ -21,7 +21,7 @@ namespace PCM.WEB.Controllers
         private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private DAL.Governanca oGovernanca = new DAL.Governanca(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private DAL.Relatorio oRelatorio = new DAL.Relatorio(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Api oAPI = new DAL.Api(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, sConIntercity: ConfigurationManager.ConnectionStrings["DefaultConnectionIntercity"].ConnectionString);
+        private DAL.Api oAPI = new DAL.Api(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, sConIntercity: ConfigurationManager.ConnectionStrings["DefaultConnectionIntercity2"].ConnectionString);
         private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
       
         #region ::: JSON :::

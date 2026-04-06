@@ -165,5 +165,82 @@ namespace PCM.WEB.Controllers
 
         #endregion
 
+        #region ::: ASSET MOVEMENT :::
+
+        public ActionResult AssetMovement()
+        {
+            if (!IsSessionValid())
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+
+            ViewBag.unidade = new SelectList(_combo.Unidade(iCodigoEmpresa: codigoEmpresa, iCodigoUsuario: codigoUsuario, bCadastro: false), "codigo", "descricao", codigoUnidade);
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult LoadAssetMovement(int unidade = -1, string asset = "", string codigo = "", string descricao = "", int status = -1, int setor = -1, int apartamento = -1)
+        {
+            return Json(_ativoFixo.LoadAssetMovement(codigoEmpresa: codigoEmpresa,
+                                                     codigoUnidade: unidade,
+                                                     codigo: codigo,
+                                                     descricao: descricao,
+                                                     status: status,
+                                                     setor: setor,
+                                                     apartamento: apartamento));
+        }
+
+        #endregion
+
+        #region ::: ASSET INVENTORY :::
+
+        public ActionResult assetInventoryMng()
+        {
+            if (!IsSessionValid())
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+
+            bool insert = false;
+            bool edit = false;
+            bool delete = false;
+            bool administrator = false;
+
+            _account.LoadPerfil(iCodigoEmpresa: codigoEmpresa,
+                                iCodigoUsuario: codigoUsuario,
+                                sFormulario: "assetInventoryMng",
+                                bInserir: ref insert,
+                                bEditar: ref edit,
+                                bExcluir: ref delete,
+                                bAdministrador: ref administrator);
+
+            ViewBag.administrator = administrator;
+            ViewBag.startInventory = true;
+
+            ViewBag.unidade = new SelectList(_combo.Unidade(iCodigoEmpresa: codigoEmpresa, iCodigoUsuario: codigoUsuario, bCadastro: false), "codigo", "descricao", codigoUnidade);
+
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult assetInventoryMng(int unidade)
+        {
+            return Json(_ativoFixo.CreateAssetInventory(codigoEmpresa: codigoEmpresa,
+                                                        codigoUnidade: unidade,
+                                                        codigoUsuario: codigoUsuario));
+        }
+
+        public ActionResult AssetInventory()
+        {
+            if (!IsSessionValid())
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+
+            ViewBag.unidade = new SelectList(_combo.Unidade(iCodigoEmpresa: codigoEmpresa, iCodigoUsuario: codigoUsuario, bCadastro: false), "codigo", "descricao", codigoUnidade);
+            ViewBag.setor = new SelectList(_combo.Setor(iCodigoEmpresa: codigoEmpresa, iCodigoUnidade: codigoUnidade), "codigo", "descricao", null);
+            ViewBag.apartamento = new SelectList(_combo.Apartamento(iCodigoEmpresa: codigoEmpresa, iCodigoUnidade: codigoUnidade), "codigo", "descricao", null);
+
+            return View();
+        }
+
+        #endregion
+
     }
 }

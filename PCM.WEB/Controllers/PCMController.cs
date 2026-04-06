@@ -139,31 +139,21 @@ namespace PCM.WEB.Controllers
 
         public void ResizeAndSaveImage(Stream imageStream, string outputFilePath)
         {
-
-            // Carrega a imagem a partir do Stream
             using (Bitmap originalImage = new Bitmap(imageStream))
             {
+                double scaleFactor = (originalImage.Width > originalImage.Height)
+                    ? 400.0 / originalImage.Width
+                    : 400.0 / originalImage.Height;
 
-                double scaleFactor = (originalImage.Width > originalImage.Height) ? 400.0 / originalImage.Width : 400.0 / originalImage.Height;
+                int newWidth = (int)Math.Ceiling(originalImage.Width * scaleFactor);
+                int newHeight = (int)Math.Ceiling(originalImage.Height * scaleFactor);
 
-                // Calcula a nova largura e altura com base no fator de escala
-                int newWidth = (int)(originalImage.Width * scaleFactor);
-                int newHeight = (int)(originalImage.Height * scaleFactor);
-
-                // Cria uma nova imagem redimensionada
-                using (Bitmap resizedImage = new Bitmap(newWidth, newHeight))
+                using (Bitmap resizedImage = new Bitmap(originalImage, newWidth, newHeight))
                 {
-                    // Configura o objeto Graphics para redimensionar a imagem com alta qualidade
-                    using (Graphics graphics = Graphics.FromImage(resizedImage))
-                    {
-                        graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                        graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight);
-                    }
-
-                    // Salva a imagem redimensionada no caminho de destino
-                    resizedImage.Save(outputFilePath, System.Drawing.Imaging.ImageFormat.Png); // ou outro formato conforme necessário
+                    resizedImage.Save(outputFilePath, System.Drawing.Imaging.ImageFormat.Png);
                 }
             }
+
         }
 
         // POST: /LOAD FOTO

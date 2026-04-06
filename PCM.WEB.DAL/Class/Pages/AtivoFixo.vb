@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlClient
+Imports OracleInternal.Json
 Imports PCM.WEB.DAL.SQLHelper
 Imports PCM.WEB.MODELS
 
@@ -10,7 +11,7 @@ Public Class AtivoFixo
         sConnection = sCon
     End Sub
 
-#Region "::: CADASTRO DE ATIVO :::"
+#Region "::: ASSET :::"
 
     Public Sub InsertAsset(ByVal oModel As AssetModel)
 
@@ -104,10 +105,6 @@ Public Class AtivoFixo
 
         Try
 
-            Dim oData As New List(Of Object)
-            Dim oColumns As New List(Of Object)
-            Dim oGroupBy As New List(Of Object)
-
             Dim oSqlParameter As SqlParameter() = {
                 CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
@@ -117,74 +114,7 @@ Public Class AtivoFixo
                 CriarParametro("localizacao", SqlDbType.VarChar, localizacao)
             }
 
-            Using oReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_asset", oSqlParameter)
-
-                'Data
-                If oReader.HasRows Then
-
-                    While oReader.Read()
-
-                        Dim oRow As New Dictionary(Of String, Object)
-
-                        For i As Integer = 0 To oReader.FieldCount - 1
-
-                            Dim columnName As String = oReader.GetName(i)
-
-                            If oReader.IsDBNull(i) Then
-                                oRow(columnName) = Nothing
-                            Else
-                                oRow(columnName) = oReader.GetValue(i)
-                            End If
-
-                        Next
-
-                        oData.Add(oRow)
-
-                    End While
-
-                End If
-
-                'Columns
-                If oReader.NextResult() Then
-
-                    While oReader.Read()
-
-                        oColumns.Add(New With {
-                            .Data = SafeGetString(oReader, "Data"),
-                            .Title = SafeGetString(oReader, "Title"),
-                            .Visible = SafeGetBoolean(oReader, "Visible"),
-                            .Orderable = SafeGetBoolean(oReader, "Orderable"),
-                            .Align = SafeGetString(oReader, "Align")
-                        })
-
-                    End While
-
-                End If
-
-                'Group
-                If oReader.NextResult() Then
-
-                    While oReader.Read()
-
-                        oGroupBy.Add(New With {
-                            .Column = SafeGetString(oReader, "ColumnName"),
-                            .Level = SafeGetLong(oReader, "Level"),
-                            .Collapsible = SafeGetBoolean(oReader, "Collapsible"),
-                            .ShowCount = SafeGetBoolean(oReader, "ShowCount"),
-                            .CssClass = SafeGetString(oReader, "CssClass")
-                        })
-
-                    End While
-
-                End If
-
-            End Using
-
-            Return New With {
-                .data = oData,
-                .columns = oColumns,
-                .groupBy = oGroupBy
-            }
+            Return LoadDynamicGrid(sConnection, "sp_select_cadastro_basico_asset", oSqlParameter)
 
         Catch SqlEx As SqlException
             Throw SqlEx
@@ -262,6 +192,99 @@ Public Class AtivoFixo
         End Try
 
     End Function
+
+#End Region
+
+#Region "::: ASSET MOVEMENT :::"
+
+    Public Function LoadAssetMovement(ByVal codigoEmpresa As Integer,
+                                      ByVal codigoUnidade As Integer,
+                                      ByVal codigo As String,
+                                      ByVal descricao As String,
+                                      ByVal status As Integer,
+                                      ByVal setor As Integer,
+                                      ByVal apartamento As Integer) As Object
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo", SqlDbType.VarChar, codigo),
+                CriarParametro("descricao", SqlDbType.VarChar, descricao),
+                CriarParametro("status", SqlDbType.SmallInt, status),
+                CriarParametro("setor", SqlDbType.Int, setor),
+                CriarParametro("apartamento", SqlDbType.Int, apartamento)
+            }
+
+            Return LoadDynamicGrid(sConnection, "sp_select_asset_movement", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
+#Region "::: ASSET INVENTORY :::"
+
+    Public Function CreateAssetInventory(ByVal codigoEmpresa As Integer,
+                                         ByVal codigoUnidade As Integer,
+                                         ByVal codigoUsuario As Integer) As defaultResponse
+
+
+        Dim _response As New defaultResponse
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario),
+                CriarParametro("numero_documento", SqlDbType.VarChar, codigoUsuario, ParameterDirection.Output)
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_asset_inventory", oSqlParameter)
+
+            _response.success = True
+            _response.documentNumber = oSqlParameter(3).Value.ToString()
+
+        Catch SqlEx As SqlException
+            _response.success = True
+            _response.message = SqlEx.Message.ToString()
+        Catch ex As Exception
+            _response.success = True
+            _response.message = ex.Message.ToString()
+        End Try
+
+        Return _response
+
+    End Function
+
+    Public Sub CloseAssetInventory(ByVal inventoryId As Long,
+                                   ByVal status As Integer,
+                                   ByVal codigoUsuario As Integer)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("inventory_id", SqlDbType.BigInt, inventoryId),
+                CriarParametro("status", SqlDbType.Int, status),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_asset_inventory_status", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
 
 #End Region
 

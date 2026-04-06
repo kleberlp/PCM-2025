@@ -345,7 +345,7 @@
 
                 jQuery.ajax({
                     type: "POST",
-                    url: "ClearPlanejamento",
+                    url: "@Url.Action("ClearPlanejamento", "Governanca")",
                     async: false,
                     data: {
                         unidade: $("#unidade").val(),
@@ -393,7 +393,7 @@
             lengthChange: false,
             autoWidth: false,
             ajax: {
-                url: "LoadPlanejamento",
+                url: "@Url.Action("LoadPlanejamento", "Governanca")",
                 type: "POST",
                 datatype: "json",
                 data: function (d) {
@@ -553,7 +553,7 @@
 
             // Envia via Ajax como parâmetros
             $.ajax({
-                url: "/Governanca/UpdateTipoGovernanca",
+                url: "@Url.Action("UpdateTipoGovernanca", "Governanca")",
                 type: "POST",
                 data: {
                     unidade: $("#unidade").val(),
@@ -626,7 +626,7 @@
 
             // Envia via Ajax como parâmetros
             $.ajax({
-                url: "/Governanca/UpdateCamareira",
+                url: "@Url.Action("UpdateCamareira", "Governanca")",
                 type: "POST",
                 data: {
                     unidade: $("#unidade").val(),
