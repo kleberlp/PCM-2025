@@ -395,6 +395,7 @@ Public Class InterfaceApi
 
                     Dim oInfo As New interfaceGovernancaDetails With {
                         .unidade = SafeGetString(oSqlDataReader, "unidade"),
+                        .codigoApontamento = SafeGetLong(oSqlDataReader, "codigo_apontamento"),
                         .dataInput = SafeGetString(oSqlDataReader, "data_input"),
                         .apartamento = SafeGetString(oSqlDataReader, "apartamento"),
                         .camareira = SafeGetString(oSqlDataReader, "camareira"),

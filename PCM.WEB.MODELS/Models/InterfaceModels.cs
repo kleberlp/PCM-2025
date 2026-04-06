@@ -135,6 +135,7 @@ namespace PCM.WEB.MODELS
     {
         public string unidade { get; set; }
         public string dataInput { get; set; }
+        public long codigoApontamento { get; set; }
         public string apartamento { get; set; }
         public string camareira { get; set; }
         public string vistoriador { get; set; }
