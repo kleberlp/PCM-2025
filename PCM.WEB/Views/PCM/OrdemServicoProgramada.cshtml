@@ -2,7 +2,7 @@
 
 <!-- Main Container -->
 <main id="main-container">
-   
+
     <!-- Breadcrumb -->
     <div class="bg-body-light border-b">
         <div class="content py-0 text-center">
@@ -14,7 +14,6 @@
         </div>
     </div>
     <!-- END Breadcrumb -->
-
     <!-- Page Content -->
     <div class="content">
 
@@ -355,8 +354,8 @@
                     </div>
                     <div class="modal-footer">
                         @*<input type="hidden" id="codigo_auditoria_interna" value="@Model.codigo_pcm_programada_ordem_servico" />
-                        <input type="hidden" id="codigo_auditoria" value="@Model.codigo " />
-                        <input type="hidden" id="data" value="@ViewBag.data" />*@
+                            <input type="hidden" id="codigo_auditoria" value="@Model.codigo " />
+                            <input type="hidden" id="data" value="@ViewBag.data" />*@
                         <input type="hidden" id="codigo_item_checklist" />
                         <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo();"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
                         <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$(this).next('.custom-file-label').addClass('selected').html('');" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
@@ -380,7 +379,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/clockpicker")
 
-<script>
+    <script>
 
         $(document).ready(function () { $("#data_inicio").mask("99/99/9999"); });
         $(document).ready(function () { $("#data_termino").mask("99/99/9999"); });
@@ -390,7 +389,7 @@
         $(document).ready(function () { $("#valor_manutencao").maskMoney({ prefix: 'R$ ', thousands: '.', decimal: ",", precision: 2, allowNegative: false, 'placeholder': '' }); });
 
         $(".custom-file-input").on('change', function () {
-            var filename = document.getElementById("arquivo").files[0].name;
+            var filename = document.getElementById("fileInput").files[0].name;
             $(this).next(".custom-file-label").addClass("selected").html(filename);
         });
 
@@ -419,6 +418,8 @@
 
                     var result = JSON.parse(oXMLHttpRequest.response);
 
+                    $(this).next(".custom-file-label").addClass("selected").html("Selecionar arquivo");
+
                     if (result == "false") {
 
                         swal({
@@ -437,7 +438,6 @@
                             }
                         });
 
-                        $(this).next(".custom-file-label").addClass("selected").html("");
                         Codebase.layout('header_loader_off');
 
                     } else {
@@ -448,6 +448,40 @@
             }
 
             return false;
+        }
+
+        function DeleteFoto(codigo) {
+
+            swal.fire({
+                title: 'Deseja excluir a Foto?',
+                text: 'Esta foto não poderá ser recuperada!',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d26a5c',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function (result) {
+                if (result.value) {
+                    $.post("DeleteFoto",
+                        {
+                            "codigoUnidade": $("#codigo_unidade").val(),
+                            "codigoDocumento": @ViewBag.ordem_servico.codigo,
+                            "codigoItemChecklist": $("#codigo_item_checklist").val(),
+                            "codigo": codigo,
+                            "tipo": $("#pcm_tipo").val()
+                        },
+                        function (result) {
+                            if (result) {
+                                swal.fire('Foto Excluida com Sucesso!', '', 'success').then(function (result) { LoadArquivo(); });
+                            } else {
+                                swal.fire('Não foi possível excluir a foto!', '', 'error');
+                            }
+                        });
+                }
+            });
+
         }
 
         function LoadArquivo() {
@@ -462,15 +496,22 @@
                 dataType: "json",
                 success: function (response) {
                     for (var i = 0; i < response.length; i++) {
-                        var image = '<div class="col-sm-6 col-xl-3">';
-                        image += '<a class="img-link img-link-zoom-in img-lightbox" href="' + response[i].filename + '">';
-                        image += '<img class="img-fluid" src="' + response[i].filename + '" alt="">';
+                        var image = '<div class="col-sm-6 col-xl-3 options-container">';
+                        image += '<img class="img-fluid options-item" src="' + response[i].filename + '" alt="">';
+                        image += '<div class="options-overlay bg-black-op-75">';
+                        image += '<div class="options-overlay-content">';
+                        image += '<a class="btn btn-sm btn-rounded btn-alt-danger min-width-75" onclick="DeleteFoto(' + response[i].codigo + ');">';
+                        image += '<i class="fa fa-times"></i> Excluir';
                         image += '</a>';
+                        image += '</div>';
+                        image += '</div>';
                         image += '</div>';
                         $("#galery").append(image);
                     }
                 }
             });
+
+            $(this).next(".custom-file-label").addClass("selected").html("Selecionar arquivo");
 
             $("#modalFoto").modal("show");
 
@@ -743,5 +784,5 @@
             Codebase.helpers(['datepicker', 'maxlength', 'select2', 'masked-inputs']);
         });
 
-</script>
+    </script>
 }

@@ -22684,3 +22684,46 @@ tr.dt-group-row.level-0 {
 tr.dt-group-row.level-1 {
     background-color: #fcf7e6;
 }
+
+
+.page-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.inventory-wrapper {
+    height: calc(100vh - 60px); /* ajusta conforme header do Codebase */
+    display: flex;
+    flex-direction: column;
+}
+
+/* topo */
+.top-fixed {
+    flex: 0 0 auto;
+    padding: 10px;
+}
+
+/* grid */
+.grid-scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding-bottom: 80px;
+}
+
+/* footer */
+.bottom-fixed {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    z-index: 10;
+}
+
+#tbApp thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: #d6d8db;
+}

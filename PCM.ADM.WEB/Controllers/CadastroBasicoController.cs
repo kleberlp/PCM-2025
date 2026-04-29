@@ -38,13 +38,13 @@ namespace PCM.ADM.WEB.Controllers
             {
                 if (codigo == 0)
                 {
-                    return Json(oAdministracao.ValidaUsuario(iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                             sEmail: email));
+                    return Json(oAdministracao.ValidaUsuario(codigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                             email: email));
                 }
                 else
                 {
-                    return Json(oAdministracao.ValidaUsuario(iCodigoUsuario: codigo,
-                                                             sEmail: email));
+                    return Json(oAdministracao.ValidaUsuario(codigoUsuario: codigo,
+                                                             email: email));
                 }
             }
 

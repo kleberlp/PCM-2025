@@ -1539,12 +1539,14 @@ namespace PCM.WEB.API.Controllers
             try
             {
                 List<pwaListaNotificacao> results = new List<pwaListaNotificacao>();
+                string versao = "";
 
                 results = oAPI.getNotificacao(iCodigoEmpresa: codigoEmpresa,
                                               iCodigoUnidade: codigoUnidade,
-                                              iCodigoUsuario: codigoUsuario);
+                                              iCodigoUsuario: codigoUsuario,
+                                              sVersao: ref versao);
 
-                notificacao.version = "2.23";
+                notificacao.version = versao;
                 notificacao.success = true;
                 notificacao.message = "";
                 notificacao.results = results;

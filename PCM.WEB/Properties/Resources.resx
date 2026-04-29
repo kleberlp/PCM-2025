@@ -2238,4 +2238,55 @@
   <data name="assetInventoryMng" xml:space="preserve">
     <value>Gestão de Inventário</value>
   </data>
+  <data name="inventoryInsertedSuccefully" xml:space="preserve">
+    <value>Inventário inserido com sucesso!</value>
+  </data>
+  <data name="msgQuestionCloseInventory" xml:space="preserve">
+    <value>Gostaria de finalizar o inventário?</value>
+  </data>
+  <data name="inventoryClosedSuccefully" xml:space="preserve">
+    <value>Inventário finalizado com sucesso!</value>
+  </data>
+  <data name="msgInformarDescricao" xml:space="preserve">
+    <value>Informar descrição</value>
+  </data>
+  <data name="descricaoAtivoFixo" xml:space="preserve">
+    <value>Descrição do ativo fixo</value>
+  </data>
+  <data name="ativoNaoEncontrado" xml:space="preserve">
+    <value>Ativo não encontrado</value>
+  </data>
+  <data name="msgQuestionRegistrarInventarioAtivo" xml:space="preserve">
+    <value>Deseja registrar a contagem mesmo assim?</value>
+  </data>
+  <data name="ativoCadastrado" xml:space="preserve">
+    <value>Ativo Cadastrado</value>
+  </data>
+  <data name="apartamentoAnterior" xml:space="preserve">
+    <value>Local/U.H. Anterior</value>
+  </data>
+  <data name="setorAnterior" xml:space="preserve">
+    <value>Setor anterior</value>
+  </data>
+  <data name="notaFiscal" xml:space="preserve">
+    <value>Nota fiscal</value>
+  </data>
+  <data name="contaContabil" xml:space="preserve">
+    <value>Conta contábil</value>
+  </data>
+  <data name="tempoDepreciacaoMes" xml:space="preserve">
+    <value>Tempo depreciação (mês)</value>
+  </data>
+  <data name="dataMovimentacao" xml:space="preserve">
+    <value>Data movimentação</value>
+  </data>
+  <data name="origem" xml:space="preserve">
+    <value>Origem</value>
+  </data>
+  <data name="destino" xml:space="preserve">
+    <value>Destino</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

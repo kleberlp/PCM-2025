@@ -5785,7 +5785,8 @@ Public Class Api
 
     Public Function getNotificacao(ByVal iCodigoEmpresa As Integer,
                                    ByVal iCodigoUnidade As Integer,
-                                   ByVal iCodigoUsuario As Integer) As List(Of pwaListaNotificacao)
+                                   ByVal iCodigoUsuario As Integer,
+                                   ByRef sVersao As String) As List(Of pwaListaNotificacao)
 
         'Variaveis Locais
         Dim oSqlParameter(2) As SqlParameter
@@ -5834,6 +5835,11 @@ Public Class Api
 
             End While
 
+            oSqlDataReader.NextResult()
+
+            While oSqlDataReader.Read
+                sVersao = oSqlDataReader("versao")
+            End While
 
             'Fecha o SqlDataReader
             If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing

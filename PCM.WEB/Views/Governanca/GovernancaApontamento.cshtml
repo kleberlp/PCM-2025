@@ -98,7 +98,7 @@
 
         $.ajax({
             type: "POST",
-            url: "LoadGovernancaHistoricoDetails",
+            url: "@Url.Action("LoadGovernancaHistoricoDetails", "Governanca")",
             async: false,
             data: {
                 "empresa": data.codigoEmpresa,
@@ -219,7 +219,7 @@
             scrollX: false,
             scrollColapse: true,
             ajax: {
-                url: "LoadApontamentoHistorico",
+                url: "@Url.Action("LoadApontamentoHistorico", "Governanca")",
                 type: "POST",
                 datatype: "json",
                 data: {
@@ -322,7 +322,7 @@
                 closeOnCancel: false
             }).then(function (result) {
                 if (result.value) {
-                    $.post("DeleteGovernanca", { "empresa": codigoEmpresa, "unidade": codigoUnidade, "codigo": codigo },
+                    $.post("@Url.Action("DeleteGovernanca", "Governanca")", { "empresa": codigoEmpresa, "unidade": codigoUnidade, "codigo": codigo },
                          function (resultDelete) {
                              if (resultDelete) {
                                  swal.fire('Registro excluído com Sucesso!', '', 'success').then(function (resultDelete) { window.location.href = '@Url.Action("Historico", "Governanca")'; });
@@ -337,7 +337,7 @@
 
         function viewGovernanca(data) {
 
-            window.open('GovernancaView' + '?empresa=' + data.codigoEmpresa + '&unidade=' + data.codigoUnidade + '&codigo=' + data.codigo, '_self');
+            window.open('@Url.Action("GovernancaView", "Governanca")' + '?empresa=' + data.codigoEmpresa + '&unidade=' + data.codigoUnidade + '&codigo=' + data.codigo, '_self');
 
         }
 

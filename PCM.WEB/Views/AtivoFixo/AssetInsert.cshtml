@@ -32,7 +32,8 @@
                 {
                     @Html.AntiForgeryToken()
 
-                    <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario">
+                    <input type="hidden" name="codigoUsuarioInput" id="codigoUsuarioInput" value="@ViewBag.usuario">
+                    <input type="hidden" name="codigoEmpresa" id="codigoEmpresa" value="@ViewBag.codigoEmpresa">
 
                     <div class="block block-rounded border">
 
@@ -76,14 +77,14 @@
                             <!-- LINHA 2 -->
                             <div class="form-group row">
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label>@Resources.tag</label>
                                     <input type="text" class="form-control" id="tag" name="tag">
                                 </div>
 
                                 <div class="col-md-2">
-                                    <label>@Resources.status</label>
-                                    @Html.DropDownList("codigoStatus", null, "", new { @class = "form-control" })
+                                    <label>@Resources.contaContabil</label>
+                                    <input type="text" class="form-control" id="contaContabil" name="contaContabil" maxlength="20">
                                 </div>
 
                                 <div class="col-md-2">
@@ -95,18 +96,28 @@
 
                                 <div class="col-md-2">
                                     <label>@Resources.valorCompra</label>
-                                    <input type="text" class="form-control" id="valorCompra" name="valorCompra">
+                                    <input type="number" class="form-control" id="valorCompra" name="valorCompra">
                                 </div>
 
-                                <div class="col-md-3">
-                                    <label>@Resources.responsavel</label>
-                                    @Html.DropDownList("codigoUsuarioResponsavel", null, "", new { @class = "form-control" })
+                                <div class="col-md-2">
+                                    <label>@Resources.tempoDepreciacaoMes</label>
+                                    <input type="number" class="form-control" id="tempoDepreciacaoMes" name="tempoDepreciacaoMes">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>@Resources.notaFiscal</label>
+                                    <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" maxlength="20">
                                 </div>
 
                             </div>
 
                             <!-- LINHA 3 -->
                             <div class="form-group row">
+
+                                <div class="col-md-2">
+                                    <label>@Resources.status</label>
+                                    @Html.DropDownList("codigoStatus", null, "", new { @class = "form-control" })
+                                </div>
 
                                 <div class="col-md-3">
                                     <label>@Resources.setor</label>
@@ -118,6 +129,23 @@
                                     @Html.DropDownList("codigoApartamento", null, "", new { @class = "form-control" })
                                 </div>
 
+                                <div class="col-md-4">
+                                    <label>@Resources.responsavel</label>
+                                    @Html.DropDownList("codigoUsuarioResponsavel", null, "", new { @class = "form-control" })
+                                </div>
+
+                            </div>
+
+                            <!-- LINHA 4 -->
+                            <div class="form-group row">
+
+                                <div class="col-md-12">
+                                    <label>@PCM.WEB.Properties.Resources.arquivo</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="application/pdf">
+                                        <label id="lblArquivo" class="custom-file-label" for="arquivo">@ViewBag.arquivo</label>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>

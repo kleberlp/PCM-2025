@@ -439,11 +439,11 @@ Module modFuncion
                     While oReader.Read()
 
                         oColumns.Add(New With {
-                            .Data = SafeGetString(oReader, "Data"),
-                            .Title = SafeGetString(oReader, "Title"),
-                            .Visible = SafeGetBoolean(oReader, "Visible"),
-                            .Orderable = SafeGetBoolean(oReader, "Orderable"),
-                            .Align = SafeGetString(oReader, "Align")
+                            .data = SafeGetString(oReader, "data"),
+                            .title = SafeGetString(oReader, "title"),
+                            .visible = SafeGetBoolean(oReader, "visible"),
+                            .orderable = SafeGetBoolean(oReader, "orderable"),
+                            .align = SafeGetString(oReader, "align")
                         })
 
                     End While
@@ -456,11 +456,11 @@ Module modFuncion
                     While oReader.Read()
 
                         oGroupBy.Add(New With {
-                            .Column = SafeGetString(oReader, "ColumnName"),
-                            .Level = SafeGetLong(oReader, "Level"),
-                            .Collapsible = SafeGetBoolean(oReader, "Collapsible"),
-                            .ShowCount = SafeGetBoolean(oReader, "ShowCount"),
-                            .CssClass = SafeGetString(oReader, "CssClass")
+                            .column = SafeGetString(oReader, "columnName"),
+                            .level = SafeGetLong(oReader, "level"),
+                            .collapsible = SafeGetBoolean(oReader, "collapsible"),
+                            .showCount = SafeGetBoolean(oReader, "showCount"),
+                            .cssClass = SafeGetString(oReader, "cssClass")
                         })
 
                     End While

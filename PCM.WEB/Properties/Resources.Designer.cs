@@ -259,6 +259,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Local/U.H. Anterior.
+        /// </summary>
+        public static string apartamentoAnterior {
+            get {
+                return ResourceManager.GetString("apartamentoAnterior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Apelido.
         /// </summary>
         public static string apelido {
@@ -534,6 +543,24 @@ namespace PCM.WEB.Properties {
         public static string ativo {
             get {
                 return ResourceManager.GetString("ativo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ativo Cadastrado.
+        /// </summary>
+        public static string ativoCadastrado {
+            get {
+                return ResourceManager.GetString("ativoCadastrado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ativo não encontrado.
+        /// </summary>
+        public static string ativoNaoEncontrado {
+            get {
+                return ResourceManager.GetString("ativoNaoEncontrado", resourceCulture);
             }
         }
         
@@ -1267,6 +1294,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Conta contábil.
+        /// </summary>
+        public static string contaContabil {
+            get {
+                return ResourceManager.GetString("contaContabil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Contador por.
         /// </summary>
         public static string contador {
@@ -1654,6 +1690,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Data movimentação.
+        /// </summary>
+        public static string dataMovimentacao {
+            get {
+                return ResourceManager.GetString("dataMovimentacao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Dedetização.
         /// </summary>
         public static string dedetizacao {
@@ -1753,6 +1798,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Descrição do ativo fixo.
+        /// </summary>
+        public static string descricaoAtivoFixo {
+            get {
+                return ResourceManager.GetString("descricaoAtivoFixo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Descritivo.
         /// </summary>
         public static string descritivo {
@@ -1794,6 +1848,15 @@ namespace PCM.WEB.Properties {
         public static string desempenho_unidades_qualidade {
             get {
                 return ResourceManager.GetString("desempenho_unidades_qualidade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Destino.
+        /// </summary>
+        public static string destino {
+            get {
+                return ResourceManager.GetString("destino", resourceCulture);
             }
         }
         
@@ -2950,6 +3013,24 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Inventário finalizado com sucesso!.
+        /// </summary>
+        public static string inventoryClosedSuccefully {
+            get {
+                return ResourceManager.GetString("inventoryClosedSuccefully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Inventário inserido com sucesso!.
+        /// </summary>
+        public static string inventoryInsertedSuccefully {
+            get {
+                return ResourceManager.GetString("inventoryInsertedSuccefully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Item - Medição.
         /// </summary>
         public static string item_medicao {
@@ -3427,6 +3508,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Informar descrição.
+        /// </summary>
+        public static string msgInformarDescricao {
+            get {
+                return ResourceManager.GetString("msgInformarDescricao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Esta operação não poderá ser desfeita.
         /// </summary>
         public static string msgNotPossibleReverse {
@@ -3445,11 +3535,29 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Gostaria de finalizar o inventário?.
+        /// </summary>
+        public static string msgQuestionCloseInventory {
+            get {
+                return ResourceManager.GetString("msgQuestionCloseInventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Gostaria de excluir o registro selecionado?.
         /// </summary>
         public static string msgQuestionDelete {
             get {
                 return ResourceManager.GetString("msgQuestionDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Deseja registrar a contagem mesmo assim?.
+        /// </summary>
+        public static string msgQuestionRegistrarInventarioAtivo {
+            get {
+                return ResourceManager.GetString("msgQuestionRegistrarInventarioAtivo", resourceCulture);
             }
         }
         
@@ -3603,6 +3711,15 @@ namespace PCM.WEB.Properties {
         public static string nota {
             get {
                 return ResourceManager.GetString("nota", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nota fiscal.
+        /// </summary>
+        public static string notaFiscal {
+            get {
+                return ResourceManager.GetString("notaFiscal", resourceCulture);
             }
         }
         
@@ -3796,6 +3913,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a OK.
+        /// </summary>
+        public static string ok {
+            get {
+                return ResourceManager.GetString("ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Operação realizada com sucesso!.
         /// </summary>
         public static string operacao_realizaca_sucesso {
@@ -3846,6 +3972,15 @@ namespace PCM.WEB.Properties {
         public static string ordemCompraGerada {
             get {
                 return ResourceManager.GetString("ordemCompraGerada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Origem.
+        /// </summary>
+        public static string origem {
+            get {
+                return ResourceManager.GetString("origem", resourceCulture);
             }
         }
         
@@ -5200,6 +5335,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Setor anterior.
+        /// </summary>
+        public static string setorAnterior {
+            get {
+                return ResourceManager.GetString("setorAnterior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Sexta.
         /// </summary>
         public static string sexta {
@@ -5385,6 +5529,15 @@ namespace PCM.WEB.Properties {
         public static string tempo_real {
             get {
                 return ResourceManager.GetString("tempo_real", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Tempo depreciação (mês).
+        /// </summary>
+        public static string tempoDepreciacaoMes {
+            get {
+                return ResourceManager.GetString("tempoDepreciacaoMes", resourceCulture);
             }
         }
         

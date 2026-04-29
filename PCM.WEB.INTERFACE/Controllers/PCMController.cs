@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
 using PCM.WEB.DAL;
 using PCM.WEB.MODELS;
@@ -205,6 +206,24 @@ namespace PCM.WEB.INTERFACE.Controllers
             InterfaceApiOracle interfaceApi = new InterfaceApiOracle(sCon: _config["ConnectionStringOracle"].ToString());
 
             return Ok(interfaceApi.StatusUH(sHotelId: hotelId));
+
+        }
+
+        [HttpGet]
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("VisaoPCM")]
+        public IActionResult VisaoPCM(int mes = 0, int ano = 0)
+        {
+
+            if (mes == 0 || ano == 0)
+            {
+                mes = DateTime.Now.Month;
+                ano = DateTime.Now.Year;
+            }
+
+            InterfaceApi interfaceApi = new InterfaceApi(sCon: _config["ConnectionString"].ToString());
+
+            return Ok(interfaceApi.VisaoPCM(mes: mes, ano: ano));
 
         }
 

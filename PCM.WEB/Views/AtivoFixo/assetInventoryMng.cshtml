@@ -9,69 +9,110 @@
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
 }
 
 
-<div class="content">
+<!-- Main Container -->
+<main id="main-container">
 
-    <!-- HEADER -->
-    <div class="block block-rounded">
-        <div class="block-header">
-            <h3 class="block-title">@Resources.assetInventory</h3>
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@Resources.pcm</a>
+                <span class="breadcrumb-item">@Resources.cadastro_basico</span>
+                <span class="breadcrumb-item active">@Resources.asset</span>
+            </nav>
         </div>
     </div>
 
-    <!-- TABS -->
-    <div class="block block-rounded">
+    <!-- Page Content -->
+    <div class="content">
 
-        <div class="form-group row">
-            <div class="col-lg-6">
-                <!-- Vertical Block Tabs Default Style -->
-                <div class="block block-rounded row g-0 overflow-hidden">
-                    <ul class="nav nav-tabs nav-tabs-block flex-md-column col-md-4 rounded-0" role="tablist">
-                        <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link fs-sm text-md-start rounded-0 active" id="btabs-vertical-home-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-home" role="tab" aria-controls="btabs-vertical-home" aria-selected="true">
-                                <i class="fa fa-fw fa-home opacity-50 me-1 d-none d-sm-inline-block"></i> Home
-                            </button>
-                        </li>
-                        <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link fs-sm text-md-start rounded-0" id="btabs-vertical-profile-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-profile" role="tab" aria-controls="btabs-vertical-profile" aria-selected="false">
-                                <i class="fa fa-fw fa-user-circle opacity-50 me-1 d-none d-sm-inline-block"></i> Profile
-                            </button>
-                        </li>
-                        <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link fs-sm text-md-start rounded-0" id="btabs-vertical-settings-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-settings" role="tab" aria-controls="btabs-vertical-settings" aria-selected="false">
-                                <i class="fa fa-fw fa-cog opacity-50 me-1 d-none d-sm-inline-block"></i> Settings
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content col-md-8">
-                        <div class="block-content tab-pane active" id="btabs-vertical-home" role="tabpanel" aria-labelledby="btabs-vertical-home-tab" tabindex="0">
-                            <h4 class="fw-semibold">Home Content</h4>
-                            <p class="fs-sm">
-                                Enim elit sollicitudin orci, eget dictum leo mi nec lectus. Nam commodo turpis id lectus scelerisque vulputate. Integer sed dolor erat. Fusce erat ipsum, varius vel euismod sed, tristique et lectus? Etiam egestas fringilla enim, id convallis lectus laoreet at. Fusce purus nisi, gravida sed consectetur ut, interdum quis nisi. Quisque egestas nisl id lectus facilisis scelerisque? Proin rhoncus dui at ligula vestibulum ut facilisis ante sodales! Suspendisse potenti. Aliquam tincidunt sollicitudin sem nec ultrices. Sed at mi velit. Ut egestas tempor est, in cursus enim venenatis eget! Nulla quis ligula ipsum.
-                            </p>
-                        </div>
-                        <div class="block-content tab-pane" id="btabs-vertical-profile" role="tabpanel" aria-labelledby="btabs-vertical-profile-tab" tabindex="0">
-                            <h4 class="fw-semibold">Profile Content</h4>
-                            <p class="fs-sm">
-                                Mauris tincidunt tincidunt turpis in porta. Integer fermentum tincidunt auctor. Vestibulum ullamcorper, odio sed rhoncus imperdiet, enim elit sollicitudin orci, eget dictum leo mi nec lectus. Nam commodo turpis id lectus scelerisque vulputate. Integer sed dolor erat. Fusce erat ipsum, varius vel euismod sed, tristique et lectus? Etiam egestas fringilla enim, id convallis lectus laoreet at. Fusce purus nisi, gravida sed consectetur ut, interdum quis nisi. Quisque egestas nisl id lectus facilisis scelerisque? Proin rhoncus dui at ligula vestibulum ut facilisis ante sodales! Suspendisse potenti. Aliquam tincidunt.
-                            </p>
-                        </div>
-                        <div class="block-content tab-pane" id="btabs-vertical-settings" role="tabpanel" aria-labelledby="btabs-vertical-settings-tab" tabindex="0">
-                            <h4 class="fw-semibold">Settings Content</h4>
-                            <p class="fs-sm">
-                                Integer fermentum tincidunt auctor. Vestibulum ullamcorper, odio sed rhoncus imperdiet, enim elit sollicitudin orci, eget dictum leo mi nec lectus. Nam commodo turpis id lectus scelerisque vulputate. Integer sed dolor erat. Fusce erat ipsum, varius vel euismod sed, tristique et lectus? Etiam egestas fringilla enim, id convallis lectus laoreet at. Fusce purus nisi, gravida sed consectetur ut, interdum quis nisi. Quisque egestas nisl id lectus facilisis scelerisque? Proin rhoncus dui at ligula vestibulum ut facilisis ante sodales! Suspendisse potenti. Aliquam tincidunt sollicitudin sem nec ultrices. Sed at mi velit.
-                            </p>
+        @using (Html.BeginForm("AssetIndex", "Asset", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "form", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Toggle Mobile -->
+            <button type="button" class="btn btn-block btn-square btn-secondary d-md-none mb-10"
+                    data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">
+                Buscar
+            </button>
+
+            <!-- FILTROS -->
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+
+                    <div class="block-header block-header-default bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">@Resources.asset</h3>
+
+                        <div class="block-options">
+                            <a href="@Url.Action("AssetInventoryInsert", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75" id="newInventory" name="newInventory"><i class="fa fa-plus mr-5"></i>@Resources.novo</a>
+                            <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" id="closeInventory" name="closeInventory"><i class="fa fa-plus mr-5"></i>@Resources.closeInventory</button>
                         </div>
                     </div>
+
+                    <div class="block-content">
+                        <ul class="list-group push">
+
+                            <li class="list-group-item">
+                                <div class="row">
+
+                                    <div class="col-md-2">
+                                        <label>@Resources.unidade</label>
+                                        @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label>@Resources.descricao</label>
+                                        <input type="text" class="form-control" id="descricao">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label>@Resources.periodo</label>
+                                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                            <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text font-w600">-</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label>@Resources.status</label>
+                                        @Html.DropDownList("statusInventario", null, "", new { @class = "form-control" })
+                                    </div>
+
+                                </div>
+                            </li>
+
+                            <li class="list-group-item text-right">
+                                <button type="button" id="filtrar" name="filtrar" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
+                            </li>
+
+                        </ul>
+                    </div>
+
                 </div>
             </div>
-        </div>
+
+            <!-- GRID -->
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full">
+
+                    <table id="tbMain" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+
+                </div>
+
+            </div>
+
+        }
 
     </div>
-
-</div>
+</main>
 
 <div id="resource-messages"
      data-messages='@Html.Raw(JsonConvert.SerializeObject(new
@@ -79,6 +120,7 @@
         emptyTable = Resources.emptyTable,
         msgQuestionDelete = Resources.msgQuestionDelete,
         msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        msgQuestionCloseInventory = Resources.msgQuestionCloseInventory,
         yes = Resources.yes,
         no = Resources.no,
         clickToEdit = Resources.clickToEdit,
@@ -87,7 +129,21 @@
         clickToExcel = Resources.clickToExcel,
         clickToPdf = Resources.clickToPdf,
         clickToConfig = Resources.clickToConfig,
-        administrator = ViewBag.administrator
+        asset = Resources.asset,
+        descricao = Resources.descricao,
+        setor = Resources.setor,
+        apartamento = Resources.apartamento,
+        usuario = Resources.usuario,
+        data = Resources.data,
+        ativoCadastrado = Resources.ativoCadastrado,
+        setorAnterior = Resources.setorAnterior,
+        apartamentoAnterior = Resources.apartamentoAnterior,
+        editar = ViewBag.editar,
+        excluir = ViewBag.excluir,
+        urlLoadAssetInventoryMng = Url.Action("loadAssetInventoryMng", "AtivoFixo"),
+        urlLoadAssetInventoryMngDetails = Url.Action("loadAssetInventoryMngDetails", "AtivoFixo"),
+        urlHasInventoryOpened = Url.Action("hasInventoryOpened", "AtivoFixo"),
+        urlCloseInventory = Url.Action("closeInventory", "AtivoFixo")
     }))'>
 </div>
 
@@ -106,6 +162,7 @@
     <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
     <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+    <script src="~/Content/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="~/Content/js/pcm.js"></script>
 
     <!-- Page-->

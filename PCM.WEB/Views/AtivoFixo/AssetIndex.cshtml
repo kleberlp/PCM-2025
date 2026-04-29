@@ -67,7 +67,7 @@
 
                                     <div class="col-md-2">
                                         <label>@Resources.codigo</label>
-                                        <input type="text" class="form-control" id="assetCode">
+                                        <input type="text" class="form-control" id="codigo">
                                     </div>
 
                                     <div class="col-md-3">
@@ -109,7 +109,7 @@
 
                 <div class="block-content block-content-full">
 
-                    <table id="tableDynamic" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+                    <table id="tbMain" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
 
                 </div>
 
@@ -136,7 +136,9 @@
         clickToConfig = Resources.clickToConfig,
         editar = ViewBag.editar,
         excluir = ViewBag.excluir,
-        urlLoadAsset = Url.Action("LoadAsset")
+        urlLoadAsset = Url.Action("LoadAsset", "AtivoFixo"),
+        urlAssetEdit = Url.Action("AssetEdit", "AtivoFixo"),
+        urlAssetDelete = Url.Action("AssetDelete", "AtivoFixo")
     }))'>
 </div>
 

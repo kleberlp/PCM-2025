@@ -535,4 +535,64 @@ Public Class InterfaceApi
 
 #End Region
 
+#Region "::: VISÃO PCM :::"
+
+    Public Function VisaoPCM(ByVal mes As Integer, ByVal ano As Integer) As List(Of interfaceVisaoPCM)
+
+
+        'Variaveis Locais
+        Dim oReturn As New List(Of interfaceVisaoPCM)
+
+        Try
+
+            Dim culture = Globalization.CultureInfo.GetCultureInfo("pt-BR")
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("mes", SqlDbType.SmallInt, mes),
+                CriarParametro("ano", SqlDbType.Int, ano)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_dashboard_silas", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New interfaceVisaoPCM
+
+                    oInfo.empresa = oSqlDataReader.Item("empresa")
+                    oInfo.unidade = oSqlDataReader.Item("unidade")
+                    oInfo.quantidadeOSGerada = oSqlDataReader.Item("quantidade_os_gerada")
+                    oInfo.quantidadeOSAtendida = oSqlDataReader.Item("quantidade_os_atendida")
+                    oInfo.quantidadeOSPendente = oSqlDataReader.Item("quantidade_os_pendente")
+                    oInfo.laudo = oSqlDataReader.Item("laudo") / 100.0
+                    oInfo.preventiva = oSqlDataReader.Item("preventiva") / 100.0
+                    oInfo.rotina = oSqlDataReader.Item("rotina") / 100.0
+                    oInfo.pmoc = oSqlDataReader.Item("pmoc") / 100.0
+                    oInfo.uhDia = oSqlDataReader.Item("uh_dia") / 100.0
+                    oInfo.greenPlanet = oSqlDataReader.Item("green_planet") / 100.0
+                    oInfo.corLaudo = IIf(oSqlDataReader.Item("laudo") >= 90, "bg-success text-white", IIf(oSqlDataReader.Item("laudo") < 80, "bg-danger text-white", "bg-warning"))
+                    oInfo.corPreventiva = IIf(oSqlDataReader.Item("preventiva") >= 90, "bg-success text-white", IIf(oSqlDataReader.Item("preventiva") < 80, "bg-danger text-white", "bg-warning"))
+                    oInfo.corRotina = IIf(oSqlDataReader.Item("rotina") >= 90, "bg-success text-white", IIf(oSqlDataReader.Item("rotina") < 80, "bg-danger text-white", "bg-warning"))
+                    oInfo.corPMOC = IIf(oSqlDataReader.Item("pmoc") >= 90, "bg-success text-white", IIf(oSqlDataReader.Item("pmoc") < 80, "bg-danger text-white", "bg-warning"))
+                    oInfo.corUHDia = IIf(oSqlDataReader.Item("uh_dia") >= 90, "bg-success text-white", IIf(oSqlDataReader.Item("uh_dia") < 80, "bg-danger text-white", "bg-warning"))
+                    oInfo.corGreenPlanet = IIf(oSqlDataReader.Item("green_planet") >= 90, "bg-success text-white", IIf(oSqlDataReader.Item("green_planet") < 80, "bg-danger text-white", "bg-warning"))
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
 End Class

@@ -148,12 +148,22 @@ namespace PCM.WEB.Controllers
                 int newWidth = (int)Math.Ceiling(originalImage.Width * scaleFactor);
                 int newHeight = (int)Math.Ceiling(originalImage.Height * scaleFactor);
 
-                using (Bitmap resizedImage = new Bitmap(originalImage, newWidth, newHeight))
+                using (Bitmap resizedImage = new Bitmap(newWidth, newHeight))
                 {
+                    using (Graphics g = Graphics.FromImage(resizedImage))
+                    {
+                        // Configurações de alta qualidade
+                        g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+                        g.DrawImage(originalImage, 0, 0, newWidth, newHeight);
+                    }
+
                     resizedImage.Save(outputFilePath, System.Drawing.Imaging.ImageFormat.Png);
                 }
             }
-
         }
 
         // POST: /LOAD FOTO
@@ -204,6 +214,27 @@ namespace PCM.WEB.Controllers
 
         }
 
+        // POST: /DELETE
+        public JsonResult DeleteFoto(int codigoUnidade, long codigoDocumento, int codigoItemChecklist, int codigo, string tipo)
+        {
+            try
+            {
+                //Insere Registro no Banco de Dados
+                oPicture.DeletePicture(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                       iCodigoUnidade: codigoUnidade,
+                                       sTipo: tipo,
+                                       lCodigoDocumento: codigoDocumento,
+                                       iCodigoItemChecklist: codigoItemChecklist,
+                                       iCodigo: codigo);
+
+                //Redireciona para Index
+                return Json(true);
+            }
+            catch
+            {
+                return Json(false);
+            }
+        }
         #endregion
 
         #region ::: APONTAMENTO - OS :::

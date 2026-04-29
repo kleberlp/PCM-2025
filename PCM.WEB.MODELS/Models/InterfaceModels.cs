@@ -172,5 +172,24 @@ namespace PCM.WEB.MODELS
         public string termino { get; set; }
         public string justificativa { get; set; }
     }
-
+    public class interfaceVisaoPCM
+    {
+        public string empresa { get; set; }
+        public string unidade { get; set; }
+        public int quantidadeOSGerada { get; set; }
+        public int quantidadeOSAtendida { get; set; }
+        public int quantidadeOSPendente { get; set; }
+        public float laudo { get; set; }
+        public float preventiva { get; set; }
+        public float rotina { get; set; }
+        public float pmoc { get; set; }
+        public float uhDia { get; set; }
+        public float greenPlanet { get; set; }
+        public string corLaudo { get; set; }
+        public string corPreventiva { get; set; }
+        public string corRotina { get; set; }
+        public string corPMOC { get; set; }
+        public string corUHDia { get; set; }
+        public string corGreenPlanet { get; set; }
+    }
 }

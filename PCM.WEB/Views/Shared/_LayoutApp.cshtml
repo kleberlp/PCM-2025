@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 
@@ -37,36 +36,26 @@
 
     @Styles.Render("~/Content/codebase")
 
-    @*You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg:*@
-    @*<link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css">*@
-    <!-- END Stylesheets
-    </head>
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
+    <!-- END Stylesheets -->
+</head>
 
-    <body>
+<body>
 
-        <!-- Wrapper-->
+    <!-- Wrapper-->
     <!-- PageClass give you ability to specify custom style for specific view based on action -->
-    <div id="page-container" class="sidebar sidebar-mini page-header-fixed sidebar-inverse sidebar-o side-scroll">
-
-        <!-- Sidebar -->
-        @Html.Partial("_Sidebar")
+    <div id="page-container" class="page-header-fixed page-footer-fixed">
 
         <!-- Header -->
-        @Html.Partial("_Header")
+        @Html.Partial("_HeaderApp")
 
         <!-- Main view  -->
         @RenderBody()
 
-        <!-- Footer -->
-        @*@Html.Partial("_Footer")*@
-
     </div>
     <!-- End wrapper-->
     <!-- Section for main scripts render -->
-    @*@Scripts.Render("~/plugins/codebase")*@
-    @*@Scripts.Render("~/plugins/validation")*@
-    @*@Scripts.Render("~/pages/sidebar")*@
-
     <script src="~/Content/js/jquery.min.js"></script>
     <script src="~/Content/js/jquery-3.7.1.js"></script>
     <script src="~/Content/js/jquery.core.js"></script>
@@ -86,9 +75,6 @@
     <script src="~/Content/js/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="~/Content/js/plugins/dropzonejs/min/dropzone.min.js"></script>
 
-    <script src="~/Content/js/plugins/masked-inputs/jquery.maskedinput.min.js"></script>
-    <script src="~/Content/js/plugins/masked-money/jquery.maskMoney.min.js"></script>
-
     <script src="~/Content/js/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/Content/js/plugins/jquery-validation/additional-methods.min.js"></script>
 
@@ -97,6 +83,8 @@
     <script src="~/Content/js/lib/tippy/tippy.all.min.js"></script>
     <script src="~/Content/js/lib/jquery-validation/jquery.validate.js"></script>
     <script src="~/Content/js/lib/jquery-validation/additional-methods.js"></script>
+    <script src="~/Content/js/lib/masked-inputs/jquery.maskedinput.min.js"></script>
+    <script src="~/Content/js/lib/masked-money/jquery.maskMoney.min.js"></script>
     <script src="~/Content/js/lib/select2/select2.min.js"></script>
     <script src="~/Content/js/lib/timepicker/bootstrap-material-datetimepicker.js"></script>
     <script src="~/Content/js/lib/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
@@ -105,10 +93,15 @@
     <script src="~/Content/js/pages/sidebar.js"></script>
     <script src="~/Content/js/codebase.js"></script>
 
-
     <!-- Handler for local scripts -->
     @RenderSection("scripts", required: false)
 
-    </body>
+    <script type="text/javascript">
+        var urlSenha = "@Url.Action("UsuarioUpdate", "Administracao")";
+        var urlNotificacao = "@Url.Action("Notificacao", "Home")";
+        var urlNotificacaoOSHospede = "@Url.Action("NotificacaoOSHospede", "Home")";
+    </script>
+
+</body>
 
 </html>

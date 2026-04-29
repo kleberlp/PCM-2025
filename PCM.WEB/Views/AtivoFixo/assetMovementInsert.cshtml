@@ -1,6 +1,5 @@
 ﻿@using PCM.WEB.Properties;
 @using Newtonsoft.Json;
-@Model AssetModel;
 
 @section styles {
     <!-- Table css -->
@@ -15,8 +14,8 @@
         <div class="content py-0 text-md-center">
             <nav class="breadcrumb bg-body-light mb-0">
                 <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
-                <span class="breadcrumb-item">@Resources.cadastro_basico</span>
-                <a class="breadcrumb-item" href="@Url.Action("AssetIndex", "Asset")">@Resources.asset</a>
+                <span class="breadcrumb-item">@Resources.asset</span>
+                <a class="breadcrumb-item" href="@Url.Action("AssetIndex", "Asset")">@Resources.assetMovement</a>
                 <span class="breadcrumb-item active">@Resources.inserir</span>
             </nav>
         </div>
@@ -29,13 +28,12 @@
 
             <div class="col-md-12">
 
-                @using (Html.BeginForm("AssetEdit", "AtivoFixo", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", name = "form", id = "form" }))
+                @using (Html.BeginForm("assetMovementInsert", "AtivoFixo", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", name = "form", id = "form" }))
                 {
                     @Html.AntiForgeryToken()
 
-                    <input type="hidden" name="codigo" id="codigo" value="@Model.codigo">
-                    <input type="hidden" name="codigoUsuarioUpdate" id="codigoUsuarioUpdate" value="@ViewBag.usuario">
-                    <input type="hidden" name="codigoEmpresa" id="codigoEmpresa" value="@Model.codigoEmpresa">
+                    <input type="hidden" name="codigoUsuarioInput" id="codigoUsuarioInput" value="@ViewBag.usuario">
+                    <input type="hidden" name="codigoEmpresa" id="codigoEmpresa" value="@ViewBag.codigoEmpresa">
 
                     <div class="block block-rounded border">
 
@@ -44,7 +42,7 @@
                             <h3 class="block-title text-white font-w600">@Resources.inserir</h3>
                             <div class="block-options">
                                 <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@Resources.salvar</button>
-                                <a href="@Url.Action("AssetIndex", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-action-undo mr-5"></i>@Resources.voltar</a>
+                                <a href="@Url.Action("assetMovement", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-action-undo mr-5"></i>@Resources.voltar</a>
                             </div>
                         </div>
 
@@ -56,22 +54,29 @@
 
                                 <div class="col-md-3">
                                     <label>@Resources.unidade</label>
-                                    @Html.DropDownList("codigoUnidade", null, "", new { @class = "js-select2 form-control" })
+                                    @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
                                 </div>
 
                                 <div class="col-md-2">
-                                    <label>@Resources.codigo</label>
-                                    <input type="text" class="form-control" id="assetCode" name="assetCode" maxlength="50" value="@Model.assetCode">
-                                </div>
-
-                                <div class="col-md-5">
-                                    <label>@Resources.descricao</label>
-                                    <input type="text" class="form-control" id="descricao" name="descricao" maxlength="255" value="@Model.descricao">
+                                    <label>@Resources.tipoMovimentacao</label>
+                                    @Html.DropDownList("tipoMovimentacao", null, "", new { @class = "form-control" })
                                 </div>
 
                                 <div class="col-md-2">
-                                    <label>@Resources.numeroSerie</label>
-                                    <input type="text" class="form-control" id="numeroSerie" name="numeroSerie" value="@Model.numeroSerie">
+                                    <label>@Resources.dataMovimentacao</label>
+                                    <div>
+                                        <input type="text" class="js-datepicker form-control" id="dataMovimentacao" name="dataMovimentacao" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>@Resources.numero_documento</label>
+                                    <input type="text" class="form-control" id="documento" name="documento" maxlength="20">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>@Resources.asset</label>
+                                    @Html.DropDownList("asset", null, "", new { @class = "form-control" })
                                 </div>
 
                             </div>
@@ -79,36 +84,24 @@
                             <!-- LINHA 2 -->
                             <div class="form-group row">
 
-                                <div class="col-md-2">
-                                    <label>@Resources.tag</label>
-                                    <input type="text" class="form-control" id="tag" name="tag" value="@Model.tag">
+                                <div class="col-md-3">
+                                    <label>@Resources.setor</label>
+                                    @Html.DropDownList("setor", null, "", new { @class = "form-control" })
                                 </div>
 
                                 <div class="col-md-2">
-                                    <label>@Resources.contaContabil</label>
-                                    <input type="text" class="form-control" id="contaContabil" name="contaContabil" maxlength="20" value="@Model.contaContabil">
+                                    <label>@Resources.apartamento</label>
+                                    @Html.DropDownList("apartamento", null, "", new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-5">
+                                    <label>@Resources.fornecedor</label>
+                                    @Html.DropDownList("fornecedor", null, "", new { @class = "form-control" })
                                 </div>
 
                                 <div class="col-md-2">
-                                    <label>@Resources.dataCompra</label>
-                                    <div>
-                                        <input type="text" class="js-datepicker form-control" id="dataCompra" name="dataCompra" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" value="@Model.dataCompra">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2">
-                                    <label>@Resources.valorCompra</label>
-                                    <input type="number" class="form-control" id="valorCompra" name="valorCompra" value="@Model.valorCompra">
-                                </div>
-
-                                <div class="col-md-2">
-                                    <label>@Resources.tempoDepreciacaoMes</label>
-                                    <input type="number" class="form-control" id="tempoDepreciacaoMes" name="tempoDepreciacaoMes" value="@Model.tempoDepreciacaoMes">
-                                </div>
-
-                                <div class="col-md-2">
-                                    <label>@Resources.notaFiscal</label>
-                                    <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" maxlength="20" value="@Model.notaFiscal">
+                                    <label>@Resources.valor</label>
+                                    <input type="text" class="form-control" id="valor" name="valor" maxlength="10">
                                 </div>
 
                             </div>
@@ -116,32 +109,11 @@
                             <!-- LINHA 3 -->
                             <div class="form-group row">
 
-                                <div class="col-md-2">
-                                    <label>@Resources.status</label>
-                                    @Html.DropDownList("codigoStatus", null, "", new { @class = "form-control" })
+                                <div class="col-md-6">
+                                    <label>@PCM.WEB.Properties.Resources.observacao</label>
+                                    <div><textarea class="form-control" id="observacao" name="observacao" maxlength="500" rows="6"></textarea></div>
                                 </div>
-
-                                <div class="col-md-3">
-                                    <label>@Resources.setor</label>
-                                    @Html.DropDownList("codigoSetor", null, "", new { @class = "form-control" })
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label>@Resources.apartamento</label>
-                                    @Html.DropDownList("codigoApartamento", null, "", new { @class = "form-control" })
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label>@Resources.responsavel</label>
-                                    @Html.DropDownList("codigoUsuarioResponsavel", null, "", new { @class = "form-control" })
-                                </div>
-
-                            </div>
-
-                            <!-- LINHA 4 -->
-                            <div class="form-group row">
-
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label>@PCM.WEB.Properties.Resources.arquivo</label>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="application/pdf">
@@ -174,6 +146,7 @@
         msgQuestionReprovalInventory = Resources.msgQuestionReprovalInventory,
         yes = Resources.yes,
         no = Resources.no,
+        ok = Resources.ok,
         clickToEdit = Resources.clickToEdit,
         clickToDelete = Resources.clickToDelete,
         clickToCopy = Resources.clickToCopy,
@@ -193,7 +166,9 @@
         requiredField = Resources.campo_requerido,
         urlValidaAsset = Url.Action("ValidaAsset", "AtivoFixo"),
         urlLoadListSetor = Url.Action("LoadListSetor", "AtivoFixo"),
-        urlLoadListApartamento = Url.Action("LoadListApartamento", "AtivoFixo")
+        urlLoadListApartamento = Url.Action("LoadListApartamento", "AtivoFixo"),
+        urlLoadListAsset = Url.Action("LoadListAsset", "AtivoFixo"),
+        urlLoadConfiguracaoTipoMovimentacao = Url.Action("LoadConfiguracaoTipoMovimentacao", "AtivoFixo")
     }))'>
 </div>
 
@@ -218,5 +193,5 @@
     <script src="~/Content/js/plugins/jquery-validation/additional-methods.min.js"></script>
     <script src="~/Content/js/pcm.js"></script>
 
-    <script src="~/Content/js/pages/AtivoFixo/jquery.assetEdit.init.js"></script>
+    <script src="~/Content/js/pages/AtivoFixo/jquery.assetMovementInsert.init.js"></script>
 }

@@ -6,11 +6,13 @@ var table = null;
 
 $(document).ready(function () {
 
+    Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+
     carregarFiltro();
     carregarGrid();
 
-    $('input, select').change(function () {
-        salvarFiltro();
+    $('#unidade').on('change', function () {
+        hasInventoryOpened();
     });
 
     $('#filtrar').click(function () {
@@ -18,22 +20,31 @@ $(document).ready(function () {
         carregarGrid();
     });
 
+    $('#closeInventory').click(function () {
+        closeInventory();
+    });
+
+    if ($("#unidade").val() === "" || $("#unidade").val() === "-1") {
+        $("#newInventory").hide();
+        $("#closeInventory").hide();
+    }
+
 });
 
 function carregarGrid() {
 
     var data = {
-        unidade: $('#unidade').val(),
-        asset: $('#asset').val(),
-        status: $('#status').val(),
-        setor: $('#setor').val(),
-        apartamento: $('#apartamento').val()
+        unidade: ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+        descricao: $('#descricao').val(),
+        statusInventario: ($('#statusInventario').val() == "") ? -1 : $('#statusInventario').val(),
+        dataInicio: $('#dataInicio').val(),
+        dataTermino: $('#dataTermino').val()
     };
 
     loadGridMain({
         tableId: "#tbMain",
         data: data,
-        endpoint: messages.urlLoadAssetMovement,
+        endpoint: messages.urlLoadAssetInventoryMng,
         editAction: false,
         deleteAction: false,
         warningAction: false,
@@ -55,26 +66,58 @@ function salvarFiltro() {
 
     var filtro = {
         unidade: $('#unidade').val(),
-        asset: $('#asset').val(),
-        status: $('#status').val(),
-        setor: $('#setor').val(),
-        apartamento: $('#apartamento').val()
+        descricao: $('#descricao').val(),
+        dataInicio: $('#dataInicio').val(),
+        dataTermino: $('#dataTermino').val(),
+        statusInventario: $('#statusInventario').val()
     };
 
-    localStorage.setItem("assetMovementfiltro", JSON.stringify(filtro));
+    localStorage.setItem("assetInventoryMngFiltro", JSON.stringify(filtro));
 }
 
 function carregarFiltro() {
 
-    var filtro = JSON.parse(localStorage.getItem("assetMovementfiltro") || "{}");
+    var filtro = JSON.parse(localStorage.getItem("assetInventoryMngFiltro") || "{}");
 
     if (!filtro) return;
 
     $('#unidade').val(filtro.unidade || "");
-    $('#asset').val(filtro.asset || "");
-    $('#status').val(filtro.status || "");
-    $('#setor').val(filtro.setor || "");
-    $('#apartamento').val(filtro.apartamento || "");
+    $('#descricao').val(filtro.descricao || "");
+    $('#dataInicio').val(filtro.dataInicio || "");
+    $('#dataTermino').val(filtro.dataTermino || "");
+    $('#statusInventario').val(filtro.statusInventario || "");
+}
+
+function hasInventoryOpened() {
+
+    var unidade = $("#unidade").val();
+
+    if (unidade === "" || unidade === "-1") {
+        $("#newInventory").hide();
+        $("#closeInventory").hide();
+        return;
+    }
+    else
+    {
+        $.ajax({
+            type: "POST",
+            url: messages.urlHasInventoryOpened,
+            async: false,
+            data: {
+                unidade: unidade
+            },
+            success: function (response) {
+                if (response == 0) {
+                    $("#newInventory").show();
+                    $("#closeInventory").hide();
+                } else {
+                    $("#closeInventory").show();
+                    $("#newInventory").hide();
+                }
+                
+            }
+        });
+    }   
 }
 
 function loadChildTable(data) {
@@ -83,10 +126,10 @@ function loadChildTable(data) {
 
     $.ajax({
         type: "POST",
-        url: messages.urlLoadAssetMovementDetails,
+        url: messages.urlLoadAssetInventoryMngDetails,
         async: false,
         data: {
-            assetId: data.assetId
+            codigoInventario: data.codigoInventario
         },
         success: function (response) {
 
@@ -94,12 +137,15 @@ function loadChildTable(data) {
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>${messages.tipoMovimentacao}</th>
-                            <th>${messages.documento}</th>
+                            <th>${messages.asset}</th>
+                            <th>${messages.descricao}</th>
                             <th>${messages.setor}</th>
                             <th>${messages.apartamento}</th>
-                            <th class="text-center">${messages.data}</th>
+                            <th>${messages.setorAnterior}</th>
+                            <th>${messages.apartamentoAnterior}</th>
                             <th class="text-center">${messages.usuario}</th>
+                            <th class="text-center">${messages.data}</th>
+                            <th class="text-center">${messages.ativoCadastrado}</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -107,12 +153,15 @@ function loadChildTable(data) {
             response.forEach(r => {
                 table_info += `
                     <tr>
-                        <td>${r.tipoMovimentacao}</td>
-                        <td>${r.documento}</td>
+                        <td class="text-center">${r.assetCode}</td>
+                        <td>${r.descricao}</td>
                         <td>${r.setor}</td>
                         <td>${r.apartamento}</td>
-                        <td class="text-center">${r.data}</td>
+                        <td>${r.setorAnterior}</td>
+                        <td>${r.apartamentoAnterior}</td>
                         <td class="text-center">${r.usuario}</td>
+                        <td class="text-center">${r.data}</td>
+                        <td class="text-center">${r.ativoCadastrado}</td>
                     </tr>`;
             });
 
@@ -121,4 +170,53 @@ function loadChildTable(data) {
     });
 
     return table_info;
+}
+
+async function closeInventory() {
+
+    const confirmed = await rfConfirm({
+        title: messages.msgQuestionCloseInventory,
+        message: messages.msgNotPossibleReverse,
+        confirmButtonText: messages.yes,
+        cancelButtonText: messages.no
+    });
+
+    if (confirmed) {
+
+        jQuery.ajax({
+            method: "POST",
+            url: messages.urlCloseInventory,
+            async: true,
+            data: {
+                "unidade": $("#unidade").val()
+            },
+            dataType: "json",
+            success: async function (response) {
+
+                if (response.success) {
+
+                    await rfAlert({
+                        title: response.message,
+                        message: "",
+                        icon: "success",
+                        confirmButtonText: messages.ok
+                    });
+
+                    carregarGrid();
+                    hasInventoryOpened();
+
+                } else {
+
+                    await rfAlert({
+                        title: response.message,
+                        message: "",
+                        icon: "error",
+                        confirmButtonText: messages.ok
+                    });
+                }
+            }
+        });
+
+    }
+
 }

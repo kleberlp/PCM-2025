@@ -73,7 +73,7 @@ public static class ExcelHelper
             ws.Protection.AllowAutoFilter = true;
             ws.Protection.AllowSort = true;
             ws.Protection.AllowFormatColumns = true;
-            ws.Protection.AllowFormatRows = true;
+            ws.Protection.AllowFormatRows = false;
 
             ws.Protection.IsProtected = true;
 

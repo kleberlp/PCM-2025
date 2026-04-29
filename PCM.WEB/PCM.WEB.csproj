@@ -391,7 +391,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\codebase.css" />
-    <Content Include="Content\css\codebase.min.css" />
     <Content Include="Content\css\pages\home\dashboard-governanca.css" />
     <Content Include="Content\css\themes\corporate.min.css" />
     <Content Include="Content\css\themes\earth.min.css" />
@@ -433,7 +432,10 @@
     <Content Include="Content\img\photos\PRODIGY.png" />
     <Content Include="Content\img\photos\WISH.png" />
     <Content Include="Content\js\bootstrap.bundle.min.js" />
-    <Content Include="Content\js\pages\AtivoFixo\jquery.assetIEdit.init.js" />
+    <Content Include="Content\js\pages\AtivoFixo\jquery.assetEdit.init.js" />
+    <Content Include="Content\js\pages\AtivoFixo\jquery.assetMovementInsert.init.js" />
+    <Content Include="Content\js\pages\AtivoFixo\jquery.assetInventoryInsert.init.js" />
+    <Content Include="Content\js\pages\AtivoFixo\jquery.assetInventory.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetInventoryMng.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetMovement.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetInsert.init.js" />
@@ -2605,9 +2607,14 @@
     <Content Include="Views\CadastroBasico\ChecklistEdit2.cshtml" />
     <Content Include="Views\AtivoFixo\AssetIndex.cshtml" />
     <Content Include="Views\AtivoFixo\AssetInsert.cshtml" />
-    <Content Include="Views\AtivoFixo\AssetMovement.cshtml" />
+    <Content Include="Views\AtivoFixo\assetMovement.cshtml" />
     <Content Include="Views\AtivoFixo\AssetEdit.cshtml" />
     <Content Include="Views\AtivoFixo\assetInventoryMng.cshtml" />
+    <Content Include="Views\AtivoFixo\assetInventoryInsert.cshtml" />
+    <Content Include="Views\Shared\_LayoutApp.cshtml" />
+    <Content Include="Views\Shared\_HeaderApp.cshtml" />
+    <Content Include="Views\AtivoFixo\assetInventory.cshtml" />
+    <Content Include="Views\AtivoFixo\assetMovementInsert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

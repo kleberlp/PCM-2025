@@ -1,0 +1,145 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+@using PCM.WEB.Properties;
+@using Newtonsoft.Json;
+@model IEnumerable<PCM.WEB.MODELS.AssetInventory>
+
+<!-- Main Container -->
+<main id="main-container" class="bg-white">
+
+    @using (Html.BeginForm("AppConference", "AppConference", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", name = "form", id = "form", autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="inventory-wrapper">
+
+            <!-- FILTROS -->
+            <div class="top-fixed">
+
+                <input type="hidden" id="codigoInventario" value="@ViewBag.codigoInventario" />
+                <input type="hidden" id="codigoUnidade" value="@ViewBag.codigoUnidade" />
+
+                <div class="row">
+                    <div class="col-12">
+                        <label>@Resources.setor</label>
+                        @Html.DropDownList("codigoSetor", null, "", new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row mt-2 mb-2">
+                    <div class="col-12">
+                        <label>@Resources.apartamento</label>
+                        @Html.DropDownList("codigoApartamento", null, "", new { @class = "form-control" })
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- GRID -->
+            <div class="grid-scroll">
+
+                <table class="table table-vcenter table-striped" id="tbApp">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th class="text-center col-3">@Resources.asset</th>
+                            <th class="col-9">@Resources.descricao</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center @item.cssClass">@item.asset</td>
+                                <td class="@item.cssClass">@item.descricao</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="bottom-fixed">
+
+                <label class="font-weight-bold">@Resources.asset:</label>
+
+                <div class="input-group">
+                    <input type="text" class="form-control" id="barcode" maxlength="20" autofocus>
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</main>
+<!-- END From Right Modal -->
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        msgQuestionDelete = Resources.msgQuestionDelete,
+        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        msgQuestionApprovalInventory = Resources.msgQuestionApprovalInventory,
+        msgQuestionReprovalInventory = Resources.msgQuestionReprovalInventory,
+        yes = Resources.yes,
+        no = Resources.no,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig,
+        clickToApproval = Resources.clickToApproval,
+        clickToReproval = Resources.clickToReproval,
+        enxoval = Resources.enxoval,
+        quantidade = Resources.quantidade,
+        quantidadeInventario = Resources.quantidadeInventario,
+        quantidadeRouparia = Resources.quantidadeRouparia,
+        quantidadeUso = Resources.quantidadeUso,
+        quantidadeLavanderia = Resources.quantidadeLavanderia,
+        divergencia = Resources.divergencia,
+        validaBancoDados = Resources.valida_bd,
+        requiredField = Resources.campo_requerido,
+        msgInformarDescricao = Resources.msgInformarDescricao,
+        descricaoAtivoFixo = Resources.descricaoAtivoFixo,
+        ativoNaoEncontrado = Resources.ativoNaoEncontrado,
+        msgQuestionRegistrarInventarioAtivo = Resources.msgQuestionRegistrarInventarioAtivo,
+        urlValidaAsset = Url.Action("validaAssetInventory", "AtivoFixo"),
+        urlLoadListSetor = Url.Action("loadListSetor", "AtivoFixo"),
+        urlLoadListApartamento = Url.Action("loadListApartamento", "AtivoFixo"),
+        urlInsertAssetInventory = Url.Action("insertAssetInventory", "AtivoFixo"),
+        urlLoadAssetInventory = Url.Action("loadAssetInventory", "AtivoFixo")
+    }))'>
+</div>
+
+@section Scripts {
+
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+    <script src="~/Content/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/Content/js/plugins/jquery-validation/additional-methods.min.js"></script>
+    <script src="~/Content/js/pcm.js"></script>
+
+    <script src="~/Content/js/pages/AtivoFixo/jquery.assetInventory.init.js"></script>
+}

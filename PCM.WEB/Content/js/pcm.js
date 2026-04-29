@@ -99,7 +99,7 @@ function loadGridMain({
                 let buttons = "";
 
                 if (editAction) {
-                    buttons += `<button type="button" class='btn btn-sm btn-primary btn-edit'><i class='fa fa-pencil-alt'></i></button>`;
+                    buttons += `<button type="button" class='btn btn-sm btn-primary btn-edit'><i class='fa fa-pencil'></i></button>`;
                 }
 
                 if (deleteAction) {
@@ -128,25 +128,25 @@ function loadGridMain({
                 buttonsConfig = [
                     {
                         extend: 'copy',
-                        text: "<i class='fas fa-copy text-primary'></i>",
+                        text: "<i class='fa fa-copy text-primary'></i>",
                         titleAttr: messages.clickToCopy,
                         className: 'btn btn-sm btn-outline-light mb-2'
                     },
                     {
                         extend: 'excel',
-                        text: "<i class='fas fa-file-excel text-success'></i>",
+                        text: "<i class='fa fa-file-excel-o text-success'></i>",
                         titleAttr: messages.clickToExcel,
                         className: 'btn btn-sm btn-outline-light mb-2'
                     },
                     {
                         extend: 'pdf',
-                        text: "<i class='fas fa-file-pdf text-danger'></i>",
+                        text: "<i class='fa fa-file-pdf-o text-danger'></i>",
                         titleAttr: messages.clickToPdf,
                         className: 'btn btn-sm btn-outline-light mb-2'
                     },
                     {
                         extend: 'colvis',
-                        text: "<i class='fas fa-columns text-dark'></i>",
+                        text: "<i class='fa fa-columns text-dark'></i>",
                         titleAttr: messages.clickToConfig,
                         className: 'btn btn-sm btn-outline-light mb-2'
                     }
