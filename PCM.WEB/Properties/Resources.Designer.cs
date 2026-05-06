@@ -556,6 +556,24 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ativo inventariado.
+        /// </summary>
+        public static string ativoInventariado {
+            get {
+                return ResourceManager.GetString("ativoInventariado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ativo não cadastrado.
+        /// </summary>
+        public static string ativoNaoCadastrado {
+            get {
+                return ResourceManager.GetString("ativoNaoCadastrado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Ativo não encontrado.
         /// </summary>
         public static string ativoNaoEncontrado {
@@ -1065,6 +1083,15 @@ namespace PCM.WEB.Properties {
         public static string clickToExcel {
             get {
                 return ResourceManager.GetString("clickToExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clique para visualizar detalhes do Inventário.
+        /// </summary>
+        public static string clickToManagerInventory {
+            get {
+                return ResourceManager.GetString("clickToManagerInventory", resourceCulture);
             }
         }
         
@@ -3540,6 +3567,15 @@ namespace PCM.WEB.Properties {
         public static string msgQuestionCloseInventory {
             get {
                 return ResourceManager.GetString("msgQuestionCloseInventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Confirma a movimentação do Ativo fixo?.
+        /// </summary>
+        public static string msgQuestionConfirmMovement {
+            get {
+                return ResourceManager.GetString("msgQuestionConfirmMovement", resourceCulture);
             }
         }
         

@@ -28,6 +28,7 @@ namespace PCM.WEB.MODELS
         public string quantidateUHsGovernanca { get; set; }
         public string quantidadeOSGerada { get; set; }
         public string quantidadeTrocaStatus { get; set; }
+        public string itensChecklist { get; set; }
     }
 
     public class dashboardGovernancaChartArrumacaoDia

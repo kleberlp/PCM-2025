@@ -433,6 +433,7 @@
     <Content Include="Content\img\photos\WISH.png" />
     <Content Include="Content\js\bootstrap.bundle.min.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetEdit.init.js" />
+    <Content Include="Content\js\pages\AtivoFixo\jquery.assetInventoryClose.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetMovementInsert.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetInventoryInsert.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetInventory.init.js" />
@@ -2615,6 +2616,7 @@
     <Content Include="Views\Shared\_HeaderApp.cshtml" />
     <Content Include="Views\AtivoFixo\assetInventory.cshtml" />
     <Content Include="Views\AtivoFixo\assetMovementInsert.cshtml" />
+    <Content Include="Views\AtivoFixo\assetInventoryClose.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1,0 +1,286 @@
+﻿@using PCM.WEB.Properties
+@using Newtonsoft.Json
+
+@section styles {
+    <!-- Table css -->
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+}
+
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@Resources.pcm</a>
+                <span class="breadcrumb-item">@Resources.cadastro_basico</span>
+                <span class="breadcrumb-item active">@Resources.asset</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <input type="hidden" id="codigoInventario" name="codigoInventario" value="@ViewBag.info.codigoInventario" />
+        <input type="hidden" id="unidade" name="unidade" value="@ViewBag.info.codigoUnidade" />
+
+        <!-- FILTROS -->
+        <div class="block block-rounded border">
+
+            <div class="block-header block-header-default bg-gd-primary">
+                <h3 class="block-title text-white font-w600">@Resources.asset</h3>
+
+                <div class="block-options">
+                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@Resources.closeInventory</button>
+                    <a href="@Url.Action("AssetInventoryMng", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-action-undo mr-5"></i>@Resources.voltar</a>
+                </div>
+            </div>
+
+            <div class="block-content">
+                <ul class="list-group push">
+
+                    <li class="list-group-item">
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                <label>@Resources.unidade</label>
+                                <input type="text" class="form-control" id="unidade" name="unidade" value="@ViewBag.info.unidade" disabled>
+                            </div>
+
+                            <div class="col-md-10">
+                                <label>@Resources.descricao</label>
+                                <input type="text" class="form-control" id="descricao" name="descricao" value="@ViewBag.info.descricao" disabled>
+                            </div>
+
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- LINHA PADRÃO (POOL) -->
+        <div class="row invisible g-3 mb-20" data-toggle="appear">
+
+            <div class="col-4">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bank fa-2x text-success"></i></div>
+                        <div class="font-size-h4 font-w600 text-success" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoInventariado" name="ativoInventariado">0</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@Resources.ativoInventariado</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-4">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bank fa-2x text-warning"></i></div>
+                        <div class="font-size-h4 font-w600 text-warning" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoNaoEncontrado" name="ativoNaoEncontrado">0</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@Resources.ativoNaoEncontrado</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-4">
+                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })">
+                    <div class="block-content block-content-full clearfix">
+                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bank fa-2x text-pulse"></i></div>
+                        <div class="font-size-h4 font-w600 text-pulse" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoNaoCadastrado" name="ativoNaoCadastrado">0</div>
+                        <div class="font-size-sm font-w600 text-uppercase text-muted">@Resources.ativoNaoCadastrado</div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+
+        <div class="block block-rounded overflow-hidden">
+            <ul class="nav nav-tabs nav-tabs-block" role="tablist">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" id="btabs-ativoInventariado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoInventariado" role="tab" aria-controls="btabs-ativoInventariado" aria-selected="true">@Resources.ativoInventariado</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" id="btabs-ativoNaoEncontrado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoNaoEncontrado" role="tab" aria-controls="btabs-ativoNaoEncontrado" aria-selected="false">@Resources.ativoNaoEncontrado</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" id="btabs-ativoNaoCadastrado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoNaoCadastrado" role="tab" aria-controls="btabs-ativoNaoCadastrado" aria-selected="false">@Resources.ativoNaoCadastrado</button>
+                </li>
+            </ul>
+            <div class="block-content tab-content pb-10">
+                <div class="tab-pane active" id="btabs-ativoInventariado" role="tabpanel" aria-labelledby="btabs-ativoInventariado-tab" tabindex="0">
+
+                    <table id="tbAssetInventoried" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+
+                </div>
+                <div class="tab-pane" id="btabs-ativoNaoEncontrado" role="tabpanel" aria-labelledby="btabs-ativoNaoEncontrado-tab" tabindex="0">
+
+                    <table id="tbAssetNotFinded" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+
+                </div>
+                <div class="tab-pane" id="btabs-ativoNaoCadastrado" role="tabpanel" aria-labelledby="btabs-ativoNaoCadastrado-tab" tabindex="0">
+
+                    <table id="tbAssetNotRegistered" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<div class="modal fade" id="modalManagerAsset" tabindex="-1" role="dialog" aria-labelledby="modalCancelar" aria-hidden="true">
+    @using (Html.BeginForm("assetInventoryMovementInsert", "AtivoFixo", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @name = "formMovement", @id = "formMovement", enctype = "multipart/form-data", @autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken();
+
+        <input type="hidden" name="codigo" id="codigo">
+        <input type="hidden" name="assetCode" id="assetCode">
+
+        <div class="modal-dialog modal-dialog-fromright modal-xlg" role="document">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent mb-15">
+                    <div class="block-header bg-gd-primary">
+                        <h3 class="block-title text-white font-w600">Ajuste - Ativo fixo</h3>
+                    </div>
+                    <div class="block-content">
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label>@Resources.tipoMovimentacao</label>
+                                @Html.DropDownList("tipoMovimentacao", null, "", new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>@Resources.dataMovimentacao</label>
+                                <input type="text" class="js-datepicker form-control" id="dataMovimentacao" name="dataMovimentacao" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>@Resources.numero_documento</label>
+                                <input type="text" class="form-control" id="documento" name="documento" maxlength="20">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mt-2">
+
+                            <div class="col-md-3">
+                                <label>@Resources.setor</label>
+                                @Html.DropDownList("setor", null, "", new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>@Resources.apartamento</label>
+                                @Html.DropDownList("apartamento", null, "", new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-md-5">
+                                <label>@Resources.fornecedor</label>
+                                @Html.DropDownList("fornecedor", null, "", new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>@Resources.valor</label>
+                                <input type="text" class="form-control" id="valor" name="valor" maxlength="10">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row mt-2">
+
+                            <div class="col-md-5">
+                                <label>@PCM.WEB.Properties.Resources.observacao</label>
+                                <textarea class="form-control" id="observacao" name="observacao" maxlength="500" rows="6"></textarea>
+                            </div>
+                            <div class="col-md-7">
+                                <label>@PCM.WEB.Properties.Resources.arquivo</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="application/pdf">
+                                    <label id="lblArquivo" class="custom-file-label" for="arquivo">@ViewBag.arquivo</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnSaveMovement" id="btnSaveMovement"><i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.confirmado</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+    ]
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        msgQuestionDelete = Resources.msgQuestionDelete,
+        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        msgQuestionCloseInventory = Resources.msgQuestionCloseInventory,
+        yes = Resources.yes,
+        no = Resources.no,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig,
+        clickToManagerInventory = Resources.clickToManagerInventory,
+        asset = Resources.asset,
+        descricao = Resources.descricao,
+        setor = Resources.setor,
+        apartamento = Resources.apartamento,
+        usuario = Resources.usuario,
+        data = Resources.data,
+        ativoCadastrado = Resources.ativoCadastrado,
+        setorAnterior = Resources.setorAnterior,
+        apartamentoAnterior = Resources.apartamentoAnterior,
+        editar = ViewBag.editar,
+        excluir = ViewBag.excluir,
+        validaBancoDados = Resources.valida_bd,
+        requiredField = Resources.campo_requerido,
+        msgQuestionConfirmMovement = Resources.msgQuestionConfirmMovement,
+        urlLoadAssetInventoried = Url.Action("loadAssetInventoried", "AtivoFixo"),
+        urlLoadAssetNotFinded = Url.Action("loadAssetNotFinded", "AtivoFixo"),
+        urlLoadAssetNotRegistered = Url.Action("loadAssetNotRegistered", "AtivoFixo"),
+        urlLoadListApartamento = Url.Action("LoadListApartamento", "AtivoFixo"),
+        urlLoadConfiguracaoTipoMovimentacao = Url.Action("LoadConfiguracaoTipoMovimentacao", "AtivoFixo"),
+        urlInsertInventoryMovementAsset = Url.Action("insertInventoryMovementAsset", "AtivoFixo")
+    }))'>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+    <script src="~/Content/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/js/pcm.js"></script>
+
+    <!-- Page-->
+    <script src="~/Content/js/pages/AtivoFixo/jquery.assetInventoryClose.init.js"></script>
+    <!--Datatables-->
+
+}

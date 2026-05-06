@@ -424,8 +424,17 @@
                         <div class="block dashboard-card">
 
                             <div class="kpi-line">
-                                <div class="kpi-value">@ViewBag.dashboard_info.quantidadeOSGerada</div>
-                                <div class="kpi-title">OS Gerada</div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="kpi-value">@ViewBag.dashboard_info.quantidadeOSGerada</div>
+                                        <div class="kpi-title">OS Gerada</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="kpi-value">@ViewBag.dashboard_info.itensChecklist</div>
+                                        <div class="kpi-title">Items vistoriados</div>
+                                    </div>
+                                </div>
+                                
                             </div>
 
                             <div class="kpi-line">

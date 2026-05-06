@@ -49,7 +49,6 @@
 
                         <div class="block-options">
                             <a href="@Url.Action("AssetInventoryInsert", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75" id="newInventory" name="newInventory"><i class="fa fa-plus mr-5"></i>@Resources.novo</a>
-                            <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" id="closeInventory" name="closeInventory"><i class="fa fa-plus mr-5"></i>@Resources.closeInventory</button>
                         </div>
                     </div>
 
@@ -129,6 +128,7 @@
         clickToExcel = Resources.clickToExcel,
         clickToPdf = Resources.clickToPdf,
         clickToConfig = Resources.clickToConfig,
+        clickToManagerInventory = Resources.clickToManagerInventory,
         asset = Resources.asset,
         descricao = Resources.descricao,
         setor = Resources.setor,
@@ -138,12 +138,15 @@
         ativoCadastrado = Resources.ativoCadastrado,
         setorAnterior = Resources.setorAnterior,
         apartamentoAnterior = Resources.apartamentoAnterior,
+        origem = Resources.origem,
+        destino = Resources.destino,
         editar = ViewBag.editar,
         excluir = ViewBag.excluir,
         urlLoadAssetInventoryMng = Url.Action("loadAssetInventoryMng", "AtivoFixo"),
         urlLoadAssetInventoryMngDetails = Url.Action("loadAssetInventoryMngDetails", "AtivoFixo"),
         urlHasInventoryOpened = Url.Action("hasInventoryOpened", "AtivoFixo"),
-        urlCloseInventory = Url.Action("closeInventory", "AtivoFixo")
+        urlCloseInventory = Url.Action("closeInventory", "AtivoFixo"),
+        urlAssetInventoryMngClose = Url.Action("assetInventoryClose", "AtivoFixo")
     }))'>
 </div>
 

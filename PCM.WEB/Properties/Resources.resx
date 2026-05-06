@@ -2289,4 +2289,16 @@
   <data name="ok" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="clickToManagerInventory" xml:space="preserve">
+    <value>Clique para visualizar detalhes do Inventário</value>
+  </data>
+  <data name="ativoInventariado" xml:space="preserve">
+    <value>Ativo inventariado</value>
+  </data>
+  <data name="ativoNaoCadastrado" xml:space="preserve">
+    <value>Ativo não cadastrado</value>
+  </data>
+  <data name="msgQuestionConfirmMovement" xml:space="preserve">
+    <value>Confirma a movimentação do Ativo fixo?</value>
+  </data>
 </root>

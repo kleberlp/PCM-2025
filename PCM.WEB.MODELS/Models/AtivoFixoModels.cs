@@ -44,10 +44,8 @@ namespace PCM.WEB.MODELS
     {
         public string assetCode { get; set; } = "";
         public string descricao { get; set; } = "";
-        public string setor { get; set; } = "";
-        public string apartamento { get; set; } = "";
-        public string setorAnterior { get; set; } = "";
-        public string apartamentoAnterior { get; set; } = "";
+        public string origem { get; set; } = "";
+        public string destino { get; set; } = "";
         public string usuario { get; set; } = "";
         public string data { get; set; } = "";
         public string ativoCadastrado { get; set; } = "";
@@ -55,8 +53,10 @@ namespace PCM.WEB.MODELS
 
     public class AssetInventoryInfo
     {
+        public string unidade { get; set; } = "";
         public string descricao { get; set; } = "";
         public long codigoInventario { get; set; } = 0;
+        public int codigoUnidade { get; set; } = 0;
     }
 
     public class AssetTipoMovimentacaoConfig

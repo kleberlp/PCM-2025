@@ -672,14 +672,21 @@ div.dt-container {
     clear: both;
 }
 
-    div.dt-container .dt-search input {
-        border: 1px solid #aaa;
-        border-radius: 3px;
-        padding: 5px;
-        background-color: transparent;
-        color: inherit;
-        margin-left: 3px;
+    div.dt-container .dt-search {
+        float: right;
     }
+
+        div.dt-container .dt-search input {
+            margin-left: 0.5em; /* Espaçamento entre o texto "Search:" e o campo de input */
+            margin-bottom: 0.5em;
+            width: 400px; /* Define uma largura consistente */
+            display: inline-flex;
+            justify-content: flex-end;
+            padding: 5px;
+            background-color: transparent;
+            color: inherit;
+            text-align: right;
+        }
 
     div.dt-container .dt-input {
         border: 1px solid #aaa;
@@ -896,4 +903,40 @@ html.dark {
 
 *[dir=rtl] div.dt-container div.dt-search input {
     margin: 0 3px 0 0;
+}
+
+
+table.dataTable tbody td,
+table.dataTable tbody th {
+    font-size: 11px;
+}
+
+/* ===== Header azul claro (pega header normal + header do scroll) ===== */
+table.dataTable thead th,
+table.dataTable thead td,
+div.dt-scroll-head table.dataTable thead th,
+div.dt-scroll-head table.dataTable thead td,
+div.dataTables_scrollHead table.dataTable thead th,
+div.dataTables_scrollHead table.dataTable thead td {
+    font-size: 12px;
+    background: linear-gradient(to bottom, #f0f7ff 0%, #e7f1ff 100%) !important;
+    color: #0b2e59 !important;
+    border-bottom: 1px solid #cfe3ff !important;
+    font-weight: 600;
+}
+
+/* Se tiver a "coluna extra" do scroll (o espaço à direita), pinta também */
+div.dt-scroll-head,
+div.dataTables_scrollHead {
+    background-color: #e7f1ff !important;
+}
+
+/* Opcional: alinhar o ícone de ordenação e manter o fundo uniforme */
+table.dataTable thead th > *,
+div.dt-scroll-head table.dataTable thead th > * {
+    background: transparent !important;
+}
+
+div.dt-container .dt-paging {
+    margin-top: 25px; /* ajuste como quiser: 20px, 30px, 40px */
 }

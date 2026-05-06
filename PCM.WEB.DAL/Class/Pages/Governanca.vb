@@ -251,6 +251,7 @@ Public Class Governanca
                     oReturn.quantidateUHsGovernanca = oSqlDataReader.Item("quantidateUHsGovernanca")
                     oReturn.quantidadeOSGerada = oSqlDataReader.Item("quantidadeOSGerada")
                     oReturn.quantidadeTrocaStatus = oSqlDataReader.Item("quantidadeTrocaStatus")
+                    oReturn.itensChecklist = oSqlDataReader.Item("itensChecklist")
 
                 End While
 
@@ -264,6 +265,7 @@ Public Class Governanca
                 oReturn.quantidateUHsGovernanca = "0"
                 oReturn.quantidadeOSGerada = "0"
                 oReturn.quantidadeTrocaStatus = "0"
+                oReturn.itensChecklist = "0"
 
             End If
 

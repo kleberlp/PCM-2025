@@ -17,8 +17,6 @@ $('#codigoSetor').change(function () {
         setor: ($('#codigoSetor').val() == "" ? "-1" : $('#codigoSetor').val())
     }), '#codigoApartamento');
 
-    reloadGrid();
-
 });
 
 $('#codigoApartamento').change(function () {

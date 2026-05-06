@@ -187,13 +187,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     const value = data.toLowerCase();
 
                     if (value.includes('aumento'))
-                        return '<span class="text-danger"><i class="fa fa-arrow-up"></i> Aumento</span>';
+                        return '<span class="text-danger"><i class="fa fa-arrow-up"></i>' + value + '</span>';
 
-                    if (value.includes('diminuição'))
-                        return '<span class="text-success"><i class="fa fa-arrow-down"></i> Queda</span>';
+                    if (value.includes('queda'))
+                        return '<span class="text-success"><i class="fa fa-arrow-down"></i> ' + value + '</span>';
 
                     if (value.includes('estável'))
-                        return '<span class="text-secondary"><i class="fa fa-minus"></i> Estável</span>';
+                        return '<span class="text-secondary"><i class="fa fa-minus"></i> ' + value + '</span>';
 
                     return data;
                 }
@@ -255,13 +255,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     const value = data.toLowerCase();
 
                     if (value.includes('aumento'))
-                        return '<span class="text-danger"><i class="fa fa-arrow-up"></i> Aumento</span>';
+                        return '<span class="text-danger"><i class="fa fa-arrow-up"></i> ' + value + '</span>';
 
-                    if (value.includes('diminuição'))
-                        return '<span class="text-success"><i class="fa fa-arrow-down"></i> Queda</span>';
+                    if (value.includes('queda'))
+                        return '<span class="text-success"><i class="fa fa-arrow-down"></i> ' + value + '</span>';
 
                     if (value.includes('estável'))
-                        return '<span class="text-secondary"><i class="fa fa-minus"></i> Estável</span>';
+                        return '<span class="text-secondary"><i class="fa fa-minus"></i> ' + value + '</span>';
 
                     return data;
                 }

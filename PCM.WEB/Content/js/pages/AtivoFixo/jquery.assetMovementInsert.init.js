@@ -74,6 +74,10 @@ $('#tipoMovimentacao').change(function () {
     loadConfiguracaoTipoMovimentacao();
 });
 
+function Arquivo() {
+    document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;
+}
+
 function loadConfiguracaoTipoMovimentacao() {
 
     if ($("#tipoMovimentacao").val() == "") {

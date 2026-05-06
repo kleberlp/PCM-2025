@@ -22,6 +22,7 @@ function loadGridMain({
     editAction = false,
     deleteAction = false,
     warningAction = false,
+    customAction = false,
     grupo = "",
     onEdit = null,
     onDelete = null,
@@ -34,9 +35,12 @@ function loadGridMain({
     textSearch = "Pesquisar:",
     textNothingRegister = "Nenhum registro encontrado...",
 
-    // CHILD
+    customButtons = [],
+
     enableChild = false,
-    childRender = null
+    childRender = null,
+
+    onLoaded = null
 }) {
 
     // =========================
@@ -64,6 +68,10 @@ function loadGridMain({
             const rows = response.data || [];
             const columnsResponse = response.columns || [];
             const groupDefs = response.groupBy || [];
+
+            if (onLoaded) {
+                onLoaded(response, rows);
+            }
 
             // =========================
             // COLUMNS
@@ -94,28 +102,60 @@ function loadGridMain({
             // =========================
             // ACTIONS
             // =========================
-            if (editAction || deleteAction || warningAction) {
+            if (editAction || deleteAction || warningAction || customAction) {
 
-                let buttons = "";
+                let buttons = [];
 
                 if (editAction) {
-                    buttons += `<button type="button" class='btn btn-sm btn-primary btn-edit'><i class='fa fa-pencil'></i></button>`;
+                    buttons.push({
+                        class: "btn-edit btn btn-sm btn-primary",
+                        icon: "fa fa-pencil",
+                        action: "edit"
+                    });
                 }
 
                 if (deleteAction) {
-                    buttons += `<button type="button" class='btn btn-sm btn-danger btn-delete'><i class='fa fa-times'></i></button>`;
+                    buttons.push({
+                        class: "btn-delete btn btn-sm btn-danger",
+                        icon: "fa fa-times",
+                        action: "delete"
+                    });
                 }
 
                 if (warningAction) {
-                    buttons += `<button type="button" class='btn btn-sm btn-outline-secondary btn-warning-view'><i class='fa fa-warning text-warning'></i></button>`;
+                    buttons.push({
+                        class: "btn-warning-view btn btn-sm btn-outline-secondary",
+                        icon: "fa fa-warning text-warning",
+                        action: "warning"
+                    });
+                }
+
+                if (customAction) {
+                    customButtons.forEach(btn => {
+                        buttons.push({
+                            class: btn.class || "btn btn-sm btn-secondary",
+                            icon: btn.icon || "",
+                            action: btn.action,
+                            title: btn.title || "",
+                            visible: btn.visible,
+                            onClick: btn.onClick
+                        });
+                    });
                 }
 
                 dynamicColumns.push({
                     data: null,
                     orderable: false,
-                    width: "80px",
+                    width: "40px",
                     className: "text-center",
-                    defaultContent: `<div class='btn-group'>${buttons}</div>`
+                    render: function (data, type, row) {
+                        const html = buttons
+                            .filter(b => {
+                                if (!b.visible) return true;
+                                return b.visible(row);
+                            }).map(b => `<button type="button" class="${b.class}" data-action="${b.action}" title="${b.title}"><i class="${b.icon}"></i></button>`).join("");
+                        return `<div class='btn-group'>${html}</div>`;
+                    }
                 });
             }
 
@@ -195,7 +235,7 @@ function loadGridMain({
             // =========================
             // EVENTS (EDIT / DELETE / WARNING)
             // =========================
-            bindGridEvents(dt, { onEdit, onDelete, onWarning }, tableId);
+            bindGridEvents(dt, { onEdit, onDelete, onWarning, customButtons }, tableId);
 
             // =========================
             // CHILD EVENT (+ / -)
@@ -325,7 +365,7 @@ function applyCollapse(api, groupColumn, tableId) {
 
 function bindGridEvents(table, callbacks, tableId) {
 
-    const { onEdit, onDelete, onWarning } = callbacks;
+    const { onEdit, onDelete, onWarning, customButtons } = callbacks;
 
     const $tbody = $(`${tableId} tbody`);
 
@@ -346,17 +386,26 @@ function bindGridEvents(table, callbacks, tableId) {
 
         const rowData = row.data();
 
-        if ($(this).hasClass('btn-edit') && onEdit) {
+        const action = $(this).data("action");
+
+        if (action === "edit" && onEdit) {
             onEdit(rowData);
         }
 
-        if ($(this).hasClass('btn-delete') && onDelete) {
+        if (action === "delete" && onDelete) {
             onDelete(rowData);
         }
 
-        if ($(this).hasClass('btn-warning-view') && onWarning) {
+        if (action === "warning" && onWarning) {
             onWarning(rowData);
         }
+
+        const custom = customButtons.find(x => x.action === action);
+
+        if (custom && custom.onClick) {
+            custom.onClick(rowData);
+        }
+
     });
 }
 

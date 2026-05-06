@@ -397,6 +397,41 @@ Public Class AtivoFixo
 
     End Function
 
+    Public Function LoadAssetInventoryInfo(ByVal codigo As Long) As AssetInventoryInfo
+
+        Dim _return As New AssetInventoryInfo()
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo", SqlDbType.BigInt, codigo)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_asset_inventario_info", oSqlParameter)
+
+                If oSqlDataReader.HasRows Then
+
+                    While oSqlDataReader.Read()
+                        _return.descricao = SafeGetString(oSqlDataReader, "descricao")
+                        _return.codigoInventario = SafeGetLong(oSqlDataReader, "codigo")
+                        _return.codigoUnidade = SafeGetInt32(oSqlDataReader, "codigo_unidade")
+                        _return.unidade = SafeGetString(oSqlDataReader, "unidade")
+                    End While
+
+                End If
+
+            End Using
+
+            Return _return
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     Public Function LoadAssetInventoryMngDetails(ByVal codigoInventario As Long) As List(Of AssetInventoryDetails)
 
         Try
@@ -413,10 +448,8 @@ Public Class AtivoFixo
                     Dim oInfo As New AssetInventoryDetails With {
                     .assetCode = SafeGetString(oSqlDataReader, "asset_code"),
                     .descricao = SafeGetString(oSqlDataReader, "descricao"),
-                    .setor = SafeGetString(oSqlDataReader, "setor"),
-                    .apartamento = SafeGetString(oSqlDataReader, "apartamento"),
-                    .setorAnterior = SafeGetString(oSqlDataReader, "setor_anterior"),
-                    .apartamentoAnterior = SafeGetString(oSqlDataReader, "apartamento_anterior"),
+                    .origem = SafeGetString(oSqlDataReader, "origem"),
+                    .destino = SafeGetString(oSqlDataReader, "destino"),
                     .usuario = SafeGetString(oSqlDataReader, "usuario"),
                     .data = SafeGetString(oSqlDataReader, "data"),
                     .ativoCadastrado = SafeGetBooleanSimNao(oSqlDataReader, "ativo_cadastrado")
@@ -515,6 +548,77 @@ Public Class AtivoFixo
         End Try
 
     End Sub
+
+    Public Function LoadAssetInventoried(ByVal codigo As Long,
+                                         ByVal type As Integer) As Object
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo", SqlDbType.BigInt, codigo),
+                CriarParametro("type", SqlDbType.SmallInt, type)
+            }
+
+            Return LoadDynamicGrid(sConnection, "sp_select_asset_manager_movement", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Function InsertInventoryAssetMovement(ByVal codigoInventario As Long,
+                                                 ByVal codigoEmpresa As Integer,
+                                                 ByVal codigoTipoMovimentacao As Integer,
+                                                 ByVal dataMovimentacao As String,
+                                                 ByVal documento As String,
+                                                 ByVal assetCode As String,
+                                                 ByVal codigoSetorDestino As Integer,
+                                                 ByVal codigoApartamentoDestino As Long,
+                                                 ByVal codigoFornecedorDestino As Long,
+                                                 ByVal valor As Double,
+                                                 ByVal observacao As String,
+                                                 ByVal arquivo As String,
+                                                 ByVal codigoUsuario As Integer) As defaultResponse
+
+
+        Dim _response As New defaultResponse
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_inventario", SqlDbType.BigInt, codigoInventario),
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_tipo_movimentacao", SqlDbType.Int, codigoTipoMovimentacao),
+                CriarParametro("data_movimentacao", SqlDbType.Date, dataMovimentacao),
+                CriarParametro("documento", SqlDbType.VarChar, documento),
+                CriarParametro("asset_code", SqlDbType.BigInt, assetCode),
+                CriarParametro("codigo_setor", SqlDbType.BigInt, IIf(codigoSetorDestino = -1, DBNull.Value, codigoSetorDestino)),
+                CriarParametro("codigo_apartamento", SqlDbType.BigInt, IIf(codigoApartamentoDestino = -1, DBNull.Value, codigoApartamentoDestino)),
+                CriarParametro("codigo_fornecedor", SqlDbType.BigInt, IIf(codigoFornecedorDestino = -1, DBNull.Value, codigoFornecedorDestino)),
+                CriarParametro("valor", SqlDbType.Float, valor),
+                CriarParametro("observacao", SqlDbType.VarChar, observacao),
+                CriarParametro("arquivo", SqlDbType.VarChar, arquivo),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_asset_inventory_movement", oSqlParameter)
+
+            _response.success = True
+
+        Catch SqlEx As SqlException
+            _response.success = True
+            _response.message = SqlEx.Message.ToString()
+        Catch ex As Exception
+            _response.success = True
+            _response.message = ex.Message.ToString()
+        End Try
+
+        Return _response
+
+    End Function
 
 #End Region
 

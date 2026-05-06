@@ -48,6 +48,7 @@ function carregarGrid() {
         editAction: false,
         deleteAction: false,
         warningAction: false,
+        customAction: true,
         enablePaging: true,
         pageLength: 15,
         enableSearch: true,
@@ -55,11 +56,27 @@ function carregarGrid() {
         textSearch: messages.search,
         textNothingRegister: messages.nothingRegister,
         enableChild: true,
+        customButtons: [
+            {
+                action: "managerInventory",
+                icon: "fa fa-list",
+                class: "btn btn-sm",
+                title: messages.clickToManagerInventory,
+                visible: (row) => row.status != "FINALIZADO",
+                onClick: (row) => {
+                    managerInventory(row);
+                }
+            }
+        ],
         childRender: function (row) {
             return loadChildTable(row);
         }
     });
 
+}
+
+function managerInventory(data) {
+    window.location = messages.urlAssetInventoryMngClose + '?codigo=' + data.codigoInventario;
 }
 
 function salvarFiltro() {
@@ -139,10 +156,8 @@ function loadChildTable(data) {
                         <tr>
                             <th>${messages.asset}</th>
                             <th>${messages.descricao}</th>
-                            <th>${messages.setor}</th>
-                            <th>${messages.apartamento}</th>
-                            <th>${messages.setorAnterior}</th>
-                            <th>${messages.apartamentoAnterior}</th>
+                            <th>${messages.origem}</th>
+                            <th>${messages.destino}</th>
                             <th class="text-center">${messages.usuario}</th>
                             <th class="text-center">${messages.data}</th>
                             <th class="text-center">${messages.ativoCadastrado}</th>
@@ -155,10 +170,8 @@ function loadChildTable(data) {
                     <tr>
                         <td class="text-center">${r.assetCode}</td>
                         <td>${r.descricao}</td>
-                        <td>${r.setor}</td>
-                        <td>${r.apartamento}</td>
-                        <td>${r.setorAnterior}</td>
-                        <td>${r.apartamentoAnterior}</td>
+                        <td>${r.origem}</td>
+                        <td>${r.destino}</td>
                         <td class="text-center">${r.usuario}</td>
                         <td class="text-center">${r.data}</td>
                         <td class="text-center">${r.ativoCadastrado}</td>

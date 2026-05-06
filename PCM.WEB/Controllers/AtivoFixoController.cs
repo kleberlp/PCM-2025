@@ -377,7 +377,7 @@ namespace PCM.WEB.Controllers
                                            codigoSetorDestino: setor,
                                            codigoApartamentoDestino: apartamento,
                                            codigoFornecedorDestino: fornecedor,
-                                           valor: Convert.ToDouble(valor.Replace("R$", "").Replace(".", "").Replace(",",".")),
+                                           valor: Convert.ToDouble(valor.Replace("R$", "").Replace(".", "").Replace(",", ".")),
                                            observacao: observacao,
                                            arquivo: filePath,
                                            codigoUsuario: codigoUsuario);
@@ -401,7 +401,7 @@ namespace PCM.WEB.Controllers
                 _return.message = ex.Message.ToString();
             }
 
-            return Json(_return); 
+            return Json(_return);
 
         }
 
@@ -504,6 +504,97 @@ namespace PCM.WEB.Controllers
             return Json(_response);
         }
 
+        public ActionResult assetInventoryClose(long codigo)
+        {
+            if (!IsSessionValid())
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+
+            AssetInventoryInfo _info = _ativoFixo.LoadAssetInventoryInfo(codigo: codigo);
+
+            ViewBag.info = _info;
+            ViewBag.tipoMovimentacao = new SelectList(_combo.LoadCombo(storedProcedure: "sp_select_combo_stc_tipo_movimentacao_asset"), "codigo", "descricao", null);
+            ViewBag.setor = new SelectList(_combo.LoadCombo(storedProcedure: "sp_select_combo_cadastro_basico_setor", codigoEmpresa: codigoEmpresa, codigoUnidade: _info.codigoUnidade), "codigo", "descricao", null);
+            ViewBag.apartamento = new SelectList(_combo.Apartamento(iCodigoEmpresa: codigoEmpresa, iCodigoUnidade: _info.codigoUnidade), "codigo", "descricao", null);
+            ViewBag.fornecedor = new SelectList(_combo.LoadCombo(storedProcedure: "sp_select_combo_cadastro_basico_fornecedor", codigoEmpresa: codigoEmpresa, codigoUnidade: _info.codigoUnidade), "codigo", "descricao", null);
+
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult loadAssetInventoried(long codigoInventario)
+        {
+            return Json(_ativoFixo.LoadAssetInventoried(codigo: codigoInventario,
+                                                        type: 0));
+        }
+
+        [HttpPost]
+        public JsonResult loadAssetNotFinded(long codigoInventario)
+        {
+            return Json(_ativoFixo.LoadAssetInventoried(codigo: codigoInventario,
+                                                        type: 1));
+        }
+
+        [HttpPost]
+        public JsonResult loadAssetNotRegistered(long codigoInventario)
+        {
+            return Json(_ativoFixo.LoadAssetInventoried(codigo: codigoInventario,
+                                                        type: 2));
+        }
+
+        [HttpPost]
+        public JsonResult insertInventoryMovementAsset(long codigo, int tipoMovimentacao, string dataMovimentacao, string documento, string assetCode, HttpPostedFileBase arquivo, int setor = -1, int apartamento = -1, int fornecedor = -1, string valor = "R$ 0,00", string observacao = "")
+        {
+            defaultResponse _return = new defaultResponse();
+
+            try
+            {
+
+                var filePath = "";
+
+                if (arquivo != null)
+                {
+                    string uniqueId = Guid.NewGuid().ToString();
+                    FileInfo fileInfo = new FileInfo(arquivo.FileName);
+
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "asset", "movement");
+                    filePath = Path.Combine(path, String.Concat(uniqueId, ".", fileInfo.Extension));
+
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    arquivo.SaveAs(filePath);
+                }
+
+                _ativoFixo.InsertInventoryAssetMovement(codigoInventario: codigo,
+                                                        codigoEmpresa: codigoEmpresa,
+                                                        codigoTipoMovimentacao: tipoMovimentacao,
+                                                        dataMovimentacao: dataMovimentacao,
+                                                        documento: documento,
+                                                        assetCode: assetCode,
+                                                        codigoSetorDestino: setor,
+                                                        codigoApartamentoDestino: apartamento,
+                                                        codigoFornecedorDestino: fornecedor,
+                                                        valor: Convert.ToDouble(valor.Replace("R$", "").Replace(".", "").Replace(",", ".")),
+                                                        observacao: observacao,
+                                                        arquivo: filePath,
+                                                        codigoUsuario: codigoUsuario);
+
+                _return.success = true;
+                _return.message = Resources.operacao_realizaca_sucesso;
+
+            }
+            catch (Exception ex)
+            {
+                _return.success = false;
+                _return.message = ex.Message.ToString();
+            }
+
+            return Json(_return);
+
+        }
+
         #endregion
 
         #region ::: ASSET INVENTORY :::
@@ -547,6 +638,7 @@ namespace PCM.WEB.Controllers
             Session["app_undo_controller"] = "Home";
             Session["app_undo_action"] = "Index";
             Session["app_header_title"] = inventoryInfo.descricao;
+            Session["app_header_subtitle"] = "";
 
             return View(assetInventory);
         }
