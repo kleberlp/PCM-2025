@@ -425,6 +425,8 @@ namespace PCM.WEB.MODELS
         public string bloco { get; set; }
         public string andar { get; set; }
         public string uh { get; set; }
+        public int codigoTipoGovernanca { get; set; }
+        public string tipoGovernanca { get; set; }
         public pwaStatus statusUH { get; set; }
         public pwaStatus statusGovernanca { get; set; }
     }
@@ -791,6 +793,7 @@ namespace PCM.WEB.MODELS
         public long codigo { get; set; }
         public string cabecalho { get; set; }
         public string info { get; set; }
+        public string modulo { get; set; }
         public string descricao { get; set; }
         public string autor { get; set; }
         public bool lido { get; set; }

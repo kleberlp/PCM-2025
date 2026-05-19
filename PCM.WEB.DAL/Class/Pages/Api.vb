@@ -2894,6 +2894,8 @@ Public Class Api
                         .bloco = SafeGetString(oSqlDataReader, "bloco"),
                         .codigoApartamento = SafeGetLong(oSqlDataReader, "codigo_apartamento"),
                         .uh = SafeGetString(oSqlDataReader, "uh"),
+                        .codigoTipoGovernanca = SafeGetLong(oSqlDataReader, "codigo_tipo_governanca"),
+                        .tipoGovernanca = SafeGetString(oSqlDataReader, "tipo_governanca"),
                         .statusGovernanca = New pwaStatus With {
                             .codigo = oSqlDataReader.Item("status_codigo"),
                             .descricao = oSqlDataReader.Item("status_descricao"),
@@ -5827,6 +5829,7 @@ Public Class Api
                 oInfo.codigo = oSqlDataReader("codigo")
                 oInfo.cabecalho = oSqlDataReader("cabecalho")
                 oInfo.info = oSqlDataReader("info")
+                oInfo.modulo = oSqlDataReader("modulo")
                 oInfo.descricao = oSqlDataReader("descricao")
                 oInfo.autor = oSqlDataReader("autor")
                 oInfo.lido = oSqlDataReader("lido")
