@@ -1603,7 +1603,7 @@ Public Class Qualidade
                     oMailMessage.To.Add(sEmail)
                 Next
 
-                oMailMessage.From = New MailAddress("pcm@simservices.com.br", "PCM by SIM", System.Text.Encoding.UTF8)
+                oMailMessage.From = New MailAddress("no-reply@pcmbysim.com.br", "PCM by SIM", System.Text.Encoding.UTF8)
                 oMailMessage.Subject = oSqlDataReader.Item("subject")
                 oMailMessage.SubjectEncoding = System.Text.Encoding.UTF8
                 oMailMessage.Body = oSqlDataReader.Item("body")
@@ -1611,10 +1611,10 @@ Public Class Qualidade
                 oMailMessage.IsBodyHtml = True
                 oMailMessage.Priority = MailPriority.Normal
                 Dim oSmtpClient As New SmtpClient()
-                oSmtpClient.Credentials = New System.Net.NetworkCredential("pcm@simservices.com.br", "p@ssw0rd013459")
-                oSmtpClient.Port = 80
+                oSmtpClient.Credentials = New System.Net.NetworkCredential("no-reply@pcmbysim.com.br", "$Noreply@2026$")
+                oSmtpClient.Port = 465
                 oSmtpClient.Host = "smtpout.secureserver.net"
-                oSmtpClient.EnableSsl = False
+                oSmtpClient.EnableSsl = True
 
                 Try
                     oSmtpClient.Send(oMailMessage)

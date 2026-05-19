@@ -362,7 +362,7 @@ Public Class Main
 
             For Each oMessage As Email In oHashTable.Values
 
-                Dim sRemetente As String = "pcm@simservices.com.br"
+                Dim sRemetente As String = "no-reply@pcmbysim.com.br"
                 Dim oMailMessage As New MailMessage()
 
                 For Each sEmail As String In oMessage.sTo.Split(";")
@@ -381,9 +381,9 @@ Public Class Main
                 oMailMessage.Priority = MailPriority.High
 
                 Dim oSmtpClient As New SmtpClient()
-                oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "p@ssw0rd013459")
-                oSmtpClient.Port = 587
-                oSmtpClient.Host = "smtp.office365.com"
+                oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
+                oSmtpClient.Port = 465
+                oSmtpClient.Host = "smtpout.secureserver.net"
                 oSmtpClient.EnableSsl = True
 
                 Try

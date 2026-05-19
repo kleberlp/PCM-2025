@@ -38,7 +38,7 @@ Module modMain
                           ByVal sBody As String,
                           ByVal sLaudo As String)
 
-        Dim sRemetente As String = "pcm@simservices.com.br"
+        Dim sRemetente As String = "no-reply@pcmbysim.com.br"
         Dim oEmail As New MailMessage()
 
         For Each sTo As String In sEmail.Split(";")
@@ -54,9 +54,9 @@ Module modMain
         oEmail.IsBodyHtml = True
         oEmail.Priority = MailPriority.High
         Dim oSmtpClient As New SmtpClient()
-        oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "p@ssw0rd013459")
-        oSmtpClient.Port = 587
-        oSmtpClient.Host = "smtp.office365.com"
+        oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
+        oSmtpClient.Port = 465
+        oSmtpClient.Host = "smtpout.secureserver.net"
         oSmtpClient.EnableSsl = True
 
         Try

@@ -85,7 +85,7 @@
                             <li class="list-group-item">
                                 <div class="row">
                                     <div class="col-md-4"><div>@Html.DropDownList("justificativa_apontamento", null, PCM.WEB.Properties.Resources.justificativa_apontamento, new { @class = "js-select2 form-control" })</div></div>
-                                    <div class="col-md-4"><div>@Html.DropDownList("departamento", null, PCM.WEB.Properties.Resources.departamento_responsavel, new { @class = "js-select2 form-control" })</div></div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("departamento", null, PCM.WEB.Properties.Resources.departamento_responsavel, new { @class = "js-select2 form-control" })</div></div>
                                     <div class="col-md-4">
                                         <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
                                             <input type="text" class="form-control" id="data_inicio_execucao" name="data_inicio_execucao" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_inicio_execucao">
@@ -95,6 +95,7 @@
                                             <input type="text" class="form-control" id="data_termino_execucao" name="data_termino_execucao" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino_execucao">
                                         </div>
                                     </div>
+                                    <div class="col-md-2"><div>@Html.DropDownList("origem", null, PCM.WEB.Properties.Resources.origem, new { @class = "js-select2 form-control" })</div></div>
                                 </div>
                             </li>
                             <li class="list-group-item text-right">
@@ -729,7 +730,8 @@
                     d.justificativa_apontamento = $("#justificativa_apontamento").val() == "" ? "-1" : $("#justificativa_apontamento").val(),
                     d.data_inicio_execucao = $("#data_inicio_execucao").val(),
                     d.data_termino_execucao = $("#data_termino_execucao").val(),
-                    d.hospede = $("#hospede").val()
+                    d.hospede = $("#hospede").val(),
+                    d.origem = $("#origem").val() || -1
                 },
                 dataSrc: ""
             },

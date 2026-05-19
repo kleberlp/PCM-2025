@@ -97,7 +97,7 @@ namespace PCM.ADM.WEB.Controllers
             {
                 string password = getPassword(8);
 
-                string remetente = "pcm@simservices.com.br"; //O e-mail do remetente
+                string remetente = "no-reply@pcmbysim.com.br"; //O e-mail do remetente
                 MailMessage mail = new MailMessage();
                 mail.To.Add(email);
                 mail.From = new MailAddress(remetente, "PCM by SIM", System.Text.Encoding.UTF8);
@@ -108,8 +108,8 @@ namespace PCM.ADM.WEB.Controllers
                 mail.IsBodyHtml = true;
                 mail.Priority = MailPriority.High;
                 SmtpClient client = new SmtpClient(); 
-                client.Credentials = new System.Net.NetworkCredential(remetente, "p@ssw0rd013459");
-                client.Port = 80;
+                client.Credentials = new System.Net.NetworkCredential(remetente, "$Noreply@2026$");
+                client.Port = 465;
                 client.Host = "smtpout.secureserver.net";
                 client.EnableSsl = false;
 

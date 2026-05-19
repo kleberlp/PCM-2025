@@ -742,7 +742,7 @@ namespace PCM.WEB.API.Controllers
                     else if (governanca.codigoEmpresa == 926)
                     {
                         // Aguardando a conclusão do método assíncrono
-                        response = oAPI.updateUHStatusIntercity(uhStatus: statusUpdate, origem: "CHECKLIST");
+                        responseStatus = oAPI.updateUHStatusIntercity(uhStatus: statusUpdate, origem: "CHECKLIST");
                     }
                     else
                     {
@@ -757,7 +757,9 @@ namespace PCM.WEB.API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                response.success = false;
+                response.message = ex.Message.ToString();
+                return Ok(response);
             }
             finally
             {

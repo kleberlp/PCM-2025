@@ -415,6 +415,7 @@ namespace PCM.WEB.Controllers
                     ViewBag.responsavel_apartamento = new SelectList(oCombo.ResponsavelApartamento(), "codigo", "descricao", responsavel_apartamento);
                     ViewBag.departamento = new SelectList(oCombo.Departamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", Convert.ToInt32(Session["codigo_departamento"]));
+                    ViewBag.origem = new SelectList(oCombo.LoadCombo("sp_select_combo_static_origem_ordem_servico", codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
 
                     return View();
                 }
@@ -457,115 +458,14 @@ namespace PCM.WEB.Controllers
                     ViewBag.responsavel_apartamento = new SelectList(oCombo.ResponsavelApartamento(), "codigo", "descricao", Convert.ToInt32(Session["os_responsavel_apartamento"].ToString()));
                     ViewBag.departamento = new SelectList(oCombo.Departamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", Convert.ToInt32(Session["codigo_departamento"]));
+                    ViewBag.origem = new SelectList(oCombo.LoadCombo("sp_select_combo_static_origem_ordem_servico", codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
 
                     return View();
                 }
             }
         }
 
-        // POST: INDEX
-        [HttpPost]
-        public ActionResult OrdemServicoIndex2(int unidade = -1, int departamento = -1, int codigo_unidade = -1, string data_inicio = "", string data_termino = "", string ordem_servico = "", string ordem_servico_cliente = "", int setor = -1, int prioridade = -1, long equipamento = -1, int status = -1, int responsavel_apartamento = -1, string executor = "", int solicitante = -1, int apartamento = -1, int justificativa_apontamento = -1, string data_execucao_inicio = "", string data_execucao_termino = "", int hospede = -1)
-        {
-            if (Session["empresa"] == null)
-            {
-                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-            }
-            else
-            {
-                //Váriaveis
-                bool editar = false;
-                bool inserir = false;
-                bool excluir = false;
-                bool administrador = false;
-                bool administrador_vincular = false;
-                bool apontamento = false;
-
-                Session["os_unidade"] = unidade;
-                Session["os_departamento"] = departamento;
-                Session["os_codigo_unidade"] = codigo_unidade;
-                Session["os_data_inicio"] = data_inicio;
-                Session["os_data_termino"] = data_termino;
-                Session["os_ordem_servico"] = ordem_servico;
-                Session["os_ordem_servico_cliente"] = ordem_servico_cliente;
-                Session["os_setor"] = setor;
-                Session["os_prioridade"] = prioridade;
-                Session["os_equipamento"] = equipamento;
-                Session["os_status"] = status;
-                Session["os_responsavel_apartamento"] = responsavel_apartamento;
-                Session["os_executor"] = executor;
-                Session["os_solicitante"] = solicitante;
-                Session["os_apartamento"] = apartamento;
-                Session["os_justificativa_apontamento"] = justificativa_apontamento;
-
-                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                    sFormulario: "ordem_servico",
-                                    bInserir: ref inserir,
-                                    bEditar: ref editar,
-                                    bExcluir: ref excluir,
-                                    bAdministrador: ref administrador);
-
-                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                    sFormulario: "ordem_servico_atribuir",
-                                    sDireito: "administrador",
-                                    bReturn: ref administrador_vincular);
-
-                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                    sFormulario: "pcm_apontamento_os",
-                                    sDireito: "inserir",
-                                    bReturn: ref apontamento);
-
-                ViewBag.administrador_vincular = administrador_vincular;
-                ViewBag.apontamento = apontamento;
-                ViewBag.administrador = administrador;
-                ViewBag.inserir = inserir;
-                ViewBag.editar = editar;
-                ViewBag.excluir = excluir;
-                ViewBag.data = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")).ToShortDateString();
-                ViewBag.data_inicio = data_inicio;
-                ViewBag.data_termino = data_termino;
-                ViewBag.data_execucao_inicio = data_execucao_inicio;
-                ViewBag.data_execucao_termino = data_execucao_termino;
-                ViewBag.ordem_servico = ordem_servico;
-                ViewBag.ordem_servico_cliente = ordem_servico_cliente;
-                ViewBag.empresa = Session["empresa"].ToString();
-                ViewBag.usuario = User.Identity.GetUserName();
-                ViewBag.codigo_unidade = unidade;
-                ViewBag.hospede = hospede;
-                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                bCadastro: false), "codigo", "descricao", (unidade == -1) ? codigo_unidade : unidade);
-                ViewBag.setor = new SelectList(oCombo.Setor(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                            iCodigoUnidade: unidade), "codigo", "descricao", setor);
-                ViewBag.apartamento = new SelectList(oCombo.Apartamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        iCodigoUnidade: unidade, iCodigoSetor: setor), "codigo", "descricao", apartamento);
-                ViewBag.equipamento = new SelectList(oCombo.Equipamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        iCodigoUnidade: unidade), "codigo", "descricao", equipamento);
-                ViewBag.prioridade = new SelectList(oCombo.Prioridade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        iCodigoUnidade: unidade), "codigo", "descricao", prioridade);
-                ViewBag.solicitante = new SelectList(oCombo.Solicitante(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                        iCodigoUnidade: unidade), "codigo", "descricao", solicitante);
-                ViewBag.funcionario = new SelectList(oCombo.Funcionario(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"]),
-                                                                        iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"])), "codigo", "descricao", null);
-                ViewBag.justificativa_apontamento = new SelectList(oCombo.JustificativaApontamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                                    iCodigoUnidade: codigo_unidade), "codigo", "descricao", justificativa_apontamento);
-                ViewBag.justificativa_cancelamento = new SelectList(oCombo.JustificativaCancelamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
-                ViewBag.responsavel_apartamento = new SelectList(oCombo.ResponsavelApartamento(), "codigo", "descricao", responsavel_apartamento);
-                ViewBag.executor = executor;
-                ViewBag.status = new SelectList(oCombo.StatusManutencao(), "codigo", "descricao", status);
-                ViewBag.departamento = new SelectList(oCombo.Departamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", departamento);
-
-                return View();
-            }
-        }
-
-        public JsonResult LoadOrdemServicoIndex(int empresa, int usuario, int unidade, int departamento, string ordem_servico, string ordem_servico_cliente, string data_inicio, string data_termino, int setor = -1, int prioridade = -1, int equipamento = -1, int solicitante = -1, int responsavel_apartamento = -1, int apartamento = -1, string executor = "", int status = -1, int justificativa_apontamento = -1, string data_execucao_inicio = "", string data_execucao_termino = "", int hospede = -1)
+        public JsonResult LoadOrdemServicoIndex(int empresa, int usuario, int unidade, int departamento, string ordem_servico, string ordem_servico_cliente, string data_inicio, string data_termino, int setor = -1, int prioridade = -1, int equipamento = -1, int solicitante = -1, int responsavel_apartamento = -1, int apartamento = -1, string executor = "", int status = -1, int justificativa_apontamento = -1, string data_execucao_inicio = "", string data_execucao_termino = "", int hospede = -1, int origem = -1)
         {
             List<MODELS.OrdemServico> result = new List<MODELS.OrdemServico>();
 
@@ -586,7 +486,8 @@ namespace PCM.WEB.Controllers
                                                      sExecutor: executor,
                                                      iStatus: status,
                                                      iCodigoJustificativaApontamento: justificativa_apontamento,
-                                                     iHospede: hospede);
+                                                     iHospede: hospede,
+                                                     codigoOrigem: origem);
 
 
             var jsonResult = Json(result, JsonRequestBehavior.AllowGet);

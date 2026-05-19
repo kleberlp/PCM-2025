@@ -645,14 +645,15 @@ Public Class OrdemServico
                                       Optional ByVal iCodigoJustificativaApontamento As Integer = -1,
                                       Optional ByVal sDataInicioExecucao As String = "",
                                       Optional ByVal sDataTerminoExecucao As String = "",
-                                      Optional ByVal iHospede As Integer = -1) As List(Of MODELS.OrdemServico)
+                                      Optional ByVal iHospede As Integer = -1,
+                                      Optional ByVal codigoOrigem As Integer = -1) As List(Of MODELS.OrdemServico)
 
         Try
 
             'Váriaveis Locais
             Dim oOrdemServico As New List(Of MODELS.OrdemServico)
             Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(19) As SqlParameter
+            Dim oSqlParameter(20) As SqlParameter
             Dim i As Integer = 0
 
             'Seta Parametros - Código Empresa
@@ -796,8 +797,14 @@ Public Class OrdemServico
             oSqlParameter(i).ParameterName = "data_termino_execucao"
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.Date
-            oSqlParameter(i).Value = IIf(sDataTerminoExecucao = "", DBNull.Value, sDataTerminoExecucao)
+            oSqlParameter(i).Value = IIf(sDataTerminoExecucao = "", DBNull.Value, sDataTerminoExecucao) : i += 1
 
+            'Seta Parametros - Código Origem
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_origem"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = codigoOrigem
 
             'Executa Query
             oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_pcm_ordem_servico", oSqlParameter)

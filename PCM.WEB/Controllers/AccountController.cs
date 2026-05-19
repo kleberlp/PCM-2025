@@ -528,7 +528,7 @@ namespace PCM.WEB.Controllers
 
                 string password = getPassword(8);
 
-                string remetente = "pcm@simservices.com.br"; //O e-mail do remetente
+                string remetente = "no-reply@pcmbysim.com.br"; //O e-mail do remetente
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; 
                 MailMessage mail = new MailMessage();
                 mail.To.Add(email);
@@ -540,9 +540,9 @@ namespace PCM.WEB.Controllers
                 mail.IsBodyHtml = true;
                 mail.Priority = MailPriority.High;
                 SmtpClient client = new SmtpClient();
-                client.Credentials = new System.Net.NetworkCredential(remetente, "p@ssw0rd013459");
-                client.Port = 587;
-                client.Host = "smtp.office365.com";
+                client.Credentials = new System.Net.NetworkCredential(remetente, "$Noreply@2026$");
+                client.Port = 465;
+                client.Host = "smtpout.secureserver.net";
                 client.EnableSsl = true;
 
                 try

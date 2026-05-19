@@ -338,9 +338,9 @@ Public Class Main
         oEmail.IsBodyHtml = True
         oEmail.Priority = MailPriority.High
         Dim oSmtpClient As New SmtpClient()
-        oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "p@ssw0rd013459")
-        oSmtpClient.Port = 587
-        oSmtpClient.Host = "smtp.office365.com"
+        oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
+        oSmtpClient.Port = 465
+        oSmtpClient.Host = "smtpout.secureserver.net"
         oSmtpClient.EnableSsl = True
 
         Try

@@ -1066,14 +1066,14 @@ namespace PCM.WEB.Controllers
             {
                 //Insere Ordem de Serviço
                 oPCM.UpdateOrdemServicoProgramada(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                    iCodigoUnidade: codigo_unidade,
-                                                    lCodigoPCMProgramada: codigo_pcm_programada,
-                                                    dValor: Convert.ToDouble(valor_manutencao.Replace(".", "").Replace("R$ ", "")),
-                                                    iQuantidadeEquipamento: quantidade_equipamento,
-                                                    sDescricaoSolucao: descricao_solucao,
-                                                    bConcluido: concluido,
-                                                    lCodigoPCMProgramadaOrdemServico: codigo_pcm_programada_ordem_servico);
+                                                  iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                  iCodigoUnidade: codigo_unidade,
+                                                  lCodigoPCMProgramada: codigo_pcm_programada,
+                                                  dValor: Convert.ToDouble(valor_manutencao.Replace(".", "").Replace("R$ ", "")),
+                                                  iQuantidadeEquipamento: quantidade_equipamento,
+                                                  sDescricaoSolucao: descricao_solucao,
+                                                  bConcluido: concluido,
+                                                  lCodigoPCMProgramadaOrdemServico: codigo_pcm_programada_ordem_servico);
 
                 //Insere Checklist
                 if (checklist != null)
@@ -1084,12 +1084,12 @@ namespace PCM.WEB.Controllers
 
                         //Insere Registro no Banco de Dados
                         oPCM.InsertChecklistProgramada(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                        iCodigoUnidade: codigo_unidade,
-                                                        lCodigoPCMProgramadaOrdemServico: codigo_pcm_programada_ordem_servico,
-                                                        iCodigoChecklistItem: item.codigo,
-                                                        sResultado: item.resultado,
-                                                        sObservacao: item.observacao);
+                                                       iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                       iCodigoUnidade: codigo_unidade,
+                                                       lCodigoPCMProgramadaOrdemServico: codigo_pcm_programada_ordem_servico,
+                                                       iCodigoChecklistItem: item.codigo,
+                                                       sResultado: item.resultado,
+                                                       sObservacao: item.observacao);
 
                     }
 
@@ -1189,31 +1189,31 @@ namespace PCM.WEB.Controllers
 
                 //Insere Ordem de Serviço
                 oPCM.InsertOrdemServicoProgramada(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                    iCodigoUnidade: codigo_unidade,
-                                                    lCodigoPCMProgramada: codigo_pcm_programada,
-                                                    dValor: Convert.ToDouble(valor_manutencao.Replace(".", "").Replace("R$ ", "")),
-                                                    iQuantidadeEquipamento: quantidade_equipamento,
-                                                    sDescricaoSolucao: descricao_solucao,
-                                                    bConcluido: concluido,
-                                                    sData: data_inicio,
-                                                    sDataTermino: data_termino,
-                                                    lCodigoPCMProgramadaOrdemServico: ref codigo_pcm_programada_ordem_servico);
+                                                  iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                  iCodigoUnidade: codigo_unidade,
+                                                  lCodigoPCMProgramada: codigo_pcm_programada,
+                                                  dValor: Convert.ToDouble(valor_manutencao.Replace(".", "").Replace("R$ ", "")),
+                                                  iQuantidadeEquipamento: quantidade_equipamento,
+                                                  sDescricaoSolucao: descricao_solucao,
+                                                  bConcluido: concluido,
+                                                  sData: data_inicio,
+                                                  sDataTermino: data_termino,
+                                                  lCodigoPCMProgramadaOrdemServico: ref codigo_pcm_programada_ordem_servico);
 
                 //Insere Apontamento
                 if (funcionario == null)
                 {
 
                     oPCM.InsertApontamentoProgramada(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                        iCodigoUnidade: codigo_unidade,
-                                                        lCodigoPCMProgramadaOrdemServico: codigo_pcm_programada_ordem_servico,
-                                                        iCodigoFornecedor: fornecedor,
-                                                        iCodigoFuncionario: -1,
-                                                        sDataInicio: data_inicio,
-                                                        sDataTermino: data_termino,
-                                                        sHoraInicio: hora_inicio,
-                                                        sHoraTermino: hora_termino);
+                                                     iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                     iCodigoUnidade: codigo_unidade,
+                                                     lCodigoPCMProgramadaOrdemServico: codigo_pcm_programada_ordem_servico,
+                                                     iCodigoFornecedor: fornecedor,
+                                                     iCodigoFuncionario: -1,
+                                                     sDataInicio: data_inicio,
+                                                     sDataTermino: data_termino,
+                                                     sHoraInicio: hora_inicio,
+                                                     sHoraTermino: hora_termino);
                 }
                 else
                 {
@@ -1243,12 +1243,12 @@ namespace PCM.WEB.Controllers
 
                         //Insere Registro no Banco de Dados
                         oPCM.InsertChecklistProgramada(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                        iCodigoUnidade: codigo_unidade,
-                                                        lCodigoPCMProgramadaOrdemServico: codigo_pcm_programada_ordem_servico,
-                                                        iCodigoChecklistItem: item.codigo,
-                                                        sResultado: item.resultado,
-                                                        sObservacao: item.observacao);
+                                                       iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                       iCodigoUnidade: codigo_unidade,
+                                                       lCodigoPCMProgramadaOrdemServico: codigo_pcm_programada_ordem_servico,
+                                                       iCodigoChecklistItem: item.codigo,
+                                                       sResultado: item.resultado,
+                                                       sObservacao: item.observacao);
 
                     }
 
@@ -2540,7 +2540,7 @@ namespace PCM.WEB.Controllers
 
                 if (body != "")
                 {
-                    string remetente = "pcm@simservices.com.br"; //O e-mail do remetente
+                    string remetente = "no-reply@pcmbysim.com.br"; //O e-mail do remetente
                     MailMessage mail = new MailMessage();
                     foreach (string email in to.Split(new char[] { ';' }))
                     {
@@ -2556,9 +2556,9 @@ namespace PCM.WEB.Controllers
                     mail.IsBodyHtml = true;
                     mail.Priority = MailPriority.High;
                     SmtpClient client = new SmtpClient();
-                    client.Credentials = new System.Net.NetworkCredential(remetente, "p@ssw0rd013459");
-                    client.Port = 587;
-                    client.Host = "smtp.office365.com";
+                    client.Credentials = new System.Net.NetworkCredential(remetente, "$Noreply@2026$");
+                    client.Port = 465;
+                    client.Host = "smtpout.secureserver.net";
                     client.EnableSsl = true;
 
                     try
