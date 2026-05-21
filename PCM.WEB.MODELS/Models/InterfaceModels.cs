@@ -175,7 +175,9 @@ namespace PCM.WEB.MODELS
     public class interfaceVisaoPCM
     {
         public string empresa { get; set; }
+        public string empresaAtiva { get; set; }
         public string unidade { get; set; }
+        public string unidadeAtiva { get; set; }
         public int quantidadeOSGerada { get; set; }
         public int quantidadeOSAtendida { get; set; }
         public int quantidadeOSPendente { get; set; }
@@ -191,5 +193,23 @@ namespace PCM.WEB.MODELS
         public string corPMOC { get; set; }
         public string corUHDia { get; set; }
         public string corGreenPlanet { get; set; }
+        public string slaDia { get; set; }
+        public string slaUmDia { get; set; }
+        public string slaTresDias { get; set; }
+        public string slaCincoDias { get; set; }
+        public string slaAcimaCincoDias { get; set; }
+        public string slaNaoAtendido { get; set; }
+        public string qtdColaboradorProprio { get; set; }
+        public string qtdColaboradorTerceiro { get; set; }
+        public string hhDisponivel { get; set; }
+        public string faltasJustificadas { get; set; }
+        public string faltasNaoJustificadas { get; set; }
+        public string horasCorretivas { get; set; }
+        public string horasPreventivas { get; set; }
+        public string horasPMOC { get; set; }
+        public string horasUH { get; set; }
+        public string hhApontado { get; set; }
+        public string hhOciosas { get; set; }
+        public string nota { get; set; }
     }
 }

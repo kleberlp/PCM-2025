@@ -82,8 +82,13 @@
                             <td class="d-none d-sm-table-cell text-center">@Html.DisplayFor(modelItem => modelItem[i].periodicidade)</td>
                             <td class="d-none d-sm-table-cell text-center">@Html.DisplayFor(modelItem => modelItem[i].intervalo)</td>
                             <td class="d-none d-sm-table-cell text-md-center" style="width: 80px;">
+                                <span style="display:none;">
+                                    @(Model[i].ativo ? "Ativo" : "Inativo")
+                                </span>
+
                                 <label class="css-control-sm css-control-secondary css-checkbox">
-                                    @Html.CheckBoxFor(modelItem => modelItem[i].ativo, new { @class = "css-control-input", @disabled = "disabled" })
+                                    @Html.CheckBoxFor(modelItem => modelItem[i].ativo,
+                                        new { @class = "css-control-input", @disabled = "disabled" })
                                     <span class="css-control-indicator"></span>
                                 </label>
                             </td>
