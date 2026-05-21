@@ -442,10 +442,6 @@
             checkboxes.prop('checked', $(this).is(':checked'));
         });
 
-        $('#tab_main').DataTable({
-            order: [[1, 'asc']]
-        });
-
         $('#tb_main thead th:eq(0)').append(selectAllCheckbox);
 
         $('#tb_main tbody').on('click', 'button', function () {

@@ -4351,15 +4351,15 @@ tbody.cb_collapse.cb_show {
 }
 
 .cb_badge-light {
-  color: #212529;
-  background-color: #f8f9fa;
+    color: #ee7a26;
+    background-color: #f8f9fa;
 }
 
-.cb_badge-light[href]:hover, .cb_badge-light[href]:focus {
-  color: #212529;
-  text-decoration: none;
-  background-color: #dae0e5;
-}
+    .cb_badge-light[href]:hover, .cb_badge-light[href]:focus {
+        color: #ee7a26;
+        text-decoration: none;
+        background-color: #dae0e5;
+    }
 
 .cb_badge-dark {
   color: #fff;

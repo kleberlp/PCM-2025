@@ -3887,12 +3887,12 @@ tbody.collapse.show {
     }
 
 .badge-light {
-    color: #212529;
+    color: #ee7a26;
     background-color: #f8f9fa
 }
 
     .badge-light[href]:focus, .badge-light[href]:hover {
-        color: #212529;
+        color: #ee7a26;
         text-decoration: none;
         background-color: #dae0e5
     }

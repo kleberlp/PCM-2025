@@ -1250,6 +1250,72 @@ namespace PCM.WEB.Controllers
             return File(stream, "application/pdf;");
         }
 
+        // POST: /BACKLOG
+        [HttpPost]
+        public JsonResult SendBacklog(string codigos)
+        {
+            defaultResponse response = new defaultResponse();
+
+            try
+            {
+
+                foreach (string row in codigos.Split(','))
+                {
+                    oOrdemServico.UpdateOrdemServicoStatus(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                           iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                           lCodigo: Convert.ToInt64(row.Split('|')[0]),
+                                                           iCodigoUnidade: Convert.ToInt32(row.Split('|')[1]),
+                                                           iStatus: 0);
+
+                }
+
+                response.success = true;
+                response.message = "Ordens de serviço enviadas para backlog com sucesso.";
+
+            }
+            catch (Exception ex)
+            {
+                response.success = false;
+                response.message = "Ocorreu um erro ao enviar as ordens de serviço para backlog: " + ex.Message;                
+            }
+
+            return Json(response);
+
+        }
+
+        // POST: /BACKLOG
+        [HttpPost]
+        public JsonResult ReturnBacklog(string codigos)
+        {
+            defaultResponse response = new defaultResponse();
+
+            try
+            {
+
+                foreach (string row in codigos.Split(','))
+                {
+                    oOrdemServico.UpdateOrdemServicoStatus(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                           iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                           lCodigo: Convert.ToInt64(row.Split('|')[0]),
+                                                           iCodigoUnidade: Convert.ToInt32(row.Split('|')[1]),
+                                                           iStatus: 1);
+
+                }
+
+                response.success = true;
+                response.message = "Ordens de serviço retornadas do backlog com sucesso.";
+
+            }
+            catch (Exception ex)
+            {
+                response.success = false;
+                response.message = "Ocorreu um erro ao retornar as ordens de serviço para backlog: " + ex.Message;
+            }
+
+            return Json(response);
+
+        }
+
         #endregion
 
     }

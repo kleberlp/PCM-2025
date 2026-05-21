@@ -42,11 +42,13 @@ namespace PCM.WEB.MODELS
         public int quantidade_concluida_pool { get; set; }
         public int quantidade_andamento_pool { get; set; }
         public int quantidade_vinculada_pool { get; set; }
+        public int quantidade_backlog_pool { get; set; }
         public int quantidade_atrasada_condo { get; set; }
         public int quantidade_pendente_condo { get; set; }
         public int quantidade_concluida_condo { get; set; }
         public int quantidade_andamento_condo { get; set; }
         public int quantidade_vinculada_condo { get; set; }
+        public int quantidade_backlog_condo { get; set; }
         public float nota_auditoria_externa { get; set; }
         public float nota_avaliacao_mensal { get; set; }
         public string ranking { get; set; }

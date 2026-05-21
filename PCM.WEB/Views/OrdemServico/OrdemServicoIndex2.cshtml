@@ -34,6 +34,15 @@
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.ordem_servico </h3>
 
+                            @if (ViewBag.administrador)
+                            {
+                                <div class="block-options">
+                                    <button class="btn btn-square btn-secondary min-width-100 h-75" id="btnBacklog" name="btnBacklog" type="button"><i class="fa fa-upload mr-5"></i>Enviar para Backlog</button>
+                                </div>
+                                <div class="block-options">
+                                    <button class="btn btn-square btn-secondary min-width-100 h-75" id="btnReturnBacklog" name="btnReturnBacklog" type="button"><i class="fa fa-download mr-5"></i>Retornar do Backlog</button>
+                                </div>
+                            }
                             @if (ViewBag.inserir)
                             {
                                 <div class="block-options">
@@ -113,6 +122,7 @@
 
                         <thead>
                             <tr class="table-secondary">
+                                <th class="text-center"></th>
                                 <th class="text-center"></th>
                                 <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.ordem_servico</th>
                                 <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data</th>
@@ -681,13 +691,11 @@
         }
     });
 
-    // Initialize when page loads
     jQuery(function () {
 
         $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
         $.fn.dataTable.moment('DD/MM/YYYY');
         Codebase.helpers(['datepicker', 'maxlength', 'select2']);
-
 
         // Init simple DataTable, for more examples you can check out https://www.datatables.net/
         table = $('#tb_main').DataTable({
@@ -737,6 +745,16 @@
             },
             columns: [
                 {
+                    orderable: false,
+                    data: null,
+                    defaultContent: "<td class='d-none d-sm-table-cell text-center' style='width: 40px;'>" +
+                        "<label class='css-control-sm css-control-success css-checkbox py-0 px-0'>" +
+                        "<input type='checkbox' id='checkbox' class='css-control-input' name='x'>" +
+                        "<span class='css-control-indicator'></span>" +
+                        "</label>" +
+                        "</td >"
+                },
+                {
                     class: "details-control",
                     orderable: false,
                     data: null,
@@ -770,73 +788,77 @@
                         "<button type='button' id='btnReabrirOS' name='btnReabrirOS' class='btn btn-sm btn-secondary' title='Reabrir Ordem de Serviço'> <i class='fa fa-unlock'></i></button>"
                 }
             ],
+            order: [[2, 'DESC']],
             columnDefs: [
-                { className: 'text-center', targets: [0, 1, 2, 8, 9, 10, 11, 12] },
+                { orderable: false, targets: [0, 1, 13] },
+                { className: 'text-center', targets: [0, 1, 2, 3, 9, 10, 11, 12, 13] },
                 {
                     createdCell: function (td, cellData, rowData, row, col) {
 
-                        if (col == 3 && ("@Session["unidade"].ToString()" != "")) {
+                        if (col == 4 && ("@Session["unidade"].ToString()" != "")) {
                             $(td).hide();
                         }
 
-                        if (col == 1) {
+                        if (col == 2) {
                             $(td).addClass("font-w600");
                         }
 
-                        if (col == 12 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 2 || rowData.status == 99)) {
+                        if (col == 13 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 2 || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnVincularOS').hide();
                         }
 
-                        if (col == 12 && ("@ViewBag.administrador_vincular" != "True" || rowData.status != 5 || rowData.status == 99)) {
+                        if (col == 13 && ("@ViewBag.administrador_vincular" != "True" || rowData.status != 5 || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnDesvincularOS').hide();
                         }
 
-                        if (col == 12 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 5 || rowData.status == 99)) {
+                        if (col == 13 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 5 || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnVincularOS').hide();
                         }
 
-                        if (col == 12 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 2 || rowData.status == 4 || rowData.status == 99)) {
+                        if (col == 13 && ("@ViewBag.administrador_vincular" != "True" || rowData.status == 2 || rowData.status == 4 || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnDesvincularOS').hide();
                         }
-                        if (col == 12 && ("@ViewBag.apontamento" != "True" || rowData.status == 2 || rowData.status == 99)) {
+                        if (col == 13 && ("@ViewBag.apontamento" != "True" || rowData.status == 2 || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnApontamento').hide();
                         }
-                        if (col == 12 && ("@ViewBag.editar" != "True" || rowData.status == 99)) {
+                        if (col == 13 && ("@ViewBag.editar" != "True" || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnEditar').hide();
                         }
-                        if (col == 12 && ("@ViewBag.excluir" != "True" || rowData.status == 99)) {
+                        if (col == 13 && ("@ViewBag.excluir" != "True" || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnExcluir').hide();
                         }
-                        if (col == 12 && ("@ViewBag.administrador" != "True" || rowData.status != 2 || rowData.status == 99)) {
+                        if (col == 13 && ("@ViewBag.administrador" != "True" || rowData.status != 2 || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnReabrirOS').hide();
                         }
-                        if (col == 12 && (rowData.status == 5 || rowData.status == 99)) {
+                        if (col == 13 && (rowData.status == 5 || rowData.status == 99 || rowData.status == 0)) {
                             $(td).find('#btnVincularOS').addClass("btn-danger");
                         }
 
-                        if (col == 10 && rowData.data_necessidade_inicial == "") {
+                        if (col == 11 && rowData.data_necessidade_inicial == "") {
                             $(td).html(rowData.data_necessidade + "<br><span class='" + rowData.css_class + "'>" + rowData.dias + "</span>");
-                        }else if (col == 10 && rowData.data_necessidade_inicial != "") {
+                        }else if (col == 11 && rowData.data_necessidade_inicial != "") {
                             $(td).html(rowData.data_necessidade + "<span class='text-danger font-w400'> **</span> <br><span class='" + rowData.css_class + "'>" + rowData.dias + "</span>");
                         }
 
-                        if (col == 11 && rowData.status == 1) {
+                        if (col == 12 && rowData.status == 1) {
                             $(td).html("<span class='badge badge-warning'>" + rowData.status_descricao + "</span>");
-                        } else if (col == 11 && rowData.status == 2) {
+                        } else if (col == 12 && rowData.status == 2) {
                             $(td).html("<span class='badge badge-success'>" + rowData.status_descricao + "</span>");
-                        } else if (col == 11 && rowData.status == 3) {
+                        } else if (col == 12 && rowData.status == 3) {
                             $(td).html("<span class='badge badge-danger'>" + rowData.status_descricao + "</span>");
-                        } else if (col == 11 && rowData.status == 4) {
+                        } else if (col == 12 && rowData.status == 4) {
                             $(td).html("<span class='badge badge-primary'>" + rowData.status_descricao + "</span>");
-                        } else if (col == 11 && rowData.status == 5) {
+                        } else if (col == 12 && rowData.status == 5) {
                             $(td).html("<span class='badge badge-info'>" + rowData.status_descricao + "</span>");
-                        } else if (col == 11 && rowData.status == 99) {
+                        } else if (col == 12 && rowData.status == 99) {
                             $(td).html("<span class='badge badge-secondary'>" + rowData.status_descricao + "</span>");
+                        } else if (col == 12 && rowData.status == 0) {
+                            $(td).html("<span class='badge badge-light'>" + rowData.status_descricao + "</span>");
 }
 
-                    }, targets: [1, 2, 3, 10, 11, 12]
+                    }, targets: [1, 2, 3, 4, 11, 12, 13]
                 },
-                { width: '80px', targets: 11 }
+                { width: '80px', targets: 12 }
             ],
             dom: 'Bfrtip',
             buttons: [
@@ -875,6 +897,14 @@
             }
         });
 
+        var selectAllCheckbox = $("<label class='css-control-sm css-control-success css-checkbox py-0 px-0 mb-0'><input type='checkbox' class='css-control-input select-all-checkbox'><span class='css-control-indicator'></span></label>").on('change', 'input', function () {
+            var checkboxes = table.column(0).nodes().to$().find('input[type="checkbox"]');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        $('#tb_main thead th:eq(0)').append(selectAllCheckbox);
+        $('#tb_main thead th:eq(0)').removeClass('sorting sorting_asc sorting_desc');
+
         $('#tb_main tbody').on('click', 'button', function () {
 
             var data = table.row($(this).closest('tr')).data();
@@ -901,6 +931,11 @@
 
         });
 
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+            if ($(cell.node()).hasClass("details-control")) {
+                e.preventDefault();
+            }
+        });
 
         function apontamentoOS(data) {
 
@@ -992,8 +1027,162 @@
             }
         }
 
+        function sendBacklog() {
 
-        // Add event listener for opening and closing details
+            var codigos = [];
+
+            table.rows().every(function () {
+                var rowData = this.data();
+                var node = this.node();
+
+                if (!node) return;
+
+                var checkbox = $(node).find('input[type="checkbox"]');
+
+                if (checkbox.is(':checked') && (rowData.status == 3 || rowData.status == 1)) {
+                    codigos.push(rowData.codigo + '|' + rowData.codigo_unidade);
+                }
+            });
+
+            if (codigos.length === 0) {
+
+                swal.fire({
+                    text: "Nenhuma Ordem de Serviço valida selecionada.",
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: "Ok",
+                    reverseButtons: true
+                }).then(function (result) {
+                    return;
+                });
+
+            } else {
+
+                swal.fire({
+                    text: "Gostaria de enviar a(s) Ordem(ns) de Serviço selecionada(s) para o Backlog?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: "Sim",
+                    cancelButtonText: "Não",
+                    reverseButtons: true
+                }).then(function (result) {
+
+                    if (result.value) {
+
+                        jQuery.ajax({
+                            method: "POST",
+                            url: `SendBacklog`,
+                            async: false,
+                            data: {
+                                "codigos": codigos.join(',')
+                            },
+                            dataType: "json",
+                            success: function (response) {
+
+                                if (response.success) {
+                                    Swal.fire({
+                                        text: response.message,
+                                        icon: "success",
+                                        showDenyButton: false,
+                                        showCancelButton: false,
+                                    })
+                                    table.ajax.reload(null, false);
+
+                                } else {
+                                    Swal.fire({
+                                        text: response.message,
+                                        icon: "error",
+                                        showDenyButton: false,
+                                        showCancelButton: false,
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+
+            }
+
+        }
+
+        function returnBacklog() {
+
+            var codigos = [];
+
+            table.rows().every(function () {
+                var rowData = this.data();
+                var node = this.node();
+
+                if (!node) return;
+
+                var checkbox = $(node).find('input[type="checkbox"]');
+
+                if (checkbox.is(':checked') && (rowData.status == 0)) {
+                    codigos.push(rowData.codigo + '|' + rowData.codigo_unidade);
+                }
+            });
+
+            if (codigos.length === 0) {
+
+                swal.fire({
+                    text: "Nenhuma Ordem de Serviço valida selecionada.",
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: "Ok",
+                    reverseButtons: true
+                }).then(function (result) {
+                    return;
+                });
+
+            } else {
+
+                swal.fire({
+                    text: "Gostaria de retornar a(s) Ordem(ns) de Serviço selecionada(s) do Backlog?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: "Sim",
+                    cancelButtonText: "Não",
+                    reverseButtons: true
+                }).then(function (result) {
+
+                    if (result.value) {
+
+                        jQuery.ajax({
+                            method: "POST",
+                            url: `ReturnBacklog`,
+                            async: false,
+                            data: {
+                                "codigos": codigos.join(',')
+                            },
+                            dataType: "json",
+                            success: function (response) {
+
+                                if (response.success) {
+                                    Swal.fire({
+                                        text: response.message,
+                                        icon: "success",
+                                        showDenyButton: false,
+                                        showCancelButton: false,
+                                    })
+                                    table.ajax.reload(null, false);
+
+                                } else {
+                                    Swal.fire({
+                                        text: response.message,
+                                        icon: "error",
+                                        showDenyButton: false,
+                                        showCancelButton: false,
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+
+            }
+
+        }
+
         $('#tb_main tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var tdi = tr.find("i.fa");
@@ -1023,9 +1212,20 @@
             }
         });
 
-        // Reload DataTable
         $('#filtrar').click(function () {
             table.ajax.reload(null, false);
+        });
+
+        $('#btnBacklog').click(function () {
+
+            sendBacklog();
+
+        });
+
+        $('#btnReturnBacklog').click(function () {
+
+            returnBacklog();
+
         });
 
     });
