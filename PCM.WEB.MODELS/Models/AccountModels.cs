@@ -171,6 +171,7 @@ namespace PCM.WEB.MODELS
         public bool qa_plano_acao { get; set; }
         public bool dash_desempenho { get; set; }
         public bool dash_desempenho_qa { get; set; }
+        public bool dash_desempenho_gov { get; set; }
         public bool qa_tarefa { get; set; }
         public bool qa_tarefa_historico { get; set; }
 

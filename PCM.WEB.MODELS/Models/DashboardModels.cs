@@ -267,4 +267,23 @@ namespace PCM.WEB.MODELS
         public string tempo_gasto { get; set; }
         public string valor_gasto { get; set; }
     }
+
+
+
+    public class DashboardGovernancaInfo
+    {
+        public string unidade { get; set; }
+        public string quantidadeCamareiras { get; set; }
+        public string quantidadeSupervisores { get; set; }
+        public string uhsArrumadas { get; set; }
+        public string uhsPermanencia { get; set; }
+        public string uhsSaida { get; set; }
+        public string uhsVistoriadas { get; set; }
+        public string percentualVistoria { get; set; }
+        public string quantidadeOSManutencao { get; set; }
+        public string quantidadeNC { get; set; }
+        public string quantidadeRetrabalho { get; set; }
+        public string quantidadeAlteracaoStatus { get; set; }
+    }
+
 }

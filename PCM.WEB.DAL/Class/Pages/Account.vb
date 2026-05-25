@@ -584,6 +584,7 @@ Public Class Account
 
                 oFormularioVisualizar.dash_desempenho = IIf(IsDBNull(oSqlDataReader.Item("dash_desempenho")) = False AndAlso oSqlDataReader.Item("dash_desempenho") = "S", True, False)
                 oFormularioVisualizar.dash_desempenho_qa = IIf(IsDBNull(oSqlDataReader.Item("dash_desempenho_qa")) = False AndAlso oSqlDataReader.Item("dash_desempenho_qa") = "S", True, False)
+                oFormularioVisualizar.dash_desempenho_gov = IIf(IsDBNull(oSqlDataReader.Item("dash_desempenho_gov")) = False AndAlso oSqlDataReader.Item("dash_desempenho_gov") = "S", True, False)
 
                 oFormularioVisualizar.cad_area_comum = IIf(IsDBNull(oSqlDataReader.Item("cad_area_comum")) = False AndAlso oSqlDataReader.Item("cad_area_comum") = "S", True, False)
                 oFormularioVisualizar.agenda_area_comum = IIf(IsDBNull(oSqlDataReader.Item("agenda_area_comum")) = False AndAlso oSqlDataReader.Item("agenda_area_comum") = "S", True, False)

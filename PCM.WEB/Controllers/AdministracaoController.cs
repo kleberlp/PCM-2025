@@ -452,6 +452,7 @@ namespace PCM.WEB.Controllers
                 Session["qa_tarefa_historico"] = formulario_visualizar.qa_tarefa_historico;
                 Session["dash_desempenho"] = formulario_visualizar.dash_desempenho;
                 Session["dash_desempenho_qa"] = formulario_visualizar.dash_desempenho_qa;
+                Session["dash_desempenho_gov"] = formulario_visualizar.dash_desempenho_gov;
                 Session["cad_area_comum"] = formulario_visualizar.cad_area_comum;
                 Session["agenda_area_comum"] = formulario_visualizar.agenda_area_comum;
                 Session["agenda_entrada"] = formulario_visualizar.agenda_entrada;
@@ -943,6 +944,7 @@ namespace PCM.WEB.Controllers
                 Session["qa_tarefa_historico"] = formulario_visualizar.qa_tarefa_historico;
                 Session["dash_desempenho"] = formulario_visualizar.dash_desempenho;
                 Session["dash_desempenho_qa"] = formulario_visualizar.dash_desempenho_qa;
+                Session["dash_desempenho_gov"] = formulario_visualizar.dash_desempenho_gov;
 
                 Session["cad_area_comum"] = formulario_visualizar.cad_area_comum;
                 Session["agenda_area_comum"] = formulario_visualizar.agenda_area_comum;

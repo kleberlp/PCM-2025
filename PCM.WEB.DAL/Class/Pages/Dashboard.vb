@@ -2527,4 +2527,64 @@ Public Class Dashboard
 
 #End Region
 
+#Region "::: DASHBOARD GOVERNANÇA :::"
+
+    Public Function DashboardGovernancaInfo(ByVal codigoEmpresa As Integer,
+                                            ByVal codigoUnidade As Integer,
+                                            ByVal data As String) As List(Of DashboardGovernancaInfo)
+
+        Try
+
+
+            'Váriaveis Locais
+            Dim _return As New List(Of DashboardGovernancaInfo)
+
+            Dim _sqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data", SqlDbType.Date, data)
+            }
+
+            'Executa Query
+            Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_govenanca_desempenho", _sqlParameter)
+
+                If _sqlDataReader.HasRows Then
+
+                    While _sqlDataReader.Read
+
+                        Dim _info As New DashboardGovernancaInfo With {
+                            .unidade = SafeGetString(_sqlDataReader, "unidade"),
+                            .quantidadeCamareiras = SafeGetString(_sqlDataReader, "qtd_camareiras"),
+                            .quantidadeSupervisores = SafeGetString(_sqlDataReader, "qtd_surpevisores"),
+                            .uhsArrumadas = SafeGetString(_sqlDataReader, "uhs_arrumadas"),
+                            .uhsPermanencia = SafeGetString(_sqlDataReader, "uhs_permanencia"),
+                            .uhsSaida = SafeGetString(_sqlDataReader, "uhs_saida"),
+                            .uhsVistoriadas = SafeGetString(_sqlDataReader, "uhs_vistoriadas"),
+                            .percentualVistoria = SafeGetString(_sqlDataReader, "percentual_vistoria"),
+                            .quantidadeOSManutencao = SafeGetString(_sqlDataReader, "qtd_os_manutencao"),
+                            .quantidadeNC = SafeGetString(_sqlDataReader, "qtd_nc"),
+                            .quantidadeRetrabalho = SafeGetString(_sqlDataReader, "qtd_retrabalho"),
+                            .quantidadeAlteracaoStatus = SafeGetString(_sqlDataReader, "qtd_alteracao_status")
+                        }
+
+                        _return.Add(_info)
+
+                    End While
+
+                End If
+
+            End Using
+
+            Return _return
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
 End Class

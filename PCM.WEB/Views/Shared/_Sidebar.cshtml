@@ -161,6 +161,12 @@
                             <a class="@Html.IsSelected(action: "QualidadeDesempenho", cssClass: "active") font-size-sm" href="@Url.Action("QualidadeDesempenho", "Home", new { unidade = Session["codigo_unidade"].ToString() })"><i class="si si-bar-chart"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.desempenho - @PCM.WEB.Properties.Resources.qualidade</span></a>
                         </li>
                     }
+                    @if ((bool)Session["dash_desempenho_gov"])
+                    {
+                        <li>
+                            <a class="@Html.IsSelected(action: "DesempenhoGovernanca", cssClass: "active") font-size-sm" href="@Url.Action("DesempenhoGovernanca", "Home", new { unidade = Session["codigo_unidade"].ToString() })"><i class="si si-bar-chart"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.desempenho - @PCM.WEB.Properties.Resources.governanca</span></a>
+                        </li>
+                    }
                     @if ((bool)Session["adm_empresa"] || (bool)Session["adm_usuario"] || (bool)Session["adm_configuracao_desempenho_unidade"] || (bool)Session["adm_perfil"] || (bool)Session["adm_perfil_hierarquia"])
                     {
                         <li class="@Html.IsSelected(controller: "Administracao", cssClass: "open")">
