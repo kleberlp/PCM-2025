@@ -76,7 +76,7 @@ namespace PCM.WEB.OS.Controllers
                     // Extensão segura/permitida
                     var originalExt = Path.GetExtension(file.FileName);
                     var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                { ".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif" };
+                { ".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif" }; 
 
                     var ext = allowed.Contains(originalExt) ? originalExt : ".jpg";
 
