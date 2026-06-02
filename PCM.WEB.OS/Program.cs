@@ -29,6 +29,8 @@ var filesPath = builder.Configuration.GetSection("StaticFileConfig:FilesPath").V
 
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(filesPath));
 
+builder.Services.AddScoped<ImageService>();
+
 // Configuração do esquema de autenticação padrão (Cookies)
 builder.Services.AddAuthentication(options =>
     {

@@ -52,6 +52,7 @@ namespace PCM.WEB.OS.Controllers
         {
             string relativePath = string.Empty;
             var fullPath = string.Empty;
+            var _imageService = new ImageService();
 
             if (file != null && file.Length > 0)
             {
@@ -61,7 +62,7 @@ namespace PCM.WEB.OS.Controllers
                     ModelState.AddModelError("file", "Apenas imagens são permitidas.");
                 }
 
-                const long maxSize = 5 * 1024 * 1024; // 5MB
+                const long maxSize = 10 * 1024 * 1024; // 5MB
                 if (file.Length > maxSize)
                 {
                     ModelState.AddModelError("file", "Imagem muito grande (máx. 5MB).");
@@ -70,8 +71,8 @@ namespace PCM.WEB.OS.Controllers
                 if (ModelState.IsValid)
                 {
                     // Pasta de destino: wwwroot/uploads/OS
-                    var uploadsRoot = Path.Combine("C:\\SIM\\PCM\\SITE\\IMAGE\\OS", "HOSPEDE");
-                    Directory.CreateDirectory(uploadsRoot);
+                    var uploadDir = Path.Combine("C:\\SIM\\PCM\\SITE\\IMAGE\\OS", "HOSPEDE");
+                    Directory.CreateDirectory(uploadDir);
 
                     // Extensão segura/permitida
                     var originalExt = Path.GetExtension(file.FileName);
@@ -80,13 +81,11 @@ namespace PCM.WEB.OS.Controllers
 
                     // Nome único
                     var fileName = $"{Guid.NewGuid():N}{ext}";
-                    fullPath = Path.Combine(uploadsRoot, fileName);
+                    fullPath = Path.Combine(uploadDir, fileName);
 
-                    // Grava
-                    await using (var stream = System.IO.File.Create(fullPath))
-                    {
-                        await file.CopyToAsync(stream, ct);
-                    }
+                    // Redimensiona e salva
+                    using var stream = file.OpenReadStream();
+                    await _imageService.ResizeAndSaveAsync(stream, fullPath);
 
                     // Caminho relativo para servir na web e salvar no BD
                     relativePath = $"/uploads/OS/{fileName}";
