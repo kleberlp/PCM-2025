@@ -1039,7 +1039,7 @@
 
                 var checkbox = $(node).find('input[type="checkbox"]');
 
-                if (checkbox.is(':checked') && (rowData.status == 3 || rowData.status == 1)) {
+                if (checkbox.is(':checked') && (rowData.status == 3 || rowData.status == 1 || rowData.status == 5)) {
                     codigos.push(rowData.codigo + '|' + rowData.codigo_unidade);
                 }
             });

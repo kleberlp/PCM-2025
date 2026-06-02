@@ -109,9 +109,12 @@
                                         <input id="inputCamera" type="file" name="file" accept="image/*" capture="environment" style="display:none" />
                                         <input id="inputGaleria" type="file" name="file" accept="image/*" style="display:none" />
 
-                                        <!-- Preview opcional -->
-                                        <div class="col-12 mt-2">
-                                            <img id="preview" style="max-width:260px; display:none; border:1px solid #eee; border-radius:8px;" />
+                                        <!-- Preview da imagem -->
+                                        <div class="col-12 mt-2 text-center">
+                                            <img id="preview"
+                                                 src=""
+                                                 alt="Preview da imagem"
+                                                 style="max-width: 100%; max-height: 300px; display: none; border: 1px solid #dee2e6; border-radius: 8px; object-fit: contain;" />
                                             <div id="fileInfo" class="text-muted small mt-1"></div>
                                         </div>
                                     </div>
@@ -145,40 +148,6 @@
 
     <script src="~/js/jquery.min.js"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const btnCamera  = document.getElementById('btnCamera');
-        const btnGaleria = document.getElementById('btnGaleria');
-        const inCamera   = document.getElementById('inputCamera');
-        const inGaleria  = document.getElementById('inputGaleria');
-        const preview    = document.getElementById('preview');
-        const fileInfo   = document.getElementById('fileInfo');
-
-        // Abre câmera
-        btnCamera.addEventListener('click', () => {
-            if (inCamera.showPicker) inCamera.showPicker(); else inCamera.click();
-        });
-
-        // Abre galeria
-        btnGaleria.addEventListener('click', () => {
-            if (inGaleria.showPicker) inGaleria.showPicker(); else inGaleria.click();
-        });
-
-        // Preview e info
-        function onChosen(input) {
-            const file = input.files && input.files[0];
-            if (!file) return;
-            const url = URL.createObjectURL(file);
-            preview.src = url;
-            preview.style.display = 'inline-block';
-            fileInfo.textContent = `${file.name} - ${(file.size/1024/1024).toFixed(2)} MB`;
-        }
-
-        inCamera.addEventListener('change', () => onChosen(inCamera));
-        inGaleria.addEventListener('change', () => onChosen(inGaleria));
-
-        // (Opcional) Auto-submit após tirar/selecionar a foto:
-        // inCamera.addEventListener('change', () => document.getElementById('form').submit());
-        // inGaleria.addEventListener('change', () => document.getElementById('form').submit());
-    </script>
+    <script src="~/js/pages/home/jquery.ordemServico.init.js"></script>
 </body>
 </html>

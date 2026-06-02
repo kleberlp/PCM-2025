@@ -70,14 +70,12 @@ namespace PCM.WEB.OS.Controllers
                 if (ModelState.IsValid)
                 {
                     // Pasta de destino: wwwroot/uploads/OS
-                    var uploadsRoot = Path.Combine(_env.WebRootPath, "uploads", "OS");
+                    var uploadsRoot = Path.Combine("C:\\SIM\\PCM\\SITE\\IMAGE\\OS", "HOSPEDE");
                     Directory.CreateDirectory(uploadsRoot);
 
                     // Extensão segura/permitida
                     var originalExt = Path.GetExtension(file.FileName);
-                    var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                { ".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif" }; 
-
+                    var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif" }; 
                     var ext = allowed.Contains(originalExt) ? originalExt : ".jpg";
 
                     // Nome único

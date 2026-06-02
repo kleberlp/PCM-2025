@@ -76,9 +76,9 @@ app.Use(async (context, next) =>
             "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
             "font-src 'self' https://fonts.gstatic.com; " +
-            "img-src 'self' data:; " +
+            "img-src 'self' data: blob:;" +
             "frame-src 'none'; " +
-            "connect-src 'self' ws://localhost:* http://localhost:* https://localhost:* ws://qa.imts.jnj.com https://qa.imts.jnj.com  ws://imts.jnj.com https://imts.jnj.com ws://awseganvaw0002.jnj.com https://awseganvaw0002.jnj.com ws://awseganvaw0001.jnj.com https://awseganvaw0001.jnj.com https://viacep.com.br;");
+            "connect-src 'self' https://www.simservices.com.br  ws://www.simservices.com.br https://viacep.com.br;");
 
         await next();
     }
