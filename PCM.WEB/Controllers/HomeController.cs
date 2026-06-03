@@ -1786,41 +1786,17 @@ namespace PCM.WEB.Controllers
                 ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                     iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", data);
 
-                ViewBag.info = oDashboard.DashboardGovernancaInfo(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                  data: data);
-
                 return View();
             }
 
         }
 
         [HttpPost]
-        public ActionResult DesempenhoGovernanca(int unidade = -1, string data = "")
+        public JsonResult LoadDesempenhoGovernanca(int unidade = -1, string data = "")
         {
-
-
-            if (Session["empresa"] == null)
-            {
-                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-            }
-            else
-            {
-                data = (data == "") ? new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.DaysInMonth(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month)).ToShortDateString() : data;
-
-                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                bCadastro: false), "codigo", "descricao", unidade);
-
-                ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                    iCodigoUnidade: unidade), "codigo", "descricao", data);
-
-                ViewBag.info = oDashboard.DashboardGovernancaInfo(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+            return Json(oDashboard.DashboardGovernancaInfo(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                   codigoUnidade: unidade,
-                                                                  data: data);
-
-                return View();
-            }
+                                                                  data: data));
 
         }
 

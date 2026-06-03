@@ -441,6 +441,7 @@
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetMovement.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetInsert.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetIndex.init.js" />
+    <Content Include="Content\js\pages\Governanca\jquery.desempenhoGovernanca.init.js" />
     <Content Include="Content\js\pcm.js" />
     <Content Include="Content\js\codebase.js" />
     <Content Include="Content\js\core\bootstrap-notify.min.js" />

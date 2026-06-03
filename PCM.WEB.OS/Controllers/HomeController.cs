@@ -23,12 +23,13 @@ namespace PCM.WEB.OS.Controllers
             oCombo = new Combo(sConnectionString: _configuration.GetConnectionString("DefaultConnection"));
         }
 
-        public IActionResult index(string uniqueId = "")
+        public IActionResult index(string uniqueId = "", string message = "")
         {
             OSHospedeApartamento apartamento = new OSHospedeApartamento();
             apartamento = oOSHospede.InfoApartamento(uniqueId);
 
             ViewBag.uniqueId = uniqueId;
+            ViewBag.message = message;
 
             return View(apartamento);
         }
@@ -110,7 +111,7 @@ namespace PCM.WEB.OS.Controllers
                     ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             }
 
-            return RedirectToAction("Index", "Home", new { uniqueId });
+            return RedirectToAction("Index", "Home", new { uniqueId, message = "Ordem de Serviço aberta com sucesso!" });
         }
 
         public IActionResult rating(string uniqueId)

@@ -2,34 +2,32 @@
 const messagesData = document.getElementById('resource-messages').getAttribute('data-messages');
 const messages = JSON.parse(messagesData);
 
+var table = null;
+
 $(document).ready(function () {
 
-    var table = $('#tableMain').DataTable({
+    table = $('#tbMain').DataTable({
         select: {
             selector: 'td:not(:first-child)',
             style: 'os'
         },
+        searching: false,
         fixedColumns: {
             start: 0,
             end: 1
         },
-        searching: true,
         lengthChange: false,
         pageLength: 15,
         processing: true,
-        scrollX: true,
-        scrollCollapse: true,
+        scrollCollapse: false,
         serverSide: false,
         ajax: {
-            url: "loadLeadTime",
+            url: messages.urlLoadDesempenhoGovernanca,
             type: "POST",
             datatype: "json",
             data: function (d) {
-                d.branch = $('#branch').val(),
-                d.carrier = ($('#carrier').val() == "") ? -1 : $("#carrier").val(),
-                d.deliveryType = ($('#deliveryType').val() == "") ? -1 : $("#deliveryType").val(),
-                d.origem = $('#origem').val(),
-                d.destine = $('#origem').val()
+                d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.data = $('#data').val()
             },
             dataSrc: ""
         },
@@ -39,39 +37,43 @@ $(document).ready(function () {
         buttons: [
             {
                 extend: 'copy',
-                text: "<i class='fas fa-copy text-primary'></i>",
+                text: "<i class='fa fa-copy text-primary'></i>",
                 titleAttr: messages.clickToCopy,
-                className: 'btn btn-sm btn-outline-light waves-light waves-effect dropdown-toggle tippy-btn mb-2'
+                className: 'btn btn-sm btn-secondary'
             },
             {
                 extend: 'excel',
-                text: "<i class='fas fa-file-excel text-success'></i>",
+                text: "<i class='fa fa-file-excel-o text-success'></i>",
                 titleAttr: messages.clickToExcel,
-                className: 'btn btn-sm btn-outline-light waves-light waves-effect dropdown-toggle tippy-btn mb-2'
+                className: 'btn btn-sm btn-secondary'
             },
             {
                 extend: 'pdf',
-                text: "<i class='fas fa-file-pdf text-danger'></i>",
+                text: "<i class='fa fa-file-pdf-o text-danger'></i>",
                 titleAttr: messages.clickToPdf,
-                className: 'btn btn-sm btn-outline-light waves-light waves-effect dropdown-toggle tippy-btn mb-2'
+                className: 'btn btn-sm btn-secondary'
             },
             {
                 extend: 'colvis',
-                text: "<i class='fas fa-columns text-black'></i>",
+                text: "<i class='fa fa-columns text-black'></i>",
                 titleAttr: messages.clickToConfig,
                 className: 'btn btn-sm btn-outline-light waves-light waves-effect dropdown-toggle tippy-btn mb-2',
-                columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
             }
         ],
         columns: [
-            { data: "branch"},
-            { data: "carrier" },
-            { data: "origem"},
-            { data: "destine" },
-            { data: "deliveryType" },
-            { data: "leadTimeMin"},
-            { data: "leadTimeMax"},
-            { data: "distanceKm"}
+            { data: "unidade" },
+            { data: "quantidadeCamareiras" },
+            { data: "quantidadeSupervisores" },
+            { data: "uhsArrumadas" },
+            { data: "uhsPermanencia" },
+            { data: "uhsSaida" },
+            { data: "uhsVistoriadas" },
+            { data: "percentualVistoria" },
+            { data: "quantidadeOSManutencao" },
+            { data: "quantidadeNC" },
+            { data: "quantidadeRetrabalho" },
+            { data: "quantidadeAlteracaoStatus" }
         ],
         language: {
             emptyTable: messages.emptyTable,
@@ -79,15 +81,19 @@ $(document).ready(function () {
             infoEmpty: "",
             infoFiltered: "",
         },
-        order: [[1, 'asc']],
+        order: [[0, 'asc']],
         columnDefs: [
-            { className: 'text-center', targets: [0, 4, 5, 6, 7] },
-            { width: '150px', targets: [0, 5, 6, 7] }
+            { className: 'text-center', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+            { width: '150px', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
         ],
+
     });
 
-    // Reload DataTable
-    $('#btnSearch').click(function () {
+    $("#unidade").change(function () {
+        table.ajax.reload(null, false);
+    });
+
+    $("#data").change(function () {
         table.ajax.reload(null, false);
     });
 

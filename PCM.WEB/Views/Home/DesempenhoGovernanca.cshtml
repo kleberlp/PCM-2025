@@ -1,4 +1,18 @@
-﻿
+﻿@using PCM.WEB.Properties
+@using Newtonsoft.Json
+
+
+@section styles {
+    <!-- Table css -->
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+}
+
+
 <!-- Main Container -->
 <main id="main-container">
 
@@ -80,43 +94,23 @@
                 <div class="block-content block-content-full pb-1">
 
                     <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped table-sm table-bordered">
+                    <table class="table table-striped" id="tbMain" name="tbMain">
                         <thead>
                             <tr class="table-secondary">
                                 <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-center" data-sortable="false">Qtd. Camareiras</th>
-                                <th class="text-center" data-sortable="false">Qtd. Supervisores</th>
-                                <th class="text-center" data-sortable="false">UHs Arrumadas</th>
-                                <th class="text-center" data-sortable="false">UHs Permanência</th>
-                                <th class="text-center" data-sortable="false">UHs Saída</th>
-                                <th class="text-center" data-sortable="false">UHs Vistoriadas</th>
-                                <th class="text-center" data-sortable="false">% Vistoriadas das Saídas</th>
-                                <th class="text-center" data-sortable="false">Qtd. OS Manutenção</th>
-                                <th class="text-center" data-sortable="false">Qtd. NC</th>
-                                <th class="text-center" data-sortable="false">Qtd. Retrabalho</th>
-                                <th class="text-center" data-sortable="false">Qtd. Alteração status</th>
+                                <th class="text-center">Qtd. Camareiras</th>
+                                <th class="text-center">Qtd. Supervisores</th>
+                                <th class="text-center">UHs Arrumadas</th>
+                                <th class="text-center">UHs Permanência</th>
+                                <th class="text-center">UHs Saída</th>
+                                <th class="text-center">UHs Vistoriadas</th>
+                                <th class="text-center">% Vistoriadas das Saídas</th>
+                                <th class="text-center">Qtd. OS Manutenção</th>
+                                <th class="text-center">Qtd. NC</th>
+                                <th class="text-center">Qtd. Retrabalho</th>
+                                <th class="text-center">Qtd. Alteração status</th>
                             </tr>
                         </thead>
-
-                        <tbody>
-                            @foreach (var item in ViewBag.info)
-                            {
-                                <tr>
-                                    <td>@item.unidade</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidadeCamareiras</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidadeSupervisores</td>
-                                    <td class="text-center" data-sortable="false">@item.uhsArrumadas</td>
-                                    <td class="text-center" data-sortable="false">@item.uhsPermanencia</td>
-                                    <td class="text-center" data-sortable="false">@item.uhsSaida</td>
-                                    <td class="text-center" data-sortable="false">@item.uhsVistoriadas</td>
-                                    <td class="text-center" data-sortable="false">@item.percentualVistoria</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidadeOSManutencao</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidadeNC</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidadeRetrabalho</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidadeAlteracaoStatus</td>
-                                </tr>
-                            }
-                        </tbody>
                     </table>
 
                 </div>
@@ -130,33 +124,46 @@
 </main>
 <!-- END Main Container -->
 
-@section Styles {
-    @Styles.Render("~/Content/datepicker")
-    @Styles.Render("~/Content/dataTables")
-    @Styles.Render("~/Content/select")
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        msgQuestionDelete = Resources.msgQuestionDelete,
+        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
+        yes = Resources.yes,
+        no = Resources.no,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig,
+        editar = ViewBag.editar,
+        excluir = ViewBag.excluir,
+        urlLoadDesempenhoGovernanca = Url.Action("LoadDesempenhoGovernanca", "Home")
+    }))'>
+</div>
+
+
+@section scripts {
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+    <script src="~/Content/js/pcm.js"></script>
+
+    <!-- Page-->
+    <script src="~/Content/js/pages/Governanca/jquery.desempenhoGovernanca.init.js"></script>
+    <!--Datatables-->
 }
-
-@section Scripts {
-    @Scripts.Render("~/plugins/datatables")
-    @Scripts.Render("~/plugins/datepicker")
-    @Scripts.Render("~/plugins/chart")
-    @Scripts.Render("~/plugins/gauge")
-    @Scripts.Render("~/plugins/select")
-
-    <script>
-
-        $(function () {
-
-            $("#unidade").change(function () {
-                $("#form").submit();
-            });
-
-            $("#data").change(function () {
-                $("#form").submit();
-            });
-
-        });
-
-    </script>
-}
-

@@ -3630,14 +3630,14 @@ Public Class CadastroBasico
 
                     Dim col As New ColumnStructure()
 
-                    col.Data = oSqlDataReader("dataMember").ToString()
-                    col.Title = oSqlDataReader("colunaExcel").ToString()
-                    col.Visible = Convert.ToBoolean(oSqlDataReader("visivel"))
-                    col.Width = If(IsDBNull(oSqlDataReader("largura")), Nothing, oSqlDataReader("largura").ToString())
-                    col.Align = If(IsDBNull(oSqlDataReader("alinhamento")), Nothing, oSqlDataReader("alinhamento").ToString())
-                    col.Frozen = Convert.ToBoolean(oSqlDataReader("frozen"))
-                    col.Orderable = Convert.ToBoolean(oSqlDataReader("ordenavel"))
-                    col.Wrap = Convert.ToBoolean(oSqlDataReader("quebraLinha"))
+                    col.data = oSqlDataReader("dataMember").ToString()
+                    col.title = oSqlDataReader("colunaExcel").ToString()
+                    col.visible = Convert.ToBoolean(oSqlDataReader("visivel"))
+                    col.width = If(IsDBNull(oSqlDataReader("largura")), Nothing, oSqlDataReader("largura").ToString())
+                    col.align = If(IsDBNull(oSqlDataReader("alinhamento")), Nothing, oSqlDataReader("alinhamento").ToString())
+                    col.frozen = Convert.ToBoolean(oSqlDataReader("frozen"))
+                    col.orderable = Convert.ToBoolean(oSqlDataReader("ordenavel"))
+                    col.wrap = Convert.ToBoolean(oSqlDataReader("quebraLinha"))
 
                     oReturn.columns.Add(col)
 
@@ -3668,11 +3668,11 @@ Public Class CadastroBasico
 
                     Dim group As New GroupDefinition()
 
-                    group.Column = oSqlDataReader("column").ToString()
-                    group.Level = oSqlDataReader("level").ToString()
-                    group.Collapsible = Convert.ToBoolean(oSqlDataReader("collapsible"))
-                    group.ShowCount = Convert.ToBoolean(oSqlDataReader("showCount"))
-                    group.CssClass = oSqlDataReader("cssClass").ToString()
+                    group.column = oSqlDataReader("column").ToString()
+                    group.level = oSqlDataReader("level").ToString()
+                    group.collapsible = Convert.ToBoolean(oSqlDataReader("collapsible"))
+                    group.showCount = Convert.ToBoolean(oSqlDataReader("showCount"))
+                    group.cssClass = oSqlDataReader("cssClass").ToString()
 
                     oReturn.groupBy.Add(group)
 
@@ -4044,14 +4044,14 @@ Public Class CadastroBasico
 
                     Dim col As New ColumnStructure()
 
-                    col.Data = oSqlDataReader("dataMember").ToString()
-                    col.Title = oSqlDataReader("colunaExcel").ToString()
-                    col.Visible = Convert.ToBoolean(oSqlDataReader("visivel"))
-                    col.Width = If(IsDBNull(oSqlDataReader("largura")), Nothing, oSqlDataReader("largura").ToString())
-                    col.Align = If(IsDBNull(oSqlDataReader("alinhamento")), Nothing, oSqlDataReader("alinhamento").ToString())
-                    col.Frozen = Convert.ToBoolean(oSqlDataReader("frozen"))
-                    col.Orderable = Convert.ToBoolean(oSqlDataReader("ordenavel"))
-                    col.Wrap = Convert.ToBoolean(oSqlDataReader("quebraLinha"))
+                    col.data = oSqlDataReader("dataMember").ToString()
+                    col.title = oSqlDataReader("colunaExcel").ToString()
+                    col.visible = Convert.ToBoolean(oSqlDataReader("visivel"))
+                    col.width = If(IsDBNull(oSqlDataReader("largura")), Nothing, oSqlDataReader("largura").ToString())
+                    col.align = If(IsDBNull(oSqlDataReader("alinhamento")), Nothing, oSqlDataReader("alinhamento").ToString())
+                    col.frozen = Convert.ToBoolean(oSqlDataReader("frozen"))
+                    col.orderable = Convert.ToBoolean(oSqlDataReader("ordenavel"))
+                    col.wrap = Convert.ToBoolean(oSqlDataReader("quebraLinha"))
 
                     oReturn.columns.Add(col)
 
@@ -4090,11 +4090,11 @@ Public Class CadastroBasico
 
                     Dim group As New GroupDefinition()
 
-                    group.Column = oSqlDataReader("column").ToString()
-                    group.Level = oSqlDataReader("level").ToString()
-                    group.Collapsible = Convert.ToBoolean(oSqlDataReader("collapsible"))
-                    group.ShowCount = Convert.ToBoolean(oSqlDataReader("showCount"))
-                    group.CssClass = oSqlDataReader("cssClass").ToString()
+                    group.column = oSqlDataReader("column").ToString()
+                    group.level = oSqlDataReader("level").ToString()
+                    group.collapsible = Convert.ToBoolean(oSqlDataReader("collapsible"))
+                    group.showCount = Convert.ToBoolean(oSqlDataReader("showCount"))
+                    group.cssClass = oSqlDataReader("cssClass").ToString()
 
                     oReturn.groupBy.Add(group)
 

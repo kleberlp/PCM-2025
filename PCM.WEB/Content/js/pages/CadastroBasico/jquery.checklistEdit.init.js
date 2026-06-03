@@ -206,7 +206,23 @@ $(document).ready(function () {
             tipoChecklist: $("#tipoChecklist").val()
         }
 
-        loadGridMain(table, data, messages.loadChecklist, false, false, true);
+        loadGridMain({
+            tableId: "#tableDynamic",
+            data: data,
+            endpoint: messages.loadChecklist,
+            editAction: false,
+            deleteAction: false,
+            warningAction: false,
+            customAction: false,
+            enablePaging: false,
+            pageLength: 15,
+            enableSearch: true,
+            enableExport: true,
+            textSearch: messages.search,
+            textNothingRegister: messages.nothingRegister,
+            enableChild: false
+        });
+
     }
 
     loadGrid();

@@ -6,14 +6,14 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>VC</title>
+    <title>PCM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta content="VC" name="description" />
+    <meta content="PCM" name="description" />
     <meta content="" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="~/images/favicon.ico">
+    <link rel="shortcut icon" href="~/images/favicon.png">
 
     <!-- App css -->
     <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -48,6 +48,8 @@
             <div class="row mt-3">
 
                 <div class="col-12">
+
+                    <input type="hidden" id="message" name="message" value="@ViewBag.message" />
 
                     <div class="accordion" id="accordionFlushExample">
                         <div class="accordion-item">
@@ -119,6 +121,8 @@
     <script src="~/js/jquery.core.js"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/rating/jquery.barrating.min.js"></script>
+    <script src="~/lib/sweet-alert2/sweetalert2.min.js"></script>
+    <script src="~/js/pages/home/jquery.home.init.js"></script>
 
 </body>
 </html> 

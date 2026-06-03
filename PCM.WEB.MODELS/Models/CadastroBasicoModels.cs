@@ -190,14 +190,14 @@ namespace PCM.WEB.MODELS
 
     public class ColumnStructure
     {
-        public string Data { get; set; }
-        public string Title { get; set; }
-        public bool Visible { get; set; }
-        public string Width { get; set; }
-        public string Align { get; set; }
-        public bool Frozen { get; set; }
-        public bool Orderable { get; set; }
-        public bool Wrap { get; set; }
+        public string data { get; set; }
+        public string title { get; set; }
+        public bool visible { get; set; }
+        public string width { get; set; }
+        public string align { get; set; }
+        public bool frozen { get; set; }
+        public bool orderable { get; set; }
+        public bool wrap { get; set; }
     }
 
     public class InterfaceError
@@ -207,11 +207,11 @@ namespace PCM.WEB.MODELS
 
     public class GroupDefinition
     {
-        public string Column { get; set; }
-        public int Level { get; set; }
-        public bool Collapsible { get; set; }
-        public bool ShowCount { get; set; }
-        public string CssClass { get; set; }
+        public string column { get; set; }
+        public int level { get; set; }
+        public bool collapsible { get; set; }
+        public bool showCount { get; set; }
+        public string cssClass { get; set; }
     }
 
     public class ChecklistItem
