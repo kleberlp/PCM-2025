@@ -1,6 +1,7 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using Microsoft.AspNet.Identity;
+using NPOI.SS.Formula.Functions;
 using PCM.WEB.MODELS;
 using System;
 using System.Collections.Generic;
@@ -87,8 +88,11 @@ namespace PCM.WEB.Controllers
         }
 
         //JSON: /MANUTENÇÃO - ABERTO x CONCLUÍDO/
-        public JsonResult ChartManutencaoAbertoConcluido(int unidade, string data_inicio, string data_termino, bool qualidade = false)
+        public JsonResult ChartManutencaoAbertoConcluido(int unidade, string data_inicio = "", string data_termino = "", bool qualidade = false)
         {
+            data_inicio = (data_inicio == "") ? System.DateTime.Now.AddDays(-7).ToShortDateString() : data_inicio;
+            data_termino = (data_termino == "") ? System.DateTime.Now.ToShortDateString() : data_termino;
+
             return Json(oRelatorio.ChartManutencaoAbertoConcluido(iCodigoEmpresa: Convert.ToInt16(Session["empresa"].ToString()),
                                                                     iCodigoUnidade: unidade,
                                                                     sDataInicio: data_inicio,
@@ -139,8 +143,10 @@ namespace PCM.WEB.Controllers
         }
 
         //JSON: /MANUTENÇÃO - TEMPO MÉDIO ATENDIMENTO/
-        public JsonResult ChartManutencaoTempoMedioAtendimento(int unidade, int ano, bool qualidade = false)
+        public JsonResult ChartManutencaoTempoMedioAtendimento(int unidade, int ano = -1, bool qualidade = false)
         {
+            ano = (ano == -1) ? System.DateTime.Now.Year : ano;
+
             return Json(oRelatorio.ChartManutencaoTempoMedioAtendimento(iCodigoEmpresa: Convert.ToInt16(Session["empresa"].ToString()),
                                                                         iCodigoUnidade: unidade,
                                                                         iAno: ano,

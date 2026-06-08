@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace PCM.WEB.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private Home oHome = new Home(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
@@ -31,7 +31,7 @@ namespace PCM.WEB.Controllers
         {
             oLogBook.UpdateLogBook(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                     iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));                
+                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
         }
 
         public JsonResult DadosOrdemServico(int unidade)
@@ -54,6 +54,57 @@ namespace PCM.WEB.Controllers
             return Json(oDashboard.QualidadePlanoAcaoRecorrenciaUnidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                         iCodigoUnidade: unidade,
                                                                         iFiltro: filtro));
+        }
+
+        /// <summary>
+        /// Retorna as listas de unidade e módulo para o select do header global.
+        /// Usado por todas as páginas — não depende de ViewBag.
+        /// </summary>
+        public JsonResult HeaderCombos()
+        {
+            int empresa = Convert.ToInt32(Session["empresa"].ToString());
+            int usuario = Convert.ToInt32(User.Identity.GetUserName());
+            int unidadeAtual = Convert.ToInt32(Session["codigo_unidade"].ToString());
+            int moduloAtual = Convert.ToInt32(Session["codigo_modulo"].ToString());
+
+            var unidades = oCombo.Unidade(iCodigoEmpresa: empresa,
+                                           iCodigoUsuario: usuario,
+                                           bCadastro: false)
+                                  .Select(u => new { codigo = u.codigo, descricao = u.descricao, selecionado = (u.codigo == unidadeAtual) });
+
+            var modulos = oCombo.Modulo(iCodigoEmpresa: empresa,
+                                          iCodigoUsuario: usuario)
+                                  .Select(m => new { codigo = m.codigo, descricao = m.descricao, selecionado = (m.codigo == moduloAtual) });
+
+            return Json(new { unidades, modulos }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Retorna todos os dados do dashboard em um único request AJAX,
+        /// usado pelo auto-refresh sem reload de página.
+        /// </summary>
+        public JsonResult DashboardSnapshot()
+        {
+            int empresa = Convert.ToInt32(Session["empresa"].ToString());
+            int unidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
+            int modulo = Convert.ToInt32(Session["codigo_modulo"].ToString());
+
+            InfoOrdemServicoNew os = oHome.InfoOrdemServico(iCodigoEmpresa: empresa,
+                                                              iCodigoUnidade: unidade,
+                                                              iCodigoModulo: modulo,
+                                                              bQualidade: false);
+
+            var gauge = oHome.ChartGauge(iCodigoEmpresa: empresa,
+                                         iCodigoUnidade: unidade,
+                                         iCodigoModulo: modulo);
+
+            var ocorrencias = oHome.PrincipaisOcorrencias(iCodigoEmpresa: empresa,
+                                                          iCodigoUnidade: unidade,
+                                                          iCodigoModulo: modulo,
+                                                          bQualidade: false,
+                                                          iQuantidade: 30);
+
+            return Json(new { os, gauge, ocorrencias }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
@@ -186,7 +237,7 @@ namespace PCM.WEB.Controllers
             {
                 Session["codigo_unidade"] = unidade;
                 Session["codigo_modulo"] = modulo;
-               
+
                 if (modulo == 2)
                 {
                     Session["dashboard"] = "IndexQA";
@@ -292,7 +343,7 @@ namespace PCM.WEB.Controllers
                 Session["unidade"] = info_ordem_servico.unidade;
                 Session["unidade_descricao"] = (info_ordem_servico.unidade == "") ? "TODAS AS UNIDADES" : info_ordem_servico.unidade;
 
-                ViewBag.InfoOrdemServico = info_ordem_servico; 
+                ViewBag.InfoOrdemServico = info_ordem_servico;
                 ViewBag.data_inicio = System.DateTime.Now.Date.AddMonths(-1).ToShortDateString();
                 ViewBag.data_termino = System.DateTime.Now.Date.ToShortDateString();
                 ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
@@ -340,21 +391,21 @@ namespace PCM.WEB.Controllers
             else
             {
 
-            int iCodigoEmpresaPMOC = 0;
-            int iCodigoUnidadePMOC = 0;
-            int iCodigoTipoUnidade = 0;
-            string sHotelOpera = "";
+                int iCodigoEmpresaPMOC = 0;
+                int iCodigoUnidadePMOC = 0;
+                int iCodigoTipoUnidade = 0;
+                string sHotelOpera = "";
 
-            oHome.DadosUnidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                iCodigoEmpresaPMOC: ref iCodigoEmpresaPMOC,
-                                iCodigoUnidadePMOC: ref iCodigoUnidadePMOC,
-                                iCodigoTipoUnidade: ref iCodigoTipoUnidade,
-                                sHotelOpera: ref sHotelOpera);
+                oHome.DadosUnidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                    iCodigoEmpresaPMOC: ref iCodigoEmpresaPMOC,
+                                    iCodigoUnidadePMOC: ref iCodigoUnidadePMOC,
+                                    iCodigoTipoUnidade: ref iCodigoTipoUnidade,
+                                    sHotelOpera: ref sHotelOpera);
 
-            Session["codigo_empresa_pmoc"] = iCodigoEmpresaPMOC;
-            Session["codigo_unidade_pmoc"] = iCodigoUnidadePMOC;
-            Session["hotel_opera"] = sHotelOpera;
+                Session["codigo_empresa_pmoc"] = iCodigoEmpresaPMOC;
+                Session["codigo_unidade_pmoc"] = iCodigoUnidadePMOC;
+                Session["hotel_opera"] = sHotelOpera;
 
                 FormularioVisualizar formulario_visualizar = null;
 
@@ -388,7 +439,7 @@ namespace PCM.WEB.Controllers
                                                                             iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
                 ViewBag.status = oQualidade.LoadAuditoriaStatus(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                 iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
-                    
+
                 return View();
             }
         }
@@ -447,7 +498,7 @@ namespace PCM.WEB.Controllers
                 Session["hotel_opera"] = sHotelOpera;
 
                 InfoOrdemServico info_ordem_servico = null;
-                    
+
                 oHome.DadosOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                         iCodigoUnidade: unidade,
                                         iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
@@ -853,7 +904,7 @@ namespace PCM.WEB.Controllers
                 {
                     Session["dashboard"] = "IndexAEB";
                     Session["modulo"] = "AEB";
-                    Session["modulo_css"] = "text-earth"; 
+                    Session["modulo_css"] = "text-earth";
                     return RedirectToAction("IndexAEB", new { unidade = unidade, modulo = modulo });
                 }
 
@@ -949,7 +1000,8 @@ namespace PCM.WEB.Controllers
 
                     primeiroDia = new DateTime(currentDate.Year, currentDate.Month, 1);
                     ultimoDia = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-                } else
+                }
+                else
                 {
                     DateTime currentDate = DateTime.ParseExact(data, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
@@ -1382,7 +1434,7 @@ namespace PCM.WEB.Controllers
         //        return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
         //    }
         //}
-        
+
         #endregion
 
         #endregion
@@ -1441,7 +1493,7 @@ namespace PCM.WEB.Controllers
 
                 return View();
             }
-        
+
         }
 
         [HttpPost]
@@ -1463,12 +1515,12 @@ namespace PCM.WEB.Controllers
                                                                                 iCodigoUnidade: unidade,
                                                                                 iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
                                                                                 bQualidade: false);
-                    
+
                 ViewBag.nome_fantasia = info_ordem_servico.unidade;
 
                 ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                     iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", data);
-                
+
                 ViewBag.dashboard_info = oDashboard.DashboardInfo(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                     iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
                                                                     sData: data);
@@ -1517,72 +1569,72 @@ namespace PCM.WEB.Controllers
         }
 
         public ActionResult DesempenhoUnidades(string data = "")
+        {
+
+            if (Session["empresa"] == null)
             {
-
-                if (Session["empresa"] == null)
-                {
-                    return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-                }
-                else
-                {
-                    data = (data == "") ? new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.DaysInMonth(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month)).ToShortDateString() : data;
-
-                    ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                    bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
-
-                    ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", data);
-
-                    ViewBag.dashboard_info = oDashboard.DashboardInfo(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                        sData: data);
-
-                    ViewBag.ranking_unidades = oDashboard.RankingUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                            sData: data);
-
-                    ViewBag.notas_unidades = oDashboard.NotasUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        sData: data);
-
-                    ViewBag.percentual_nota = oDashboard.Percentual(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()));
-
-                    ViewBag.pmoc = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                sData: data,
-                                                                sField: "pmoc");
-
-                    ViewBag.laudo = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                sData: data,
-                                                                sField: "laudo");
-
-                    ViewBag.rotina = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                sData: data,
-                                                                sField: "rotina");
-
-                    ViewBag.preventiva = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                    sData: data,
-                                                                    sField: "preventiva");
-
-                    ViewBag.uh_dia = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                sData: data,
-                                                                sField: "uh_dia");
-
-                    ViewBag.atendimento_os = oDashboard.AtendimentoOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                                sData: data);
-
-                    ViewBag.apontamento_horas = oDashboard.ApontamentoHoras(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                            sData: data);
-
-                    ViewBag.manutencao_laudo = oDashboard.ManutencaoLaudo(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
-                                                                            sData: data,
-                                                                            iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
-                                                                            iCodigoTipoOrdemServico:6,
-                                                                            bRotina: false);
-
-                    return View();
-                }
-
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
             }
+            else
+            {
+                data = (data == "") ? new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.DaysInMonth(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month)).ToShortDateString() : data;
+
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
+
+                ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", data);
+
+                ViewBag.dashboard_info = oDashboard.DashboardInfo(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                    sData: data);
+
+                ViewBag.ranking_unidades = oDashboard.RankingUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                        sData: data);
+
+                ViewBag.notas_unidades = oDashboard.NotasUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    sData: data);
+
+                ViewBag.percentual_nota = oDashboard.Percentual(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()));
+
+                ViewBag.pmoc = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            sData: data,
+                                                            sField: "pmoc");
+
+                ViewBag.laudo = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            sData: data,
+                                                            sField: "laudo");
+
+                ViewBag.rotina = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            sData: data,
+                                                            sField: "rotina");
+
+                ViewBag.preventiva = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                sData: data,
+                                                                sField: "preventiva");
+
+                ViewBag.uh_dia = oDashboard.MetricaUnidades(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            sData: data,
+                                                            sField: "uh_dia");
+
+                ViewBag.atendimento_os = oDashboard.AtendimentoOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                            sData: data);
+
+                ViewBag.apontamento_horas = oDashboard.ApontamentoHoras(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                        sData: data);
+
+                ViewBag.manutencao_laudo = oDashboard.ManutencaoLaudo(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                        iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                        sData: data,
+                                                                        iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
+                                                                        iCodigoTipoOrdemServico: 6,
+                                                                        bRotina: false);
+
+                return View();
+            }
+
+        }
 
         #endregion
 
@@ -1608,7 +1660,7 @@ namespace PCM.WEB.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("QualidadeDesempenhoUnidade", new {unidade = unidade, data = data });
+                    return RedirectToAction("QualidadeDesempenhoUnidade", new { unidade = unidade, data = data });
                 }
 
             }
@@ -1697,36 +1749,36 @@ namespace PCM.WEB.Controllers
         }
 
         public ActionResult QualidadeDesempenhoTodasUnidades(string data = "")
-            {
+        {
 
-                if (Session["empresa"] == null)
-                {
-                    return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-                }
-                else
-                {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
 
                 data = (data == "") ? new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.DaysInMonth(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month)).ToShortDateString() : data;
 
                 DateTime oDate = Convert.ToDateTime(data);
 
-                    ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                    bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
-                    ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", data);
-                    ViewBag.mes = Convert.ToDateTime(data).ToString("MMM/yyyy");
-                    ViewBag.inicio_mes = new DateTime(oDate.Year, oDate.Month, 1).ToShortDateString();
-                    ViewBag.termino_mes = new DateTime(oDate.Year, oDate.Month, DateTime.DaysInMonth(oDate.Year, oDate.Month)).ToShortDateString();
-                    ViewBag.plano_acao = oDashboard.QualidadePlanoAcao(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        sData: data);
-                    ViewBag.nota = oDashboard.QualidadeNotas(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                sData: data);
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
+                ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", data);
+                ViewBag.mes = Convert.ToDateTime(data).ToString("MMM/yyyy");
+                ViewBag.inicio_mes = new DateTime(oDate.Year, oDate.Month, 1).ToShortDateString();
+                ViewBag.termino_mes = new DateTime(oDate.Year, oDate.Month, DateTime.DaysInMonth(oDate.Year, oDate.Month)).ToShortDateString();
+                ViewBag.plano_acao = oDashboard.QualidadePlanoAcao(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    sData: data);
+                ViewBag.nota = oDashboard.QualidadeNotas(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            sData: data);
 
-                    return View();
-                }
-
+                return View();
             }
+
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1743,23 +1795,23 @@ namespace PCM.WEB.Controllers
 
                 DateTime oDate = Convert.ToDateTime(data);
 
-            Session["codigo_unidade"] = unidade;
+                Session["codigo_unidade"] = unidade;
 
-            ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                            bCadastro: false), "codigo", "descricao", unidade);
-            ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                iCodigoUnidade: unidade), "codigo", "descricao", data);
-            ViewBag.inicio_mes = new DateTime(oDate.Year, oDate.Month, 1).ToShortDateString();
-            ViewBag.termino_mes = new DateTime(oDate.Year, oDate.Month, DateTime.DaysInMonth(oDate.Year, oDate.Month)).ToShortDateString();
-            ViewBag.mes = Convert.ToDateTime(data).ToString("MMM/yyyy");
-            ViewBag.plano_acao = oDashboard.QualidadePlanoAcao(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                        sData: data);
-            ViewBag.nota = oDashboard.QualidadeNotas(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        sData: data);
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: false), "codigo", "descricao", unidade);
+                ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: unidade), "codigo", "descricao", data);
+                ViewBag.inicio_mes = new DateTime(oDate.Year, oDate.Month, 1).ToShortDateString();
+                ViewBag.termino_mes = new DateTime(oDate.Year, oDate.Month, DateTime.DaysInMonth(oDate.Year, oDate.Month)).ToShortDateString();
+                ViewBag.mes = Convert.ToDateTime(data).ToString("MMM/yyyy");
+                ViewBag.plano_acao = oDashboard.QualidadePlanoAcao(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                            sData: data);
+                ViewBag.nota = oDashboard.QualidadeNotas(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            sData: data);
 
-            return View();
-        }
+                return View();
+            }
 
         }
 
@@ -1844,7 +1896,7 @@ namespace PCM.WEB.Controllers
 
         public ActionResult LoadIOsLink()
         {
-            return Redirect(oHome.LoadLinkIOS()); 
+            return Redirect(oHome.LoadLinkIOS());
         }
 
         #endregion

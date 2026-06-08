@@ -2471,7 +2471,6 @@
     <Content Include="Views\CadastroBasico\DepartamentoGestorIndex.cshtml" />
     <Content Include="Views\Home\DashboardAtual.cshtml" />
     <Content Include="Views\Home\DesempenhoUnidades.cshtml" />
-    <Content Include="Views\Home\Index_NEW.cshtml" />
     <Content Include="Views\PMOC\PMOC2.cshtml" />
     <Content Include="Views\Administracao\ConfiguracaoDesempenhoUnidade.cshtml" />
     <Content Include="Views\Excel\PlanoAcaoQA.cshtml" />
@@ -2605,7 +2604,7 @@
     <Content Include="Views\UH\MapaManutencaoHistorico.cshtml" />
     <Content Include="Views\Governanca\RelatorioUHNC.cshtml" />
     <Content Include="Views\Home\IndexGovernanca_old.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Index_OLD.cshtml" />
     <Content Include="Views\CadastroBasico\ChecklistEdit2.cshtml" />
     <Content Include="Views\AtivoFixo\AssetIndex.cshtml" />
     <Content Include="Views\AtivoFixo\AssetInsert.cshtml" />
@@ -2618,6 +2617,7 @@
     <Content Include="Views\AtivoFixo\assetInventory.cshtml" />
     <Content Include="Views\AtivoFixo\assetMovementInsert.cshtml" />
     <Content Include="Views\AtivoFixo\assetInventoryClose.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

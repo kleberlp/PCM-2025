@@ -1,80 +1,86 @@
-/* ===============================
-   DASHBOARD GOVERNAN�A - MODERNO
+﻿/* ===============================
+   DASHBOARD - MODERNO
    =============================== */
 
-/* Fundo geral */
 body {
     background-color: #f8f9fb;
 }
 
-/* Containers principais */
 .dashboard-section {
     margin-bottom: 24px;
     overflow: visible;
 }
 
-/* T�tulos de se��o */
 .section-title {
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: #374151;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     text-transform: uppercase;
     letter-spacing: .05em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* ===============================
-   CARDS / KPIs
+   CARD BASE
    =============================== */
 
 .dashboard-card {
     background: #ffffff;
     border-radius: 14px;
     border: none;
-    box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
     padding: 16px;
-    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/*    .dashboard-card:hover {
-        transform: translateY(-2px);
-        transition: all .2s ease;
-    }*/
-.dashboard-grid {
-    padding-left: 12px;
-    padding-right: 12px;
-}
-
-/* KPI */
 .dashboard-section,
 .dashboard-card,
 .kpi-card {
     font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-.dashboard-section > .row {
-    margin-left: 0;
-    margin-right: 0;
-}
+    .dashboard-section > .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
 
-.dashboard-card {
-    width: 100%;
-    box-sizing: border-box;
-}
+/* ===============================
+   KPI CARDS
+   =============================== */
 
-.kpi-title {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: #6b7280;
+/* Linha com ícone + label */
+.kpi-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     margin-bottom: 6px;
 }
 
+.kpi-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* Label pequeno acima do número */
+.kpi-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #6b7280;
+    line-height: 1.3;
+    margin-bottom: 0;
+}
+
+/* Número grande */
 .kpi-value {
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.1;
     color: #111827;
 }
 
@@ -89,32 +95,37 @@ body {
     font-weight: 700;
 }
 
-/* Easy Pie Chart (gauges) */
+/* ===============================
+   GAUGES (Easy Pie Chart)
+   =============================== */
+
 .easy-pie-chart {
-    margin: 0 auto 8px;
-    transform: scale(1.05);
+    margin: 8px auto 4px;
 }
 
     .easy-pie-chart canvas {
-        filter: drop-shadow(0 4px 6px rgba(0,0,0,.1));
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,.08));
     }
 
 /* ===============================
-   GR�FICOS
+   GRÁFICOS
    =============================== */
 
+/* Card que contém gráfico — sem height fixo, deixa o wrapper definir */
 .chart-card {
-    height: 380px;
-    position: relative;
     padding: 16px;
+    overflow: hidden;
 }
 
-    .chart-card canvas {
-        display: block;
-    }
+/* Wrapper com altura fixa para que o Chart.js respeite */
+.chart-wrapper {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
 
 /* ===============================
-   TABELAS / RANKING
+   TABELAS
    =============================== */
 
 .table {
@@ -128,7 +139,7 @@ body {
     }
 
     .table th {
-        font-size: .85rem;
+        font-size: .82rem;
         text-transform: uppercase;
         letter-spacing: .05em;
         color: #374151;
@@ -136,15 +147,17 @@ body {
     }
 
     .table td {
-        font-size: .95rem;
+        font-size: .92rem;
     }
 
-    /* Linhas do ranking */
     .table tbody tr:hover {
         background-color: #f9fafb;
     }
 
-/* Badges leves */
+/* ===============================
+   BADGES
+   =============================== */
+
 .badge-soft {
     padding: 4px 8px;
     border-radius: 999px;
@@ -180,7 +193,7 @@ body {
 }
 
 /* ===============================
-   MODAL / DETALHES
+   MODAL
    =============================== */
 
 .modal-content {
@@ -197,19 +210,10 @@ body {
     font-size: 1rem;
 }
 
-/* ===== DADOS DA UNIDADE ===== */
+/* ===============================
+   kpi-line (blocos de dados)
+   =============================== */
 
-.dashboard-card {
-    background: #ffffff;
-    border-radius: 14px;
-    border: none;
-    box-shadow: 0 6px 18px rgba(0,0,0,.06);
-    padding: 16px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Bloco de linhas dentro do card */
 .dashboard-card .kpi-line {
     display: flex;
     flex-direction: column;
@@ -220,24 +224,9 @@ body {
         margin-bottom: 0;
     }
 
-/* N�mero principal */
-.dashboard-card .kpi-value {
-    font-size: 22px;
-    font-weight: 700;
-    color: #111827;
-    line-height: 1.2;
-}
-
-/* Label */
-.dashboard-card .kpi-title {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    color: #6b7280;
-}
-
-/* ===== PRODUTIVIDADE (TABELAS GRANDES) ===== */
+/* ===============================
+   TABELAS DENTRO DE CARDS
+   =============================== */
 
 .dashboard-card table {
     width: 100% !important;
@@ -246,22 +235,22 @@ body {
     border-spacing: 0;
 }
 
-.dashboard-card table thead th {
-    background-color: #f3f4f6;
-    color: #374151;
-    font-weight: 600;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-    border-bottom: 1px solid #e5e7eb;
-    white-space: nowrap;
-}
+    .dashboard-card table thead th {
+        background-color: #f3f4f6;
+        color: #374151;
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        border-bottom: 1px solid #e5e7eb;
+        white-space: nowrap;
+    }
 
-.dashboard-card table tbody td {
-    color: #374151;
-    padding: 6px 10px;
-    vertical-align: middle;
-}
+    .dashboard-card table tbody td {
+        color: #374151;
+        padding: 6px 10px;
+        vertical-align: middle;
+    }
 
 .dashboard-card .dataTables_wrapper {
     padding: 12px;
@@ -271,18 +260,260 @@ body {
     margin-top: 8px;
 }
 
-/* Scroll SOMENTE no primeiro gr�fico */
-.chart-scroll-x {
-    overflow-x: auto;
+/* ===============================
+   TOTAIS ABAIXO DOS GRÁFICOS
+   (fonte menor que KPI cards normais)
+   =============================== */
+
+.chart-card .kpi-value {
+    font-size: 20px;
 }
 
-.chart-inner {
-    position: relative;
-    width: 100%;
+.chart-card .kpi-title {
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+
+/* Remove padding extra do .block herdado pelo Codebase dentro de chart-card */
+.chart-card.block {
+    padding: 16px !important;
+}
+
+/* ===============================
+   TORRE DE COMANDO – INDICADORES
+   =============================== */
+
+.torre-comando-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.torre-item {
+    flex: 1 1 160px;
+    padding: 16px 20px;
+    border-right: 1px solid #f0f1f3;
+    border-bottom: 1px solid #f0f1f3;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: background .15s ease;
+    cursor: pointer;
+}
+
+    .torre-item:last-child {
+        border-right: none;
+    }
+
+    .torre-item:hover {
+        background: #f8f9fb;
+    }
+
+.torre-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.torre-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.torre-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #374151;
+    flex: 1;
+}
+
+.torre-pct {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.5px;
+}
+
+/* Barra de progresso */
+.torre-bar-track {
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.torre-bar-fill {
     height: 100%;
+    border-radius: 999px;
+    transition: width .6s ease;
 }
 
-.chart-inner canvas {
-    width: 100% !important;
-    height: 100% !important;
+/* Rodapé */
+.torre-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.torre-link {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.torre-item:hover .torre-link {
+    color: #374151;
+}
+
+/* ===============================
+   OS CARDS – faixa horizontal
+   =============================== */
+
+/* Item de OS: mais compacto que o torre de indicador (sem barra de progresso) */
+.os-item {
+    gap: 4px !important;
+}
+
+/* Número grande de OS */
+.os-value {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+/* ===============================
+   GRÁFICOS – alinhamento correto
+   =============================== */
+
+/* Garante que os dois cards de gráfico ficam com a mesma altura */
+.chart-card.flex-fill {
+    display: flex;
+    flex-direction: column;
+}
+
+    .chart-card.flex-fill .chart-wrapper {
+        flex: 1;
+    }
+
+/* Remove margin-top extra do section-title quando ele precede um chart-card */
+.d-flex.flex-column > .section-title {
+    margin-bottom: 8px;
+}
+
+/* ===============================
+   INDICADOR DE ATUALIZAÇÃO
+   =============================== */
+
+.refresh-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #9ca3af;
+    margin-bottom: 12px;
+    padding: 4px 10px;
+    background: #f3f4f6;
+    border-radius: 999px;
+    user-select: none;
+    transition: background .2s, color .2s;
+}
+
+    .refresh-indicator strong {
+        color: #6b7280;
+        font-weight: 700;
+        min-width: 28px;
+        display: inline-block;
+        text-align: right;
+    }
+
+.refresh-icon {
+    font-size: 11px;
+    transition: transform .4s ease;
+}
+
+/* Estado durante a atualização */
+.refresh-indicator.refreshing {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+    .refresh-indicator.refreshing strong {
+        color: #3b82f6;
+    }
+
+    .refresh-indicator.refreshing .refresh-icon {
+        animation: spin 1s linear infinite;
+    }
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===============================
+   HEADER – SELECTS DE FILTRO
+   =============================== */
+
+.header-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.header-select {
+    min-width: 180px;
+    max-width: 320px;
+    height: 32px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    border: 1px solid #e5e7eb !important;
+    background: #f9fafb !important;
+    color: #374151 !important;
+    padding: 0 10px !important;
+    cursor: pointer;
+}
+
+    .header-select:focus {
+        border-color: #6366f1 !important;
+        background: #fff !important;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99,102,241,.1) !important;
+    }
+
+/* Select2 no header */
+.header-filter-form .select2-container {
+    min-width: 180px;
+    max-width: 320px;
+}
+
+.header-filter-form .select2-selection--single {
+    height: 32px !important;
+    border-radius: 8px !important;
+    border: 1px solid #e5e7eb !important;
+    background: #f9fafb !important;
+    display: flex;
+    align-items: center;
+}
+
+.header-filter-form .select2-selection__rendered {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    line-height: 30px !important;
+}
+
+.header-filter-form .select2-selection__arrow {
+    height: 30px !important;
 }

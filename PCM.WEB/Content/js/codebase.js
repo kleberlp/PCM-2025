@@ -36,7 +36,7 @@ function loadNotificacao() {
                 }
             }
 
-            $("#quantidade_notificacao").html((quantidade == 0) ? "":quantidade.toString());
+            $("#quantidade_notificacao").html((quantidade == 0) ? "" : quantidade.toString());
         }
     });
 
@@ -156,11 +156,12 @@ function setNotificacaoVista(codigo_empresa, codigo) {
         url: "../Home/NotificacaoVista",
         async: true,
         data: { "codigo_empresa": codigo_empresa, "codigo": codigo },
-        dataType: "json"});
+        dataType: "json"
+    });
 
 }
 
-var Codebase = function() {
+var Codebase = function () {
     var lHtml,
         lBody,
         lPage,
@@ -178,20 +179,20 @@ var Codebase = function() {
 
 
     // Set helper variables
-    var uiInit = function() {
-        lHtml              = jQuery('html');
-        lBody              = jQuery('body');
-        lPage              = jQuery('#page-container');
-        lSidebar           = jQuery('#sidebar');
-        lSidebarScroll     = jQuery('#sidebar-scroll');
-        lSideOverlay       = jQuery('#side-overlay');
+    var uiInit = function () {
+        lHtml = jQuery('html');
+        lBody = jQuery('body');
+        lPage = jQuery('#page-container');
+        lSidebar = jQuery('#sidebar');
+        lSidebarScroll = jQuery('#sidebar-scroll');
+        lSideOverlay = jQuery('#side-overlay');
         lSideOverlayScroll = jQuery('#side-overlay-scroll');
-        lHeader            = jQuery('#page-header');
-        lHeaderSearch      = jQuery('#page-header-search');
+        lHeader = jQuery('#page-header');
+        lHeaderSearch = jQuery('#page-header-search');
         lHeaderSearchInput = jQuery('#page-header-search-input');
-        lHeaderLoader      = jQuery('#page-header-loader');
-        lMain              = jQuery('#main-container');
-        lFooter            = jQuery('#page-footer');
+        lHeaderLoader = jQuery('#page-header-loader');
+        lMain = jQuery('#main-container');
+        lFooter = jQuery('#page-footer');
     };
 
     /*
@@ -206,7 +207,7 @@ var Codebase = function() {
      */
 
     // Handles sidebar and side overlay custom scrolling functionality
-    var uiHandleScroll = function(mode) {
+    var uiHandleScroll = function (mode) {
         windowW = getWidth();
 
         // Init scrolling
@@ -217,10 +218,10 @@ var Codebase = function() {
             jQuery(window).off('resize.cb.scroll orientationchange.cb.scroll');
 
             // Bind the events
-            jQuery(window).on('resize.cb.scroll orientationchange.cb.scroll', function(){
+            jQuery(window).on('resize.cb.scroll orientationchange.cb.scroll', function () {
                 clearTimeout(sScrollTimeout);
 
-                sScrollTimeout = setTimeout(function(){
+                sScrollTimeout = setTimeout(function () {
                     uiHandleScroll();
                 }, 150);
             }).triggerHandler('resize.cb.scroll');
@@ -236,9 +237,9 @@ var Codebase = function() {
                         height: lSidebar.outerHeight(),
                         color: '#cdcdcd',
                         size: '4px',
-                        opacity : .9,
-                        wheelStep : 15,
-                        distance : '0',
+                        opacity: .9,
+                        wheelStep: 15,
+                        distance: '0',
                         railVisible: false,
                         railOpacity: 1
                     });
@@ -261,9 +262,9 @@ var Codebase = function() {
                         height: lSideOverlay.outerHeight(),
                         color: '#cdcdcd',
                         size: '4px',
-                        opacity : .9,
-                        wheelStep : 15,
-                        distance : '0',
+                        opacity: .9,
+                        wheelStep: 15,
+                        distance: '0',
                         railVisible: false,
                         railOpacity: 1
                     });
@@ -280,7 +281,7 @@ var Codebase = function() {
                 // If sidebar scrolling exists destroy it..
                 if (lSidebarScroll.length && lSidebarScroll.parent('.slimScrollDiv').length) {
                     lSidebarScroll
-                        .slimScroll({destroy: true});
+                        .slimScroll({ destroy: true });
                     lSidebarScroll
                         .attr('style', '');
                 }
@@ -288,7 +289,7 @@ var Codebase = function() {
                 // If side overlay scrolling exists destroy it..
                 if (lSideOverlayScroll.length && lSideOverlayScroll.parent('.slimScrollDiv').length) {
                     lSideOverlayScroll
-                        .slimScroll({destroy: true});
+                        .slimScroll({ destroy: true });
                     lSideOverlayScroll
                         .attr('style', '');
                 }
@@ -297,7 +298,7 @@ var Codebase = function() {
     };
 
     // Resizes #main-container to fill empty space if exists (pushes footer to the bottom) + Adds transition to sidebar (small fix for IE)
-    var uiHandleMain = function() {
+    var uiHandleMain = function () {
         var resizeTimeout;
 
         // Unbind events in case they are already binded
@@ -305,13 +306,13 @@ var Codebase = function() {
 
         // If #main-container element exists
         if (lMain.length) {
-            jQuery(window).on('resize.cb.main orientationchange.cb.main', function(){
+            jQuery(window).on('resize.cb.main orientationchange.cb.main', function () {
                 clearTimeout(resizeTimeout);
 
-                resizeTimeout = setTimeout(function(){
-                    var hWindow     = jQuery(window).height();
-                    var hHeader     = lHeader.outerHeight() || 0;
-                    var hFooter     = lFooter.outerHeight() || 0;
+                resizeTimeout = setTimeout(function () {
+                    var hWindow = jQuery(window).height();
+                    var hHeader = lHeader.outerHeight() || 0;
+                    var hFooter = lFooter.outerHeight() || 0;
 
                     // Set #main-container min height accordingly
                     if (lPage.hasClass('page-header-fixed') || lPage.hasClass('page-header-glass')) {
@@ -332,13 +333,13 @@ var Codebase = function() {
     };
 
     // Handles header related classes
-    var uiHandleHeader = function() {
+    var uiHandleHeader = function () {
         // Unbind event in case it is already enabled
         jQuery(window).off('scroll.cb.header');
 
         // If the header is fixed and has the glass style, add the related class on scrolling to add a background color to the header
         if (lPage.hasClass('page-header-glass') && lPage.hasClass('page-header-fixed')) {
-            jQuery(window).on('scroll.cb.header', function(){
+            jQuery(window).on('scroll.cb.header', function () {
                 if (jQuery(this).scrollTop() > 60) {
                     lPage.addClass('page-header-scroll');
                 } else {
@@ -349,12 +350,12 @@ var Codebase = function() {
     };
 
     // Main navigation functionality
-    var uiHandleNav = function() {
+    var uiHandleNav = function () {
         // Unbind event in case it is already enabled
         lPage.off('click.cb.menu');
 
         // When a submenu link is clicked
-        lPage.on('click.cb.menu', '[data-toggle="nav-submenu"]', function(e){
+        lPage.on('click.cb.menu', '[data-toggle="nav-submenu"]', function (e) {
             // Get link
             var link = jQuery(this);
 
@@ -383,18 +384,18 @@ var Codebase = function() {
     };
 
     // Material form inputs functionality
-    var uiHandleForms = function() {
-        jQuery('.form-material.floating > .form-control').each(function(){
-            var input  = jQuery(this);
+    var uiHandleForms = function () {
+        jQuery('.form-material.floating > .form-control').each(function () {
+            var input = jQuery(this);
             var parent = input.parent('.form-material');
 
-            setTimeout(function() {
-                if (input.val() ) {
+            setTimeout(function () {
+                if (input.val()) {
                     parent.addClass('open');
                 }
             }, 150);
 
-            input.off('change.cb.inputs').on('change.cb.inputs', function(){
+            input.off('change.cb.inputs').on('change.cb.inputs', function () {
                 if (input.val()) {
                     parent.addClass('open');
                 } else {
@@ -405,13 +406,13 @@ var Codebase = function() {
     };
 
     // Set active color theme functionality
-    var uiHandleTheme = function() {
+    var uiHandleTheme = function () {
         var themeEl = jQuery('#css-theme');
         var cookies = lPage.hasClass('enable-cookies') ? true : false;
 
         // If cookies are enabled
         if (cookies) {
-            var themeName  = Cookies.get('cbThemeName') || false;
+            var themeName = Cookies.get('cbThemeName') || false;
 
             // Update color theme
             if (themeName) {
@@ -431,7 +432,7 @@ var Codebase = function() {
         lPage.off('click.cb.themes');
 
         // When a color theme link is clicked
-        lPage.on('click.cb.themes', '[data-toggle="theme"]', function(){
+        lPage.on('click.cb.themes', '[data-toggle="theme"]', function () {
             var themeName = jQuery(this).data('theme');
 
             // Set this color theme link as active
@@ -457,7 +458,7 @@ var Codebase = function() {
     };
 
     // Helper function for changing a theme
-    var uiHandleThemeChange = function(themeEl, themeName) {
+    var uiHandleThemeChange = function (themeEl, themeName) {
         if (themeName === 'default') {
             if (themeEl.length) {
                 themeEl.remove();
@@ -483,17 +484,17 @@ var Codebase = function() {
      */
 
     // Layout API
-    var uiApiLayout = function(mode) {
+    var uiApiLayout = function (mode) {
         windowW = getWidth();
 
         // Mode selection
-        switch(mode) {
+        switch (mode) {
             case 'init':
                 // Unbind event in case it is already enabled
                 lPage.off('click.cb.layout');
 
                 // Call layout API on button click
-                lPage.on('click.cb.layout', '[data-toggle="layout"]', function(){
+                lPage.on('click.cb.layout', '[data-toggle="layout"]', function () {
                     var el = jQuery(this);
 
                     uiApiLayout(el.data('action'));
@@ -558,15 +559,15 @@ var Codebase = function() {
                 lPage.removeClass('sidebar-inverse');
                 break;
             case 'side_overlay_toggle':
-               if (lPage.hasClass('side-overlay-o')) {
-                   uiApiLayout('side_overlay_close');
-               } else {
-                   uiApiLayout('side_overlay_open');
-               }
+                if (lPage.hasClass('side-overlay-o')) {
+                    uiApiLayout('side_overlay_close');
+                } else {
+                    uiApiLayout('side_overlay_open');
+                }
                 break;
             case 'side_overlay_open':
                 // When ESCAPE key is hit close the side overlay
-                jQuery(document).on('keydown.cb.sideOverlay', function(e){
+                jQuery(document).on('keydown.cb.sideOverlay', function (e) {
                     if (e.which === 27) {
                         e.preventDefault();
                         uiApiLayout('side_overlay_close');
@@ -640,7 +641,7 @@ var Codebase = function() {
                 lHeaderSearchInput.focus();
 
                 // When ESCAPE key is hit close the search section
-                jQuery(document).on('keydown.cb.header.search', function(e){
+                jQuery(document).on('keydown.cb.header.search', function (e) {
                     if (e.which === 27) {
                         e.preventDefault();
                         console.log('test');
@@ -696,22 +697,22 @@ var Codebase = function() {
     };
 
     // Blocks API
-    var uiApiBlocks = function(block, mode) {
+    var uiApiBlocks = function (block, mode) {
         // Set default icons for fullscreen and content toggle buttons
-        var iconFullscreen         = 'si si-size-fullscreen';
-        var iconFullscreenActive   = 'si si-size-actual';
-        var iconContent            = 'si si-arrow-up';
-        var iconContentActive      = 'si si-arrow-down';
+        var iconFullscreen = 'si si-size-fullscreen';
+        var iconFullscreenActive = 'si si-size-actual';
+        var iconContent = 'si si-arrow-up';
+        var iconContentActive = 'si si-arrow-down';
 
         if (mode === 'init') {
             // Auto add the default toggle icons to fullscreen and content toggle buttons
-            jQuery('[data-toggle="block-option"][data-action="fullscreen_toggle"]').each(function(){
+            jQuery('[data-toggle="block-option"][data-action="fullscreen_toggle"]').each(function () {
                 var el = jQuery(this);
 
                 el.html('<i class="' + (jQuery(el).closest('.block').hasClass('block-mode-fullscreen') ? iconFullscreenActive : iconFullscreen) + '"></i>');
             });
 
-            jQuery('[data-toggle="block-option"][data-action="content_toggle"]').each(function(){
+            jQuery('[data-toggle="block-option"][data-action="content_toggle"]').each(function () {
                 var el = jQuery(this);
 
                 el.html('<i class="' + (el.closest('.block').hasClass('block-mode-hidden') ? iconContentActive : iconContent) + '"></i>');
@@ -721,7 +722,7 @@ var Codebase = function() {
             lPage.off('click.cb.blocks');
 
             // Call blocks API on option button click
-            lPage.on('click.cb.blocks', '[data-toggle="block-option"]', function(){
+            lPage.on('click.cb.blocks', '[data-toggle="block-option"]', function () {
                 uiApiBlocks(jQuery(this).closest('.block'), jQuery(this).data('action'));
             });
         } else {
@@ -731,11 +732,11 @@ var Codebase = function() {
             // If element exists, procceed with blocks functionality
             if (elBlock.length) {
                 // Get block option buttons if exist (need them to update their icons)
-                var btnFullscreen       = jQuery('[data-toggle="block-option"][data-action="fullscreen_toggle"]', elBlock);
-                var btnContentToggle    = jQuery('[data-toggle="block-option"][data-action="content_toggle"]', elBlock);
+                var btnFullscreen = jQuery('[data-toggle="block-option"][data-action="fullscreen_toggle"]', elBlock);
+                var btnContentToggle = jQuery('[data-toggle="block-option"][data-action="content_toggle"]', elBlock);
 
                 // Mode selection
-                switch(mode) {
+                switch (mode) {
                     case 'fullscreen_toggle':
                         elBlock.removeClass('block-mode-pinned').toggleClass('block-mode-fullscreen');
 
@@ -826,7 +827,7 @@ var Codebase = function() {
 
                         // Return block to normal state if the demostration mode is on in the refresh option button - data-action-mode="demo"
                         if (jQuery('[data-toggle="block-option"][data-action="state_toggle"][data-action-mode="demo"]', elBlock).length) {
-                            setTimeout(function(){
+                            setTimeout(function () {
                                 elBlock.removeClass('block-mode-loading');
                             }, 2000);
                         }
@@ -870,7 +871,7 @@ var Codebase = function() {
      */
 
     // Get window width
-    var getWidth = function() {
+    var getWidth = function () {
         return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     };
 
@@ -886,8 +887,8 @@ var Codebase = function() {
      */
 
     // Toggle class
-    var uiHelperCoreToggleClass = function() {
-        jQuery('[data-toggle="class-toggle"]:not(.js-class-toggle-enabled)').on('click.cb.helpers.core', function(){
+    var uiHelperCoreToggleClass = function () {
+        jQuery('[data-toggle="class-toggle"]:not(.js-class-toggle-enabled)').on('click.cb.helpers.core', function () {
             var el = jQuery(this);
 
             // Add .js-class-toggle-enabled class to tag it as activated
@@ -902,15 +903,15 @@ var Codebase = function() {
     };
 
     // Scroll to element animation
-    var uiHelperCoreScrollTo = function() {
-        jQuery('[data-toggle="scroll-to"]:not(.js-scroll-to-enabled)').on('click.cb.helpers.core', function(e){
+    var uiHelperCoreScrollTo = function () {
+        jQuery('[data-toggle="scroll-to"]:not(.js-scroll-to-enabled)').on('click.cb.helpers.core', function (e) {
             e.stopPropagation();
 
             // Set variables
-            var el            = jQuery(this);
-            var elTarget      = el.data('target') || el.attr('href');
-            var elSpeed       = el.data('speed') || 1000;
-            var headerHeight  = (lHeader.length && lPage.hasClass('page-header-fixed')) ? lHeader.outerHeight() : 0;
+            var el = jQuery(this);
+            var elTarget = el.data('target') || el.attr('href');
+            var elSpeed = el.data('speed') || 1000;
+            var headerHeight = (lHeader.length && lPage.hasClass('page-header-fixed')) ? lHeader.outerHeight() : 0;
 
             // Add .js-scroll-to-enabled class to tag it as activated
             el.addClass('js-scroll-to-enabled');
@@ -922,13 +923,13 @@ var Codebase = function() {
     };
 
     // Add the correct copyright year
-    var uiHelperCoreYearCopy = function() {
+    var uiHelperCoreYearCopy = function () {
         var yearCopy = jQuery('.js-year-copy');
 
         if (yearCopy.length > 0) {
-            var date        = new Date();
-            var curYear     = date.getFullYear();
-            var baseYear    = (yearCopy.html().length > 0) ? yearCopy.html() : curYear;
+            var date = new Date();
+            var curYear = date.getFullYear();
+            var baseYear = (yearCopy.html().length > 0) ? yearCopy.html() : curYear;
 
             if (parseInt(baseYear) >= curYear) {
                 yearCopy.html(curYear);
@@ -939,8 +940,8 @@ var Codebase = function() {
     };
 
     // Bootstrap tooltip, for more examples you can check out https://getbootstrap.com/docs/4.0/components/tooltips/
-    var uiHelperCoreTooltip = function() {
-        jQuery('[data-toggle="tooltip"]:not(.js-tooltip-enabled)').add('.js-tooltip:not(.js-tooltip-enabled)').each(function(){
+    var uiHelperCoreTooltip = function () {
+        jQuery('[data-toggle="tooltip"]:not(.js-tooltip-enabled)').add('.js-tooltip:not(.js-tooltip-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-tooltip-enabled class to tag it as activated
@@ -955,8 +956,8 @@ var Codebase = function() {
     };
 
     // Bootstrap popover, for more examples you can check out https://getbootstrap.com/docs/4.0/components/popovers/
-    var uiHelperCorePopover = function() {
-        jQuery('[data-toggle="popover"]:not(.js-popover-enabled)').add('.js-popover:not(.js-popover-enabled)').each(function(){
+    var uiHelperCorePopover = function () {
+        jQuery('[data-toggle="popover"]:not(.js-popover-enabled)').add('.js-popover:not(.js-popover-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-popover-enabled class to tag it as activated
@@ -972,15 +973,15 @@ var Codebase = function() {
     };
 
     // Bootstrap tab, for more examples you can check out http://getbootstrap.com/docs/4.0/components/navs/#tabs
-    var uiHelperCoreTab = function() {
-        jQuery('[data-toggle="tabs"]:not(.js-tabs-enabled)').add('.js-tabs:not(.js-tabs-enabled)').each(function(){
+    var uiHelperCoreTab = function () {
+        jQuery('[data-toggle="tabs"]:not(.js-tabs-enabled)').add('.js-tabs:not(.js-tabs-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-tabs-enabled class to tag it as activated
             el.addClass('js-tabs-enabled');
 
             // Init
-            el.find('a').on('click.cb.helpers.core', function(e){
+            el.find('a').on('click.cb.helpers.core', function (e) {
                 e.preventDefault();
                 jQuery(this).tab('show');
             });
@@ -988,48 +989,48 @@ var Codebase = function() {
     };
 
     // jQuery Appear, for more examples you can check out https://github.com/bas2k/jquery.appear
-    var uiHelperCoreAppear = function(){
+    var uiHelperCoreAppear = function () {
         // Add a specific class on elements (when they become visible on scrolling)
-        jQuery('[data-toggle="appear"]:not(.js-appear-enabled)').each(function(){
+        jQuery('[data-toggle="appear"]:not(.js-appear-enabled)').each(function () {
             windowW = getWidth();
 
-            var el         = jQuery(this);
+            var el = jQuery(this);
             var elCssClass = el.data('class') || 'animated fadeIn';
-            var elOffset   = el.data('offset') || 0;
-            var elTimeout  = (lHtml.hasClass('ie9') || windowW < 992) ? 0 : (el.data('timeout') ? el.data('timeout') : 0);
+            var elOffset = el.data('offset') || 0;
+            var elTimeout = (lHtml.hasClass('ie9') || windowW < 992) ? 0 : (el.data('timeout') ? el.data('timeout') : 0);
 
             // Add .js-appear-enabled class to tag it as activated
             el.addClass('js-appear-enabled');
 
             // Init
-            el.appear(function() {
-                setTimeout(function(){
+            el.appear(function () {
+                setTimeout(function () {
                     el
                         .removeClass('invisible')
                         .addClass(elCssClass);
                 }, elTimeout);
-            },{accY: elOffset});
+            }, { accY: elOffset });
         });
     };
 
     // jQuery Appear + jQuery countTo, for more examples you can check out https://github.com/bas2k/jquery.appear and https://github.com/mhuggins/jquery-countTo
-    var uiHelperCoreAppearCountTo = function(){
+    var uiHelperCoreAppearCountTo = function () {
         // Init counter functionality
-        jQuery('[data-toggle="countTo"]:not(.js-count-to-enabled)').each(function(){
-            var el         = jQuery(this);
-            var elAfter    = el.data('after');
-            var elBefore   = el.data('before');
+        jQuery('[data-toggle="countTo"]:not(.js-count-to-enabled)').each(function () {
+            var el = jQuery(this);
+            var elAfter = el.data('after');
+            var elBefore = el.data('before');
 
             // Add .js-count-to-enabled class to tag it as activated
             el.addClass('js-count-to-enabled');
 
             // Init
-            el.appear(function() {
+            el.appear(function () {
                 el.countTo({
                     speed: el.data('speed') || 1500,
                     refreshInterval: el.data('refresh-interval') || 15,
-                    onComplete: function() {
-                        if(elAfter) {
+                    onComplete: function () {
+                        if (elAfter) {
                             el.html(el.html() + elAfter);
                         } else if (elBefore) {
                             el.html(elBefore + el.html());
@@ -1041,9 +1042,9 @@ var Codebase = function() {
     };
 
     // jQuery SlimScroll, for more examples you can check out http://rocha.la/jQuery-slimScroll
-    var uiHelperCoreSlimscroll = function(){
+    var uiHelperCoreSlimscroll = function () {
         // Init slimScroll functionality
-        jQuery('[data-toggle="slimscroll"]:not(.js-slimscroll-enabled)').each(function(){
+        jQuery('[data-toggle="slimscroll"]:not(.js-slimscroll-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-slimscroll-enabled class to tag it as activated
@@ -1059,14 +1060,14 @@ var Codebase = function() {
                 distance: el.data('distance') || '0',
                 alwaysVisible: el.data('always-visible') ? true : false,
                 railVisible: el.data('rail-visible') ? true : false,
-                railColor: el.data('rail-color') ||'#999',
+                railColor: el.data('rail-color') || '#999',
                 railOpacity: el.data('rail-opacity') || .3
             });
         });
     };
 
     // Manage page loading screen functionality
-    var uiHelperCorePageLoader = function(mode, colorClass) {
+    var uiHelperCorePageLoader = function (mode, colorClass) {
         var lpageLoader = jQuery('#page-loader');
 
         if (mode === 'show') {
@@ -1093,8 +1094,8 @@ var Codebase = function() {
     };
 
     // Ripple effect fuctionality
-    var uiHelperCoreRipple = function() {
-        jQuery('[data-toggle="click-ripple"]:not(.js-click-ripple-enabled)').each(function(){
+    var uiHelperCoreRipple = function () {
+        jQuery('[data-toggle="click-ripple"]:not(.js-click-ripple-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-click-ripple-enabled class to tag it as activated
@@ -1108,7 +1109,7 @@ var Codebase = function() {
             });
 
             // On element click
-            el.on('click.cb.helpers.core', function(e) {
+            el.on('click.cb.helpers.core', function (e) {
                 var cssClass = 'click-ripple', ripple, d, x, y;
 
                 // If the ripple element doesn't exist in this element, add it..
@@ -1123,17 +1124,17 @@ var Codebase = function() {
                 var ripple = el.children('.' + cssClass);
 
                 // If the ripple element doesn't have dimensions set them accordingly
-                if(!ripple.height() && !ripple.width()) {
+                if (!ripple.height() && !ripple.width()) {
                     d = Math.max(el.outerWidth(), el.outerHeight());
-                    ripple.css({height: d, width: d});
+                    ripple.css({ height: d, width: d });
                 }
 
                 // Get coordinates for our ripple element
-                x = e.pageX - el.offset().left - ripple.width()/2;
-                y = e.pageY - el.offset().top - ripple.height()/2;
+                x = e.pageX - el.offset().left - ripple.width() / 2;
+                y = e.pageY - el.offset().top - ripple.height() / 2;
 
                 // Position the ripple element and add the class .animate to it
-                ripple.css({top: y + 'px', left: x + 'px'}).addClass('animate');
+                ripple.css({ top: y + 'px', left: x + 'px' }).addClass('animate');
             });
         });
     };
@@ -1156,7 +1157,7 @@ var Codebase = function() {
      * Codebase.helper('print-page');
      *
      */
-    var uiHelperPrint = function() {
+    var uiHelperPrint = function () {
         // Store all #page-container classes
         var pageCls = lPage.prop('class');
 
@@ -1178,24 +1179,24 @@ var Codebase = function() {
      */
 
     // Table sections functionality
-    var uiHelperTableToolsSections = function(){
+    var uiHelperTableToolsSections = function () {
         // For each table
-        jQuery('.js-table-sections:not(.js-table-sections-enabled)').each(function(){
+        jQuery('.js-table-sections:not(.js-table-sections-enabled)').each(function () {
             var table = jQuery(this);
 
             // Add .js-table-sections-enabled class to tag it as activated
             table.addClass('js-table-sections-enabled');
 
             // When a row is clicked in tbody.js-table-sections-header
-            jQuery('.js-table-sections-header > tr', table).on('click.cb.helpers', function(e) {
+            jQuery('.js-table-sections-header > tr', table).on('click.cb.helpers', function (e) {
                 if (e.target.type !== 'checkbox'
-                        && e.target.type !== 'button'
-                        && e.target.tagName.toLowerCase() !== 'a'
-                        && !jQuery(e.target).parent('label').length) {
-                    var row    = jQuery(this);
-                    var tbody  = row.parent('tbody');
+                    && e.target.type !== 'button'
+                    && e.target.tagName.toLowerCase() !== 'a'
+                    && !jQuery(e.target).parent('label').length) {
+                    var row = jQuery(this);
+                    var tbody = row.parent('tbody');
 
-                    if ( ! tbody.hasClass('show')) {
+                    if (!tbody.hasClass('show')) {
                         jQuery('tbody', table).removeClass('show table-active');
                     }
 
@@ -1206,20 +1207,20 @@ var Codebase = function() {
     };
 
     // Checkable table functionality
-    var uiHelperTableToolsCheckable = function() {
+    var uiHelperTableToolsCheckable = function () {
         // For each table
-        jQuery('.js-table-checkable:not(.js-table-checkable-enabled)').each(function(){
+        jQuery('.js-table-checkable:not(.js-table-checkable-enabled)').each(function () {
             var table = jQuery(this);
 
             // Add .js-table-checkable-enabled class to tag it as activated
             table.addClass('js-table-checkable-enabled');
 
             // When a checkbox is clicked in thead
-            jQuery('thead input:checkbox', table).on('click.cb.helpers', function() {
+            jQuery('thead input:checkbox', table).on('click.cb.helpers', function () {
                 var checkedStatus = jQuery(this).prop('checked');
 
                 // Check or uncheck all checkboxes in tbody
-                jQuery('tbody input:checkbox', table).each(function() {
+                jQuery('tbody input:checkbox', table).each(function () {
                     var checkbox = jQuery(this);
 
                     checkbox.prop('checked', checkedStatus);
@@ -1228,30 +1229,30 @@ var Codebase = function() {
             });
 
             // When a checkbox is clicked in tbody
-            jQuery('tbody input:checkbox', table).on('click.cb.helpers', function() {
+            jQuery('tbody input:checkbox', table).on('click.cb.helpers', function () {
                 var checkbox = jQuery(this);
 
                 uiHelperTableToolscheckRow(checkbox, checkbox.prop('checked'));
             });
 
             // When a row is clicked in tbody
-            jQuery('tbody > tr', table).on('click.cb.helpers', function(e) {
+            jQuery('tbody > tr', table).on('click.cb.helpers', function (e) {
                 if (e.target.type !== 'checkbox'
-                        && e.target.type !== 'button'
-                        && e.target.tagName.toLowerCase() !== 'a'
-                        && !jQuery(e.target).parent('label').length) {
-                    var checkbox       = jQuery('input:checkbox', this);
-                    var checkedStatus  = checkbox.prop('checked');
+                    && e.target.type !== 'button'
+                    && e.target.tagName.toLowerCase() !== 'a'
+                    && !jQuery(e.target).parent('label').length) {
+                    var checkbox = jQuery('input:checkbox', this);
+                    var checkedStatus = checkbox.prop('checked');
 
-                    checkbox.prop('checked', ! checkedStatus);
-                    uiHelperTableToolscheckRow(checkbox, ! checkedStatus);
+                    checkbox.prop('checked', !checkedStatus);
+                    uiHelperTableToolscheckRow(checkbox, !checkedStatus);
                 }
             });
         });
     };
 
     // Checkable table functionality helper - Checks or unchecks table row
-    var uiHelperTableToolscheckRow = function(checkbox, checkedStatus) {
+    var uiHelperTableToolscheckRow = function (checkbox, checkedStatus) {
         if (checkedStatus) {
             checkbox
                 .closest('tr')
@@ -1269,11 +1270,11 @@ var Codebase = function() {
      * Codebase.helper('content-filter');
      *
      */
-    var uiHelperContentFilter = function() {
+    var uiHelperContentFilter = function () {
         // Content Filtering init
-        jQuery('.js-filter:not(.js-filter-enabled)').each(function(){
-            var el          = jQuery(this);
-            var filterNav   = jQuery('.nav-pills', el);
+        jQuery('.js-filter:not(.js-filter-enabled)').each(function () {
+            var el = jQuery(this);
+            var filterNav = jQuery('.nav-pills', el);
             var filterLinks = jQuery('a[data-category-link]', el);
             var filterItems = jQuery('[data-category]', el);
             var filterSpeed = el.data('speed') || 200;
@@ -1285,10 +1286,10 @@ var Codebase = function() {
             if (filterNav.length) {
                 var resizeTimeout, windowW;
 
-                jQuery(window).on('resize.cb.helpers', function(){
+                jQuery(window).on('resize.cb.helpers', function () {
                     clearTimeout(resizeTimeout);
 
-                    resizeTimeout = setTimeout(function(){
+                    resizeTimeout = setTimeout(function () {
                         windowW = getWidth();
 
                         if (windowW < 768) {
@@ -1302,9 +1303,9 @@ var Codebase = function() {
 
             // Add number of items to the links if enabled by adding data-numbers="true" to the main element
             if (el.data('numbers')) {
-                filterLinks.each(function(){
-                    var filterLink  = jQuery(this);
-                    var filterCat   = filterLink.data('category-link');
+                filterLinks.each(function () {
+                    var filterLink = jQuery(this);
+                    var filterCat = filterLink.data('category-link');
 
                     // Add number of items to this category link
                     if (filterCat === 'all') {
@@ -1316,12 +1317,12 @@ var Codebase = function() {
             }
 
             // When a filter link is clicked
-            filterLinks.on('click.cb.helpers', function() {
+            filterLinks.on('click.cb.helpers', function () {
                 var filterLink = jQuery(this);
                 var filterCat;
 
                 // Procceed only if the user clicked on an inactive category
-                if ( ! filterLink.hasClass('active')) {
+                if (!filterLink.hasClass('active')) {
                     // Remove active class from all filter links
                     filterLinks.removeClass('active');
 
@@ -1334,7 +1335,7 @@ var Codebase = function() {
                     // If the value is 'all' hide current visible items and show them all together, else hide them all and show only from the category we need
                     if (filterCat === 'all') {
                         if (filterItems.filter(':visible').length) {
-                            filterItems.filter(':visible').fadeOut(filterSpeed, function(){
+                            filterItems.filter(':visible').fadeOut(filterSpeed, function () {
                                 filterItems.fadeIn(filterSpeed);
                             });
                         } else {
@@ -1342,7 +1343,7 @@ var Codebase = function() {
                         }
                     } else {
                         if (filterItems.filter(':visible').length) {
-                            filterItems.filter(':visible').fadeOut(filterSpeed, function(){
+                            filterItems.filter(':visible').fadeOut(filterSpeed, function () {
                                 filterItems
                                     .filter('[data-category="' + filterCat + '"]')
                                     .fadeIn(filterSpeed);
@@ -1374,9 +1375,9 @@ var Codebase = function() {
      * Codebase.helper('magnific-popup');
      *
      */
-    var uiHelperMagnific = function(){
+    var uiHelperMagnific = function () {
         // Gallery init
-        jQuery('.js-gallery:not(.js-gallery-enabled)').each(function(){
+        jQuery('.js-gallery:not(.js-gallery-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-gallery-enabled class to tag it as activated
@@ -1399,10 +1400,10 @@ var Codebase = function() {
      * Codebase.helper('ckeditor');
      *
      */
-    var uiHelperCkeditor = function(){
+    var uiHelperCkeditor = function () {
         // Init inline text editor
         if (jQuery('#js-ckeditor-inline:not(.js-ckeditor-inline-enabled)').length) {
-            jQuery('#js-ckeditor-inline').attr('contenteditable','true');
+            jQuery('#js-ckeditor-inline').attr('contenteditable', 'true');
             CKEDITOR.inline('js-ckeditor-inline');
 
             // Add .js-ckeditor-inline-enabled class to tag it as activated
@@ -1424,9 +1425,9 @@ var Codebase = function() {
      * Codebase.helper('simplemde');
      *
      */
-    var uiHelperSimpleMDE = function(){
+    var uiHelperSimpleMDE = function () {
         // Init markdown editor (with .js-simplemde class)
-        jQuery('.js-simplemde:not(.js-simplemde-enabled)').each(function(){
+        jQuery('.js-simplemde:not(.js-simplemde-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-simplemde-enabled class to tag it as activated
@@ -1443,9 +1444,9 @@ var Codebase = function() {
      * Codebase.helper('slick');
      *
      */
-    var uiHelperSlick = function(){
+    var uiHelperSlick = function () {
         // Get each slider element (with .js-slider class)
-        jQuery('.js-slider:not(.js-slider-enabled)').each(function(){
+        jQuery('.js-slider:not(.js-slider-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-slider-enabled class to tag it as activated
@@ -1470,9 +1471,9 @@ var Codebase = function() {
      * Codebase.helper('datepicker');
      *
      */
-    var uiHelperDatepicker = function(){
+    var uiHelperDatepicker = function () {
         // Init datepicker (with .js-datepicker and .input-daterange class)
-        jQuery('.js-datepicker:not(.js-datepicker-enabled)').add('.input-daterange:not(.js-datepicker-enabled)').each(function(){
+        jQuery('.js-datepicker:not(.js-datepicker-enabled)').add('.input-daterange:not(.js-datepicker-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-datepicker-enabled class to tag it as activated
@@ -1494,9 +1495,9 @@ var Codebase = function() {
      * Codebase.helper('colorpicker');
      *
      */
-    var uiHelperColorpicker = function(){
+    var uiHelperColorpicker = function () {
         // Get each colorpicker element (with .js-colorpicker class)
-        jQuery('.js-colorpicker:not(.js-colorpicker-enabled)').each(function(){
+        jQuery('.js-colorpicker:not(.js-colorpicker-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-enabled class to tag it as activated
@@ -1513,7 +1514,7 @@ var Codebase = function() {
      * Codebase.helper('masked-inputs');
      *
      */
-    var uiHelperMaskedInputs = function(){
+    var uiHelperMaskedInputs = function () {
         // Init Masked Inputs
         // a - Represents an alpha character (A-Z,a-z)
         // 9 - Represents a numeric character (0-9)
@@ -1528,7 +1529,7 @@ var Codebase = function() {
         jQuery('.js-masked-time:not(.js-masked-enabled)').mask('99:99');
         jQuery('.js-masked-number:not(.js-masked-enabled)').maskMoney({ prefix: '', thousands: '.', decimal: ",", precision: 2, allowNegative: false, 'placeholder': '' });
         jQuery('.js-masked-number-int:not(.js-masked-enabled)').maskMoney({ prefix: '', thousands: '.', decimal: ",", precision: 0, allowNegative: false, 'placeholder': '' });
-       
+
         jQuery('.js-masked-date')
             .add('.js-masked-date-dash')
             .add('.js-masked-phone')
@@ -1548,10 +1549,10 @@ var Codebase = function() {
      * Codebase.helper('tags-inputs');
      *
      */
-    var uiHelperTagsInputs = function(){
+    var uiHelperTagsInputs = function () {
         // Init Tags Inputs (with .js-tags-input class)
-        jQuery('.js-tags-input:not(.js-tags-input-enabled)').each(function(){
-           var el = jQuery(this);
+        jQuery('.js-tags-input:not(.js-tags-input-enabled)').each(function () {
+            var el = jQuery(this);
 
             // Add .js-tags-input-enabled class to tag it as activated
             el.addClass('js-tags-input-enabled');
@@ -1573,9 +1574,9 @@ var Codebase = function() {
      * Codebase.helper('select2');
      *
      */
-    var uiHelperSelect2 = function(){
+    var uiHelperSelect2 = function () {
         // Init Select2 (with .js-select2 class)
-        jQuery('.js-select2:not(.js-select2-enabled)').each(function(){
+        jQuery('.js-select2:not(.js-select2-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-select2-enabled class to tag it as activated
@@ -1592,9 +1593,9 @@ var Codebase = function() {
      * Codebase.helper('highlightjs');
      *
      */
-    var uiHelperHighlightjs = function(){
+    var uiHelperHighlightjs = function () {
         // Init Highlight.js
-        if ( ! hljs.isHighlighted) {
+        if (!hljs.isHighlighted) {
             hljs.initHighlighting();
         }
     };
@@ -1605,24 +1606,24 @@ var Codebase = function() {
      * Codebase.helper('notify');
      *
      */
-    var uiHelperNotify = function(){
+    var uiHelperNotify = function () {
         // Init notifications (with .js-notify class)
-        jQuery('.js-notify:not(.js-notify-enabled)').each(function(){
+        jQuery('.js-notify:not(.js-notify-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-notify-enabled class to tag it as activated
             el.addClass('js-notify-enabled');
 
             // Init on click
-            el.on('click.cb.helpers', function(){
+            el.on('click.cb.helpers', function () {
                 var growl = jQuery(this);
 
                 // Create notification
                 jQuery.notify({
-                        icon: growl.data('icon') || '',
-                        message: growl.data('message'),
-                        url: growl.data('url') || ''
-                    },
+                    icon: growl.data('icon') || '',
+                    message: growl.data('message'),
+                    url: growl.data('url') || ''
+                },
                     {
                         element: 'body',
                         type: growl.data('type') || 'info',
@@ -1639,15 +1640,15 @@ var Codebase = function() {
                         delay: 5000,
                         timer: 1000,
                         template: '<div data-notify="container" class="col-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                    '<span data-notify="icon"></span> ' +
-                                    '<span data-notify="title">{1}</span> ' +
-                                    '<span data-notify="message">{2}</span>' +
-                                    '<div class="progress" data-notify="progressbar">' +
-                                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                    '</div>' +
-                                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                    '</div>',
+                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                            '<span data-notify="icon"></span> ' +
+                            '<span data-notify="title">{1}</span> ' +
+                            '<span data-notify="message">{2}</span>' +
+                            '<div class="progress" data-notify="progressbar">' +
+                            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                            '</div>' +
+                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                            '</div>',
                         animate: {
                             enter: 'animated fadeIn',
                             exit: 'animated fadeOutDown'
@@ -1663,9 +1664,9 @@ var Codebase = function() {
      * Codebase.helper('draggable-items');
      *
      */
-    var uiHelperDraggableItems = function(){
+    var uiHelperDraggableItems = function () {
         // Init draggable items functionality (with .js-draggable-items class)
-        jQuery('.js-draggable-items:not(.js-draggable-items-enabled)').each(function(){
+        jQuery('.js-draggable-items:not(.js-draggable-items-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-draggable-items-enabled class to tag it as activated
@@ -1680,7 +1681,7 @@ var Codebase = function() {
                 handle: '.draggable-handler',
                 placeholder: 'draggable-placeholder',
                 tolerance: 'pointer',
-                start: function(e, ui){
+                start: function (e, ui) {
                     ui.placeholder.css({
                         'height': ui.item.outerHeight(),
                         'margin-bottom': ui.item.css('margin-bottom')
@@ -1696,9 +1697,9 @@ var Codebase = function() {
      * Codebase.helper('easy-pie-chart');
      *
      */
-    var uiHelperEasyPieChart = function(){
+    var uiHelperEasyPieChart = function () {
         // Init Easy Pie Charts (with .js-pie-chart class)
-        jQuery('.js-pie-chart:not(.js-pie-chart-enabled)').each(function(){
+        jQuery('.js-pie-chart:not(.js-pie-chart-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-pie-chart-enabled class to tag it as activated
@@ -1722,9 +1723,9 @@ var Codebase = function() {
      * Codebase.helper('maxlength');
      *
      */
-    var uiHelperMaxlength = function(){
+    var uiHelperMaxlength = function () {
         // Init Bootstrap Maxlength (with .js-maxlength class)
-        jQuery('.js-maxlength:not(.js-maxlength-enabled)').each(function(){
+        jQuery('.js-maxlength:not(.js-maxlength-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-maxlength-enabled class to tag it as activated
@@ -1750,9 +1751,9 @@ var Codebase = function() {
      * Codebase.helper('rangeslider');
      *
      */
-    var uiHelperRangeslider = function(){
+    var uiHelperRangeslider = function () {
         // Init Ion Range Slider (with .js-rangeslider class)
-        jQuery('.js-rangeslider:not(.js-rangeslider-enabled)').each(function(){
+        jQuery('.js-rangeslider:not(.js-rangeslider-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-rangeslider-enabled class to tag it as activated
@@ -1771,9 +1772,9 @@ var Codebase = function() {
      * Codebase.helper('summernote');
      *
      */
-    var uiHelperSummernote = function(){
+    var uiHelperSummernote = function () {
         // Init text editor in air mode (inline)
-        jQuery('.js-summernote-air:not(.js-summernote-air-enabled)').each(function(){
+        jQuery('.js-summernote-air:not(.js-summernote-air-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-summernote-air-enabled class to tag it as activated
@@ -1787,7 +1788,7 @@ var Codebase = function() {
         });
 
         // Init full text editor
-        jQuery('.js-summernote:not(.js-summernote-enabled)').each(function(){
+        jQuery('.js-summernote:not(.js-summernote-enabled)').each(function () {
             var el = jQuery(this);
 
             // Add .js-summernote-enabled class to tag it as activated
@@ -1803,7 +1804,7 @@ var Codebase = function() {
     };
 
     return {
-        init: function() {
+        init: function () {
             // LAYOUT VARIABLES
             uiInit();
 
@@ -1832,16 +1833,16 @@ var Codebase = function() {
             uiHelperCorePageLoader('hide');
             uiHelperCoreRipple();
         },
-        layout: function(mode) {
+        layout: function (mode) {
             uiApiLayout(mode);
         },
-        blocks: function(block, mode) {
+        blocks: function (block, mode) {
             uiApiBlocks(block, mode);
         },
-        loader: function(mode, colorClass) {
+        loader: function (mode, colorClass) {
             uiHelperCorePageLoader(mode, colorClass);
         },
-        helper: function(helper) {
+        helper: function (helper) {
             switch (helper) {
                 case 'core-fn-uiInit':
                     uiInit();
@@ -1971,7 +1972,7 @@ var Codebase = function() {
                     return false;
             }
         },
-        helpers: function(helpers) {
+        helpers: function (helpers) {
             if (helpers instanceof Array) {
                 for (var index in helpers) {
                     Codebase.helper(helpers[index]);
@@ -1984,12 +1985,54 @@ var Codebase = function() {
 }();
 
 // Initialize when page loads
-jQuery(function(){
+jQuery(function () {
     if (typeof angular === 'undefined') {
         Codebase.init();
         loadNotificacao();
         notifyOrdemServico();
+        initHeaderCombos();
     }
 });
 
 
+
+// ================================================
+// HEADER – Selects de Unidade/Módulo
+// URLs injetadas pelo _Header.cshtml:
+//   urlHeaderCombos  → Home/HeaderCombos
+//   urlHeaderPost    → Home/Index (POST)
+// ================================================
+function initHeaderCombos() {
+    if (typeof urlHeaderCombos === 'undefined') return;
+
+    $.getJSON(urlHeaderCombos, function (data) {
+        var selU = $('#header-unidade').empty();
+        var selM = $('#header-modulo').empty();
+
+        $.each(data.unidades, function (_, u) {
+            $('<option>', { value: u.codigo, text: u.descricao, selected: u.selecionado })
+                .appendTo(selU);
+        });
+
+        $.each(data.modulos, function (_, m) {
+            $('<option>', { value: m.codigo, text: m.descricao, selected: m.selecionado })
+                .appendTo(selM);
+        });
+
+        // Aplica select2 se disponível
+        if ($.fn.select2) {
+            selU.select2({ width: 'resolve', minimumResultsForSearch: 5 })
+                .on('select2:select', function () { $('#form-header-filter').submit(); });
+            selM.select2({ width: 'resolve', minimumResultsForSearch: 5 })
+                .on('select2:select', function () { $('#form-header-filter').submit(); });
+        } else {
+            selU.on('change', function () { $('#form-header-filter').submit(); });
+            selM.on('change', function () { $('#form-header-filter').submit(); });
+        }
+
+        // Notifica a página que os selects estão prontos com a unidade correta
+        if (typeof window.onHeaderReady === 'function') {
+            window.onHeaderReady();
+        }
+    });
+}
