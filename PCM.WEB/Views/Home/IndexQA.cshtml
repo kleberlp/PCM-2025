@@ -7,22 +7,6 @@
         {
             @Html.AntiForgeryToken()
 
-            <div class="row invisible" data-toggle="appear">
-                <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                    <div class="input-group">
-                        @Html.DropDownList("unidade", null, null, new { @class = "form-control material font-w600 js-select2" })
-                        <input type="hidden" name="nome_fantasia" id="nome_fantasia" value="@ViewBag.nome_fantasia" />
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                    <div class="input-group">
-                        @Html.DropDownList("modulo", null, null, new { @class = "form-control material font-w600 js-select2" })
-                    </div>
-                </div>
-            </div>
-
-            <br />
-
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-3 col-xl-3">
                     <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "Qualidade",  new { status = 1})">

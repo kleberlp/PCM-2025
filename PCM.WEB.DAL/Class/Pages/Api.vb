@@ -4670,15 +4670,19 @@ Public Class Api
 
                 oInfo.status = oStatus
 
-                oInfo.checklist = New pwaChecklist
+                If (bOffline) Then
 
-                'If iCodigoEmpresa = 905 Then
-                oInfo.checklist = getCheckListFull(iCodigoEmpresa:=iCodigoEmpresa,
+                    oInfo.checklist = New pwaChecklist
+
+                    'If iCodigoEmpresa = 905 Then
+                    oInfo.checklist = getCheckListFull(iCodigoEmpresa:=iCodigoEmpresa,
                                                    iCodigoUnidade:=iCodigoUnidade,
                                                    lCodigoChecklist:=oSqlDataReader.Item("codigo_checklist"),
                                                    sTipo:="AUDITORIA_CORPORATIVO",
                                                    lCodigoDocumento:=-1,
                                                    iIntervalo:=-1)
+
+                End If
 
                 'Else
                 '    oInfo.checklist = getCheckList(iCodigoEmpresa:=iCodigoEmpresa,
