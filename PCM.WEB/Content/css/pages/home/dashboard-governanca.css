@@ -397,6 +397,7 @@ body {
 
     .chart-card.flex-fill .chart-wrapper {
         flex: 1;
+        min-height: 400px;
     }
 
 /* Remove margin-top extra do section-title quando ele precede um chart-card */

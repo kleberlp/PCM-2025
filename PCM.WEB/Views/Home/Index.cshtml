@@ -459,13 +459,48 @@
         function confirmLogBook() { $.post("Home/ConfirmLogBook"); }
 
         var configTempoMedioAtendimento = {
-            type: 'horizontalBar',
+            type: 'doughnut',
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                legend: { display: false },
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: {
+                        padding: 16,
+                        boxWidth: 14,
+                        fontSize: 12,
+                        generateLabels: function(chart) {
+                            var data = chart.data;
+                            if (!data.labels.length) return [];
+                            return data.labels.map(function(label, i) {
+                                var ds  = data.datasets[0];
+                                var val = ds && ds.data[i] != null ? ds.data[i].toFixed(2) + '%' : '0%';
+                                var bg  = ds && ds.backgroundColor ? ds.backgroundColor[i] : '#ccc';
+                                return {
+                                    text: label + '  ' + val,
+                                    fillStyle: bg,
+                                    strokeStyle: bg,
+                                    lineWidth: 0,
+                                    hidden: false,
+                                    index: i
+                                };
+                            });
+                        }
+                    }
+                },
                 title: { display: false },
-                tooltips: { enabled: true }
+                tooltips: {
+                    enabled: true,
+                    callbacks: {
+                        label: function(item, data) {
+                            var label = data.labels[item.index] || '';
+                            var val   = data.datasets[0].data[item.index];
+                            return ' ' + label + ': ' + (val != null ? val.toFixed(2) : 0) + '%';
+                        }
+                    }
+                },
+                cutoutPercentage: 60
             }
         };
 
@@ -608,7 +643,7 @@
             if (!window.TempoMedioAtendimento) {
                 window.TempoMedioAtendimento = new Chart(
                     document.getElementById('chartManutencaoTempoMedioAtendimento').getContext('2d'),
-                    { type: 'horizontalBar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false } }
+                    { type: 'doughnut', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false } }
                 );
             }
         }

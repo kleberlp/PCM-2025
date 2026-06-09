@@ -1,249 +1,257 @@
 ﻿<!-- Main Container -->
 <main id="main-container">
-    <!-- Page Content -->
-    <div class="content" style="background-color:lightgrey">
+    <div class="content">
 
         @using (Html.BeginForm("IndexQA", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "Qualidade",  new { status = 1})">
-                        <div class="block-content block-content-full clearfix">
-                            <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-area-chart fa-2x text-warning"></i></div>
-                            <div class="font-size-h3 font-w600  text-warning" data-speed="1000" data-to="@ViewBag.plano_acao_status.pendente" id="pendente" name="pendente">@ViewBag.plano_acao_status.pendente</div>
-                            <div class="font-size-md font-w600 text-uppercase text-muted">Não Conf. Qualidade @PCM.WEB.Properties.Resources.pendente</div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "Qualidade",  new { status = 3})">
-                        <div class="block-content block-content-full clearfix">
-                            <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-area-chart fa-2x text-danger"></i></div>
-                            <div class="font-size-h3 font-w600 text-danger"><span data-speed="1000" data-to="@ViewBag.plano_acao_status.atrasado" id="atrasado" name="atrasado">@ViewBag.plano_acao_status.atrasado</span></div>
-                            <div class="font-size-md font-w600 text-uppercase text-muted">Não Conf. Qualidade @PCM.WEB.Properties.Resources.atrasado</div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "Qualidade",  new { status = 2})">
-                        <div class="block-content block-content-full clearfix">
-                            <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-area-chart fa-2x text-success"></i></div>
-                            <div class="font-size-h3 font-w600 text-success"><span data-speed="1000" data-to="@ViewBag.plano_acao_status.concluido" id="concluido" name="concluido">@ViewBag.plano_acao_status.concluido</span></div>
-                            <div class="font-size-md font-w600 text-uppercase text-muted">Não Conf. Qualidade @PCM.WEB.Properties.Resources.concluido</div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                    <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex", "Qualidade",  new { status = 4})">
-                        <div class="block-content block-content-full clearfix">
-                            <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-area-chart fa-2x text-primary"></i></div>
-                            <div class="font-size-h3 font-w600 text-primary"><span data-speed="1000" data-to="@ViewBag.plano_acao_status.em_andamento" id="em_andamento" name="em_andamento">@ViewBag.plano_acao_status.em_andamento</span></div>
-                            <div class="font-size-md font-w600 text-uppercase text-muted">Não Conf. Qualidade @PCM.WEB.Properties.Resources.em_andamento</div>
-                        </div>
-                    </a>
+            <!-- ================= INDICADOR DE ATUALIZAÇÃO ================= -->
+            <div id="refresh-indicator" class="refresh-indicator" title="Atualizando em breve">
+                <i class="fa fa-refresh refresh-icon"></i>
+                <span>Atualiza em <strong id="refresh-countdown">60s</strong></span>
+            </div>
+
+            <!-- ================= NÃO CONFORMIDADES QUALIDADE ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Não Conformidades de Qualidade</div>
+                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="torre-comando-grid">
+                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header">
+                                <i class="fa fa-exclamation-triangle torre-icon text-warning"></i>
+                                <span class="torre-label">@PCM.WEB.Properties.Resources.pendente</span>
+                            </div>
+                            <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.plano_acao_status.pendente" id="nc_pendente">@ViewBag.plano_acao_status.pendente</div>
+                        </a>
+                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 3 })" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header">
+                                <i class="fa fa-clock-o torre-icon text-danger"></i>
+                                <span class="torre-label">@PCM.WEB.Properties.Resources.atrasado</span>
+                            </div>
+                            <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.plano_acao_status.atrasado" id="nc_atrasado">@ViewBag.plano_acao_status.atrasado</div>
+                        </a>
+                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header">
+                                <i class="fa fa-check-circle torre-icon text-success"></i>
+                                <span class="torre-label">@PCM.WEB.Properties.Resources.concluido</span>
+                            </div>
+                            <div class="os-value text-success" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.plano_acao_status.concluido" id="nc_concluido">@ViewBag.plano_acao_status.concluido</div>
+                        </a>
+                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 4 })" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header">
+                                <i class="fa fa-spinner torre-icon text-primary"></i>
+                                <span class="torre-label">@PCM.WEB.Properties.Resources.em_andamento</span>
+                            </div>
+                            <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.plano_acao_status.em_andamento" id="nc_em_andamento">@ViewBag.plano_acao_status.em_andamento</div>
+                        </a>
+                    </div>
                 </div>
             </div>
 
+            <!-- ================= AUDITORIA DE QUALIDADE (condicional) ================= -->
             if ((bool)Session["qa_auditoria"])
             {
-
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Auditoria", "Qualidade", new { status = 1 })">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-edit fa-2x text-warning"></i></div>
-                                <div class="font-size-h3 font-w600  text-warning" data-speed="1000" data-to="@ViewBag.status.pendente" id="pendente" name="pendente">@ViewBag.status.pendente</div>
-                                <div class="font-size-md font-w600 text-uppercase text-muted">Audit. Qualidade @PCM.WEB.Properties.Resources.pendente</div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Auditoria", "Qualidade", new { status = 3 })">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-edit fa-2x text-danger"></i></div>
-                                <div class="font-size-h3 font-w600 text-danger"><span data-speed="1000" data-to="@ViewBag.status.atrasado" id="atrasado" name="atrasado">@ViewBag.status.atrasado</span></div>
-                                <div class="font-size-md font-w600 text-uppercase text-muted">Audit. Qualidade @PCM.WEB.Properties.Resources.atrasado</div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Auditoria", "Qualidade", new { status = 2 })">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-edit fa-2x text-success"></i></div>
-                                <div class="font-size-h3 font-w600 text-success"><span data-speed="1000" data-to="@ViewBag.status.concluido" id="concluido" name="concluido">@ViewBag.status.concluido</span></div>
-                                <div class="font-size-md font-w600 text-uppercase text-muted">Audit. Qualidade @PCM.WEB.Properties.Resources.concluido</div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-3 col-xl-3">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("Auditoria", "Qualidade", new { status = 4 })">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-edit fa-2x text-primary"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary"><span data-speed="1000" data-to="@ViewBag.status.em_andamento" id="em_andamento" name="em_andamento">@ViewBag.status.em_andamento</span></div>
-                                <div class="font-size-md font-w600 text-uppercase text-muted">Audit. Qualidade @PCM.WEB.Properties.Resources.em_andamento</div>
-                            </div>
-                        </a>
+                <div class="dashboard-section">
+                    <div class="section-title">Auditoria de Qualidade</div>
+                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                        <div class="torre-comando-grid">
+                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header">
+                                    <i class="fa fa-edit torre-icon text-warning"></i>
+                                    <span class="torre-label">@PCM.WEB.Properties.Resources.pendente</span>
+                                </div>
+                                <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.status.pendente" id="aud_pendente">@ViewBag.status.pendente</div>
+                            </a>
+                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 3 })" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header">
+                                    <i class="fa fa-clock-o torre-icon text-danger"></i>
+                                    <span class="torre-label">@PCM.WEB.Properties.Resources.atrasado</span>
+                                </div>
+                                <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.status.atrasado" id="aud_atrasado">@ViewBag.status.atrasado</div>
+                            </a>
+                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header">
+                                    <i class="fa fa-check-circle torre-icon text-success"></i>
+                                    <span class="torre-label">@PCM.WEB.Properties.Resources.concluido</span>
+                                </div>
+                                <div class="os-value text-success" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.status.concluido" id="aud_concluido">@ViewBag.status.concluido</div>
+                            </a>
+                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 4 })" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header">
+                                    <i class="fa fa-spinner torre-icon text-primary"></i>
+                                    <span class="torre-label">@PCM.WEB.Properties.Resources.em_andamento</span>
+                                </div>
+                                <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.status.em_andamento" id="aud_em_andamento">@ViewBag.status.em_andamento</div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             }
 
-            <div class="row invisible" data-toggle="appear">
+            <!-- ================= GRÁFICOS ================= -->
+            <div class="dashboard-section row invisible" data-toggle="appear">
 
-                <!-- CHART -->
-                <div class="col-md-6">
-                    <div class="block block-rounded block-mode-loading-refresh">
-                        <div class="block-header block-header-default bg-primary-dark">
-                            <h3 class="block-title text-white text-center font-w600">Gráfico - @PCM.WEB.Properties.Resources.plano_acao_aberto_concluido</h3>
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.plano_acao_aberto_concluido</div>
+                    <div class="block dashboard-card chart-card flex-fill">
+                        <div class="chart-wrapper">
+                            <canvas id="chartManutencaoAbertoConcluido"></canvas>
                         </div>
-                        <div class="block-content block-content-full">
-                            <div class="pull-all pt-50">
-                                <canvas id="chartManutencaoAbertoConcluido"></canvas>
+                        <div class="row mt-3 text-center">
+                            <div class="col-4">
+                                <div class="kpi-title">Aberto</div>
+                                <div class="kpi-value" style="color:rgba(255,0,0);" id="aberto">0</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="kpi-title">Concluído</div>
+                                <div class="kpi-value" style="color:rgba(34,177,76);" id="concluido">0</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="kpi-title">Saldo</div>
+                                <div class="kpi-value" style="color:rgb(255,201,14);" id="saldo">0</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- END CHART -->
-                <!-- CHART -->
-                <div class="col-md-6">
-                    <div class="block block-rounded block-mode-loading-refresh">
-                        <div class="block-header block-header-default bg-primary-dark">
-                            <h3 class="block-title text-white text-center font-w600">Gráfico - @PCM.WEB.Properties.Resources.manutencao_tempo_medio_atendimento</h3>
+
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.manutencao_tempo_medio_atendimento</div>
+                    <div class="block dashboard-card chart-card flex-fill">
+                        <div class="chart-wrapper">
+                            <canvas id="chartManutencaoTempoMedioAtendimento"></canvas>
                         </div>
-                        <div class="block-content block-content-full">
-                            <div class="pull-all pt-50">
-                                <canvas id="chartManutencaoTempoMedioAtendimento"></canvas>
+                        <div class="row mt-3 text-center">
+                            <div class="col">
+                                <div class="kpi-title">No Dia</div>
+                                <div class="kpi-value" style="color:rgba(34,177,76);" id="no_dia">0%</div>
+                            </div>
+                            <div class="col">
+                                <div class="kpi-title">1 Dia</div>
+                                <div class="kpi-value" style="color:rgba(63,72,204);" id="um_dia">0%</div>
+                            </div>
+                            <div class="col">
+                                <div class="kpi-title">3 Dias</div>
+                                <div class="kpi-value" style="color:rgb(255,201,14);" id="tres_dia">0%</div>
+                            </div>
+                            <div class="col">
+                                <div class="kpi-title">5 Dias</div>
+                                <div class="kpi-value" style="color:rgba(255,128,0);" id="cinco_dia">0%</div>
+                            </div>
+                            <div class="col">
+                                <div class="kpi-title">&gt;5 Dias</div>
+                                <div class="kpi-value" style="color:rgba(255,0,0);" id="mais_cinco_dia">0%</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- END CHART -->
 
             </div>
 
-            <div class="row invisible" data-toggle="appear">
-
-                <!-- PRINCIPAIS OCORRÊNCIAS -->
-                <div class="col-12">
-                    <div class="block-header block-header-default border-b bg-primary-dark">
-                        <h3 class="block-title text-white">Principas Ocorrências</h3>
-                        <div class="dropdown float-right">
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(1);">Dia Anterior</button>
-                                <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(7);">Semana</button>
-                                <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(30);">Mês</button>
-                                <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(365);">Ano</button>
-                            </div>
+            <!-- ================= PRINCIPAIS OCORRÊNCIAS ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Principais Ocorrências
+                    <span>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-secondary" onclick="PrincipaisOcorrencias(1);">Dia Anterior</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="PrincipaisOcorrencias(7);">Semana</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="PrincipaisOcorrencias(30);">Mês</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="PrincipaisOcorrencias(365);">Ano</button>
                         </div>
-                    </div>
-                    <div class="block-content bg-white">
-                        <table class="table table-borderless table-striped" id="tb-principais-ocorrencias">
-                            <thead>
-                                <tr class="bg-gray">
-                                    <th class="text-center" style="width: 100px;">#</th>
-                                    <th>Local</th>
-                                    <th class="text-center" style="width: 150px;">Quantidade</th>
+                    </span>
+                </div>
+                <div class="block dashboard-card">
+                    <table class="table table-striped" id="tb-principais-ocorrencias">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width:80px;">#</th>
+                                <th>Local</th>
+                                <th class="text-center" style="width:130px;">Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb-principais-ocorrencias-body">
+                            @foreach (var item in ViewBag.PrincipaisOcorrencias)
+                            {
+                                <tr>
+                                    <td class="text-center">@item.item</td>
+                                    <td class="font-w600">@item.local</td>
+                                    <td class="text-center">@item.quantidade</td>
                                 </tr>
-                            </thead>
-                            <tbody id="tb-principais-ocorrencias-body">
-                                @foreach (var item in ViewBag.PrincipaisOcorrencias)
-                                {
-                                    <tr>
-                                        <td class="text-center" style="width: 100px;">@item.item</td>
-                                        <td class="font-w600">@item.local</td>
-                                        <td class="text-center">@item.quantidade</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-
-                <!-- END PRINCIPAIS PRODUTOS -->
-
             </div>
+
         }
 
     </div>
-    <!-- END Page Content -->
-
 </main>
 <!-- END Main Container -->
 
 @section Styles {
+    @Styles.Render("~/Content/dashboard")
     @Styles.Render("~/Content/datepicker")
     @Styles.Render("~/Content/dataTables")
     @Styles.Render("~/Content/select")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 }
 
 @section Scripts {
     @Scripts.Render("~/plugins/datatables")
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/chart")
-    @Scripts.Render("~/plugins/gauge")
     @Scripts.Render("~/plugins/select")
 
     <script>
 
-        var informacao = $("#informacao");
-        var informacao = $("#informacao");
-        var unidade = $("#unidade");
-        var modulo = $("#modulo");
-        var nome_fantasia = $("#nome_fantasia");
-        var agrupado_por = $("#agrupado_por");
-        var forma_calculo = $("#forma_calculo");
-        var grupo_item_medicao = $("#grupo_item_medicao");
-        var data_inicio = $("#data_inicio");
-        var data_termino = $("#data_termino");
-
-        var colorNamesAbertoConcluido = Object.keys(window.chartColors);
-        var colorNamesTempoMedioAtendimento = Object.keys(window.chartColors);
-
-        $(function () {
-
-            unidade.change(function () {
-                $("#form").submit();
-            });
-
-            modulo.change(function () {
-                $("#form").submit();
-            });
-
-        });
-
-        function confirmLogBook() {
-            $.post("Home/ConfirmLogBook");
-        }
+        var unidade = $("#header-unidade");
+        var modulo  = $("#header-modulo");
 
         var configTempoMedioAtendimento = {
             type: 'doughnut',
             options: {
                 responsive: true,
-                data: {
-                    datasets: [{
-                        data: [],
-                        backgroundColor: [],
-                    }],
-                    labels: []
-                },
+                maintainAspectRatio: false,
                 legend: {
                     display: true,
+                    position: 'right',
                     labels: {
-                        padding: 20
-                    },
-                    position: 'bottom',
+                        padding: 16,
+                        boxWidth: 14,
+                        fontSize: 12,
+                        generateLabels: function(chart) {
+                            var data = chart.data;
+                            if (!data.labels.length) return [];
+                            return data.labels.map(function(label, i) {
+                                var ds  = data.datasets[0];
+                                var val = ds && ds.data[i] != null ? ds.data[i].toFixed(2) + '%' : '0%';
+                                var bg  = ds && ds.backgroundColor ? ds.backgroundColor[i] : '#ccc';
+                                return {
+                                    text: label + '  ' + val,
+                                    fillStyle: bg,
+                                    strokeStyle: bg,
+                                    lineWidth: 0,
+                                    hidden: false,
+                                    index: i
+                                };
+                            });
+                        }
+                    }
                 },
-                title: {
-                    display: false,
-                },
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
-                },
+                title: { display: false },
                 tooltips: {
-                    enabled: true
-                }
+                    enabled: true,
+                    callbacks: {
+                        label: function(item, data) {
+                            var label = data.labels[item.index] || '';
+                            var val   = data.datasets[0].data[item.index];
+                            return ' ' + label + ': ' + (val != null ? val.toFixed(2) : 0) + '%';
+                        }
+                    }
+                },
+                cutoutPercentage: 60
             }
         };
 
@@ -251,144 +259,177 @@
             type: 'line',
             options: {
                 responsive: true,
-                data: {
-                    datasets: [{
-                        data: [],
-                        backgroundColor: [],
-                    }],
-                    labels: []
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                },
-                title: {
-                    display: false,
-                },
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
-                }
+                maintainAspectRatio: false,
+                legend: { display: true, labels: { padding: 20 }, position: 'bottom' },
+                title: { display: false },
+                tooltips: { enabled: true }
             }
         };
 
-
-        function LoadChartManutencaoTempoMedioAtendimento() {
-
-            var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val(), "ano": new Date().getFullYear(), "qualidade": true };
-
-            $.post("../Relatorio/ChartManutencaoTempoMedioAtendimento", request, function (obj) {
-
-                var newDataset = {
-                    label: [],
-                    data: [],
-                    backgroundColor: [],
-                    fill: false
-                };
-
-                $.each(obj, function (indice, result) {
-                    var colorName = colorNamesTempoMedioAtendimento[newDataset.data.length % colorNamesTempoMedioAtendimento.length];
-                    var newColor = window.chartColors[colorName];
-                    configTempoMedioAtendimento.data.labels.push(result.tipo);
-                    newDataset.data.push(Number(result.valor));
-                    newDataset.backgroundColor.push(newColor);
-                });
-
-                configTempoMedioAtendimento.data.datasets.push(newDataset);
-                window.TempoMedioAtendimento.update();
-
-            }, "json");
-        }
-
         function LoadChartManutencaoAbertoConcluido() {
-
-            var request = { "unidade": (unidade.val() == "") ? "-1" : unidade.val(), "data_inicio": "@ViewBag.data_inicio", "data_termino": new Date().toDateString(), "qualidade": true };
-
-            $.post("../Relatorio/ChartManutencaoAbertoConcluido", request, function (obj) {
-
-                var Aberto = {
-                    label: 'Aberto',
-                    data: [],
-                    fill: false,
-                    backgroundColor: 'rgba(255,25,40,0.5)',
-                    borderColor: 'rgba(255,25,40,0.5)',
-                    pointBorderColor: 'rgba(255,25,40,1)',
-                };
-
-                var Concluido = {
-                    label: 'Concluído',
-                    data: [],
-                    fill: false,
-                    backgroundColor: 'rgba(0, 147, 133, 0.5)',
-                    borderColor: 'rgba(0, 147, 133, 0.5)',
-                    pointBorderColor: 'rgba(0, 147, 133, 1)',
-                };
-
-                var Saldo = {
-                    label: 'Saldo',
-                    data: [],
-                    fill: true,
-                    backgroundColor: 'rgba(170, 170, 170, 0.5)',
-                    borderColor: 'rgba(170, 170, 170, 0.5)',
-                    pointBorderColor: 'rgba(170, 170, 170, 1)',
-                };
-
-                $.each(obj, function (indice, result) {
-                    configAbertoConcluido.data.labels.push(result.data);
-                    Aberto.data.push(result.aberto);
-                    Concluido.data.push(result.concluido);
-                    Saldo.data.push(result.saldo);
-                });
-
-                configAbertoConcluido.data.datasets.push(Aberto);
-                configAbertoConcluido.data.datasets.push(Concluido);
-                configAbertoConcluido.data.datasets.push(Saldo);
-                window.AbertoConcluido.update();
-
-            }, "json");
-        }
-
-        function PrincipaisOcorrencias(quantidade) {
-
-            var dataString = { "unidade": unidade.val(), "quantidade": quantidade, "qualidade": true };
-            $("#tb-principais-ocorrencias-body").empty();
-
             jQuery.ajax({
                 type: "POST",
-                url: "Home/PrincipaisOcorrencias",
+                url: "@Url.Content("Relatorio/ChartManutencaoAbertoConcluido")",
                 async: false,
-                data: dataString,
+                data: { "unidade": (unidade.val() == "") ? "-1" : unidade.val(), "data_inicio": "@ViewBag.data_inicio", "data_termino": new Date().toDateString(), "qualidade": true },
                 dataType: "json",
-                success: function (response) {
-                    for (var i = 0; i < response.length; i++) {
-                        var newRowItem = $("<tr>");
-                        var colsItem = "";
-                        colsItem = '<td class="text-center" style="width: 100px;">' + response[i].item + '</td>';
-                        newRowItem.append(colsItem);
-                        colsItem = '<td class="font-w600">' + response[i].local + '</td>';
-                        newRowItem.append(colsItem); sp_select_combo_cadastro_basico_auditoria_interna
-                        colsItem = '<td class="text-center">' + response[i].quantidade + '</td>';
-                        newRowItem.append(colsItem);
-                        $("#tb-principais-ocorrencias").append(newRowItem);
+                success: function (r) {
+                    var labels  = r.map(function(d) { return d.data; });
+                    var abertos = r.map(function(d) { return d.aberto; });
+                    var concls  = r.map(function(d) { return d.concluido; });
+                    var ultimo  = r.length ? r[r.length - 1] : { aberto: 0, concluido: 0, saldo: 0 };
+                    $("#aberto").html(ultimo.aberto);
+                    $("#concluido").html(ultimo.concluido);
+                    $("#saldo").html(ultimo.saldo);
+
+                    configAbertoConcluido.data = {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Aberto',
+                                data: abertos,
+                                borderColor: 'rgba(255,0,0,0.8)',
+                                backgroundColor: 'rgba(255,0,0,0.1)',
+                                fill: true,
+                                tension: 0.3
+                            },
+                            {
+                                label: 'Concluído',
+                                data: concls,
+                                borderColor: 'rgba(34,177,76,0.8)',
+                                backgroundColor: 'rgba(34,177,76,0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }
+                        ]
+                    };
+
+                    if (window.AbertoConcluido) {
+                        window.AbertoConcluido.data = configAbertoConcluido.data;
+                        window.AbertoConcluido.update();
                     }
                 }
             });
         }
 
-        window.onload = function () {
-            var cManutencaoTempoMedioAtencimento = document.getElementById('chartManutencaoTempoMedioAtendimento').getContext('2d');
-            window.TempoMedioAtendimento = new Chart(cManutencaoTempoMedioAtencimento, configTempoMedioAtendimento);
-            var cManutencaoAbertoConcluido = document.getElementById('chartManutencaoAbertoConcluido').getContext('2d');
-            window.AbertoConcluido = new Chart(cManutencaoAbertoConcluido, configAbertoConcluido);
-        };
+        function LoadChartManutencaoTempoMedioAtendimento() {
+            jQuery.ajax({
+                type: "POST",
+                url: "@Url.Content("Relatorio/ChartManutencaoTempoMedioAtendimento")",
+                async: false,
+                data: { "unidade": (unidade.val() == "") ? "-1" : unidade.val(), "ano": new Date().getFullYear(), "qualidade": true },
+                dataType: "json",
+                success: function (r) {
+                    var labels = r.map(function(d) { return d.tipo; });
+                    var values = r.map(function(d) { return d.valor; });
+                    var colors = ['rgba(34,177,76,0.7)', 'rgba(63,72,204,0.7)',
+                                  'rgba(255,201,14,0.7)', 'rgba(255,128,0,0.7)', 'rgba(255,0,0,0.7)'];
 
-        // Initialize when page loads
-        jQuery(function () {
-            LoadChartManutencaoTempoMedioAtendimento();
+                    var ids = ['no_dia','um_dia','tres_dia','cinco_dia','mais_cinco_dia'];
+                    for (var i = 0; i < r.length && i < ids.length; i++) {
+                        $('#' + ids[i]).html(r[i].valor.toFixed(2) + '%');
+                    }
+
+                    configTempoMedioAtendimento.data = {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Tempo de Atendimento (%)',
+                            data: values,
+                            backgroundColor: colors.slice(0, r.length)
+                        }]
+                    };
+
+                    if (window.TempoMedioAtendimento) {
+                        window.TempoMedioAtendimento.data = configTempoMedioAtendimento.data;
+                        window.TempoMedioAtendimento.update();
+                    }
+                }
+            });
+        }
+
+        function PrincipaisOcorrencias(quantidade) {
+            $("#tb-principais-ocorrencias-body").empty();
+            jQuery.ajax({
+                type: "POST",
+                url: "Home/PrincipaisOcorrencias",
+                async: false,
+                data: { "unidade": (unidade.val() == "") ? "-1" : unidade.val(), "quantidade": quantidade, "qualidade": true },
+                dataType: "json",
+                success: function (r) {
+                    for (var i = 0; i < r.length; i++) {
+                        var row = $("<tr>");
+                        row.append('<td class="text-center" style="width:80px;">' + r[i].item + '</td>');
+                        row.append('<td class="font-w600">' + r[i].local + '</td>');
+                        row.append('<td class="text-center">' + r[i].quantidade + '</td>');
+                        $("#tb-principais-ocorrencias-body").append(row);
+                    }
+                }
+            });
+        }
+
+        function initCharts() {
+            if (!window.AbertoConcluido) {
+                window.AbertoConcluido = new Chart(
+                    document.getElementById('chartManutencaoAbertoConcluido').getContext('2d'),
+                    { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false } }
+                );
+            }
+            if (!window.TempoMedioAtendimento) {
+                window.TempoMedioAtendimento = new Chart(
+                    document.getElementById('chartManutencaoTempoMedioAtendimento').getContext('2d'),
+                    { type: 'doughnut', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false } }
+                );
+            }
+        }
+
+        // ================================================
+        // AUTO-REFRESH via AJAX
+        // ================================================
+        var REFRESH_INTERVAL = 60;
+        var countdownTimer;
+        var secondsLeft = REFRESH_INTERVAL;
+
+        function startRefreshCycle() {
+            secondsLeft = REFRESH_INTERVAL;
+            updateCountdown();
+            clearInterval(countdownTimer);
+            countdownTimer = setInterval(function () {
+                secondsLeft--;
+                updateCountdown();
+                if (secondsLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    refreshDashboard();
+                }
+            }, 1000);
+        }
+
+        function updateCountdown() {
+            var el = document.getElementById('refresh-countdown');
+            if (el) el.textContent = secondsLeft + 's';
+        }
+
+        function refreshDashboard() {
+            var el = document.getElementById('refresh-indicator');
+            if (el) { el.classList.add('refreshing'); el.title = 'Atualizando...'; }
+
             LoadChartManutencaoAbertoConcluido();
+            LoadChartManutencaoTempoMedioAtendimento();
+
+            if (el) {
+                el.classList.remove('refreshing');
+                el.title = 'Última atualização: ' + new Date().toLocaleTimeString();
+            }
+            startRefreshCycle();
+        }
+
+        // Chamado pelo codebase.js após popular os selects do header
+        window.onHeaderReady = function () {
+            initCharts();
+            LoadChartManutencaoAbertoConcluido();
+            LoadChartManutencaoTempoMedioAtendimento();
             Codebase.helpers(['datepicker', 'maxlength', 'select2']);
-        });
+            startRefreshCycle();
+        };
 
     </script>
 }
-

@@ -15,11 +15,12 @@ let chartNC = null;
 const ctxArr = document.getElementById('chartArrumadoxVistoriado')?.getContext('2d');
 const ctxNC = document.getElementById('chartNCDia')?.getContext('2d');
 
-document.addEventListener("DOMContentLoaded", function () {
+// Chamado pelo codebase.js após popular os selects do header
+window.onHeaderReady = function () {
 
     Codebase.helpers(['datepicker', 'maxlength', 'select2', 'easy-pie-chart']);
 
-    if ($("#unidade").val() == "-1") {
+    if ($("#header-unidade").val() == "-1") {
         $("#arrumacaoCamareira").hide();
     }
 
@@ -60,11 +61,11 @@ document.addEventListener("DOMContentLoaded", function () {
             datatype: "json",
             data: function (d) {
                 d.empresa = $('#empresa').val(),
-                d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
-                d.data = $('#data').val()
+                    d.unidade = ($('#header-unidade').val() == "") ? -1 : $('#header-unidade').val(),
+                    d.data = $('#data').val()
             },
             dataSrc: ""
-        },        
+        },
         columns: [
             { data: "unidade" },
             { data: "totalUHArrumada" },
@@ -109,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
             datatype: "json",
             data: function (d) {
                 d.empresa = $('#empresa').val(),
-                    d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.unidade = ($('#header-unidade').val() == "") ? -1 : $('#header-unidade').val(),
                     d.data = $('#data').val()
             },
             dataSrc: ""
@@ -157,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
             datatype: "json",
             data: function (d) {
                 d.empresa = $('#empresa').val(),
-                    d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.unidade = ($('#header-unidade').val() == "") ? -1 : $('#header-unidade').val(),
                     d.data = $('#data').val()
             },
             dataSrc: ""
@@ -225,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
             datatype: "json",
             data: function (d) {
                 d.empresa = $('#empresa').val(),
-                    d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.unidade = ($('#header-unidade').val() == "") ? -1 : $('#header-unidade').val(),
                     d.data = $('#data').val()
             },
             dataSrc: ""
@@ -293,7 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
             datatype: "json",
             data: function (d) {
                 d.empresa = $('#empresa').val(),
-                    d.unidade = ($('#unidade').val() == "") ? -1 : $('#unidade').val(),
+                    d.unidade = ($('#header-unidade').val() == "") ? -1 : $('#header-unidade').val(),
                     d.data = $('#data').val()
             },
             dataSrc: ""
@@ -329,29 +330,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-$("#unidade").change(function () {
-    $("#form").submit();
-});
-
-$("#modulo").change(function () {
-    $("#form").submit();
-});
-
-$("#unidade").change(function () {
-    $("#form").submit();
-});
-
-$("#modulo").change(function () {
-    $("#form").submit();
-});
-
+// unidade e modulo são gerenciados pelo header global (codebase.js)
+// apenas o filtro de data é local a esta tela
 $("#data").change(function () {
     $("#form").submit();
 });
 
 async function loadChartData(url, type) {
 
-    const unidade = document.getElementById("unidade").value;
+    const unidade = document.getElementById('header-unidade').value;
     const data = document.getElementById("data").value;
 
     const dataInicio = inicioFimMes(data).primeiroDia;
@@ -367,7 +354,7 @@ async function loadChartData(url, type) {
             applyArrumadoxVistoriadoData(cfg, payload);
 
             //ajustarLayoutGraficoArrumado(payload.length);
-            
+
             if (chartArr) chartArr.destroy();
 
             chartArr = new Chart(ctxArr, cfg);
@@ -394,7 +381,7 @@ function ajustarLayoutGraficoArrumado(labelsCount) {
     const colArrumado = document.getElementById("col-chart-arrumado");
     const colNC = document.getElementById("col-chart-nc");
 
-    if (labelsCount > 6 && $("#unidade").val() === "-1") {
+    if (labelsCount > 6 && $("#header-unidade").val() === "-1") {
         // Gráfico principal ocupa a linha inteira
         colArrumado.classList.remove("col-md-6");
         colArrumado.classList.add("col-md-12");
@@ -789,7 +776,7 @@ function openModal(data) {
             type: "POST",
             datatype: "json",
             data: {
-                "unidade": $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                "unidade": $("#header-unidade").val() == "" ? "-1" : $("#header-unidade").val(),
                 "data": data.data,
                 "tipoGovernanca": data.tipoGovernanca,
                 "camareira": data.camareira,
@@ -877,7 +864,7 @@ function openModal(data) {
 
 function loadNaoConformidade() {
 
-    const unidade = document.getElementById("unidade").value;
+    const unidade = document.getElementById('header-unidade').value;
     const dataInicio = document.getElementById("dataInicio").value;
     const dataTermino = document.getElementById("dataTermino").value;
 
@@ -1005,7 +992,7 @@ function buildArrumadoxVistoriadoChart(chart, payload) {
             borderWidth: 2,
             pointRadius: 0,
             fill: false,
-            yAxisID: 'yMeta' 
+            yAxisID: 'yMeta'
         },
 
         {
@@ -1022,4 +1009,3 @@ function buildArrumadoxVistoriadoChart(chart, payload) {
 
 
 }
-
