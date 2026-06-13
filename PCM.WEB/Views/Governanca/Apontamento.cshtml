@@ -249,6 +249,9 @@
 
     $(function () {
 
+        // Initialize when page loads
+        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+
         $.ajaxSetup({async: false});
 
         var unidade = $("#unidade");
@@ -342,6 +345,10 @@
         });
 
         bloco.change(function () {
+            table.ajax.reload(null, false);
+        });
+
+        data.change(function () {
             table.ajax.reload(null, false);
         });
 

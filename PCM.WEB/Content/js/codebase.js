@@ -2004,6 +2004,8 @@ jQuery(function () {
 // ================================================
 function initHeaderCombos() {
     if (typeof urlHeaderCombos === 'undefined') return;
+    if (window._headerCombosInitialized) return;
+    window._headerCombosInitialized = true;
 
     $.getJSON(urlHeaderCombos, function (data) {
         var selU = $('#header-unidade').empty();
@@ -2019,18 +2021,42 @@ function initHeaderCombos() {
                 .appendTo(selM);
         });
 
-        // Aplica select2 se disponível
-        if ($.fn.select2) {
-            selU.select2({ width: 'resolve', minimumResultsForSearch: 5 })
-                .on('select2:select', function () { $('#form-header-filter').submit(); });
-            selM.select2({ width: 'resolve', minimumResultsForSearch: 5 })
-                .on('select2:select', function () { $('#form-header-filter').submit(); });
-        } else {
-            selU.on('change', function () { $('#form-header-filter').submit(); });
-            selM.on('change', function () { $('#form-header-filter').submit(); });
+        // Mudanca de UNIDADE: atualiza sessao via AJAX e recarrega a pagina atual
+        // A pagina pode interceptar definindo window.onUnidadeChange(unidade)
+        function onUnidadeChange() {
+            var unidade = selU.val();
+            if (!unidade) return;
+            if (typeof urlSetUnidade !== 'undefined') {
+                $.post(urlSetUnidade, { unidade: unidade }, function () {
+                    if (typeof window.onUnidadeChange === 'function') {
+                        window.onUnidadeChange(unidade);
+                    } else {
+                        location.reload();
+                    }
+                });
+            } else {
+                $('#form-header-filter').submit();
+            }
         }
 
-        // Notifica a página que os selects estão prontos com a unidade correta
+        // Mudanca de MODULO: redireciona para o dashboard do modulo
+        function onModuloChange() {
+            $('#form-header-filter').submit();
+        }
+
+        // Aplica select2 se disponivel
+        // Usa apenas 'select2:select' — nao adiciona 'change' para evitar disparo duplo
+        if ($.fn.select2) {
+            selU.select2({ width: 'resolve', minimumResultsForSearch: 5 });
+            selM.select2({ width: 'resolve', minimumResultsForSearch: 5 });
+            selU.on('select2:select', onUnidadeChange);
+            selM.on('select2:select', onModuloChange);
+        } else {
+            selU.on('change', onUnidadeChange);
+            selM.on('change', onModuloChange);
+        }
+
+        // Notifica a pagina que os selects estao prontos com a unidade correta
         if (typeof window.onHeaderReady === 'function') {
             window.onHeaderReady();
         }

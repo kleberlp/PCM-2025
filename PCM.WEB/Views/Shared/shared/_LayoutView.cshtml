@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+    <title>@PCM.WEB.Properties.Resources.title</title>
+
+    <meta name="description" content="Sistema de Planejamento e Controle de Manutenção">
+    <meta name="author" content="SIM">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="PCM by SIM">
+    <meta property="og:site_name" content="PCM by SIM">
+    <meta property="og:description" content="PCM - Planejamento e Controle de Manutenção by SIM">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="~/Content/img/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/Content/img/favicons/favicon192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicons/favicon180x180.png">
+    <!-- END Icons -->
+    <!-- Stylesheets -->
+    <!-- Codebase framework -->
+    @if (IsSectionDefined("Styles"))
+    {
+        @RenderSection("Styles", required: false)
+    }
+
+    @Styles.Render("~/Content/codebase")
+
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg:
+    <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css">
+    <!-- END Stylesheets -->
+</head>
+
+<body>
+
+    <!-- Wrapper-->
+    <!-- PageClass give you ability to specify custom style for specific view based on action -->
+    <div id="page-container" class="">
+
+        <!-- Main view  -->
+        @RenderBody()
+
+    </div>
+    <!-- End wrapper-->
+    <!-- Section for main scripts render -->
+    @Scripts.Render("~/plugins/codebase")
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/pages/sidebar")
+
+    <!-- Handler for local scripts -->
+    @RenderSection("scripts", required: false)
+
+</body>
+
+</html>

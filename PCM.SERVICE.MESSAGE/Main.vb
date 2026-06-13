@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Net
 Imports System.Net.Mail
+Imports System.Net.Mail.MailMessage
 Imports System.Runtime.Remoting.Messaging
 Imports System.Text
 Imports System.Text.RegularExpressions
@@ -10,8 +11,8 @@ Imports System.Web.Script.Serialization
 Imports FirebaseAdmin
 Imports FirebaseAdmin.Messaging
 Imports Google.Apis.Auth.OAuth2
+Imports Google.Apis.Requests.BatchRequest
 Imports PCM.SERVICE.MESSAGE.SQLHelper
-Imports System.Net.Mail.MailMessage
 
 Public Class Main
 
@@ -349,9 +350,8 @@ Public Class Main
                                sUnidade:=oMessage.sUnidade,
                                sBody:=oMessage.sBody,
                                sTopic:=oMessage.sTopic,
-                               sToken:=oMessage.sToken)
-
-                PWAUpdateMessage(oMessage.lCodigo)
+                               sToken:=oMessage.sToken,
+                               lCodigo:=oMessage.lCodigo)
 
             Next
 
@@ -365,7 +365,8 @@ Public Class Main
                                ByVal sUnidade As String,
                                ByVal sBody As String,
                                ByVal sTopic As String,
-                               ByVal sToken As String)
+                               ByVal sToken As String,
+                               ByVal lCodigo As Long)
 
         Dim message As New Messaging.Message With
         {
@@ -385,17 +386,19 @@ Public Class Main
 
         Try
             Dim response As String = FirebaseMessaging.DefaultInstance.SendAsync(message).GetAwaiter().GetResult()
+            PWAUpdateMessage(lCodigo, response, sToken)
             Console.WriteLine("Mensagem enviada com sucesso: " & response)
         Catch ex As Exception
+            PWAUpdateMessage(lCodigo, ex.Message.ToString(), sToken)
             Console.WriteLine("Erro ao enviar mensagem: " & ex.Message)
         End Try
 
     End Sub
 
-    Public Sub PWAUpdateMessage(ByVal lCodigo As Long)
+    Public Sub PWAUpdateMessage(ByVal lCodigo As Long, ByVal sMessage As String, ByVal sToken As String)
 
         'Váriaveis Locais
-        Dim oSqlParameter(0) As SqlParameter
+        Dim oSqlParameter(2) As SqlParameter
         Dim i As Integer = 0
 
         Try
@@ -405,7 +408,23 @@ Public Class Main
             oSqlParameter(i).ParameterName = "codigo"
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.BigInt
-            oSqlParameter(i).Value = lCodigo
+            oSqlParameter(i).Value = lCodigo : i += 1
+
+            'Seta Parametros - Message
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "message"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 500
+            oSqlParameter(i).Value = sMessage : i += 1
+
+            'Seta Parametros - Token
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "token"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 100
+            oSqlParameter(i).Value = sToken
 
             'Executa Query
             ExecuteNonQuery(gDatabase, CommandType.StoredProcedure, "sp_pwa_update_firebase_message", oSqlParameter)

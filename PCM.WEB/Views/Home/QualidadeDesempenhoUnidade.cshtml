@@ -1,334 +1,176 @@
 ﻿<!-- Main Container -->
 <main id="main-container">
-
-    <!-- Page Content -->
-    <div class="content bg-white">
+    <div class="content">
 
         @using (Html.BeginForm("QualidadeDesempenho", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
-            //PRINT - HEADER
-            <div class="block d-print-normal p-10 m-10" style="display:none">
-                <div class="form-row">
-                    <div class="col-3">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center">
-                        <label class="h2">Qualidade - Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600">01/04</label>
+            <!-- ================= FILTRO DATA ================= -->
+            <div class="dashboard-section">
+                <div class="block dashboard-card">
+                    <div class="row align-items-end">
+                        <div class="col-sm-12 col-md-3">
+                            <label>@PCM.WEB.Properties.Resources.data</label>
+                            @Html.DropDownList("data", null, null, new { @class = "form-control font-w600", id = "filtro-data" })
+                        </div>
+                        <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
                     </div>
                 </div>
-                <hr />
             </div>
 
-            //HEADER
-            <div class="block d-print-normal bg-white">
-
-                <div class="block-header block-header-default bg-secondary d-print-none">
-                    <h3 class="block-title-big text-white font-w600">Qualidade - Desempenho da Unidade</h3>
-                    <div class="block-options">
-                        <!-- Print Page functionality is initialized in Codebase() -> uiHelperPrint() -->
-                        <button type="button" class="btn-block-option text-white" onclick="Codebase.helpers('print-page');">
-                            <i class="si si-printer text-white"></i> @PCM.WEB.Properties.Resources.imprimir
-                        </button>
-                        <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
-                    </div>
+            <!-- ================= NOTAS POR UNIDADE ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Qualidade – Desempenho da Unidade
+                    <span class="float-right">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="Codebase.helpers('print-page');"><i class="si si-printer"></i> @PCM.WEB.Properties.Resources.imprimir</button>
+                    </span>
                 </div>
-
-                <div class="row pt-20 pr-20 pl-20" data-toggle="appear">
-                    <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-                        <label>@PCM.WEB.Properties.Resources.unidade</label>
-                        @Html.DropDownList("unidade", null, null, new { @class = "form-control material font-w600 js-select2" })
-                    </div>
-                    <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-                        <label>@PCM.WEB.Properties.Resources.data</label>
-                        @Html.DropDownList("data", null, null, new { @class = "form-control material font-w600" })
-                    </div>
-                    <input type="hidden" name="nome_fantasia" id="nome_fantasia" value="@ViewBag.nome_fantasia" />
-                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@Session["codigo_unidade"]" />
-                </div>
-
-                <br />
-
-            </div>
-
-            //NOTAS POR UNIDADE
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">Notas por Unidade</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1 col-xl-12 col-md-12">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped">
+                <div class="block dashboard-card">
+                    <table class="table table-striped table-sm table-bordered">
                         <thead>
-                            <tr class="table-secondary">
+                            <tr>
                                 <th>@PCM.WEB.Properties.Resources.auditoria</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total de Auditorias</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Auditorias Realizadas @ViewBag.mes</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total de Perguntas Checklist</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total Conformes</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total Não Conformes</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Total N/A</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.media_nota</th>
+                                <th class="text-center">Total de Auditorias</th>
+                                <th class="text-center">Realizadas @ViewBag.mes</th>
+                                <th class="text-center">Total Perguntas</th>
+                                <th class="text-center">Conformes</th>
+                                <th class="text-center">Não Conformes</th>
+                                <th class="text-center">N/A</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.media_nota</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach (var item in ViewBag.nota)
                             {
-                            <tr>
-                                <td>@item.auditoria</td>
-                                <td class="text-md-center" style="width: 150px;"><a href="@Url.Action("AuditoriaHistorico", "Qualidade", new { data_inicio = "SEM", data_termino = "SEM", auditoria_qualidade = item.codigo_auditoria_interna, status = 2 })">@item.quantidade_auditoria</a></td>
-                                <td class="text-md-center" style="width: 150px;"><a href="@Url.Action("AuditoriaHistorico", "Qualidade", new { data_inicio = @ViewBag.inicio_mes, data_termino = ViewBag.termino_mes, auditoria_qualidade = item.codigo_auditoria_interna, status = 2 })">@item.quantidade_concluida</a></td>
-                                <td class="text-md-center" style="width: 150px;">@item.total_perguntas</td>
-                                <td class="text-md-center" style="width: 150px;">@item.total_conformes</td>
-                                <td class="text-md-center" style="width: 150px;">@item.total_nao_conformes</td>
-                                <td class="text-md-center" style="width: 150px;">@item.total_na</td>
-                                <td class="text-md-center" style="width: 150px;">@item.media_nota</td>
-                            </tr>
+                                <tr>
+                                    <td>@item.auditoria</td>
+                                    <td class="text-center"><a href="@Url.Action("AuditoriaHistorico", "Qualidade", new { data_inicio = "SEM", data_termino = "SEM", auditoria_qualidade = item.codigo_auditoria_interna, status = 2 })">@item.quantidade_auditoria</a></td>
+                                    <td class="text-center"><a href="@Url.Action("AuditoriaHistorico", "Qualidade", new { data_inicio = @ViewBag.inicio_mes, data_termino = ViewBag.termino_mes, auditoria_qualidade = item.codigo_auditoria_interna, status = 2 })">@item.quantidade_concluida</a></td>
+                                    <td class="text-center">@item.total_perguntas</td>
+                                    <td class="text-center">@item.total_conformes</td>
+                                    <td class="text-center">@item.total_nao_conformes</td>
+                                    <td class="text-center">@item.total_na</td>
+                                    <td class="text-center">@item.media_nota</td>
+                                </tr>
                             }
                         </tbody>
                     </table>
-
                 </div>
-
-
-                <div>
-
-                    <div class="col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartNotas" height="70px"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
             </div>
 
-            //QUEBRA LINHA
-            <div class="block break-after"></div>
-
-
-            //PRINT - HEADER - 2
-            <div class="block d-print-normal p-10 m-10" style="display:none">
-                <div class="form-row">
-                    <div class="col-3">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center">
-                        <label class="h2">Qualidade - Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600">02/04</label>
-                    </div>
+            <!-- ================= EVOLUÇÃO DE NOTAS (line) ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Evolução de Notas</div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper"><canvas id="chartNotas"></canvas></div>
                 </div>
-                <hr />
             </div>
 
-            //PLANO DE AÇÃO POR UNIDADE
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.plano_acao</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1 col-xl-12 col-md-12">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped">
+            <!-- ================= PLANO DE AÇÃO ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">@PCM.WEB.Properties.Resources.plano_acao</div>
+                <div class="block dashboard-card">
+                    <table class="table table-striped table-sm table-bordered">
                         <thead>
-                            <tr class="table-secondary">
+                            <tr>
                                 <th>@PCM.WEB.Properties.Resources.departamento_responsavel</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_concluida</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_pendente</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_atrasada</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_andamento</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.tempo_medio_em_andamento</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.quantidade</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_concluida</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_pendente</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_atrasada</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_andamento</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.tempo_medio_em_andamento</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach (var item in ViewBag.plano_acao)
                             {
                                 <tr>
                                     <td>@item.departamento_responsavel</td>
-                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_plano_acao</td>
-                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_concluido</td>
-                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_pendente</td>
-                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_atrasada</td>
-                                    <td class="text-md-center" style="width: 150px;">@item.quantidade_em_andamento</td>
-                                    <td class="text-md-center" style="width: 150px;">@item.tempo_medio_em_andamento</td>
+                                    <td class="text-center">@item.quantidade_plano_acao</td>
+                                    <td class="text-center">@item.quantidade_concluido</td>
+                                    <td class="text-center">@item.quantidade_pendente</td>
+                                    <td class="text-center">@item.quantidade_atrasada</td>
+                                    <td class="text-center">@item.quantidade_em_andamento</td>
+                                    <td class="text-center">@item.tempo_medio_em_andamento</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-
                 </div>
-
             </div>
 
-            //QUEBRA LINHA
-            <div class="block break-after"></div>
-
-
-            //PRINT - HEADER - 3
-            <div class="block d-print-normal p-10 m-10" style="display:none">
-                <div class="form-row">
-                    <div class="col-3">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center">
-                        <label class="h2">Qualidade - Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600">03/04</label>
-                    </div>
-                </div>
-                <hr />
-            </div>
-
-            //PLANO DE AÇÃO - ANDAMENTO X JUSTIFICATIVA
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.plano_acao_andamento_justificativa</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1 col-xl-12 col-md-12">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped">
-                        @*<thead>
-                            <tr class="table-secondary">
-                                <th>@PCM.WEB.Properties.Resources.departamento_responsavel</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.tempo_medio_em_andamento</th>
-                            </tr>
-                        </thead>*@
-
+            <!-- ================= PLANO DE AÇÃO – ANDAMENTO × JUSTIFICATIVA ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">@PCM.WEB.Properties.Resources.plano_acao_andamento_justificativa</div>
+                <div class="block dashboard-card">
+                    <table class="table table-striped table-sm table-bordered">
                         <tbody>
-                            @for (int i = 0; i < @ViewBag.plano_acao_justificativa.Count; i++)
+                            @for (int i = 0; i < ViewBag.plano_acao_justificativa.Count; i++)
                             {
-                                if (i == 0 || @ViewBag.plano_acao_justificativa[i].justificativa != @ViewBag.plano_acao_justificativa[i - 1].justificativa)
+                                if (i == 0 || ViewBag.plano_acao_justificativa[i].justificativa != ViewBag.plano_acao_justificativa[i - 1].justificativa)
                                 {
-
                                     <tr class="table-secondary">
                                         <td colspan="3" class="font-w600">@ViewBag.plano_acao_justificativa[i].justificativa</td>
                                     </tr>
-                                    <tr>
-                                        <td>@ViewBag.plano_acao_justificativa[i].departamento_responsavel</td>
-                                        <td class="text-md-center" style="width: 150px;" data-sortable="false">@ViewBag.plano_acao_justificativa[i].quantidade Plano(s) de Ação</td>
-                                        <td class="text-md-center" style="width: 200px;" data-sortable="false">@ViewBag.plano_acao_justificativa[i].tempo_medio_em_andamento (dias) em Andamento</td>
-                                    </tr>
-
-                                    @*<tr>
-                    <td>@ViewBag.plano_acao_justificativa[i].departamento_responsavel</td>
-                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@ViewBag.plano_acao_justificativa[i].quantidade</td>
-                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@ViewBag.plano_acao_justificativa[i].tempo_medio_em_andamento</td>
-                </tr>*@
                                 }
-                                else
-                                {
-                                    <tr>
-                                        <td>@ViewBag.plano_acao_justificativa[i].departamento_responsavel</td>
-                                        <td class="text-md-center" style="width: 150px;" data-sortable="false">@ViewBag.plano_acao_justificativa[i].quantidade Plano(s) de Ação</td>
-                                        <td class="text-md-center" style="width: 200px;" data-sortable="false">@ViewBag.plano_acao_justificativa[i].tempo_medio_em_andamento (dias) em Andamento</td>
-                                    </tr>
-                                }
+                                <tr>
+                                    <td>@ViewBag.plano_acao_justificativa[i].departamento_responsavel</td>
+                                    <td class="text-center" style="width:160px;">@ViewBag.plano_acao_justificativa[i].quantidade Plano(s) de Ação</td>
+                                    <td class="text-center" style="width:200px;">@ViewBag.plano_acao_justificativa[i].tempo_medio_em_andamento (dias) em Andamento</td>
+                                </tr>
                             }
                         </tbody>
                     </table>
-
                 </div>
-
             </div>
 
-            //QUEBRA LINHA
-            <div class="block break-after"></div>
-
-
-            //PRINT - HEADER - 4
-            <div class="block d-print-normal p-10 m-10" style="display:none">
-                <div class="form-row">
-                    <div class="col-3">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center">
-                        <label class="h2">Qualidade - Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600">04/04</label>
-                    </div>
+            <!-- ================= PLANO DE AÇÃO – RECORRÊNCIA ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    @PCM.WEB.Properties.Resources.plano_acao_recorrencia
+                    <span class="float-right btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="PlanoAcaoRecorrencia(1);">Mês Corrente</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="PlanoAcaoRecorrencia(2);">Ano Corrente</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="PlanoAcaoRecorrencia(3);">Todo Período</button>
+                    </span>
                 </div>
-                <hr />
-            </div>
-
-            //PLANO DE AÇÃO - RECORRÊNCIA
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.plano_acao_recorrencia</h3>]
-                    <div class="dropdown float-right">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-sm btn btn-secondary" onclick="PlanoAcaoRecorrencia(1);">Mês Corrente</button>
-                            <button type="button" class="btn btn-sm btn btn-secondary" onclick="PlanoAcaoRecorrencia(2);">Ano Corrente</button>
-                            <button type="button" class="btn btn-sm btn btn-secondary" onclick="PlanoAcaoRecorrencia(3);">Todo Período</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="block-content block-content-full pb-1 col-xl-12 col-md-12">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped" id="tb-planoacao-recorrencia">
+                <div class="block dashboard-card">
+                    <table class="table table-striped table-sm table-bordered" id="tb-planoacao-recorrencia">
                         <thead>
-                            <tr class="table-secondary">
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade</th>
+                            <tr>
+                                <th class="text-center" style="width:100px;">@PCM.WEB.Properties.Resources.quantidade</th>
                                 <th>@PCM.WEB.Properties.Resources.item_plano_acao</th>
                                 <th>@PCM.WEB.Properties.Resources.departamento</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.tempo_gasto</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.valor_gasto</th>
+                                <th class="text-center" style="width:130px;">@PCM.WEB.Properties.Resources.tempo_gasto</th>
+                                <th class="text-center" style="width:130px;">@PCM.WEB.Properties.Resources.valor_gasto</th>
                             </tr>
                         </thead>
-
                         <tbody id="tb-planoacao-recorrencia-body">
                             @foreach (var item in ViewBag.plano_acao_recorrencia)
                             {
                                 <tr>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.quantidade</td>
+                                    <td class="text-center">@item.quantidade</td>
                                     <td>@item.item_plano_acao</td>
                                     <td>@item.departamento</td>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.tempo_gasto</td>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.valor_gasto</td>
+                                    <td class="text-center">@item.tempo_gasto</td>
+                                    <td class="text-center">@item.valor_gasto</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-
                 </div>
-
             </div>
 
         }
 
     </div>
-
 </main>
-<!-- END Main Container -->
 
 @section Styles {
+    @Styles.Render("~/Content/dashboard")
     @Styles.Render("~/Content/datepicker")
     @Styles.Render("~/Content/dataTables")
     @Styles.Render("~/Content/select")
@@ -338,232 +180,107 @@
     @Scripts.Render("~/plugins/datatables")
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/chart")
-    @Scripts.Render("~/plugins/gauge")
     @Scripts.Render("~/plugins/select")
 
-<script>
+    <script>
 
-    var colorNamesNotas = Object.keys(window.chartColors);
+        // ── Submit ao mudar data (passa unidade do header) ───────
+        $(function () {
+            $("#filtro-data").change(function () {
+                var unidadeHeader = $("#header-unidade").val();
+                if (unidadeHeader) $("#hidden-unidade").val(unidadeHeader);
+                $("#form").submit();
+            });
+        });
 
-    var configChartNotas = {
+        // ── Plano de Ação – Recorrência ──────────────────────────
+        function PlanoAcaoRecorrencia(filtro) {
+            var unidade = $("#header-unidade").val() || $("#hidden-unidade").val();
+            $("#tb-planoacao-recorrencia-body").empty();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Content("~/Home/PlanoAcaoRecorrencia")",
+                async: false,
+                data: { unidade: unidade, filtro: filtro },
+                dataType: "json",
+                success: function (response) {
+                    $.each(response, function (_, r) {
+                        var row = '<tr>'
+                            + '<td class="text-center">' + r.quantidade + '</td>'
+                            + '<td>' + r.item_plano_acao + '</td>'
+                            + '<td>' + r.departamento + '</td>'
+                            + '<td class="text-center">' + r.tempo_gasto + '</td>'
+                            + '<td class="text-center">' + r.valor_gasto + '</td>'
+                            + '</tr>';
+                        $("#tb-planoacao-recorrencia-body").append(row);
+                    });
+                }
+            });
+        }
+
+        // ── Config Chart.js ──────────────────────────────────────
+        var colorNamesNotas = Object.keys(window.chartColors);
+
+        var configChartNotas = {
             type: 'line',
+            data: { labels: [], datasets: [] },
             options: {
-                responsive: true,
-                data: {
-                    datasets: [{
-                        data: [],
-                        backgroundColor: [],
-                    }],
-                    labels: [],
-                    yRangeBegin: 0,
-                    yRangeEnd: 93.4
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                    fontStyle: 'bold'
-                },
-                title: {
-                    display: false,
-                    text: "Evolução - Últimos 12 meses",
-                    fontSize: 20,
-                    padding: 30
-                },
-                animation: {
-                    animateScale: false,
-                    animateRotate: false
-                },
+                responsive: true, maintainAspectRatio: false,
+                legend: { display: true, position: 'bottom' },
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            suggestedMin: 0,
-                            suggestedMax: 100,
-                            fontSize: 12,
-                            beginAtZero: true
-                        }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            fontSize: 12
-                        }
-                    }]
+                    yAxes: [{ ticks: { suggestedMin: 0, suggestedMax: 100, beginAtZero: true } }]
                 },
                 annotation: {
-                    events: ['click'],
                     annotations: [
                         {
-                            drawTime: 'beforeDatasetsDraw',
-                            type: 'box',
-                            yScaleID: 'y-axis-0',
-                            yMin: 85,
-                            yMax: 100,
-                            backgroundColor: 'rgba(34, 177, 76, 0.1)',
-                            borderWidth: 0,
-                            onClick: function (e) {
-                                console.log('Box', e.type, this);
-                            }
+                            drawTime: 'beforeDatasetsDraw', type: 'box', yScaleID: 'y-axis-0',
+                            yMin: 85, yMax: 100,
+                            backgroundColor: 'rgba(34,177,76,0.1)', borderWidth: 0
                         },
                         {
-                            drawTime: 'beforeDatasetsDraw',
-                            type: 'box',
-                            yScaleID: 'y-axis-0',
-                            yMin: 0,
-                            yMax: 85,
-                            backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                            borderWidth: 0,
-                            onClick: function (e) {
-                                console.log('Box', e.type, this);
-                            }
+                            drawTime: 'beforeDatasetsDraw', type: 'box', yScaleID: 'y-axis-0',
+                            yMin: 0, yMax: 85,
+                            backgroundColor: 'rgba(255,0,0,0.1)', borderWidth: 0
                         }
                     ]
                 }
             }
         };
 
-    $(function () {
+        // ── Carregamento ─────────────────────────────────────────
+        function LoadChartNotas() {
+            var unidade = $("#header-unidade").val() || $("#hidden-unidade").val();
+            var data    = $("#filtro-data").val();
 
-        $("#unidade").change(function () {
-            $("#form").submit();
-        });
-
-        $("#data").change(function () {
-            $("#form").submit();
-        });
-
-    });
-
-    function PlanoAcaoRecorrencia(filtro) {
-
-        var dataString = { "unidade": $("#unidade").val(), "filtro": filtro};
-        $("#tb-planoacao-recorrencia-body").empty();
-
-        jQuery.ajax({
-            type: "POST",
-            url: "@Url.Content("~/Home/PlanoAcaoRecorrencia")",
-            async: false,
-            data: dataString,
-            dataType: "json",
-            success: function (response) {
-                for (var i = 0; i < response.length; i++) {
-                    var newRowItem = $("<tr>");
-                    var colsItem = "";
-                    colsItem = '<td class="text-md-center" style="width: 150px;" data-sortable="false">' + response[i].quantidade + '</td>';
-                    colsItem += '<td>' + response[i].item_plano_acao + '</td>';
-                    colsItem += '<td>' + response[i].departamento + '</td>';
-                    colsItem += '<td class="text-md-center" style="width: 150px;" data-sortable="false">' + response[i].tempo_gasto + '</td>';
-                    colsItem += '<td class="text-md-center" style="width: 150px;" data-sortable="false">' + response[i].valor_gasto + '</td>';
-                    newRowItem.append(colsItem);
-                    $("#tb-planoacao-recorrencia").append(newRowItem);
-                }
-            }
-        });
-    }
-
-    function LoadChartNotas() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/QualidadeDataMonth")", { "unidade": $("#unidade").val(), "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartNotas.data.labels.push(result);
-            });
-            window.ChartNotas.update();
-        }, "json");
-
-        $.post("@Url.Content("~/Dashboard/QualidadeNotasUnidade")", { "unidade": $("#unidade").val(), "data": $("#data").val() }, function (obj) {
-
-            if (obj.length == 0) {
-                configChartNotas.data.labels = [];
-                configChartNotas.data.datasets = [];
+            $.post("@Url.Content("~/Dashboard/QualidadeDataMonth")", { unidade: unidade, data: data }, function (obj) {
+                configChartNotas.data.labels = obj;
                 window.ChartNotas.update();
-            } else {
-                $.each(obj, function (indice, result) {
+            }, "json");
 
-                    var colorName = colorNamesNotas[configChartNotas.data.datasets.length % colorNamesNotas.length];
-                    var newColor = window.chartColors[colorName];
-                    var borderColor = window.chartBorderColors[colorName];
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: newColor,
-                        borderColor: borderColor,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartNotas.data.datasets.push(newDataset);
-                    window.ChartNotas.update();
+            $.post("@Url.Content("~/Dashboard/QualidadeNotasUnidade")", { unidade: unidade, data: data }, function (obj) {
+                configChartNotas.data.datasets = [];
+                if (!obj || !obj.length) { window.ChartNotas.update(); return; }
+                $.each(obj, function (i, r) {
+                    var c = colorNamesNotas[i % colorNamesNotas.length];
+                    configChartNotas.data.datasets.push({
+                        label: r.serie, data: r.valor, fill: false,
+                        backgroundColor: window.chartColors[c],
+                        borderColor: window.chartBorderColors[c]
+                    });
                 });
-
-                //var newDataset = {
-                //    label: "META",
-                //    backgroundColor: 'rgba(255, 201, 14, 0.1)',
-                //    borderColor: 'rgba(255, 201, 14, 0.6)',
-                //    pointBorderColor: 'rgba(255, 201, 14, 0.6)',
-                //    data: [],
-                //    fill: true
-                //};
-
-                //for (var index = 0; index < configChartNotas.data.labels.length; ++index) {
-                //    newDataset.data.push("85.00");
-                //}
-
-                //configChartNotas.data.datasets.push(newDataset);
-                //window.ChartNotas.update();
-
-            }
-        }, "json");
-
-    };
-
-    var ctx = document.getElementById("chartNotas");
-
-    var lineSuperDraw = Chart.controllers.line.prototype.draw;
-    Chart.helpers.extend(Chart.controllers.line.prototype, {
-        draw: function () {
-            var chart = this.chart;
-            var ctx = chart.chart.ctx;
-
-            var yRangeBegin = chart.config.data.yRangeBegin;
-            var yRangeEnd = chart.config.data.yRangeEnd;
-
-            var xaxis = chart.scales['x-axis-0'];
-            var yaxis = chart.scales['y-axis-0'];
-
-            var yRangeBeginPixel = yaxis.getPixelForValue(yRangeBegin);
-            var yRangeEndPixel = yaxis.getPixelForValue(yRangeEnd);
-
-            ctx.save();
-
-            for (var yPixel = Math.min(yRangeBeginPixel, yRangeEndPixel); yPixel <= Math.max(yRangeBeginPixel, yRangeEndPixel); ++yPixel) {
-                ctx.beginPath();
-                ctx.moveTo(xaxis.left, yPixel);
-                ctx.strokeStyle = '#00ff00';
-                ctx.lineTo(xaxis.right, yPixel);
-                ctx.stroke();
-            }
-
-            ctx.restore();
-
-            lineSuperDraw.apply(this, arguments);
+                window.ChartNotas.update();
+            }, "json");
         }
-    });
 
-    // Initialize when page loads
-    jQuery(function () {
+        // ── Inicialização ─────────────────────────────────────────
+        jQuery(function () {
+            window.ChartNotas = new Chart(
+                document.getElementById('chartNotas').getContext('2d'),
+                configChartNotas
+            );
+            LoadChartNotas();
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
 
-        var cChartNotas = document.getElementById('chartNotas').getContext('2d');
-        window.ChartNotas = new Chart(cChartNotas, configChartNotas);
-
-        LoadChartNotas();
-
-        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
-    });
-
-
-</script>
+    </script>
 }
-

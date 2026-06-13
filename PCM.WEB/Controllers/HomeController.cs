@@ -56,10 +56,6 @@ namespace PCM.WEB.Controllers
                                                                         iFiltro: filtro));
         }
 
-        /// <summary>
-        /// Retorna as listas de unidade e módulo para o select do header global.
-        /// Usado por todas as páginas — não depende de ViewBag.
-        /// </summary>
         public JsonResult HeaderCombos()
         {
             int empresa = Convert.ToInt32(Session["empresa"].ToString());
@@ -79,10 +75,6 @@ namespace PCM.WEB.Controllers
             return Json(new { unidades, modulos }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Retorna todos os dados do dashboard em um único request AJAX,
-        /// usado pelo auto-refresh sem reload de página.
-        /// </summary>
         public JsonResult DashboardSnapshot()
         {
             int empresa = Convert.ToInt32(Session["empresa"].ToString());
@@ -105,6 +97,35 @@ namespace PCM.WEB.Controllers
                                                           iQuantidade: 30);
 
             return Json(new { os, gauge, ocorrencias }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SetUnidade(int unidade)
+        {
+            if (Session["empresa"] == null)
+                return Json(new { ok = false });
+
+            Session["codigo_unidade"] = unidade;
+
+            // Atualiza dados da unidade na sessão (empresa PMOC, tipo unidade, etc.)
+            int iCodigoEmpresaPMOC = 0;
+            int iCodigoUnidadePMOC = 0;
+            int iCodigoTipoUnidade = 0;
+            string sHotelOpera = "";
+
+            oHome.DadosUnidade(
+                iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                iCodigoUnidade: unidade,
+                iCodigoEmpresaPMOC: ref iCodigoEmpresaPMOC,
+                iCodigoUnidadePMOC: ref iCodigoUnidadePMOC,
+                iCodigoTipoUnidade: ref iCodigoTipoUnidade,
+                sHotelOpera: ref sHotelOpera);
+
+            Session["codigo_empresa_pmoc"] = iCodigoEmpresaPMOC;
+            Session["codigo_unidade_pmoc"] = iCodigoUnidadePMOC;
+            Session["hotel_opera"] = sHotelOpera;
+
+            return Json(new { ok = true, unidade = unidade });
         }
 
         #endregion

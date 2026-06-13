@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+    <title>@PCM.WEB.Properties.Resources.title</title>
+
+    <meta name="description" content="Sistema de Planejamento e Controle de Manutenção">
+    <meta name="author" content="SIM">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="PCM by SIM">
+    <meta property="og:site_name" content="PCM by SIM">
+    <meta property="og:description" content="PCM - Planejamento e Controle de Manutenção by SIM">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="~/Content/img/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/Content/img/favicons/favicon192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicons/favicon180x180.png">
+    <!-- END Icons -->
+    <!-- Stylesheets -->
+    <!-- Codebase framework -->
+    @if (IsSectionDefined("Styles"))
+    {
+        @RenderSection("Styles", required: false)
+    }
+
+    @Styles.Render("~/Content/codebase")
+
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
+    <!-- END Stylesheets -->
+</head>
+
+<body>
+
+    <!-- Wrapper-->
+    <!-- PageClass give you ability to specify custom style for specific view based on action -->
+    <div id="page-container" class="page-header-fixed page-footer-fixed">
+
+        <!-- Header -->
+        @Html.Partial("_HeaderApp")
+
+        <!-- Main view  -->
+        @RenderBody()
+
+    </div>
+    <!-- End wrapper-->
+    <!-- Section for main scripts render -->
+    <script src="~/Content/js/jquery.min.js"></script>
+    <script src="~/Content/js/jquery-3.7.1.js"></script>
+    <script src="~/Content/js/jquery.core.js"></script>
+    <script src="~/Content/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <script src="~/Content/js/metismenu.min.js"></script>
+    <script src="~/Content/js/waves.js"></script>
+    <script src="~/Content/js/feather.min.js"></script>
+    <script src="~/Content/js/simplebar.min.js"></script>
+    <script src="~/Content/js/moment.js"></script>
+    <script src="~/Content/js/core/jquery.slimscroll.min.js"></script>
+    <script src="~/Content/js/core/jquery.scrollLock.min.js"></script>
+    <script src="~/Content/js/core/jquery.appear.min.js"></script>
+    <script src="~/Content/js/core/jquery.countTo.min.js"></script>
+    <script src="~/Content/js/core/js.cookie.min.js"></script>
+    <script src="~/Content/js/plugins/jquery-inputmask/jquery.inputmask.js"></script>
+    <script src="~/Content/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/Content/js/plugins/dropzonejs/min/dropzone.min.js"></script>
+
+    <script src="~/Content/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/Content/js/plugins/jquery-validation/additional-methods.min.js"></script>
+
+    <script src="~/Content/js/lib/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/js/lib/sweet-alert2/sweetalert2.min.js"></script>
+    <script src="~/Content/js/lib/tippy/tippy.all.min.js"></script>
+    <script src="~/Content/js/lib/jquery-validation/jquery.validate.js"></script>
+    <script src="~/Content/js/lib/jquery-validation/additional-methods.js"></script>
+    <script src="~/Content/js/lib/masked-inputs/jquery.maskedinput.min.js"></script>
+    <script src="~/Content/js/lib/masked-money/jquery.maskMoney.min.js"></script>
+    <script src="~/Content/js/lib/select2/select2.min.js"></script>
+    <script src="~/Content/js/lib/timepicker/bootstrap-material-datetimepicker.js"></script>
+    <script src="~/Content/js/lib/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="~/Content/js/lib/jvectormap/jquery-jvectormap-us-aea-en.js"></script>
+    <script src="~/Content/js/lib/flatpickr/flatpickr.js"></script>
+    <script src="~/Content/js/pages/sidebar.js"></script>
+    <script src="~/Content/js/codebase.js"></script>
+
+    <!-- Handler for local scripts -->
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        var urlSenha = "@Url.Action("UsuarioUpdate", "Administracao")";
+        var urlNotificacao = "@Url.Action("Notificacao", "Home")";
+        var urlNotificacaoOSHospede = "@Url.Action("NotificacaoOSHospede", "Home")";
+    </script>
+
+</body>
+
+</html>

@@ -1,102 +1,39 @@
 ﻿@using PCM.WEB.Properties
 @using Newtonsoft.Json
 
-
-@section styles {
-    <!-- Table css -->
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
-}
-
-
 <!-- Main Container -->
 <main id="main-container">
-
-    <!-- Page Content -->
-    <div class="content bg-white">
+    <div class="content">
 
         @using (Html.BeginForm("DesempenhoGovernanca", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
-            <div class="block d-print-normal p-10 m-10" style="display:none">
-                <div class="form-row">
-                    <div class="col-3">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600">01/11</label>
+            <!-- ================= FILTRO DATA ================= -->
+            <div class="dashboard-section">
+                <div class="block dashboard-card">
+                    <div class="row align-items-end">
+                        <div class="col-sm-12 col-md-3">
+                            <label>@PCM.WEB.Properties.Resources.data</label>
+                            @Html.DropDownList("data", null, null, new { @class = "form-control font-w600", id = "filtro-data" })
+                        </div>
+                        <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
                     </div>
                 </div>
-                <hr />
             </div>
 
-            <div class="block d-print-normal bg-white">
-
-                <div class="block-header block-header-default bg-secondary d-print-none">
-                    <h3 class="block-title-big text-white font-w600">Desempenho das Unidades</h3>
-                    <div class="block-options">
-                        <!-- Print Page functionality is initialized in Codebase() -> uiHelperPrint() -->
-                        <button type="button" class="btn-block-option text-white" onclick="Codebase.helpers('print-page');">
-                            <i class="si si-printer text-white"></i> @PCM.WEB.Properties.Resources.imprimir
-                        </button>
-                        <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
-                    </div>
+            <!-- ================= ATENDIMENTO DE ORDEM DE SERVIÇO (DataTable) ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    @PCM.WEB.Properties.Resources.atendimento_ordem_servico
+                    <span class="float-right">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="Codebase.helpers('print-page');"><i class="si si-printer"></i> @PCM.WEB.Properties.Resources.imprimir</button>
+                    </span>
                 </div>
-
-                <div class="row pt-20 pr-20 pl-20" data-toggle="appear">
-                    <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-                        <label>@PCM.WEB.Properties.Resources.unidade</label>
-                        @Html.DropDownList("unidade", null, null, new { @class = "form-control material font-w600 js-select2" })
-                    </div>
-                    <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-                        <label>@PCM.WEB.Properties.Resources.data</label>
-                        @Html.DropDownList("data", null, null, new { @class = "form-control material font-w600" })
-                    </div>
-                    <input type="hidden" name="nome_fantasia" id="nome_fantasia" value="@ViewBag.nome_fantasia" />
-                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@Session["codigo_unidade"]" />
-                </div>
-
-                <br />
-
-            </div>
-
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right mt-10">
-                        <label class="h4 font-w600">02/11</label>
-                    </div>
-                </div>
-                <hr />
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.atendimento_ordem_servico</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                <div class="block dashboard-card">
                     <table class="table table-striped" id="tbMain" name="tbMain">
                         <thead>
-                            <tr class="table-secondary">
+                            <tr>
                                 <th>@PCM.WEB.Properties.Resources.unidade</th>
                                 <th class="text-center">Qtd. Camareiras</th>
                                 <th class="text-center">Qtd. Supervisores</th>
@@ -112,42 +49,46 @@
                             </tr>
                         </thead>
                     </table>
-
                 </div>
-
             </div>
 
         }
 
     </div>
-
 </main>
-<!-- END Main Container -->
-
 
 <div id="resource-messages"
      data-messages='@Html.Raw(JsonConvert.SerializeObject(new
     {
-        emptyTable = Resources.emptyTable,
-        msgQuestionDelete = Resources.msgQuestionDelete,
-        msgNotPossibleReverse = Resources.msgNotPossibleReverse,
-        yes = Resources.yes,
-        no = Resources.no,
-        clickToEdit = Resources.clickToEdit,
-        clickToDelete = Resources.clickToDelete,
-        clickToCopy = Resources.clickToCopy,
-        clickToExcel = Resources.clickToExcel,
-        clickToPdf = Resources.clickToPdf,
-        clickToConfig = Resources.clickToConfig,
-        editar = ViewBag.editar,
-        excluir = ViewBag.excluir,
+        emptyTable                  = Resources.emptyTable,
+        msgQuestionDelete           = Resources.msgQuestionDelete,
+        msgNotPossibleReverse       = Resources.msgNotPossibleReverse,
+        yes                         = Resources.yes,
+        no                          = Resources.no,
+        clickToEdit                 = Resources.clickToEdit,
+        clickToDelete               = Resources.clickToDelete,
+        clickToCopy                 = Resources.clickToCopy,
+        clickToExcel                = Resources.clickToExcel,
+        clickToPdf                  = Resources.clickToPdf,
+        clickToConfig               = Resources.clickToConfig,
+        editar                      = ViewBag.editar,
+        excluir                     = ViewBag.excluir,
         urlLoadDesempenhoGovernanca = Url.Action("LoadDesempenhoGovernanca", "Home")
     }))'>
 </div>
 
+@section styles {
+    @Styles.Render("~/Content/dashboard")
+    @Styles.Render("~/Content/dataTables")
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+}
 
 @section scripts {
-
     <script src="~/Content/js/lib/datatables/dataTables.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
@@ -162,8 +103,5 @@
     <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
     <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
     <script src="~/Content/js/pcm.js"></script>
-
-    <!-- Page-->
     <script src="~/Content/js/pages/Governanca/jquery.desempenhoGovernanca.init.js"></script>
-    <!--Datatables-->
 }

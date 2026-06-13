@@ -1,1025 +1,569 @@
-﻿
-<!-- Main Container -->
+﻿<!-- Main Container -->
 <main id="main-container">
-
-    <!-- Page Content -->
-    <div class="content bg-white">
+    <div class="content">
 
         @using (Html.BeginForm("Desempenho", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
-            <div class="block d-print-normal p-10 m-10" style="display:none">
-                <div class="form-row">
-                    <div class="col-3">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600">01/11</label>
+            <!-- ================= FILTRO DATA ================= -->
+            <div class="dashboard-section">
+                <div class="block dashboard-card">
+                    <div class="row align-items-end">
+                        <div class="col-sm-12 col-md-3">
+                            <label>@PCM.WEB.Properties.Resources.data</label>
+                            @Html.DropDownList("data", null, null, new { @class = "form-control font-w600", id = "filtro-data" })
+                        </div>
+                        <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
                     </div>
                 </div>
-                <hr />
             </div>
 
-            <div class="block d-print-normal bg-white">
-
-                <div class="block-header block-header-default bg-secondary d-print-none">
-                    <h3 class="block-title-big text-white font-w600">Desempenho das Unidades</h3>
-                    <div class="block-options">
-                        <!-- Print Page functionality is initialized in Codebase() -> uiHelperPrint() -->
-                        <button type="button" class="btn-block-option text-white" onclick="Codebase.helpers('print-page');">
-                            <i class="si si-printer text-white"></i> @PCM.WEB.Properties.Resources.imprimir
-                        </button>
-                        <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+            <!-- ================= KPIs – VISÃO GERAL ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Desempenho das Unidades
+                    <span class="float-right">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="Codebase.helpers('print-page');"><i class="si si-printer"></i> @PCM.WEB.Properties.Resources.imprimir</button>
+                    </span>
+                </div>
+                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="torre-comando-grid">
+                        <a href="@Url.Action("UsuarioIndex", "Administracao")" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-user torre-icon text-primary"></i><span class="torre-label">@PCM.WEB.Properties.Resources.usuarios</span></div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_usuario</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-users torre-icon text-info"></i><span class="torre-label">Equipe Manutenção</span></div>
+                            <div class="os-value text-info">@ViewBag.dashboard_info.equipe_manutencao</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">@PCM.WEB.Properties.Resources.equipamentos</span></div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_equipamento</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-settings torre-icon text-warning"></i><span class="torre-label">Total de OS</span></div>
+                            <div class="os-value text-warning">@ViewBag.dashboard_info.quantidade_os</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">OS Mês</span></div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os_gerada</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Rotinas Implantadas</span></div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.rotinas_implantadas</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-clock torre-icon text-primary"></i><span class="torre-label">H.H. Apontado</span></div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.hh_apontado</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">SLA</span></div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.os_atendimento_dia</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Preventivas Implantadas</span></div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.preventivas_implantadas</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-clock torre-icon text-muted"></i><span class="torre-label">H.H. Corretivas</span></div>
+                            <div class="os-value text-muted">@ViewBag.dashboard_info.hh_corretiva</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="si si-clock torre-icon text-primary"></i><span class="torre-label">H.H. Preventivas</span></div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.hh_preventiva</div>
+                        </a>
+                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <div class="torre-header"><i class="fa fa-percent torre-icon text-warning"></i><span class="torre-label">% Preventiva H.H.T.</span></div>
+                            <div class="os-value text-warning">@ViewBag.dashboard_info.corretiva_preventiva</div>
+                        </a>
                     </div>
                 </div>
-
-                <div class="row pt-20 pr-20 pl-20" data-toggle="appear">
-                    <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-                        <label>@PCM.WEB.Properties.Resources.unidade</label>
-                        @Html.DropDownList("unidade", null, null, new { @class = "form-control material font-w600 js-select2" })
-                    </div>
-                    <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-                        <label>@PCM.WEB.Properties.Resources.data</label>
-                        @Html.DropDownList("data", null, null, new { @class = "form-control material font-w600" })
-                    </div>
-                    <input type="hidden" name="nome_fantasia" id="nome_fantasia" value="@ViewBag.nome_fantasia" />
-                    <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@Session["codigo_unidade"]" />
-                </div>
-
-                <br />
-
-                <div class="row pt-20 pr-20 pl-20" data-toggle="appear">
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("UsuarioIndex", "Administracao")">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-user fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.quantidade_usuario</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.usuarios</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-users fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.equipe_manutencao</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">Nº Equipe manutenção</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-list fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.quantidade_equipamento</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.equipamentos</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-settings fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.quantidade_os</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">Total de OS</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-settings fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.quantidade_os_gerada</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted" style="text-decoration:none">OS Mês</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-calendar fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.rotinas_implantadas</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">Rotinas Implantadas</div>
-                            </div>
-                        </a>
-                    </div>
-
-                </div>
-
-                <div class="row pb-20 pl-20 pr-20" data-toggle="appear">
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-clock fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.hh_apontado</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">H.H. Apontado</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-clock fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.hh_corretiva</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">H.H. Corretivas</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-clock fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.hh_preventiva</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">H.H. Preventivas</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-clock fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.corretiva_preventiva</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">% Preventiva H.H.T.</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-list fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.os_atendimento_dia</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">SLA</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-6 col-sm-12 col-md-4 col-xl-2">
-                        <a class="block block-rounded block-bordered block-link-shadow" href="#">
-                            <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="si si-settings fa-3x"></i></div>
-                                <div class="font-size-h3 font-w600 text-primary" style="text-decoration:none">@ViewBag.dashboard_info.preventivas_implantadas</div>
-                                <div class="font-size-sm font-w600 text-uppercase text-muted">Preventivas Implantadas</div>
-                            </div>
-                        </a>
-                    </div>
-
-                </div>
-
             </div>
 
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.ranking</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1 col-xl-5 col-md-10">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped">
+            <!-- ================= RANKING ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">@PCM.WEB.Properties.Resources.ranking</div>
+                <div class="block dashboard-card">
+                    <table class="table table-striped" style="max-width:500px;">
                         <thead>
-                            <tr class="table-secondary">
-                                <th class="text-center" style="width:100px;">#</th>
-                                <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">@PCM.WEB.Properties.Resources.nota</th>
+                            <tr>
+                                <th class="text-center" style="width:80px;">#</th>
+                                <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                <th class="text-center" style="width:120px;">@PCM.WEB.Properties.Resources.nota</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach (var item in ViewBag.ranking_unidades)
                             {
                                 <tr>
-                                    <td class="text-center" style="width:100px;">@item.ranking</td>
-                                    <td class="d-none d-sm-table-cell">@item.unidade</td>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.nota</td>
+                                    <td class="text-center">@item.ranking</td>
+                                    <td>@item.unidade</td>
+                                    <td class="text-center">@item.nota</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-
                 </div>
             </div>
 
-
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right mt-10">
-                        <label class="h4 font-w600">02/11</label>
-                    </div>
-                </div>
-                <hr />
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">Notas</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped table-sm table-bordered d-print-table-7">
-                        <thead>
-                            <tr class="table-secondary">
-                                <th class="d-sm-table-cell" rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-sm-center" rowspan="2" style="width: 100px;">Nota Final</th>
-                                <th class="text-sm-center" colspan="2">Laudo</th>
-                                <th class="text-sm-center" colspan="2">Preventiva</th>
-                                <th class="text-sm-center" colspan="2">Rotina</th>
-                                <th class="text-sm-center" colspan="2">PMOC</th>
-                                <th class="text-sm-center" colspan="2">Antendimento Dia</th>
-                                <th class="text-sm-center" colspan="2">U.H.</th>
-                                <th class="text-sm-center" colspan="2">H.H. NÃO Apontado</th>
-                                <th class="text-sm-center" colspan="2">% OS Pendente</th>
-                                <th class="text-sm-center" colspan="2">HH Extra</th>
-                                <th class="text-sm-center" colspan="2">Preventiva x Corretiva</th>
-                                <th class="text-sm-center" colspan="2">Green Planet</th>
-                            </tr>
-
-                            <tr class="table-secondary">
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.laudo</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.preventiva</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.rotina</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.pmoc</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.os_atendimento_dia</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.uh_dia</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.hh_nao_apontado</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.os_pendente</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.hh_extra</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.preventiva_corretiva</th>
-                                <th class="text-sm-center">Nota</th>
-                                <th class="text-sm-center">Peso @ViewBag.percentual_nota.green_planet</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            @foreach (var item in ViewBag.notas_unidades)
-                            {
-                                <tr>
-                                    <td class="d-sm-table-cell">@item.unidade</td>
-                                    <td class="text-sm-center">@item.nota_final</td>
-                                    <td class="text-sm-center">@item.laudo</td>
-                                    <td class="text-sm-center">@item.laudo_peso</td>
-                                    <td class="text-sm-center">@item.preventiva</td>
-                                    <td class="text-sm-center">@item.preventiva_peso</td>
-                                    <td class="text-sm-center">@item.rotina</td>
-                                    <td class="text-sm-center">@item.rotina_peso</td>
-                                    <td class="text-sm-center">@item.pmoc</td>
-                                    <td class="text-sm-center">@item.pmoc_peso</td>
-                                    <td class="text-sm-center">@item.os_atendimento_dia</td>
-                                    <td class="text-sm-center">@item.os_atendimento_dia_peso</td>
-                                    <td class="text-sm-center">@item.uh_dia</td>
-                                    <td class="text-sm-center">@item.uh_dia_peso</td>
-                                    <td class="text-sm-center">@item.hh_nao_apontado</td>
-                                    <td class="text-sm-center">@item.hh_nao_apontado_peso</td>
-                                    <td class="text-sm-center">@item.os_pendente</td>
-                                    <td class="text-sm-center">@item.os_pendente_peso</td>
-                                    <td class="text-sm-center">@item.hh_extra</td>
-                                    <td class="text-sm-center">@item.hh_extra_peso</td>
-                                    <td class="text-sm-center">@item.preventiva_corretiva</td>
-                                    <td class="text-sm-center">@item.preventiva_corretiva_peso</td>
-                                    <td class="text-sm-center">@item.green_planet</td>
-                                    <td class="text-sm-center">@item.green_planet_peso</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
-                </div>
-
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">Gráfico - Geral</h3>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="block block-rounded block-mode-loading-refresh">
-                        <div class="block-content block-content-full">
-                            <div class="pull-all pt-30 p-20">
-                                <canvas id="chartGeral" height="80px" class="chartCanvas"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            @*CHART: PMOC*@
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">03/11</label>
-                    </div>
-                </div>
-                <hr />
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.pmoc</h3>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-xl-7 col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartPMOC" height="120px" class="chartCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="block-content block-content-full p-10 col-xl-5 col-md-8">
-
-                        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+            <!-- ================= NOTAS ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Notas</div>
+                <div class="block dashboard-card">
+                    <div style="overflow-x:auto;">
                         <table class="table table-striped table-sm table-bordered">
                             <thead>
-                                <tr class="table-secondary">
-                                    <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                <tr>
+                                    <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
+                                    <th class="text-center" rowspan="2" style="width:80px;">Nota Final</th>
+                                    <th class="text-center" colspan="2">Laudo</th>
+                                    <th class="text-center" colspan="2">Preventiva</th>
+                                    <th class="text-center" colspan="2">Rotina</th>
+                                    <th class="text-center" colspan="2">PMOC</th>
+                                    <th class="text-center" colspan="2">Atendimento Dia</th>
+                                    <th class="text-center" colspan="2">U.H.</th>
+                                    <th class="text-center" colspan="2">HH NÃO Apontado</th>
+                                    <th class="text-center" colspan="2">% OS Pendente</th>
+                                    <th class="text-center" colspan="2">HH Extra</th>
+                                    <th class="text-center" colspan="2">Preventiva x Corretiva</th>
+                                    <th class="text-center" colspan="2">Green Planet</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.laudo</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.preventiva</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.rotina</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.pmoc</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.os_atendimento_dia</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.uh_dia</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.hh_nao_apontado</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.os_pendente</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.hh_extra</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.preventiva_corretiva</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Peso @ViewBag.percentual_nota.green_planet</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.notas_unidades)
+                                {
+                                    <tr>
+                                        <td>@item.unidade</td>
+                                        <td class="text-center font-w600">@item.nota_final</td>
+                                        <td class="text-center">@item.laudo</td>
+                                        <td class="text-center text-muted">@item.laudo_peso</td>
+                                        <td class="text-center">@item.preventiva</td>
+                                        <td class="text-center text-muted">@item.preventiva_peso</td>
+                                        <td class="text-center">@item.rotina</td>
+                                        <td class="text-center text-muted">@item.rotina_peso</td>
+                                        <td class="text-center">@item.pmoc</td>
+                                        <td class="text-center text-muted">@item.pmoc_peso</td>
+                                        <td class="text-center">@item.os_atendimento_dia</td>
+                                        <td class="text-center text-muted">@item.os_atendimento_dia_peso</td>
+                                        <td class="text-center">@item.uh_dia</td>
+                                        <td class="text-center text-muted">@item.uh_dia_peso</td>
+                                        <td class="text-center">@item.hh_nao_apontado</td>
+                                        <td class="text-center text-muted">@item.hh_nao_apontado_peso</td>
+                                        <td class="text-center">@item.os_pendente</td>
+                                        <td class="text-center text-muted">@item.os_pendente_peso</td>
+                                        <td class="text-center">@item.hh_extra</td>
+                                        <td class="text-center text-muted">@item.hh_extra_peso</td>
+                                        <td class="text-center">@item.preventiva_corretiva</td>
+                                        <td class="text-center text-muted">@item.preventiva_corretiva_peso</td>
+                                        <td class="text-center">@item.green_planet</td>
+                                        <td class="text-center text-muted">@item.green_planet_peso</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
+            <!-- ================= GRÁFICO GERAL – RADAR ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Gráfico Geral – Perfil por Unidade</div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper"><canvas id="chartGeral"></canvas></div>
+                </div>
+            </div>
+
+
+            <!-- ================= PMOC (bar horizontal colorido) ================= -->
+            <div class="dashboard-section row">
+                <div class="col-md-7 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.pmoc</div>
+                    <div class="block dashboard-card chart-card flex-fill">
+                        <div class="chart-wrapper"><canvas id="chartPMOC"></canvas></div>
+                    </div>
+                </div>
+                <div class="col-md-5 d-flex flex-column">
+                    <div class="section-title">&nbsp;</div>
+                    <div class="block dashboard-card flex-fill">
+                        <table class="table table-striped table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 @foreach (var item in ViewBag.pmoc)
                                 {
                                     <tr>
-                                        <th>@item.unidade</th>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_ok</td>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_pendente</td>
-                                        <td class="text-center" style="widtd:100px">@item.total</td>
-                                        <td class="text-center" style="widtd:100px">@item.percentual_atendido</td>
+                                        <td>@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_ok</td>
+                                        <td class="text-center">@item.quantidade_pendente</td>
+                                        <td class="text-center">@item.total</td>
+                                        <td class="text-center">@item.percentual_atendido</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-
                     </div>
-
                 </div>
-
             </div>
 
-            @*CHART: LAUDO*@
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">04/11</label>
+            <!-- ================= LAUDO (bar horizontal colorido) ================= -->
+            <div class="dashboard-section row">
+                <div class="col-md-7 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.laudo</div>
+                    <div class="block dashboard-card chart-card flex-fill">
+                        <div class="chart-wrapper"><canvas id="chartLaudo"></canvas></div>
                     </div>
                 </div>
-                <hr />
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <label class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.laudo</label>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-xl-7 col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartLaudo" height="120px" class="chartCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="block-content block-content-full p-10 col-xl-5 col-md-8">
-
-                        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                <div class="col-md-5 d-flex flex-column">
+                    <div class="section-title">&nbsp;</div>
+                    <div class="block dashboard-card flex-fill">
                         <table class="table table-striped table-sm table-bordered">
                             <thead>
-                                <tr class="table-secondary">
+                                <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @foreach (var item in ViewBag.laudo)
                                 {
                                     <tr>
-                                        <th>@item.unidade</th>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_ok</td>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_pendente</td>
-                                        <td class="text-center" style="widtd:100px">@item.total</td>
-                                        <td class="text-center" style="widtd:100px">@item.percentual_atendido</td>
+                                        <td>@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_ok</td>
+                                        <td class="text-center">@item.quantidade_pendente</td>
+                                        <td class="text-center">@item.total</td>
+                                        <td class="text-center">@item.percentual_atendido</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-
                     </div>
-
                 </div>
-
             </div>
 
-            @*CHART: ROTINA*@
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">05/11</label>
+            <!-- ================= ROTINA (bar horizontal colorido) ================= -->
+            <div class="dashboard-section row">
+                <div class="col-md-7 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.rotina</div>
+                    <div class="block dashboard-card chart-card flex-fill">
+                        <div class="chart-wrapper"><canvas id="chartRotina"></canvas></div>
                     </div>
                 </div>
-                <hr />
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.rotina</h3>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-xl-7 col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartRotina" height="120px" class="chartCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="block-content block-content-full p-10 col-xl-5 col-md-8">
-
-                        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                <div class="col-md-5 d-flex flex-column">
+                    <div class="section-title">&nbsp;</div>
+                    <div class="block dashboard-card flex-fill">
                         <table class="table table-striped table-sm table-bordered">
                             <thead>
-                                <tr class="table-secondary">
+                                <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @foreach (var item in ViewBag.rotina)
                                 {
                                     <tr>
-                                        <th>@item.unidade</th>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_ok</td>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_pendente</td>
-                                        <td class="text-center" style="widtd:100px">@item.total</td>
-                                        <td class="text-center" style="widtd:100px">@item.percentual_atendido</td>
+                                        <td>@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_ok</td>
+                                        <td class="text-center">@item.quantidade_pendente</td>
+                                        <td class="text-center">@item.total</td>
+                                        <td class="text-center">@item.percentual_atendido</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-
                     </div>
-
                 </div>
-
             </div>
 
-
-            @*CHART: PREVENTIVA*@
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">06/11</label>
+            <!-- ================= PREVENTIVA (bar horizontal colorido) ================= -->
+            <div class="dashboard-section row">
+                <div class="col-md-7 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.preventiva</div>
+                    <div class="block dashboard-card chart-card flex-fill">
+                        <div class="chart-wrapper"><canvas id="chartPreventiva"></canvas></div>
                     </div>
                 </div>
-                <hr />
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.preventiva</h3>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-xl-7 col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartPreventiva" height="120px" class="chartCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="block-content block-content-full p-10 col-xl-5 col-md-8">
-
-                        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                <div class="col-md-5 d-flex flex-column">
+                    <div class="section-title">&nbsp;</div>
+                    <div class="block dashboard-card flex-fill">
                         <table class="table table-striped table-sm table-bordered">
                             <thead>
-                                <tr class="table-secondary">
+                                <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @foreach (var item in ViewBag.preventiva)
                                 {
                                     <tr>
-                                        <th>@item.unidade</th>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_ok</td>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_pendente</td>
-                                        <td class="text-center" style="widtd:100px">@item.total</td>
-                                        <td class="text-center" style="widtd:100px">@item.percentual_atendido</td>
+                                        <td>@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_ok</td>
+                                        <td class="text-center">@item.quantidade_pendente</td>
+                                        <td class="text-center">@item.total</td>
+                                        <td class="text-center">@item.percentual_atendido</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-
                     </div>
-
                 </div>
-
             </div>
 
-            @*CHART: UH Dia*@
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">07/11</label>
+            <!-- ================= UH EM DIA (bar horizontal colorido) ================= -->
+            <div class="dashboard-section row">
+                <div class="col-md-7 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.uh_em_dia</div>
+                    <div class="block dashboard-card chart-card flex-fill">
+                        <div class="chart-wrapper"><canvas id="chartUHDia"></canvas></div>
                     </div>
                 </div>
-                <hr />
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.uh_em_dia</h3>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-xl-7 col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartUHDia" height="120px" class="chartCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="block-content block-content-full p-10 col-xl-5 col-md-8">
-
-                        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                <div class="col-md-5 d-flex flex-column">
+                    <div class="section-title">&nbsp;</div>
+                    <div class="block dashboard-card flex-fill">
                         <table class="table table-striped table-sm table-bordered">
                             <thead>
-                                <tr class="table-secondary">
+                                <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @foreach (var item in ViewBag.uh_dia)
                                 {
                                     <tr>
-                                        <th>@item.unidade</th>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_ok</td>
-                                        <td class="text-center" style="widtd:100px">@item.quantidade_pendente</td>
-                                        <td class="text-center" style="widtd:100px">@item.total</td>
-                                        <td class="text-center" style="widtd:100px">@item.percentual_atendido</td>
+                                        <td>@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_ok</td>
+                                        <td class="text-center">@item.quantidade_pendente</td>
+                                        <td class="text-center">@item.total</td>
+                                        <td class="text-center">@item.percentual_atendido</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-
                     </div>
-
                 </div>
-
             </div>
 
-            @*TABLE: ATENDIMENTO - ORDEM DE SERVIÇO*@
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">08/11</label>
+            <!-- ================= ATENDIMENTO OS ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">@PCM.WEB.Properties.Resources.atendimento_ordem_servico</div>
+                <div class="block dashboard-card">
+                    <div style="overflow-x:auto;">
+                        <table class="table table-striped table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_coloborador</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_terceiro</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.hh_disponivel</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_os_gerada</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_os_atendida</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.quantidade_os_por_pax</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.saldo_os_pendente</th>
+                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_pendente_gerado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.atendimento_os)
+                                {
+                                    <tr>
+                                        <td>@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_colaborador_proprio</td>
+                                        <td class="text-center">@item.quantidade_colaborador_terceiro</td>
+                                        <td class="text-center">@item.hh_disponivel</td>
+                                        <td class="text-center">@item.quantidade_os_gerada</td>
+                                        <td class="text-center">@item.quantidade_os_atendida</td>
+                                        <td class="text-center">@item.quantidade_os_por_funcionario</td>
+                                        <td class="text-center">@item.quantidade_os_pendente</td>
+                                        <td class="text-center">@item.percentual_os_gerada</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <hr />
             </div>
 
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.atendimento_ordem_servico</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+            <!-- ================= SLA (tabela) ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">SLA</div>
+                <div class="block dashboard-card">
                     <table class="table table-striped table-sm table-bordered">
                         <thead>
-                            <tr class="table-secondary">
+                            <tr>
                                 <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_coloborador</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_terceiro</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.hh_disponivel</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_os_gerada</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_os_atendida</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.quantidade_os_por_pax</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.saldo_os_pendente</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.percentual_pendente_gerado</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.os_atendimento_dia</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.os_atendimento_um_dia</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.os_atendimento_tres_dias</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.os_atendimento_cinco_dias</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.os_atendimento_acima_cinco_dias</th>
+                                <th class="text-center">@PCM.WEB.Properties.Resources.os_nao_atendido</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach (var item in ViewBag.atendimento_os)
                             {
                                 <tr>
                                     <td>@item.unidade</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidade_colaborador_proprio</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidade_colaborador_terceiro</td>
-                                    <td class="text-center" data-sortable="false">@item.hh_disponivel</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidade_os_gerada</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidade_os_atendida</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidade_os_por_funcionario</td>
-                                    <td class="text-center" data-sortable="false">@item.quantidade_os_pendente</td>
-                                    <td class="text-center" data-sortable="false">@item.percentual_os_gerada</td>
+                                    <td class="text-center">@item.os_atendimento_dia</td>
+                                    <td class="text-center">@item.os_atendimento_um_dia</td>
+                                    <td class="text-center">@item.os_atendimento_tres_dias</td>
+                                    <td class="text-center">@item.os_atendimento_cinco_dias</td>
+                                    <td class="text-center">@item.os_atendimento_acima_cinco_dias</td>
+                                    <td class="text-center">@item.os_nao_atendido</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-
                 </div>
-
             </div>
 
-            @*TABLE: SLA*@
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">SLA</h3>
+            <!-- ================= NÚMERO DE OS's ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Número de OS's</div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper"><canvas id="chartNumeroOS"></canvas></div>
                 </div>
+            </div>
 
-                <div class="block-content block-content-full pb-1">
+            <!-- ================= SLA – TEMPO MÉDIO (stacked horizontal) ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">SLA – Tempo Médio de Atendimento por Unidade</div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper"><canvas id="chartTempoMedioAtendimento"></canvas></div>
+                </div>
+            </div>
 
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+            <!-- ================= MÉDIA OS POR COLABORADOR ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Nº Colaborador × Média Individual de OS por Colaborador</div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper"><canvas id="chartMediaOSColaborador"></canvas></div>
+                </div>
+            </div>
+
+            <!-- ================= APONTAMENTO DE HORAS ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Apontamento - Horas</div>
+                <div class="block dashboard-card">
+                    <div style="overflow-x:auto;">
+                        <table class="table table-striped table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
+                                    <th class="text-center" rowspan="2">Colaboradores Próprios</th>
+                                    <th class="text-center" rowspan="2">Colaboradores Terceiros</th>
+                                    <th class="text-center" rowspan="2">HH Disponível</th>
+                                    <th class="text-center" rowspan="2">Falta Just.</th>
+                                    <th class="text-center" rowspan="2">Falta Ñ Just.</th>
+                                    <th class="text-center" colspan="2">HH Corretiva</th>
+                                    <th class="text-center" colspan="2">HH Preventiva</th>
+                                    <th class="text-center" colspan="2">HH PMOC</th>
+                                    <th class="text-center" colspan="2">HH UH em Dia</th>
+                                    <th class="text-center" rowspan="2">Total Apontamento</th>
+                                    <th class="text-center" rowspan="2">Saldo HH Disponível</th>
+                                    <th class="text-center" rowspan="2">% Ociosidade</th>
+                                    <th class="text-center" rowspan="2">H.E.</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">%</th>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">%</th>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">%</th>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.apontamento_horas)
+                                {
+                                    <tr class="@item.css_row">
+                                        <td class="font-w600 @(item.css_row == "" ? "bg-warning-light" : "")">@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_colaborador_proprio</td>
+                                        <td class="text-center">@item.quantidade_colaborador_terceiro</td>
+                                        <td class="text-center">@item.hh_disponivel</td>
+                                        <td class="text-center">@item.faltas_justificadas</td>
+                                        <td class="text-center">@item.faltas_nao_justificadas</td>
+                                        <td class="text-center">@item.horas_corretivas</td>
+                                        <td class="text-center">@item.percentual_horas_corretivas</td>
+                                        <td class="text-center">@item.horas_preventivas</td>
+                                        <td class="text-center">@item.percentual_horas_preventivas</td>
+                                        <td class="text-center">@item.horas_pmoc</td>
+                                        <td class="text-center">@item.percentual_horas_pmoc</td>
+                                        <td class="text-center">@item.horas_uh_dia</td>
+                                        <td class="text-center">@item.percentual_horas_uh_dia</td>
+                                        <td class="text-center">@item.total_apontamento</td>
+                                        <td class="text-center"><span class="@item.css_saldo_hh_disponivel">@item.saldo_hh_disponivel</span></td>
+                                        <td class="text-center">@item.percentual_ociosidade</td>
+                                        <td class="text-center">@item.hora_extra</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= LAUDOS DETALHADO ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">@PCM.WEB.Properties.Resources.laudo</div>
+                <div class="block dashboard-card">
                     <table class="table table-striped table-sm table-bordered">
                         <thead>
-                            <tr class="table-secondary">
-                                <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.os_atendimento_dia</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.os_atendimento_um_dia</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.os_atendimento_tres_dias</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.os_atendimento_cinco_dias</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.os_atendimento_acima_cinco_dias</th>
-                                <th class="text-center" data-sortable="false">@PCM.WEB.Properties.Resources.os_nao_atendido</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach (var item in ViewBag.atendimento_os)
-                            {
-                                <tr>
-                                    <td>@item.unidade</td>
-                                    <td class="text-center" data-sortable="false">@item.os_atendimento_dia</td>
-                                    <td class="text-center" data-sortable="false">@item.os_atendimento_um_dia</td>
-                                    <td class="text-center" data-sortable="false">@item.os_atendimento_tres_dias</td>
-                                    <td class="text-center" data-sortable="false">@item.os_atendimento_cinco_dias</td>
-                                    <td class="text-center" data-sortable="false">@item.os_atendimento_acima_cinco_dias</td>
-                                    <td class="text-center" data-sortable="false">@item.os_nao_atendido</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
-                </div>
-
-            </div>
-
-            @*CHART: NÚMERO DE OS's*@
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">09/11</label>
-                    </div>
-                </div>
-                <hr />
-            </div>
-
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">Número de OS's</h3>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartNumeroOS" height="100px" class="chartCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            @*CHART: SLA*@
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title text-white">SLA - Tempo Médio de Atendimento</h3>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartTempoMedioAtendimento" height="100px" class="chartCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            @*CHART: MÉDIA DE OS POR COLABORADOR*@
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">Nº Colaborador x Média Individual de OS por Colaborador</h3>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-md-12">
-                        <div class="block block-rounded block-mode-loading-refresh">
-                            <div class="block-content block-content-full">
-                                <div class="pull-all pt-30 p-20">
-                                    <canvas id="chartMediaOSColaborador" height="100px" class="chartCanvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">10/11</label>
-                    </div>
-                </div>
-                <hr />
-            </div>
-
-            @*TABLE: APONTAMENTO HORAS*@
-            <div class="block">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">Apontamento - Horas</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped table-sm table-bordered d-print-table-7">
-                        <thead>
-                            <tr class="table-secondary">
-                                <th class="d-sm-table-cell" rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-sm-center" rowspan="2" style="width: 100px;">Quantidade Colaborador Próprio</th>
-                                <th class="text-sm-center" rowspan="2" style="width: 100px;">Quantidade Colaborador Terceiros</th>
-                                <th class="text-sm-center" rowspan="2">HH Disponível</th>
-                                <th class="text-sm-center" rowspan="2">Falta Just.</th>
-                                <th class="text-sm-center" rowspan="2">Falta Ñ Just.</th>
-                                <th class="text-sm-center" colspan="2">HH Corretiva</th>
-                                <th class="text-sm-center" colspan="2">HH Preventiva</th>
-                                <th class="text-sm-center" colspan="2">HH PMOC</th>
-                                <th class="text-sm-center" colspan="2">HH UH em Dia</th>
-                                <th class="text-sm-center" rowspan="2">Total Apontamento</th>
-                                <th class="text-sm-center" rowspan="2">Saldo HH Disponível</th>
-                                <th class="text-sm-center" rowspan="2">% Ociosidade</th>
-                                <th class="text-sm-center" rowspan="2">H.E.</th>
-                            </tr>
-
-                            <tr class="table-secondary">
-                                <th class="text-sm-center">Horas Apontadas</th>
-                                <th class="text-sm-center">%</th>
-                                <th class="text-sm-center">Horas Apontadas</th>
-                                <th class="text-sm-center">%</th>
-                                <th class="text-sm-center">Horas Apontadas</th>
-                                <th class="text-sm-center">%</th>
-                                <th class="text-sm-center">Horas Apontadas</th>
-                                <th class="text-sm-center">%</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            @foreach (var item in ViewBag.apontamento_horas)
-                            {
-                                <tr class="@item.css_row">
-                                    @if (item.css_row == "")
-                                    {
-                                        <td class="d-sm-table-cell font-w600 bg-warning-light">@item.unidade</td>
-                                    }
-                                    else
-                                    {
-                                        <td class="d-sm-table-cell font-w600">@item.unidade</td>
-                                    }
-                                    <td class="text-sm-center">@item.quantidade_colaborador_proprio</td>
-                                    <td class="text-sm-center">@item.quantidade_colaborador_terceiro</td>
-                                    <td class="text-sm-center">@item.hh_disponivel</td>
-                                    <td class="text-sm-center">@item.faltas_justificadas</td>
-                                    <td class="text-sm-center">@item.faltas_nao_justificadas</td>
-                                    <td class="text-sm-center">@item.horas_corretivas</td>
-                                    <td class="text-sm-center">@item.percentual_horas_corretivas</td>
-                                    <td class="text-sm-center">@item.horas_preventivas</td>
-                                    <td class="text-sm-center">@item.percentual_horas_preventivas</td>
-                                    <td class="text-sm-center">@item.horas_pmoc</td>
-                                    <td class="text-sm-center">@item.percentual_horas_pmoc</td>
-                                    <td class="text-sm-center">@item.horas_uh_dia</td>
-                                    <td class="text-sm-center">@item.percentual_horas_uh_dia</td>
-                                    <td class="text-sm-center">@item.total_apontamento</td>
-                                    <td class="text-sm-center"><span class="@item.css_saldo_hh_disponivel">@item.saldo_hh_disponivel</span></td>
-                                    <td class="text-sm-center">@item.percentual_ociosidade</td>
-                                    <td class="text-sm-center">@item.hora_extra</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
-                </div>
-
-            </div>
-
-            <div class="block break-after"></div>
-
-            <div class="block d-print-normal" style="display:none">
-                <div class="form-row">
-                    <div class="col-3 mt-10">
-                        <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
-                    </div>
-                    <div class="col-6 text-center mt-10">
-                        <label class="h2">Desempenho das Unidades</label>
-                    </div>
-                    <div class="col-3 text-right">
-                        <label class="h4 font-w600 mt-10">11/11</label>
-                    </div>
-                </div>
-                <hr />
-            </div>
-
-            @*TABLE: LAUDOS*@
-            <div class="block-content block-content-full pb-1">
-
-                <div class="block-header block-header-default bg-secondary">
-                    <h3 class="block-title-big text-white font-w600">@PCM.WEB.Properties.Resources.laudo</h3>
-                </div>
-
-                <div class="block-content block-content-full pb-1">
-
-                    <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                    <table class="table table-striped table-sm table-bordered d-print-table-2">
-                        <thead>
-                            <tr class="table-secondary">
+                            <tr>
                                 <th>@PCM.WEB.Properties.Resources.laudo</th>
                                 <th class="text-center" style="width:100px;">@PCM.WEB.Properties.Resources.data_validade</th>
                                 <th class="text-center" style="width:75px;">@ViewBag.data_atual</th>
                             </tr>
                         </thead>
-
                         <tbody>
-
                             @foreach (var item in ViewBag.manutencao_laudo)
                             {
                                 <tr>
@@ -1031,53 +575,50 @@
                                     else if (DateTime.Parse(item.data_validade) < ViewBag.data_atual)
                                     {
                                         <td class="font-w600 text-center"><span class="badge badge-danger">@item.data_validade</span></td>
-                                    }
+ }
                                     else
                                     {
                                         <td class="font-w600 text-center">@item.data_validade</td>
-                                    }
+}
 
                                     @if (item.mes_1 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_1 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-warning">X</span></td>
+                                        <td class="text-center"><span class="badge badge-warning">X</span></td>
                                     }
                                     else if (item.mes_1 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_1 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center"></td>
                                     }
                                     else if (item.mes_1 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_1 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-success">X</span></td>
+                                        <td class="text-center"><span class="badge badge-success">X</span></td>
                                     }
                                 </tr>
                             }
                         </tbody>
                     </table>
-
                 </div>
-
             </div>
 
         }
 
     </div>
-
 </main>
-<!-- END Main Container -->
 
 @section Styles {
+    @Styles.Render("~/Content/dashboard")
     @Styles.Render("~/Content/datepicker")
     @Styles.Render("~/Content/dataTables")
     @Styles.Render("~/Content/select")
@@ -1087,938 +628,261 @@
     @Scripts.Render("~/plugins/datatables")
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/chart")
-    @Scripts.Render("~/plugins/gauge")
     @Scripts.Render("~/plugins/select")
 
     <script>
 
-    var colorNamesChartGeral = Object.keys(window.chartColors);
-    var colorNamesChartPMOC = Object.keys(window.chartColors);
-    var colorNamesChartLaudo = Object.keys(window.chartColors);
-    var colorNamesChartRotina = Object.keys(window.chartColors);
-    var colorNamesChartPreventiva = Object.keys(window.chartColors);
-    var colorNamesChartUHDia = Object.keys(window.chartColors);
-    var colorNamesChartNumeroOS = Object.keys(window.chartColors);
-    var colorNamesChartTempoMedioAtendimento = Object.keys(window.chartColors);
-    var colorNamesChartMediaOSColaborador = Object.keys(window.chartColors);
-
-    var configChartGeral = {
-        type: 'bar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: true,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "Gráfico Geral",
-                fontSize: 20,
-                padding: 30
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        fontSize: 14
-                    }
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false
-        }
-    };
-
-    var configChartPMOC = {
-        type: 'bar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: false,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "PMOC",
-                fontSize: 20,
-                padding: 30
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        fontSize: 14
-                    },
-                    color: '#000'
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false
-        }
-    };
-
-    var configChartLaudo = {
-        type: 'bar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: false,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "PMOC",
-                fontSize: 20,
-                padding: 30
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        fontSize: 14
-                    },
-                    color: '#000'
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false
-        }
-    };
-
-    var configChartRotina = {
-        type: 'bar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: false,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "PMOC",
-                fontSize: 20,
-                padding: 30
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        fontSize: 14
-                    },
-                    color: '#000'
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false
-        }
-    };
-
-    var configChartPreventiva = {
-        type: 'bar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: false,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "PMOC",
-                fontSize: 20,
-                padding: 30
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        fontSize: 14
-                    },
-                    color: '#000'
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false
-        }
-    };
-
-    var configChartUHDia = {
-        type: 'bar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: false,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "PMOC",
-                fontSize: 20,
-                padding: 30
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        fontSize: 14
-                    },
-                    color: '#000'
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false
-        }
-    };
-
-    var configChartNumeroOS = {
-        type: 'bar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: true,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "Número de OS",
-                fontSize: 20,
-                padding: 30
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    },
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false
-        }
-    };
-
-    var configChartTempoMedioAtendimento = {
-        type: 'bar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: true,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "Tempo Médio de Atendimento OS",
-                fontSize: 20,
-                padding: 30
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false,
-            scales: {
-                xAxes: [{
-                    stacked: true,
-                    ticks: {
-                        stepSize: 10,
-                        min: 0,
-                        max: 100,
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        fontSize: 14
-                    },
-                    scaleLabel: {
-                        display: true
-                    }
-                }],
-                yAxes: [{
-                    stacked: true,
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            }
-        }
-    };
-
-    var configChartMediaOSColaborador = {
-        type: 'horizontalBar',
-        options: {
-            responsive: true,
-            data: {
-                datasets: [{
-                    data: [],
-                    backgroundColor: []
-                }],
-                labels: []
-            },
-            legend: {
-                display: true,
-                position: 'bottom',
-                fontStyle: 'bold',
-                fontSize: 14
-            },
-            title: {
-                display: false,
-                text: "Nº Colaborador x Média Individual de OS por Colaborador",
-                fontSize: 20,
-                padding: 30
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    },
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 14
-                    }
-                }]
-            },
-            hover: {
-                animationDuration: 0
-            },
-            animation: false
-        }
-    };
-
-    $(function () {
-
-        $("#unidade").change(function () {
-            $("#form").submit();
-        });
-
-        $("#data").change(function () {
-            $("#form").submit();
-        });
-
-    });
-
-    function LoadChartGeral() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartGeral.data.labels.push(result);
+        // ── Submit ao mudar data (passa unidade do header) ───────
+        $(function () {
+            $("#filtro-data").change(function () {
+                var unidadeHeader = $("#header-unidade").val();
+                if (unidadeHeader) $("#hidden-unidade").val(unidadeHeader);
+                $("#form").submit();
             });
-            window.ChartGeral.update();
-        }, "json");
+        });
 
-        $.post("@Url.Content("~/Dashboard/ChartGeral")", { "data": $("#data").val() }, function (obj) {
+        // ── Cores ─────────────────────────────────────────────────
+        var colorNamesGeral             = Object.keys(window.chartColors);
+        var colorNamesMediaOSColaborador = Object.keys(window.chartColors);
 
-            if (obj.length == 0) {
-                configChartGeral.data.labels = [];
-                configChartGeral.data.datasets = [];
-                window.ChartGeral.update();
-            } else {
-                $.each(obj, function (indice, result) {
+        var geralColors = {
+            'LAUDO':      { bg: 'rgba(255,51,91,0.7)',   border: 'rgba(255,51,91,1)' },
+            'PMOC':       { bg: 'rgba(68,169,236,0.7)',  border: 'rgba(68,169,236,1)' },
+            'PREVENTIVA': { bg: 'rgba(255,208,98,0.7)',  border: 'rgba(255,208,98,1)' },
+            'ROTINA':     { bg: 'rgba(88,196,196,0.7)',  border: 'rgba(88,196,196,1)' },
+            'U.H EM DIA': { bg: 'rgba(160,113,255,0.7)', border: 'rgba(160,113,255,1)' }
+        };
+        var slaColors = {
+            'NO DIA':         { bg: 'rgba(34,177,76,0.75)',  border: 'rgba(34,177,76,1)' },
+            '1 DIA':          { bg: 'rgba(63,72,204,0.75)',  border: 'rgba(63,72,204,1)' },
+            '2 A 3 DIAS':     { bg: 'rgba(255,201,14,0.75)', border: 'rgba(255,201,14,1)' },
+            '4 A 5 DIAS':     { bg: 'rgba(255,128,0,0.75)',  border: 'rgba(255,128,0,1)' },
+            '> 5 DIAS':       { bg: 'rgba(128,0,128,0.75)',  border: 'rgba(128,0,128,1)' },
+            'OS NÃO ATENDIDA':{ bg: 'rgba(255,0,0,0.75)',    border: 'rgba(255,0,0,1)' }
+        };
+        var osColors = {
+            'QUANTIDADE OS ATENDIDA': { bg: 'rgba(34,177,76,0.75)',  border: 'rgba(34,177,76,1)' },
+            'QUANTIDADE OS GERADA':   { bg: 'rgba(63,72,204,0.75)',  border: 'rgba(63,72,204,1)' },
+            'SALDO OS PENDENTE':      { bg: 'rgba(255,0,0,0.75)',    border: 'rgba(255,0,0,1)' }
+        };
+        var singleColor = 'rgba(68,114,196,0.85)';
 
-                    switch (result.serie) {
-                        case 'LAUDO':
-                            colorName = 'rgba(255, 51, 91, 0.7)';
-                            borderColorName = 'rgba(255, 51, 91, 1)';
-                            break;
-                        case 'PMOC':
-                            colorName = 'rgba(68, 169, 236, 0.7)';
-                            borderColorName = 'rgba(68, 169, 236, 1)';
-                            break;
-                        case 'PREVENTIVA':
-                            colorName = 'rgba(255, 208, 98, 0.7)';
-                            borderColorName = 'rgba(255, 208, 98, 1)';
-                            break;
-                        case 'ROTINA':
-                            colorName = 'rgba(88, 196, 196, 0.7)';
-                            borderColorName = 'rgba(88, 196, 196, 1)';
-                            break;
-                        case 'U.H EM DIA':
-                            colorName = 'rgba(160, 113, 255, 0.7)';
-                            borderColorName = 'rgba(160, 113, 255, 1)';
-                            break;
+        // Cor condicional por percentual (para bar horizontal das métricas)
+        function metricaColor(pct) {
+            if (pct >= 86) return 'rgba(34,177,76,0.85)';
+            if (pct >= 65) return 'rgba(255,201,14,0.85)';
+            return 'rgba(255,0,0,0.85)';
+        }
+
+        // ── Configurações ────────────────────────────────────────
+
+        // RADAR – Gráfico Geral
+        var configChartGeral = {
+            type: 'radar',
+            data: { labels: [], datasets: [] },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scale: {
+                    ticks: { beginAtZero: true, min: 0, max: 100, stepSize: 20 },
+                    pointLabels: { fontSize: 12 }
+                },
+                legend: { display: true, position: 'bottom' }
+            }
+        };
+
+        // BAR HORIZONTAL colorido por faixa – métricas individuais
+        function makeMetricaCfg() {
+            return {
+                type: 'horizontalBar',
+                data: { labels: [], datasets: [] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, animation: false,
+                    legend: { display: false },
+                    scales: {
+                        xAxes: [{ ticks: { min: 0, max: 100, stepSize: 20 } }],
+                        yAxes: [{ ticks: { fontSize: 12 } }]
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(item) { return ' ' + item.xLabel.toFixed(1) + '%'; }
+                        }
                     }
+                }
+            };
+        }
 
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: colorName,
-                        borderColor: borderColorName,
-                        data: [],
-                        fill: false
-                    };
+        var configChartPMOC       = makeMetricaCfg();
+        var configChartLaudo      = makeMetricaCfg();
+        var configChartRotina     = makeMetricaCfg();
+        var configChartPreventiva = makeMetricaCfg();
+        var configChartUHDia      = makeMetricaCfg();
 
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
+        var configChartNumeroOS = {
+            type: 'bar',
+            data: { labels: [], datasets: [] },
+            options: {
+                responsive: true, maintainAspectRatio: false, animation: false,
+                legend: { display: true, position: 'bottom' }
+            }
+        };
+
+        var configChartTempoMedioAtendimento = {
+            type: 'horizontalBar',
+            data: { labels: [], datasets: [] },
+            options: {
+                responsive: true, maintainAspectRatio: false, animation: false,
+                legend: { display: true, position: 'bottom' },
+                scales: {
+                    xAxes: [{ stacked: true, ticks: { stepSize: 10, min: 0, max: 100 } }],
+                    yAxes: [{ stacked: true, ticks: { fontSize: 12 } }]
+                }
+            }
+        };
+
+        var configChartMediaOSColaborador = {
+            type: 'horizontalBar',
+            data: { labels: [], datasets: [] },
+            options: {
+                responsive: true, maintainAspectRatio: false, animation: false,
+                legend: { display: true, position: 'bottom' }
+            }
+        };
+
+        // ── Helpers ──────────────────────────────────────────────
+        var dataVal = function() { return $("#filtro-data").val(); };
+
+        function loadUnidades(cfg, win) {
+            $.post("@Url.Content("~/Dashboard/Unidades")", { data: dataVal() }, function (obj) {
+                cfg.data.labels = obj;
+                win.update();
+            }, "json");
+        }
+
+        function applyDatasets(cfg, win, obj, colorMap) {
+            cfg.data.datasets = [];
+            $.each(obj, function (i, r) {
+                var c = colorMap ? (colorMap[r.serie] || { bg: '#ccc', border: '#999' })
+                                 : { bg: singleColor, border: singleColor };
+                cfg.data.datasets.push({ label: r.serie, data: r.valor, fill: false, backgroundColor: c.bg, borderColor: c.border });
+            });
+            win.update();
+        }
+
+        // ── Carregamento ─────────────────────────────────────────
+
+        function LoadChartGeral() {
+            // Radar: cada dataset = uma unidade, cada ponto = uma métrica (LAUDO, PMOC, etc.)
+            $.post("@Url.Content("~/Dashboard/ChartGeral")", { data: dataVal() }, function (obj) {
+                if (!obj || !obj.length) return;
+
+                // Constrói labels de métricas e datasets por série (unidade)
+                // API retorna [{serie:"LAUDO", valor:[u1,u2,...]}, ...]
+                // Para radar precisamos transpor: labels = métricas, datasets = unidades
+                var metricas = obj.map(function(s) { return s.serie; });
+                var nUnidades = obj[0].valor.length;
+
+                // Busca os nomes das unidades para legenda
+                $.post("@Url.Content("~/Dashboard/Unidades")", { data: dataVal() }, function (unidades) {
+                    configChartGeral.data.labels = metricas;
+                    configChartGeral.data.datasets = [];
+
+                    for (var u = 0; u < nUnidades; u++) {
+                        var c = colorNamesGeral[u % colorNamesGeral.length];
+                        var valores = obj.map(function(s) { return s.valor[u] || 0; });
+                        configChartGeral.data.datasets.push({
+                            label: unidades[u] || ('Unidade ' + (u + 1)),
+                            data: valores,
+                            backgroundColor: window.chartColors[c].replace('0.7', '0.15'),
+                            borderColor: window.chartBorderColors[c],
+                            borderWidth: 2, pointRadius: 3
+                        });
                     }
-
-                    configChartGeral.data.datasets.push(newDataset);
                     window.ChartGeral.update();
+                }, "json");
+            }, "json");
+        }
+
+        function loadMetrica(cfg, win, field, descricao) {
+            $.post("@Url.Content("~/Dashboard/Unidades")", { data: dataVal() }, function (unidades) {
+                cfg.data.labels = unidades;
+                win.update();
+            }, "json");
+            $.post("@Url.Content("~/Dashboard/ChartMetricas")", { field: field, descricao: descricao, data: dataVal() }, function (obj) {
+                cfg.data.datasets = [];
+                if (!obj || !obj.length) { win.update(); return; }
+                // Cada item: {serie: "Preventiva", valor: [pct1, pct2, ...]}
+                var valores = obj[0].valor;
+                var bgs = valores.map(function(v) { return metricaColor(v); });
+                cfg.data.datasets.push({
+                    label: descricao, data: valores,
+                    backgroundColor: bgs, borderColor: bgs.map(function(c) { return c.replace('0.85','1'); }),
+                    borderWidth: 1
                 });
-            }
-        }, "json");
-
-    };
-
-    function LoadChartPMOC() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartPMOC.data.labels.push(result);
-            });
-            window.ChartPMOC.update();
-        }, "json");
-
-        var request = { "field": "PMOC", "descricao": "PMOC", "data": $("#data").val() };
-
-        $.post("@Url.Content("~/Dashboard/ChartMetricas")", request, function (obj) {
-
-            if (obj.length == 0) {
-                configChartPMOC.data.labels = [];
-                configChartPMOC.data.datasets = [];
-                window.ChartPMOC.update();
-            }
-            else
-            {
-                $.each(obj, function (indice, result) {
-
-                    var colorName = 'rgba(68, 114, 196, 1)';
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: colorName,
-                        borderColor: colorName,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartPMOC.data.datasets.push(newDataset);
-                    window.ChartPMOC.update();
-                });
-            }
-        }, "json");
-
-    };
-
-    function LoadChartLaudo() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartLaudo.data.labels.push(result);
-            });
-            window.ChartLaudo.update();
-        }, "json");
-
-        var request = { "field": "laudo", "descricao": "Laudo", "data": $("#data").val() };
-
-        $.post("@Url.Content("~/Dashboard/ChartMetricas")", request, function (obj) {
-
-            if (obj.length == 0) {
-                configChartLaudo.data.labels = [];
-                configChartLaudo.data.datasets = [];
-                window.ChartLaudo.update();
-            }
-            else
-            {
-                $.each(obj, function (indice, result) {
-
-                    var colorName = 'rgba(68, 114, 196, 1)';
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: colorName,
-                        borderColor: colorName,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartLaudo.data.datasets.push(newDataset);
-                    window.ChartLaudo.update();
-                });
-            }
-        }, "json");
-
-    };
-
-    function LoadChartRotina() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartRotina.data.labels.push(result);
-            });
-            window.ChartRotina.update();
-        }, "json");
-
-        var request = { "field": "rotina", "descricao": "Rotina", "data": $("#data").val() };
-
-        $.post("@Url.Content("~/Dashboard/ChartMetricas")", request, function (obj) {
-
-            if (obj.length == 0) {
-                configChartRotina.data.labels = [];
-                configChartRotina.data.datasets = [];
-                window.ChartRotina.update();
-            }
-            else
-            {
-                $.each(obj, function (indice, result) {
-
-                    var colorName = 'rgba(68, 114, 196, 1)';
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: colorName,
-                        borderColor: colorName,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartRotina.data.datasets.push(newDataset);
-                    window.ChartRotina.update();
-                });
-            }
-        }, "json");
-
-    };
-
-    function LoadChartPreventiva() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartPreventiva.data.labels.push(result);
-            });
-            window.ChartPreventiva.update();
-        }, "json");
-
-        var request = { "field": "preventiva", "descricao": "Preventiva", "data": $("#data").val() };
-
-        $.post("@Url.Content("~/Dashboard/ChartMetricas")", request, function (obj) {
-
-            if (obj.length == 0) {
-                configChartPreventiva.data.labels = [];
-                configChartPreventiva.data.datasets = [];
-                window.ChartPreventiva.update();
-            }
-            else
-            {
-                $.each(obj, function (indice, result) {
-
-                    var colorName = 'rgba(68, 114, 196, 1)';
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: colorName,
-                        borderColor: colorName,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartPreventiva.data.datasets.push(newDataset);
-                    window.ChartPreventiva.update();
-                });
-            }
-        }, "json");
-
-    };
-
-    function LoadChartUHDia() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartUHDia.data.labels.push(result);
-            });
-            window.ChartUHDia.update();
-        }, "json");
-
-        var request = { "field": "uh_dia", "descricao": "U.H em Dia", "data": $("#data").val() };
-
-        $.post("@Url.Content("~/Dashboard/ChartMetricas")", request, function (obj) {
-
-            if (obj.length == 0) {
-                configChartUHDia.data.labels = [];
-                configChartUHDia.data.datasets = [];
-                window.ChartUHDia.update();
-            }
-            else
-            {
-                $.each(obj, function (indice, result) {
-
-                    var colorName = 'rgba(68, 114, 196, 1)';
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: colorName,
-                        borderColor: colorName,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartUHDia.data.datasets.push(newDataset);
-                    window.ChartUHDia.update();
-                });
-            }
-        }, "json");
-
-    };
-
-    function LoadChartNumeroOS() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartNumeroOS.data.labels.push(result);
-            });
-            window.ChartNumeroOS.update();
-        }, "json");
-
-        $.post("@Url.Content("~/Dashboard/ChartNumeroOS")", { "data": $("#data").val() }, function (obj) {
-
-            if (obj.length == 0) {
-                configChartNumeroOS.data.labels = [];
-                configChartNumeroOS.data.datasets = [];
-                window.ChartNumeroOS.update();
-            }
-            else
-            {
-                $.each(obj, function (indice, result) {
-
-                    var colorName = '';
-                    var borderColorName = '';
-
-                    switch (result.serie) {
-                        case 'QUANTIDADE OS ATENDIDA':
-                            colorName= 'rgba(34, 177, 76, 0.7)';
-                            borderColorName= 'rgba(34, 177, 76, 1)';
-                            break;
-                        case 'QUANTIDADE OS GERADA':
-                            colorName = 'rgba(63, 72, 204, 0.7)';
-                            borderColorName = 'rgba(63, 72, 204, 0.8)';
-                            break;
-                        case 'SALDO OS PENDENTE':
-                            colorName = 'rgba(255, 0, 0, 0.7)';
-                            borderColorName = 'rgba(255, 0, 0, 1)';
-                            break;
-                    }
-
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: colorName,
-                        borderColor: borderColorName,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartNumeroOS.data.datasets.push(newDataset);
-                    window.ChartNumeroOS.update();
-                });
-            }
-        }, "json");
-
-    };
-
-    function LoadChartTempoMedioAtendimento() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartTempoMedioAtendimento.data.labels.push(result);
-            });
-            window.ChartTempoMedioAtendimento.update();
-        }, "json");
-
-        $.post("@Url.Content("~/Dashboard/ChartTempoMedioAtendimento")", { "data": $("#data").val() }, function (obj) {
-
-            if (obj.length == 0) {
-                configChartTempoMedioAtendimento.data.labels = [];
-                configChartTempoMedioAtendimento.data.datasets = [];
-                window.ChartTempoMedioAtendimento.update();
-            }
-            else
-            {
-                $.each(obj, function (indice, result) {
-
-                    var colorName = colorNamesChartTempoMedioAtendimento[configChartTempoMedioAtendimento.data.datasets.length % colorNamesChartTempoMedioAtendimento.length];
-                    var newColor = window.chartColors[colorName];
-                    var borderColor = window.chartBorderColors[colorName];
-
-                    switch (result.serie) {
-                        case 'NO DIA':
-                            colorName = 'rgba(34, 177, 76, 0.7)';
-                            borderColorName = 'rgba(34, 177, 76, 0.8)';
-                            break;
-                        case '1 DIA':
-                            colorName = 'rgba(63, 72, 204, 0.7)';
-                            borderColorName = 'rgba(63, 72, 204, 0.8)';
-                            break;
-                        case '2 A 3 DIAS':
-                            colorName = 'rgba(255, 201, 14, 0.7)';
-                            borderColorName = 'rgba(255, 201, 14, 0.8)';
-                            break;
-                        case '4 A 5 DIAS':
-                            colorName = 'rgba(255, 128, 0, 0.7)';
-                            borderColorName = 'rgba(255, 128, 0, 0.8)';
-                            break;
-                        case '> 5 DIAS':
-                            colorName = 'rgba(128, 0, 128, 0.7)';
-                            borderColorName = 'rgba(128, 0, 128, 0.8)';
-                            break;
-                        case 'OS NÃO ATENDIDA':
-                            colorName = 'rgba(255, 0, 0, 0.7)';
-                            borderColorName = 'rgba(255, 0, 0, 0.8)';
-                            break;
-                    }
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: colorName,
-                        borderColor: borderColorName,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartTempoMedioAtendimento.data.datasets.push(newDataset);
-                    window.ChartTempoMedioAtendimento.update();
-                });
-            }
-        }, "json");
-
-    };
-
-    function LoadChartMediaOSColaborador() {
-
-        //Obtém eixo X
-        $.post("@Url.Content("~/Dashboard/Unidades")", { "data": $("#data").val() }, function (obj) {
-            $.each(obj, function (indice, result) {
-                configChartMediaOSColaborador.data.labels.push(result);
-            });
-            window.ChartMediaOSColaborador.update();
-        }, "json");
-
-        $.post("@Url.Content("~/Dashboard/ChartMediaOSColaborador")", { "data": $("#data").val() }, function (obj) {
-
-            if (obj.length == 0) {
-                configChartMediaOSColaborador.data.labels = [];
+                win.update();
+            }, "json");
+        }
+
+        function LoadChartPMOC()       { loadMetrica(configChartPMOC,       window.ChartPMOC,       'PMOC',       'PMOC'); }
+        function LoadChartLaudo()      { loadMetrica(configChartLaudo,      window.ChartLaudo,      'laudo',      'Laudo'); }
+        function LoadChartRotina()     { loadMetrica(configChartRotina,     window.ChartRotina,     'rotina',     'Rotina'); }
+        function LoadChartPreventiva() { loadMetrica(configChartPreventiva, window.ChartPreventiva, 'preventiva', 'Preventiva'); }
+        function LoadChartUHDia()      { loadMetrica(configChartUHDia,      window.ChartUHDia,      'uh_dia',     'U.H em Dia'); }
+
+        function LoadChartNumeroOS() {
+            loadUnidades(configChartNumeroOS, window.ChartNumeroOS);
+            $.post("@Url.Content("~/Dashboard/ChartNumeroOS")", { data: dataVal() }, function (obj) {
+                applyDatasets(configChartNumeroOS, window.ChartNumeroOS, obj, osColors);
+            }, "json");
+        }
+
+        function LoadChartTempoMedioAtendimento() {
+            loadUnidades(configChartTempoMedioAtendimento, window.ChartTempoMedioAtendimento);
+            $.post("@Url.Content("~/Dashboard/ChartTempoMedioAtendimento")", { data: dataVal() }, function (obj) {
+                applyDatasets(configChartTempoMedioAtendimento, window.ChartTempoMedioAtendimento, obj, slaColors);
+            }, "json");
+        }
+
+        function LoadChartMediaOSColaborador() {
+            loadUnidades(configChartMediaOSColaborador, window.ChartMediaOSColaborador);
+            $.post("@Url.Content("~/Dashboard/ChartMediaOSColaborador")", { data: dataVal() }, function (obj) {
                 configChartMediaOSColaborador.data.datasets = [];
-                window.ChartMediaOSColaborador.update();
-            }
-            else
-            {
-                $.each(obj, function (indice, result) {
-
-                    var colorName = colorNamesChartMediaOSColaborador[configChartMediaOSColaborador.data.datasets.length % colorNamesChartMediaOSColaborador.length];
-                    var newColor = window.chartColors[colorName];
-                    var borderColor = window.chartBorderColors[colorName];
-
-                    var newDataset = {
-                        label: result.serie,
-                        backgroundColor: newColor,
-                        borderColor: borderColor,
-                        data: [],
-                        fill: false
-                    };
-
-                    for (var index = 0; index < result.valor.length; ++index) {
-                        newDataset.data.push(result.valor[index]);
-                    }
-
-                    configChartMediaOSColaborador.data.datasets.push(newDataset);
-                    window.ChartMediaOSColaborador.update();
+                $.each(obj, function (i, r) {
+                    var c = colorNamesMediaOSColaborador[i % colorNamesMediaOSColaborador.length];
+                    configChartMediaOSColaborador.data.datasets.push({
+                        label: r.serie, data: r.valor, fill: false,
+                        backgroundColor: window.chartColors[c], borderColor: window.chartBorderColors[c]
+                    });
                 });
-            }
-        }, "json");
+                window.ChartMediaOSColaborador.update();
+            }, "json");
+        }
 
-    };
+        // ── Inicialização ─────────────────────────────────────────
+        jQuery(function () {
+            function mk(id, cfg) { return new Chart(document.getElementById(id).getContext('2d'), cfg); }
 
-    // Initialize when page loads
-    jQuery(function () {
+            window.ChartGeral                 = mk('chartGeral',                configChartGeral);
+            window.ChartPMOC                  = mk('chartPMOC',                 configChartPMOC);
+            window.ChartLaudo                 = mk('chartLaudo',                configChartLaudo);
+            window.ChartRotina                = mk('chartRotina',               configChartRotina);
+            window.ChartPreventiva            = mk('chartPreventiva',           configChartPreventiva);
+            window.ChartUHDia                 = mk('chartUHDia',                configChartUHDia);
+            window.ChartNumeroOS              = mk('chartNumeroOS',             configChartNumeroOS);
+            window.ChartTempoMedioAtendimento = mk('chartTempoMedioAtendimento',configChartTempoMedioAtendimento);
+            window.ChartMediaOSColaborador    = mk('chartMediaOSColaborador',   configChartMediaOSColaborador);
 
-        var cChartGeral = document.getElementById('chartGeral').getContext('2d');
-        window.ChartGeral = new Chart(cChartGeral, configChartGeral);
-        var cChartPMOC = document.getElementById('chartPMOC').getContext('2d');
-        window.ChartPMOC = new Chart(cChartPMOC, configChartPMOC);
-        var cChartLaudo = document.getElementById('chartLaudo').getContext('2d');
-        window.ChartLaudo = new Chart(cChartLaudo, configChartLaudo);
-        var cChartRotina = document.getElementById('chartRotina').getContext('2d');
-        window.ChartRotina = new Chart(cChartRotina, configChartRotina);
-        var cChartPreventiva = document.getElementById('chartPreventiva').getContext('2d');
-        window.ChartPreventiva = new Chart(cChartPreventiva, configChartPreventiva);
-        var cChartUHDia = document.getElementById('chartUHDia').getContext('2d');
-        window.ChartUHDia = new Chart(cChartUHDia, configChartUHDia);
-        var cChartNumeroOS = document.getElementById('chartNumeroOS').getContext('2d');
-        window.ChartNumeroOS = new Chart(cChartNumeroOS, configChartNumeroOS);
-        var cChartTempoMedioAtendimento = document.getElementById('chartTempoMedioAtendimento').getContext('2d');
-        window.ChartTempoMedioAtendimento = new Chart(cChartTempoMedioAtendimento, configChartTempoMedioAtendimento);
-        var cChartMediaOSColaborador = document.getElementById('chartMediaOSColaborador').getContext('2d');
-        window.ChartMediaOSColaborador = new Chart(cChartMediaOSColaborador, configChartMediaOSColaborador);
+            LoadChartGeral();
+            LoadChartPMOC();
+            LoadChartLaudo();
+            LoadChartRotina();
+            LoadChartPreventiva();
+            LoadChartUHDia();
+            LoadChartNumeroOS();
+            LoadChartTempoMedioAtendimento();
+            LoadChartMediaOSColaborador();
 
-        LoadChartGeral();
-        LoadChartPMOC();
-        LoadChartLaudo();
-        LoadChartRotina();
-        LoadChartPreventiva();
-        LoadChartUHDia();
-        LoadChartNumeroOS();
-        LoadChartTempoMedioAtendimento();
-        LoadChartMediaOSColaborador();
-
-        Codebase.helpers(['datepicker', 'maxlength', 'select2']);
-    });
-
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
 
     </script>
 }
-

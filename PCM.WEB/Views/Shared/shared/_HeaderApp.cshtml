@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNet.Identity
+
+<!-- Header -->
+<header id="page-header">
+
+
+    <!-- Header Content -->
+    <div class="content-header border-b">
+
+        <!-- Left Section -->
+        <div class="content-header-section">
+            <!-- Toggle Sidebar -->
+            <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+            @if (Session["app_undo_controller"] != null)
+            {
+                <a class="btn btn-circle btn-dual-secondary" data-toggle="layout" data-action="sidebar_toggle" href="@Url.Action(Session["app_undo_action"].ToString(), Session["app_undo_controller"].ToString())">
+                    <i class="si si-arrow-left"></i>
+                </a>
+            }
+            <!-- END Toggle Sidebar -->
+        </div>
+        <!-- END Left Section -->
+        <!-- Right Section -->
+        <div class="content-header-section mt-20">
+            <div class="text-right mt-5"><h5 class="text-right" href="#" id="header_right">@Session["app_header_title"].ToString().ToUpper()</h5></div>
+            <div class="text-right"><h4 class="text-right" href="#" id="header_text">@Session["app_header_subtitle"].ToString().ToUpper()</h4></div>
+        </div>
+
+    </div>
+    <!-- END Header Content -->
+
+</header>
+<!-- END Header -->
