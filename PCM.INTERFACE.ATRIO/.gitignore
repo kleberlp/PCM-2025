@@ -1,0 +1,25 @@
+# Build
+bin/
+obj/
+publish/
+
+# Secrets
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+secrets.json
+
+# Logs
+logs/
+
+# VS
+.vs/
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
