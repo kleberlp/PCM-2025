@@ -83,16 +83,140 @@
         }
 
         /* Cores de status vindas do cssClass do model */
-        tr.table-success td { background-color: #d1e7dd !important; }
-        tr.table-danger  td { background-color: #f8d7da !important; }
-        tr.table-warning td { background-color: #fff3cd !important; }
+        tr.table-success td {
+            background-color: #d1e7dd !important;
+        }
+
+        tr.table-danger td {
+            background-color: #f8d7da !important;
+        }
+
+        tr.table-warning td {
+            background-color: #fff3cd !important;
+        }
+
+        .modal-confirmacao {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1050;
+            background: rgba(0,0,0,.45);
+            align-items: center;
+            justify-content: center;
+        }
+
+            .modal-confirmacao.show {
+                display: flex;
+            }
+
+            .modal-confirmacao .modal-card {
+                background: #fff;
+                border-radius: 12px;
+                width: 92%;
+                max-width: 420px;
+                padding: 24px 20px 20px;
+                box-shadow: 0 8px 32px rgba(0,0,0,.18);
+            }
+
+            .modal-confirmacao .modal-title {
+                font-size: 1rem;
+                font-weight: 600;
+                color: #212529;
+                margin-bottom: 4px;
+            }
+
+            .modal-confirmacao .modal-asset {
+                font-size: 0.82rem;
+                color: #6c757d;
+                margin-bottom: 18px;
+                word-break: break-all;
+            }
+
+        .status-toggle {
+            display: flex;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+            .status-toggle input[type=radio] {
+                display: none;
+            }
+
+            .status-toggle label {
+                flex: 1;
+                text-align: center;
+                padding: 9px 4px;
+                font-size: 0.87rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background .15s,color .15s;
+                color: #6c757d;
+                background: #fff;
+            }
+
+        #stOk:checked ~ .lbl-ok {
+            background: #198754;
+            color: #fff;
+        }
+
+        #stNok:checked ~ .lbl-nok {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        #areaNok {
+            display: none;
+        }
+
+            #areaNok.show {
+                display: block;
+            }
+
+        #fotoPreview {
+            display: none;
+            width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-top: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+            #fotoPreview.show {
+                display: block;
+            }
+
+        .btn-foto {
+            width: 100%;
+            border: 1.5px dashed #adb5bd;
+            background: #f8f9fa;
+            color: #495057;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+            .btn-foto:hover {
+                background: #e9ecef;
+            }
+
+        #inputFoto {
+            display: none;
+        }
     </style>
 </head>
 <body class="account-body">
 
     <input type="hidden" id="codigoInventario" value="@ViewBag.codigoInventario" />
-    <input type="hidden" id="codigoUnidade"    value="@ViewBag.codigoUnidade" />
-    <input type="hidden" id="uniqueId"         value="@ViewBag.uniqueId" />
+    <input type="hidden" id="codigoUnidade" value="@ViewBag.codigoUnidade" />
+    <input type="hidden" id="uniqueId" value="@ViewBag.uniqueId" />
 
     <div class="inventory-wrapper">
 
@@ -133,8 +257,9 @@
             <table class="table table-sm table-hover table-striped mb-0" id="tbInventario">
                 <thead class="table-light sticky-top">
                     <tr>
-                        <th class="text-center" style="width:38%">Asset</th>
+                        <th class="text-center" style="width:32%">Asset</th>
                         <th>Descrição</th>
+                        <th class="text-center" style="width:18%">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,6 +270,22 @@
                             <tr class="@item.cssClass">
                                 <td class="text-center">@item.asset</td>
                                 <td>@item.descricao</td>
+                                <td class="text-center">
+                                    @if (item.statusOk == null)
+                                    {
+                                        <span></span>
+                                    }
+                                    else if (item.statusOk == true)
+                                    {
+
+                                        <span class="badge bg-success" style="font-size:.72rem">OK</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="badge bg-danger" style="font-size:.72rem" title="@item.observacao">N/OK</span>
+                                    }
+                                </td>
                             </tr>
                         }
                     }
@@ -175,6 +316,41 @@
 
     </div>
 
+    <!-- MODAL CONFIRMAÇÃO DE ATIVO -->
+    <div class="modal-confirmacao" id="modalConfirmacao">
+        <div class="modal-card">
+            <p class="modal-title">Confirmar ativo</p>
+            <p class="modal-asset" id="modalAssetCode"></p>
+
+            <div class="status-toggle">
+                <input type="radio" name="statusOk" id="stOk" value="true" checked>
+                <input type="radio" name="statusOk" id="stNok" value="false">
+                <label for="stOk" class="lbl-ok"><i class="fas fa-check me-1"></i> OK</label>
+                <label for="stNok" class="lbl-nok"><i class="fas fa-times me-1"></i> Não OK</label>
+            </div>
+
+            <div id="areaNok">
+                <div class="mb-2">
+                    <label class="form-label" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">Observação</label>
+                    <textarea id="modalObservacao" class="form-control form-control-sm" rows="2" maxlength="500" placeholder="Descreva o problema encontrado..."></textarea>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">Foto</label>
+                    <label class="btn-foto" for="inputFoto">
+                        <i class="fas fa-camera"></i> Tirar foto / selecionar imagem
+                    </label>
+                    <input type="file" id="inputFoto" accept="image/*" capture="environment">
+                    <img id="fotoPreview" src="#" alt="Preview">
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-3">
+                <button type="button" class="btn btn-outline-secondary btn-sm flex-fill" id="btnModalCancelar">Cancelar</button>
+                <button type="button" class="btn btn-primary btn-sm flex-fill" id="btnModalConfirmar">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="~/js/jquery.min.js"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/sweet-alert2/sweetalert2.min.js"></script>
@@ -183,8 +359,8 @@
     <script>
         var urlValidaAsset        = '@Url.Action("validaAssetInventory", "AtivoFixo")';
         var urlInsertAssetInventory = '@Url.Action("insertAssetInventory", "AtivoFixo")';
-        var urlLoadAssetInventory = '@Url.Action("loadAssetInventory",   "AtivoFixo")';
-        var urlLoadListApartamento = '@Url.Action("loadListApartamento",  "AtivoFixo")';
+        var urlLoadAssetInventory = '@Url.Action("loadAssetInventory", "AtivoFixo")';
+        var urlLoadListApartamento = '@Url.Action("loadListApartamento", "AtivoFixo")';
     </script>
     <script src="~/js/pages/ativoFixo/jquery.assetInventory.init.js"></script>
 

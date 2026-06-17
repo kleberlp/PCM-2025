@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PCM.WEB.OS.DAL;
 using PCM.WEB.OS.MODELS;
+using Microsoft.AspNetCore.Http;
 
 namespace PCM.WEB.OS.Controllers
 {
@@ -38,10 +39,10 @@ namespace PCM.WEB.OS.Controllers
 
             ViewBag.codigoApartamento = new SelectList(_combo.LoadCombo(storedProcedure: "sp_select_combo_cadastro_basico_apartamento", codigoEmpresa: inventory.codigoEmpresa, codigoUnidade: inventory.codigoUnidade), "codigo", "descricao", null);
 
-            var items = _ativoFixo.LoadAssetInventory(codigoInventario: codigoInventario, 
-                                                      codigoEmpresa: inventory.codigoEmpresa, 
-                                                      codigoUnidade: inventory.codigoUnidade, 
-                                                      codigoSetor: -1, 
+            var items = _ativoFixo.LoadAssetInventory(codigoInventario: codigoInventario,
+                                                      codigoEmpresa: inventory.codigoEmpresa,
+                                                      codigoUnidade: inventory.codigoUnidade,
+                                                      codigoSetor: -1,
                                                       codigoApartamento: -1);
 
             var viewModel = new AssetInventoryViewModel
@@ -58,7 +59,7 @@ namespace PCM.WEB.OS.Controllers
         {
             int empresa = HttpContext.Session.GetInt32("inv_codigoEmpresa") ?? -1;
 
-            var list = _combo.LoadCombo(storedProcedure: "sp_select_combo_cadastro_basico_apartamento_setor",codigoEmpresa: empresa,codigoUnidade: unidade);
+            var list = _combo.LoadCombo(storedProcedure: "sp_select_combo_asset_cadastro_basico_apartamento", codigoEmpresa: empresa, codigoUnidade: unidade, codigo:setor);
 
             return Json(list);
         }
@@ -76,27 +77,56 @@ namespace PCM.WEB.OS.Controllers
         }
 
         [HttpPost]
-        public JsonResult insertAssetInventory(long codigoInventario, 
-                                               int unidade, 
-                                               int setor, 
-                                               int apartamento,
-                                               string assetCode, 
-                                               bool ativoCadastrado, 
-                                               string descricaoInformada)
+        [RequestFormLimits(MultipartBodyLengthLimit = 10_000_000)]
+        public async Task<JsonResult> insertAssetInventory(long codigoInventario,
+                                                           int unidade,
+                                                           int setor,
+                                                           int apartamento,
+                                                           string assetCode,
+                                                           bool ativoCadastrado,
+                                                           string descricaoInformada,
+                                                           bool statusOk = true,
+                                                           string? observacao = null,
+                                                           IFormFile? foto = null)
         {
-        
             int empresa = HttpContext.Session.GetInt32("inv_codigoEmpresa") ?? -1;
+            string codigoUsuario = HttpContext.Session.GetString("inv_codigoUsuario") ?? "";
 
             try
             {
+                string fotoPath = string.Empty;
+
+                if (foto != null && foto.Length > 0)
+                {
+                    var uploadDir = Path.Combine("C:\\SIM\\PCM\\SITE\\IMAGE\\OS", "INVENTARIO");
+                    Directory.CreateDirectory(uploadDir);
+
+                    var ext = Path.GetExtension(foto.FileName);
+                    var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif" };
+                    ext = allowed.Contains(ext) ? ext : ".jpg";
+
+                    var fileName = $"{Guid.NewGuid():N}{ext}";
+                    var fullPath = Path.Combine(uploadDir, fileName);
+
+                    var imageService = new ImageService();
+                    using var stream = foto.OpenReadStream();
+                    await imageService.ResizeAndSaveAsync(stream, fullPath);
+
+                    fotoPath = fullPath;
+                }
+
                 _ativoFixo.InsertInventoryAsset(codigoInventario: codigoInventario,
                                                 codigoEmpresa: empresa,
                                                 codigoUnidade: unidade,
                                                 codigoSetor: setor,
                                                 codigoApartamento: apartamento,
                                                 assetCode: assetCode,
+                                                codigoUsuario: codigoUsuario,
                                                 ativoCadastrado: ativoCadastrado,
-                                                descricaoInformada: descricaoInformada);
+                                                descricaoInformada: descricaoInformada,
+                                                statusOk: statusOk,
+                                                observacao: observacao ?? string.Empty,
+                                                fotoPath: fotoPath);
 
                 return Json(new { success = true, message = "" });
             }
@@ -107,12 +137,12 @@ namespace PCM.WEB.OS.Controllers
         }
 
         [HttpPost]
-        public JsonResult loadAssetInventory(long codigoInventario, 
-                                             int unidade, 
-                                             int setor, 
-                                             int apartamento) 
+        public JsonResult loadAssetInventory(long codigoInventario,
+                                             int unidade,
+                                             int setor,
+                                             int apartamento)
         {
-        
+
             int empresa = HttpContext.Session.GetInt32("inv_codigoEmpresa") ?? -1;
 
             var items = _ativoFixo.LoadAssetInventory(codigoInventario: codigoInventario,

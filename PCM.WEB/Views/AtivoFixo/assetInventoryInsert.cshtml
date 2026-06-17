@@ -34,6 +34,7 @@
 
                     <input type="hidden" name="codigoUsuarioInput" id="codigoUsuarioInput" value="@ViewBag.usuario">
                     <input type="hidden" name="codigoEmpresa" id="codigoEmpresa" value="@ViewBag.codigoEmpresa">
+                    <input type="hidden" name="contadoresJson" id="contadoresJson" value="">
 
                     <div class="block block-rounded border">
 
@@ -62,6 +63,27 @@
                                     <input type="text" class="form-control" id="descricao" name="descricao" maxlength="255">
                                 </div>
 
+                            </div>
+
+                            <!-- CONTADORES -->
+                            <hr class="mt-10 mb-20" />
+                            <div class="form-group row mb-10">
+                                <div class="col-md-12 d-flex align-items-center justify-content-between">
+                                    <h5 class="mb-0" style="font-weight:600;">
+                                        <i class="fa fa-users mr-5 text-primary"></i> Contadores do Inventário
+                                    </h5>
+                                    <button type="button" id="btn-add-contador" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-plus mr-5"></i> Adicionar Contador
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="contadores-container">
+                                <!-- rows inseridas dinamicamente via JS -->
+                            </div>
+
+                            <div id="contadores-empty" class="text-muted text-center py-10" style="font-size:13px;">
+                                <i class="fa fa-info-circle mr-5"></i> Nenhum contador adicionado. Clique em <strong>Adicionar Contador</strong> para incluir.
                             </div>
 
                         </div>

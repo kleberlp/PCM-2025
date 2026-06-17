@@ -5,6 +5,8 @@ namespace PCM.WEB.OS.MODELS
         public string? asset { get; set; }
         public string? descricao { get; set; }
         public string? cssClass { get; set; }
+        public bool? statusOk { get; set; }
+        public string? observacao { get; set; }
     }
 
     public class AssetInventoryViewModel

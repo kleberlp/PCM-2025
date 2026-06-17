@@ -94,7 +94,11 @@ Public Class AtivoFixo
                                     ByVal codigoApartamento As Integer,
                                     ByVal assetCode As String,
                                     ByVal ativoCadastrado As Boolean,
-                                    ByVal descricaoInformada As String)
+                                    ByVal descricaoInformada As String,
+                                    ByVal codigoUsuario As String,
+                                    Optional ByVal statusOk As Boolean = True,
+                                    Optional ByVal observacao As String = "",
+                                    Optional ByVal fotoPath As String = "")
 
         Dim oSqlParameter As List(Of SqlParameter) = New List(Of SqlParameter)
 
@@ -106,8 +110,12 @@ Public Class AtivoFixo
             AddSqlParameter(oSqlParameter, "codigo_setor", SqlDbType.Int, 0, codigoSetor)
             AddSqlParameter(oSqlParameter, "codigo_apartamento", SqlDbType.Int, 0, codigoApartamento)
             AddSqlParameter(oSqlParameter, "asset_code", SqlDbType.VarChar, 50, assetCode)
+            AddSqlParameter(oSqlParameter, "codigo_usuario", SqlDbType.VarChar, 50, codigoUsuario)
             AddSqlParameter(oSqlParameter, "ativo_cadastrado", SqlDbType.Bit, 0, ativoCadastrado)
             AddSqlParameter(oSqlParameter, "descricao_informada", SqlDbType.VarChar, 250, If(descricaoInformada, ""))
+            AddSqlParameter(oSqlParameter, "status_ok", SqlDbType.Bit, 0, statusOk)
+            AddSqlParameter(oSqlParameter, "observacao", SqlDbType.VarChar, 500, If(String.IsNullOrWhiteSpace(observacao), DBNull.Value, CObj(observacao)))
+            AddSqlParameter(oSqlParameter, "foto_path", SqlDbType.VarChar, 500, If(String.IsNullOrWhiteSpace(fotoPath), DBNull.Value, CObj(fotoPath)))
 
             ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_asset_inventory_count", oSqlParameter.ToArray())
 

@@ -474,8 +474,8 @@ Public Class AtivoFixo
     Public Function InsertInventory(ByVal codigoEmpresa As Integer,
                                     ByVal codigoUnidade As Integer,
                                     ByVal descricao As String,
-                                    ByVal codigoUsuario As Integer) As defaultResponse
-
+                                    ByVal codigoUsuario As Integer,
+                                    Optional ByVal contadoresJson As String = "") As defaultResponse
 
         Dim _response As New defaultResponse
 
@@ -485,7 +485,8 @@ Public Class AtivoFixo
                 CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
                 CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario),
-                CriarParametro("descricao", SqlDbType.VarChar, descricao)
+                CriarParametro("descricao", SqlDbType.VarChar, descricao),
+                CriarParametro("contadores_json", SqlDbType.NVarChar, If(String.IsNullOrWhiteSpace(contadoresJson), DBNull.Value, CObj(contadoresJson)))
             }
 
             ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_asset_inventario", oSqlParameter)
@@ -493,10 +494,10 @@ Public Class AtivoFixo
             _response.success = True
 
         Catch SqlEx As SqlException
-            _response.success = True
+            _response.success = False
             _response.message = SqlEx.Message.ToString()
         Catch ex As Exception
-            _response.success = True
+            _response.success = False
             _response.message = ex.Message.ToString()
         End Try
 
@@ -505,7 +506,7 @@ Public Class AtivoFixo
     End Function
 
     Public Function HasInventoryOpened(ByVal codigoEmpresa As Integer,
-                                       ByVal codigoUnidade As Integer) As Integer
+                                   ByVal codigoUnidade As Integer) As Integer
 
 
         Try

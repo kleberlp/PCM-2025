@@ -70,4 +70,11 @@ namespace PCM.WEB.MODELS
         public bool fornecedor { get; set; } = false;
 
     }
+
+    public class InventarioContador
+    {
+        public string nome { get; set; } = "";
+        public string email { get; set; } = "";
+        public string celular { get; set; } = "";
+    }
 }

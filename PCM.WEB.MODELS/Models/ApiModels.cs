@@ -425,6 +425,7 @@ namespace PCM.WEB.MODELS
         public string bloco { get; set; }
         public string andar { get; set; }
         public string uh { get; set; }
+        public string poolCondominio { get; set; }
         public int codigoTipoGovernanca { get; set; }
         public string tipoGovernanca { get; set; }
         public pwaStatus statusUH { get; set; }

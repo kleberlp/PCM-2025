@@ -2896,6 +2896,7 @@ Public Class Api
                         .uh = SafeGetString(oSqlDataReader, "uh"),
                         .codigoTipoGovernanca = SafeGetLong(oSqlDataReader, "codigo_tipo_governanca"),
                         .tipoGovernanca = SafeGetString(oSqlDataReader, "tipo_governanca"),
+                        .poolCondominio = IIf(oSqlDataReader.Item("pool_condominio") = 2, "C", "P"),
                         .statusGovernanca = New pwaStatus With {
                             .codigo = oSqlDataReader.Item("status_codigo"),
                             .descricao = oSqlDataReader.Item("status_descricao"),
@@ -3245,7 +3246,7 @@ Public Class Api
                         .naoPerturbe = oSqlDataReader.Item("nao_perturbe"),
                         .dataUltimaGovernaca = oSqlDataReader.Item("data_ultima_governanca"),
                         .alertaCheckInOut = oSqlDataReader.Item("alert_checkin_out"),
-                        .poolCondominio = IIf(oSqlDataReader.Item("pool_condominio") = 2, "P", "C"),
+                        .poolCondominio = IIf(oSqlDataReader.Item("pool_condominio") = 2, "C", "P"),
                         .status = New pwaStatus With {
                             .codigo = oSqlDataReader.Item("status_codigo"),
                             .descricao = oSqlDataReader.Item("status_descricao"),

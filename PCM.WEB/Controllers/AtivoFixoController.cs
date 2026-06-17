@@ -465,7 +465,7 @@ namespace PCM.WEB.Controllers
         }
 
         [HttpPost]
-        public ActionResult assetInventoryInsert(int unidade, string descricao)
+        public ActionResult assetInventoryInsert(int unidade, string descricao, string contadoresJson)
         {
 
             defaultResponse _response = new defaultResponse();
@@ -473,7 +473,8 @@ namespace PCM.WEB.Controllers
             _ativoFixo.InsertInventory(codigoEmpresa: codigoEmpresa,
                                        codigoUnidade: unidade,
                                        descricao: descricao,
-                                       codigoUsuario: codigoUsuario);
+                                       codigoUsuario: codigoUsuario,
+                                       contadoresJson: contadoresJson);
 
             _response.success = true;
             _response.message = Resources.inventoryInsertedSuccefully;

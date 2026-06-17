@@ -7,7 +7,7 @@ $(document).ready(function () {
     // ---- Filtro: setor -> recarrega apartamentos ----
     $('#codigoSetor').on('change', function () {
         const unidade = $('#codigoUnidade').val();
-        const setor   = $(this).val() || -1;
+        const setor = $(this).val() || -1;
 
         $.post(urlLoadListApartamento, { unidade: unidade, setor: setor }, function (data) {
             const $sel = $('#codigoApartamento');
@@ -34,6 +34,38 @@ $(document).ready(function () {
             e.preventDefault();
             processBarcode();
         }
+    });
+
+    // ---- Toggle OK / Não OK no modal ----
+    $('input[name="statusOk"]').on('change', function () {
+        const isOk = $(this).val() === 'true';
+        $('#areaNok').toggleClass('show', !isOk);
+        if (isOk) {
+            $('#modalObservacao').val('');
+            $('#inputFoto').val('');
+            $('#fotoPreview').attr('src', '#').removeClass('show');
+        }
+    });
+
+    // ---- Preview da foto ----
+    $('#inputFoto').on('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $('#fotoPreview').attr('src', e.target.result).addClass('show');
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ---- Cancelar modal ----
+    $('#btnModalCancelar').on('click', function () {
+        fecharModal();
+    });
+
+    // ---- Confirmar modal ----
+    $('#btnModalConfirmar').on('click', function () {
+        confirmarRegistro();
     });
 
     // ---- Focus inicial ----
@@ -66,7 +98,9 @@ async function processBarcode() {
             cancelButtonText: 'Não'
         });
 
-        if (!confirmar.isConfirmed) {
+        // compatível com SweetAlert2 v6 (retorna bool) e v7+ (retorna objeto)
+        const confirmado = confirmar === true || (confirmar && confirmar.isConfirmed);
+        if (!confirmado) {
             $('#barcode').val('').focus();
             return;
         }
@@ -81,57 +115,111 @@ async function processBarcode() {
             cancelButtonText: 'Cancelar'
         });
 
-        if (descResult.dismiss === Swal.DismissReason.cancel || !descResult.value) {
+        const cancelado = descResult === false ||
+            (descResult && descResult.dismiss === Swal.DismissReason.cancel) ||
+            !descResult.value;
+        if (cancelado) {
             $('#barcode').val('').focus();
             return;
         }
 
-        await registrarInventario(false, descResult.value);
+        const desc = typeof descResult === 'string' ? descResult : descResult.value;
+        abrirModal(barcode, false, desc);
         return;
     }
 
-    // 2) Ativo existe — registra diretamente
-    await registrarInventario(true, null);
+    // 2) Ativo existe — abre modal de status
+    abrirModal(barcode, true, null);
 }
 
 // ============================================================
-//  Valida asset via AJAX (retorna Promise)
+//  Abre o modal de confirmação de status
+// ============================================================
+function abrirModal(barcode, ativoCadastrado, descricaoInformada) {
+    // Guarda contexto no modal via data attributes
+    $('#modalConfirmacao')
+        .data('barcode', barcode)
+        .data('ativoCadastrado', ativoCadastrado)
+        .data('descricaoInformada', descricaoInformada);
+
+    // Reset estado
+    $('#stOk').prop('checked', true);
+    $('#areaNok').removeClass('show');
+    $('#modalObservacao').val('');
+    $('#inputFoto').val('');
+    $('#fotoPreview').attr('src', '#').removeClass('show');
+    $('#modalAssetCode').text('Ativo: ' + barcode);
+
+    $('#modalConfirmacao').addClass('show');
+    $('#btnModalConfirmar').prop('disabled', false);
+}
+
+function fecharModal() {
+    $('#modalConfirmacao').removeClass('show');
+    $('#barcode').val('').focus();
+}
+
+// ============================================================
+//  Confirma e envia para o servidor
+// ============================================================
+async function confirmarRegistro() {
+    $('#btnModalConfirmar').prop('disabled', true);
+
+    const modal = $('#modalConfirmacao');
+    const barcode = modal.data('barcode');
+    const ativoCadastrado = modal.data('ativoCadastrado');
+    const descricaoInformada = modal.data('descricaoInformada') || '';
+    const statusOk = $('input[name="statusOk"]:checked').val() === 'true';
+    const observacao = statusOk ? '' : $('#modalObservacao').val().trim();
+    const fotoFile = statusOk ? null : ($('#inputFoto')[0].files[0] || null);
+
+    // Monta FormData para suportar envio de arquivo
+    const fd = new FormData();
+    fd.append('codigoInventario', $('#codigoInventario').val());
+    fd.append('unidade', $('#codigoUnidade').val());
+    fd.append('setor', $('#codigoSetor').val() || -1);
+    fd.append('apartamento', $('#codigoApartamento').val() || -1);
+    fd.append('assetCode', barcode);
+    fd.append('ativoCadastrado', ativoCadastrado);
+    fd.append('descricaoInformada', descricaoInformada);
+    fd.append('statusOk', statusOk);
+    fd.append('observacao', observacao);
+    if (fotoFile) fd.append('foto', fotoFile);
+
+    try {
+        const response = await $.ajax({
+            type: 'POST',
+            url: urlInsertAssetInventory,
+            data: fd,
+            processData: false,
+            contentType: false
+        });
+
+        if (response.success) {
+            fecharModal();
+            reloadGrid();
+        } else {
+            $('#btnModalConfirmar').prop('disabled', false);
+            Swal.fire({ title: response.message, icon: 'error' });
+        }
+    } catch (e) {
+        $('#btnModalConfirmar').prop('disabled', false);
+        Swal.fire({ title: 'Erro ao registrar ativo.', icon: 'error' });
+    }
+}
+
+// ============================================================
+//  Valida asset via AJAX
 // ============================================================
 function validarAsset(assetCode) {
     return $.ajax({
         type: 'POST',
         url: urlValidaAsset,
         data: {
-            unidade:   $('#codigoUnidade').val(),
+            unidade: $('#codigoUnidade').val(),
             assetCode: assetCode
         }
     });
-}
-
-// ============================================================
-//  Registra no inventário via AJAX
-// ============================================================
-async function registrarInventario(isValidAsset, descricao) {
-    const response = await $.ajax({
-        type: 'POST',
-        url: urlInsertAssetInventory,
-        data: {
-            codigoInventario:  $('#codigoInventario').val(),
-            unidade:           $('#codigoUnidade').val(),
-            setor:             $('#codigoSetor').val()      || -1,
-            apartamento:       $('#codigoApartamento').val() || -1,
-            assetCode:         $('#barcode').val().trim(),
-            ativoCadastrado:   isValidAsset,
-            descricaoInformada: descricao
-        }
-    });
-
-    if (response.success) {
-        $('#barcode').val('').focus();
-        reloadGrid();
-    } else {
-        Swal.fire({ title: response.message, icon: 'error' });
-    }
 }
 
 // ============================================================
@@ -143,19 +231,24 @@ function reloadGrid() {
         url: urlLoadAssetInventory,
         data: {
             codigoInventario: $('#codigoInventario').val(),
-            unidade:          $('#codigoUnidade').val(),
-            setor:            $('#codigoSetor').val()      || -1,
-            apartamento:      $('#codigoApartamento').val() || -1
+            unidade: $('#codigoUnidade').val(),
+            setor: $('#codigoSetor').val() || -1,
+            apartamento: $('#codigoApartamento').val() || -1
         },
         success: function (data) {
             const $tbody = $('#tbInventario tbody');
             $tbody.empty();
 
             (data || []).forEach(function (item) {
+                let statusBadge = '';
+                if (item.statusOk === true) statusBadge = '<span class="badge bg-success" style="font-size:.72rem">OK</span>';
+                else if (item.statusOk === false) statusBadge = '<span class="badge bg-danger"  style="font-size:.72rem" title="' + (item.observacao || '') + '">N/OK</span>';
+
                 $tbody.append(
-                    `<tr class="${item.cssClass}">
-                        <td class="text-center">${item.asset}</td>
-                        <td>${item.descricao}</td>
+                    `<tr class="${item.cssClass || ''}">
+                        <td class="text-center">${item.asset || ''}</td>
+                        <td>${item.descricao || ''}</td>
+                        <td class="text-center">${statusBadge}</td>
                     </tr>`
                 );
             });
