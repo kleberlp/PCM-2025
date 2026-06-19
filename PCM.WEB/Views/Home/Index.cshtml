@@ -235,36 +235,59 @@
             {
                 <div class="dashboard-section">
                     <div class="section-title">Resumo das Unidades - @DateTime.Now.Date.ToString("MM/yyyy")</div>
-                    <div class="block dashboard-card">
-                        <table class="table table-bordered table-striped tbl-sort" id="tb-unidades">
+                    <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                        @{
+                            var _info = ((IEnumerable<dynamic>)ViewBag.dashboardInfo).ToList();
+
+                            Func<string, string> corHex = cls => {
+                                if (cls != null && cls.Contains("bg-success")) return "#27ae60";
+                                if (cls != null && cls.Contains("bg-danger"))  return "#e74c3c";
+                                return "#f0a500";
+                            };
+
+                            // barra estilo DesempenhoUnidades: trilho cinza + fill colorido + valor à direita
+                            Func<double, string, string> barPct = (val, cls) => {
+                                var cor = corHex(cls);
+                                var w   = Math.Min(Math.Round(val * 100, 1), 100)
+                                              .ToString("0", System.Globalization.CultureInfo.InvariantCulture);
+                                var lbl = val.ToString("P2");
+                                return string.Format(
+                                    "<div style='display:flex;align-items:center;gap:6px;'>" +
+                                    "<div style='flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;'>" +
+                                    "<div style='width:{0}%;height:100%;background:{1};border-radius:3px;transition:width .4s;'></div></div>" +
+                                    "<span style='font-size:11px;font-weight:600;color:{1};white-space:nowrap;min-width:46px;text-align:right;'>{2}</span></div>",
+                                    w, cor, lbl);
+                            };
+                        }
+                        <table class="table table-striped table-sm table-bordered mb-0 tbl-sort" id="tb-unidades">
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center">Nº OS Aberto</th>
-                                    <th class="text-center">Nº OS Concluído</th>
-                                    <th class="text-center">Nº OS Pendente</th>
-                                    <th class="text-center">Laudo</th>
-                                    <th class="text-center">Preventiva</th>
-                                    <th class="text-center">Rotina</th>
-                                    <th class="text-center">PMOC</th>
-                                    <th class="text-center">UH Dia</th>
-                                    <th class="text-center">Green Planet</th>
+                                    <th class="text-center" style="width:70px;">OS Aberto</th>
+                                    <th class="text-center" style="width:85px;">OS Concluído</th>
+                                    <th class="text-center" style="width:80px;">OS Pendente</th>
+                                    <th style="min-width:130px;">Laudo</th>
+                                    <th style="min-width:130px;">Preventiva</th>
+                                    <th style="min-width:130px;">Rotina</th>
+                                    <th style="min-width:130px;">PMOC</th>
+                                    <th style="min-width:130px;">UH Dia</th>
+                                    <th style="min-width:130px;">Green Planet</th>
                                 </tr>
                             </thead>
                             <tbody id="tb-principais">
-                                @foreach (var item in ViewBag.dashboardInfo)
+                                @foreach (var item in _info)
                                 {
                                     <tr>
                                         <td>@item.unidade</td>
                                         <td class="text-center">@item.quantidadeOSGerada</td>
                                         <td class="text-center">@item.quantidadeOSAtendida</td>
                                         <td class="text-center">@item.quantidadeOSPendente</td>
-                                        <td class="text-center @item.corLaudo">@item.laudo.ToString("P2")</td>
-                                        <td class="text-center @item.corPreventiva">@item.preventiva.ToString("P2")</td>
-                                        <td class="text-center @item.corRotina">@item.rotina.ToString("P2")</td>
-                                        <td class="text-center @item.corPMOC">@item.pmoc.ToString("P2")</td>
-                                        <td class="text-center @item.corUHDia">@item.uhDia.ToString("P2")</td>
-                                        <td class="text-center @item.corGreenPlanet">@item.greenPlanet.ToString("P2")</td>
+                                        <td>@Html.Raw(barPct((double)item.laudo,       item.corLaudo.ToString()))</td>
+                                        <td>@Html.Raw(barPct((double)item.preventiva,  item.corPreventiva.ToString()))</td>
+                                        <td>@Html.Raw(barPct((double)item.rotina,      item.corRotina.ToString()))</td>
+                                        <td>@Html.Raw(barPct((double)item.pmoc,        item.corPMOC.ToString()))</td>
+                                        <td>@Html.Raw(barPct((double)item.uhDia,       item.corUHDia.ToString()))</td>
+                                        <td>@Html.Raw(barPct((double)item.greenPlanet, item.corGreenPlanet.ToString()))</td>
                                     </tr>
                                 }
                             </tbody>
@@ -431,6 +454,12 @@
     @Styles.Render("~/Content/dataTables")
     @Styles.Render("~/Content/select")
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        /* ── Resumo das Unidades ── */
+        #tb-unidades thead th { cursor: pointer; user-select: none; }
+        #tb-unidades thead th.sort-asc::after  { content: ' ↑'; }
+        #tb-unidades thead th.sort-desc::after { content: ' ↓'; }
+    </style>
 }
 
 @section Scripts {
