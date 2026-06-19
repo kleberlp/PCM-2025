@@ -328,6 +328,15 @@ body {
     flex: 1;
 }
 
+.torre-label2 {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #374151;
+    flex: 1;
+}
+
 .torre-pct {
     font-size: 20px;
     font-weight: 800;

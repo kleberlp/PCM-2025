@@ -35,47 +35,31 @@
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
                             <div class="torre-header"><i class="si si-users torre-icon text-info"></i><span class="torre-label">Equipe Manutenção</span></div>
-                            <div class="os-value text-info">@ViewBag.dashboard_info.equipe_manutencao</div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.equipe_manutencao</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">@PCM.WEB.Properties.Resources.equipamentos</span></div>
+                            <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">Máq. / Equipamentos</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_equipamento</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
                             <div class="torre-header"><i class="si si-settings torre-icon text-warning"></i><span class="torre-label">Total de OS</span></div>
-                            <div class="os-value text-warning">@ViewBag.dashboard_info.quantidade_os</div>
+                            <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
                             <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">OS Mês</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os_gerada</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Rotinas Implantadas</span></div>
+                            <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Qtd. Rotinas</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.rotinas_implantadas</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-clock torre-icon text-primary"></i><span class="torre-label">H.H. Apontado</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.hh_apontado</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
                             <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">SLA</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.os_atendimento_dia</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Preventivas Implantadas</span></div>
+                            <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Qtd. Preventivas</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.preventivas_implantadas</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-clock torre-icon text-muted"></i><span class="torre-label">H.H. Corretivas</span></div>
-                            <div class="os-value text-muted">@ViewBag.dashboard_info.hh_corretiva</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-clock torre-icon text-primary"></i><span class="torre-label">H.H. Preventivas</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.hh_preventiva</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-percent torre-icon text-warning"></i><span class="torre-label">% Preventiva H.H.T.</span></div>
-                            <div class="os-value text-warning">@ViewBag.dashboard_info.corretiva_preventiva</div>
                         </a>
                     </div>
                 </div>
@@ -84,27 +68,87 @@
             <!-- ================= RANKING ================= -->
             <div class="dashboard-section">
                 <div class="section-title">@PCM.WEB.Properties.Resources.ranking</div>
-                <div class="block dashboard-card">
-                    <table class="table table-striped" style="max-width:500px;">
-                        <thead>
-                            <tr>
-                                <th class="text-center" style="width:80px;">#</th>
-                                <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-center" style="width:120px;">@PCM.WEB.Properties.Resources.nota</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in ViewBag.ranking_unidades)
-                            {
-                                <tr>
-                                    <td class="text-center">@item.ranking</td>
-                                    <td>@item.unidade</td>
-                                    <td class="text-center">@item.nota</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                @{
+                    var rankingList = ((IEnumerable<dynamic>)ViewBag.ranking_unidades).ToList();
+                    bool rankSingle = rankingList.Count <= 15;
+
+                    // helper: ícone de troféu para top-3
+                    Func<int, string> trofeu = pos =>
+                    {
+                        if (pos == 1) return "<span title='1º lugar' style='font-size:15px;'>🥇</span>";
+                        if (pos == 2) return "<span title='2º lugar' style='font-size:15px;'>🥈</span>";
+                        if (pos == 3) return "<span title='3º lugar' style='font-size:15px;'>🥉</span>";
+                        return pos.ToString();
+                    };
+                }
+                @if (rankSingle)
+                {
+                    <!-- tabela única centralizada quando <= 15 unidades -->
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                                <table class="table table-striped table-sm mb-0 tbl-sort">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width:55px;">#</th>
+                                            <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                            <th class="text-center" style="width:70px;">@PCM.WEB.Properties.Resources.nota</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in rankingList)
+                                        {
+                                            int _pos = (int)item.ranking;
+                                            <tr class="@(_pos <= 3 ? "ranking-top" : "")">
+                                                <td class="text-center font-w600">@Html.Raw(trofeu(_pos))</td>
+                                                <td class="@(_pos <= 3 ? "font-w700" : "")">@item.unidade</td>
+                                                <td class="text-center font-w600">@item.nota</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <!-- 3 colunas quando > 15 unidades -->
+                    var rankPerCol = (int)Math.Ceiling(rankingList.Count / 3.0);
+                    var rankCol1 = rankingList.Take(rankPerCol).ToList();
+                    var rankCol2 = rankingList.Skip(rankPerCol).Take(rankPerCol).ToList();
+                    var rankCol3 = rankingList.Skip(rankPerCol * 2).ToList();
+
+                    <div class="row">
+                        @foreach (var col in new[] { rankCol1, rankCol2, rankCol3 })
+                        {
+                            <div class="col-md-4">
+                                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                                    <table class="table table-striped table-sm mb-0 tbl-sort">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" style="width:45px;">#</th>
+                                                <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                                <th class="text-center" style="width:70px;">@PCM.WEB.Properties.Resources.nota</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in col)
+                                            {
+                                                int _pos = (int)item.ranking;
+                                                <tr class="@(_pos <= 3 ? "ranking-top" : "")">
+                                                    <td class="text-center font-w600">@Html.Raw(trofeu(_pos))</td>
+                                                    <td class="@(_pos <= 3 ? "font-w700" : "")">@item.unidade</td>
+                                                    <td class="text-center font-w600">@item.nota</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
 
             <!-- ================= NOTAS ================= -->
@@ -112,46 +156,46 @@
                 <div class="section-title">Notas</div>
                 <div class="block dashboard-card">
                     <div style="overflow-x:auto;">
-                        <table class="table table-striped table-sm table-bordered">
+                        <table class="table table-striped table-sm table-bordered tbl-sort">
                             <thead>
                                 <tr>
                                     <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
                                     <th class="text-center" rowspan="2" style="width:80px;">Nota Final</th>
-                                    <th class="text-center" colspan="2">Laudo</th>
-                                    <th class="text-center" colspan="2">Preventiva</th>
-                                    <th class="text-center" colspan="2">Rotina</th>
-                                    <th class="text-center" colspan="2">PMOC</th>
-                                    <th class="text-center" colspan="2">Atendimento Dia</th>
-                                    <th class="text-center" colspan="2">U.H.</th>
-                                    <th class="text-center" colspan="2">HH NÃO Apontado</th>
-                                    <th class="text-center" colspan="2">% OS Pendente</th>
-                                    <th class="text-center" colspan="2">HH Extra</th>
-                                    <th class="text-center" colspan="2">Preventiva x Corretiva</th>
-                                    <th class="text-center" colspan="2">Green Planet</th>
+                                    <th class="text-center" colspan="2">Laudo<br /><span class="font-size-xs">@ViewBag.percentual_nota.laudo</span></th>
+                                    <th class="text-center" colspan="2">Preventiva<br /><span class="font-size-xs">@ViewBag.percentual_nota.preventiva</span></th>
+                                    <th class="text-center" colspan="2">Rotina<br /><span class="font-size-xs">@ViewBag.percentual_nota.rotina</span></th>
+                                    <th class="text-center" colspan="2">PMOC<br /><span class="font-size-xs">@ViewBag.percentual_nota.pmoc</span></th>
+                                    <th class="text-center" colspan="2">Atendimento Dia<br /><span class="font-size-xs">@ViewBag.percentual_nota.os_atendimento_dia</span></th>
+                                    <th class="text-center" colspan="2">U.H.<br /><span class="font-size-xs">@ViewBag.percentual_nota.uh_dia</span></th>
+                                    <th class="text-center" colspan="2">HH NÃO Apontado<br /><span class="font-size-xs">@ViewBag.percentual_nota.hh_nao_apontado</span></th>
+                                    <th class="text-center" colspan="2">% OS Pendente<br /><span class="font-size-xs">@ViewBag.percentual_nota.os_pendente</span></th>
+                                    <th class="text-center" colspan="2">HH Extra<br /><span class="font-size-xs">@ViewBag.percentual_nota.hh_extra</span></th>
+                                    <th class="text-center" colspan="2">Preventiva x Corretiva<br /><span class="font-size-xs">@ViewBag.percentual_nota.preventiva_corretiva</span></th>
+                                    <th class="text-center" colspan="2">Green Planet<br /><span class="font-size-xs">@ViewBag.percentual_nota.green_planet</span></th>
                                 </tr>
                                 <tr>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.laudo</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.preventiva</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.rotina</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.pmoc</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.os_atendimento_dia</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.uh_dia</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.hh_nao_apontado</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.os_pendente</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.hh_extra</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.preventiva_corretiva</th>
+                                    <th class="text-center">%</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Peso @ViewBag.percentual_nota.green_planet</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -193,156 +237,91 @@
             <!-- ================= GRÁFICO GERAL – RADAR ================= -->
             <div class="dashboard-section">
                 <div class="section-title">Gráfico Geral – Perfil por Unidade</div>
-                <div class="block dashboard-card chart-card">
-                    <div class="chart-wrapper"><canvas id="chartGeral"></canvas></div>
+                <div class="block dashboard-card">
+                    <div id="radar-filter" style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #e9ecef;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                            <button type="button" id="radar-select-all" class="btn-radar-ctrl btn-radar-primary">Marcar todas</button>
+                            <button type="button" id="radar-deselect-all" class="btn-radar-ctrl btn-radar-secondary">Desmarcar todas</button>
+                        </div>
+                        <div id="radar-checkboxes" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+                    </div>
+                    <div style="height:520px;position:relative;"><canvas id="chartGeral"></canvas></div>
                 </div>
             </div>
 
 
-            <!-- ================= PMOC (bar horizontal colorido) ================= -->
+            <!-- ================= ROTINA + PREVENTIVA ================= -->
             <div class="dashboard-section row">
-                <div class="col-md-7 d-flex flex-column">
-                    <div class="section-title">@PCM.WEB.Properties.Resources.pmoc</div>
-                    <div class="block dashboard-card chart-card flex-fill">
-                        <div class="chart-wrapper"><canvas id="chartPMOC"></canvas></div>
-                    </div>
-                </div>
-                <div class="col-md-5 d-flex flex-column">
-                    <div class="section-title">&nbsp;</div>
-                    <div class="block dashboard-card flex-fill">
-                        <table class="table table-striped table-sm table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in ViewBag.pmoc)
-                                {
-                                    <tr>
-                                        <td>@item.unidade</td>
-                                        <td class="text-center">@item.quantidade_ok</td>
-                                        <td class="text-center">@item.quantidade_pendente</td>
-                                        <td class="text-center">@item.total</td>
-                                        <td class="text-center">@item.percentual_atendido</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ================= LAUDO (bar horizontal colorido) ================= -->
-            <div class="dashboard-section row">
-                <div class="col-md-7 d-flex flex-column">
-                    <div class="section-title">@PCM.WEB.Properties.Resources.laudo</div>
-                    <div class="block dashboard-card chart-card flex-fill">
-                        <div class="chart-wrapper"><canvas id="chartLaudo"></canvas></div>
-                    </div>
-                </div>
-                <div class="col-md-5 d-flex flex-column">
-                    <div class="section-title">&nbsp;</div>
-                    <div class="block dashboard-card flex-fill">
-                        <table class="table table-striped table-sm table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in ViewBag.laudo)
-                                {
-                                    <tr>
-                                        <td>@item.unidade</td>
-                                        <td class="text-center">@item.quantidade_ok</td>
-                                        <td class="text-center">@item.quantidade_pendente</td>
-                                        <td class="text-center">@item.total</td>
-                                        <td class="text-center">@item.percentual_atendido</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ================= ROTINA (bar horizontal colorido) ================= -->
-            <div class="dashboard-section row">
-                <div class="col-md-7 d-flex flex-column">
+                <div class="col-md-6 d-flex flex-column">
                     <div class="section-title">@PCM.WEB.Properties.Resources.rotina</div>
-                    <div class="block dashboard-card chart-card flex-fill">
-                        <div class="chart-wrapper"><canvas id="chartRotina"></canvas></div>
-                    </div>
-                </div>
-                <div class="col-md-5 d-flex flex-column">
-                    <div class="section-title">&nbsp;</div>
                     <div class="block dashboard-card flex-fill">
-                        <table class="table table-striped table-sm table-bordered">
+                        <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                    <th class="text-center" style="width:55px;">OK</th>
+                                    <th class="text-center" style="width:65px;">Pend.</th>
+                                    <th class="text-center" style="width:55px;">Total</th>
+                                    <th style="min-width:140px;">% Atend.</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in ViewBag.rotina)
                                 {
+                                    var pctRotina = 0.0;
+                                    double.TryParse(item.percentual_atendido.ToString().Replace("%", "").Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out pctRotina);
+                                    var corRotina = pctRotina >= 86 ? "#22b14c" : (pctRotina >= 65 ? "#ffc90e" : "#e74c3c");
                                     <tr>
                                         <td>@item.unidade</td>
                                         <td class="text-center">@item.quantidade_ok</td>
                                         <td class="text-center">@item.quantidade_pendente</td>
                                         <td class="text-center">@item.total</td>
-                                        <td class="text-center">@item.percentual_atendido</td>
+                                        <td>
+                                            <div style="display:flex;align-items:center;gap:6px;">
+                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                    <div style="width:@(pctRotina.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corRotina;border-radius:3px;transition:width .4s;"></div>
+                                                </div>
+                                                <span style="font-size:11px;font-weight:600;color:@corRotina;white-space:nowrap;">@item.percentual_atendido</span>
+                                            </div>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-
-            <!-- ================= PREVENTIVA (bar horizontal colorido) ================= -->
-            <div class="dashboard-section row">
-                <div class="col-md-7 d-flex flex-column">
+                <div class="col-md-6 d-flex flex-column">
                     <div class="section-title">@PCM.WEB.Properties.Resources.preventiva</div>
-                    <div class="block dashboard-card chart-card flex-fill">
-                        <div class="chart-wrapper"><canvas id="chartPreventiva"></canvas></div>
-                    </div>
-                </div>
-                <div class="col-md-5 d-flex flex-column">
-                    <div class="section-title">&nbsp;</div>
                     <div class="block dashboard-card flex-fill">
-                        <table class="table table-striped table-sm table-bordered">
+                        <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                    <th class="text-center" style="width:55px;">OK</th>
+                                    <th class="text-center" style="width:65px;">Pend.</th>
+                                    <th class="text-center" style="width:55px;">Total</th>
+                                    <th style="min-width:140px;">% Atend.</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in ViewBag.preventiva)
                                 {
+                                    var pctPrev = 0.0;
+                                    double.TryParse(item.percentual_atendido.ToString().Replace("%", "").Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out pctPrev);
+                                    var corPrev = pctPrev >= 86 ? "#22b14c" : (pctPrev >= 65 ? "#ffc90e" : "#e74c3c");
                                     <tr>
                                         <td>@item.unidade</td>
                                         <td class="text-center">@item.quantidade_ok</td>
                                         <td class="text-center">@item.quantidade_pendente</td>
                                         <td class="text-center">@item.total</td>
-                                        <td class="text-center">@item.percentual_atendido</td>
+                                        <td>
+                                            <div style="display:flex;align-items:center;gap:6px;">
+                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                    <div style="width:@(pctPrev.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corPrev;border-radius:3px;transition:width .4s;"></div>
+                                                </div>
+                                                <span style="font-size:11px;font-weight:600;color:@corPrev;white-space:nowrap;">@item.percentual_atendido</span>
+                                            </div>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -351,41 +330,123 @@
                 </div>
             </div>
 
-            <!-- ================= UH EM DIA (bar horizontal colorido) ================= -->
+            <!-- ================= PMOC + LAUDO / DOCUMENTAÇÃO ================= -->
             <div class="dashboard-section row">
-                <div class="col-md-7 d-flex flex-column">
-                    <div class="section-title">@PCM.WEB.Properties.Resources.uh_em_dia</div>
-                    <div class="block dashboard-card chart-card flex-fill">
-                        <div class="chart-wrapper"><canvas id="chartUHDia"></canvas></div>
-                    </div>
-                </div>
-                <div class="col-md-5 d-flex flex-column">
-                    <div class="section-title">&nbsp;</div>
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.pmoc</div>
                     <div class="block dashboard-card flex-fill">
-                        <table class="table table-striped table-sm table-bordered">
+                        <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.qtde_ok</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.pendente</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.total</th>
-                                    <th class="text-center">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                                    <th class="text-center" style="width:55px;">OK</th>
+                                    <th class="text-center" style="width:65px;">Pend.</th>
+                                    <th class="text-center" style="width:55px;">Total</th>
+                                    <th style="min-width:140px;">% Atend.</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in ViewBag.uh_dia)
+                                @foreach (var item in ViewBag.pmoc)
                                 {
+                                    var pctPmoc = 0.0;
+                                    double.TryParse(item.percentual_atendido.ToString().Replace("%", "").Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out pctPmoc);
+                                    var corPmoc = pctPmoc >= 86 ? "#22b14c" : (pctPmoc >= 65 ? "#ffc90e" : "#e74c3c");
                                     <tr>
                                         <td>@item.unidade</td>
                                         <td class="text-center">@item.quantidade_ok</td>
                                         <td class="text-center">@item.quantidade_pendente</td>
                                         <td class="text-center">@item.total</td>
-                                        <td class="text-center">@item.percentual_atendido</td>
+                                        <td>
+                                            <div style="display:flex;align-items:center;gap:6px;">
+                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                    <div style="width:@(pctPmoc.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corPmoc;border-radius:3px;transition:width .4s;"></div>
+                                                </div>
+                                                <span style="font-size:11px;font-weight:600;color:@corPmoc;white-space:nowrap;">@item.percentual_atendido</span>
+                                            </div>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.laudo</div>
+                    <div class="block dashboard-card flex-fill">
+                        <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
+                            <thead>
+                                <tr>
+                                    <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                    <th class="text-center" style="width:55px;">OK</th>
+                                    <th class="text-center" style="width:65px;">Pend.</th>
+                                    <th class="text-center" style="width:55px;">Total</th>
+                                    <th style="min-width:140px;">% Atend.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.laudo)
+                                {
+                                    var pctLaudo = 0.0;
+                                    double.TryParse(item.percentual_atendido.ToString().Replace("%", "").Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out pctLaudo);
+                                    var corLaudo = pctLaudo >= 86 ? "#22b14c" : (pctLaudo >= 65 ? "#ffc90e" : "#e74c3c");
+                                    <tr>
+                                        <td>@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_ok</td>
+                                        <td class="text-center">@item.quantidade_pendente</td>
+                                        <td class="text-center">@item.total</td>
+                                        <td>
+                                            <div style="display:flex;align-items:center;gap:6px;">
+                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                    <div style="width:@(pctLaudo.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corLaudo;border-radius:3px;transition:width .4s;"></div>
+                                                </div>
+                                                <span style="font-size:11px;font-weight:600;color:@corLaudo;white-space:nowrap;">@item.percentual_atendido</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= UH EM DIA ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">@PCM.WEB.Properties.Resources.uh_em_dia</div>
+                <div class="block dashboard-card">
+                    <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
+                        <thead>
+                            <tr>
+                                <th>@PCM.WEB.Properties.Resources.unidade</th>
+                                <th class="text-center" style="width:70px;">OK</th>
+                                <th class="text-center" style="width:80px;">Pend.</th>
+                                <th class="text-center" style="width:70px;">Total</th>
+                                <th style="min-width:200px;">% Atend.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.uh_dia)
+                            {
+                                var pctUh = 0.0;
+                                double.TryParse(item.percentual_atendido.ToString().Replace("%", "").Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out pctUh);
+                                var corUh = pctUh >= 86 ? "#22b14c" : (pctUh >= 65 ? "#ffc90e" : "#e74c3c");
+                                <tr>
+                                    <td>@item.unidade</td>
+                                    <td class="text-center">@item.quantidade_ok</td>
+                                    <td class="text-center">@item.quantidade_pendente</td>
+                                    <td class="text-center">@item.total</td>
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:6px;">
+                                            <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                <div style="width:@(pctUh.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corUh;border-radius:3px;transition:width .4s;"></div>
+                                            </div>
+                                            <span style="font-size:11px;font-weight:600;color:@corUh;white-space:nowrap;">@item.percentual_atendido</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -394,7 +455,7 @@
                 <div class="section-title">@PCM.WEB.Properties.Resources.atendimento_ordem_servico</div>
                 <div class="block dashboard-card">
                     <div style="overflow-x:auto;">
-                        <table class="table table-striped table-sm table-bordered">
+                        <table class="table table-striped table-sm table-bordered tbl-sort">
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
@@ -429,11 +490,19 @@
                 </div>
             </div>
 
+            <!-- ================= NÚMERO DE OS's ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Número de OS's</div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper"><canvas id="chartNumeroOS"></canvas></div>
+                </div>
+            </div>
+
             <!-- ================= SLA (tabela) ================= -->
             <div class="dashboard-section">
                 <div class="section-title">SLA</div>
                 <div class="block dashboard-card">
-                    <table class="table table-striped table-sm table-bordered">
+                    <table class="table table-striped table-sm table-bordered tbl-sort">
                         <thead>
                             <tr>
                                 <th>@PCM.WEB.Properties.Resources.unidade</th>
@@ -463,27 +532,94 @@
                 </div>
             </div>
 
-            <!-- ================= NÚMERO DE OS's ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Número de OS's</div>
-                <div class="block dashboard-card chart-card">
-                    <div class="chart-wrapper"><canvas id="chartNumeroOS"></canvas></div>
-                </div>
-            </div>
-
-            <!-- ================= SLA – TEMPO MÉDIO (stacked horizontal) ================= -->
+            <!-- ================= SLA – TEMPO MÉDIO (tabela com barras inline) ================= -->
             <div class="dashboard-section">
                 <div class="section-title">SLA – Tempo Médio de Atendimento por Unidade</div>
-                <div class="block dashboard-card chart-card">
-                    <div class="chart-wrapper"><canvas id="chartTempoMedioAtendimento"></canvas></div>
-                </div>
-            </div>
-
-            <!-- ================= MÉDIA OS POR COLABORADOR ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Nº Colaborador × Média Individual de OS por Colaborador</div>
-                <div class="block dashboard-card chart-card">
-                    <div class="chart-wrapper"><canvas id="chartMediaOSColaborador"></canvas></div>
+                <div class="block dashboard-card" style="overflow-x:auto;">
+                    <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
+                                <th class="text-center" colspan="2" style="color:#22b14c;">No Dia</th>
+                                <th class="text-center" colspan="2" style="color:#3f48cc;">1 Dia</th>
+                                <th class="text-center" colspan="2" style="color:#b38f00;">2 a 3 Dias</th>
+                                <th class="text-center" colspan="2" style="color:#ff8000;">4 a 5 Dias</th>
+                                <th class="text-center" colspan="2" style="color:#800080;">&gt; 5 Dias</th>
+                                <th class="text-center" colspan="2" style="color:#e74c3c;">Não Atendidas</th>
+                                <th rowspan="2" style="min-width:160px;">Distribuição</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center" style="width:55px;color:#22b14c;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#22b14c;">%</th>
+                                <th class="text-center" style="width:55px;color:#3f48cc;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#3f48cc;">%</th>
+                                <th class="text-center" style="width:55px;color:#b38f00;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#b38f00;">%</th>
+                                <th class="text-center" style="width:55px;color:#ff8000;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#ff8000;">%</th>
+                                <th class="text-center" style="width:55px;color:#800080;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#800080;">%</th>
+                                <th class="text-center" style="width:55px;color:#e74c3c;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#e74c3c;">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.atendimento_os)
+                            {
+                                var _inv = System.Globalization.CultureInfo.InvariantCulture;
+                                var _ns = System.Globalization.NumberStyles.Any;
+                                double slaNodia = 0, sla1dia = 0, sla23 = 0, sla45 = 0, sla5mais = 0, slaNao = 0, totalOS = 0;
+                                double.TryParse(item.os_atendimento_dia.ToString().Replace("%", "").Replace(",", "."), _ns, _inv, out slaNodia);
+                                double.TryParse(item.os_atendimento_um_dia.ToString().Replace("%", "").Replace(",", "."), _ns, _inv, out sla1dia);
+                                double.TryParse(item.os_atendimento_tres_dias.ToString().Replace("%", "").Replace(",", "."), _ns, _inv, out sla23);
+                                double.TryParse(item.os_atendimento_cinco_dias.ToString().Replace("%", "").Replace(",", "."), _ns, _inv, out sla45);
+                                double.TryParse(item.os_atendimento_acima_cinco_dias.ToString().Replace("%", "").Replace(",", "."), _ns, _inv, out sla5mais);
+                                double.TryParse(item.os_nao_atendido.ToString().Replace("%", "").Replace(",", "."), _ns, _inv, out slaNao);
+                                double.TryParse(item.quantidade_os_gerada.ToString().Replace(".", "").Replace(",", "."), _ns, _inv, out totalOS);
+                                @* quantidades calculadas a partir da % × total de OS geradas *@
+                                var qNodia = (int)Math.Round(slaNodia / 100 * totalOS);
+                                var q1dia = (int)Math.Round(sla1dia / 100 * totalOS);
+                                var q23 = (int)Math.Round(sla23 / 100 * totalOS);
+                                var q45 = (int)Math.Round(sla45 / 100 * totalOS);
+                                var q5mais = (int)Math.Round(sla5mais / 100 * totalOS);
+                                var qNao = (int)Math.Round(slaNao / 100 * totalOS);
+                                @* barras proporcionais *@
+                                var slaBase = slaNodia + sla1dia + sla23 + sla45 + sla5mais + slaNao;
+                                if (slaBase == 0) { slaBase = 1; }
+                                var bNodia = Math.Round(slaNodia / slaBase * 100, 1).ToString("0.#", _inv);
+                                var b1dia = Math.Round(sla1dia / slaBase * 100, 1).ToString("0.#", _inv);
+                                var b23 = Math.Round(sla23 / slaBase * 100, 1).ToString("0.#", _inv);
+                                var b45 = Math.Round(sla45 / slaBase * 100, 1).ToString("0.#", _inv);
+                                var b5mais = Math.Round(sla5mais / slaBase * 100, 1).ToString("0.#", _inv);
+                                var bNao = Math.Round(slaNao / slaBase * 100, 1).ToString("0.#", _inv);
+                                <tr>
+                                    <td class="font-w600">@item.unidade</td>
+                                    <td class="text-center" style="color:#22b14c;">@qNodia</td>
+                                    <td class="text-center" style="font-weight:600;color:#22b14c;">@item.os_atendimento_dia</td>
+                                    <td class="text-center" style="color:#3f48cc;">@q1dia</td>
+                                    <td class="text-center" style="font-weight:600;color:#3f48cc;">@item.os_atendimento_um_dia</td>
+                                    <td class="text-center" style="color:#b38f00;">@q23</td>
+                                    <td class="text-center" style="font-weight:600;color:#b38f00;">@item.os_atendimento_tres_dias</td>
+                                    <td class="text-center" style="color:#ff8000;">@q45</td>
+                                    <td class="text-center" style="font-weight:600;color:#ff8000;">@item.os_atendimento_cinco_dias</td>
+                                    <td class="text-center" style="color:#800080;">@q5mais</td>
+                                    <td class="text-center" style="font-weight:600;color:#800080;">@item.os_atendimento_acima_cinco_dias</td>
+                                    <td class="text-center" style="color:#e74c3c;">@qNao</td>
+                                    <td class="text-center" style="font-weight:600;color:#e74c3c;">@item.os_nao_atendido</td>
+                                    <td>
+                                        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;width:100%;">
+                                            <div style="width:@bNodia%;background:#22b14c;" title="No Dia: @item.os_atendimento_dia (@qNodia OS)"></div>
+                                            <div style="width:@b1dia%;background:#3f48cc;" title="1 Dia: @item.os_atendimento_um_dia (@q1dia OS)"></div>
+                                            <div style="width:@b23%;background:#ffc90e;" title="2-3 Dias: @item.os_atendimento_tres_dias (@q23 OS)"></div>
+                                            <div style="width:@b45%;background:#ff8000;" title="4-5 Dias: @item.os_atendimento_cinco_dias (@q45 OS)"></div>
+                                            <div style="width:@b5mais%;background:#800080;" title=">5 Dias: @item.os_atendimento_acima_cinco_dias (@q5mais OS)"></div>
+                                            <div style="width:@bNao%;background:#e74c3c;" title="Não Atendidas: @item.os_nao_atendido (@qNao OS)"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -492,15 +628,13 @@
                 <div class="section-title">Apontamento - Horas</div>
                 <div class="block dashboard-card">
                     <div style="overflow-x:auto;">
-                        <table class="table table-striped table-sm table-bordered">
+                        <table class="table table-striped table-sm table-bordered tbl-sort">
                             <thead>
                                 <tr>
                                     <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" rowspan="2">Colaboradores Próprios</th>
-                                    <th class="text-center" rowspan="2">Colaboradores Terceiros</th>
+                                    <th class="text-center" colspan="2">Colaboradores</th>
                                     <th class="text-center" rowspan="2">HH Disponível</th>
-                                    <th class="text-center" rowspan="2">Falta Just.</th>
-                                    <th class="text-center" rowspan="2">Falta Ñ Just.</th>
+                                    <th class="text-center" colspan="2">Falta</th>
                                     <th class="text-center" colspan="2">HH Corretiva</th>
                                     <th class="text-center" colspan="2">HH Preventiva</th>
                                     <th class="text-center" colspan="2">HH PMOC</th>
@@ -511,6 +645,10 @@
                                     <th class="text-center" rowspan="2">H.E.</th>
                                 </tr>
                                 <tr>
+                                    <th class="text-center">Próprios</th>
+                                    <th class="text-center">Terceiros</th>
+                                    <th class="text-center">Justificada</th>
+                                    <th class="text-center">Ñ Justificada</th>
                                     <th class="text-center">Horas</th>
                                     <th class="text-center">%</th>
                                     <th class="text-center">Horas</th>
@@ -524,7 +662,9 @@
                             <tbody>
                                 @foreach (var item in ViewBag.apontamento_horas)
                                 {
-                                    <tr class="@item.css_row">
+                                    var _cssRow = Convert.ToString(item.css_row); var _skip = _cssRow.Trim() == "" ? "data-sort-skip='true'" : "";
+
+                                    <tr class="@_cssRow" @Html.Raw(_skip)>
                                         <td class="font-w600 @(item.css_row == "" ? "bg-warning-light" : "")">@item.unidade</td>
                                         <td class="text-center">@item.quantidade_colaborador_proprio</td>
                                         <td class="text-center">@item.quantidade_colaborador_terceiro</td>
@@ -551,11 +691,21 @@
                 </div>
             </div>
 
+            <!-- ================= MÉDIA OS POR COLABORADOR ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Nº Colaborador × Média Individual de OS por Colaborador</div>
+                <div class="block dashboard-card" style="overflow-x:auto;">
+                    <div id="tabelaMediaOS">
+                        <div style="text-align:center;padding:20px;color:#aaa;"><i class="fa fa-spinner fa-spin"></i> Carregando...</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ================= LAUDOS DETALHADO ================= -->
             <div class="dashboard-section">
                 <div class="section-title">@PCM.WEB.Properties.Resources.laudo</div>
                 <div class="block dashboard-card">
-                    <table class="table table-striped table-sm table-bordered">
+                    <table class="table table-striped table-sm table-bordered tbl-sort">
                         <thead>
                             <tr>
                                 <th>@PCM.WEB.Properties.Resources.laudo</th>
@@ -575,11 +725,11 @@
                                     else if (DateTime.Parse(item.data_validade) < ViewBag.data_atual)
                                     {
                                         <td class="font-w600 text-center"><span class="badge badge-danger">@item.data_validade</span></td>
- }
+                                    }
                                     else
                                     {
                                         <td class="font-w600 text-center">@item.data_validade</td>
-}
+                                    }
 
                                     @if (item.mes_1 == 0)
                                     {
@@ -652,14 +802,7 @@
             'ROTINA':     { bg: 'rgba(88,196,196,0.7)',  border: 'rgba(88,196,196,1)' },
             'U.H EM DIA': { bg: 'rgba(160,113,255,0.7)', border: 'rgba(160,113,255,1)' }
         };
-        var slaColors = {
-            'NO DIA':         { bg: 'rgba(34,177,76,0.75)',  border: 'rgba(34,177,76,1)' },
-            '1 DIA':          { bg: 'rgba(63,72,204,0.75)',  border: 'rgba(63,72,204,1)' },
-            '2 A 3 DIAS':     { bg: 'rgba(255,201,14,0.75)', border: 'rgba(255,201,14,1)' },
-            '4 A 5 DIAS':     { bg: 'rgba(255,128,0,0.75)',  border: 'rgba(255,128,0,1)' },
-            '> 5 DIAS':       { bg: 'rgba(128,0,128,0.75)',  border: 'rgba(128,0,128,1)' },
-            'OS NÃO ATENDIDA':{ bg: 'rgba(255,0,0,0.75)',    border: 'rgba(255,0,0,1)' }
-        };
+
         var osColors = {
             'QUANTIDADE OS ATENDIDA': { bg: 'rgba(34,177,76,0.75)',  border: 'rgba(34,177,76,1)' },
             'QUANTIDADE OS GERADA':   { bg: 'rgba(63,72,204,0.75)',  border: 'rgba(63,72,204,1)' },
@@ -667,12 +810,7 @@
         };
         var singleColor = 'rgba(68,114,196,0.85)';
 
-        // Cor condicional por percentual (para bar horizontal das métricas)
-        function metricaColor(pct) {
-            if (pct >= 86) return 'rgba(34,177,76,0.85)';
-            if (pct >= 65) return 'rgba(255,201,14,0.85)';
-            return 'rgba(255,0,0,0.85)';
-        }
+
 
         // ── Configurações ────────────────────────────────────────
 
@@ -686,36 +824,25 @@
                     ticks: { beginAtZero: true, min: 0, max: 100, stepSize: 20 },
                     pointLabels: { fontSize: 12 }
                 },
-                legend: { display: true, position: 'bottom' }
-            }
-        };
-
-        // BAR HORIZONTAL colorido por faixa – métricas individuais
-        function makeMetricaCfg() {
-            return {
-                type: 'horizontalBar',
-                data: { labels: [], datasets: [] },
-                options: {
-                    responsive: true, maintainAspectRatio: false, animation: false,
-                    legend: { display: false },
-                    scales: {
-                        xAxes: [{ ticks: { min: 0, max: 100, stepSize: 20 } }],
-                        yAxes: [{ ticks: { fontSize: 12 } }]
-                    },
-                    tooltips: {
-                        callbacks: {
-                            label: function(item) { return ' ' + item.xLabel.toFixed(1) + '%'; }
+                legend: { display: false },
+                tooltips: {
+                    callbacks: {
+                        title: function(items, data) {
+                            // mostra o label do eixo (LAUDO, PMOC…) em vez do valor
+                            return data.labels[items[0].index] || '';
+                        },
+                        label: function(item, data) {
+                            var ds = data.datasets[item.datasetIndex];
+                            return (ds.label || '') + ': ' + item.value;
                         }
                     }
                 }
-            };
-        }
+            }
+        };
 
-        var configChartPMOC       = makeMetricaCfg();
-        var configChartLaudo      = makeMetricaCfg();
-        var configChartRotina     = makeMetricaCfg();
-        var configChartPreventiva = makeMetricaCfg();
-        var configChartUHDia      = makeMetricaCfg();
+
+
+
 
         var configChartNumeroOS = {
             type: 'bar',
@@ -726,27 +853,10 @@
             }
         };
 
-        var configChartTempoMedioAtendimento = {
-            type: 'horizontalBar',
-            data: { labels: [], datasets: [] },
-            options: {
-                responsive: true, maintainAspectRatio: false, animation: false,
-                legend: { display: true, position: 'bottom' },
-                scales: {
-                    xAxes: [{ stacked: true, ticks: { stepSize: 10, min: 0, max: 100 } }],
-                    yAxes: [{ stacked: true, ticks: { fontSize: 12 } }]
-                }
-            }
-        };
 
-        var configChartMediaOSColaborador = {
-            type: 'horizontalBar',
-            data: { labels: [], datasets: [] },
-            options: {
-                responsive: true, maintainAspectRatio: false, animation: false,
-                legend: { display: true, position: 'bottom' }
-            }
-        };
+
+        // chartMediaOSColaborador foi substituído por tabela — var mantida por compatibilidade
+        var configChartMediaOSColaborador = { data: { labels: [], datasets: [] } };
 
         // ── Helpers ──────────────────────────────────────────────
         var dataVal = function() { return $("#filtro-data").val(); };
@@ -770,26 +880,59 @@
 
         // ── Carregamento ─────────────────────────────────────────
 
+        // ── Radar: datasets completos (todos os unidades) ────────
+        var _radarAllDatasets = [];
+        var _radarMetricas    = [];
+
+        function BuildRadarCheckboxes(unidades) {
+            var $box = $('#radar-checkboxes').empty();
+            unidades.forEach(function(nome, idx) {
+                var ds    = _radarAllDatasets[idx];
+                var color = (ds && ds.borderColor) ? ds.borderColor : '#999';
+                var id    = 'radar-cb-' + idx;
+                var $pill = $('<label>').attr('for', id).addClass('radar-pill');
+                var $dot  = $('<span>').addClass('radar-pill-dot').css('background', color);
+                var $cb   = $('<input type="checkbox">').attr({type:'checkbox', id:id})
+                                .prop('checked', true).data('idx', idx)
+                                .on('change', ApplyRadarFilter);
+                $pill.append($cb).append($dot).append(nome);
+                $box.append($pill);
+            });
+        }
+
+        function ApplyRadarFilter() {
+            var visible = [];
+            $('#radar-checkboxes input[type=checkbox]').each(function() {
+                if ($(this).prop('checked')) visible.push($(this).data('idx'));
+            });
+            configChartGeral.data.datasets = visible.map(function(i) { return _radarAllDatasets[i]; });
+            window.ChartGeral.update();
+        }
+
+        $('#radar-select-all').on('click', function() {
+            $('#radar-checkboxes input[type=checkbox]').prop('checked', true);
+            ApplyRadarFilter();
+        });
+        $('#radar-deselect-all').on('click', function() {
+            $('#radar-checkboxes input[type=checkbox]').prop('checked', false);
+            ApplyRadarFilter();
+        });
+
         function LoadChartGeral() {
-            // Radar: cada dataset = uma unidade, cada ponto = uma métrica (LAUDO, PMOC, etc.)
             $.post("@Url.Content("~/Dashboard/ChartGeral")", { data: dataVal() }, function (obj) {
                 if (!obj || !obj.length) return;
-
-                // Constrói labels de métricas e datasets por série (unidade)
-                // API retorna [{serie:"LAUDO", valor:[u1,u2,...]}, ...]
-                // Para radar precisamos transpor: labels = métricas, datasets = unidades
-                var metricas = obj.map(function(s) { return s.serie; });
+                var metricas  = obj.map(function(s) { return s.serie; });
                 var nUnidades = obj[0].valor.length;
 
-                // Busca os nomes das unidades para legenda
                 $.post("@Url.Content("~/Dashboard/Unidades")", { data: dataVal() }, function (unidades) {
+                    _radarMetricas = metricas;
+                    _radarAllDatasets = [];
                     configChartGeral.data.labels = metricas;
-                    configChartGeral.data.datasets = [];
 
                     for (var u = 0; u < nUnidades; u++) {
-                        var c = colorNamesGeral[u % colorNamesGeral.length];
+                        var c       = colorNamesGeral[u % colorNamesGeral.length];
                         var valores = obj.map(function(s) { return s.valor[u] || 0; });
-                        configChartGeral.data.datasets.push({
+                        _radarAllDatasets.push({
                             label: unidades[u] || ('Unidade ' + (u + 1)),
                             data: valores,
                             backgroundColor: window.chartColors[c].replace('0.7', '0.15'),
@@ -797,36 +940,15 @@
                             borderWidth: 2, pointRadius: 3
                         });
                     }
+
+                    BuildRadarCheckboxes(unidades);
+                    configChartGeral.data.datasets = _radarAllDatasets.slice();
                     window.ChartGeral.update();
                 }, "json");
             }, "json");
         }
 
-        function loadMetrica(cfg, win, field, descricao) {
-            $.post("@Url.Content("~/Dashboard/Unidades")", { data: dataVal() }, function (unidades) {
-                cfg.data.labels = unidades;
-                win.update();
-            }, "json");
-            $.post("@Url.Content("~/Dashboard/ChartMetricas")", { field: field, descricao: descricao, data: dataVal() }, function (obj) {
-                cfg.data.datasets = [];
-                if (!obj || !obj.length) { win.update(); return; }
-                // Cada item: {serie: "Preventiva", valor: [pct1, pct2, ...]}
-                var valores = obj[0].valor;
-                var bgs = valores.map(function(v) { return metricaColor(v); });
-                cfg.data.datasets.push({
-                    label: descricao, data: valores,
-                    backgroundColor: bgs, borderColor: bgs.map(function(c) { return c.replace('0.85','1'); }),
-                    borderWidth: 1
-                });
-                win.update();
-            }, "json");
-        }
 
-        function LoadChartPMOC()       { loadMetrica(configChartPMOC,       window.ChartPMOC,       'PMOC',       'PMOC'); }
-        function LoadChartLaudo()      { loadMetrica(configChartLaudo,      window.ChartLaudo,      'laudo',      'Laudo'); }
-        function LoadChartRotina()     { loadMetrica(configChartRotina,     window.ChartRotina,     'rotina',     'Rotina'); }
-        function LoadChartPreventiva() { loadMetrica(configChartPreventiva, window.ChartPreventiva, 'preventiva', 'Preventiva'); }
-        function LoadChartUHDia()      { loadMetrica(configChartUHDia,      window.ChartUHDia,      'uh_dia',     'U.H em Dia'); }
 
         function LoadChartNumeroOS() {
             loadUnidades(configChartNumeroOS, window.ChartNumeroOS);
@@ -835,54 +957,292 @@
             }, "json");
         }
 
-        function LoadChartTempoMedioAtendimento() {
-            loadUnidades(configChartTempoMedioAtendimento, window.ChartTempoMedioAtendimento);
-            $.post("@Url.Content("~/Dashboard/ChartTempoMedioAtendimento")", { data: dataVal() }, function (obj) {
-                applyDatasets(configChartTempoMedioAtendimento, window.ChartTempoMedioAtendimento, obj, slaColors);
-            }, "json");
-        }
+
 
         function LoadChartMediaOSColaborador() {
-            loadUnidades(configChartMediaOSColaborador, window.ChartMediaOSColaborador);
-            $.post("@Url.Content("~/Dashboard/ChartMediaOSColaborador")", { data: dataVal() }, function (obj) {
-                configChartMediaOSColaborador.data.datasets = [];
-                $.each(obj, function (i, r) {
-                    var c = colorNamesMediaOSColaborador[i % colorNamesMediaOSColaborador.length];
-                    configChartMediaOSColaborador.data.datasets.push({
-                        label: r.serie, data: r.valor, fill: false,
-                        backgroundColor: window.chartColors[c], borderColor: window.chartBorderColors[c]
-                    });
+            $.when(
+                $.post("@Url.Content("~/Dashboard/Unidades")", { data: dataVal() }),
+                $.post("@Url.Content("~/Dashboard/ChartMediaOSColaborador")", { data: dataVal() })
+            ).done(function(resUnidades, resData) {
+                var unidades = resUnidades[0];
+                var series   = resData[0];
+                if (!unidades || !series || !series.length) { $('#tabelaMediaOS').html('<p class="text-muted">Sem dados.</p>'); return; }
+
+                // espera duas séries: OS POR COLABORADOR e QUANTIDADE COLABORADOR
+                var serieOS  = series[0] || { valor: [] };
+                var serieQtd = series[1] || { valor: [] };
+                var corOS    = '#4472c4';
+                var corQtd   = '#ed7d31';
+
+                // máximos para escala das barras
+                var maxOS  = Math.max.apply(null, serieOS.valor.map(Number).filter(isFinite).concat([1]));
+                var maxQtd = Math.max.apply(null, serieQtd.valor.map(Number).filter(isFinite).concat([1]));
+
+                var html = '<table class="table table-striped table-sm table-bordered mb-0 tbl-sort">';
+                html += '<thead><tr>';
+                html += '<th>' + '@PCM.WEB.Properties.Resources.unidade' + '</th>';
+                html += '<th class="text-center" style="width:160px;color:' + corOS  + ';">' + (serieOS.serie  || 'OS por Colaborador') + '</th>';
+                html += '<th class="text-center" style="width:160px;color:' + corQtd + ';">' + (serieQtd.serie || 'Qtd. Colaborador')   + '</th>';
+                html += '<th style="min-width:200px;">Distribuição</th>';
+                html += '</tr></thead><tbody>';
+
+                unidades.forEach(function(nome, i) {
+                    var vOS  = parseFloat(serieOS.valor[i])  || 0;
+                    var vQtd = parseFloat(serieQtd.valor[i]) || 0;
+                    var pOS  = Math.round(vOS  / maxOS  * 100);
+                    var pQtd = Math.round(vQtd / maxQtd * 100);
+                    html += '<tr>';
+                    html += '<td class="font-w600">' + nome + '</td>';
+                    html += '<td class="text-center" style="font-weight:600;color:' + corOS  + ';">' + vOS  + '</td>';
+                    html += '<td class="text-center" style="font-weight:600;color:' + corQtd + ';">' + vQtd + '</td>';
+                    html += '<td>';
+                    html += '<div style="display:flex;flex-direction:column;gap:3px;padding:2px 0;">';
+                    html += '<div style="display:flex;align-items:center;gap:6px;">';
+                    html += '<div style="flex:1;background:#e9ecef;border-radius:3px;height:10px;overflow:hidden;">';
+                    html += '<div style="width:' + pOS + '%;height:100%;background:' + corOS + ';border-radius:3px;"></div></div>';
+                    html += '<span style="font-size:10px;color:' + corOS + ';min-width:30px;">' + vOS + '</span></div>';
+                    html += '<div style="display:flex;align-items:center;gap:6px;">';
+                    html += '<div style="flex:1;background:#e9ecef;border-radius:3px;height:10px;overflow:hidden;">';
+                    html += '<div style="width:' + pQtd + '%;height:100%;background:' + corQtd + ';border-radius:3px;"></div></div>';
+                    html += '<span style="font-size:10px;color:' + corQtd + ';min-width:30px;">' + vQtd + '</span></div>';
+                    html += '</div></td>';
+                    html += '</tr>';
                 });
-                window.ChartMediaOSColaborador.update();
-            }, "json");
+
+                html += '</tbody>';
+                html += '<tfoot><tr style="background:#f8f9fa;">';
+                html += '<td colspan="4" style="padding:6px 8px;">';
+                html += '<span style="display:inline-flex;align-items:center;gap:16px;">';
+                html += '<span><span style="display:inline-block;width:14px;height:10px;background:' + corOS  + ';border-radius:2px;margin-right:4px;"></span>' + (serieOS.serie  || 'OS por Colaborador') + '</span>';
+                html += '<span><span style="display:inline-block;width:14px;height:10px;background:' + corQtd + ';border-radius:2px;margin-right:4px;"></span>' + (serieQtd.serie || 'Qtd. Colaborador')   + '</span>';
+                html += '</span></td></tr></tfoot>';
+                html += '</table>';
+                $('#tabelaMediaOS').html(html);
+
+                // re-aplica sortable nas novas linhas
+                document.querySelectorAll('#tabelaMediaOS table.tbl-sort thead th').forEach(function(th) {
+                    if (parseInt(th.getAttribute('colspan') || 1) > 1) return;
+                    th.style.cursor = 'pointer'; th.style.userSelect = 'none';
+                    th.title = 'Clique para ordenar';
+                    th.addEventListener('click', function() { sortTableEl(th); });
+                });
+            });
+        }
+
+        // ── Calcula índice visual de coluna considerando rowspan/colspan ──
+        function getColumnIndex(th) {
+            var table = th.closest('table');
+            var thead = table.querySelector('thead');
+            if (!thead) return Array.from(th.parentNode.children).indexOf(th);
+            var rows = Array.from(thead.querySelectorAll('tr'));
+            var grid = [];
+            rows.forEach(function(row, r) {
+                if (!grid[r]) grid[r] = [];
+                var col = 0;
+                Array.from(row.children).forEach(function(cell) {
+                    while (grid[r][col]) col++;
+                    var cs = parseInt(cell.getAttribute('colspan') || 1);
+                    var rs = parseInt(cell.getAttribute('rowspan') || 1);
+                    for (var rr = r; rr < Math.min(r + rs, rows.length); rr++) {
+                        if (!grid[rr]) grid[rr] = [];
+                        for (var cc = col; cc < col + cs; cc++) {
+                            grid[rr][cc] = cell;
+                        }
+                    }
+                    col += cs;
+                });
+            });
+            for (var r = 0; r < grid.length; r++) {
+                for (var c = 0; c < grid[r].length; c++) {
+                    if (grid[r][c] === th) return c;
+                }
+            }
+            return -1;
+        }
+
+        // ── Ordenação de tabelas (global para reutilização) ──────
+        function sortTableEl(th) {
+            var table = th.closest('table');
+            var tbody = table.querySelector('tbody');
+            // exclui linhas marcadas como fixas (totais, cabeçalhos internos)
+            function isFixed(r) {
+                return r.hasAttribute('data-sort-skip') || !!r.querySelector('td.bg-warning-light');
+            }
+            var rows  = Array.from(tbody.querySelectorAll('tr')).filter(function(r) { return !isFixed(r); });
+            var fixed = Array.from(tbody.querySelectorAll('tr')).filter(isFixed);
+            var idx   = getColumnIndex(th);
+            if (idx < 0) return;
+            var asc   = th.dataset.sortDir !== 'asc';
+            th.dataset.sortDir = asc ? 'asc' : 'desc';
+            table.querySelectorAll('th[data-sort-dir]').forEach(function(t) {
+                if (t !== th) delete t.dataset.sortDir;
+                t.classList.remove('sort-asc','sort-desc');
+            });
+            th.classList.toggle('sort-asc', asc);
+            th.classList.toggle('sort-desc', !asc);
+            rows.sort(function(a, b) {
+                var va = a.cells[idx] ? a.cells[idx].innerText.trim() : '';
+                var vb = b.cells[idx] ? b.cells[idx].innerText.trim() : '';
+                // formato BR: remove separador de milhar (.) depois troca decimal (,) por (.)
+                function brFloat(s) { return parseFloat(s.replace(/[^0-9,.\-]/g,'').replace(/\./g,'').replace(',','.')); }
+                var na = brFloat(va), nb = brFloat(vb);
+                if (!isNaN(na) && !isNaN(nb)) return asc ? na - nb : nb - na;
+                return asc ? va.localeCompare(vb,'pt') : vb.localeCompare(va,'pt');
+            });
+            // reinsere linhas ordenáveis e depois as fixas no final
+            rows.forEach(function(r) { tbody.appendChild(r); });
+            fixed.forEach(function(r) { tbody.appendChild(r); });
         }
 
         // ── Inicialização ─────────────────────────────────────────
         jQuery(function () {
             function mk(id, cfg) { return new Chart(document.getElementById(id).getContext('2d'), cfg); }
 
-            window.ChartGeral                 = mk('chartGeral',                configChartGeral);
-            window.ChartPMOC                  = mk('chartPMOC',                 configChartPMOC);
-            window.ChartLaudo                 = mk('chartLaudo',                configChartLaudo);
-            window.ChartRotina                = mk('chartRotina',               configChartRotina);
-            window.ChartPreventiva            = mk('chartPreventiva',           configChartPreventiva);
-            window.ChartUHDia                 = mk('chartUHDia',                configChartUHDia);
-            window.ChartNumeroOS              = mk('chartNumeroOS',             configChartNumeroOS);
-            window.ChartTempoMedioAtendimento = mk('chartTempoMedioAtendimento',configChartTempoMedioAtendimento);
-            window.ChartMediaOSColaborador    = mk('chartMediaOSColaborador',   configChartMediaOSColaborador);
+            window.ChartGeral    = mk('chartGeral',    configChartGeral);
+            window.ChartNumeroOS = mk('chartNumeroOS',  configChartNumeroOS);
 
             LoadChartGeral();
-            LoadChartPMOC();
-            LoadChartLaudo();
-            LoadChartRotina();
-            LoadChartPreventiva();
-            LoadChartUHDia();
             LoadChartNumeroOS();
-            LoadChartTempoMedioAtendimento();
             LoadChartMediaOSColaborador();
 
-            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+            // ── Ordenação de tabelas estáticas ────────────────────
+            function initSortable() {
+                document.querySelectorAll('table.tbl-sort thead th').forEach(function(th) {
+                    // colspan > 1 agrupa colunas → não ordenável
+                    if (parseInt(th.getAttribute('colspan') || 1) > 1) return;
+                    th.style.cursor = 'pointer';
+                    th.style.userSelect = 'none';
+                    th.title = 'Clique para ordenar';
+                    th.addEventListener('click', function() { sortTableEl(th); });
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSortable);
+            } else {
+                initSortable();
+            }
         });
 
     </script>
+
+    <style>
+        /* ── Top-3 ranking ──────────────────────────────── */
+        tr.ranking-top td { background: #fffbea !important; }
+        tr.ranking-top .font-w700 { color: #7a5800; }
+
+        th.sort-asc::after {
+            content: ' ▲';
+            font-size: 10px;
+            opacity: .7;
+        }
+
+        th.sort-desc::after {
+            content: ' ▼';
+            font-size: 10px;
+            opacity: .7;
+        }
+
+        table.tbl-sort thead th:not([colspan]):not([rowspan]):hover {
+            background: rgba(0,0,0,.04);
+        }
+
+        /* ── Filtro radar: pills ─────────────────────────────── */
+        .radar-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px 3px 6px;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            font-size: 11px;
+            cursor: pointer;
+            user-select: none;
+            background: #fff;
+            transition: background .15s, border-color .15s;
+            white-space: nowrap;
+        }
+        .radar-pill:hover { background: #f0f4ff; border-color: #aac4f0; }
+        .radar-pill input[type=checkbox] { display: none; }
+        .radar-pill:has(input:not(:checked)) { opacity: .45; }
+        .radar-pill-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ── Botões Marcar/Desmarcar ─────────────────────────── */
+        .btn-radar-ctrl {
+            padding: 3px 12px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: 1px solid;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+        .btn-radar-primary  { color: #007bff; border-color: #007bff; background: #fff; }
+        .btn-radar-primary:hover  { background: #007bff; color: #fff; }
+        .btn-radar-secondary { color: #6c757d; border-color: #6c757d; background: #fff; }
+        .btn-radar-secondary:hover { background: #6c757d; color: #fff; }
+
+        /* ── IMPRESSÃO ───────────────────────────────────────── */
+        @@page {
+            size: A4 landscape;
+            margin: 8mm 10mm;
+        }
+
+        @@media print {
+            /* força cores exatas (barras, badges) */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+            /* oculta elementos de navegação e interação */
+            #sidebar, #header-navbar, .navbar, nav,
+            #radar-filter, .btn-radar-ctrl,
+            button[onclick*="print"], .float-right,
+            .no-print { display: none !important; }
+
+            /* container ocupa 100% sem offset da sidebar */
+            body, #main-container, .content {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
+            }
+            #main-container { padding-left: 0 !important; }
+
+            /* cards sem sombra */
+            .block, .dashboard-card {
+                box-shadow: none !important;
+                border: 1px solid #dee2e6 !important;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* espaçamento entre seções */
+            .dashboard-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 12px !important;
+            }
+
+            /* gráficos em landscape cabem melhor em 300px */
+            [style*="height:520px"] { height: 300px !important; }
+            #chartNumeroOS          { max-height: 260px !important; }
+
+            /* tabelas compactas */
+            table          { font-size: 8.5px !important; }
+            th, td         { padding: 2px 4px !important; }
+            .section-title { font-size: 10px !important; font-weight: 700; padding: 3px 8px !important; }
+
+            /* layout de colunas preservado */
+            .row       { display: flex !important; flex-wrap: wrap !important; }
+            .col-md-4  { width: 33.33% !important; flex: 0 0 33.33% !important; }
+            .col-md-6  { width: 50%    !important; flex: 0 0 50%    !important; }
+
+            /* tabela dinâmica de OS colaborador */
+            #tabelaMediaOS table { break-inside: auto; }
+        }
+    </style>
 }
