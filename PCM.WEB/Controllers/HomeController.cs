@@ -1511,6 +1511,20 @@ namespace PCM.WEB.Controllers
                                                                         iCodigoTipoOrdemServico: 6,
                                                                         bRotina: false);
 
+                int _unidadeAtual = Convert.ToInt32(Session["codigo_unidade"].ToString());
+                var _dashAtual = oDashboard.DashboardAtualData(
+                    iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                    sData: data,
+                    iCodigoUnidade: _unidadeAtual);
+                ViewBag.metrica_laudo      = _dashAtual.metrica_laudo;
+                ViewBag.metrica_preventiva = _dashAtual.metrica_preventiva;
+                ViewBag.metrica_pmoc       = _dashAtual.metrica_pmoc;
+                ViewBag.metrica_rotina     = _dashAtual.metrica_rotina;
+                ViewBag.metrica_uh         = _dashAtual.metrica_uh;
+                ViewBag.notas_unidades     = _dashAtual.notas_unidades;
+                ViewBag.percentual_nota    = _dashAtual.percentual_nota;
+
+                ViewBag.ShowDateFilter = true;
 
                 return View();
             }
@@ -1521,6 +1535,8 @@ namespace PCM.WEB.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DashboardAtual(int unidade, string data = "")
         {
+            data = (data == "") ? new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).ToShortDateString() : data;
+
             if (@Session["empresa"] == null)
             {
                 return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
@@ -1553,6 +1569,20 @@ namespace PCM.WEB.Controllers
                                                                         iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
                                                                         iCodigoTipoOrdemServico: 6,
                                                                         bRotina: false);
+
+                var _dashAtualPost = oDashboard.DashboardAtualData(
+                    iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                    sData: data,
+                    iCodigoUnidade: unidade);
+                ViewBag.metrica_laudo      = _dashAtualPost.metrica_laudo;
+                ViewBag.metrica_preventiva = _dashAtualPost.metrica_preventiva;
+                ViewBag.metrica_pmoc       = _dashAtualPost.metrica_pmoc;
+                ViewBag.metrica_rotina     = _dashAtualPost.metrica_rotina;
+                ViewBag.metrica_uh         = _dashAtualPost.metrica_uh;
+                ViewBag.notas_unidades     = _dashAtualPost.notas_unidades;
+                ViewBag.percentual_nota    = _dashAtualPost.percentual_nota;
+
+                ViewBag.ShowDateFilter = true;
 
                 return View();
             }
@@ -1651,6 +1681,8 @@ namespace PCM.WEB.Controllers
                                                                         iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
                                                                         iCodigoTipoOrdemServico: 6,
                                                                         bRotina: false);
+
+                ViewBag.ShowDateFilter = true;
 
                 return View();
             }

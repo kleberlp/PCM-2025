@@ -90,7 +90,7 @@ namespace PCM.WEB.Controllers
         //JSON: /MANUTENÇÃO - ABERTO x CONCLUÍDO/
         public JsonResult ChartManutencaoAbertoConcluido(int unidade, string data_inicio = "", string data_termino = "", bool qualidade = false)
         {
-            data_inicio = (data_inicio == "") ? System.DateTime.Now.AddDays(-7).ToShortDateString() : data_inicio;
+            data_inicio = (data_inicio == "") ? System.DateTime.Now.AddMonths(-1).ToShortDateString() : data_inicio;
             data_termino = (data_termino == "") ? System.DateTime.Now.ToShortDateString() : data_termino;
 
             return Json(oRelatorio.ChartManutencaoAbertoConcluido(iCodigoEmpresa: Convert.ToInt16(Session["empresa"].ToString()),

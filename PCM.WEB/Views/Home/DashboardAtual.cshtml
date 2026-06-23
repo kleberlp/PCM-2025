@@ -6,18 +6,8 @@
         {
             @Html.AntiForgeryToken()
 
-            <!-- ================= FILTRO DATA ================= -->
-            <div class="dashboard-section">
-                <div class="block dashboard-card">
-                    <div class="row align-items-end">
-                        <div class="col-sm-12 col-md-3">
-                            <label>@PCM.WEB.Properties.Resources.data</label>
-                            @Html.DropDownList("data", null, null, new { @class = "form-control font-w600", id = "filtro-data" })
-                        </div>
-                        <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
-                    </div>
-                </div>
-            </div>
+            <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
+            <input type="hidden" name="data" id="hidden-data" value="" />
 
             if (Session["codigo_unidade"].ToString() != "-1")
             {
@@ -40,7 +30,7 @@
                             <div class="os-value text-info">@ViewBag.dashboard_info.equipe_manutencao</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">@PCM.WEB.Properties.Resources.equipamentos</span></div>
+                            <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">Máq. / Equip.</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_equipamento</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
@@ -52,7 +42,7 @@
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os_gerada</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Rotinas Implantadas</span></div>
+                            <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Qtd. Rotinas</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.rotinas_implantadas</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
@@ -64,7 +54,7 @@
                             <div class="os-value text-primary">@ViewBag.dashboard_info.os_atendimento_dia</div>
                         </a>
                         <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Preventivas Implantadas</span></div>
+                            <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Qtd. Preventivas</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.preventivas_implantadas</div>
                         </a>
                     </div>
@@ -93,6 +83,128 @@
                             </a>
                         }
                     </div>
+                </div>
+            </div>
+
+            <!-- ================= MÉTRICAS POR ATIVIDADE ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Métricas por Atividade</div>
+                @{
+                    var _mLaudo  = ViewBag.metrica_laudo      != null ? ((IEnumerable<dynamic>)ViewBag.metrica_laudo).Cast<dynamic>().FirstOrDefault()      : null;
+                    var _mPrev   = ViewBag.metrica_preventiva != null ? ((IEnumerable<dynamic>)ViewBag.metrica_preventiva).Cast<dynamic>().FirstOrDefault() : null;
+                    var _mPmoc   = ViewBag.metrica_pmoc       != null ? ((IEnumerable<dynamic>)ViewBag.metrica_pmoc).Cast<dynamic>().FirstOrDefault()       : null;
+                    var _mRotina = ViewBag.metrica_rotina     != null ? ((IEnumerable<dynamic>)ViewBag.metrica_rotina).Cast<dynamic>().FirstOrDefault()     : null;
+                    var _mUh     = ViewBag.metrica_uh         != null ? ((IEnumerable<dynamic>)ViewBag.metrica_uh).Cast<dynamic>().FirstOrDefault()         : null;
+                    var _nota    = ViewBag.notas_unidades     != null ? ((IEnumerable<dynamic>)ViewBag.notas_unidades).Cast<dynamic>().FirstOrDefault()     : null;
+                    var _pnota   = ViewBag.percentual_nota;
+                    var NA = "N/A";
+
+                    var _linhas1 = new[]
+                    {
+                        new { label="Laudo / Documentação", ok = _mLaudo  != null ? (string)_mLaudo.quantidade_ok.ToString()       : NA, pend = _mLaudo  != null ? (string)_mLaudo.quantidade_pendente.ToString()  : NA, total = _mLaudo  != null ? (string)_mLaudo.total.ToString()  : NA, pct = _nota != null ? (string)_nota.laudo.ToString()      : "", peso = _pnota != null ? (string)_pnota.laudo.ToString()      : "", notaKey = "laudo_peso" },
+                        new { label="Preventiva",           ok = _mPrev   != null ? (string)_mPrev.quantidade_ok.ToString()        : NA, pend = _mPrev   != null ? (string)_mPrev.quantidade_pendente.ToString()   : NA, total = _mPrev   != null ? (string)_mPrev.total.ToString()   : NA, pct = _nota != null ? (string)_nota.preventiva.ToString() : "", peso = _pnota != null ? (string)_pnota.preventiva.ToString() : "", notaKey = "preventiva_peso" },
+                        new { label="PMOC",                 ok = _mPmoc   != null ? (string)_mPmoc.quantidade_ok.ToString()        : NA, pend = _mPmoc   != null ? (string)_mPmoc.quantidade_pendente.ToString()   : NA, total = _mPmoc   != null ? (string)_mPmoc.total.ToString()   : NA, pct = _nota != null ? (string)_nota.pmoc.ToString()       : "", peso = _pnota != null ? (string)_pnota.pmoc.ToString()       : "", notaKey = "pmoc_peso" },
+                        new { label="Rotina",               ok = _mRotina != null ? (string)_mRotina.quantidade_ok.ToString()      : NA, pend = _mRotina != null ? (string)_mRotina.quantidade_pendente.ToString() : NA, total = _mRotina != null ? (string)_mRotina.total.ToString() : NA, pct = _nota != null ? (string)_nota.rotina.ToString()      : "", peso = _pnota != null ? (string)_pnota.rotina.ToString()      : "", notaKey = "rotina_peso" },
+                        new { label="UH. em Dia",           ok = _mUh     != null ? (string)_mUh.quantidade_ok.ToString()          : NA, pend = _mUh     != null ? (string)_mUh.quantidade_pendente.ToString()     : NA, total = _mUh     != null ? (string)_mUh.total.ToString()     : NA, pct = _nota != null ? (string)_nota.uh_dia.ToString()      : "", peso = _pnota != null ? (string)_pnota.uh_dia.ToString()      : "", notaKey = "uh_dia_peso" },
+                    };
+
+                    var _linhas2 = new[]
+                    {
+                        new { label="Atend. no Dia",    pct = _nota != null ? (string)_nota.os_atendimento_dia.ToString()    : "", peso = _pnota != null ? (string)_pnota.os_atendimento_dia.ToString()    : "", notaKey = "os_atendimento_dia_peso" },
+                        new { label="HH Não Apontado",  pct = _nota != null ? (string)_nota.hh_nao_apontado.ToString()       : "", peso = _pnota != null ? (string)_pnota.hh_nao_apontado.ToString()       : "", notaKey = "hh_nao_apontado_peso" },
+                        new { label="% OS Pendente",    pct = _nota != null ? (string)_nota.os_pendente.ToString()            : "", peso = _pnota != null ? (string)_pnota.os_pendente.ToString()            : "", notaKey = "os_pendente_peso" },
+                        new { label="HH Extra",         pct = _nota != null ? (string)_nota.hh_extra.ToString()               : "", peso = _pnota != null ? (string)_pnota.hh_extra.ToString()               : "", notaKey = "hh_extra_peso" },
+                        new { label="Prev. x Corretiva",pct = _nota != null ? (string)_nota.preventiva_corretiva.ToString()   : "", peso = _pnota != null ? (string)_pnota.preventiva_corretiva.ToString()   : "", notaKey = "preventiva_corretiva_peso" },
+                        new { label="Green Planet",     pct = _nota != null ? (string)_nota.green_planet.ToString()           : "", peso = _pnota != null ? (string)_pnota.green_planet.ToString()           : "", notaKey = "green_planet_peso" },
+                    };
+                }
+                <!-- Bloco 1: com OK / Pend. / Total -->
+                <div class="block dashboard-card" style="padding:0;overflow:hidden;margin-bottom:8px;">
+                    <table class="table table-striped table-sm table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Atividade</th>
+                                <th class="text-center" style="width:55px;">OK</th>
+                                <th class="text-center" style="width:60px;">Pend.</th>
+                                <th class="text-center" style="width:60px;">Total</th>
+                                <th style="min-width:180px;">% Atendido</th>
+                                <th class="text-center" style="width:75px;">Peso</th>
+                                <th class="text-center" style="width:75px;">Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var linha in _linhas1)
+                            {
+                                var _pctVal = 0.0;
+                                double.TryParse(linha.pct.Replace("%","").Replace(",","."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out _pctVal);
+                                var _cor = _pctVal >= 86 ? "#22b14c" : (_pctVal >= 65 ? "#ffc90e" : "#e74c3c");
+                                var _w   = Math.Min((int)_pctVal, 100).ToString();
+                                string _nf = "";
+                                if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { _nf = _prop.GetValue((object)_nota).ToString() ?? ""; } }
+                                <tr>
+                                    <td class="font-w600">@linha.label</td>
+                                    <td class="text-center">@linha.ok</td>
+                                    <td class="text-center">@linha.pend</td>
+                                    <td class="text-center">@linha.total</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(linha.pct))
+                                        {
+                                            <div style="display:flex;align-items:center;gap:6px;">
+                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                    <div style="width:@(_w)%;height:100%;background:@_cor;border-radius:3px;transition:width .4s;"></div>
+                                                </div>
+                                                <span style="font-size:11px;font-weight:600;color:@_cor;white-space:nowrap;min-width:52px;text-align:right;">@linha.pct</span>
+                                            </div>
+                                        }
+                                        else { <span class="text-muted" style="font-size:11px;">Sem dados</span> }
+                                    </td>
+                                    <td class="text-center text-muted" style="font-size:12px;">@linha.peso</td>
+                                    <td class="text-center font-w600" style="color:#2c3e50;">@_nf</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Bloco 2: sem OK / Pend. / Total -->
+                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                    <table class="table table-striped table-sm table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Atividade</th>
+                                <th style="min-width:180px;">% Atendido</th>
+                                <th class="text-center" style="width:75px;">Peso</th>
+                                <th class="text-center" style="width:75px;">Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var linha in _linhas2)
+                            {
+                                var _pctVal = 0.0;
+                                double.TryParse(linha.pct.Replace("%","").Replace(",","."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out _pctVal);
+                                var _cor = _pctVal >= 86 ? "#22b14c" : (_pctVal >= 65 ? "#ffc90e" : "#e74c3c");
+                                var _w   = Math.Min((int)_pctVal, 100).ToString();
+                                string _nf = "";
+                                if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { _nf = _prop.GetValue((object)_nota).ToString() ?? ""; } }
+                                <tr>
+                                    <td class="font-w600">@linha.label</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(linha.pct))
+                                        {
+                                            <div style="display:flex;align-items:center;gap:6px;">
+                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                    <div style="width:@(_w)%;height:100%;background:@_cor;border-radius:3px;transition:width .4s;"></div>
+                                                </div>
+                                                <span style="font-size:11px;font-weight:600;color:@_cor;white-space:nowrap;min-width:52px;text-align:right;">@linha.pct</span>
+                                            </div>
+                                        }
+                                        else { <span class="text-muted" style="font-size:11px;">Sem dados</span> }
+                                    </td>
+                                    <td class="text-center text-muted" style="font-size:12px;">@linha.peso</td>
+                                    <td class="text-center font-w600" style="color:#2c3e50;">@_nf</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -321,7 +433,9 @@
                             if (!data.labels.length) return [];
                             return data.labels.map(function(label, i) {
                                 var ds  = data.datasets[0];
-                                var val = ds && ds.data[i] != null ? ds.data[i].toFixed(1) + '%' : '0%';
+                                var raw = ds && ds.data[i] != null ? ds.data[i] : 0;
+                                var num = parseFloat(String(raw).replace('%','').replace(',','.')) || 0;
+                                var val = num.toFixed(1) + '%';
                                 var bg  = ds && ds.backgroundColor ? ds.backgroundColor[i] : '#ccc';
                                 return { text: label + '  ' + val, fillStyle: bg, strokeStyle: bg, lineWidth: 0, index: i };
                             });
@@ -330,8 +444,9 @@
                     tooltips: {
                         callbacks: {
                             label: function(item, data) {
-                                var val = data.datasets[0].data[item.index];
-                                return ' ' + data.labels[item.index] + ': ' + (val != null ? val.toFixed(1) : 0) + '%';
+                                var raw = data.datasets[0].data[item.index];
+                                var num = parseFloat(String(raw).replace('%','').replace(',','.')) || 0;
+                                return ' ' + data.labels[item.index] + ': ' + num.toFixed(1) + '%';
                             }
                         }
                     }
@@ -381,19 +496,30 @@
             'Não atendida': { bg: 'rgba(128,0,128,0.75)',  border: 'rgba(128,0,128,1)' }
         };
 
-        // ── Submit ao mudar data (passa unidade do header) ───────
+        // ── Submit ao mudar data ─────────────────────────────────
         $(function () {
-            $("#filtro-data").change(function () {
+            $(document).on("change", "#filtro-data", function () {
                 var unidadeHeader = $("#header-unidade").val();
                 if (unidadeHeader) $("#hidden-unidade").val(unidadeHeader);
+                $("#hidden-data").val($(this).val());
                 $("#form").submit();
             });
         });
 
+        // ── Navegação ao trocar unidade no header ────────────────
+        window.onUnidadeChange = function (unidade) {
+            var data = $("#filtro-data").val() || "";
+            if (String(unidade) === "-1") {
+                window.location.href = "@Url.Action("DesempenhoUnidades", "Home")" + (data ? "?data=" + encodeURIComponent(data) : "");
+            } else {
+                window.location.href = "@Url.Action("DashboardAtual", "Home")" + (data ? "?data=" + encodeURIComponent(data) : "");
+            }
+        };
+
         // ── Carregamento dos gráficos ────────────────────────────
 
         function LoadChartEvolucaoMensal() {
-            $.post("@Url.Content("~/Dashboard/DataMonth")", { "data": $("#filtro-data").val() }, function (obj) {
+            $.post("@Url.Content("~/Dashboard/DataMonth")", { "unidade": $("#header-unidade").val(), "data": $("#filtro-data").val() }, function (obj) {
                 configEvolucaoMensal.data.labels = obj;
                 window.EvolucaoMensal.update();
             }, "json");
@@ -419,15 +545,16 @@
                 var tendLabels  = [], tendDatasets = [];
 
                 // Monta eixo X da tendência a partir do primeiro conjunto de valores
-                $.post("@Url.Content("~/Dashboard/DataMonth")", { "data": $("#filtro-data").val() }, function (months) {
+                $.post("@Url.Content("~/Dashboard/DataMonth")", { "unidade": $("#header-unidade").val(), "data": $("#filtro-data").val() }, function (months) {
                     tendLabels = months;
 
                     $.each(obj, function (i, r) {
                         var c = slaColors[r.serie] || { bg: 'rgba(150,150,150,0.7)', border: '#999' };
 
-                        // Doughnut: último valor de cada série
+                        // Doughnut: último valor de cada série (converte string "90,04%" → número)
                         donutLabels.push(r.serie);
-                        donutData.push(r.valor.length ? r.valor[r.valor.length - 1] : 0);
+                        var lastVal = r.valor.length ? r.valor[r.valor.length - 1] : 0;
+                        donutData.push(parseFloat(String(lastVal).replace('%','').replace(',','.')) || 0);
                         donutBg.push(c.bg);
 
                         // Tendência: série completa
@@ -451,7 +578,7 @@
         }
 
         function LoadChartEvolucaoHH() {
-            $.post("@Url.Content("~/Dashboard/DataMonth")", { "data": $("#filtro-data").val() }, function (obj) {
+            $.post("@Url.Content("~/Dashboard/DataMonth")", { "unidade": $("#header-unidade").val(), "data": $("#filtro-data").val() }, function (obj) {
                 configEvolucaoHH.data.labels = obj;
                 window.EvolucaoHH.update();
             }, "json");
@@ -500,13 +627,16 @@
             window.EvolucaoHH     = new Chart(document.getElementById('chartEvolucaoHH').getContext('2d'),         configEvolucaoHH);
             window.EvolucaoPMOC   = new Chart(document.getElementById('chartEvolucaoPMOC').getContext('2d'),       configEvolucaoPMOC);
 
+            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+        });
+
+        // Aguarda o header carregar o código numérico da unidade antes dos POSTs
+        window.onHeaderReady = function () {
             LoadChartEvolucaoMensal();
             LoadChartSLA();
             LoadChartEvolucaoHH();
             LoadChartEvolucaoPMOC();
-
-            Codebase.helpers(['datepicker', 'maxlength', 'select2']);
-        });
+        };
 
     </script>
 }

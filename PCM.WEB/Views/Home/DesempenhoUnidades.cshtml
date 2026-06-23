@@ -6,18 +6,7 @@
         {
             @Html.AntiForgeryToken()
 
-            <!-- ================= FILTRO DATA ================= -->
-            <div class="dashboard-section">
-                <div class="block dashboard-card">
-                    <div class="row align-items-end">
-                        <div class="col-sm-12 col-md-3">
-                            <label>@PCM.WEB.Properties.Resources.data</label>
-                            @Html.DropDownList("data", null, null, new { @class = "form-control font-w600", id = "filtro-data" })
-                        </div>
-                        <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
-                    </div>
-                </div>
-            </div>
+            <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
 
             <!-- ================= KPIs – VISÃO GERAL ================= -->
             <div class="dashboard-section">
@@ -782,14 +771,24 @@
 
     <script>
 
-        // ── Submit ao mudar data (passa unidade do header) ───────
+        // ── Submit ao mudar data ─────────────────────────────────
         $(function () {
-            $("#filtro-data").change(function () {
+            $(document).on("change", "#filtro-data", function () {
                 var unidadeHeader = $("#header-unidade").val();
                 if (unidadeHeader) $("#hidden-unidade").val(unidadeHeader);
                 $("#form").submit();
             });
         });
+
+        // ── Navegação ao trocar unidade no header ────────────────
+        window.onUnidadeChange = function (unidade) {
+            var data = $("#filtro-data").val() || "";
+            if (String(unidade) === "-1") {
+                window.location.href = "@Url.Action("DesempenhoUnidades", "Home")" + (data ? "?data=" + encodeURIComponent(data) : "");
+            } else {
+                window.location.href = "@Url.Action("DashboardAtual", "Home")" + (data ? "?data=" + encodeURIComponent(data) : "");
+            }
+        };
 
         // ── Cores ─────────────────────────────────────────────────
         var colorNamesGeral             = Object.keys(window.chartColors);

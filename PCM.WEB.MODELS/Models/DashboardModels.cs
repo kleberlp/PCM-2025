@@ -119,6 +119,17 @@ namespace PCM.WEB.MODELS
         public string percentual_atendido { get; set; }
     }
 
+    public class DashboardAtualData
+    {
+        public List<MetricaUnidades> metrica_laudo      { get; set; } = new List<MetricaUnidades>();
+        public List<MetricaUnidades> metrica_preventiva { get; set; } = new List<MetricaUnidades>();
+        public List<MetricaUnidades> metrica_pmoc       { get; set; } = new List<MetricaUnidades>();
+        public List<MetricaUnidades> metrica_rotina     { get; set; } = new List<MetricaUnidades>();
+        public List<MetricaUnidades> metrica_uh         { get; set; } = new List<MetricaUnidades>();
+        public List<NotasUnidades>   notas_unidades     { get; set; } = new List<NotasUnidades>();
+        public PercentualNota        percentual_nota     { get; set; } = new PercentualNota();
+    }
+
     public class AtendimentoOrdemServico
     {
         public string unidade { get; set; }

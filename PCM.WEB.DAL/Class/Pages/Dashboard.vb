@@ -851,14 +851,15 @@ Public Class Dashboard
     End Function
 
     Public Function NotasUnidades(ByVal iCodigoEmpresa As Integer,
-                                  ByVal sData As String) As List(Of MODELS.NotasUnidades)
+                                  ByVal sData As String,
+                                  Optional ByVal iCodigoUnidade As Integer? = Nothing) As List(Of MODELS.NotasUnidades)
 
         Try
 
             'Váriaveis Locais
             Dim oReturn As New List(Of MODELS.NotasUnidades)
             Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(1) As SqlParameter
+            Dim oSqlParameter(2) As SqlParameter
             Dim i As Integer = 0
 
             'Seta Parametros - Código Empresa
@@ -873,7 +874,14 @@ Public Class Dashboard
             oSqlParameter(i).ParameterName = "data"
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.Date
-            oSqlParameter(i).Value = sData
+            oSqlParameter(i).Value = sData : i += 1
+
+            'Seta Parametros - Código Unidade (opcional)
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_unidade"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = If(iCodigoUnidade.HasValue, CObj(iCodigoUnidade.Value), DBNull.Value)
 
             'Executa Query
             oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_dashboard_notas_unidades", oSqlParameter)
@@ -882,30 +890,30 @@ Public Class Dashboard
 
                 Dim oInfo As New NotasUnidades
 
-                oInfo.unidade = oSqlDataReader("unidade")
-                oInfo.nota_final = oSqlDataReader("nota_final")
-                oInfo.laudo = oSqlDataReader("laudo")
-                oInfo.laudo_peso = oSqlDataReader("laudo_peso")
-                oInfo.preventiva = oSqlDataReader("preventiva")
-                oInfo.preventiva_peso = oSqlDataReader("preventiva_peso")
-                oInfo.rotina = oSqlDataReader("rotina")
-                oInfo.rotina_peso = oSqlDataReader("rotina_peso")
-                oInfo.pmoc = oSqlDataReader("pmoc")
-                oInfo.pmoc_peso = oSqlDataReader("pmoc_peso")
-                oInfo.os_atendimento_dia = oSqlDataReader("os_atendimento_dia")
-                oInfo.os_atendimento_dia_peso = oSqlDataReader("os_atendimento_dia_peso")
-                oInfo.uh_dia = oSqlDataReader("uh_dia")
-                oInfo.uh_dia_peso = oSqlDataReader("uh_dia_peso")
-                oInfo.hh_nao_apontado = oSqlDataReader("hh_nao_apontado")
-                oInfo.hh_nao_apontado_peso = oSqlDataReader("hh_nao_apontado_peso")
-                oInfo.os_pendente = oSqlDataReader("os_pendente")
-                oInfo.os_pendente_peso = oSqlDataReader("os_pendente_peso")
-                oInfo.hh_extra = oSqlDataReader("hh_extra")
-                oInfo.hh_extra_peso = oSqlDataReader("hh_extra_peso")
-                oInfo.preventiva_corretiva = oSqlDataReader("preventiva_corretiva")
-                oInfo.preventiva_corretiva_peso = oSqlDataReader("preventiva_corretiva_peso")
-                oInfo.green_planet = oSqlDataReader("green_planet")
-                oInfo.green_planet_peso = oSqlDataReader("green_planet_peso")
+                oInfo.unidade = If(IsDBNull(oSqlDataReader("unidade")), "", oSqlDataReader("unidade"))
+                oInfo.nota_final = If(IsDBNull(oSqlDataReader("nota_final")), "", oSqlDataReader("nota_final"))
+                oInfo.laudo = If(IsDBNull(oSqlDataReader("laudo")), "", oSqlDataReader("laudo"))
+                oInfo.laudo_peso = If(IsDBNull(oSqlDataReader("laudo_peso")), "", oSqlDataReader("laudo_peso"))
+                oInfo.preventiva = If(IsDBNull(oSqlDataReader("preventiva")), "", oSqlDataReader("preventiva"))
+                oInfo.preventiva_peso = If(IsDBNull(oSqlDataReader("preventiva_peso")), "", oSqlDataReader("preventiva_peso"))
+                oInfo.rotina = If(IsDBNull(oSqlDataReader("rotina")), "", oSqlDataReader("rotina"))
+                oInfo.rotina_peso = If(IsDBNull(oSqlDataReader("rotina_peso")), "", oSqlDataReader("rotina_peso"))
+                oInfo.pmoc = If(IsDBNull(oSqlDataReader("pmoc")), "", oSqlDataReader("pmoc"))
+                oInfo.pmoc_peso = If(IsDBNull(oSqlDataReader("pmoc_peso")), "", oSqlDataReader("pmoc_peso"))
+                oInfo.os_atendimento_dia = If(IsDBNull(oSqlDataReader("os_atendimento_dia")), "", oSqlDataReader("os_atendimento_dia"))
+                oInfo.os_atendimento_dia_peso = If(IsDBNull(oSqlDataReader("os_atendimento_dia_peso")), "", oSqlDataReader("os_atendimento_dia_peso"))
+                oInfo.uh_dia = If(IsDBNull(oSqlDataReader("uh_dia")), "", oSqlDataReader("uh_dia"))
+                oInfo.uh_dia_peso = If(IsDBNull(oSqlDataReader("uh_dia_peso")), "", oSqlDataReader("uh_dia_peso"))
+                oInfo.hh_nao_apontado = If(IsDBNull(oSqlDataReader("hh_nao_apontado")), "", oSqlDataReader("hh_nao_apontado"))
+                oInfo.hh_nao_apontado_peso = If(IsDBNull(oSqlDataReader("hh_nao_apontado_peso")), "", oSqlDataReader("hh_nao_apontado_peso"))
+                oInfo.os_pendente = If(IsDBNull(oSqlDataReader("os_pendente")), "", oSqlDataReader("os_pendente"))
+                oInfo.os_pendente_peso = If(IsDBNull(oSqlDataReader("os_pendente_peso")), "", oSqlDataReader("os_pendente_peso"))
+                oInfo.hh_extra = If(IsDBNull(oSqlDataReader("hh_extra")), "", oSqlDataReader("hh_extra"))
+                oInfo.hh_extra_peso = If(IsDBNull(oSqlDataReader("hh_extra_peso")), "", oSqlDataReader("hh_extra_peso"))
+                oInfo.preventiva_corretiva = If(IsDBNull(oSqlDataReader("preventiva_corretiva")), "", oSqlDataReader("preventiva_corretiva"))
+                oInfo.preventiva_corretiva_peso = If(IsDBNull(oSqlDataReader("preventiva_corretiva_peso")), "", oSqlDataReader("preventiva_corretiva_peso"))
+                oInfo.green_planet = If(IsDBNull(oSqlDataReader("green_planet")), "", oSqlDataReader("green_planet"))
+                oInfo.green_planet_peso = If(IsDBNull(oSqlDataReader("green_planet_peso")), "", oSqlDataReader("green_planet_peso"))
 
                 oReturn.Add(oInfo)
 
@@ -927,14 +935,15 @@ Public Class Dashboard
 
     Public Function MetricaUnidades(ByVal iCodigoEmpresa As Integer,
                                     ByVal sData As String,
-                                    ByVal sField As String) As List(Of MODELS.MetricaUnidades)
+                                    ByVal sField As String,
+                                    Optional ByVal iCodigoUnidade As Integer? = Nothing) As List(Of MODELS.MetricaUnidades)
 
         Try
 
             'Váriaveis Locais
             Dim oReturn As New List(Of MODELS.MetricaUnidades)
             Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(2) As SqlParameter
+            Dim oSqlParameter(3) As SqlParameter
             Dim i As Integer = 0
 
             'Seta Parametros - Código Empresa
@@ -957,7 +966,14 @@ Public Class Dashboard
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.VarChar
             oSqlParameter(i).Size = 50
-            oSqlParameter(i).Value = sField
+            oSqlParameter(i).Value = sField : i += 1
+
+            'Seta Parametros - Código Unidade (opcional)
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_unidade"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = If(iCodigoUnidade.HasValue, CObj(iCodigoUnidade.Value), DBNull.Value)
 
             'Executa Query
             oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_dashboard_metrica_unidades", oSqlParameter)
@@ -980,6 +996,117 @@ Public Class Dashboard
             If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
 
             'Retorno da Função
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Function DashboardAtualData(ByVal iCodigoEmpresa As Integer,
+                                       ByVal sData As String,
+                                       Optional ByVal iCodigoUnidade As Integer? = Nothing) As MODELS.DashboardAtualData
+
+        Try
+
+            Dim oReturn As New MODELS.DashboardAtualData
+            Dim oSqlDataReader As SqlDataReader
+            Dim oSqlParameter(2) As SqlParameter
+            Dim i As Integer = 0
+
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_empresa"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
+
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "data"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Date
+            oSqlParameter(i).Value = sData : i += 1
+
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_unidade"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = If(iCodigoUnidade.HasValue, CObj(iCodigoUnidade.Value), DBNull.Value)
+
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_dashboard_atual", oSqlParameter)
+
+            ' --- RS1: Métricas (campo identifica qual atividade) ---
+            While oSqlDataReader.Read
+                Dim oM As New MODELS.MetricaUnidades
+                oM.unidade = If(IsDBNull(oSqlDataReader("unidade")), "", oSqlDataReader("unidade"))
+                oM.quantidade_ok = If(IsDBNull(oSqlDataReader("quantidade_ok")), 0, CInt(oSqlDataReader("quantidade_ok")))
+                oM.quantidade_pendente = If(IsDBNull(oSqlDataReader("quantidade_pendente")), 0, CInt(oSqlDataReader("quantidade_pendente")))
+                oM.total = If(IsDBNull(oSqlDataReader("total")), 0, CInt(oSqlDataReader("total")))
+                oM.percentual_atendido = If(IsDBNull(oSqlDataReader("percentual_atendido")), "", oSqlDataReader("percentual_atendido"))
+                Dim campo As String = If(IsDBNull(oSqlDataReader("campo")), "", oSqlDataReader("campo").ToString())
+                Select Case campo
+                    Case "laudo" : oReturn.metrica_laudo.Add(oM)
+                    Case "preventiva" : oReturn.metrica_preventiva.Add(oM)
+                    Case "pmoc" : oReturn.metrica_pmoc.Add(oM)
+                    Case "rotina" : oReturn.metrica_rotina.Add(oM)
+                    Case "uh_dia" : oReturn.metrica_uh.Add(oM)
+                End Select
+            End While
+
+            ' --- RS2: Notas ---
+            oSqlDataReader.NextResult()
+            While oSqlDataReader.Read
+                Dim oNota As New MODELS.NotasUnidades
+                Dim rd As SqlDataReader = oSqlDataReader
+                oNota.unidade = If(IsDBNull(rd("unidade")), "", rd("unidade"))
+                oNota.nota_final = If(IsDBNull(rd("nota_final")), "", rd("nota_final"))
+                oNota.laudo = If(IsDBNull(rd("laudo")), "", rd("laudo"))
+                oNota.laudo_peso = If(IsDBNull(rd("laudo_peso")), "", rd("laudo_peso"))
+                oNota.preventiva = If(IsDBNull(rd("preventiva")), "", rd("preventiva"))
+                oNota.preventiva_peso = If(IsDBNull(rd("preventiva_peso")), "", rd("preventiva_peso"))
+                oNota.rotina = If(IsDBNull(rd("rotina")), "", rd("rotina"))
+                oNota.rotina_peso = If(IsDBNull(rd("rotina_peso")), "", rd("rotina_peso"))
+                oNota.pmoc = If(IsDBNull(rd("pmoc")), "", rd("pmoc"))
+                oNota.pmoc_peso = If(IsDBNull(rd("pmoc_peso")), "", rd("pmoc_peso"))
+                oNota.os_atendimento_dia = If(IsDBNull(rd("os_atendimento_dia")), "", rd("os_atendimento_dia"))
+                oNota.os_atendimento_dia_peso = If(IsDBNull(rd("os_atendimento_dia_peso")), "", rd("os_atendimento_dia_peso"))
+                oNota.uh_dia = If(IsDBNull(rd("uh_dia")), "", rd("uh_dia"))
+                oNota.uh_dia_peso = If(IsDBNull(rd("uh_dia_peso")), "", rd("uh_dia_peso"))
+                oNota.hh_nao_apontado = If(IsDBNull(rd("hh_nao_apontado")), "", rd("hh_nao_apontado"))
+                oNota.hh_nao_apontado_peso = If(IsDBNull(rd("hh_nao_apontado_peso")), "", rd("hh_nao_apontado_peso"))
+                oNota.os_pendente = If(IsDBNull(rd("os_pendente")), "", rd("os_pendente"))
+                oNota.os_pendente_peso = If(IsDBNull(rd("os_pendente_peso")), "", rd("os_pendente_peso"))
+                oNota.hh_extra = If(IsDBNull(rd("hh_extra")), "", rd("hh_extra"))
+                oNota.hh_extra_peso = If(IsDBNull(rd("hh_extra_peso")), "", rd("hh_extra_peso"))
+                oNota.preventiva_corretiva = If(IsDBNull(rd("preventiva_corretiva")), "", rd("preventiva_corretiva"))
+                oNota.preventiva_corretiva_peso = If(IsDBNull(rd("preventiva_corretiva_peso")), "", rd("preventiva_corretiva_peso"))
+                oNota.green_planet = If(IsDBNull(rd("green_planet")), "", rd("green_planet").ToString())
+                oNota.green_planet_peso = If(IsDBNull(rd("green_planet_peso")), "", rd("green_planet_peso").ToString())
+                oReturn.notas_unidades.Add(oNota)
+            End While
+
+            ' --- RS3: Percentual Nota ---
+            oSqlDataReader.NextResult()
+            If oSqlDataReader.Read Then
+                Dim oP As New MODELS.PercentualNota
+                oP.laudo = If(IsDBNull(oSqlDataReader("laudo")), "", oSqlDataReader("laudo"))
+                oP.preventiva = If(IsDBNull(oSqlDataReader("preventiva")), "", oSqlDataReader("preventiva"))
+                oP.rotina = If(IsDBNull(oSqlDataReader("rotina")), "", oSqlDataReader("rotina"))
+                oP.pmoc = If(IsDBNull(oSqlDataReader("pmoc")), "", oSqlDataReader("pmoc"))
+                oP.uh_dia = If(IsDBNull(oSqlDataReader("uh_dia")), "", oSqlDataReader("uh_dia"))
+                oP.os_atendimento_dia = If(IsDBNull(oSqlDataReader("os_atendimento_dia")), "", oSqlDataReader("os_atendimento_dia"))
+                oP.hh_nao_apontado = If(IsDBNull(oSqlDataReader("hh_nao_apontado")), "", oSqlDataReader("hh_nao_apontado"))
+                oP.os_pendente = If(IsDBNull(oSqlDataReader("os_pendente")), "", oSqlDataReader("os_pendente"))
+                oP.hh_extra = If(IsDBNull(oSqlDataReader("hh_extra")), "", oSqlDataReader("hh_extra"))
+                oP.preventiva_corretiva = If(IsDBNull(oSqlDataReader("preventiva_corretiva")), "", oSqlDataReader("preventiva_corretiva"))
+                oP.green_planet = If(IsDBNull(oSqlDataReader("green_planet")), "", oSqlDataReader("green_planet"))
+                oReturn.percentual_nota = oP
+            End If
+
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+
             Return oReturn
 
         Catch SqlEx As SqlException
@@ -1088,26 +1215,26 @@ Public Class Dashboard
 
                 Dim oInfo As New ApontamentoHoras
 
-                oInfo.unidade = oSqlDataReader.Item("unidade")
-                oInfo.quantidade_colaborador_proprio = oSqlDataReader.Item("quantidade_colaborador_proprio")
-                oInfo.quantidade_colaborador_terceiro = oSqlDataReader.Item("quantidade_colaborador_terceiro")
-                oInfo.hh_disponivel = oSqlDataReader.Item("hh_disponivel")
-                oInfo.faltas_justificadas = oSqlDataReader.Item("faltas_justificadas")
-                oInfo.faltas_nao_justificadas = oSqlDataReader.Item("faltas_nao_justificadas")
-                oInfo.horas_corretivas = oSqlDataReader.Item("horas_corretivas")
-                oInfo.percentual_horas_corretivas = oSqlDataReader.Item("percentual_horas_corretivas")
-                oInfo.horas_preventivas = oSqlDataReader.Item("horas_preventivas")
-                oInfo.percentual_horas_preventivas = oSqlDataReader.Item("percentual_horas_preventivas")
-                oInfo.horas_pmoc = oSqlDataReader.Item("horas_pmoc")
-                oInfo.percentual_horas_pmoc = oSqlDataReader.Item("percentual_horas_pmoc")
-                oInfo.horas_uh_dia = oSqlDataReader.Item("horas_uh")
-                oInfo.percentual_horas_uh_dia = oSqlDataReader.Item("percentual_horas_uh")
-                oInfo.total_apontamento = oSqlDataReader.Item("total_apontado")
-                oInfo.saldo_hh_disponivel = oSqlDataReader.Item("saldo_hh_disponivel")
-                oInfo.css_saldo_hh_disponivel = oSqlDataReader.Item("css_saldo_hh_disponivel")
-                oInfo.percentual_ociosidade = oSqlDataReader.Item("percentual_ociosidade")
-                oInfo.hora_extra = oSqlDataReader.Item("hora_extra")
-                oInfo.css_row = oSqlDataReader.Item("css_row")
+                oInfo.unidade = If(IsDBNull(oSqlDataReader.Item("unidade")), "", oSqlDataReader.Item("unidade"))
+                oInfo.quantidade_colaborador_proprio = If(IsDBNull(oSqlDataReader.Item("quantidade_colaborador_proprio")), "0", oSqlDataReader.Item("quantidade_colaborador_proprio"))
+                oInfo.quantidade_colaborador_terceiro = If(IsDBNull(oSqlDataReader.Item("quantidade_colaborador_terceiro")), "0", oSqlDataReader.Item("quantidade_colaborador_terceiro"))
+                oInfo.hh_disponivel = If(IsDBNull(oSqlDataReader.Item("hh_disponivel")), "0", oSqlDataReader.Item("hh_disponivel"))
+                oInfo.faltas_justificadas = If(IsDBNull(oSqlDataReader.Item("faltas_justificadas")), "0", oSqlDataReader.Item("faltas_justificadas"))
+                oInfo.faltas_nao_justificadas = If(IsDBNull(oSqlDataReader.Item("faltas_nao_justificadas")), "0", oSqlDataReader.Item("faltas_nao_justificadas"))
+                oInfo.horas_corretivas = If(IsDBNull(oSqlDataReader.Item("horas_corretivas")), "0", oSqlDataReader.Item("horas_corretivas"))
+                oInfo.percentual_horas_corretivas = If(IsDBNull(oSqlDataReader.Item("percentual_horas_corretivas")), "0", oSqlDataReader.Item("percentual_horas_corretivas"))
+                oInfo.horas_preventivas = If(IsDBNull(oSqlDataReader.Item("horas_preventivas")), "0", oSqlDataReader.Item("horas_preventivas"))
+                oInfo.percentual_horas_preventivas = If(IsDBNull(oSqlDataReader.Item("percentual_horas_preventivas")), "0", oSqlDataReader.Item("percentual_horas_preventivas"))
+                oInfo.horas_pmoc = If(IsDBNull(oSqlDataReader.Item("horas_pmoc")), "0", oSqlDataReader.Item("horas_pmoc"))
+                oInfo.percentual_horas_pmoc = If(IsDBNull(oSqlDataReader.Item("percentual_horas_pmoc")), "0", oSqlDataReader.Item("percentual_horas_pmoc"))
+                oInfo.horas_uh_dia = If(IsDBNull(oSqlDataReader.Item("horas_uh")), "0", oSqlDataReader.Item("horas_uh"))
+                oInfo.percentual_horas_uh_dia = If(IsDBNull(oSqlDataReader.Item("percentual_horas_uh")), "0", oSqlDataReader.Item("percentual_horas_uh"))
+                oInfo.total_apontamento = If(IsDBNull(oSqlDataReader.Item("total_apontado")), "0", oSqlDataReader.Item("total_apontado"))
+                oInfo.saldo_hh_disponivel = If(IsDBNull(oSqlDataReader.Item("saldo_hh_disponivel")), "0", oSqlDataReader.Item("saldo_hh_disponivel"))
+                oInfo.css_saldo_hh_disponivel = If(IsDBNull(oSqlDataReader.Item("css_saldo_hh_disponivel")), "", oSqlDataReader.Item("css_saldo_hh_disponivel"))
+                oInfo.percentual_ociosidade = If(IsDBNull(oSqlDataReader.Item("percentual_ociosidade")), "0", oSqlDataReader.Item("percentual_ociosidade"))
+                oInfo.hora_extra = If(IsDBNull(oSqlDataReader.Item("hora_extra")), "0", oSqlDataReader.Item("hora_extra"))
+                oInfo.css_row = If(IsDBNull(oSqlDataReader.Item("css_row")), "", oSqlDataReader.Item("css_row"))
 
                 oReturn.Add(oInfo)
 
@@ -1978,7 +2105,7 @@ Public Class Dashboard
     Public Function QualidadePlanoAcaoJustificativaUnidade(ByVal iCodigoEmpresa As Integer,
                                                            ByVal iCodigoUnidade As Integer,
                                                            ByVal sData As String) As List(Of MODELS.QualidadePlanoAcaoJustificativaUnidade)
-         
+
         Try
 
             'Váriaveis Locais

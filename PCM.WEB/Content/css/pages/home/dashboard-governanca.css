@@ -329,7 +329,7 @@ body {
 }
 
 .torre-label2 {
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .05em;
@@ -386,9 +386,15 @@ body {
     gap: 4px !important;
 }
 
+
+.text-newOS {
+    color: #6c757d !important;
+}
+
+
 /* Número grande de OS */
 .os-value {
-    font-size: 32px;
+    font-size: 25px;
     font-weight: 800;
     line-height: 1;
     letter-spacing: -1px;

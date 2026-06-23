@@ -23,49 +23,49 @@
                             <a href="@Url.Action("OrdemServicoInsert", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.ordem_servico</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.ordem_servico</span>
                                 </div>
-                                <div class="os-value text-primary">NOVA</div>
+                                <div class="os-value text-newOS">NOVA</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_atrasada</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_atrasada</span>
                                 </div>
                                 <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_atrasada_condo" id="quantidade_atrasada_condo">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-warning"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_pendente</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente</span>
                                 </div>
                                 <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_condo" id="quantidade_pendente_condo">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-info"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_vinculada</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_vinculada</span>
                                 </div>
                                 <div class="os-value text-info" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_condo" id="quantidade_vinculada_condo">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-primary"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_andamento</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_andamento</span>
                                 </div>
                                 <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_condo" id="quantidade_andamento_condo">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-check-circle torre-icon text-earth"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_realizada</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_realizada</span>
                                 </div>
                                 <div class="os-value text-earth" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_concluida_condo" id="quantidade_realizada_condo">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 0, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-clock-o torre-icon text-muted"></i>
-                                    <span class="torre-label2">Backlog</span>
+                                    <span class="torre-label2 text-muted">Backlog</span>
                                 </div>
                                 <div class="os-value text-muted" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_backlog_condo" id="quantidade_backlog_condo">0</div>
                             </a>
@@ -83,7 +83,7 @@
                                     <i class="fa fa-gear torre-icon text-danger"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.ordem_servico</span>
                                 </div>
-                                <div class="os-value text-primary">NOVA</div>
+                                <div class="os-value text-newOS">NOVA</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
@@ -139,49 +139,49 @@
                             <a href="@Url.Action("OrdemServicoInsert", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.ordem_servico</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.ordem_servico</span>
                                 </div>
-                                <div class="os-value text-primary">NOVA</div>
+                                <div class="os-value text-newOS">NOVA</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_atrasada</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_atrasada</span>
                                 </div>
                                 <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_atrasada_pool" id="quantidade_atrasada_pool">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-warning"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_pendente</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente</span>
                                 </div>
                                 <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-info"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_vinculada</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_vinculada</span>
                                 </div>
                                 <div class="os-value text-info" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_pool" id="quantidade_vinculada_pool">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-primary"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_andamento</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_andamento</span>
                                 </div>
                                 <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_pool" id="quantidade_andamento_pool">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-check-circle torre-icon text-earth"></i>
-                                    <span class="torre-label2">@PCM.WEB.Properties.Resources.quantidade_realizada</span>
+                                    <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_realizada</span>
                                 </div>
                                 <div class="os-value text-earth" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_concluida_pool" id="quantidade_realizada_pool">0</div>
                             </a>
                             <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 0, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
                                 <div class="torre-header">
                                     <i class="fa fa-clock-o torre-icon text-muted"></i>
-                                    <span class="torre-label2">Backlog</span>
+                                    <span class="torre-label2 text-muted">Backlog</span>
                                 </div>
                                 <div class="os-value text-muted" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_backlog_pool" id="quantidade_backlog_pool">0</div>
                             </a>
@@ -231,7 +231,7 @@
             }
 
             <!-- ================= RESUMO DAS UNIDADES (multi-unidade) ================= -->
-            if (@Session["codigo_unidade"].ToString() == "-1")
+            if (Session["codigo_unidade"].ToString() == "-1")
             {
                 <div class="dashboard-section">
                     <div class="section-title">Resumo das Unidades - @DateTime.Now.Date.ToString("MM/yyyy")</div>
