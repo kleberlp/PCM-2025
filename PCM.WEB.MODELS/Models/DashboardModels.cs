@@ -93,6 +93,16 @@ namespace PCM.WEB.MODELS
         public string preventiva_corretiva_peso { get; set; }
         public string green_planet { get; set; }
         public string green_planet_peso { get; set; }
+        public string atend_ok { get; set; }
+        public string atend_pend { get; set; }
+        public string atend_total { get; set; }
+        public string gp_ok { get; set; }
+        public string gp_pend { get; set; }
+        public string gp_total { get; set; }
+        public string hh_nao_apontado_realizado { get; set; }
+        public string os_pendente_realizado { get; set; }
+        public string hh_extra_realizado { get; set; }
+        public string prev_corretiva_realizado { get; set; }
     }
 
     public class PercentualNota

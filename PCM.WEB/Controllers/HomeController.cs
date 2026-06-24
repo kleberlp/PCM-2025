@@ -1516,13 +1516,21 @@ namespace PCM.WEB.Controllers
                     iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                     sData: data,
                     iCodigoUnidade: _unidadeAtual);
-                ViewBag.metrica_laudo      = _dashAtual.metrica_laudo;
+                ViewBag.metrica_laudo = _dashAtual.metrica_laudo;
                 ViewBag.metrica_preventiva = _dashAtual.metrica_preventiva;
-                ViewBag.metrica_pmoc       = _dashAtual.metrica_pmoc;
-                ViewBag.metrica_rotina     = _dashAtual.metrica_rotina;
-                ViewBag.metrica_uh         = _dashAtual.metrica_uh;
-                ViewBag.notas_unidades     = _dashAtual.notas_unidades;
-                ViewBag.percentual_nota    = _dashAtual.percentual_nota;
+                ViewBag.metrica_pmoc = _dashAtual.metrica_pmoc;
+                ViewBag.metrica_rotina = _dashAtual.metrica_rotina;
+                ViewBag.metrica_uh = _dashAtual.metrica_uh;
+                ViewBag.notas_unidades = _dashAtual.notas_unidades;
+                ViewBag.percentual_nota = _dashAtual.percentual_nota;
+
+                ViewBag.apontamento_horas = oDashboard.ApontamentoHoras(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                         sData: data);
+
+                ViewBag.atendimento_os = oDashboard.AtendimentoOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                            sData: data);
 
                 ViewBag.ShowDateFilter = true;
 
@@ -1574,13 +1582,21 @@ namespace PCM.WEB.Controllers
                     iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                     sData: data,
                     iCodigoUnidade: unidade);
-                ViewBag.metrica_laudo      = _dashAtualPost.metrica_laudo;
+                ViewBag.metrica_laudo = _dashAtualPost.metrica_laudo;
                 ViewBag.metrica_preventiva = _dashAtualPost.metrica_preventiva;
-                ViewBag.metrica_pmoc       = _dashAtualPost.metrica_pmoc;
-                ViewBag.metrica_rotina     = _dashAtualPost.metrica_rotina;
-                ViewBag.metrica_uh         = _dashAtualPost.metrica_uh;
-                ViewBag.notas_unidades     = _dashAtualPost.notas_unidades;
-                ViewBag.percentual_nota    = _dashAtualPost.percentual_nota;
+                ViewBag.metrica_pmoc = _dashAtualPost.metrica_pmoc;
+                ViewBag.metrica_rotina = _dashAtualPost.metrica_rotina;
+                ViewBag.metrica_uh = _dashAtualPost.metrica_uh;
+                ViewBag.notas_unidades = _dashAtualPost.notas_unidades;
+                ViewBag.percentual_nota = _dashAtualPost.percentual_nota;
+
+                ViewBag.apontamento_horas = oDashboard.ApontamentoHoras(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                         sData: data);
+
+                ViewBag.atendimento_os = oDashboard.AtendimentoOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                             sData: data);
 
                 ViewBag.ShowDateFilter = true;
 
@@ -1670,9 +1686,11 @@ namespace PCM.WEB.Controllers
                                                             sField: "uh_dia");
 
                 ViewBag.atendimento_os = oDashboard.AtendimentoOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                            iCodigoUnidade: -1,
                                                                             sData: data);
 
                 ViewBag.apontamento_horas = oDashboard.ApontamentoHoras(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                            iCodigoUnidade: -1,
                                                                         sData: data);
 
                 ViewBag.manutencao_laudo = oDashboard.ManutencaoLaudo(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),

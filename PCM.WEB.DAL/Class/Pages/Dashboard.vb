@@ -1084,6 +1084,16 @@ Public Class Dashboard
                 oNota.preventiva_corretiva_peso = If(IsDBNull(rd("preventiva_corretiva_peso")), "", rd("preventiva_corretiva_peso"))
                 oNota.green_planet = If(IsDBNull(rd("green_planet")), "", rd("green_planet").ToString())
                 oNota.green_planet_peso = If(IsDBNull(rd("green_planet_peso")), "", rd("green_planet_peso").ToString())
+                oNota.atend_ok = If(IsDBNull(rd("atend_ok")), "0", rd("atend_ok").ToString())
+                oNota.atend_pend = If(IsDBNull(rd("atend_pend")), "0", rd("atend_pend").ToString())
+                oNota.atend_total = If(IsDBNull(rd("atend_total")), "0", rd("atend_total").ToString())
+                oNota.gp_ok = If(IsDBNull(rd("gp_ok")), "0", rd("gp_ok").ToString())
+                oNota.gp_pend = If(IsDBNull(rd("gp_pend")), "0", rd("gp_pend").ToString())
+                oNota.gp_total = If(IsDBNull(rd("gp_total")), "0", rd("gp_total").ToString())
+                oNota.hh_nao_apontado_realizado = If(IsDBNull(rd("hh_nao_apontado_realizado")), "", rd("hh_nao_apontado_realizado").ToString())
+                oNota.os_pendente_realizado = If(IsDBNull(rd("os_pendente_realizado")), "", rd("os_pendente_realizado").ToString())
+                oNota.hh_extra_realizado = If(IsDBNull(rd("hh_extra_realizado")), "", rd("hh_extra_realizado").ToString())
+                oNota.prev_corretiva_realizado = If(IsDBNull(rd("prev_corretiva_realizado")), "", rd("prev_corretiva_realizado").ToString())
                 oReturn.notas_unidades.Add(oNota)
             End While
 
@@ -1118,6 +1128,7 @@ Public Class Dashboard
     End Function
 
     Public Function AtendimentoOrdemServico(ByVal iCodigoEmpresa As Integer,
+                                            ByVal iCodigoUnidade As Integer,
                                             ByVal sData As String) As List(Of MODELS.AtendimentoOrdemServico)
 
         Try
@@ -1125,7 +1136,7 @@ Public Class Dashboard
             'Váriaveis Locais
             Dim oReturn As New List(Of MODELS.AtendimentoOrdemServico)
             Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(1) As SqlParameter
+            Dim oSqlParameter(2) As SqlParameter
             Dim i As Integer = 0
 
             'Seta Parametros - Código Empresa
@@ -1134,6 +1145,13 @@ Public Class Dashboard
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
             oSqlParameter(i).Value = iCodigoEmpresa : i += 1
+
+            'Seta Parametros - Código Unidade
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_unidade"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = iCodigoUnidade : i += 1
 
             'Seta Parametros - Data
             oSqlParameter(i) = New SqlParameter
@@ -1184,6 +1202,7 @@ Public Class Dashboard
     End Function
 
     Public Function ApontamentoHoras(ByVal iCodigoEmpresa As Integer,
+                                     ByVal iCodigoUnidade As Integer,
                                      ByVal sData As String) As List(Of MODELS.ApontamentoHoras)
 
         Try
@@ -1191,7 +1210,7 @@ Public Class Dashboard
             'Váriaveis Locais
             Dim oReturn As New List(Of MODELS.ApontamentoHoras)
             Dim oSqlDataReader As SqlDataReader
-            Dim oSqlParameter(1) As SqlParameter
+            Dim oSqlParameter(2) As SqlParameter
             Dim i As Integer = 0
 
             'Seta Parametros - Código Empresa
@@ -1200,6 +1219,13 @@ Public Class Dashboard
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
             oSqlParameter(i).Value = iCodigoEmpresa : i += 1
+
+            'Seta Parametros - Código Unidade
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_unidade"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = iCodigoUnidade : i += 1
 
             'Seta Parametros - Data
             oSqlParameter(i) = New SqlParameter

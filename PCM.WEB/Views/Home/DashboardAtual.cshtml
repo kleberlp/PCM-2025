@@ -11,80 +11,75 @@
 
             if (Session["codigo_unidade"].ToString() != "-1")
             {
-                <!-- ================= KPIs – VISÃO GERAL ================= -->
+                <!-- ================= CARD RESUMO ================= -->
                 <div class="dashboard-section">
-                    <div class="section-title">
-                        @ViewBag.dashboard_info.unidade
-                    <span class="float-right">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="Codebase.helpers('print-page');"><i class="si si-printer"></i> @PCM.WEB.Properties.Resources.imprimir</button>
-                    </span>
-                </div>
-                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
-                    <div class="torre-comando-grid">
-                        <a href="@Url.Action("UsuarioIndex", "Administracao")" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-user torre-icon text-primary"></i><span class="torre-label">@PCM.WEB.Properties.Resources.usuarios</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_usuario</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-users torre-icon text-info"></i><span class="torre-label">Equipe Manutenção</span></div>
-                            <div class="os-value text-info">@ViewBag.dashboard_info.equipe_manutencao</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">Máq. / Equip.</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_equipamento</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon text-warning"></i><span class="torre-label">Total de OS</span></div>
-                            <div class="os-value text-warning">@ViewBag.dashboard_info.quantidade_os</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">OS Mês</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os_gerada</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Qtd. Rotinas</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.rotinas_implantadas</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-clock torre-icon text-primary"></i><span class="torre-label">H.H. Apontado</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.hh_apontado</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">SLA</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.os_atendimento_dia</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Qtd. Preventivas</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.preventivas_implantadas</div>
-                        </a>
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-8">
+                            @{ var _notaGeral = ViewBag.notas_unidades != null ? ((IEnumerable<dynamic>)ViewBag.notas_unidades).Cast<dynamic>().FirstOrDefault() : null; }
+                            <div class="block dashboard-card" style="padding:16px 24px;">
+                                <div style="display:flex;align-items:center;">
+                                    <div style="flex:1;text-align:center;border-right:1px solid #dee2e6;padding-right:24px;">
+                                        <div style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6c757d;letter-spacing:.08em;">Unidade</div>
+                                        <div style="font-size:22px;font-weight:700;color:#2c3e50;margin-top:2px;">@(_notaGeral != null ? (string)_notaGeral.unidade : (string)ViewBag.dashboard_info.unidade)</div>
+                                    </div>
+                                    <div style="flex:1;text-align:center;border-right:1px solid #dee2e6;padding:0 24px;">
+                                        <div style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6c757d;letter-spacing:.08em;">Nota Geral</div>
+                                        <div style="font-size:22px;font-weight:700;color:#2c3e50;margin-top:2px;">
+                                            @(_notaGeral != null ? ((string)_notaGeral.nota_final).Replace("%", "").Trim() : "—")
+                                        </div>
+                                    </div>
+                                    <div style="flex:1;text-align:center;padding-left:24px;">
+                                        <div style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6c757d;letter-spacing:.08em;">Ranking</div>
+                                        <div style="font-size:22px;font-weight:700;color:#2c3e50;margin-top:2px;">
+                                            <i class="si si-trophy" style="font-size:16px;color:#ffc90e;margin-right:4px;"></i>@ViewBag.dashboard_info.ranking°
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- ================= NOTAS ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Notas</div>
-                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
-                    <div class="torre-comando-grid">
-                        @{
-                            var notaItems = new List<dynamic>();
-                            notaItems.Add(new { icon = "si si-doc", label = PCM.WEB.Properties.Resources.laudo, valor = (string)ViewBag.dashboard_info.laudo + "%" });
-                            notaItems.Add(new { icon = "si si-settings", label = PCM.WEB.Properties.Resources.preventiva, valor = (string)ViewBag.dashboard_info.preventiva + "%" });
-                            notaItems.Add(new { icon = "fa fa-hotel", label = PCM.WEB.Properties.Resources.uh_em_dia, valor = (string)ViewBag.dashboard_info.uh_dia + "%" });
-                            notaItems.Add(new { icon = "fa fa-snowflake-o", label = PCM.WEB.Properties.Resources.pmoc, valor = (string)ViewBag.dashboard_info.pmoc + "%" });
-                            notaItems.Add(new { icon = "si si-calendar", label = PCM.WEB.Properties.Resources.rotina, valor = (string)ViewBag.dashboard_info.rotina + "%" });
-                            notaItems.Add(new { icon = "si si-trophy", label = PCM.WEB.Properties.Resources.ranking, valor = ViewBag.dashboard_info.ranking + "º" });
-                        }
-                        @foreach (var n in notaItems)
-                        {
-                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                                <div class="torre-header"><i class="@n.icon torre-icon text-primary"></i><span class="torre-label">@n.label</span></div>
-                                <div class="os-value text-primary">@n.valor</div>
+                <!-- ================= DADOS DA UNIDADE ================= -->
+                <div class="dashboard-section">
+                    <div class="section-title">Dados da Unidade</div>
+                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                        <div class="torre-comando-grid">
+                            <a href="@Url.Action("UsuarioIndex", "Administracao")" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header"><i class="si si-user torre-icon text-primary"></i><span class="torre-label">@PCM.WEB.Properties.Resources.usuarios</span></div>
+                                <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_usuario</div>
                             </a>
-                        }
+                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header"><i class="si si-users torre-icon text-info"></i><span class="torre-label">Equipe Manutenção</span></div>
+                                <div class="os-value text-info">@ViewBag.dashboard_info.equipe_manutencao</div>
+                            </a>
+                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">Máq. / Equip.</span></div>
+                                <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_equipamento</div>
+                            </a>
+                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header"><i class="si si-settings torre-icon text-warning"></i><span class="torre-label">Total de OS</span></div>
+                                <div class="os-value text-warning">@ViewBag.dashboard_info.quantidade_os</div>
+                            </a>
+                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">OS Mês</span></div>
+                                <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os_gerada</div>
+                            </a>
+                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Qtd. Rotinas</span></div>
+                                <div class="os-value text-primary">@ViewBag.dashboard_info.rotinas_implantadas</div>
+                            </a>
+                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">SLA</span></div>
+                                <div class="os-value text-primary">@ViewBag.dashboard_info.os_atendimento_dia</div>
+                            </a>
+                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                                <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Qtd. Preventivas</span></div>
+                                <div class="os-value text-primary">@ViewBag.dashboard_info.preventivas_implantadas</div>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
             <!-- ================= MÉTRICAS POR ATIVIDADE ================= -->
             <div class="dashboard-section">
@@ -101,32 +96,32 @@
 
                     var _linhas1 = new[]
                     {
-                        new { label="Laudo / Documentação", ok = _mLaudo  != null ? (string)_mLaudo.quantidade_ok.ToString()       : NA, pend = _mLaudo  != null ? (string)_mLaudo.quantidade_pendente.ToString()  : NA, total = _mLaudo  != null ? (string)_mLaudo.total.ToString()  : NA, pct = _nota != null ? (string)_nota.laudo.ToString()      : "", peso = _pnota != null ? (string)_pnota.laudo.ToString()      : "", notaKey = "laudo_peso" },
-                        new { label="Preventiva",           ok = _mPrev   != null ? (string)_mPrev.quantidade_ok.ToString()        : NA, pend = _mPrev   != null ? (string)_mPrev.quantidade_pendente.ToString()   : NA, total = _mPrev   != null ? (string)_mPrev.total.ToString()   : NA, pct = _nota != null ? (string)_nota.preventiva.ToString() : "", peso = _pnota != null ? (string)_pnota.preventiva.ToString() : "", notaKey = "preventiva_peso" },
-                        new { label="PMOC",                 ok = _mPmoc   != null ? (string)_mPmoc.quantidade_ok.ToString()        : NA, pend = _mPmoc   != null ? (string)_mPmoc.quantidade_pendente.ToString()   : NA, total = _mPmoc   != null ? (string)_mPmoc.total.ToString()   : NA, pct = _nota != null ? (string)_nota.pmoc.ToString()       : "", peso = _pnota != null ? (string)_pnota.pmoc.ToString()       : "", notaKey = "pmoc_peso" },
-                        new { label="Rotina",               ok = _mRotina != null ? (string)_mRotina.quantidade_ok.ToString()      : NA, pend = _mRotina != null ? (string)_mRotina.quantidade_pendente.ToString() : NA, total = _mRotina != null ? (string)_mRotina.total.ToString() : NA, pct = _nota != null ? (string)_nota.rotina.ToString()      : "", peso = _pnota != null ? (string)_pnota.rotina.ToString()      : "", notaKey = "rotina_peso" },
-                        new { label="UH. em Dia",           ok = _mUh     != null ? (string)_mUh.quantidade_ok.ToString()          : NA, pend = _mUh     != null ? (string)_mUh.quantidade_pendente.ToString()     : NA, total = _mUh     != null ? (string)_mUh.total.ToString()     : NA, pct = _nota != null ? (string)_nota.uh_dia.ToString()      : "", peso = _pnota != null ? (string)_pnota.uh_dia.ToString()      : "", notaKey = "uh_dia_peso" },
+                        new { label="Laudo / Documentação", ok = _mLaudo  != null ? (string)_mLaudo.quantidade_ok.ToString()       : NA, pend = _mLaudo  != null ? (string)_mLaudo.quantidade_pendente.ToString()  : NA, total = _mLaudo  != null ? (string)_mLaudo.total.ToString()  : NA, pct = _nota != null ? (string)_nota.laudo.ToString()      : "", peso = _pnota != null ? (string)_pnota.laudo.ToString()      : "", notaKey = "laudo_peso",      okLabel="", pendLabel="", totalLabel="" },
+                        new { label="Preventiva",           ok = _mPrev   != null ? (string)_mPrev.quantidade_ok.ToString()        : NA, pend = _mPrev   != null ? (string)_mPrev.quantidade_pendente.ToString()   : NA, total = _mPrev   != null ? (string)_mPrev.total.ToString()   : NA, pct = _nota != null ? (string)_nota.preventiva.ToString() : "", peso = _pnota != null ? (string)_pnota.preventiva.ToString() : "", notaKey = "preventiva_peso", okLabel="", pendLabel="", totalLabel="" },
+                        new { label="PMOC",                 ok = _mPmoc   != null ? (string)_mPmoc.quantidade_ok.ToString()        : NA, pend = _mPmoc   != null ? (string)_mPmoc.quantidade_pendente.ToString()   : NA, total = _mPmoc   != null ? (string)_mPmoc.total.ToString()   : NA, pct = _nota != null ? (string)_nota.pmoc.ToString()       : "", peso = _pnota != null ? (string)_pnota.pmoc.ToString()       : "", notaKey = "pmoc_peso",       okLabel="", pendLabel="", totalLabel="" },
+                        new { label="Rotina",               ok = _mRotina != null ? (string)_mRotina.quantidade_ok.ToString()      : NA, pend = _mRotina != null ? (string)_mRotina.quantidade_pendente.ToString() : NA, total = _mRotina != null ? (string)_mRotina.total.ToString() : NA, pct = _nota != null ? (string)_nota.rotina.ToString()      : "", peso = _pnota != null ? (string)_pnota.rotina.ToString()      : "", notaKey = "rotina_peso",      okLabel="", pendLabel="", totalLabel="" },
+                        new { label="UH. em Dia",           ok = _mUh     != null ? (string)_mUh.quantidade_ok.ToString()          : NA, pend = _mUh     != null ? (string)_mUh.quantidade_pendente.ToString()     : NA, total = _mUh     != null ? (string)_mUh.total.ToString()     : NA, pct = _nota != null ? (string)_nota.uh_dia.ToString()      : "", peso = _pnota != null ? (string)_pnota.uh_dia.ToString()      : "", notaKey = "uh_dia_peso",      okLabel="", pendLabel="", totalLabel="" },
+                        new { label="Atend. no Dia",        ok = _nota != null ? (string)_nota.atend_ok    : NA, pend = _nota != null ? (string)_nota.atend_pend  : NA, total = _nota != null ? (string)_nota.atend_total : NA, pct = _nota != null ? (string)_nota.os_atendimento_dia.ToString() : "", peso = _pnota != null ? (string)_pnota.os_atendimento_dia.ToString() : "", notaKey = "os_atendimento_dia_peso", okLabel="", pendLabel="", totalLabel="" },
+                        new { label="Green Planet",         ok = _nota != null ? (string)_nota.gp_ok       : NA, pend = _nota != null ? (string)_nota.gp_pend     : NA, total = _nota != null ? (string)_nota.gp_total      : NA, pct = _nota != null ? (string)_nota.green_planet.ToString()        : "", peso = _pnota != null ? (string)_pnota.green_planet.ToString()        : "", notaKey = "green_planet_peso",      okLabel="", pendLabel="", totalLabel="" },
                     };
 
                     var _linhas2 = new[]
                     {
-                        new { label="Atend. no Dia",    pct = _nota != null ? (string)_nota.os_atendimento_dia.ToString()    : "", peso = _pnota != null ? (string)_pnota.os_atendimento_dia.ToString()    : "", notaKey = "os_atendimento_dia_peso" },
-                        new { label="HH Não Apontado",  pct = _nota != null ? (string)_nota.hh_nao_apontado.ToString()       : "", peso = _pnota != null ? (string)_pnota.hh_nao_apontado.ToString()       : "", notaKey = "hh_nao_apontado_peso" },
-                        new { label="% OS Pendente",    pct = _nota != null ? (string)_nota.os_pendente.ToString()            : "", peso = _pnota != null ? (string)_pnota.os_pendente.ToString()            : "", notaKey = "os_pendente_peso" },
-                        new { label="HH Extra",         pct = _nota != null ? (string)_nota.hh_extra.ToString()               : "", peso = _pnota != null ? (string)_pnota.hh_extra.ToString()               : "", notaKey = "hh_extra_peso" },
-                        new { label="Prev. x Corretiva",pct = _nota != null ? (string)_nota.preventiva_corretiva.ToString()   : "", peso = _pnota != null ? (string)_pnota.preventiva_corretiva.ToString()   : "", notaKey = "preventiva_corretiva_peso" },
-                        new { label="Green Planet",     pct = _nota != null ? (string)_nota.green_planet.ToString()           : "", peso = _pnota != null ? (string)_pnota.green_planet.ToString()           : "", notaKey = "green_planet_peso" },
+                        new { label="HH Não Apontado",   realizado = _nota != null ? (string)_nota.hh_nao_apontado_realizado  : "", meta=">80%",  pct = _nota != null ? (string)_nota.hh_nao_apontado.ToString()      : "", peso = _pnota != null ? (string)_pnota.hh_nao_apontado.ToString()      : "", notaKey = "hh_nao_apontado_peso" },
+                        new { label="% OS Pendente",     realizado = _nota != null ? (string)_nota.os_pendente_realizado       : "", meta="<20%",  pct = _nota != null ? (string)_nota.os_pendente.ToString()           : "", peso = _pnota != null ? (string)_pnota.os_pendente.ToString()           : "", notaKey = "os_pendente_peso" },
+                        new { label="HH Extra",          realizado = _nota != null ? (string)_nota.hh_extra_realizado          : "", meta="<10%",  pct = _nota != null ? (string)_nota.hh_extra.ToString()              : "", peso = _pnota != null ? (string)_pnota.hh_extra.ToString()              : "", notaKey = "hh_extra_peso" },
+                        new { label="Prev. x Corretiva", realizado = _nota != null ? (string)_nota.prev_corretiva_realizado    : "", meta=">50%",  pct = _nota != null ? (string)_nota.preventiva_corretiva.ToString()  : "", peso = _pnota != null ? (string)_pnota.preventiva_corretiva.ToString()  : "", notaKey = "preventiva_corretiva_peso" },
                     };
                 }
-                <!-- Bloco 1: com OK / Pend. / Total -->
+                <!-- Bloco 1: quantidade (OK / Pend. / Total) -->
                 <div class="block dashboard-card" style="padding:0;overflow:hidden;margin-bottom:8px;">
                     <table class="table table-striped table-sm table-bordered mb-0">
                         <thead>
                             <tr>
                                 <th>Atividade</th>
-                                <th class="text-center" style="width:55px;">OK</th>
-                                <th class="text-center" style="width:60px;">Pend.</th>
-                                <th class="text-center" style="width:60px;">Total</th>
+                                <th class="text-center" style="width:130px;">OK</th>
+                                <th class="text-center" style="width:130px;">Pend.</th>
+                                <th class="text-center" style="width:130px;">Total</th>
                                 <th style="min-width:180px;">% Atendido</th>
                                 <th class="text-center" style="width:75px;">Peso</th>
                                 <th class="text-center" style="width:75px;">Nota</th>
@@ -140,12 +135,13 @@
                                 var _cor = _pctVal >= 86 ? "#22b14c" : (_pctVal >= 65 ? "#ffc90e" : "#e74c3c");
                                 var _w   = Math.Min((int)_pctVal, 100).ToString();
                                 string _nf = "";
-                                if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { _nf = _prop.GetValue((object)_nota).ToString() ?? ""; } }
+                                if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { var _pv = _prop.GetValue((object)_nota); _nf = _pv != null ? _pv.ToString() : ""; } }
+                                bool _isDesc = !string.IsNullOrEmpty(linha.okLabel);
                                 <tr>
                                     <td class="font-w600">@linha.label</td>
-                                    <td class="text-center">@linha.ok</td>
-                                    <td class="text-center">@linha.pend</td>
-                                    <td class="text-center">@linha.total</td>
+                                    <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.okLabel : linha.ok)</td>
+                                    <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.pendLabel : linha.pend)</td>
+                                    <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.totalLabel : linha.total)</td>
                                     <td>
                                         @if (!string.IsNullOrEmpty(linha.pct))
                                         {
@@ -165,12 +161,14 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- Bloco 2: sem OK / Pend. / Total -->
+                <!-- Bloco 2: indicadores com Realizado / Meta -->
                 <div class="block dashboard-card" style="padding:0;overflow:hidden;">
                     <table class="table table-striped table-sm table-bordered mb-0">
                         <thead>
                             <tr>
                                 <th>Atividade</th>
+                                <th class="text-center" style="width:140px;">Realizado</th>
+                                <th class="text-center" style="width:80px;">Meta</th>
                                 <th style="min-width:180px;">% Atendido</th>
                                 <th class="text-center" style="width:75px;">Peso</th>
                                 <th class="text-center" style="width:75px;">Nota</th>
@@ -184,9 +182,11 @@
                                 var _cor = _pctVal >= 86 ? "#22b14c" : (_pctVal >= 65 ? "#ffc90e" : "#e74c3c");
                                 var _w   = Math.Min((int)_pctVal, 100).ToString();
                                 string _nf = "";
-                                if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { _nf = _prop.GetValue((object)_nota).ToString() ?? ""; } }
+                                if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { var _pv = _prop.GetValue((object)_nota); _nf = _pv != null ? _pv.ToString() : ""; } }
                                 <tr>
                                     <td class="font-w600">@linha.label</td>
+                                    <td class="text-center text-primary font-w600">@linha.realizado</td>
+                                    <td class="text-center text-muted">@linha.meta</td>
                                     <td>
                                         @if (!string.IsNullOrEmpty(linha.pct))
                                         {
@@ -216,36 +216,97 @@
                 </div>
             </div>
 
-            <!-- ================= SLA – MANUTENÇÃO (KPIs) ================= -->
+            <!-- ================= SLA – TEMPO MÉDIO (tabela com barras inline) ================= -->
             <div class="dashboard-section">
-                <div class="section-title">SLA - Manutenção</div>
-                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
-                    <div class="torre-comando-grid">
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon" style="color:rgba(34,177,76)"></i><span class="torre-label">@PCM.WEB.Properties.Resources.no_dia</span></div>
-                            <div class="os-value" style="color:rgba(34,177,76)">@ViewBag.dashboard_info.os_atendimento_dia%</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon" style="color:rgba(63,72,204)"></i><span class="torre-label">@PCM.WEB.Properties.Resources.um_dia</span></div>
-                            <div class="os-value" style="color:rgba(63,72,204)">@ViewBag.dashboard_info.os_atendimento_um_dia</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon" style="color:rgb(255,201,14)"></i><span class="torre-label">@PCM.WEB.Properties.Resources.tres_dias</span></div>
-                            <div class="os-value" style="color:rgb(255,201,14)">@ViewBag.dashboard_info.os_atendimento_tres_dias</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon" style="color:rgba(255,128,0)"></i><span class="torre-label">@PCM.WEB.Properties.Resources.cinco_dias</span></div>
-                            <div class="os-value" style="color:rgba(255,128,0)">@ViewBag.dashboard_info.os_atendimento_cinco_dias</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon" style="color:rgba(255,128,0)"></i><span class="torre-label">@PCM.WEB.Properties.Resources.acima_cinco_dias</span></div>
-                            <div class="os-value" style="color:rgba(255,128,0)">@ViewBag.dashboard_info.os_atendimento_acima_cinco_dias</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="si si-settings torre-icon text-danger"></i><span class="torre-label">@PCM.WEB.Properties.Resources.nao_atendido</span></div>
-                            <div class="os-value text-danger">@ViewBag.dashboard_info.os_nao_atendido</div>
-                        </a>
-                    </div>
+                <div class="section-title">SLA – Tempo Médio de Atendimento por Unidade</div>
+                <div class="block dashboard-card" style="overflow-x:auto;">
+                    <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
+                                <th class="text-center" colspan="2" style="color:#22b14c;">No Dia</th>
+                                <th class="text-center" colspan="2" style="color:#3f48cc;">1 Dia</th>
+                                <th class="text-center" colspan="2" style="color:#b38f00;">2 a 3 Dias</th>
+                                <th class="text-center" colspan="2" style="color:#ff8000;">4 a 5 Dias</th>
+                                <th class="text-center" colspan="2" style="color:#800080;">&gt; 5 Dias</th>
+                                <th class="text-center" colspan="2" style="color:#e74c3c;">Não Atendidas</th>
+                                <th rowspan="2" style="min-width:160px;">Distribuição</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center" style="width:55px;color:#22b14c;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#22b14c;">%</th>
+                                <th class="text-center" style="width:55px;color:#3f48cc;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#3f48cc;">%</th>
+                                <th class="text-center" style="width:55px;color:#b38f00;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#b38f00;">%</th>
+                                <th class="text-center" style="width:55px;color:#ff8000;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#ff8000;">%</th>
+                                <th class="text-center" style="width:55px;color:#800080;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#800080;">%</th>
+                                <th class="text-center" style="width:55px;color:#e74c3c;">Qtde</th>
+                                <th class="text-center" style="width:65px;color:#e74c3c;">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var _inv2 = System.Globalization.CultureInfo.InvariantCulture;
+                                var _ns2  = System.Globalization.NumberStyles.Any;
+                                var _di   = ViewBag.dashboard_info;
+                                double slaNodia2 = 0, sla1dia2 = 0, sla232 = 0, sla452 = 0, sla5mais2 = 0, slaNao2 = 0, totalOS2 = 0;
+                                if (_di != null) {
+                                    double.TryParse(((string)_di.os_atendimento_dia).Replace("%","").Replace(",","."), _ns2, _inv2, out slaNodia2);
+                                    double.TryParse(((string)_di.os_atendimento_um_dia).Replace("%","").Replace(",","."), _ns2, _inv2, out sla1dia2);
+                                    double.TryParse(((string)_di.os_atendimento_tres_dias).Replace("%","").Replace(",","."), _ns2, _inv2, out sla232);
+                                    double.TryParse(((string)_di.os_atendimento_cinco_dias).Replace("%","").Replace(",","."), _ns2, _inv2, out sla452);
+                                    double.TryParse(((string)_di.os_atendimento_acima_cinco_dias).Replace("%","").Replace(",","."), _ns2, _inv2, out sla5mais2);
+                                    double.TryParse(((string)_di.os_nao_atendido).Replace("%","").Replace(",","."), _ns2, _inv2, out slaNao2);
+                                    double.TryParse(((string)_di.quantidade_os_gerada).Replace(".","").Replace(",","."), _ns2, _inv2, out totalOS2);
+                                }
+                                var qNodia2   = (int)Math.Round(slaNodia2  / 100 * totalOS2);
+                                var q1dia2    = (int)Math.Round(sla1dia2   / 100 * totalOS2);
+                                var q232      = (int)Math.Round(sla232     / 100 * totalOS2);
+                                var q452      = (int)Math.Round(sla452     / 100 * totalOS2);
+                                var q5mais2   = (int)Math.Round(sla5mais2  / 100 * totalOS2);
+                                var qNao2     = (int)Math.Round(slaNao2    / 100 * totalOS2);
+                                var slaBase2  = slaNodia2 + sla1dia2 + sla232 + sla452 + sla5mais2 + slaNao2;
+                                if (slaBase2 == 0) { slaBase2 = 1; }
+                                var bNodia2   = Math.Round(slaNodia2  / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                var b1dia2    = Math.Round(sla1dia2   / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                var b232      = Math.Round(sla232     / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                var b452      = Math.Round(sla452     / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                var b5mais2   = Math.Round(sla5mais2  / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                var bNao2     = Math.Round(slaNao2    / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                            }
+                            @if (_di != null)
+                            {
+                                <tr>
+                                    <td class="font-w600">@_di.unidade</td>
+                                    <td class="text-center" style="color:#22b14c;">@qNodia2</td>
+                                    <td class="text-center" style="font-weight:600;color:#22b14c;">@_di.os_atendimento_dia</td>
+                                    <td class="text-center" style="color:#3f48cc;">@q1dia2</td>
+                                    <td class="text-center" style="font-weight:600;color:#3f48cc;">@_di.os_atendimento_um_dia</td>
+                                    <td class="text-center" style="color:#b38f00;">@q232</td>
+                                    <td class="text-center" style="font-weight:600;color:#b38f00;">@_di.os_atendimento_tres_dias</td>
+                                    <td class="text-center" style="color:#ff8000;">@q452</td>
+                                    <td class="text-center" style="font-weight:600;color:#ff8000;">@_di.os_atendimento_cinco_dias</td>
+                                    <td class="text-center" style="color:#800080;">@q5mais2</td>
+                                    <td class="text-center" style="font-weight:600;color:#800080;">@_di.os_atendimento_acima_cinco_dias</td>
+                                    <td class="text-center" style="color:#e74c3c;">@qNao2</td>
+                                    <td class="text-center" style="font-weight:600;color:#e74c3c;">@_di.os_nao_atendido</td>
+                                    <td>
+                                        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;width:100%;">
+                                            <div style="width:@bNodia2%;background:#22b14c;" title="No Dia: @_di.os_atendimento_dia (@qNodia2 OS)"></div>
+                                            <div style="width:@b1dia2%;background:#3f48cc;" title="1 Dia: @_di.os_atendimento_um_dia (@q1dia2 OS)"></div>
+                                            <div style="width:@b232%;background:#ffc90e;" title="2-3 Dias: @_di.os_atendimento_tres_dias (@q232 OS)"></div>
+                                            <div style="width:@b452%;background:#ff8000;" title="4-5 Dias: @_di.os_atendimento_cinco_dias (@q452 OS)"></div>
+                                            <div style="width:@b5mais2%;background:#800080;" title=">5 Dias: @_di.os_atendimento_acima_cinco_dias (@q5mais2 OS)"></div>
+                                            <div style="width:@bNao2%;background:#e74c3c;" title="Não Atendidas: @_di.os_nao_atendido (@qNao2 OS)"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -265,43 +326,72 @@
                 </div>
             </div>
 
-            <!-- ================= HORA HOMEM (KPIs) ================= -->
+            <!-- ================= HORA HOMEM (tabela) ================= -->
             <div class="dashboard-section">
-                <div class="section-title">Hora Homem</div>
-                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
-                    <div class="torre-comando-grid">
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-clock-o torre-icon text-muted"></i><span class="torre-label">H.H. Disponível</span></div>
-                            <div class="os-value text-muted">@ViewBag.dashboard_info.hh_disponivel</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-clock-o torre-icon text-danger"></i><span class="torre-label">@ViewBag.dashboard_info.percentual_corretiva – @PCM.WEB.Properties.Resources.corretiva</span></div>
-                            <div class="os-value text-danger">@ViewBag.dashboard_info.horas_corretivas</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-clock-o torre-icon text-primary"></i><span class="torre-label">@ViewBag.dashboard_info.percentual_preventiva – @PCM.WEB.Properties.Resources.preventiva</span></div>
-                            <div class="os-value text-primary">@ViewBag.dashboard_info.horas_preventivas</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-clock-o torre-icon text-info"></i><span class="torre-label">@ViewBag.dashboard_info.percentual_pmoc – @PCM.WEB.Properties.Resources.pmoc</span></div>
-                            <div class="os-value text-info">@ViewBag.dashboard_info.horas_pmoc</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-clock-o torre-icon text-success"></i><span class="torre-label">@ViewBag.dashboard_info.percentual_uh – @PCM.WEB.Properties.Resources.uh_em_dia</span></div>
-                            <div class="os-value text-success">@ViewBag.dashboard_info.horas_uh</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-clock-o torre-icon text-warning"></i><span class="torre-label">@ViewBag.dashboard_info.percentual_mapa_manutencao – Mapa Manutenção</span></div>
-                            <div class="os-value text-warning">@ViewBag.dashboard_info.horas_mapa_manutencao</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-clock-o torre-icon text-danger"></i><span class="torre-label">@ViewBag.dashboard_info.percentual_horas_ociosas – @PCM.WEB.Properties.Resources.ociosidade</span></div>
-                            <div class="os-value text-danger">@ViewBag.dashboard_info.horas_ociosas</div>
-                        </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
-                            <div class="torre-header"><i class="fa fa-clock-o torre-icon text-muted"></i><span class="torre-label">Faltas</span></div>
-                            <div class="os-value text-muted">@ViewBag.dashboard_info.faltas_justificadas J / <span class="text-danger">@ViewBag.dashboard_info.faltas_nao_justificadas NJ</span></div>
-                        </a>
+                <div class="section-title">Apontamento - Horas</div>
+                <div class="block dashboard-card">
+                    <div style="overflow-x:auto;">
+                        <table class="table table-striped table-sm table-bordered tbl-sort">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
+                                    <th class="text-center" colspan="2">Colaboradores</th>
+                                    <th class="text-center" rowspan="2">HH Disponível</th>
+                                    <th class="text-center" colspan="2">Falta</th>
+                                    <th class="text-center" colspan="2">HH Corretiva</th>
+                                    <th class="text-center" colspan="2">HH Preventiva</th>
+                                    <th class="text-center" colspan="2">HH PMOC</th>
+                                    <th class="text-center" colspan="2">HH UH em Dia</th>
+                                    <th class="text-center" rowspan="2">Total Apontamento</th>
+                                    <th class="text-center" rowspan="2">Saldo HH Disponível</th>
+                                    <th class="text-center" rowspan="2">% Ociosidade</th>
+                                    <th class="text-center" rowspan="2">H.E.</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Próprios</th>
+                                    <th class="text-center">Terceiros</th>
+                                    <th class="text-center">Justificada</th>
+                                    <th class="text-center">Ñ Justificada</th>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">%</th>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">%</th>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">%</th>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.apontamento_horas != null)
+                                {
+                                foreach (var item in (IEnumerable<dynamic>)ViewBag.apontamento_horas)
+                                {
+                                    var _cssRow = Convert.ToString(item.css_row); var _skip = _cssRow.Trim() == "" ? "data-sort-skip='true'" : "";
+                                    <tr class="@_cssRow" @Html.Raw(_skip)>
+                                        <td class="font-w600 @(item.css_row == "" ? "bg-warning-light" : "")">@item.unidade</td>
+                                        <td class="text-center">@item.quantidade_colaborador_proprio</td>
+                                        <td class="text-center">@item.quantidade_colaborador_terceiro</td>
+                                        <td class="text-center">@item.hh_disponivel</td>
+                                        <td class="text-center">@item.faltas_justificadas</td>
+                                        <td class="text-center">@item.faltas_nao_justificadas</td>
+                                        <td class="text-center">@item.horas_corretivas</td>
+                                        <td class="text-center">@item.percentual_horas_corretivas</td>
+                                        <td class="text-center">@item.horas_preventivas</td>
+                                        <td class="text-center">@item.percentual_horas_preventivas</td>
+                                        <td class="text-center">@item.horas_pmoc</td>
+                                        <td class="text-center">@item.percentual_horas_pmoc</td>
+                                        <td class="text-center">@item.horas_uh_dia</td>
+                                        <td class="text-center">@item.percentual_horas_uh_dia</td>
+                                        <td class="text-center">@item.total_apontamento</td>
+                                        <td class="text-center"><span class="@item.css_saldo_hh_disponivel">@item.saldo_hh_disponivel</span></td>
+                                        <td class="text-center">@item.percentual_ociosidade</td>
+                                        <td class="text-center">@item.hora_extra</td>
+                                    </tr>
+                                }
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
