@@ -84,6 +84,16 @@ namespace PCM.WEB.MODELS
         public string percentualAtendido { get; set; }
     }
 
+    public class dashboardGovernancaApartamentoInfo
+    {
+        public int sfoVago { get; set; }
+        public int sfoOcupado { get; set; }
+        public int sfoBloqueado { get; set; }
+        public int taManutencao { get; set; }
+        public int taPermanencia { get; set; }
+        public int taSaida { get; set; }
+    }
+
     public class dashboardGovernancaChartUHxCamareira
     {
         public string camareira { get; set; }
@@ -468,4 +478,96 @@ namespace PCM.WEB.MODELS
         public int ativoValue { get; set; }
     }
 
+    public class DesempenhoGovernancaViewModel
+    {
+        public int UnidadeId { get; set; }
+        public string NomeUnidade { get; set; }
+        public int MesReferencia { get; set; }
+        public int AnoReferencia { get; set; }
+        public string MesLabel { get; set; }
+        public int DiasDecorridos { get; set; }
+        public int DiasRestantes { get; set; }
+
+        public int TotalUHsArrumadas { get; set; }
+        public int TotalUHsVistoriadas { get; set; }
+        public decimal PctVistoria { get; set; }
+        public int TotalNC { get; set; }
+        public int TotalRetrabalho { get; set; }
+        public decimal IndiceNC { get; set; }
+        public decimal IndiceRetrabalho { get; set; }
+        public int TotalOSManutencao { get; set; }
+
+        public int MetaMensalUHs { get; set; }
+        public int RealizadoUHs { get; set; }
+        public decimal GaugePct { get; set; }
+        public int TotalNcGeral { get; set; }
+
+        public List<EvolucaoDiariaItem> EvolucaoDiaria { get; set; } = new List<EvolucaoDiariaItem>();
+        public List<CamareiraDesempenhoItem> Camareiras { get; set; } = new List<CamareiraDesempenhoItem>();
+        public List<TopNcItem> TopNcItens { get; set; } = new List<TopNcItem>();
+    }
+
+    public class EvolucaoDiariaItem
+    {
+        public int Dia { get; set; }
+        public int NC { get; set; }
+        public int Retrabalho { get; set; }
+        public int UHsSaida { get; set; }
+        public int UHsVistoriadas { get; set; }
+        public int UHsPermanencia { get; set; }
+        public int UHsManutencao { get; set; }
+        public int MetaDiaria { get; set; }
+    }
+
+    public class CamareiraDesempenhoItem
+    {
+        public string Nome { get; set; }
+        public int UHsArrumadas { get; set; }
+        public int NC { get; set; }
+        public int Retrabalho { get; set; }
+        public int DiasTrabalhados { get; set; }
+    }
+
+    public class TopNcItem
+    {
+        public string ItemVistoria { get; set; }
+        public int Quantidade { get; set; }
+    }
+
+    public class DesempenhoGovernancaAllViewModel
+    {
+        public string MesLabel { get; set; }
+        public int MesReferencia { get; set; }
+        public int AnoReferencia { get; set; }
+        public int QtdCamareira { get; set; }
+        public int QtdVistoriador { get; set; }
+        public int TotalUHsArrumadas { get; set; }
+        public int TotalUHsSaida { get; set; }
+        public int TotalUHsPermanencia { get; set; }
+        public int TotalUHsVistoriadas { get; set; }
+        public int TotalNC { get; set; }
+        public int TotalRetrabalho { get; set; }
+        public int TotalOSManutencao { get; set; }
+        public decimal PctVistoriaMedia { get; set; }
+        public List<DesempenhoGovernancaAllUnidadeItem> Unidades { get; set; } = new List<DesempenhoGovernancaAllUnidadeItem>();
+    }
+
+    public class DesempenhoGovernancaAllUnidadeItem
+    {
+        public int CodigoUnidade { get; set; }
+        public string NomeUnidade { get; set; }
+        public int QtdCamareira { get; set; }
+        public int QtdVistoriador { get; set; }
+        public int UHsArrumadas { get; set; }
+        public int UHsSaida { get; set; }
+        public int UHsPermanencia { get; set; }
+        public int UHsVistoriadas { get; set; }
+        public decimal PctVistoriaSaidas { get; set; }
+        public int OSManutencao { get; set; }
+        public int TotalNC { get; set; }
+        public decimal NCPorUH { get; set; }
+        public int TotalRetrabalho { get; set; }
+        public decimal RetrabPorUH { get; set; }
+        public decimal Score { get; set; }
+    }
 }

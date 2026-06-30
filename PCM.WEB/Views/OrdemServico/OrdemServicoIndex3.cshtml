@@ -1,0 +1,807 @@
+@*
+    OrdemServicoIndex3.cshtml — REDESIGN v2.0
+    Baseado em: M01-OrdemServicoIndex2.cshtml
+    Data: 2026-06-25
+    IMPORTANTE: Preservar todos os IDs e names originais — o JS existente depende deles.
+*@
+
+@section Style {
+<style>
+/* =================================================================
+   M01 — ORDEM DE SERVIÇO — Estilos Redesign v2.0
+   ================================================================= */
+
+/* -----------------------------------------------------------------
+   1. KPI TORRE (faixa de cards clicáveis no topo)
+   ----------------------------------------------------------------- */
+.os-kpi-strip {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: rgba(0,0,0,0.06) 0px 4px 14px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+.os-kpi-strip .torre-comando-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+.os-kpi-strip .torre-item {
+    flex: 1 1 140px;
+    padding: 14px 18px;
+    border-right: 1px solid #F0F1F3;
+    border-bottom: 1px solid #F0F1F3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    transition: background 0.15s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+.os-kpi-strip .torre-item:last-child { border-right: none; }
+.os-kpi-strip .torre-item:hover    { background: #F8F9FB; }
+.os-kpi-strip .torre-item.kpi-ativo {
+    background: #F8F9FB;
+    border-bottom: 2px solid currentColor;
+}
+
+/* -----------------------------------------------------------------
+   2. CARD DE FILTRO (colapsável)
+   ----------------------------------------------------------------- */
+.filter-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: rgba(0,0,0,0.06) 0px 4px 14px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+.filter-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 18px;
+    border-bottom: 1px solid #F0F1F3;
+    cursor: pointer;
+    user-select: none;
+}
+.filter-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.filter-toggle-icon {
+    font-size: 11px;
+    color: #9CA3AF;
+    transition: transform 0.2s;
+}
+.filter-card-header.collapsed .filter-toggle-icon { transform: rotate(-90deg); }
+
+.filter-card-body { padding: 14px 18px 10px; }
+
+.filter-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6B7280;
+    margin-bottom: 3px;
+}
+/* Inputs do filtro — estilo unificado */
+.filter-card .form-control {
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+    font-size: 12px;
+    color: #374151;
+    background: #FAFAFA;
+    height: 34px;
+}
+.filter-card .form-control:focus {
+    border-color: #374151;
+    box-shadow: 0 0 0 2px rgba(55,65,81,0.08);
+    background: #fff;
+}
+/* Select2 dentro do filtro */
+.filter-card .select2-container--default .select2-selection--single {
+    border-radius: 8px !important;
+    border: 1px solid #E5E7EB !important;
+    height: 34px !important;
+    background: #FAFAFA !important;
+}
+.filter-card .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 32px !important;
+    font-size: 12px !important;
+    padding-left: 10px !important;
+    color: #374151;
+}
+.filter-card .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 32px !important;
+}
+/* Input-group separador de data */
+.filter-card .date-sep {
+    background: #F3F4F6;
+    border: 1px solid #E5E7EB;
+    border-left: none;
+    border-right: none;
+    font-size: 10px;
+    color: #9CA3AF;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+}
+.filter-card .input-group .form-control:first-child  { border-radius: 8px 0 0 8px !important; }
+.filter-card .input-group .form-control:last-child   { border-radius: 0 8px 8px 0 !important; }
+
+/* ── Campo com valor preenchido (filtro ativo) ── */
+.filter-card .form-control.filter-ativo {
+    background: #EFF6FF !important;
+    border-color: #93C5FD !important;
+    color: #1E40AF;
+}
+.filter-card .select2-container.filter-ativo .select2-selection--single {
+    background: #EFF6FF !important;
+    border-color: #93C5FD !important;
+}
+.filter-card .select2-container.filter-ativo .select2-selection__rendered {
+    color: #1E40AF !important;
+}
+.filter-card .input-group:has(.form-control.filter-ativo) .date-sep {
+    background: #EFF6FF;
+    border-color: #93C5FD;
+    color: #93C5FD;
+}
+
+/* Botões do filtro */
+.btn-filtrar {
+    background: #374151;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: background 0.15s;
+}
+.btn-filtrar:hover { background: #111827; color: #fff; }
+.btn-limpar {
+    background: transparent;
+    color: #9CA3AF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+}
+.btn-limpar:hover { border-color: #374151; color: #374151; }
+
+/* Badge de filtros ativos */
+.badge-filtros-ativos {
+    display: inline-flex;
+    align-items: center;
+    background: #374151;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 2px 6px;
+    line-height: 1;
+}
+
+/* -----------------------------------------------------------------
+   3. CARD DA TABELA
+   ----------------------------------------------------------------- */
+.table-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: rgba(0,0,0,0.06) 0px 4px 14px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+.table-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid #F0F1F3;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.table-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.table-card-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.btn-pcm {
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+.btn-pcm-dark  { background: #374151; color: #fff; border: none; }
+.btn-pcm-dark:hover  { background: #111827; color: #fff; }
+.btn-pcm-ghost { background: transparent; color: #374151; border: 1px solid #E5E7EB; }
+.btn-pcm-ghost:hover { border-color: #374151; color: #374151; }
+
+/* Tabela */
+.table-card .dataTables_wrapper { padding: 0 18px 16px; }
+.table-card table.dataTable thead th {
+    background-color: #F3F4F6 !important;
+    color: #374151 !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    border-bottom: 1px solid #E5E7EB !important;
+    white-space: nowrap !important;
+    padding: 9px 8px !important;
+}
+.table-card table.dataTable tbody td {
+    font-size: 12px;
+    color: #374151;
+    padding: 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid #F3F4F6;
+}
+.table-card table.dataTable tbody tr:hover td { background: #F8F9FB; }
+
+/* -----------------------------------------------------------------
+   4. BOTÃO DE AÇÕES POR LINHA (dropdown consolidado)
+   ----------------------------------------------------------------- */
+.btn-row-actions {
+    background: transparent;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 13px;
+    color: #6B7280;
+    line-height: 1.4;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+.btn-row-actions:hover,
+.btn-row-actions:focus,
+.btn-row-actions[aria-expanded="true"] {
+    background: #F3F4F6;
+    border-color: #374151;
+    color: #374151;
+}
+.actions-menu {
+    min-width: 175px;
+    padding: 4px 0;
+    border-radius: 10px;
+    border: 1px solid #E5E7EB;
+    box-shadow: rgba(0,0,0,0.10) 0px 8px 24px;
+}
+.actions-menu .dropdown-item {
+    padding: 7px 14px;
+    color: #374151;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.actions-menu .dropdown-item i { width: 14px; text-align: center; }
+.actions-menu .dropdown-item:hover { background: #F8F9FB; color: #111827; }
+.actions-menu .dropdown-item.item-danger { color: #EF5350; }
+.actions-menu .dropdown-item.item-danger:hover { background: #FEF2F2; }
+.actions-menu .dropdown-divider { margin: 3px 0; border-color: #F3F4F6; }
+
+/* -----------------------------------------------------------------
+   5. BADGES DE STATUS
+   ----------------------------------------------------------------- */
+.badge-os {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+.badge-os-nova      { background: #F3F4F6; color: #6C757D; }
+.badge-os-atrasada  { background: #FEF2F2; color: #EF5350; }
+.badge-os-aberto    { background: #FFFBEB; color: #D97706; }
+.badge-os-vinculada { background: #ECFEFF; color: #0891B2; }
+.badge-os-andamento { background: #EFF6FF; color: #42A5F5; }
+.badge-os-concluida { background: #F0FDF4; color: #6EAB4D; }
+.badge-os-backlog   { background: #F3F4F6; color: #6C757D; }
+.badge-os-cancelada { background: #FEF2F2; color: #9CA3AF; }
+</style>
+}
+
+<div id="page-content">
+<div class="content content-boxed">
+
+    @Html.AntiForgeryToken()
+
+    <!-- Campos hidden (compatibilidade com JS existente — não remover) -->
+    <input type="hidden" id="empresa"  name="empresa"  value="@ViewBag.Empresa" />
+    <input type="hidden" id="usuario"  name="usuario"  value="@ViewBag.Usuario" />
+    <input type="hidden" id="hospede"  name="hospede"  value="-1" />
+    <input type="hidden" id="codigo_ordem_servico"        value="0" />
+    <input type="hidden" id="codigo_unidade"              value="0" />
+    <input type="hidden" id="codigo_status"               value="0" />
+    <input type="hidden" id="data_os"                     value="" />
+    <input type="hidden" id="codigo_ordem_servico_cancelar" value="0" />
+    <input type="hidden" id="codigo_unidade_cancelar"       value="0" />
+
+    <!-- ================================================================
+         INÍCIO: KPI TORRE DE OS
+         ================================================================ -->
+    <div class="os-kpi-strip mb-3" id="os-kpi-strip">
+        <div class="torre-comando-grid" id="torre-os-kpi">
+
+            <a class="torre-item" href="javascript:void(0)"
+               id="kpi-nova" data-os-status="">
+                <div class="torre-header">
+                    <i class="si si-wrench torre-icon text-primary"></i>
+                    <span class="torre-label2 text-muted">Ordem de Serviço</span>
+                </div>
+                <div class="os-value text-newOS" id="kpi-count-nova">—</div>
+                <div class="torre-meta"><span>NOVA</span></div>
+            </a>
+
+            <a class="torre-item" href="javascript:void(0)"
+               id="kpi-atrasada" data-os-status="atrasada">
+                <div class="torre-header">
+                    <i class="fa fa-gear torre-icon text-danger"></i>
+                    <span class="torre-label2 text-muted">O.S. Atrasada</span>
+                </div>
+                <div class="os-value text-danger" id="kpi-count-atrasada">—</div>
+                <div class="torre-meta"><span>ATRASADA</span></div>
+            </a>
+
+            <a class="torre-item" href="javascript:void(0)"
+               id="kpi-aberto" data-os-status="1">
+                <div class="torre-header">
+                    <i class="fa fa-gear torre-icon text-warning"></i>
+                    <span class="torre-label2 text-muted">O.S. em Aberto</span>
+                </div>
+                <div class="os-value text-warning" id="kpi-count-aberto">—</div>
+                <div class="torre-meta"><span>EM ABERTO</span></div>
+            </a>
+
+            <a class="torre-item" href="javascript:void(0)"
+               id="kpi-vinculada" data-os-status="2">
+                <div class="torre-header">
+                    <i class="fa fa-gear torre-icon text-info"></i>
+                    <span class="torre-label2 text-muted">O.S. Vinculada</span>
+                </div>
+                <div class="os-value text-info" id="kpi-count-vinculada">—</div>
+                <div class="torre-meta"><span>VINCULADA</span></div>
+            </a>
+
+            <a class="torre-item" href="javascript:void(0)"
+               id="kpi-andamento" data-os-status="3">
+                <div class="torre-header">
+                    <i class="fa fa-gear torre-icon text-primary"></i>
+                    <span class="torre-label2 text-muted">O.S. em Andamento</span>
+                </div>
+                <div class="os-value text-primary" id="kpi-count-andamento">—</div>
+                <div class="torre-meta"><span>EM ANDAMENTO</span></div>
+            </a>
+
+            <a class="torre-item" href="javascript:void(0)"
+               id="kpi-concluida" data-os-status="4">
+                <div class="torre-header">
+                    <i class="fa fa-check torre-icon text-earth"></i>
+                    <span class="torre-label2 text-muted">O.S. Concluídas</span>
+                </div>
+                <div class="os-value text-earth" id="kpi-count-concluida">—</div>
+                <div class="torre-meta"><span>CONCLUÍDAS</span></div>
+            </a>
+
+            <a class="torre-item" href="javascript:void(0)"
+               id="kpi-backlog" data-os-status="5">
+                <div class="torre-header">
+                    <i class="fa fa-clock-o torre-icon text-muted"></i>
+                    <span class="torre-label2 text-muted">Backlog</span>
+                </div>
+                <div class="os-value text-muted" id="kpi-count-backlog">—</div>
+                <div class="torre-meta"><span>BACKLOG</span></div>
+            </a>
+
+        </div>
+    </div>
+    <!-- FIM: KPI Torre de OS -->
+
+
+    <!-- ================================================================
+         INÍCIO: FILTROS (colapsável)
+         ================================================================ -->
+    <div class="filter-card" id="filter-card-os">
+
+        <div class="filter-card-header" id="filter-header-btn"
+             data-bs-toggle="collapse" data-bs-target="#filter-body-os"
+             aria-expanded="true" aria-controls="filter-body-os">
+            <div class="filter-card-title">
+                <i class="fa fa-sliders"></i>
+                Filtros
+                <span class="badge-filtros-ativos ms-1" id="badge-filtros" style="display:none;">0</span>
+            </div>
+            <i class="fa fa-chevron-down filter-toggle-icon"></i>
+        </div>
+
+        <div class="filter-card-body collapse show" id="filter-body-os">
+            <div class="row g-2">
+
+                <!-- Linha 1 -->
+                <div class="col-md-3">
+                    <label class="filter-label" for="unidade">Unidade</label>
+                    <select id="unidade" name="unidade"
+                            class="js-select2 form-control js-select2-enabled">
+                        @* Options carregadas pelo servidor *@
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="filter-label">Período da OS</label>
+                    <div class="input-group">
+                        <input type="text" id="data_inicio" name="data_inicio"
+                               class="form-control" placeholder="De" />
+                        <span class="date-sep">—</span>
+                        <input type="text" id="data_termino" name="data_termino"
+                               class="form-control" placeholder="Até" />
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="filter-label" for="ordem_servico">Nº OS</label>
+                    <input type="text" id="ordem_servico" name="ordem_servico"
+                           class="form-control" placeholder="Número" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="filter-label" for="status">Status</label>
+                    <select id="status" name="status"
+                            class="js-select2 form-control js-select2-enabled">
+                        @* Options: Pendente, Vinculada, Em Andamento, Concluída, Backlog … *@
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="filter-label" for="prioridade">Prioridade</label>
+                    <select id="prioridade" name="prioridade"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <!-- Linha 2 -->
+                <div class="col-md-2">
+                    <label class="filter-label" for="setor">Setor</label>
+                    <select id="setor" name="setor"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="filter-label" for="apartamento">Local / U.H.</label>
+                    <select id="apartamento" name="apartamento"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="filter-label" for="equipamento">Máquina / Equipamento</label>
+                    <select id="equipamento" name="equipamento"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="filter-label" for="origem">Origem</label>
+                    <select id="origem" name="origem"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="filter-label" for="departamento">Departamento</label>
+                    <select id="departamento" name="departamento"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <!-- Linha 3 -->
+                <div class="col-md-3">
+                    <label class="filter-label" for="solicitante">Solicitante</label>
+                    <select id="solicitante" name="solicitante"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="filter-label" for="responsavel_apartamento">Responsável</label>
+                    <select id="responsavel_apartamento" name="responsavel_apartamento"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="filter-label" for="executor">Executor</label>
+                    <input type="text" id="executor" name="executor"
+                           class="form-control" placeholder="Nome" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="filter-label">Data de Execução</label>
+                    <div class="input-group">
+                        <input type="text" id="data_inicio_execucao" name="data_inicio_execucao"
+                               class="form-control" placeholder="De" />
+                        <span class="date-sep">—</span>
+                        <input type="text" id="data_termino_execucao" name="data_termino_execucao"
+                               class="form-control" placeholder="Até" />
+                    </div>
+                </div>
+
+                <!-- Linha 4 -->
+                <div class="col-md-5">
+                    <label class="filter-label" for="justificativa_apontamento">Justificativa de Apontamento</label>
+                    <select id="justificativa_apontamento" name="justificativa_apontamento"
+                            class="js-select2 form-control js-select2-enabled">
+                    </select>
+                </div>
+
+                <!-- Botões -->
+                <div class="col-12 d-flex justify-content-end align-items-center gap-2 pt-1">
+                    <button type="button" id="clearFilter"
+                            onclick="limpaFiltros()" class="btn-limpar">
+                        <i class="fa fa-times me-1"></i> Limpar
+                    </button>
+                    <button type="button" id="filtrar" class="btn-filtrar">
+                        <i class="fa fa-search me-1"></i> Filtrar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- FIM: Filtros -->
+
+
+    <!-- ================================================================
+         INÍCIO: TABELA DE ORDENS DE SERVIÇO
+         ================================================================ -->
+    <div class="table-card" id="table-card-os">
+
+        <div class="table-card-header">
+            <div class="table-card-title">
+                <i class="fa fa-list-alt"></i>
+                Ordens de Serviço
+            </div>
+            <div class="table-card-actions">
+                <button type="button" id="btnBacklog" class="btn-pcm btn-pcm-ghost">
+                    <i class="fa fa-arrow-up"></i> Enviar p/ Backlog
+                </button>
+                <button type="button" id="btnReturnBacklog" class="btn-pcm btn-pcm-ghost">
+                    <i class="fa fa-arrow-down"></i> Retornar do Backlog
+                </button>
+                <a href="@Url.Action("OrdemServicoCreate", "OrdemServico")"
+                   class="btn-pcm btn-pcm-dark">
+                    <i class="fa fa-plus"></i> Nova OS
+                </a>
+            </div>
+        </div>
+
+        <div style="padding: 0 18px 18px;">
+            <table id="tableOS"
+                   class="table table-bordered table-striped table-vcenter js-dataTable-full dataTable"
+                   style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width:32px;">
+                            <div class="css-control css-checkbox css-checkbox-default">
+                                <input type="checkbox" class="css-control-input select-all-checkbox" />
+                                <span class="css-control-indicator"></span>
+                            </div>
+                        </th>
+                        <th class="text-center details-control" style="width:22px;"></th>
+                        <th class="text-center d-md-table-cell">Ordem de Serviço</th>
+                        <th class="text-center d-md-table-cell">Data</th>
+                        <th class="d-none d-md-table-cell">Unidade</th>
+                        <th class="d-none d-lg-table-cell">Local</th>
+                        <th class="d-none d-lg-table-cell">Solicitante</th>
+                        <th class="d-none d-lg-table-cell">Colaborador Vinculado</th>
+                        <th class="d-none d-lg-table-cell">Descrição</th>
+                        <th class="d-none d-md-table-cell text-center">Data Execução</th>
+                        <th class="d-none d-md-table-cell text-center">Prioridade</th>
+                        <th class="d-none d-md-table-cell text-center">Prazo de Execução</th>
+                        <th class="d-none d-md-table-cell text-center">Status</th>
+                        <th class="text-center" style="width:80px;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- FIM: Tabela de OS -->
+
+
+    @* Modal Vincular OS *@
+    <div class="modal fade" id="modalVincularOS" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="border-radius: 14px;">
+                <div class="modal-header" style="border-bottom: 1px solid #E5E7EB;">
+                    <h5 class="modal-title" style="font-weight:600;">Vincular Colaborador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <select id="funcionario" name="funcionario"
+                            class="js-select2 form-control h-75 js-select2-enabled"
+                            multiple="multiple">
+                    </select>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #E5E7EB;">
+                    <button type="button" class="btn-pcm btn-pcm-ghost" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn-pcm btn-pcm-dark" id="btnVincularConfirmar">
+                        <i class="fa fa-link me-1"></i> Vincular
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Modal Cancelar OS *@
+    <div class="modal fade" id="modalCancelarOS" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 14px;">
+                <div class="modal-header" style="border-bottom: 1px solid #E5E7EB;">
+                    <h5 class="modal-title" style="font-weight:600;">Cancelar Ordem de Serviço</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="filter-label mb-1">Justificativa</label>
+                    <select id="justificativa_cancelamento" name="justificativa_cancelamento"
+                            class="form-control h-75">
+                    </select>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #E5E7EB;">
+                    <button type="button" class="btn-pcm btn-pcm-ghost" data-bs-dismiss="modal">Voltar</button>
+                    <button type="button" class="btn-pcm btn-pcm-dark" id="btnExcluirConfirmar"
+                            style="background:#EF5350;">
+                        <i class="fa fa-trash me-1"></i> Confirmar Cancelamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /content -->
+</div><!-- /page-content -->
+
+
+@section Scripts {
+<script>
+/* =================================================================
+   M01 — ORDEM DE SERVIÇO — Scripts Redesign v2.0
+   ================================================================= */
+
+$(document).ready(function () {
+
+    // ----------------------------------------------------------------
+    // 1. KPI CARDS — clique aplica filtro de status + dispara busca
+    // ----------------------------------------------------------------
+    $('#torre-os-kpi .torre-item').on('click', function () {
+        var $card    = $(this);
+        var statusVal = $card.data('os-status');
+
+        $('#torre-os-kpi .torre-item').removeClass('kpi-ativo');
+        $card.addClass('kpi-ativo');
+
+        if (statusVal === 'atrasada') {
+            $('#status').val('atrasada').trigger('change');
+        } else if (statusVal !== '' && statusVal !== undefined) {
+            $('#status').val(statusVal).trigger('change');
+        } else {
+            $('#status').val('').trigger('change');
+        }
+
+        setTimeout(function () {
+            $('#filtrar').trigger('click');
+        }, 80);
+    });
+
+    $('#filtrar').on('click', function () {
+        var currentStatus = $('#status').val();
+        $('#torre-os-kpi .torre-item').each(function () {
+            var match = $(this).data('os-status') == currentStatus;
+            $(this).toggleClass('kpi-ativo', match);
+        });
+        atualizarBadgeFiltros();
+    });
+
+    $('#clearFilter').on('click', function () {
+        $('#torre-os-kpi .torre-item').removeClass('kpi-ativo');
+        $('#filter-body-os .form-control, #filter-body-os .form-select').removeClass('filter-ativo');
+        $('#filter-body-os select').each(function () {
+            if ($(this).data('select2')) $(this).data('select2').$container.removeClass('filter-ativo');
+        });
+        $('#badge-filtros').hide();
+    });
+
+    // ----------------------------------------------------------------
+    // 2. FILTRO COLAPSÁVEL — Ajuste de ícone
+    // ----------------------------------------------------------------
+    $('#filter-header-btn').on('click', function () {
+        $(this).toggleClass('collapsed');
+    });
+
+    // ----------------------------------------------------------------
+    // 3. BADGE DE FILTROS ATIVOS + HIGHLIGHT
+    // ----------------------------------------------------------------
+    $('#filter-body-os').on('change input', 'input, select', atualizarBadgeFiltros);
+    atualizarBadgeFiltros();
+
+});
+
+function atualizarBadgeFiltros() {
+    var camposSelect = [
+        '#unidade', '#setor', '#apartamento', '#status',
+        '#equipamento', '#prioridade', '#solicitante',
+        '#responsavel_apartamento', '#origem', '#departamento',
+        '#justificativa_apontamento'
+    ];
+    var camposText = ['#ordem_servico', '#executor'];
+    var count = 0;
+
+    camposSelect.forEach(function (id) {
+        var $el = $(id);
+        var v = $el.val();
+        var ativo = v && v !== '' && v !== '-1';
+        var $s2 = $el.data('select2') ? $el.data('select2').$container : $el;
+        $s2.toggleClass('filter-ativo', !!ativo);
+        if (ativo) count++;
+    });
+
+    camposText.forEach(function (id) {
+        var $el = $(id);
+        var ativo = !!$el.val();
+        $el.toggleClass('filter-ativo', ativo);
+        if (ativo) count++;
+    });
+
+    var dataIni    = $('#data_inicio').val();
+    var dataFim    = $('#data_termino').val();
+    var execIni    = $('#data_inicio_execucao').val();
+    var execFim    = $('#data_termino_execucao').val();
+    $('#data_inicio, #data_termino').toggleClass('filter-ativo', !!(dataIni || dataFim));
+    $('#data_inicio_execucao, #data_termino_execucao').toggleClass('filter-ativo', !!(execIni || execFim));
+    if (dataIni || dataFim) count++;
+    if (execIni || execFim) count++;
+
+    var $badge = $('#badge-filtros');
+    if (count > 0) { $badge.text(count).show(); }
+    else           { $badge.hide(); }
+}
+</script>
+}

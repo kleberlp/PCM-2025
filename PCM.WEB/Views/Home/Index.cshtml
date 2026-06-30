@@ -537,9 +537,23 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                legend: { display: true, labels: { padding: 20 }, position: 'bottom' },
+                legend: {
+                    display: true, position: 'bottom',
+                    labels: {
+                        usePointStyle: true, pointStyle: 'line',
+                        generateLabels: function (chart) {
+                            return chart.data.datasets.map(function (ds, i) {
+                                return {
+                                    text: ds.label, fillStyle: ds.borderColor, strokeStyle: ds.borderColor,
+                                    lineDash: ds.borderDash || [], lineWidth: 2, pointStyle: 'line',
+                                    hidden: !chart.isDatasetVisible(i), datasetIndex: i
+                                };
+                            });
+                        }
+                    }
+                },
                 title: { display: false },
-                tooltips: { enabled: true }
+                tooltips: { mode: 'index', intersect: false }
             }
         };
 

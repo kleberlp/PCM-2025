@@ -634,6 +634,53 @@ Public Class Governanca
 
     End Function
 
+    Public Function LoadDadosGovernanca(ByVal codigoEmpresa As Integer,
+                                        ByVal codigoUnidade As Integer) As List(Of dashboardGovernancaApartamentoInfo)
+
+        Try
+
+            'Váriaveis Locais
+            Dim oReturn As New List(Of dashboardGovernancaApartamentoInfo)
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade)
+            }
+
+            'Executa Query
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_dashboard_governanca_apartamento_info", oSqlParameter)
+
+                If oSqlDataReader.HasRows Then
+
+                    While oSqlDataReader.Read
+
+                        Dim oInfo As New dashboardGovernancaApartamentoInfo
+
+                        oInfo.sfoVago = oSqlDataReader.Item("sfo_vago")
+                        oInfo.sfoOcupado = oSqlDataReader.Item("sfo_bloqueado")
+                        oInfo.sfoBloqueado = oSqlDataReader.Item("sfo_bloqueado")
+                        oInfo.taManutencao = oSqlDataReader.Item("ta_manutencao")
+                        oInfo.taPermanencia = oSqlDataReader.Item("ta_permanencia")
+                        oInfo.taSaida = oSqlDataReader.Item("ta_saida")
+
+                        oReturn.Add(oInfo)
+
+                    End While
+
+                End If
+
+            End Using
+
+            'Retorno da Função
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     Public Function LoadNCCamareira(ByVal codigoEmpresa As Integer,
                                     ByVal codigoUnidade As Integer,
                                     ByVal dataInicio As DateTime,
@@ -4013,6 +4060,231 @@ Public Class Governanca
             Throw ex
         End Try
 
+    End Function
+
+#End Region
+
+#Region "::: DESEMPENHO GOVERNANÇA :::"
+
+    Public Function LoadDesempenhoGovernancaKpi(ByVal codigoEmpresa As Integer,
+                                                ByVal codigoUnidade As Integer,
+                                                ByVal data As String) As DesempenhoGovernancaViewModel
+        Try
+            Dim _return As New DesempenhoGovernancaViewModel()
+
+            Dim _sqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data", SqlDbType.Date, data)
+            }
+
+            Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_desempenho_kpi", _sqlParameter)
+                If _sqlDataReader.HasRows Then
+                    _sqlDataReader.Read()
+                    _return.NomeUnidade = SafeGetString(_sqlDataReader, "nome_unidade")
+                    _return.MesReferencia = SafeGetInt32(_sqlDataReader, "mes_referencia")
+                    _return.AnoReferencia = SafeGetInt32(_sqlDataReader, "ano_referencia")
+                    _return.MesLabel = SafeGetString(_sqlDataReader, "mes_label")
+                    _return.DiasDecorridos = SafeGetInt32(_sqlDataReader, "dias_decorridos")
+                    _return.DiasRestantes = SafeGetInt32(_sqlDataReader, "dias_restantes")
+                    _return.TotalUHsArrumadas = SafeGetInt32(_sqlDataReader, "uhs_arrumadas")
+                    _return.TotalUHsVistoriadas = SafeGetInt32(_sqlDataReader, "uhs_vistoriadas")
+                    _return.PctVistoria = CDec(SafeGetFloat(_sqlDataReader, "pct_vistoria"))
+                    _return.TotalNC = SafeGetInt32(_sqlDataReader, "total_nc")
+                    _return.TotalRetrabalho = SafeGetInt32(_sqlDataReader, "total_retrabalho")
+                    _return.IndiceNC = CDec(SafeGetFloat(_sqlDataReader, "indice_nc"))
+                    _return.IndiceRetrabalho = CDec(SafeGetFloat(_sqlDataReader, "indice_retrabalho"))
+                    _return.TotalOSManutencao = SafeGetInt32(_sqlDataReader, "total_os_manutencao")
+                    _return.MetaMensalUHs = SafeGetInt32(_sqlDataReader, "meta_mensal_uhs")
+                    _return.RealizadoUHs = _return.TotalUHsArrumadas
+                    If _return.MetaMensalUHs > 0 Then
+                        _return.GaugePct = Math.Round(CDec(_return.RealizadoUHs) / CDec(_return.MetaMensalUHs) * 100, 1)
+                    End If
+                End If
+            End Using
+
+            Return _return
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
+    Public Function LoadDesempenhoGovernancaCamareira(ByVal codigoEmpresa As Integer,
+                                                      ByVal codigoUnidade As Integer,
+                                                      ByVal data As String) As List(Of CamareiraDesempenhoItem)
+        Try
+            Dim _return As New List(Of CamareiraDesempenhoItem)
+
+            Dim _sqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data", SqlDbType.Date, data)
+            }
+
+            Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_desempenho_camareira", _sqlParameter)
+                If _sqlDataReader.HasRows Then
+                    While _sqlDataReader.Read
+                        _return.Add(New CamareiraDesempenhoItem With {
+                            .Nome = SafeGetString(_sqlDataReader, "nome"),
+                            .UHsArrumadas = SafeGetInt32(_sqlDataReader, "uhs_arrumadas"),
+                            .NC = SafeGetInt32(_sqlDataReader, "nc"),
+                            .Retrabalho = SafeGetInt32(_sqlDataReader, "retrabalho"),
+                            .DiasTrabalhados = SafeGetInt32(_sqlDataReader, "dias_trabalhados")
+                        })
+                    End While
+                End If
+            End Using
+
+            Return _return
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
+    Public Function LoadDesempenhoGovernancaEvolucao(ByVal codigoEmpresa As Integer,
+                                                     ByVal codigoUnidade As Integer,
+                                                     ByVal data As String) As List(Of EvolucaoDiariaItem)
+        Try
+            Dim _return As New List(Of EvolucaoDiariaItem)
+
+            Dim _sqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data", SqlDbType.Date, data)
+            }
+
+            Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_desempenho_evolucao", _sqlParameter)
+                If _sqlDataReader.HasRows Then
+                    While _sqlDataReader.Read
+                        _return.Add(New EvolucaoDiariaItem With {
+                            .Dia = SafeGetInt32(_sqlDataReader, "dia"),
+                            .NC = SafeGetInt32(_sqlDataReader, "nc"),
+                            .Retrabalho = SafeGetInt32(_sqlDataReader, "retrabalho"),
+                            .UHsSaida = SafeGetInt32(_sqlDataReader, "uhs_saida"),
+                            .UHsVistoriadas = SafeGetInt32(_sqlDataReader, "uhs_vistoriadas"),
+                            .UHsPermanencia = SafeGetInt32(_sqlDataReader, "uhs_permanencia"),
+                            .UHsManutencao = SafeGetInt32(_sqlDataReader, "uhs_manutencao"),
+                            .MetaDiaria = SafeGetInt32(_sqlDataReader, "meta_diaria")
+                        })
+                    End While
+                End If
+            End Using
+
+            Return _return
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
+    Public Function LoadDesempenhoGovernancaTopNC(ByVal codigoEmpresa As Integer,
+                                                  ByVal codigoUnidade As Integer,
+                                                  ByVal data As String) As List(Of TopNcItem)
+        Try
+            Dim _return As New List(Of TopNcItem)
+
+            Dim _sqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data", SqlDbType.Date, data)
+            }
+
+            Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_desempenho_top_nc", _sqlParameter)
+                If _sqlDataReader.HasRows Then
+                    While _sqlDataReader.Read
+                        _return.Add(New TopNcItem With {
+                            .ItemVistoria = SafeGetString(_sqlDataReader, "item_vistoria"),
+                            .Quantidade = SafeGetInt32(_sqlDataReader, "quantidade")
+                        })
+                    End While
+                End If
+            End Using
+
+            Return _return
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
+#End Region
+
+#Region "::: DESEMPENHO GOVERNANÇA — TODAS AS UNIDADES :::"
+
+    Public Function LoadDesempenhoGovernancaAllKpi(ByVal codigoEmpresa As Integer,
+                                                   ByVal dataInicio As DateTime,
+                                                   ByVal dataTermino As DateTime) As DesempenhoGovernancaAllViewModel
+
+        Dim oReturn As New DesempenhoGovernancaAllViewModel
+
+        Dim oSqlParameter(2) As SqlParameter
+        oSqlParameter(0) = New SqlParameter("@codigo_empresa", codigoEmpresa)
+        oSqlParameter(1) = New SqlParameter("@data_inicio", dataInicio)
+        oSqlParameter(2) = New SqlParameter("@data_termino", dataTermino)
+
+        Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_desempenho_all_kpi", oSqlParameter)
+            If oSqlDataReader.Read() Then
+                oReturn.QtdCamareira = SafeGetInt32(oSqlDataReader, "qtd_camareira")
+                oReturn.QtdVistoriador = SafeGetInt32(oSqlDataReader, "qtd_vistoriador")
+                oReturn.TotalUHsArrumadas = SafeGetInt32(oSqlDataReader, "total_uhs_arrumadas")
+                oReturn.TotalUHsSaida = SafeGetInt32(oSqlDataReader, "total_uhs_saida")
+                oReturn.TotalUHsPermanencia = SafeGetInt32(oSqlDataReader, "total_uhs_permanencia")
+                oReturn.TotalUHsVistoriadas = SafeGetInt32(oSqlDataReader, "total_uhs_vistoriadas")
+                oReturn.TotalNC = SafeGetInt32(oSqlDataReader, "total_nc")
+                oReturn.TotalRetrabalho = SafeGetInt32(oSqlDataReader, "total_retrabalho")
+                oReturn.TotalOSManutencao = SafeGetInt32(oSqlDataReader, "total_os_manutencao")
+                oReturn.PctVistoriaMedia = CDec(SafeGetFloat(oSqlDataReader, "pct_vistoria_media"))
+            End If
+        End Using
+
+        Return oReturn
+    End Function
+
+    Public Function LoadDesempenhoGovernancaAllUnidades(ByVal codigoEmpresa As Integer,
+                                                        ByVal dataInicio As DateTime,
+                                                        ByVal dataTermino As DateTime) As List(Of DesempenhoGovernancaAllUnidadeItem)
+
+        Dim oReturn As New List(Of DesempenhoGovernancaAllUnidadeItem)
+
+        Dim oSqlParameter(2) As SqlParameter
+        oSqlParameter(0) = New SqlParameter("@codigo_empresa", codigoEmpresa)
+        oSqlParameter(1) = New SqlParameter("@data_inicio", dataInicio)
+        oSqlParameter(2) = New SqlParameter("@data_termino", dataTermino)
+
+        Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_desempenho_all_unidades", oSqlParameter)
+            While oSqlDataReader.Read()
+                Dim item As New DesempenhoGovernancaAllUnidadeItem
+                item.CodigoUnidade = SafeGetInt32(oSqlDataReader, "codigo_unidade")
+                item.NomeUnidade = SafeGetString(oSqlDataReader, "nome_unidade")
+                item.QtdCamareira = SafeGetInt32(oSqlDataReader, "qtd_camareira")
+                item.QtdVistoriador = SafeGetInt32(oSqlDataReader, "qtd_vistoriador")
+                item.UHsArrumadas = SafeGetInt32(oSqlDataReader, "uhs_arrumadas")
+                item.UHsSaida = SafeGetInt32(oSqlDataReader, "uhs_saida")
+                item.UHsPermanencia = SafeGetInt32(oSqlDataReader, "uhs_permanencia")
+                item.UHsVistoriadas = SafeGetInt32(oSqlDataReader, "uhs_vistoriadas")
+                item.PctVistoriaSaidas = CDec(SafeGetFloat(oSqlDataReader, "pct_vistoria_saidas"))
+                item.OSManutencao = SafeGetInt32(oSqlDataReader, "os_manutencao")
+                item.TotalNC = SafeGetInt32(oSqlDataReader, "total_nc")
+                item.NCPorUH = CDec(SafeGetFloat(oSqlDataReader, "nc_por_uh"))
+                item.TotalRetrabalho = SafeGetInt32(oSqlDataReader, "total_retrabalho")
+                item.RetrabPorUH = CDec(SafeGetFloat(oSqlDataReader, "retrab_por_uh"))
+                item.Score = If(item.UHsArrumadas = 0, 0D,
+                                Math.Max(0D, 100D - CDec(item.NCPorUH) * 8D - CDec(item.RetrabPorUH) * 4D))
+                oReturn.Add(item)
+            End While
+        End Using
+
+        Return oReturn
     End Function
 
 #End Region

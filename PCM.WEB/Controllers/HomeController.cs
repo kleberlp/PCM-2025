@@ -884,8 +884,13 @@ namespace PCM.WEB.Controllers
                                                                                 dataInicio: dataInicio,
                                                                                 dataTermino: dataTermino);
 
+                ViewBag.dadosGovernanca = oGovernanca.LoadDadosGovernanca(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                          codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
+
+
                 ViewBag.dataInicio = dataInicio;
                 ViewBag.dataTermino = dataTermino;
+                ViewBag.ShowDateFilter = true;
 
                 return View();
             }
@@ -1060,6 +1065,10 @@ namespace PCM.WEB.Controllers
 
                 ViewBag.dataInicio = dataInicio;
                 ViewBag.dataTermino = dataTermino;
+                ViewBag.ShowDateFilter = true;
+
+                ViewBag.dadosGovernanca = oGovernanca.LoadDadosGovernanca(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                          codigoUnidade: unidade);
 
                 return View();
             }
@@ -1890,37 +1899,124 @@ namespace PCM.WEB.Controllers
 
         #region "::: DESEMPENHO :::"
 
-        public ActionResult DesempenhoGovernanca()
+        public ActionResult DesempenhoGovernanca(string data = null)
         {
 
-
             if (Session["empresa"] == null)
-            {
                 return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
-            }
-            else
-            {
-                string data = new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.DaysInMonth(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month)).ToShortDateString();
 
-                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                                bCadastro: false), "codigo", "descricao", Convert.ToInt32(Session["codigo_unidade"].ToString()));
+            int codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString());
+            int codigoUnidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
 
-                ViewBag.data = new SelectList(oCombo.DataDashboard(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", data);
+            if (codigoUnidade == -1)
+                return RedirectToAction("DesempenhoGovernancaAll", new { data });
 
-                return View();
-            }
+            if (string.IsNullOrEmpty(data))
+                data = new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.DaysInMonth(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month)).ToShortDateString();
 
+            ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: codigoEmpresa,
+                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                            bCadastro: false), "codigo", "descricao", codigoUnidade);
+
+            ViewBag.data = new SelectList(oCombo.DataGovernanca(iCodigoEmpresa: codigoEmpresa,
+                                                                iCodigoUnidade: codigoUnidade), "codigo", "descricao", data);
+
+            ViewBag.ShowDateFilter = true;
+
+            var vm = oGovernanca.LoadDesempenhoGovernancaKpi(codigoEmpresa, codigoUnidade, data);
+            vm.UnidadeId = codigoUnidade;
+            vm.Camareiras = oGovernanca.LoadDesempenhoGovernancaCamareira(codigoEmpresa, codigoUnidade, data);
+            vm.EvolucaoDiaria = oGovernanca.LoadDesempenhoGovernancaEvolucao(codigoEmpresa, codigoUnidade, data);
+            vm.TopNcItens = oGovernanca.LoadDesempenhoGovernancaTopNC(codigoEmpresa, codigoUnidade, data);
+            vm.TotalNcGeral = vm.TopNcItens.Sum(x => x.Quantidade);
+
+            return View(vm);
         }
 
         [HttpPost]
-        public JsonResult LoadDesempenhoGovernanca(int unidade = -1, string data = "")
+        public ActionResult DesempenhoGovernanca(int unidade, string data)
         {
-            return Json(oDashboard.DashboardGovernancaInfo(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                                  codigoUnidade: unidade,
-                                                                  data: data));
+            if (Session["empresa"] == null)
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
 
+            int codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString());
+
+            ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: codigoEmpresa,
+                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                            bCadastro: false), "codigo", "descricao", unidade);
+
+            ViewBag.data = new SelectList(oCombo.DataGovernanca(iCodigoEmpresa: codigoEmpresa,
+                                                                iCodigoUnidade: unidade), "codigo", "descricao", data);
+            ViewBag.ShowDateFilter = true;
+
+            var vm = oGovernanca.LoadDesempenhoGovernancaKpi(codigoEmpresa, unidade, data);
+            vm.UnidadeId = unidade;
+            vm.Camareiras = oGovernanca.LoadDesempenhoGovernancaCamareira(codigoEmpresa, unidade, data);
+            vm.EvolucaoDiaria = oGovernanca.LoadDesempenhoGovernancaEvolucao(codigoEmpresa, unidade, data);
+            vm.TopNcItens = oGovernanca.LoadDesempenhoGovernancaTopNC(codigoEmpresa, unidade, data);
+            vm.TotalNcGeral = vm.TopNcItens.Sum(x => x.Quantidade);
+
+            return View(vm);
+        }
+
+        public ActionResult DesempenhoGovernancaAll(string data = null)
+        {
+            if (Session["empresa"] == null)
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+
+            int codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString());
+
+            DateTime dataTermino;
+            if (!string.IsNullOrEmpty(data) && DateTime.TryParse(data, out dataTermino))
+            {
+                dataTermino = new DateTime(dataTermino.Year, dataTermino.Month, DateTime.DaysInMonth(dataTermino.Year, dataTermino.Month));
+            }
+            else
+            {
+                var hoje = DateTime.Now.AddDays(-1);
+                dataTermino = new DateTime(hoje.Year, hoje.Month, DateTime.DaysInMonth(hoje.Year, hoje.Month));
+            }
+            var dataInicio = new DateTime(dataTermino.Year, dataTermino.Month, 1);
+
+            ViewBag.data = new SelectList(oCombo.DataGovernanca(iCodigoEmpresa: codigoEmpresa,
+                                                                iCodigoUnidade: -1), "codigo", "descricao", dataTermino.ToShortDateString());
+            ViewBag.ShowDateFilter = true;
+
+            var vm = oGovernanca.LoadDesempenhoGovernancaAllKpi(codigoEmpresa, dataInicio, dataTermino);
+            vm.MesLabel = dataInicio.ToString("MMMM yyyy", new System.Globalization.CultureInfo("pt-BR"));
+            vm.MesReferencia = dataInicio.Month;
+            vm.AnoReferencia = dataInicio.Year;
+            vm.Unidades = oGovernanca.LoadDesempenhoGovernancaAllUnidades(codigoEmpresa, dataInicio, dataTermino);
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult DesempenhoGovernancaAll(string data)
+        {
+            if (Session["empresa"] == null)
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+
+            int codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString());
+
+            DateTime dataTermino;
+            if (!DateTime.TryParse(data, out dataTermino))
+                dataTermino = new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month,
+                                           DateTime.DaysInMonth(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month));
+
+            var dataInicio = new DateTime(dataTermino.Year, dataTermino.Month, 1);
+
+            ViewBag.data = new SelectList(oCombo.DataGovernanca(iCodigoEmpresa: codigoEmpresa,
+                                                                iCodigoUnidade: -1), "codigo", "descricao", data);
+            ViewBag.ShowDateFilter = true;
+
+            var vm = oGovernanca.LoadDesempenhoGovernancaAllKpi(codigoEmpresa, dataInicio, dataTermino);
+            vm.MesLabel = dataInicio.ToString("MMMM yyyy", new System.Globalization.CultureInfo("pt-BR"));
+            vm.MesReferencia = dataInicio.Month;
+            vm.AnoReferencia = dataInicio.Year;
+            vm.Unidades = oGovernanca.LoadDesempenhoGovernancaAllUnidades(codigoEmpresa, dataInicio, dataTermino);
+
+            return View(vm);
         }
 
         #endregion

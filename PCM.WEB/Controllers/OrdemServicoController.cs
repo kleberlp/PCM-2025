@@ -42,6 +42,7 @@ namespace PCM.WEB.Controllers
         private DAL.PCM oPCM = new DAL.PCM(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Home oHome = new Home(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: JSON :::
 
@@ -416,6 +417,10 @@ namespace PCM.WEB.Controllers
                     ViewBag.departamento = new SelectList(oCombo.Departamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", Convert.ToInt32(Session["codigo_departamento"]));
                     ViewBag.origem = new SelectList(oCombo.LoadCombo("sp_select_combo_static_origem_ordem_servico", codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
+                    ViewBag.InfoOrdemServico = oHome.InfoOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                      iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                      iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
+                                                                      bQualidade: false);
 
                     return View();
                 }
@@ -459,6 +464,10 @@ namespace PCM.WEB.Controllers
                     ViewBag.departamento = new SelectList(oCombo.Departamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName())), "codigo", "descricao", Convert.ToInt32(Session["codigo_departamento"]));
                     ViewBag.origem = new SelectList(oCombo.LoadCombo("sp_select_combo_static_origem_ordem_servico", codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())), "codigo", "descricao", null);
+                    ViewBag.InfoOrdemServico = oHome.InfoOrdemServico(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                      iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                      iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"].ToString()),
+                                                                      bQualidade: false);
 
                     return View();
                 }

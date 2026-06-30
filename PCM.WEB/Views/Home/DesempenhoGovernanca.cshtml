@@ -1,53 +1,304 @@
-﻿@using PCM.WEB.Properties
+@using PCM.WEB.MODELS
 @using Newtonsoft.Json
+@model DesempenhoGovernancaViewModel
+
+@{
+    var gaugePct    = Model != null ? Model.GaugePct : 0m;
+    var gaugeOffset = (double)(245.04m * (1 - gaugePct / 100));
+    var gaugeColor  = gaugePct >= 90 ? "#6EAB4D" : gaugePct >= 70 ? "#D97706" : "#EF5350";
+
+    var pctVistoria      = Model != null ? Model.PctVistoria : 0m;
+    var pctVistoriaColor = pctVistoria >= 99 ? "#6EAB4D" : pctVistoria >= 90 ? "#D97706" : "#EF5350";
+
+    var indiceNC      = Model != null ? Model.IndiceNC : 0m;
+    var indiceNCColor = indiceNC <= 1 ? "#6EAB4D" : indiceNC <= 3 ? "#D97706" : "#EF5350";
+
+    var indiceR      = Model != null ? Model.IndiceRetrabalho : 0m;
+    var indiceRColor = indiceR <= 5 ? "#6EAB4D" : indiceR <= 15 ? "#D97706" : "#EF5350";
+
+    var diasRestantes      = Model != null ? Model.DiasRestantes : 0;
+    var diasRestantesClass = diasRestantes <= 5 ? "green" : diasRestantes <= 10 ? "amber" : "";
+    var gaugeValClass      = gaugePct >= 90 ? "green" : gaugePct >= 70 ? "amber" : "red";
+
+    var mesLabel       = Model != null && !string.IsNullOrEmpty(Model.MesLabel) ? Model.MesLabel : "";
+    var diasDecorridos = Model != null ? Model.DiasDecorridos : 0;
+    var nomeUnidade    = Model != null ? Model.NomeUnidade : "";
+    var unidadeId      = Model != null ? Model.UnidadeId : Convert.ToInt32(Session["codigo_unidade"]);
+
+    var camareirasJson   = Model != null
+        ? JsonConvert.SerializeObject(Model.Camareiras.Select(c => new object[] { c.Nome, c.UHsArrumadas, c.NC, c.Retrabalho, c.DiasTrabalhados }).ToList())
+        : "[]";
+    var ncDiaJson        = Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.NC).ToList())         : "[]";
+    var retrabDiaJson    = Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.Retrabalho).ToList()) : "[]";
+    var topNcJson        = Model != null
+        ? JsonConvert.SerializeObject(Model.TopNcItens.Select(n => new { item = n.ItemVistoria, qtde = n.Quantidade }).ToList())
+        : "[]";
+    var arrLabelsJson    = Model != null
+        ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => (d.Dia < 10 ? "0" : "") + d.Dia + "/" + (Model.MesReferencia < 10 ? "0" : "") + Model.MesReferencia).ToList())
+        : "[]";
+    var arrSaidaJson     = Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.UHsSaida).ToList())       : "[]";
+    var arrVistoriadoJson= Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.UHsVistoriadas).ToList()) : "[]";
+    var arrPermJson      = Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.UHsPermanencia).ToList()) : "[]";
+    var arrManutJson     = Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.UHsManutencao).ToList())  : "[]";
+    var arrMetaJson      = Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.MetaDiaria).ToList())     : "[]";
+
+    string _dataSelected = "";
+    if (ViewBag.data is System.Web.Mvc.SelectList)
+    {
+        var _selItem = ((System.Web.Mvc.SelectList)ViewBag.data).Where(x => x.Selected).FirstOrDefault();
+        _dataSelected = _selItem != null ? _selItem.Value : "";
+    }
+}
 
 <!-- Main Container -->
 <main id="main-container">
     <div class="content">
 
-        @using (Html.BeginForm("DesempenhoGovernanca", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", @id = "form", enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("DesempenhoGovernanca", "Home", FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "form" }))
         {
             @Html.AntiForgeryToken()
+            <input type="hidden" name="unidade" id="hidden-unidade" value="@unidadeId" />
+            <input type="hidden" name="data"    id="data"           value="@_dataSelected" />
 
-            <!-- ================= FILTRO DATA ================= -->
+            <!-- ================= KPI STRIP ================= -->
             <div class="dashboard-section">
-                <div class="block dashboard-card">
-                    <div class="row align-items-end">
-                        <div class="col-sm-12 col-md-3">
-                            <label>@PCM.WEB.Properties.Resources.data</label>
-                            @Html.DropDownList("data", null, null, new { @class = "form-control font-w600", id = "filtro-data" })
+                <div class="section-title">
+                    Desempenho de Governança — @mesLabel · @nomeUnidade
+                </div>
+                <div class="block dashboard-card os-kpi-strip" style="padding:0;">
+                    <div class="torre-comando-grid">
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-bed torre-icon text-info"></i><span class="torre-label2">UHs Arrumadas</span></div>
+                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalUHsArrumadas.ToString("N0") : "—")</div>
+                            <span class="torre-meta">acumulado do mês</span>
                         </div>
-                        <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-eye torre-icon text-success"></i><span class="torre-label2">UHs Vistoriadas</span></div>
+                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalUHsVistoriadas.ToString("N0") : "—")</div>
+                            <span class="torre-meta">acumulado do mês</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-percent torre-icon" style="color:#9CA3AF;"></i><span class="torre-label2">% Vistoria</span></div>
+                            <div class="os-value" style="color:@pctVistoriaColor;">@(Model != null ? Model.PctVistoria.ToString("N1") + "%" : "—")</div>
+                            <span class="torre-meta">vistoriadas / arrumadas</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-times-circle torre-icon text-danger"></i><span class="torre-label2">Total NC</span></div>
+                            <div class="os-value text-danger">@(Model != null ? Model.TotalNC.ToString() : "—")</div>
+                            <span class="torre-meta">não conformidades</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-refresh torre-icon" style="color:#EA580C;"></i><span class="torre-label2">Total Retrabalho</span></div>
+                            <div class="os-value" style="color:#EA580C;">@(Model != null ? Model.TotalRetrabalho.ToString() : "—")</div>
+                            <span class="torre-meta">quartos reinspecionados</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-bar-chart torre-icon text-warning"></i><span class="torre-label2">Índice NC</span></div>
+                            <div class="os-value" style="color:@indiceNCColor;">@(Model != null ? Model.IndiceNC.ToString("N1") + "%" : "—")</div>
+                            <span class="torre-meta">NC / UHs vistoriadas</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-warning torre-icon text-danger"></i><span class="torre-label2">Índice Retrabalho</span></div>
+                            <div class="os-value" style="color:@indiceRColor;">@(Model != null ? Model.IndiceRetrabalho.ToString("N1") + "%" : "—")</div>
+                            <span class="torre-meta">Retrabalho / Vistoriadas</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-wrench torre-icon" style="color:#6B7280;"></i><span class="torre-label2">OS Manutenção</span></div>
+                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalOSManutencao.ToString() : "—")</div>
+                            <span class="torre-meta">abertas no mês</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ================= ATENDIMENTO DE ORDEM DE SERVIÇO (DataTable) ================= -->
+            <!-- ================= GAUGE + EVOLUÇÃO DIÁRIA ================= -->
+            <div class="dashboard-section row" style="min-height:350px;">
+                <div class="col-md-4 d-flex flex-column">
+                    <div class="section-title">Meta Mensal de UHs</div>
+                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
+                        <div style="display:flex;flex-direction:column;align-items:center;padding:20px 16px 0;">
+                            <svg viewBox="0 0 200 115" width="220" height="126" style="display:block;max-width:100%;">
+                                <path d="M 22 108 A 78 78 0 0 1 178 108" fill="none" stroke="#E5E7EB" stroke-width="16" stroke-linecap="round"/>
+                                <path d="M 22 108 A 78 78 0 0 1 178 108" fill="none" stroke="@gaugeColor" stroke-width="16" stroke-linecap="round"
+                                      stroke-dasharray="245.04" stroke-dashoffset="@gaugeOffset.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"/>
+                                <text x="100" y="83" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="26" font-weight="800" fill="@gaugeColor" letter-spacing="-1">@gaugePct.ToString("N1")%</text>
+                                <text x="100" y="99" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="9" font-weight="600" fill="#9CA3AF" letter-spacing="1">ATINGIDO</text>
+                            </svg>
+                        </div>
+                        <div class="gauge-meta-row">
+                            <div class="gauge-meta-item">
+                                <span class="gauge-meta-label">Meta Mensal</span>
+                                <div class="gauge-meta-value">@(Model != null ? Model.MetaMensalUHs.ToString("N0") : "—")</div>
+                                <div style="font-size:9px;color:#9CA3AF;">UHs/mês</div>
+                            </div>
+                            <div class="gauge-meta-item" style="border-left:1px solid #F0F1F3;border-right:1px solid #F0F1F3;">
+                                <span class="gauge-meta-label">Realizado</span>
+                                <div class="gauge-meta-value @gaugeValClass">@(Model != null ? Model.RealizadoUHs.ToString("N0") : "—")</div>
+                                <div style="font-size:9px;color:#9CA3AF;">UHs arrumadas</div>
+                            </div>
+                            <div class="gauge-meta-item">
+                                <span class="gauge-meta-label">Dias Restantes</span>
+                                <div class="gauge-meta-value @diasRestantesClass">@(Model != null ? Model.DiasRestantes.ToString() : "—")</div>
+                                <div style="font-size:9px;color:#9CA3AF;">dias no mês</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8 d-flex flex-column">
+                    <div class="section-title">Evolução Diária — NC e Retrabalho</div>
+                    <div class="block dashboard-card chart-card flex-fill" style="display:flex;flex-direction:column;">
+                        <div style="flex:1;min-height:350px;position:relative;">
+                            <canvas id="evolucaoDiariaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= ARRUMADO × VISTORIADO ================= -->
             <div class="dashboard-section">
                 <div class="section-title">
-                    @PCM.WEB.Properties.Resources.atendimento_ordem_servico
-                    <span class="float-right">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="Codebase.helpers('print-page');"><i class="si si-printer"></i> @PCM.WEB.Properties.Resources.imprimir</button>
-                    </span>
+                    Arrumado × Vistoriado
+                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Evolução diária — @mesLabel</span>
+                </div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper" style="height:300px;">
+                        <canvas id="chartArrumadoVistoriado"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= RANKING GERAL ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Ranking Geral de Camareiras
+                    <span class="dg-section-badge">@(Model != null ? Model.Camareiras.Count : 0) camareiras</span>
+                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Nota×UH = (UHs − NC×14 − Retrabalho) ÷ 64,5</span>
+                </div>
+                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                    <div style="overflow-x:auto;">
+                        <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                            <colgroup>
+                                <col style="width:40px;" />
+                                <col />
+                                <col style="width:60px;" />
+                                <col style="width:50px;" />
+                                <col style="width:85px;" />
+                                <col style="width:75px;" />
+                                <col style="width:80px;" />
+                                <col style="width:80px;" />
+                                <col style="width:100px;" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th style="width:40px;">#</th>
+                                    <th>Camareira</th>
+                                    <th class="text-center" style="width:60px;">UHs</th>
+                                    <th class="text-center" style="width:50px;">NC</th>
+                                    <th class="text-center" style="width:85px;">Retrabalho</th>
+                                    <th class="text-center" style="width:75px;">Índ. NC%</th>
+                                    <th class="text-center" style="width:80px;">Índ. Retrab%</th>
+                                    <th class="text-center" style="width:80px;">Nota×UH</th>
+                                    <th class="text-center" style="width:100px;">Status</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="max-height:510px;overflow-y:auto;">
+                            <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                                <colgroup>
+                                    <col style="width:40px;" />
+                                    <col />
+                                    <col style="width:60px;" />
+                                    <col style="width:50px;" />
+                                    <col style="width:85px;" />
+                                    <col style="width:75px;" />
+                                    <col style="width:80px;" />
+                                    <col style="width:80px;" />
+                                    <col style="width:100px;" />
+                                </colgroup>
+                                <tbody id="rankingGeralBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= RANKINGS PRODUTIVIDADE + QUALIDADE ================= -->
+            <div class="dashboard-section row">
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="section-title">Ranking por Produtividade</div>
+                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
+                        <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                            <colgroup>
+                                <col style="width:40px;" /><col /><col style="width:65px;" /><col style="width:65px;" /><col style="width:90px;" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th style="width:40px;">#</th>
+                                    <th>Camareira</th>
+                                    <th class="text-center" style="width:65px;">UHs</th>
+                                    <th class="text-center" style="width:65px;">UH/Dia</th>
+                                    <th class="text-center" style="width:90px;">Status</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="max-height:510px;overflow-y:auto;">
+                            <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                                <colgroup>
+                                    <col style="width:40px;" /><col /><col style="width:65px;" /><col style="width:65px;" /><col style="width:90px;" />
+                                </colgroup>
+                                <tbody id="rankingProdBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="section-title">Ranking por Qualidade de Serviço</div>
+                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
+                        <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                            <colgroup>
+                                <col style="width:40px;" /><col /><col style="width:50px;" /><col style="width:55px;" /><col style="width:75px;" /><col style="width:80px;" /><col style="width:90px;" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th style="width:40px;">#</th>
+                                    <th>Camareira</th>
+                                    <th class="text-center" style="width:50px;">NC</th>
+                                    <th class="text-center" style="width:55px;">Retrab.</th>
+                                    <th class="text-center" style="width:75px;">Índ. NC%</th>
+                                    <th class="text-center" style="width:80px;">Índ. Retrab%</th>
+                                    <th class="text-center" style="width:90px;">Status</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="max-height:510px;overflow-y:auto;">
+                            <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                                <colgroup>
+                                    <col style="width:40px;" /><col /><col style="width:50px;" /><col style="width:55px;" /><col style="width:75px;" /><col style="width:80px;" /><col style="width:90px;" />
+                                </colgroup>
+                                <tbody id="rankingQualBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TOP 10 NC POR ITEM ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Top 10 — Itens com Mais Não Conformidades
+                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">@(Model != null ? Model.TotalNcGeral.ToString() : "0") ocorrências totais no mês</span>
                 </div>
                 <div class="block dashboard-card">
-                    <table class="table table-striped" id="tbMain" name="tbMain">
+                    <table style="width:100%;border-collapse:collapse;">
                         <thead>
-                            <tr>
-                                <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-center">Qtd. Camareiras</th>
-                                <th class="text-center">Qtd. Supervisores</th>
-                                <th class="text-center">UHs Arrumadas</th>
-                                <th class="text-center">UHs Permanência</th>
-                                <th class="text-center">UHs Saída</th>
-                                <th class="text-center">UHs Vistoriadas</th>
-                                <th class="text-center">% Vistoriadas das Saídas</th>
-                                <th class="text-center">Qtd. OS Manutenção</th>
-                                <th class="text-center">Qtd. NC</th>
-                                <th class="text-center">Qtd. Retrabalho</th>
-                                <th class="text-center">Qtd. Alteração status</th>
+                            <tr style="border-bottom:2px solid #F0F1F3;">
+                                <th style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9CA3AF;padding:0 0 8px 0;width:28px;">#</th>
+                                <th style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9CA3AF;padding:0 0 8px 0;">Item de Vistoria</th>
+                                <th style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9CA3AF;padding:0 0 8px 16px;text-align:center;width:70px;">Qtde</th>
+                                <th style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9CA3AF;padding:0 0 8px 16px;width:300px;">% do Total</th>
                             </tr>
                         </thead>
+                        <tbody id="topNcBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -57,51 +308,186 @@
     </div>
 </main>
 
-<div id="resource-messages"
-     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
-    {
-        emptyTable                  = Resources.emptyTable,
-        msgQuestionDelete           = Resources.msgQuestionDelete,
-        msgNotPossibleReverse       = Resources.msgNotPossibleReverse,
-        yes                         = Resources.yes,
-        no                          = Resources.no,
-        clickToEdit                 = Resources.clickToEdit,
-        clickToDelete               = Resources.clickToDelete,
-        clickToCopy                 = Resources.clickToCopy,
-        clickToExcel                = Resources.clickToExcel,
-        clickToPdf                  = Resources.clickToPdf,
-        clickToConfig               = Resources.clickToConfig,
-        editar                      = ViewBag.editar,
-        excluir                     = ViewBag.excluir,
-        urlLoadDesempenhoGovernanca = Url.Action("LoadDesempenhoGovernanca", "Home")
-    }))'>
-</div>
 
-@section styles {
-    @Styles.Render("~/Content/dashboard")
-    @Styles.Render("~/Content/dataTables")
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+@section Styles {
+    @Styles.Render("~/Content/select")
 }
 
-@section scripts {
-    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
-    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
-    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
-    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
-    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
-    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
-    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
-    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
-    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
-    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
-    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
-    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
-    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
-    <script src="~/Content/js/pcm.js"></script>
-    <script src="~/Content/js/pages/Governanca/jquery.desempenhoGovernanca.init.js"></script>
+@section Scripts {
+    @Scripts.Render("~/plugins/chart")
+
+    <script>
+    var camareiras = @Html.Raw(camareirasJson);
+    var diaAtual   = @diasDecorridos;
+    var ncDia      = @Html.Raw(ncDiaJson);
+    var retrabDia  = @Html.Raw(retrabDiaJson);
+    var topNc      = @Html.Raw(topNcJson);
+
+    (function () {
+        var labels      = @Html.Raw(arrLabelsJson);
+        var saida       = @Html.Raw(arrSaidaJson);
+        var vistoriado  = @Html.Raw(arrVistoriadoJson);
+        var permanencia = @Html.Raw(arrPermJson);
+        var manutencao  = @Html.Raw(arrManutJson);
+        var meta        = @Html.Raw(arrMetaJson);
+        var ctx = document.getElementById('chartArrumadoVistoriado').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    { type:'bar',  label:'Qtde. Saída',       data:saida,       backgroundColor:'rgba(239,83,80,.75)',  borderColor:'#EF5350', borderWidth:1, borderRadius:3, order:3, stack:'bars' },
+                    { type:'bar',  label:'Qtde. Permanência', data:permanencia, backgroundColor:'rgba(66,165,245,.6)',  borderColor:'#42A5F5', borderWidth:1, borderRadius:3, order:4, stack:'bars' },
+                    { type:'bar',  label:'Qtde. Manutenção',  data:manutencao,  backgroundColor:'rgba(255,202,40,.7)',  borderColor:'#FFCA28', borderWidth:1, borderRadius:3, order:5, stack:'bars' },
+                    { type:'line', label:'Qtde. Vistoriado',  data:vistoriado,  borderColor:'#6EAB4D', backgroundColor:'transparent', borderWidth:2.5, pointRadius:3, pointBackgroundColor:'#6EAB4D', tension:0.4, fill:false, order:1 },
+                    { type:'line', label:'Meta',               data:meta,        borderColor:'#1E3A5F', backgroundColor:'transparent', borderWidth:2, borderDash:[5,4], pointRadius:0, tension:0, fill:false, order:2 }
+                ]
+            },
+            options: {
+                responsive:true, maintainAspectRatio:false,
+                scales: {
+                    x: { stacked:true, grid:{color:'#F3F4F6'}, ticks:{font:{size:9},color:'#6B7280',maxRotation:0,autoSkip:true,maxTicksLimit:15} },
+                    y: { stacked:false, beginAtZero:true, grid:{color:'#F3F4F6'}, ticks:{font:{size:10},color:'#9CA3AF'} }
+                },
+                plugins: {
+                    legend:{position:'top',labels:{font:{size:10},boxWidth:12,padding:14}},
+                    tooltip:{mode:'index',bodyFont:{size:11},titleFont:{size:11}}
+                }
+            }
+        });
+    })();
+
+    function calcNota(uh,nc,r){ return Math.max(0,(uh-nc*14-r)/64.5); }
+    function indNC(nc,uh){ return uh?nc/uh*100:0; }
+    function indR(r,uh){ return uh?r/uh*100:0; }
+    function fmt1(n){ return n.toFixed(1).replace('.',','); }
+    function fmt2(n){ return n.toFixed(2).replace('.',','); }
+
+    (function(){
+        var labels=[];
+        for(var d=1;d<=diaAtual;d++) labels.push(String(d));
+        var ctx=document.getElementById('evolucaoDiariaChart').getContext('2d');
+        new Chart(ctx,{
+            type:'bar',
+            data:{
+                labels:labels,
+                datasets:[
+                    {label:'Retrabalho',data:retrabDia.slice(0,diaAtual),backgroundColor:'rgba(234,88,12,.30)',borderColor:'rgba(234,88,12,.6)',borderWidth:1,borderRadius:3,stack:'a'},
+                    {label:'NC',        data:ncDia.slice(0,diaAtual),    backgroundColor:'rgba(239,83,80,.55)',borderColor:'rgba(239,83,80,.8)', borderWidth:1,borderRadius:3,stack:'a'}
+                ]
+            },
+            options:{
+                responsive:true,maintainAspectRatio:false,
+                scales:{
+                    x:{stacked:true,grid:{display:false},ticks:{font:{size:10},color:'#9CA3AF'}},
+                    y:{stacked:true,beginAtZero:true,grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF'}}
+                },
+                plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:14}},tooltip:{bodyFont:{size:11},titleFont:{size:11}}}
+            }
+        });
+    })();
+
+    (function(){
+        var total=topNc.reduce(function(s,r){return s+r.qtde;},0);
+        var maxVal=topNc.length>0?topNc[0].qtde:1;
+        var tbody=document.getElementById('topNcBody');
+        topNc.forEach(function(r,i){
+            var pct=total>0?r.qtde/total*100:0;
+            var barW=maxVal>0?r.qtde/maxVal*100:0;
+            var tr=document.createElement('tr');
+            tr.style.borderBottom='1px solid #F3F4F6';
+            tr.innerHTML='<td style="padding:8px 0;font-size:11px;font-weight:700;color:#9CA3AF;">'+(i+1)+'</td>'
+                +'<td style="padding:8px 0;font-size:12px;color:#374151;">'+r.item+'</td>'
+                +'<td style="padding:8px 0 8px 16px;font-size:13px;font-weight:800;color:#374151;text-align:center;">'+r.qtde+'</td>'
+                +'<td style="padding:8px 0 8px 16px;"><div class="dg-pct-bar-wrap"><div class="dg-pct-bar"><div class="dg-pct-bar-fill" style="width:'+barW.toFixed(0)+'%;"></div></div><span class="dg-pct-label">'+fmt1(pct)+'%</span></div></td>';
+            tbody.appendChild(tr);
+        });
+    })();
+
+    (function(){
+        var data=camareiras.map(function(c){var uh=c[1],nc=c[2],r=c[3];return{nome:c[0],uh:uh,nc:nc,retrab:r,nota:calcNota(uh,nc,r),iNC:indNC(nc,uh),iR:indR(r,uh)};});
+        data.sort(function(a,b){return b.nota-a.nota;});
+        var tbody=document.getElementById('rankingGeralBody');
+        data.forEach(function(r,i){
+            var pos=i+1,rk=pos===1?'dg-rank-1':pos===2?'dg-rank-2':pos===3?'dg-rank-3':'dg-rank-n';
+            var nk=r.nota>=2.5?'dg-nota-green':r.nota>=1.5?'dg-nota-yellow':'dg-nota-red';
+            var sk=r.nota>=2.5?'dg-status-green':r.nota>=1.5?'dg-status-yellow':'dg-status-red';
+            var st=r.nota>=2.5?'● Excelente':r.nota>=1.5?'● Regular':'● Atenção';
+            var tr=document.createElement('tr');
+            tr.innerHTML='<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'
+                +'<td class="font-w600">'+r.nome+'</td>'
+                +'<td class="text-center font-w700">'+r.uh+'</td>'
+                +'<td class="text-center font-w700" style="color:#EF5350;">'+r.nc+'</td>'
+                +'<td class="text-center font-w700" style="color:#EA580C;">'+r.retrab+'</td>'
+                +'<td class="text-center">'+fmt1(r.iNC)+'%</td>'
+                +'<td class="text-center">'+fmt1(r.iR)+'%</td>'
+                +'<td class="text-center"><span class="dg-nota-badge '+nk+'">'+fmt2(r.nota)+'</span></td>'
+                +'<td class="text-center"><span class="dg-status-pill '+sk+'">'+st+'</span></td>';
+            tbody.appendChild(tr);
+        });
+    })();
+
+    (function(){
+        var data=camareiras.map(function(c){return{nome:c[0],uh:c[1],nc:c[2],retrab:c[3],dias:c[4]};});
+        data.sort(function(a,b){return b.uh-a.uh;});
+        var tbody=document.getElementById('rankingProdBody');
+        data.forEach(function(r,i){
+            var pos=i+1,rk=pos===1?'dg-rank-1':pos===2?'dg-rank-2':pos===3?'dg-rank-3':'dg-rank-n';
+            var uhd=r.dias>0?r.uh/r.dias:0;
+            var sk=r.uh>=220?'dg-status-green':r.uh>=150?'dg-status-yellow':'dg-status-red';
+            var st=r.uh>=220?'● Excelente':r.uh>=150?'● Regular':'● Atenção';
+            var tr=document.createElement('tr');
+            tr.innerHTML='<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'
+                +'<td class="font-w600">'+r.nome+'</td>'
+                +'<td class="text-center font-w700">'+r.uh+'</td>'
+                +'<td class="text-center font-w700" style="color:#42A5F5;">'+fmt1(uhd)+'</td>'
+                +'<td class="text-center"><span class="dg-status-pill '+sk+'">'+st+'</span></td>';
+            tbody.appendChild(tr);
+        });
+    })();
+
+    (function(){
+        var data=camareiras.filter(function(c){return c[1]>0;}).map(function(c){
+            var uh=c[1],nc=c[2],r=c[3],iNC=indNC(nc,uh),iR=indR(r,uh);
+            return{nome:c[0],nc:nc,retrab:r,iNC:iNC,iR:iR,total:iNC+iR};
+        });
+        data.sort(function(a,b){return a.total-b.total;});
+        var tbody=document.getElementById('rankingQualBody');
+        data.forEach(function(r,i){
+            var pos=i+1,rk=pos===1?'dg-rank-1':pos===2?'dg-rank-2':pos===3?'dg-rank-3':'dg-rank-n';
+            var sk=r.total<=8?'dg-status-green':r.total<=18?'dg-status-yellow':'dg-status-red';
+            var st=r.total<=8?'● Excelente':r.total<=18?'● Regular':'● Atenção';
+            var tr=document.createElement('tr');
+            tr.innerHTML='<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'
+                +'<td class="font-w600">'+r.nome+'</td>'
+                +'<td class="text-center font-w700" style="color:#EF5350;">'+r.nc+'</td>'
+                +'<td class="text-center font-w700" style="color:#EA580C;">'+r.retrab+'</td>'
+                +'<td class="text-center">'+fmt1(r.iNC)+'%</td>'
+                +'<td class="text-center">'+fmt1(r.iR)+'%</td>'
+                +'<td class="text-center"><span class="dg-status-pill '+sk+'">'+st+'</span></td>';
+            tbody.appendChild(tr);
+        });
+    })();
+
+    window.onUnidadeChange = function (unidade) {
+        var data = $("#filtro-data").val() || "";
+        var qs   = data ? "?data=" + encodeURIComponent(data) : "";
+        if (String(unidade) === "-1") {
+            window.location.href = "@Url.Action("DesempenhoGovernancaAll", "Home")" + qs;
+        } else {
+            window.location.href = "@Url.Action("DesempenhoGovernanca", "Home")" + qs;
+        }
+    };
+
+    $(function () {
+        $(document).on("change", "#filtro-data", function () {
+            var unidadeHeader = $("#header-unidade").val();
+            var data = $("#filtro-data").val();
+            if (unidadeHeader) $("#hidden-unidade").val(unidadeHeader);
+            if (data) $("#data").val(data);
+            $("#form").submit();
+        });
+    });
+
+    </script>
 }

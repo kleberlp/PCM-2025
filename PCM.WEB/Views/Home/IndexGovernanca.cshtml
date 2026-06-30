@@ -8,23 +8,18 @@
         {
             @Html.AntiForgeryToken()
 
-            <input type="hidden" id="empresa" name="empresa" value="@Session["empresa"]" />
-            <input type="hidden" id="codigo_unidade" name="codigo_unidade" value="@Session["codigo_unidade"]" />
+            <input type="hidden" id="empresa" value="@Session["empresa"]" />
+            <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
+            <input type="hidden" name="modulo" id="hidden-modulo" value="@Session["codigo_modulo"]" />
 
-            <!-- ================= INDICADOR DE ATUALIZAÇÃO ================= -->
-            <div id="refresh-indicator" class="refresh-indicator" title="Atualizando em breve">
-                <i class="fa fa-refresh refresh-icon"></i>
-                <span>Atualiza em <strong id="refresh-countdown">60s</strong></span>
-            </div>
+            string _dataSelected = "";
+            if (ViewBag.data is SelectList)
+            {
+                var _selItem = ((SelectList)ViewBag.data).Where(x => x.Selected).FirstOrDefault();
+                _dataSelected = _selItem != null ? _selItem.Value : "";
+            }
 
-            <!-- ================= FILTRO DE DATA ================= -->
-            <div class="dashboard-section">
-                <div class="row">
-                    <div class="col-md-2">
-                        @Html.DropDownList("data", null, null, new { @class = "form-control font-w600" })
-                    </div>
-                </div>
-            </div>
+            <input type="hidden" name="data" id="data" value="@_dataSelected" />
 
             <!-- ================= KPIs – ORDEM DE SERVIÇO (torre-grid) ================= -->
             if ((int)ViewBag.codigo_tipo_unidade == 2)
@@ -182,46 +177,6 @@
                 </div>
             }
 
-            <!-- ================= PAINEL DE CONTROLE – GAUGES (torre-grid) ================= -->
-            var gaugeItems = new List<dynamic>();
-            if ((bool)ViewBag.dashboard_preventiva) { gaugeItems.Add(new { id = "torre-preventiva", label = "Preventiva", icon = "fa-wrench", valor = (float)ViewBag.ChartGauge.preventiva, cor = (string)ViewBag.ChartGauge.cor_preventiva, url = Url.Action("ManutencaoPreventiva", "PCM") }); }
-            if ((bool)ViewBag.dashboard_laudo) { gaugeItems.Add(new { id = "torre-laudo", label = "Laudo", icon = "fa-file-text-o", valor = (float)ViewBag.ChartGauge.laudo, cor = (string)ViewBag.ChartGauge.cor_laudo, url = Url.Action("ManutencaoLaudo", "PCM") }); }
-            if ((bool)ViewBag.dashboard_rotina) { gaugeItems.Add(new { id = "torre-rotina", label = "Rotinas", icon = "fa-calendar-check-o", valor = (float)ViewBag.ChartGauge.rotina, cor = (string)ViewBag.ChartGauge.cor_rotina, url = Url.Action("ManutencaoRotina", "PCM") }); }
-            if ((bool)ViewBag.dashboard_pmoc) { gaugeItems.Add(new { id = "torre-pmoc", label = "PMOC", icon = "fa-snowflake-o", valor = (float)ViewBag.ChartGauge.pmoc, cor = (string)ViewBag.ChartGauge.cor_pmoc, url = Url.Action("PMOC2", "PMOC") }); }
-            if ((bool)ViewBag.dashboard_uh) { gaugeItems.Add(new { id = "torre-uh", label = "U.H em Dia", icon = "fa-bed", valor = (float)ViewBag.ChartGauge.uh_dia, cor = (string)ViewBag.ChartGauge.cor_uh_dia, url = Url.Action("ChecklistUH", "UH") }); }
-            if ((bool)ViewBag.dashboard_green_planet) { gaugeItems.Add(new { id = "torre-green", label = "Green Planet", icon = "fa-leaf", valor = (float)ViewBag.ChartGauge.green_planet, cor = (string)ViewBag.ChartGauge.cor_green_planet, url = Url.Action("LancamentoIndex", "GreenPlanet") }); }
-
-            if (gaugeItems.Any())
-            {
-                <div class="dashboard-section">
-                    <div class="section-title">Painel de Controle</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
-                        <div class="torre-comando-grid">
-                            @foreach (var g in gaugeItems)
-                            {
-                                var pct = Math.Round((double)g.valor, 1);
-                                var pctInt = (int)Math.Round((double)g.valor);
-                                var status = pct < 65 ? "Crítico" : pct > 85 ? "Meta atingida" : "Em andamento";
-                                <a href="@g.url" class="torre-item" id="@g.id" style="text-decoration:none;">
-                                    <div class="torre-header">
-                                        <i class="fa @g.icon torre-icon" style="color:@g.cor"></i>
-                                        <span class="torre-label">@g.label</span>
-                                        <span class="torre-pct" style="color:@g.cor">@pct%</span>
-                                    </div>
-                                    <div class="torre-bar-track">
-                                        <div class="torre-bar-fill" style="width:@pctInt%; background:@g.cor;"></div>
-                                    </div>
-                                    <div class="torre-meta">
-                                        <span>@status</span>
-                                        <span class="torre-link">Ver detalhes →</span>
-                                    </div>
-                                </a>
-                            }
-                        </div>
-                    </div>
-                </div>
-            }
-
             <!-- ================= DADOS DA UNIDADE ================= -->
             <div class="dashboard-section">
                 <div class="section-title">Dados da Unidade</div>
@@ -257,20 +212,6 @@
                         </div>
                         <div class="torre-item" style="cursor:default;">
                             <div class="torre-header">
-                                <i class="fa fa-clock-o torre-icon text-earth"></i>
-                                <span class="torre-label">HH Disponível</span>
-                            </div>
-                            <div class="os-value text-earth">@ViewBag.dashboard_info.hhDisponivel</div>
-                        </div>
-                        <div class="torre-item" style="cursor:default;">
-                            <div class="torre-header">
-                                <i class="fa fa-clock-o torre-icon text-danger"></i>
-                                <span class="torre-label">HH Utilizado</span>
-                            </div>
-                            <div class="os-value text-danger">@ViewBag.dashboard_info.hhUtilizado</div>
-                        </div>
-                        <div class="torre-item" style="cursor:default;">
-                            <div class="torre-header">
                                 <i class="fa fa-file-text-o torre-icon text-muted"></i>
                                 <span class="torre-label">OS Gerada</span>
                             </div>
@@ -289,6 +230,68 @@
                                 <span class="torre-label">Troca Status UH</span>
                             </div>
                             <div class="os-value text-muted">@ViewBag.dashboard_info.quantidadeTrocaStatus</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= PAINEL DE CONTROLE ================= -->
+            var _dg = ViewBag.dadosGovernanca as List<PCM.WEB.MODELS.dashboardGovernancaApartamentoInfo>;
+            var _dgInfo = _dg != null ? _dg.FirstOrDefault() : null;
+            <div class="dashboard-section row">
+                <div class="col-6">
+                    <div class="section-title">Status Front Office</div>
+                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                        <div class="torre-comando-grid">
+                            <div class="torre-item" style="cursor:default;">
+                                <div class="torre-header">
+                                    <i class="fa fa-bed torre-icon text-success"></i>
+                                    <span class="torre-label">Vagos</span>
+                                </div>
+                                <div class="os-value text-success">@(_dgInfo != null ? _dgInfo.sfoVago.ToString() : "—")</div>
+                            </div>
+                            <div class="torre-item" style="cursor:default;">
+                                <div class="torre-header">
+                                    <i class="fa fa-bed torre-icon text-primary"></i>
+                                    <span class="torre-label">Ocupados</span>
+                                </div>
+                                <div class="os-value text-primary">@(_dgInfo != null ? _dgInfo.sfoOcupado.ToString() : "—")</div>
+                            </div>
+                            <div class="torre-item" style="cursor:default;">
+                                <div class="torre-header">
+                                    <i class="fa fa-ban torre-icon text-danger"></i>
+                                    <span class="torre-label">Bloqueados</span>
+                                </div>
+                                <div class="os-value text-danger">@(_dgInfo != null ? _dgInfo.sfoBloqueado.ToString() : "—")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="section-title">Tipo de Arrumação</div>
+                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                        <div class="torre-comando-grid">
+                            <div class="torre-item" style="cursor:default;">
+                                <div class="torre-header">
+                                    <i class="fa fa-sign-out torre-icon text-warning"></i>
+                                    <span class="torre-label">Arrumação Saída</span>
+                                </div>
+                                <div class="os-value text-warning">@(_dgInfo != null ? _dgInfo.taSaida.ToString() : "—")</div>
+                            </div>
+                            <div class="torre-item" style="cursor:default;">
+                                <div class="torre-header">
+                                    <i class="fa fa-home torre-icon text-info"></i>
+                                    <span class="torre-label">Permanência</span>
+                                </div>
+                                <div class="os-value text-info">@(_dgInfo != null ? _dgInfo.taPermanencia.ToString() : "—")</div>
+                            </div>
+                            <div class="torre-item" style="cursor:default;">
+                                <div class="torre-header">
+                                    <i class="fa fa-wrench torre-icon text-earth"></i>
+                                    <span class="torre-label">Manutenção</span>
+                                </div>
+                                <div class="os-value text-earth">@(_dgInfo != null ? _dgInfo.taManutencao.ToString() : "—")</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -326,41 +329,41 @@
 
             <!-- ================= PRODUTIVIDADE ================= -->
             <div class="dashboard-section row">
-                    <div class="col-6">
-                        <div class="section-title">Produtividade por @(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</div>
-                        <div class="block dashboard-card">
-                            <table class="table table-striped" id="tbProdutividadeCamareira" name="tbProdutividadeCamareira">
-                                <thead>
-                                    <tr>
-                                        <th>@(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</th>
-                                        <th>UH's Arrumadas</th>
-                                        <th>UH's Saída</th>
-                                        <th>UH's Permanência</th>
-                                        <th>UH's Manutenção</th>
-                                        <th>% Arrumado</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                <div class="col-6">
+                    <div class="section-title">Produtividade por @(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</div>
+                    <div class="block dashboard-card" style="overflow-x:auto;">
+                        <table class="table table-striped" id="tbProdutividadeCamareira" name="tbProdutividadeCamareira" style="min-width:520px;">
+                            <thead>
+                                <tr>
+                                    <th>@(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</th>
+                                    <th>UH's Arrumadas</th>
+                                    <th>UH's Saída</th>
+                                    <th>UH's Permanência</th>
+                                    <th>UH's Manutenção</th>
+                                    <th>% Arrumado</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <div class="col-6">
-                        <div class="section-title">Produtividade por @(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Vistoriador")</div>
-                        <div class="block dashboard-card">
-                            <table class="table table-striped" id="tbProdutividadeVistoriador" name="tbProdutividadeVistoriador">
-                                <thead>
-                                    <tr>
-                                        <th>@(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Vistoriador")</th>
-                                        <th>UH's Saídas</th>
-                                        <th>UH's Vistoriadas</th>
-                                        <th>% Vistoriado Saídas</th>
-                                        <th>% Vistoriado Meta</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                </div>
+                <div class="col-6">
+                    <div class="section-title">Produtividade por @(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Vistoriador")</div>
+                    <div class="block dashboard-card" style="overflow-x:auto;">
+                        <table class="table table-striped" id="tbProdutividadeVistoriador" name="tbProdutividadeVistoriador" style="min-width:480px;">
+                            <thead>
+                                <tr>
+                                    <th>@(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Vistoriador")</th>
+                                    <th>UH's Saídas</th>
+                                    <th>UH's Vistoriadas</th>
+                                    <th>% Vistoriado Saídas</th>
+                                    <th>% Vistoriado Meta</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
+                </div>
             </div>
 
             <!-- ================= GRÁFICO NÃO CONFORMIDADE ================= -->
@@ -375,38 +378,38 @@
 
             <!-- ================= NÃO CONFORMIDADE DETALHADO ================= -->
             <div class="dashboard-section row">
-                    <div class="col-6">
-                        <div class="section-title">Não Conformidade - Detalhado</div>
-                        <div class="block dashboard-card">
-                            <table class="table table-striped" id="tbNCDetalhado" name="tbNCDetalhado">
-                                <thead>
-                                    <tr>
-                                        <th>Ocorrência</th>
-                                        <th>Quantidade NC</th>
-                                        <th>Média Móvel</th>
-                                        <th>Tendência</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                <div class="col-6">
+                    <div class="section-title">Não Conformidade - Detalhado</div>
+                    <div class="block dashboard-card">
+                        <table class="table table-striped" id="tbNCDetalhado" name="tbNCDetalhado">
+                            <thead>
+                                <tr>
+                                    <th>Ocorrência</th>
+                                    <th>Quantidade NC</th>
+                                    <th>Média Móvel</th>
+                                    <th>Tendência</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <div class="col-6">
-                        <div class="section-title">Não Conformidade - @(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</div>
-                        <div class="block dashboard-card">
-                            <table class="table table-striped" id="tbNCCamareira" name="tbNCCamareira">
-                                <thead>
-                                    <tr>
-                                        <th>@(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</th>
-                                        <th>Quantidade NC</th>
-                                        <th>Média Móvel</th>
-                                        <th>Tendência</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                </div>
+                <div class="col-6">
+                    <div class="section-title">Não Conformidade - @(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</div>
+                    <div class="block dashboard-card">
+                        <table class="table table-striped" id="tbNCCamareira" name="tbNCCamareira">
+                            <thead>
+                                <tr>
+                                    <th>@(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</th>
+                                    <th>Quantidade NC</th>
+                                    <th>Média Móvel</th>
+                                    <th>Tendência</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
+                </div>
             </div>
 
         }
@@ -470,6 +473,13 @@
 @section Scripts {
 
     <script src="~/Content/js/pages/Governanca/dashboard.js"></script>
+    <script>
+        $(document).on("change", "#filtro-data", function () {
+            $("#data").val($(this).val());
+            $("#hidden-unidade").val($("#header-unidade").val() || "@Session["codigo_unidade"]");
+            $("#form").submit();
+        });
+    </script>
 
     <script src="~/Content/js/lib/datatables/dataTables.js"></script>
     <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>

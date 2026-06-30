@@ -280,6 +280,184 @@ body {
 }
 
 /* ===============================
+   DESEMPENHO GOVERNANÇA – KPI STRIP
+   =============================== */
+
+.os-kpi-strip {
+    overflow: hidden;
+}
+
+.torre-label2 {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #6B7280;
+}
+
+/* ===============================
+   DESEMPENHO GOVERNANÇA – GAUGE
+   =============================== */
+
+.gauge-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 18px 0;
+}
+
+.gauge-svg-wrap {
+    width: 100%;
+    max-width: 260px;
+}
+
+.gauge-meta-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 18px 14px;
+    gap: 12px;
+    border-top: 1px solid #F0F1F3;
+    margin-top: 12px;
+    width: 100%;
+}
+
+.gauge-meta-item {
+    text-align: center;
+    flex: 1;
+}
+
+.gauge-meta-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #9CA3AF;
+    margin-bottom: 2px;
+    display: block;
+}
+
+.gauge-meta-value {
+    font-size: 15px;
+    font-weight: 800;
+    color: #374151;
+    letter-spacing: -.5px;
+}
+
+.gauge-meta-value.green { color: #6EAB4D; }
+.gauge-meta-value.amber { color: #D97706; }
+.gauge-meta-value.red   { color: #EF5350; }
+
+/* ===============================
+   DESEMPENHO GOVERNANÇA – RANKING
+   =============================== */
+
+.dg-rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.dg-rank-1 { background: #FEF3C7; color: #D97706; }
+.dg-rank-2 { background: #F1F5F9; color: #475569; }
+.dg-rank-3 { background: #FEF2EC; color: #C05621; }
+.dg-rank-n { background: #F3F4F6; color: #6B7280; }
+
+.dg-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.dg-status-green  { background: #D1FAE5; color: #065F46; }
+.dg-status-yellow { background: #FEF3C7; color: #92400E; }
+.dg-status-red    { background: #FEE2E2; color: #991B1B; }
+
+.dg-nota-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.dg-nota-green  { background: #D1FAE5; color: #065F46; }
+.dg-nota-yellow { background: #FEF3C7; color: #92400E; }
+.dg-nota-red    { background: #FEE2E2; color: #991B1B; }
+
+.dg-section-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #EFF6FF;
+    color: #2563EB;
+}
+
+/* ===============================
+   DESEMPENHO GOVERNANÇA – TOP NC
+   =============================== */
+
+.dg-pct-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.dg-pct-bar { flex: 1; height: 6px; background: #F3F4F6; border-radius: 99px; overflow: hidden; }
+.dg-pct-bar-fill { height: 100%; border-radius: 99px; background: #EF5350; }
+.dg-pct-label { font-size: 11px; font-weight: 700; color: #374151; min-width: 42px; text-align: right; }
+
+/* ===============================
+   DESEMPENHO GOVERNANÇA – GRÁFICOS
+   =============================== */
+
+.dg-charts-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 0;
+    height: 340px;
+}
+
+.dg-charts-row > .dg-chart-col {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.dg-chart-col .block.dashboard-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+.dg-card-header {
+    background: #F9FAFB;
+    border-bottom: 1px solid #F0F1F3;
+    padding: 11px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.dg-chart-body {
+    padding: 14px 16px 16px;
+    flex: 1;
+    position: relative;
+    min-height: 0;
+}
+
+/* ===============================
    TORRE DE COMANDO – INDICADORES
    =============================== */
 
@@ -349,6 +527,7 @@ body {
 
 /* Barra de progresso */
 .torre-bar-track {
+    width: 100%;
     height: 6px;
     background: #e5e7eb;
     border-radius: 999px;
@@ -490,7 +669,7 @@ body {
     flex: 1;
 }
 
-.header-select {
+.header-select:not(.select2-hidden-accessible) {
     min-width: 180px;
     max-width: 320px;
     height: 32px !important;
@@ -504,7 +683,7 @@ body {
     cursor: pointer;
 }
 
-    .header-select:focus {
+    .header-select:not(.select2-hidden-accessible):focus {
         border-color: #6366f1 !important;
         background: #fff !important;
         outline: none;

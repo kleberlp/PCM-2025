@@ -1,0 +1,444 @@
+@using PCM.WEB.MODELS
+@using Newtonsoft.Json
+@model DesempenhoGovernancaAllViewModel
+
+@{
+    var mesLabel = Model != null ? Model.MesLabel : "";
+
+    var pctVis      = Model != null ? Model.PctVistoriaMedia : 0m;
+    var pctVisColor = pctVis >= 99 ? "#6EAB4D" : pctVis >= 90 ? "#D97706" : "#EF5350";
+
+    string _dataSelected = "";
+    if (ViewBag.data is System.Web.Mvc.SelectList)
+    {
+        var _selItem = ((System.Web.Mvc.SelectList)ViewBag.data).Where(x => x.Selected).FirstOrDefault();
+        _dataSelected = _selItem != null ? _selItem.Value : "";
+    }
+
+    var unidadesJson = Model != null
+        ? JsonConvert.SerializeObject(Model.Unidades.Select(u => new {
+            nome      = u.NomeUnidade,
+            uh        = u.UHsArrumadas,
+            uhs       = u.UHsSaida,
+            uhp       = u.UHsPermanencia,
+            vis       = u.UHsVistoriadas,
+            pctVis    = u.PctVistoriaSaidas,
+            os        = u.OSManutencao,
+            nc        = u.TotalNC,
+            ncUH      = u.NCPorUH,
+            retrab    = u.TotalRetrabalho,
+            rUH       = u.RetrabPorUH,
+            score     = u.Score,
+            cam       = u.QtdCamareira,
+            sup       = u.QtdVistoriador,
+            semDados  = u.UHsArrumadas == 0
+          }).ToList())
+        : "[]";
+}
+
+<!-- Main Container -->
+<main id="main-container">
+    <div class="content">
+
+        @using (Html.BeginForm("DesempenhoGovernancaAll", "Home", FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="data" id="data" value="@_dataSelected" />
+
+            <!-- ================= KPI STRIP ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Desempenho de Governança — Todas as Unidades · @mesLabel
+                </div>
+                <div class="block dashboard-card os-kpi-strip" style="padding:0;">
+                    <div class="torre-comando-grid">
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-bed torre-icon text-info"></i><span class="torre-label2">UHs Arrumadas</span></div>
+                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalUHsArrumadas.ToString("N0") : "—")</div>
+                            <span class="torre-meta">total da rede no mês</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-users torre-icon" style="color:#6B7280;"></i><span class="torre-label2">Camareiras</span></div>
+                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.QtdCamareira.ToString() : "—")</div>
+                            <span class="torre-meta">ativas na rede</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-eye torre-icon text-success"></i><span class="torre-label2">Vistoriadores</span></div>
+                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.QtdVistoriador.ToString() : "—")</div>
+                            <span class="torre-meta">ativos na rede</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-times-circle torre-icon text-danger"></i><span class="torre-label2">NC Total</span></div>
+                            <div class="os-value text-danger">@(Model != null ? Model.TotalNC.ToString("N0") : "—")</div>
+                            <span class="torre-meta">não conformidades</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-percent torre-icon" style="color:#9CA3AF;"></i><span class="torre-label2">% Vistoria Média</span></div>
+                            <div class="os-value" style="color:@pctVisColor;">@(Model != null ? Model.PctVistoriaMedia.ToString("N2") + "%" : "—")</div>
+                            <span class="torre-meta">média da rede</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-refresh torre-icon" style="color:#EA580C;"></i><span class="torre-label2">Retrabalho</span></div>
+                            <div class="os-value" style="color:#EA580C;">@(Model != null ? Model.TotalRetrabalho.ToString("N0") : "—")</div>
+                            <span class="torre-meta">reinspecionados</span>
+                        </div>
+                        <div class="torre-item">
+                            <div class="torre-header"><i class="fa fa-wrench torre-icon" style="color:#6B7280;"></i><span class="torre-label2">OS Manutenção</span></div>
+                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalOSManutencao.ToString() : "—")</div>
+                            <span class="torre-meta">abertas na rede</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TABELA CONSOLIDADA ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Dados Consolidados por Unidade
+                    <span class="dg-section-badge">@mesLabel</span>
+                </div>
+                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                    <div style="overflow-x:auto;">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Unidade</th>
+                                    <th class="text-center">Camareiras</th>
+                                    <th class="text-center">Vistoriadores</th>
+                                    <th class="text-center">UHs Arrumadas</th>
+                                    <th class="text-center">UHs Permanência</th>
+                                    <th class="text-center">UHs Saída</th>
+                                    <th class="text-center">UHs Vistoriadas</th>
+                                    <th class="text-center">% Vistoria Saídas</th>
+                                    <th class="text-center">OS Manutenção</th>
+                                    <th class="text-center">NC (por UH)</th>
+                                    <th class="text-center">Retrabalho (por UH)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    foreach (var u in Model.Unidades)
+                                    {
+                                        var rowOpacity = u.UHsArrumadas == 0 ? "opacity:.45;" : "";
+                                        var pctColor   = u.PctVistoriaSaidas >= 99 ? "color:#6EAB4D;font-weight:700;" : u.PctVistoriaSaidas >= 90 ? "color:#D97706;font-weight:700;" : u.PctVistoriaSaidas > 0 ? "color:#EF5350;font-weight:700;" : "color:#9CA3AF;";
+                                        var ncColor    = u.NCPorUH >= 2.5m ? "color:#EF5350;font-weight:700;" : u.NCPorUH >= 1.5m ? "color:#D97706;font-weight:700;" : u.NCPorUH > 0 ? "color:#6EAB4D;" : "color:#9CA3AF;";
+                                        var rColor     = u.RetrabPorUH >= 1m ? "color:#EF5350;font-weight:700;" : u.RetrabPorUH >= 0.5m ? "color:#D97706;font-weight:700;" : u.RetrabPorUH > 0 ? "color:#6EAB4D;" : "color:#9CA3AF;";
+                                        <tr style="@rowOpacity">
+                                            <td class="font-w700">@u.NomeUnidade</td>
+                                            <td class="text-center">@u.QtdCamareira</td>
+                                            <td class="text-center">@u.QtdVistoriador</td>
+                                            <td class="text-center font-w700">@(u.UHsArrumadas > 0 ? u.UHsArrumadas.ToString("N0") : "—")</td>
+                                            <td class="text-center">@(u.UHsPermanencia > 0 ? u.UHsPermanencia.ToString("N0") + " (" + ((decimal)u.UHsPermanencia / u.UHsArrumadas * 100).ToString("N1") + "%)" : "—")</td>
+                                            <td class="text-center">@(u.UHsSaida > 0 ? u.UHsSaida.ToString("N0") + " (" + ((decimal)u.UHsSaida / u.UHsArrumadas * 100).ToString("N1") + "%)" : "—")</td>
+                                            <td class="text-center">@(u.UHsArrumadas > 0 ? u.UHsVistoriadas.ToString("N0") : "—")</td>
+                                            <td class="text-center" style="@pctColor">@(u.UHsArrumadas > 0 ? u.PctVistoriaSaidas.ToString("N2") : "—")</td>
+                                            <td class="text-center">@(u.OSManutencao > 0 ? u.OSManutencao.ToString() : "—")</td>
+                                            <td class="text-center" style="@ncColor">@(u.UHsArrumadas > 0 ? u.TotalNC.ToString() + " (" + u.NCPorUH.ToString("N2") + ")" : "—")</td>
+                                            <td class="text-center" style="@rColor">@(u.UHsArrumadas > 0 ? u.TotalRetrabalho.ToString() + " (" + u.RetrabPorUH.ToString("N2") + ")" : "—")</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= AVALIAÇÃO GERAL ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Avaliação Geral por Unidade
+                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Score = 100 − (NC/UH × 8) − (Retrab/UH × 4) · Meta mínima: 85</span>
+                </div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper" style="height:260px;">
+                        <canvas id="chartAvaliacaoGeral"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= NC + VISTORIA ================= -->
+            <div class="dashboard-section row">
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="section-title">Não Conformidades por Unidade</div>
+                    <div class="block dashboard-card chart-card flex-fill" style="display:flex;flex-direction:column;">
+                        <div style="flex:1;min-height:220px;position:relative;">
+                            <canvas id="chartNC"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex flex-column">
+                    <div class="section-title">% de Vistoria das Saídas</div>
+                    <div class="block dashboard-card chart-card flex-fill" style="display:flex;flex-direction:column;">
+                        <div style="flex:1;min-height:220px;position:relative;">
+                            <canvas id="chartVistoria"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= ARRUMADO × VISTORIADO ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Arrumado × Vistoriado
+                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">UHs por unidade — @mesLabel</span>
+                </div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper" style="height:260px;">
+                        <canvas id="chartArrumadoVistoriado"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= PRODUTIVIDADE ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">Produtividade · UHs Arrumadas por Camareira</div>
+                <div class="block dashboard-card chart-card">
+                    <div class="chart-wrapper" style="height:220px;">
+                        <canvas id="chartProdutividade"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= RANKING ================= -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    Ranking de Desempenho por Unidade
+                    <span class="dg-section-badge">@(Model != null ? Model.Unidades.Count : 0) unidades</span>
+                </div>
+                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th style="width:40px;">#</th>
+                                <th>Unidade</th>
+                                <th style="width:180px;">Score</th>
+                                <th class="text-center">% Vistoria</th>
+                                <th class="text-center">NC (total)</th>
+                                <th class="text-center">NC/UH</th>
+                                <th class="text-center">Retrabalho</th>
+                                <th class="text-center">UHs</th>
+                                <th class="text-center">OS</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankingBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</main>
+
+@section Styles {
+    @Styles.Render("~/Content/select")
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/chart")
+
+    <script>
+    var unidades = @Html.Raw(unidadesJson);
+    var META = 85;
+
+    (function () {
+        var ativos = unidades.filter(function(u){ return !u.semDados; });
+        var nomes   = ativos.map(function(u){ return u.nome; });
+        var scores  = ativos.map(function(u){ return Math.round(parseFloat(u.score)); });
+        var barColors  = scores.map(function(s){ return s>=META?'rgba(110,171,77,.8)':s>=70?'rgba(234,88,12,.75)':'rgba(239,83,80,.8)'; });
+        var barBorders = scores.map(function(s){ return s>=META?'#6EAB4D':s>=70?'#EA580C':'#EF5350'; });
+
+        var ctx = document.getElementById('chartAvaliacaoGeral').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: nomes,
+                datasets: [
+                    { type:'bar',  label:'Score', data:scores, backgroundColor:barColors, borderColor:barBorders, borderWidth:1, borderRadius:6, order:2 },
+                    { type:'line', label:'Meta mínima ('+META+')', data:nomes.map(function(){ return META; }),
+                      borderColor:'#2563EB', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false, tension:0, order:1 }
+                ]
+            },
+            options: {
+                responsive:true, maintainAspectRatio:false,
+                scales: {
+                    x: { grid:{display:false}, ticks:{font:{size:11},color:'#374151'} },
+                    y: { beginAtZero:true, max:110, grid:{color:'#F3F4F6'}, ticks:{font:{size:10},color:'#9CA3AF'} }
+                },
+                plugins: {
+                    legend:{ position:'top', labels:{ font:{size:10}, boxWidth:12, padding:14,
+                        filter:function(item){ return item.datasetIndex===1; } } },
+                    tooltip:{ bodyFont:{size:11}, titleFont:{size:11},
+                        filter:function(item){ return item.datasetIndex===0; },
+                        callbacks:{ label:function(c){ return 'Score: '+c.parsed.y; } } }
+                }
+            }
+        });
+    })();
+
+    (function () {
+        var ativos = unidades.filter(function(u){ return !u.semDados; });
+        var nomes = ativos.map(function(u){ return u.nome; });
+        var ctx = document.getElementById('chartNC').getContext('2d');
+        new Chart(ctx, {
+            type:'bar',
+            data: {
+                labels: nomes,
+                datasets: [
+                    { label:'NC total',          data:ativos.map(function(u){ return u.nc; }),     backgroundColor:'rgba(239,83,80,.7)',  borderColor:'#EF5350', borderWidth:1, borderRadius:4 },
+                    { label:'Retrabalho (qtde)', data:ativos.map(function(u){ return u.retrab; }), backgroundColor:'rgba(234,88,12,.35)', borderColor:'#EA580C', borderWidth:1, borderRadius:4 }
+                ]
+            },
+            options: {
+                responsive:true, maintainAspectRatio:false,
+                scales: {
+                    x:{grid:{display:false},ticks:{font:{size:10},color:'#6B7280'}},
+                    y:{beginAtZero:true,grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF'}}
+                },
+                plugins:{ legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:12}}, tooltip:{bodyFont:{size:11},titleFont:{size:11}} }
+            }
+        });
+    })();
+
+    (function () {
+        var ativos = unidades.filter(function(u){ return !u.semDados; });
+        var nomes = ativos.map(function(u){ return u.nome; });
+        var vals = ativos.map(function(u){ return parseFloat(u.pctVis); });
+        var colors  = vals.map(function(v){ return v>=99?'rgba(110,171,77,.8)':v>=90?'rgba(234,88,12,.7)':'rgba(239,83,80,.8)'; });
+        var borders = vals.map(function(v){ return v>=99?'#6EAB4D':v>=90?'#EA580C':'#EF5350'; });
+        var ctx = document.getElementById('chartVistoria').getContext('2d');
+        new Chart(ctx, {
+            type:'bar',
+            data: { labels:nomes, datasets:[{ label:'% Vistoria', data:vals, backgroundColor:colors, borderColor:borders, borderWidth:1, borderRadius:4 }] },
+            options: {
+                responsive:true, maintainAspectRatio:false,
+                scales: {
+                    x:{grid:{display:false},ticks:{font:{size:10},color:'#6B7280'}},
+                    y:{min:0,max:102,grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF',callback:function(v){ return v+'%'; }}}
+                },
+                plugins:{ legend:{display:false}, tooltip:{bodyFont:{size:11},titleFont:{size:11}, callbacks:{label:function(c){ return c.parsed.y.toFixed(2)+'%'; }}} }
+            }
+        });
+    })();
+
+    (function () {
+        var sorted     = unidades.slice().sort(function(a,b){ return b.uh-a.uh; });
+        var labels     = sorted.map(function(u){ return u.nome; });
+        var saida      = sorted.map(function(u){ return u.uhs; });
+        var vistoriado = sorted.map(function(u){ return u.vis; });
+        var permanencia= sorted.map(function(u){ return u.uhp; });
+        var manutencao = sorted.map(function(u){ return u.os; });
+        var meta       = sorted.map(function(u){ return u.uh > 0 ? u.uh : null; });
+        var ctx = document.getElementById('chartArrumadoVistoriado').getContext('2d');
+        new Chart(ctx, {
+            type:'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    { type:'line', label:'Meta',              data:meta,        borderColor:'#1E3A5F', backgroundColor:'transparent', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false, lineTension:0 },
+                    { type:'line', label:'Qtde. Vistoriado',  data:vistoriado,  borderColor:'#6EAB4D', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, pointBackgroundColor:'#6EAB4D', fill:false, lineTension:0.4 },
+                    { type:'bar',  label:'Qtde. Saída',       data:saida,       backgroundColor:'rgba(239,83,80,.65)', borderColor:'#EF5350', borderWidth:1, stack:'bars' },
+                    { type:'bar',  label:'Qtde. Permanência', data:permanencia, backgroundColor:'rgba(66,165,245,.6)', borderColor:'#42A5F5', borderWidth:1, stack:'bars' },
+                    { type:'bar',  label:'Qtde. Manutenção',  data:manutencao,  backgroundColor:'rgba(255,202,40,.7)', borderColor:'#FFCA28', borderWidth:1, stack:'bars' }
+                ]
+            },
+            options: {
+                responsive:true, maintainAspectRatio:false,
+                legend:{ position:'top', labels:{ fontSize:10, boxWidth:14, padding:18 } },
+                tooltips:{
+                    mode:'index',
+                    intersect:false,
+                    callbacks:{
+                        label:function(item, data){
+                            var ds = data.datasets[item.datasetIndex];
+                            var val = item.yLabel;
+                            if(val===null||val===undefined||val==='') return null;
+                            return ' ' + ds.label + ': ' + (Number.isFinite(val)?val.toLocaleString('pt-BR'):val);
+                        }
+                    }
+                },
+                scales:{
+                    xAxes:[{ stacked:true, gridLines:{display:false}, ticks:{fontSize:10, fontColor:'#6B7280', maxRotation:20} }],
+                    yAxes:[{ stacked:false, beginAtZero:true, gridLines:{color:'#F3F4F6'}, ticks:{fontSize:10, fontColor:'#9CA3AF'} }]
+                }
+            }
+        });
+    })();
+
+    (function () {
+        var ativos = unidades.filter(function(u){ return !u.semDados && u.cam>0; });
+        var vals   = ativos.map(function(u){ return +(u.uh/u.cam).toFixed(1); });
+        var colors = vals.map(function(v){ return v>=8?'rgba(110,171,77,.75)':v>=4?'rgba(234,88,12,.65)':'rgba(239,83,80,.7)'; });
+        var ctx = document.getElementById('chartProdutividade').getContext('2d');
+        new Chart(ctx, {
+            type:'bar',
+            data: { labels:ativos.map(function(u){ return u.nome; }), datasets:[{ label:'UHs/camareira', data:vals, backgroundColor:colors, borderRadius:4 }] },
+            options: {
+                indexAxis:'y', responsive:true, maintainAspectRatio:false,
+                scales: {
+                    x:{beginAtZero:true,grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF'}},
+                    y:{grid:{display:false},ticks:{font:{size:11},color:'#374151'}}
+                },
+                plugins:{ legend:{display:false}, tooltip:{bodyFont:{size:11},titleFont:{size:11}, callbacks:{label:function(c){ return c.parsed.x.toFixed(1)+' UHs/camareira'; }}} }
+            }
+        });
+    })();
+
+    (function () {
+        var sorted = unidades.slice().sort(function(a,b){ return b.score-a.score; });
+        var tbody  = document.getElementById('rankingBody');
+        sorted.forEach(function(u,i){
+            var pos = i+1;
+            var rk  = pos===1?'dg-rank-1':pos===2?'dg-rank-2':pos===3?'dg-rank-3':'dg-rank-n';
+            var sc  = Math.round(parseFloat(u.score));
+            var scColor = sc>=META?'#6EAB4D':sc>=70?'#D97706':'#EF5350';
+            var barC    = sc>=META?'#6EAB4D':sc>=70?'#FFCA28':'#EF5350';
+            var stCls   = u.semDados?'dg-status-yellow':sc>=META?'dg-status-green':sc>=70?'dg-status-yellow':'dg-status-red';
+            var stTxt   = u.semDados?'— Sem dados':sc>=META?'✓ OK':sc>=70?'⚠ Atenção':'✕ Crítico';
+            var vColor  = parseFloat(u.pctVis)===0?'#9CA3AF':parseFloat(u.pctVis)>=99?'#6EAB4D':parseFloat(u.pctVis)>=90?'#D97706':'#EF5350';
+            var ncColor = parseFloat(u.ncUH)>=2.5?'#EF5350':parseFloat(u.ncUH)>=1.5?'#D97706':'#6EAB4D';
+            var rColor  = parseFloat(u.rUH)>=1?'#EF5350':parseFloat(u.rUH)>=0.5?'#D97706':'#6EAB4D';
+            var tr = document.createElement('tr');
+            if (u.semDados) tr.style.opacity = '.5';
+            tr.innerHTML =
+                '<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'+
+                '<td class="font-w700" style="font-size:13px;">'+u.nome+'</td>'+
+                '<td>'+
+                  '<div style="display:flex;align-items:center;gap:8px;">'+
+                    '<span style="font-size:14px;font-weight:800;color:'+scColor+';min-width:28px;">'+sc+'</span>'+
+                    '<div style="flex:1;height:8px;background:#F3F4F6;border-radius:99px;overflow:hidden;">'+
+                      '<div style="width:'+sc+'%;height:100%;background:'+barC+';border-radius:99px;"></div>'+
+                    '</div>'+
+                    '<span style="font-size:9px;color:#9CA3AF;">/ 100</span>'+
+                  '</div>'+
+                '</td>'+
+                '<td class="text-center font-w700" style="color:'+vColor+';">'+(parseFloat(u.pctVis)===0?'—':parseFloat(u.pctVis).toFixed(2)+'%')+'</td>'+
+                '<td class="text-center font-w700" style="color:#EF5350;">'+u.nc+'</td>'+
+                '<td class="text-center font-w700" style="color:'+ncColor+';">'+parseFloat(u.ncUH).toFixed(2)+'</td>'+
+                '<td class="text-center font-w700" style="color:'+rColor+';">'+u.retrab+'</td>'+
+                '<td class="text-center">'+u.uh+'</td>'+
+                '<td class="text-center">'+u.os+'</td>'+
+                '<td class="text-center"><span class="dg-status-pill '+stCls+'">'+stTxt+'</span></td>';
+            tbody.appendChild(tr);
+        });
+    })();
+
+    window.onUnidadeChange = function (unidade) {
+        var data = $("#filtro-data").val() || "";
+        var qs   = data ? "?data=" + encodeURIComponent(data) : "";
+        if (String(unidade) === "-1") {
+            window.location.href = "@Url.Action("DesempenhoGovernancaAll", "Home")" + qs;
+        } else {
+            window.location.href = "@Url.Action("DesempenhoGovernanca", "Home")" + qs;
+        }
+    };
+
+    $(document).on('change','#filtro-data',function(){
+        $('#data').val($(this).val());
+        $('#form').submit();
+    });
+    </script>
+}

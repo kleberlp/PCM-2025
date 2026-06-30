@@ -488,7 +488,7 @@
             </div>
 
             <!-- ================= SLA (tabela) ================= -->
-            <div class="dashboard-section">
+            <!--<div class="dashboard-section">
                 <div class="section-title">SLA</div>
                 <div class="block dashboard-card">
                     <table class="table table-striped table-sm table-bordered tbl-sort">
@@ -519,7 +519,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div>-->
 
             <!-- ================= SLA – TEMPO MÉDIO (tabela com barras inline) ================= -->
             <div class="dashboard-section">
@@ -986,7 +986,7 @@
                 html += '</tr></thead><tbody>';
 
                 unidades.forEach(function(nome, i) {
-                    var vOS  = parseFloat(serieOS.valor[i])  || 0;
+                    var vOS  = parseInt(serieOS.valor[i])  || 0;
                     var vQtd = parseFloat(serieQtd.valor[i]) || 0;
                     var pOS  = Math.round(vOS  / maxOS  * 100);
                     var pQtd = Math.round(vQtd / maxQtd * 100);

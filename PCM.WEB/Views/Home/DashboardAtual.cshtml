@@ -81,21 +81,21 @@
                     </div>
                 </div>
 
-            <!-- ================= MÉTRICAS POR ATIVIDADE ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Métricas por Atividade</div>
-                @{
-                    var _mLaudo  = ViewBag.metrica_laudo      != null ? ((IEnumerable<dynamic>)ViewBag.metrica_laudo).Cast<dynamic>().FirstOrDefault()      : null;
-                    var _mPrev   = ViewBag.metrica_preventiva != null ? ((IEnumerable<dynamic>)ViewBag.metrica_preventiva).Cast<dynamic>().FirstOrDefault() : null;
-                    var _mPmoc   = ViewBag.metrica_pmoc       != null ? ((IEnumerable<dynamic>)ViewBag.metrica_pmoc).Cast<dynamic>().FirstOrDefault()       : null;
-                    var _mRotina = ViewBag.metrica_rotina     != null ? ((IEnumerable<dynamic>)ViewBag.metrica_rotina).Cast<dynamic>().FirstOrDefault()     : null;
-                    var _mUh     = ViewBag.metrica_uh         != null ? ((IEnumerable<dynamic>)ViewBag.metrica_uh).Cast<dynamic>().FirstOrDefault()         : null;
-                    var _nota    = ViewBag.notas_unidades     != null ? ((IEnumerable<dynamic>)ViewBag.notas_unidades).Cast<dynamic>().FirstOrDefault()     : null;
-                    var _pnota   = ViewBag.percentual_nota;
-                    var NA = "N/A";
+                <!-- ================= MÉTRICAS POR ATIVIDADE ================= -->
+                <div class="dashboard-section">
+                    <div class="section-title">Métricas por Atividade</div>
+                    @{
+                        var _mLaudo = ViewBag.metrica_laudo != null ? ((IEnumerable<dynamic>)ViewBag.metrica_laudo).Cast<dynamic>().FirstOrDefault() : null;
+                        var _mPrev = ViewBag.metrica_preventiva != null ? ((IEnumerable<dynamic>)ViewBag.metrica_preventiva).Cast<dynamic>().FirstOrDefault() : null;
+                        var _mPmoc = ViewBag.metrica_pmoc != null ? ((IEnumerable<dynamic>)ViewBag.metrica_pmoc).Cast<dynamic>().FirstOrDefault() : null;
+                        var _mRotina = ViewBag.metrica_rotina != null ? ((IEnumerable<dynamic>)ViewBag.metrica_rotina).Cast<dynamic>().FirstOrDefault() : null;
+                        var _mUh = ViewBag.metrica_uh != null ? ((IEnumerable<dynamic>)ViewBag.metrica_uh).Cast<dynamic>().FirstOrDefault() : null;
+                        var _nota = ViewBag.notas_unidades != null ? ((IEnumerable<dynamic>)ViewBag.notas_unidades).Cast<dynamic>().FirstOrDefault() : null;
+                        var _pnota = ViewBag.percentual_nota;
+                        var NA = "N/A";
 
-                    var _linhas1 = new[]
-                    {
+                        var _linhas1 = new[]
+                        {
                         new { label="Laudo / Documentação", ok = _mLaudo  != null ? (string)_mLaudo.quantidade_ok.ToString()       : NA, pend = _mLaudo  != null ? (string)_mLaudo.quantidade_pendente.ToString()  : NA, total = _mLaudo  != null ? (string)_mLaudo.total.ToString()  : NA, pct = _nota != null ? (string)_nota.laudo.ToString()      : "", peso = _pnota != null ? (string)_pnota.laudo.ToString()      : "", notaKey = "laudo_peso",      okLabel="", pendLabel="", totalLabel="" },
                         new { label="Preventiva",           ok = _mPrev   != null ? (string)_mPrev.quantidade_ok.ToString()        : NA, pend = _mPrev   != null ? (string)_mPrev.quantidade_pendente.ToString()   : NA, total = _mPrev   != null ? (string)_mPrev.total.ToString()   : NA, pct = _nota != null ? (string)_nota.preventiva.ToString() : "", peso = _pnota != null ? (string)_pnota.preventiva.ToString() : "", notaKey = "preventiva_peso", okLabel="", pendLabel="", totalLabel="" },
                         new { label="PMOC",                 ok = _mPmoc   != null ? (string)_mPmoc.quantidade_ok.ToString()        : NA, pend = _mPmoc   != null ? (string)_mPmoc.quantidade_pendente.ToString()   : NA, total = _mPmoc   != null ? (string)_mPmoc.total.ToString()   : NA, pct = _nota != null ? (string)_nota.pmoc.ToString()       : "", peso = _pnota != null ? (string)_pnota.pmoc.ToString()       : "", notaKey = "pmoc_peso",       okLabel="", pendLabel="", totalLabel="" },
@@ -105,375 +105,368 @@
                         new { label="Green Planet",         ok = _nota != null ? (string)_nota.gp_ok       : NA, pend = _nota != null ? (string)_nota.gp_pend     : NA, total = _nota != null ? (string)_nota.gp_total      : NA, pct = _nota != null ? (string)_nota.green_planet.ToString()        : "", peso = _pnota != null ? (string)_pnota.green_planet.ToString()        : "", notaKey = "green_planet_peso",      okLabel="", pendLabel="", totalLabel="" },
                     };
 
-                    var _linhas2 = new[]
-                    {
+                        var _linhas2 = new[]
+                        {
                         new { label="HH Não Apontado",   realizado = _nota != null ? (string)_nota.hh_nao_apontado_realizado  : "", meta=">80%",  pct = _nota != null ? (string)_nota.hh_nao_apontado.ToString()      : "", peso = _pnota != null ? (string)_pnota.hh_nao_apontado.ToString()      : "", notaKey = "hh_nao_apontado_peso" },
                         new { label="% OS Pendente",     realizado = _nota != null ? (string)_nota.os_pendente_realizado       : "", meta="<20%",  pct = _nota != null ? (string)_nota.os_pendente.ToString()           : "", peso = _pnota != null ? (string)_pnota.os_pendente.ToString()           : "", notaKey = "os_pendente_peso" },
                         new { label="HH Extra",          realizado = _nota != null ? (string)_nota.hh_extra_realizado          : "", meta="<10%",  pct = _nota != null ? (string)_nota.hh_extra.ToString()              : "", peso = _pnota != null ? (string)_pnota.hh_extra.ToString()              : "", notaKey = "hh_extra_peso" },
                         new { label="Prev. x Corretiva", realizado = _nota != null ? (string)_nota.prev_corretiva_realizado    : "", meta=">50%",  pct = _nota != null ? (string)_nota.preventiva_corretiva.ToString()  : "", peso = _pnota != null ? (string)_pnota.preventiva_corretiva.ToString()  : "", notaKey = "preventiva_corretiva_peso" },
                     };
-                }
-                <!-- Bloco 1: quantidade (OK / Pend. / Total) -->
-                <div class="block dashboard-card" style="padding:0;overflow:hidden;margin-bottom:8px;">
-                    <table class="table table-striped table-sm table-bordered mb-0">
-                        <thead>
-                            <tr>
-                                <th>Atividade</th>
-                                <th class="text-center" style="width:130px;">OK</th>
-                                <th class="text-center" style="width:130px;">Pend.</th>
-                                <th class="text-center" style="width:130px;">Total</th>
-                                <th style="min-width:180px;">% Atendido</th>
-                                <th class="text-center" style="width:75px;">Peso</th>
-                                <th class="text-center" style="width:75px;">Nota</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var linha in _linhas1)
-                            {
-                                var _pctVal = 0.0;
-                                double.TryParse(linha.pct.Replace("%","").Replace(",","."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out _pctVal);
-                                var _cor = _pctVal >= 86 ? "#22b14c" : (_pctVal >= 65 ? "#ffc90e" : "#e74c3c");
-                                var _w   = Math.Min((int)_pctVal, 100).ToString();
-                                string _nf = "";
-                                if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { var _pv = _prop.GetValue((object)_nota); _nf = _pv != null ? _pv.ToString() : ""; } }
-                                bool _isDesc = !string.IsNullOrEmpty(linha.okLabel);
-                                <tr>
-                                    <td class="font-w600">@linha.label</td>
-                                    <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.okLabel : linha.ok)</td>
-                                    <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.pendLabel : linha.pend)</td>
-                                    <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.totalLabel : linha.total)</td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(linha.pct))
-                                        {
-                                            <div style="display:flex;align-items:center;gap:6px;">
-                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
-                                                    <div style="width:@(_w)%;height:100%;background:@_cor;border-radius:3px;transition:width .4s;"></div>
-                                                </div>
-                                                <span style="font-size:11px;font-weight:600;color:@_cor;white-space:nowrap;min-width:52px;text-align:right;">@linha.pct</span>
-                                            </div>
-                                        }
-                                        else { <span class="text-muted" style="font-size:11px;">Sem dados</span> }
-                                    </td>
-                                    <td class="text-center text-muted" style="font-size:12px;">@linha.peso</td>
-                                    <td class="text-center font-w600" style="color:#2c3e50;">@_nf</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Bloco 2: indicadores com Realizado / Meta -->
-                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
-                    <table class="table table-striped table-sm table-bordered mb-0">
-                        <thead>
-                            <tr>
-                                <th>Atividade</th>
-                                <th class="text-center" style="width:140px;">Realizado</th>
-                                <th class="text-center" style="width:80px;">Meta</th>
-                                <th style="min-width:180px;">% Atendido</th>
-                                <th class="text-center" style="width:75px;">Peso</th>
-                                <th class="text-center" style="width:75px;">Nota</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var linha in _linhas2)
-                            {
-                                var _pctVal = 0.0;
-                                double.TryParse(linha.pct.Replace("%","").Replace(",","."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out _pctVal);
-                                var _cor = _pctVal >= 86 ? "#22b14c" : (_pctVal >= 65 ? "#ffc90e" : "#e74c3c");
-                                var _w   = Math.Min((int)_pctVal, 100).ToString();
-                                string _nf = "";
-                                if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { var _pv = _prop.GetValue((object)_nota); _nf = _pv != null ? _pv.ToString() : ""; } }
-                                <tr>
-                                    <td class="font-w600">@linha.label</td>
-                                    <td class="text-center text-primary font-w600">@linha.realizado</td>
-                                    <td class="text-center text-muted">@linha.meta</td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(linha.pct))
-                                        {
-                                            <div style="display:flex;align-items:center;gap:6px;">
-                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
-                                                    <div style="width:@(_w)%;height:100%;background:@_cor;border-radius:3px;transition:width .4s;"></div>
-                                                </div>
-                                                <span style="font-size:11px;font-weight:600;color:@_cor;white-space:nowrap;min-width:52px;text-align:right;">@linha.pct</span>
-                                            </div>
-                                        }
-                                        else { <span class="text-muted" style="font-size:11px;">Sem dados</span> }
-                                    </td>
-                                    <td class="text-center text-muted" style="font-size:12px;">@linha.peso</td>
-                                    <td class="text-center font-w600" style="color:#2c3e50;">@_nf</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ================= EVOLUÇÃO MENSAL (line) ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Evolução Mensal</div>
-                <div class="block dashboard-card chart-card">
-                    <div class="chart-wrapper"><canvas id="chartEvolucaoMensal"></canvas></div>
-                </div>
-            </div>
-
-            <!-- ================= SLA – TEMPO MÉDIO (tabela com barras inline) ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">SLA – Tempo Médio de Atendimento por Unidade</div>
-                <div class="block dashboard-card" style="overflow-x:auto;">
-                    <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-center" colspan="2" style="color:#22b14c;">No Dia</th>
-                                <th class="text-center" colspan="2" style="color:#3f48cc;">1 Dia</th>
-                                <th class="text-center" colspan="2" style="color:#b38f00;">2 a 3 Dias</th>
-                                <th class="text-center" colspan="2" style="color:#ff8000;">4 a 5 Dias</th>
-                                <th class="text-center" colspan="2" style="color:#800080;">&gt; 5 Dias</th>
-                                <th class="text-center" colspan="2" style="color:#e74c3c;">Não Atendidas</th>
-                                <th rowspan="2" style="min-width:160px;">Distribuição</th>
-                            </tr>
-                            <tr>
-                                <th class="text-center" style="width:55px;color:#22b14c;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#22b14c;">%</th>
-                                <th class="text-center" style="width:55px;color:#3f48cc;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#3f48cc;">%</th>
-                                <th class="text-center" style="width:55px;color:#b38f00;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#b38f00;">%</th>
-                                <th class="text-center" style="width:55px;color:#ff8000;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#ff8000;">%</th>
-                                <th class="text-center" style="width:55px;color:#800080;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#800080;">%</th>
-                                <th class="text-center" style="width:55px;color:#e74c3c;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#e74c3c;">%</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                var _inv2 = System.Globalization.CultureInfo.InvariantCulture;
-                                var _ns2  = System.Globalization.NumberStyles.Any;
-                                var _di   = ViewBag.dashboard_info;
-                                double slaNodia2 = 0, sla1dia2 = 0, sla232 = 0, sla452 = 0, sla5mais2 = 0, slaNao2 = 0, totalOS2 = 0;
-                                if (_di != null) {
-                                    double.TryParse(((string)_di.os_atendimento_dia).Replace("%","").Replace(",","."), _ns2, _inv2, out slaNodia2);
-                                    double.TryParse(((string)_di.os_atendimento_um_dia).Replace("%","").Replace(",","."), _ns2, _inv2, out sla1dia2);
-                                    double.TryParse(((string)_di.os_atendimento_tres_dias).Replace("%","").Replace(",","."), _ns2, _inv2, out sla232);
-                                    double.TryParse(((string)_di.os_atendimento_cinco_dias).Replace("%","").Replace(",","."), _ns2, _inv2, out sla452);
-                                    double.TryParse(((string)_di.os_atendimento_acima_cinco_dias).Replace("%","").Replace(",","."), _ns2, _inv2, out sla5mais2);
-                                    double.TryParse(((string)_di.os_nao_atendido).Replace("%","").Replace(",","."), _ns2, _inv2, out slaNao2);
-                                    double.TryParse(((string)_di.quantidade_os_gerada).Replace(".","").Replace(",","."), _ns2, _inv2, out totalOS2);
-                                }
-                                var qNodia2   = (int)Math.Round(slaNodia2  / 100 * totalOS2);
-                                var q1dia2    = (int)Math.Round(sla1dia2   / 100 * totalOS2);
-                                var q232      = (int)Math.Round(sla232     / 100 * totalOS2);
-                                var q452      = (int)Math.Round(sla452     / 100 * totalOS2);
-                                var q5mais2   = (int)Math.Round(sla5mais2  / 100 * totalOS2);
-                                var qNao2     = (int)Math.Round(slaNao2    / 100 * totalOS2);
-                                var slaBase2  = slaNodia2 + sla1dia2 + sla232 + sla452 + sla5mais2 + slaNao2;
-                                if (slaBase2 == 0) { slaBase2 = 1; }
-                                var bNodia2   = Math.Round(slaNodia2  / slaBase2 * 100, 1).ToString("0.#", _inv2);
-                                var b1dia2    = Math.Round(sla1dia2   / slaBase2 * 100, 1).ToString("0.#", _inv2);
-                                var b232      = Math.Round(sla232     / slaBase2 * 100, 1).ToString("0.#", _inv2);
-                                var b452      = Math.Round(sla452     / slaBase2 * 100, 1).ToString("0.#", _inv2);
-                                var b5mais2   = Math.Round(sla5mais2  / slaBase2 * 100, 1).ToString("0.#", _inv2);
-                                var bNao2     = Math.Round(slaNao2    / slaBase2 * 100, 1).ToString("0.#", _inv2);
-                            }
-                            @if (_di != null)
-                            {
-                                <tr>
-                                    <td class="font-w600">@_di.unidade</td>
-                                    <td class="text-center" style="color:#22b14c;">@qNodia2</td>
-                                    <td class="text-center" style="font-weight:600;color:#22b14c;">@_di.os_atendimento_dia</td>
-                                    <td class="text-center" style="color:#3f48cc;">@q1dia2</td>
-                                    <td class="text-center" style="font-weight:600;color:#3f48cc;">@_di.os_atendimento_um_dia</td>
-                                    <td class="text-center" style="color:#b38f00;">@q232</td>
-                                    <td class="text-center" style="font-weight:600;color:#b38f00;">@_di.os_atendimento_tres_dias</td>
-                                    <td class="text-center" style="color:#ff8000;">@q452</td>
-                                    <td class="text-center" style="font-weight:600;color:#ff8000;">@_di.os_atendimento_cinco_dias</td>
-                                    <td class="text-center" style="color:#800080;">@q5mais2</td>
-                                    <td class="text-center" style="font-weight:600;color:#800080;">@_di.os_atendimento_acima_cinco_dias</td>
-                                    <td class="text-center" style="color:#e74c3c;">@qNao2</td>
-                                    <td class="text-center" style="font-weight:600;color:#e74c3c;">@_di.os_nao_atendido</td>
-                                    <td>
-                                        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;width:100%;">
-                                            <div style="width:@bNodia2%;background:#22b14c;" title="No Dia: @_di.os_atendimento_dia (@qNodia2 OS)"></div>
-                                            <div style="width:@b1dia2%;background:#3f48cc;" title="1 Dia: @_di.os_atendimento_um_dia (@q1dia2 OS)"></div>
-                                            <div style="width:@b232%;background:#ffc90e;" title="2-3 Dias: @_di.os_atendimento_tres_dias (@q232 OS)"></div>
-                                            <div style="width:@b452%;background:#ff8000;" title="4-5 Dias: @_di.os_atendimento_cinco_dias (@q452 OS)"></div>
-                                            <div style="width:@b5mais2%;background:#800080;" title=">5 Dias: @_di.os_atendimento_acima_cinco_dias (@q5mais2 OS)"></div>
-                                            <div style="width:@bNao2%;background:#e74c3c;" title="Não Atendidas: @_di.os_nao_atendido (@qNao2 OS)"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ================= EVOLUÇÃO SLA (doughnut — mês atual) ================= -->
-            <div class="dashboard-section row">
-                <div class="col-md-5 d-flex flex-column">
-                    <div class="section-title">SLA – Distribuição Atual</div>
-                    <div class="block dashboard-card chart-card flex-fill">
-                        <div class="chart-wrapper"><canvas id="chartEvolucaoMensalAtendimentoOS"></canvas></div>
-                    </div>
-                </div>
-                <div class="col-md-7 d-flex flex-column">
-                    <div class="section-title">SLA – Tendência Mensal</div>
-                    <div class="block dashboard-card chart-card flex-fill">
-                        <div class="chart-wrapper"><canvas id="chartEvolucaoSLATendencia"></canvas></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ================= HORA HOMEM (tabela) ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Apontamento - Horas</div>
-                <div class="block dashboard-card">
-                    <div style="overflow-x:auto;">
-                        <table class="table table-striped table-sm table-bordered tbl-sort">
+                    }
+                    <!-- Bloco 1: quantidade (OK / Pend. / Total) -->
+                    <div class="block dashboard-card" style="padding:0;overflow:hidden;margin-bottom:8px;">
+                        <table class="table table-striped table-sm table-bordered mb-0">
                             <thead>
                                 <tr>
-                                    <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" colspan="2">Colaboradores</th>
-                                    <th class="text-center" rowspan="2">HH Disponível</th>
-                                    <th class="text-center" colspan="2">Falta</th>
-                                    <th class="text-center" colspan="2">HH Corretiva</th>
-                                    <th class="text-center" colspan="2">HH Preventiva</th>
-                                    <th class="text-center" colspan="2">HH PMOC</th>
-                                    <th class="text-center" colspan="2">HH UH em Dia</th>
-                                    <th class="text-center" rowspan="2">Total Apontamento</th>
-                                    <th class="text-center" rowspan="2">Saldo HH Disponível</th>
-                                    <th class="text-center" rowspan="2">% Ociosidade</th>
-                                    <th class="text-center" rowspan="2">H.E.</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Próprios</th>
-                                    <th class="text-center">Terceiros</th>
-                                    <th class="text-center">Justificada</th>
-                                    <th class="text-center">Ñ Justificada</th>
-                                    <th class="text-center">Horas</th>
-                                    <th class="text-center">%</th>
-                                    <th class="text-center">Horas</th>
-                                    <th class="text-center">%</th>
-                                    <th class="text-center">Horas</th>
-                                    <th class="text-center">%</th>
-                                    <th class="text-center">Horas</th>
-                                    <th class="text-center">%</th>
+                                    <th>Atividade</th>
+                                    <th class="text-center" style="width:130px;">OK</th>
+                                    <th class="text-center" style="width:130px;">Pend.</th>
+                                    <th class="text-center" style="width:130px;">Total</th>
+                                    <th style="min-width:180px;">% Atendido</th>
+                                    <th class="text-center" style="width:75px;">Peso</th>
+                                    <th class="text-center" style="width:75px;">Nota</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (ViewBag.apontamento_horas != null)
+                                @foreach (var linha in _linhas1)
                                 {
-                                foreach (var item in (IEnumerable<dynamic>)ViewBag.apontamento_horas)
-                                {
-                                    var _cssRow = Convert.ToString(item.css_row); var _skip = _cssRow.Trim() == "" ? "data-sort-skip='true'" : "";
-                                    <tr class="@_cssRow" @Html.Raw(_skip)>
-                                        <td class="font-w600 @(item.css_row == "" ? "bg-warning-light" : "")">@item.unidade</td>
-                                        <td class="text-center">@item.quantidade_colaborador_proprio</td>
-                                        <td class="text-center">@item.quantidade_colaborador_terceiro</td>
-                                        <td class="text-center">@item.hh_disponivel</td>
-                                        <td class="text-center">@item.faltas_justificadas</td>
-                                        <td class="text-center">@item.faltas_nao_justificadas</td>
-                                        <td class="text-center">@item.horas_corretivas</td>
-                                        <td class="text-center">@item.percentual_horas_corretivas</td>
-                                        <td class="text-center">@item.horas_preventivas</td>
-                                        <td class="text-center">@item.percentual_horas_preventivas</td>
-                                        <td class="text-center">@item.horas_pmoc</td>
-                                        <td class="text-center">@item.percentual_horas_pmoc</td>
-                                        <td class="text-center">@item.horas_uh_dia</td>
-                                        <td class="text-center">@item.percentual_horas_uh_dia</td>
-                                        <td class="text-center">@item.total_apontamento</td>
-                                        <td class="text-center"><span class="@item.css_saldo_hh_disponivel">@item.saldo_hh_disponivel</span></td>
-                                        <td class="text-center">@item.percentual_ociosidade</td>
-                                        <td class="text-center">@item.hora_extra</td>
+                                    var _pctVal = 0.0;
+                                    double.TryParse(linha.pct.Replace("%", "").Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out _pctVal);
+                                    var _cor = _pctVal >= 86 ? "#22b14c" : (_pctVal >= 65 ? "#ffc90e" : "#e74c3c");
+                                    var _w = Math.Min((int)_pctVal, 100).ToString();
+                                    string _nf = "";
+                                    if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { var _pv = _prop.GetValue((object)_nota); _nf = _pv != null ? _pv.ToString() : ""; } }
+                                    bool _isDesc = !string.IsNullOrEmpty(linha.okLabel);
+                                    <tr>
+                                        <td class="font-w600">@linha.label</td>
+                                        <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.okLabel : linha.ok)</td>
+                                        <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.pendLabel : linha.pend)</td>
+                                        <td class="text-center @(_isDesc ? "text-primary font-w600" : "")">@((_isDesc) ? linha.totalLabel : linha.total)</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(linha.pct))
+                                            {
+                                                <div style="display:flex;align-items:center;gap:6px;">
+                                                    <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                        <div style="width:@(_w)%;height:100%;background:@_cor;border-radius:3px;transition:width .4s;"></div>
+                                                    </div>
+                                                    <span style="font-size:11px;font-weight:600;color:@_cor;white-space:nowrap;min-width:52px;text-align:right;">@linha.pct</span>
+                                                </div>
+                                            }
+                                            else
+                                            { <span class="text-muted" style="font-size:11px;">Sem dados</span>}
+                                        </td>
+                                        <td class="text-center text-muted" style="font-size:12px;">@linha.peso</td>
+                                        <td class="text-center font-w600" style="color:#2c3e50;">@_nf</td>
                                     </tr>
                                 }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Bloco 2: indicadores com Realizado / Meta -->
+                    <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                        <table class="table table-striped table-sm table-bordered mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Atividade</th>
+                                    <th class="text-center" style="width:140px;">Realizado</th>
+                                    <th class="text-center" style="width:80px;">Meta</th>
+                                    <th style="min-width:180px;">% Atendido</th>
+                                    <th class="text-center" style="width:75px;">Peso</th>
+                                    <th class="text-center" style="width:75px;">Nota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var linha in _linhas2)
+                                {
+                                    var _pctVal = 0.0;
+                                    double.TryParse(linha.pct.Replace("%", "").Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out _pctVal);
+                                    var _cor = _pctVal >= 86 ? "#22b14c" : (_pctVal >= 65 ? "#ffc90e" : "#e74c3c");
+                                    var _w = Math.Min((int)_pctVal, 100).ToString();
+                                    string _nf = "";
+                                    if (_nota != null) { var _prop = ((object)_nota).GetType().GetProperty(linha.notaKey); if (_prop != null) { var _pv = _prop.GetValue((object)_nota); _nf = _pv != null ? _pv.ToString() : ""; } }
+                                    <tr>
+                                        <td class="font-w600">@linha.label</td>
+                                        <td class="text-center text-primary font-w600">@linha.realizado</td>
+                                        <td class="text-center text-muted">@linha.meta</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(linha.pct))
+                                            {
+                                                <div style="display:flex;align-items:center;gap:6px;">
+                                                    <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                        <div style="width:@(_w)%;height:100%;background:@_cor;border-radius:3px;transition:width .4s;"></div>
+                                                    </div>
+                                                    <span style="font-size:11px;font-weight:600;color:@_cor;white-space:nowrap;min-width:52px;text-align:right;">@linha.pct</span>
+                                                </div>
+                                            }
+                                            else
+                                            { <span class="text-muted" style="font-size:11px;">Sem dados</span>}
+                                        </td>
+                                        <td class="text-center text-muted" style="font-size:12px;">@linha.peso</td>
+                                        <td class="text-center font-w600" style="color:#2c3e50;">@_nf</td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
 
-            <!-- ================= EVOLUÇÃO H.H. (bar+line misto) ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Evolução H.H.</div>
-                <div class="block dashboard-card chart-card">
-                    <div class="chart-wrapper"><canvas id="chartEvolucaoHH"></canvas></div>
+                <!-- ================= EVOLUÇÃO MENSAL (line) ================= -->
+                <div class="dashboard-section">
+                    <div class="section-title">Evolução Mensal</div>
+                    <div class="block dashboard-card chart-card">
+                        <div class="chart-wrapper"><canvas id="chartEvolucaoMensal"></canvas></div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- ================= EVOLUÇÃO PMOC (bar+line misto) ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">Evolução PMOC</div>
-                <div class="block dashboard-card chart-card">
-                    <div class="chart-wrapper"><canvas id="chartEvolucaoPMOC"></canvas></div>
-                </div>
-            </div>
-
-            <!-- ================= LAUDOS (tabela) ================= -->
-            <div class="dashboard-section">
-                <div class="section-title">@PCM.WEB.Properties.Resources.laudo</div>
-                <div class="block dashboard-card">
-                    <table class="table table-striped table-sm table-bordered">
-                        <thead>
-                            <tr>
-                                <th>@PCM.WEB.Properties.Resources.laudo</th>
-                                <th class="text-center" style="width:100px;">@PCM.WEB.Properties.Resources.data_validade</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data_atual</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in ViewBag.manutencao_laudo)
-                            {
+                <!-- ================= SLA – TEMPO MÉDIO (tabela com barras inline) ================= -->
+                <div class="dashboard-section">
+                    <div class="section-title">SLA – Tempo Médio de Atendimento por Unidade</div>
+                    <div class="block dashboard-card" style="overflow-x:auto;">
+                        <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
+                            <thead>
                                 <tr>
-                                    <td><span class="font-w600">@item.nome_fantasia</span>@item.manutencao<span class="text-primary">@item.equipamento</span></td>
-                                    @if (item.data_validade == "")
-                                    {
-                                        <td class="font-w600 text-center">@item.data_validade</td>
-                                    }
-                                    else if (DateTime.Parse(item.data_validade) < ViewBag.data_atual)
-                                    {
-                                        <td class="font-w600 text-center"><span class="badge badge-danger">@item.data_validade</span></td>
- }
-                                    else
-                                    {
-                                        <td class="font-w600 text-center">@item.data_validade</td>
-}
-
-                                    @if (item.mes_1 == 0)
-                                    {
-                                        <td class="text-center"><span class="badge badge-primary">X</span></td>
-                                    }
-                                    else if (item.mes_1 == -1)
-                                    {
-                                        <td class="text-center"><span class="badge badge-warning">X</span></td>
-                                    }
-                                    else if (item.mes_1 == -2)
-                                    {
-                                        <td class="text-center"><span class="badge badge-danger">X</span></td>
-                                    }
-                                    else if (item.mes_1 == -4)
-                                    {
-                                        <td class="text-center"></td>
-                                    }
-                                    else if (item.mes_1 == -5)
-                                    {
-                                        <td class="text-center"><span class="badge badge-danger">X</span></td>
-                                    }
-                                    else if (item.mes_1 > 0)
-                                    {
-                                        <td class="text-center"><span class="badge badge-success">X</span></td>
-                                    }
+                                    <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
+                                    <th class="text-center" colspan="2" style="color:#22b14c;">No Dia</th>
+                                    <th class="text-center" colspan="2" style="color:#3f48cc;">1 Dia</th>
+                                    <th class="text-center" colspan="2" style="color:#b38f00;">2 a 3 Dias</th>
+                                    <th class="text-center" colspan="2" style="color:#ff8000;">4 a 5 Dias</th>
+                                    <th class="text-center" colspan="2" style="color:#800080;">&gt; 5 Dias</th>
+                                    <th class="text-center" colspan="2" style="color:#e74c3c;">Não Atendidas</th>
+                                    <th rowspan="2" style="min-width:160px;">Distribuição</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                                <tr>
+                                    <th class="text-center" style="width:55px;color:#22b14c;">Qtde</th>
+                                    <th class="text-center" style="width:65px;color:#22b14c;">%</th>
+                                    <th class="text-center" style="width:55px;color:#3f48cc;">Qtde</th>
+                                    <th class="text-center" style="width:65px;color:#3f48cc;">%</th>
+                                    <th class="text-center" style="width:55px;color:#b38f00;">Qtde</th>
+                                    <th class="text-center" style="width:65px;color:#b38f00;">%</th>
+                                    <th class="text-center" style="width:55px;color:#ff8000;">Qtde</th>
+                                    <th class="text-center" style="width:65px;color:#ff8000;">%</th>
+                                    <th class="text-center" style="width:55px;color:#800080;">Qtde</th>
+                                    <th class="text-center" style="width:65px;color:#800080;">%</th>
+                                    <th class="text-center" style="width:55px;color:#e74c3c;">Qtde</th>
+                                    <th class="text-center" style="width:65px;color:#e74c3c;">%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var _inv2 = System.Globalization.CultureInfo.InvariantCulture;
+                                    var _ns2 = System.Globalization.NumberStyles.Any;
+                                    var _di = ViewBag.dashboard_info;
+                                    double slaNodia2 = 0, sla1dia2 = 0, sla232 = 0, sla452 = 0, sla5mais2 = 0, slaNao2 = 0, totalOS2 = 0;
+                                    if (_di != null)
+                                    {
+                                        double.TryParse(((string)_di.os_atendimento_dia).Replace("%", "").Replace(",", "."), _ns2, _inv2, out slaNodia2);
+                                        double.TryParse(((string)_di.os_atendimento_um_dia).Replace("%", "").Replace(",", "."), _ns2, _inv2, out sla1dia2);
+                                        double.TryParse(((string)_di.os_atendimento_tres_dias).Replace("%", "").Replace(",", "."), _ns2, _inv2, out sla232);
+                                        double.TryParse(((string)_di.os_atendimento_cinco_dias).Replace("%", "").Replace(",", "."), _ns2, _inv2, out sla452);
+                                        double.TryParse(((string)_di.os_atendimento_acima_cinco_dias).Replace("%", "").Replace(",", "."), _ns2, _inv2, out sla5mais2);
+                                        double.TryParse(((string)_di.os_nao_atendido).Replace("%", "").Replace(",", "."), _ns2, _inv2, out slaNao2);
+                                        double.TryParse(((string)_di.quantidade_os_gerada).Replace(".", "").Replace(",", "."), _ns2, _inv2, out totalOS2);
+                                    }
+                                    var qNodia2 = (int)Math.Round(slaNodia2 / 100 * totalOS2);
+                                    var q1dia2 = (int)Math.Round(sla1dia2 / 100 * totalOS2);
+                                    var q232 = (int)Math.Round(sla232 / 100 * totalOS2);
+                                    var q452 = (int)Math.Round(sla452 / 100 * totalOS2);
+                                    var q5mais2 = (int)Math.Round(sla5mais2 / 100 * totalOS2);
+                                    var qNao2 = (int)Math.Round(slaNao2 / 100 * totalOS2);
+                                    var slaBase2 = slaNodia2 + sla1dia2 + sla232 + sla452 + sla5mais2 + slaNao2;
+                                    if (slaBase2 == 0) { slaBase2 = 1; }
+                                    var bNodia2 = Math.Round(slaNodia2 / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                    var b1dia2 = Math.Round(sla1dia2 / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                    var b232 = Math.Round(sla232 / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                    var b452 = Math.Round(sla452 / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                    var b5mais2 = Math.Round(sla5mais2 / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                    var bNao2 = Math.Round(slaNao2 / slaBase2 * 100, 1).ToString("0.#", _inv2);
+                                }
+                                @if (_di != null)
+                                {
+                                    <tr>
+                                        <td class="font-w600">@_di.unidade</td>
+                                        <td class="text-center" style="color:#22b14c;">@qNodia2</td>
+                                        <td class="text-center" style="font-weight:600;color:#22b14c;">@_di.os_atendimento_dia</td>
+                                        <td class="text-center" style="color:#3f48cc;">@q1dia2</td>
+                                        <td class="text-center" style="font-weight:600;color:#3f48cc;">@_di.os_atendimento_um_dia</td>
+                                        <td class="text-center" style="color:#b38f00;">@q232</td>
+                                        <td class="text-center" style="font-weight:600;color:#b38f00;">@_di.os_atendimento_tres_dias</td>
+                                        <td class="text-center" style="color:#ff8000;">@q452</td>
+                                        <td class="text-center" style="font-weight:600;color:#ff8000;">@_di.os_atendimento_cinco_dias</td>
+                                        <td class="text-center" style="color:#800080;">@q5mais2</td>
+                                        <td class="text-center" style="font-weight:600;color:#800080;">@_di.os_atendimento_acima_cinco_dias</td>
+                                        <td class="text-center" style="color:#e74c3c;">@qNao2</td>
+                                        <td class="text-center" style="font-weight:600;color:#e74c3c;">@_di.os_nao_atendido</td>
+                                        <td>
+                                            <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;width:100%;">
+                                                <div style="width:@bNodia2%;background:#22b14c;" title="No Dia: @_di.os_atendimento_dia (@qNodia2 OS)"></div>
+                                                <div style="width:@b1dia2%;background:#3f48cc;" title="1 Dia: @_di.os_atendimento_um_dia (@q1dia2 OS)"></div>
+                                                <div style="width:@b232%;background:#ffc90e;" title="2-3 Dias: @_di.os_atendimento_tres_dias (@q232 OS)"></div>
+                                                <div style="width:@b452%;background:#ff8000;" title="4-5 Dias: @_di.os_atendimento_cinco_dias (@q452 OS)"></div>
+                                                <div style="width:@b5mais2%;background:#800080;" title=">5 Dias: @_di.os_atendimento_acima_cinco_dias (@q5mais2 OS)"></div>
+                                                <div style="width:@bNao2%;background:#e74c3c;" title="Não Atendidas: @_di.os_nao_atendido (@qNao2 OS)"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+
+                <!-- ================= EVOLUÇÃO SLA (linha — tendência mensal) ================= -->
+                <div class="dashboard-section">
+                    <div class="section-title">SLA – Tendência Mensal</div>
+                    <div class="block dashboard-card chart-card">
+                        <div class="chart-wrapper"><canvas id="chartEvolucaoSLATendencia"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- ================= HORA HOMEM (tabela) ================= -->
+    <div class="dashboard-section">
+        <div class="section-title">Apontamento - Horas</div>
+        <div class="block dashboard-card" style="overflow-x:auto;">
+            <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
+                <thead>
+                    <tr>
+                        <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
+                        <th class="text-center" colspan="2">Colaboradores</th>
+                        <th class="text-center" rowspan="2">HH Disponível</th>
+                        <th class="text-center" colspan="2">Falta</th>
+                        <th class="text-center" colspan="2">HH Corretiva</th>
+                        <th class="text-center" colspan="2">HH Preventiva</th>
+                        <th class="text-center" colspan="2">HH PMOC</th>
+                        <th class="text-center" colspan="2">HH UH em Dia</th>
+                        <th class="text-center" rowspan="2">Total Apontamento</th>
+                        <th class="text-center" rowspan="2">Saldo HH Disponível</th>
+                        <th class="text-center" rowspan="2">% Ociosidade</th>
+                        <th class="text-center" rowspan="2">H.E.</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Próprios</th>
+                        <th class="text-center">Terceiros</th>
+                        <th class="text-center">Justificada</th>
+                        <th class="text-center">Ñ Justificada</th>
+                        <th class="text-center">Horas</th>
+                        <th class="text-center">%</th>
+                        <th class="text-center">Horas</th>
+                        <th class="text-center">%</th>
+                        <th class="text-center">Horas</th>
+                        <th class="text-center">%</th>
+                        <th class="text-center">Horas</th>
+                        <th class="text-center">%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.apontamento_horas != null)
+                    {
+                        foreach (var item in (IEnumerable<dynamic>)ViewBag.apontamento_horas)
+                        {
+                            var _cssRow = Convert.ToString(item.css_row); var _skip = _cssRow.Trim() == "" ? "data-sort-skip='true'" : "";
+                            <tr class="@_cssRow" @Html.Raw(_skip)>
+                                <td class="font-w600 @(item.css_row == "" ? "bg-warning-light" : "")">@item.unidade</td>
+                                <td class="text-center">@item.quantidade_colaborador_proprio</td>
+                                <td class="text-center">@item.quantidade_colaborador_terceiro</td>
+                                <td class="text-center">@item.hh_disponivel</td>
+                                <td class="text-center">@item.faltas_justificadas</td>
+                                <td class="text-center">@item.faltas_nao_justificadas</td>
+                                <td class="text-center">@item.horas_corretivas</td>
+                                <td class="text-center">@item.percentual_horas_corretivas</td>
+                                <td class="text-center">@item.horas_preventivas</td>
+                                <td class="text-center">@item.percentual_horas_preventivas</td>
+                                <td class="text-center">@item.horas_pmoc</td>
+                                <td class="text-center">@item.percentual_horas_pmoc</td>
+                                <td class="text-center">@item.horas_uh_dia</td>
+                                <td class="text-center">@item.percentual_horas_uh_dia</td>
+                                <td class="text-center">@item.total_apontamento</td>
+                                <td class="text-center"><span class="@item.css_saldo_hh_disponivel">@item.saldo_hh_disponivel</span></td>
+                                <td class="text-center">@item.percentual_ociosidade</td>
+                                <td class="text-center">@item.hora_extra</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+                <!-- ================= EVOLUÇÃO H.H. (bar+line misto) ================= -->
+                <div class="dashboard-section">
+                    <div class="section-title">Evolução H.H.</div>
+                    <div class="block dashboard-card chart-card">
+                        <div class="chart-wrapper"><canvas id="chartEvolucaoHH"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- ================= EVOLUÇÃO PMOC (bar+line misto) ================= -->
+                <div class="dashboard-section">
+                    <div class="section-title">Evolução PMOC</div>
+                    <div class="block dashboard-card chart-card">
+                        <div class="chart-wrapper"><canvas id="chartEvolucaoPMOC"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- ================= LAUDOS (tabela) ================= -->
+                <div class="dashboard-section">
+                    <div class="section-title">@PCM.WEB.Properties.Resources.laudo</div>
+                    <div class="block dashboard-card">
+                        <table class="table table-striped table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>@PCM.WEB.Properties.Resources.laudo</th>
+                                    <th class="text-center" style="width:100px;">@PCM.WEB.Properties.Resources.data_validade</th>
+                                    <th class="text-center" style="width:75px;">@ViewBag.data_atual</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.manutencao_laudo)
+                                {
+                                    <tr>
+                                        <td><span class="font-w600">@item.nome_fantasia</span>@item.manutencao<span class="text-primary">@item.equipamento</span></td>
+                                        @if (item.data_validade == "")
+                                        {
+                                            <td class="font-w600 text-center">@item.data_validade</td>
+                                        }
+                                        else if (DateTime.Parse(item.data_validade) < ViewBag.data_atual)
+                                        {
+                                            <td class="font-w600 text-center"><span class="badge badge-danger">@item.data_validade</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="font-w600 text-center">@item.data_validade</td>
+                                        }
+
+                                        @if (item.mes_1 == 0)
+                                        {
+                                            <td class="text-center"><span class="badge badge-primary">X</span></td>
+                                        }
+                                        else if (item.mes_1 == -1)
+                                        {
+                                            <td class="text-center"><span class="badge badge-warning">X</span></td>
+                                        }
+                                        else if (item.mes_1 == -2)
+                                        {
+                                            <td class="text-center"><span class="badge badge-danger">X</span></td>
+                                        }
+                                        else if (item.mes_1 == -4)
+                                        {
+                                            <td class="text-center"></td>
+                                        }
+                                        else if (item.mes_1 == -5)
+                                        {
+                                            <td class="text-center"><span class="badge badge-danger">X</span></td>
+                                        }
+                                        else if (item.mes_1 > 0)
+                                        {
+                                            <td class="text-center"><span class="badge badge-success">X</span></td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
         }
-    }
 
     </div>
 </main>
@@ -503,7 +496,22 @@
             data: { labels: [], datasets: [] },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                legend: { display: true, position: 'bottom' }
+                tooltips: { mode: 'index', intersect: false },
+                legend: {
+                    display: true, position: 'bottom',
+                    labels: {
+                        usePointStyle: true, pointStyle: 'line',
+                        generateLabels: function (chart) {
+                            return chart.data.datasets.map(function (ds, i) {
+                                return {
+                                    text: ds.label, fillStyle: ds.borderColor, strokeStyle: ds.borderColor,
+                                    lineDash: ds.borderDash || [], lineWidth: 2, pointStyle: 'line',
+                                    hidden: !chart.isDatasetVisible(i), datasetIndex: i
+                                };
+                            });
+                        }
+                    }
+                }
             }
         };
 
@@ -544,15 +552,37 @@
             }
         };
 
-        // SLA – line de tendência mensal (stacked area)
+        // SLA – line de tendência mensal
         var configSLATendencia = {
             type: 'line',
             data: { labels: [], datasets: [] },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                legend: { display: true, position: 'bottom' },
+                tooltips: { mode: 'index', intersect: false },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'line',
+                        generateLabels: function (chart) {
+                            return chart.data.datasets.map(function (ds, i) {
+                                return {
+                                    text: ds.label,
+                                    fillStyle: ds.borderColor,
+                                    strokeStyle: ds.borderColor,
+                                    lineDash: ds.borderDash || [],
+                                    lineWidth: 2,
+                                    pointStyle: 'line',
+                                    hidden: !chart.isDatasetVisible(i),
+                                    datasetIndex: i
+                                };
+                            });
+                        }
+                    }
+                },
                 scales: {
-                    yAxes: [{ stacked: true, ticks: { min: 0, max: 100, stepSize: 20 } }]
+                    yAxes: [{ ticks: { min: 0, max: 100, stepSize: 20 } }]
                 }
             }
         };
@@ -649,15 +679,10 @@
 
                         // Tendência: série completa
                         tendDatasets.push({
-                            label: r.serie, data: r.valor, fill: true,
-                            backgroundColor: c.bg, borderColor: c.border, borderWidth: 1.5, pointRadius: 2
+                            label: r.serie, data: r.valor, fill: false,
+                            backgroundColor: c.border, borderColor: c.border, borderWidth: 2, pointRadius: 2
                         });
                     });
-
-                    // Atualiza doughnut
-                    configSLADonut.data = { labels: donutLabels, datasets: [{ data: donutData, backgroundColor: donutBg }] };
-                    window.SLADonut.data = configSLADonut.data;
-                    window.SLADonut.update();
 
                     // Atualiza tendência
                     configSLATendencia.data = { labels: tendLabels, datasets: tendDatasets };
@@ -712,7 +737,6 @@
         // ── Inicialização ────────────────────────────────────────
         jQuery(function () {
             window.EvolucaoMensal = new Chart(document.getElementById('chartEvolucaoMensal').getContext('2d'),    configEvolucaoMensal);
-            window.SLADonut       = new Chart(document.getElementById('chartEvolucaoMensalAtendimentoOS').getContext('2d'), configSLADonut);
             window.SLATendencia   = new Chart(document.getElementById('chartEvolucaoSLATendencia').getContext('2d'), configSLATendencia);
             window.EvolucaoHH     = new Chart(document.getElementById('chartEvolucaoHH').getContext('2d'),         configEvolucaoHH);
             window.EvolucaoPMOC   = new Chart(document.getElementById('chartEvolucaoPMOC').getContext('2d'),       configEvolucaoPMOC);
