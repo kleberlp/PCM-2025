@@ -2626,6 +2626,7 @@
     <Content Include="Views\Shared\shared\_LayoutView.cshtml" />
     <Content Include="Views\Shared\shared\_Sidebar - Copy.cshtml" />
     <Content Include="Views\Shared\shared\_Sidebar.cshtml" />
+    <Content Include="Views\Home\DesempenhoGovernancaAll.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

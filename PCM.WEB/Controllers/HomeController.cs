@@ -1929,8 +1929,21 @@ namespace PCM.WEB.Controllers
             vm.EvolucaoDiaria = oGovernanca.LoadDesempenhoGovernancaEvolucao(codigoEmpresa, codigoUnidade, data);
             vm.TopNcItens = oGovernanca.LoadDesempenhoGovernancaTopNC(codigoEmpresa, codigoUnidade, data);
             vm.TotalNcGeral = vm.TopNcItens.Sum(x => x.Quantidade);
+            vm.RankingUnidades = LoadRankingUnidadesDoMes(codigoEmpresa, data);
 
             return View(vm);
+        }
+
+        // Ranking da rede (mesma query da tela "Todas as Unidades") para o mês da data informada
+        private List<PCM.WEB.MODELS.DesempenhoGovernancaAllUnidadeItem> LoadRankingUnidadesDoMes(int codigoEmpresa, string data)
+        {
+            DateTime dataRef;
+            if (!DateTime.TryParse(data, out dataRef))
+                dataRef = DateTime.Now.AddDays(-1);
+
+            var ini = new DateTime(dataRef.Year, dataRef.Month, 1);
+            var fim = new DateTime(dataRef.Year, dataRef.Month, DateTime.DaysInMonth(dataRef.Year, dataRef.Month));
+            return oGovernanca.LoadDesempenhoGovernancaAllUnidades(codigoEmpresa, ini, fim);
         }
 
         [HttpPost]
@@ -1955,11 +1968,12 @@ namespace PCM.WEB.Controllers
             vm.EvolucaoDiaria = oGovernanca.LoadDesempenhoGovernancaEvolucao(codigoEmpresa, unidade, data);
             vm.TopNcItens = oGovernanca.LoadDesempenhoGovernancaTopNC(codigoEmpresa, unidade, data);
             vm.TotalNcGeral = vm.TopNcItens.Sum(x => x.Quantidade);
+            vm.RankingUnidades = LoadRankingUnidadesDoMes(codigoEmpresa, data);
 
             return View(vm);
         }
 
-        public ActionResult DesempenhoGovernancaAll(string data = null)
+        public ActionResult DesempenhoGovernancaAll()
         {
             if (Session["empresa"] == null)
                 return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
@@ -1967,15 +1981,8 @@ namespace PCM.WEB.Controllers
             int codigoEmpresa = Convert.ToInt32(Session["empresa"].ToString());
 
             DateTime dataTermino;
-            if (!string.IsNullOrEmpty(data) && DateTime.TryParse(data, out dataTermino))
-            {
-                dataTermino = new DateTime(dataTermino.Year, dataTermino.Month, DateTime.DaysInMonth(dataTermino.Year, dataTermino.Month));
-            }
-            else
-            {
-                var hoje = DateTime.Now.AddDays(-1);
-                dataTermino = new DateTime(hoje.Year, hoje.Month, DateTime.DaysInMonth(hoje.Year, hoje.Month));
-            }
+            var hoje = DateTime.Now.AddDays(-1);
+            dataTermino = new DateTime(hoje.Year, hoje.Month, DateTime.DaysInMonth(hoje.Year, hoje.Month));
             var dataInicio = new DateTime(dataTermino.Year, dataTermino.Month, 1);
 
             ViewBag.data = new SelectList(oCombo.DataGovernanca(iCodigoEmpresa: codigoEmpresa,

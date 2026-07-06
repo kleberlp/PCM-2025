@@ -24,11 +24,11 @@
                 <div class="section-title">
                     Qualidade – Desempenho das Unidades
                     <span class="float-right">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="Codebase.helpers('print-page');"><i class="si si-printer"></i> @PCM.WEB.Properties.Resources.imprimir</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary no-print" onclick="window.print();"><i class="si si-printer"></i> Exportar PDF</button>
                     </span>
                 </div>
                 <div class="block dashboard-card">
-                    <table class="table table-striped table-sm table-bordered">
+                    <table class="table table-striped table-sm table-bordered dg-sortable">
                         <thead>
                             <tr>
                                 <th>@PCM.WEB.Properties.Resources.unidade</th>
@@ -72,7 +72,7 @@
             <div class="dashboard-section">
                 <div class="section-title">@PCM.WEB.Properties.Resources.plano_acao</div>
                 <div class="block dashboard-card">
-                    <table class="table table-striped table-sm table-bordered">
+                    <table class="table table-striped table-sm table-bordered dg-sortable">
                         <thead>
                             <tr>
                                 <th>@PCM.WEB.Properties.Resources.unidade</th>

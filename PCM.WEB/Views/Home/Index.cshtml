@@ -6,6 +6,10 @@
         {
             @Html.AntiForgeryToken()
 
+            <div class="text-right no-print" style="margin-bottom:10px;">
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print();"><i class="si si-printer"></i> Exportar PDF</button>
+            </div>
+
             <!-- ================= INDICADOR DE ATUALIZAÇÃO ================= -->
             @*<div id="refresh-indicator" class="refresh-indicator" title="Atualizando em breve">
                 <i class="fa fa-refresh refresh-icon"></i>

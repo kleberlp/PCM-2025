@@ -21,6 +21,10 @@
 
             <input type="hidden" name="data" id="data" value="@_dataSelected" />
 
+            <div class="text-right no-print" style="margin-bottom:10px;">
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print();"><i class="si si-printer"></i> Exportar PDF</button>
+            </div>
+
             <!-- ================= KPIs – ORDEM DE SERVIÇO (torre-grid) ================= -->
             if ((int)ViewBag.codigo_tipo_unidade == 2)
             {
@@ -471,9 +475,14 @@
 }
 
 @section Scripts {
-
-    <script src="~/Content/js/pages/Governanca/dashboard.js"></script>
     <script>
+        // Troca de unidade no header: navega via GET para ler a sessão já atualizada pelo SetUnidade.
+        // (Sem isto, o codebase.js cai em location.reload(), que re-submete o POST do #form
+        //  com a unidade antiga do campo escondido e sobrescreve a sessão — não surtia efeito.)
+        window.onUnidadeChange = function () {
+            window.location.href = '@Url.Action("IndexGovernanca", "Home")';
+        };
+
         $(document).on("change", "#filtro-data", function () {
             $("#data").val($(this).val());
             $("#hidden-unidade").val($("#header-unidade").val() || "@Session["codigo_unidade"]");
@@ -499,4 +508,6 @@
     <script src="~/Content/js/plugins/chartjs/utils.js"></script>
     <script src="~/Content/js/plugins/chartjs/chartjs-plugin-annotation.min.js"></script>
     <script src="~/Content/js/plugins/easy-pie-chart/jquery.easypiechart.min.js"></script>
+
+    <script src="~/Content/js/pages/Governanca/dashboard.js"></script>
 }

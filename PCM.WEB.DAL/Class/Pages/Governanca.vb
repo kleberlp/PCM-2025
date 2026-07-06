@@ -656,7 +656,7 @@ Public Class Governanca
                         Dim oInfo As New dashboardGovernancaApartamentoInfo
 
                         oInfo.sfoVago = oSqlDataReader.Item("sfo_vago")
-                        oInfo.sfoOcupado = oSqlDataReader.Item("sfo_bloqueado")
+                        oInfo.sfoOcupado = oSqlDataReader.Item("sfo_ocupado")
                         oInfo.sfoBloqueado = oSqlDataReader.Item("sfo_bloqueado")
                         oInfo.taManutencao = oSqlDataReader.Item("ta_manutencao")
                         oInfo.taPermanencia = oSqlDataReader.Item("ta_permanencia")
@@ -4266,6 +4266,8 @@ Public Class Governanca
                 Dim item As New DesempenhoGovernancaAllUnidadeItem
                 item.CodigoUnidade = SafeGetInt32(oSqlDataReader, "codigo_unidade")
                 item.NomeUnidade = SafeGetString(oSqlDataReader, "nome_unidade")
+                item.NomeUnidade = SafeGetString(oSqlDataReader, "nome_unidade")
+                item.QtdUH = SafeGetInt32(oSqlDataReader, "qtd_uh")
                 item.QtdCamareira = SafeGetInt32(oSqlDataReader, "qtd_camareira")
                 item.QtdVistoriador = SafeGetInt32(oSqlDataReader, "qtd_vistoriador")
                 item.UHsArrumadas = SafeGetInt32(oSqlDataReader, "uhs_arrumadas")
@@ -4273,6 +4275,7 @@ Public Class Governanca
                 item.UHsPermanencia = SafeGetInt32(oSqlDataReader, "uhs_permanencia")
                 item.UHsVistoriadas = SafeGetInt32(oSqlDataReader, "uhs_vistoriadas")
                 item.PctVistoriaSaidas = CDec(SafeGetFloat(oSqlDataReader, "pct_vistoria_saidas"))
+                item.QtdTrocaStatus = SafeGetInt32(oSqlDataReader, "qtd_troca_status")
                 item.OSManutencao = SafeGetInt32(oSqlDataReader, "os_manutencao")
                 item.TotalNC = SafeGetInt32(oSqlDataReader, "total_nc")
                 item.NCPorUH = CDec(SafeGetFloat(oSqlDataReader, "nc_por_uh"))

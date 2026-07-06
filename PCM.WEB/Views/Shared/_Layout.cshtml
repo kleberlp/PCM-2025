@@ -35,8 +35,16 @@
         @RenderSection("Styles", required: false)
     }
 
+    @* Select2 é usado pelo header (Unidade/Módulo) em TODAS as páginas — o CSS precisa ser global,
+       senão o <select> nativo não é escondido e o controle aparece duplicado.
+       IMPORTANTE: carregar ANTES do codebase.css, que tem tema próprio do select2
+       (chips do modo múltiplo, etc.) e precisa sobrescrever os estilos padrão. *@
+    @Styles.Render("~/Content/select")
+
     @Styles.Render("~/Content/codebase")
     @Styles.Render("~/Content/dashboard")
+    @* CSS de impressão dos dashboards (Exportar PDF) — carregado só na impressão *@
+    <link rel="stylesheet" href="~/Content/css/print-dashboard.css" media="print" />
 
     @*You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg:*@
     @*<link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css">*@

@@ -1991,8 +1991,83 @@ jQuery(function () {
         loadNotificacao();
         notifyOrdemServico();
         initHeaderCombos();
+        initSortableTables();
     }
 });
+
+// ================================================
+// Tabelas ordenáveis por clique no cabeçalho
+// Uso: <table class="dg-sortable">.
+//   - Cabeçalho simples (1 linha): ordena por posição das colunas.
+//   - Cabeçalho composto: marque só os <th> clicáveis com data-col="<índice da coluna no corpo>".
+//   - Células podem trazer data-sort com o valor bruto (senão usa o texto da célula).
+// ================================================
+function initSortableTables() {
+    var tables = document.querySelectorAll('table.dg-sortable');
+    Array.prototype.forEach.call(tables, function (table) {
+        if (!table.tBodies.length) return;
+        var tbody = table.tBodies[0];
+
+        var headers = [];
+        var explicit = table.querySelectorAll('thead th[data-col]');
+        if (explicit.length) {
+            Array.prototype.forEach.call(explicit, function (th) {
+                headers.push({ th: th, col: parseInt(th.getAttribute('data-col'), 10) });
+            });
+        } else if (table.tHead && table.tHead.rows.length) {
+            var cells = table.tHead.rows[0].cells;
+            for (var i = 0; i < cells.length; i++) headers.push({ th: cells[i], col: i });
+        }
+        if (!headers.length) return;
+
+        var state = { col: -1, dir: 1 };
+
+        function cellVal(row, col) {
+            var td = row.cells[col];
+            if (!td) return { num: null, txt: '' };
+            var ds = td.getAttribute('data-sort');
+            var raw = (ds !== null ? ds : td.textContent).trim();
+            var num = null;
+            if (/^-?[\d.,\s%]+$/.test(raw) && /\d/.test(raw)) {
+                var cleaned = raw.replace(/[\s%]/g, '');
+                if (cleaned.indexOf(',') >= 0) cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+                var n = parseFloat(cleaned);
+                if (!isNaN(n)) num = n;
+            }
+            return { num: num, txt: raw.toLowerCase() };
+        }
+
+        function sortBy(col) {
+            state.dir = (state.col === col) ? -state.dir : 1;
+            state.col = col;
+            var rows = Array.prototype.slice.call(tbody.rows);
+            rows.sort(function (a, b) {
+                var va = cellVal(a, col), vb = cellVal(b, col), c;
+                if (va.num !== null && vb.num !== null) c = va.num - vb.num;
+                else c = va.txt < vb.txt ? -1 : va.txt > vb.txt ? 1 : 0;
+                return c * state.dir;
+            });
+            rows.forEach(function (r) { tbody.appendChild(r); });
+            headers.forEach(function (h) {
+                var arr = h.th.querySelector('.dg-sort-arrow');
+                if (arr) arr.textContent = (h.col === col) ? (state.dir > 0 ? ' ▲' : ' ▼') : '';
+            });
+        }
+
+        headers.forEach(function (h) {
+            h.th.style.cursor = 'pointer';
+            h.th.style.userSelect = 'none';
+            if (!h.th.querySelector('.dg-sort-arrow')) {
+                var s = document.createElement('span');
+                s.className = 'dg-sort-arrow';
+                s.style.fontSize = '9px';
+                s.style.color = '#42A5F5';
+                h.th.appendChild(s);
+            }
+            h.th.addEventListener('click', function () { sortBy(h.col); });
+        });
+    });
+}
 
 
 
@@ -2031,7 +2106,10 @@ function initHeaderCombos() {
                     if (typeof window.onUnidadeChange === 'function') {
                         window.onUnidadeChange(unidade);
                     } else {
-                        location.reload();
+                        // Navega via GET (nao location.reload): reload repete o metodo da ultima
+                        // requisicao; se a pagina veio de um POST, re-enviaria o POST com a unidade
+                        // antiga e sobrescreveria a sessao que o SetUnidade acabou de gravar.
+                        window.location.href = window.location.pathname + window.location.search;
                     }
                 });
             } else {

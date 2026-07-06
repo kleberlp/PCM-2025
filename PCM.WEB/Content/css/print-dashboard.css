@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Impressão / Exportar PDF dos dashboards
+   Complementa o @media print do codebase.css (que já esconde sidebar/header/footer).
+   Objetivo: manter o layout da tela e respeitar quebras de página.
+   ========================================================================== */
+@media print {
+
+    /* Preserva as cores de fundo (gráficos, badges, barras de score, KPIs, pills de status).
+       Por padrão o navegador remove fundos ao imprimir. */
+    *,
+    *::before,
+    *::after {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Evita cortar cards / tiles de KPI / linhas de tabela entre páginas */
+    .dashboard-card,
+    .block,
+    .chart-card,
+    .torre-item,
+    tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Mantém o título de seção junto do conteúdo que o segue */
+    .section-title {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    /* Controles que não fazem parte do relatório (botões de exportar/imprimir, etc.) */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Gráficos não estouram a largura da página impressa */
+    .dashboard-card canvas,
+    .chart-card canvas {
+        max-width: 100% !important;
+    }
+
+    /* Usa a largura toda da página (sem recuos laterais herdados) */
+    #main-container .content {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* Tabelas largas ficam em wrappers com overflow-x:auto (rolagem na tela).
+       Na impressão isso CORTA as colunas à direita — força mostrar tudo. */
+    [style*="overflow-x"],
+    [style*="overflow:auto"],
+    .table-responsive {
+        overflow: visible !important;
+    }
+}

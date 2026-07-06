@@ -3,10 +3,6 @@
 @model DesempenhoGovernancaViewModel
 
 @{
-    var gaugePct    = Model != null ? Model.GaugePct : 0m;
-    var gaugeOffset = (double)(245.04m * (1 - gaugePct / 100));
-    var gaugeColor  = gaugePct >= 90 ? "#6EAB4D" : gaugePct >= 70 ? "#D97706" : "#EF5350";
-
     var pctVistoria      = Model != null ? Model.PctVistoria : 0m;
     var pctVistoriaColor = pctVistoria >= 99 ? "#6EAB4D" : pctVistoria >= 90 ? "#D97706" : "#EF5350";
 
@@ -18,7 +14,6 @@
 
     var diasRestantes      = Model != null ? Model.DiasRestantes : 0;
     var diasRestantesClass = diasRestantes <= 5 ? "green" : diasRestantes <= 10 ? "amber" : "";
-    var gaugeValClass      = gaugePct >= 90 ? "green" : gaugePct >= 70 ? "amber" : "red";
 
     var mesLabel       = Model != null && !string.IsNullOrEmpty(Model.MesLabel) ? Model.MesLabel : "";
     var diasDecorridos = Model != null ? Model.DiasDecorridos : 0;
@@ -42,6 +37,19 @@
     var arrManutJson     = Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.UHsManutencao).ToList())  : "[]";
     var arrMetaJson      = Model != null ? JsonConvert.SerializeObject(Model.EvolucaoDiaria.Select(d => d.MetaDiaria).ToList())     : "[]";
 
+    // Ranking da rede (mesma origem/cálculo da tela "Todas as Unidades") — para Score e posição desta unidade
+    var rankingUnidadesJson = Model != null
+        ? JsonConvert.SerializeObject(Model.RankingUnidades.Select(u => new {
+            codigo   = u.CodigoUnidade,
+            nome     = u.NomeUnidade,
+            uh       = u.UHsArrumadas,
+            vis      = u.UHsVistoriadas,
+            nc       = u.TotalNC,
+            retrab   = u.TotalRetrabalho,
+            semDados = u.UHsArrumadas == 0
+          }).ToList())
+        : "[]";
+
     string _dataSelected = "";
     if (ViewBag.data is System.Web.Mvc.SelectList)
     {
@@ -64,6 +72,7 @@
             <div class="dashboard-section">
                 <div class="section-title">
                     Desempenho de Governança — @mesLabel · @nomeUnidade
+                    <span class="float-right"><button type="button" class="btn btn-sm btn-outline-secondary no-print" onclick="window.print();"><i class="si si-printer"></i> Exportar PDF</button></span>
                 </div>
                 <div class="block dashboard-card os-kpi-strip" style="padding:0;">
                     <div class="torre-comando-grid">
@@ -78,7 +87,7 @@
                             <span class="torre-meta">acumulado do mês</span>
                         </div>
                         <div class="torre-item">
-                            <div class="torre-header"><i class="fa fa-percent torre-icon" style="color:#9CA3AF;"></i><span class="torre-label2">% Vistoria</span></div>
+                            <div class="torre-header"><i class="fa fa-percent torre-icon" style="color:#9CA3AF;"></i><span class="torre-label2">Vistoria</span></div>
                             <div class="os-value" style="color:@pctVistoriaColor;">@(Model != null ? Model.PctVistoria.ToString("N1") + "%" : "—")</div>
                             <span class="torre-meta">vistoriadas / arrumadas</span>
                         </div>
@@ -114,27 +123,27 @@
             <!-- ================= GAUGE + EVOLUÇÃO DIÁRIA ================= -->
             <div class="dashboard-section row" style="min-height:350px;">
                 <div class="col-md-4 d-flex flex-column">
-                    <div class="section-title">Meta Mensal de UHs</div>
+                    <div class="section-title">Score de Desempenho da Unidade</div>
                     <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
                         <div style="display:flex;flex-direction:column;align-items:center;padding:20px 16px 0;">
                             <svg viewBox="0 0 200 115" width="220" height="126" style="display:block;max-width:100%;">
                                 <path d="M 22 108 A 78 78 0 0 1 178 108" fill="none" stroke="#E5E7EB" stroke-width="16" stroke-linecap="round"/>
-                                <path d="M 22 108 A 78 78 0 0 1 178 108" fill="none" stroke="@gaugeColor" stroke-width="16" stroke-linecap="round"
-                                      stroke-dasharray="245.04" stroke-dashoffset="@gaugeOffset.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"/>
-                                <text x="100" y="83" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="26" font-weight="800" fill="@gaugeColor" letter-spacing="-1">@gaugePct.ToString("N1")%</text>
-                                <text x="100" y="99" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="9" font-weight="600" fill="#9CA3AF" letter-spacing="1">ATINGIDO</text>
+                                <path id="scoreGaugeArc" d="M 22 108 A 78 78 0 0 1 178 108" fill="none" stroke="#9CA3AF" stroke-width="16" stroke-linecap="round"
+                                      stroke-dasharray="245.04" stroke-dashoffset="245.04"/>
+                                <text id="scoreGaugeVal" x="100" y="83" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="26" font-weight="800" fill="#9CA3AF" letter-spacing="-1">—</text>
+                                <text x="100" y="99" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="9" font-weight="600" fill="#9CA3AF" letter-spacing="1">SCORE</text>
                             </svg>
                         </div>
                         <div class="gauge-meta-row">
                             <div class="gauge-meta-item">
                                 <span class="gauge-meta-label">Meta Mensal</span>
-                                <div class="gauge-meta-value">@(Model != null ? Model.MetaMensalUHs.ToString("N0") : "—")</div>
-                                <div style="font-size:9px;color:#9CA3AF;">UHs/mês</div>
+                                <div class="gauge-meta-value">85%</div>
+                                <div style="font-size:9px;color:#9CA3AF;">score mínimo</div>
                             </div>
                             <div class="gauge-meta-item" style="border-left:1px solid #F0F1F3;border-right:1px solid #F0F1F3;">
-                                <span class="gauge-meta-label">Realizado</span>
-                                <div class="gauge-meta-value @gaugeValClass">@(Model != null ? Model.RealizadoUHs.ToString("N0") : "—")</div>
-                                <div style="font-size:9px;color:#9CA3AF;">UHs arrumadas</div>
+                                <span class="gauge-meta-label">Ranking</span>
+                                <div class="gauge-meta-value" id="scoreRankVal">—</div>
+                                <div style="font-size:9px;color:#9CA3AF;" id="scoreRankSub">na rede</div>
                             </div>
                             <div class="gauge-meta-item">
                                 <span class="gauge-meta-label">Dias Restantes</span>
@@ -172,7 +181,7 @@
                 <div class="section-title">
                     Ranking Geral de Camareiras
                     <span class="dg-section-badge">@(Model != null ? Model.Camareiras.Count : 0) camareiras</span>
-                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Nota×UH = (UHs − NC×14 − Retrabalho) ÷ 64,5</span>
+                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Nota (1–10) = Produtividade×60% + NC×30% + Retrabalho×10% · elegível ≥ 20 UHs · NC/Retrab sobre vistoriados (UHs×80%)</span>
                 </div>
                 <div class="block dashboard-card" style="padding:0;overflow:hidden;">
                     <div style="overflow-x:auto;">
@@ -186,7 +195,7 @@
                                 <col style="width:75px;" />
                                 <col style="width:80px;" />
                                 <col style="width:80px;" />
-                                <col style="width:100px;" />
+                                <col style="width:150px;" />
                             </colgroup>
                             <thead>
                                 <tr>
@@ -197,8 +206,8 @@
                                     <th class="text-center" style="width:85px;">Retrabalho</th>
                                     <th class="text-center" style="width:75px;">Índ. NC%</th>
                                     <th class="text-center" style="width:80px;">Índ. Retrab%</th>
-                                    <th class="text-center" style="width:80px;">Nota×UH</th>
-                                    <th class="text-center" style="width:100px;">Status</th>
+                                    <th class="text-center" style="width:80px;">Nota</th>
+                                    <th class="text-center" style="width: 150px;">Status</th>
                                 </tr>
                             </thead>
                         </table>
@@ -213,7 +222,7 @@
                                     <col style="width:75px;" />
                                     <col style="width:80px;" />
                                     <col style="width:80px;" />
-                                    <col style="width:100px;" />
+                                    <col style="width: 150px;" />
                                 </colgroup>
                                 <tbody id="rankingGeralBody"></tbody>
                             </table>
@@ -237,7 +246,7 @@
                                     <th>Camareira</th>
                                     <th class="text-center" style="width:65px;">UHs</th>
                                     <th class="text-center" style="width:65px;">UH/Dia</th>
-                                    <th class="text-center" style="width:90px;">Status</th>
+                                    <th class="text-center" style="width: 150px;">Status</th>
                                 </tr>
                             </thead>
                         </table>
@@ -266,7 +275,7 @@
                                     <th class="text-center" style="width:55px;">Retrab.</th>
                                     <th class="text-center" style="width:75px;">Índ. NC%</th>
                                     <th class="text-center" style="width:80px;">Índ. Retrab%</th>
-                                    <th class="text-center" style="width:90px;">Status</th>
+                                    <th class="text-center" style="width:150px;">Status</th>
                                 </tr>
                             </thead>
                         </table>
@@ -323,6 +332,66 @@
     var retrabDia  = @Html.Raw(retrabDiaJson);
     var topNc      = @Html.Raw(topNcJson);
 
+    // ===== Score + Ranking desta unidade (mesmo cálculo da tela "Todas as Unidades") =====
+    var rankingUnidades = @Html.Raw(rankingUnidadesJson);
+    var unidadeAtualId  = @unidadeId;
+
+    (function(){
+        var MIN_UHS=100, META=85;
+        var PNC=0.30, PVIS=0.30, PRET=0.10, PPROD=0.30;
+
+        rankingUnidades.forEach(function(u){ u.uhVal=parseFloat(u.uh)||0; u.visVal=parseFloat(u.vis)||0; });
+
+        var eleg=rankingUnidades.filter(function(u){ return !u.semDados && u.uhVal>=MIN_UHS; });
+        var maxUHs=eleg.length ? Math.max.apply(null, eleg.map(function(u){ return u.uhVal; })) : 1;
+
+        rankingUnidades.forEach(function(u){
+            if (u.semDados || u.uhVal<MIN_UHS){ u.elegivel=false; u.score=null; return; }
+            var vis=u.visVal;
+            var ncC=vis>0?Math.max(0,100-(u.nc/vis*100)):0;
+            var viC=Math.min(100, u.uhVal>0?(vis/u.uhVal*100):0);
+            var reC=vis>0?Math.max(0,100-(u.retrab/vis*100)):0;
+            var prC=(u.uhVal/maxUHs)*100;
+            u.elegivel=true;
+            u.score=Math.max(0, Math.round(ncC*PNC+viC*PVIS+reC*PRET+prC*PPROD));
+        });
+
+        // ranking: elegíveis por score desc; inelegíveis por último
+        var ordenado=rankingUnidades.slice().sort(function(a,b){
+            if(!a.elegivel&&!b.elegivel) return b.uhVal-a.uhVal;
+            if(!a.elegivel) return 1;
+            if(!b.elegivel) return -1;
+            return b.score-a.score;
+        });
+        var totalElegiveis=ordenado.filter(function(u){ return u.elegivel; }).length;
+
+        var atual=null, pos=0;
+        for(var i=0;i<ordenado.length;i++){
+            if(String(ordenado[i].codigo)===String(unidadeAtualId)){ atual=ordenado[i]; pos=i+1; break; }
+        }
+
+        var arc=document.getElementById('scoreGaugeArc');
+        var val=document.getElementById('scoreGaugeVal');
+        var rankVal=document.getElementById('scoreRankVal');
+        var rankSub=document.getElementById('scoreRankSub');
+
+        if(atual && atual.elegivel){
+            var sc=atual.score;
+            var color=sc>=META?'#6EAB4D':sc>=70?'#D97706':'#EF5350';
+            val.textContent=sc;
+            val.setAttribute('fill',color);
+            arc.setAttribute('stroke',color);
+            arc.setAttribute('stroke-dashoffset',(245.04*(1-sc/100)).toFixed(2));
+            rankVal.textContent=pos+'º';
+            rankVal.style.color=color;
+            rankSub.textContent='de '+totalElegiveis+' avaliadas';
+        } else {
+            val.textContent='—';
+            rankVal.textContent='—';
+            rankSub.textContent = atual ? 'sem dados (< 100 UHs)' : 'sem dados';
+        }
+    })();
+
     (function () {
         var labels      = @Html.Raw(arrLabelsJson);
         var saida       = @Html.Raw(arrSaidaJson);
@@ -336,10 +405,10 @@
             data: {
                 labels: labels,
                 datasets: [
-                    { type:'bar',  label:'Qtde. Saída',       data:saida,       backgroundColor:'rgba(239,83,80,.75)',  borderColor:'#EF5350', borderWidth:1, borderRadius:3, order:3, stack:'bars' },
-                    { type:'bar',  label:'Qtde. Permanência', data:permanencia, backgroundColor:'rgba(66,165,245,.6)',  borderColor:'#42A5F5', borderWidth:1, borderRadius:3, order:4, stack:'bars' },
-                    { type:'bar',  label:'Qtde. Manutenção',  data:manutencao,  backgroundColor:'rgba(255,202,40,.7)',  borderColor:'#FFCA28', borderWidth:1, borderRadius:3, order:5, stack:'bars' },
-                    { type:'line', label:'Qtde. Vistoriado',  data:vistoriado,  borderColor:'#6EAB4D', backgroundColor:'transparent', borderWidth:2.5, pointRadius:3, pointBackgroundColor:'#6EAB4D', tension:0.4, fill:false, order:1 },
+                    { type:'bar',  label:'Saídas',       data:saida,       backgroundColor:'rgba(239,83,80,.75)',  borderColor:'#EF5350', borderWidth:1, borderRadius:3, order:3, stack:'bars' },
+                    { type:'bar',  label:'Permanências', data:permanencia, backgroundColor:'rgba(66,165,245,.6)',  borderColor:'#42A5F5', borderWidth:1, borderRadius:3, order:4, stack:'bars' },
+                    { type:'bar',  label:'Manutenção',  data:manutencao,  backgroundColor:'rgba(255,202,40,.7)',  borderColor:'#FFCA28', borderWidth:1, borderRadius:3, order:5, stack:'bars' },
+                    { type:'line', label:'Vistoriados',  data:vistoriado,  borderColor:'#6EAB4D', backgroundColor:'transparent', borderWidth:2.5, pointRadius:3, pointBackgroundColor:'#6EAB4D', tension:0.4, fill:false, order:1 },
                     { type:'line', label:'Meta',               data:meta,        borderColor:'#1E3A5F', backgroundColor:'transparent', borderWidth:2, borderDash:[5,4], pointRadius:0, tension:0, fill:false, order:2 }
                 ]
             },
@@ -357,11 +426,16 @@
         });
     })();
 
-    function calcNota(uh,nc,r){ return Math.max(0,(uh-nc*14-r)/64.5); }
+    // ===== Ranking Camareira Nota 10 (0–10) — FORMULA-RANKING-GOVERNANCA sec.1 =====
+    var CAM_MIN_UHS   = 20;    // elegibilidade: < 20 UHs fica fora do ranking
+    var CAM_VIS_RATE  = 0.80;  // estimativa de vistoriados (substituir por dado real quando disponível)
+    var CAM_PESO_PROD = 0.60;
+    var CAM_PESO_NC   = 0.30;
+    var CAM_PESO_RET  = 0.10;
+
     function indNC(nc,uh){ return uh?nc/uh*100:0; }
     function indR(r,uh){ return uh?r/uh*100:0; }
     function fmt1(n){ return n.toFixed(1).replace('.',','); }
-    function fmt2(n){ return n.toFixed(2).replace('.',','); }
 
     (function(){
         var labels=[];
@@ -405,23 +479,56 @@
     })();
 
     (function(){
-        var data=camareiras.map(function(c){var uh=c[1],nc=c[2],r=c[3];return{nome:c[0],uh:uh,nc:nc,retrab:r,nota:calcNota(uh,nc,r),iNC:indNC(nc,uh),iR:indR(r,uh)};});
-        data.sort(function(a,b){return b.nota-a.nota;});
+        // MaxUHs = maior UHs entre as camareiras elegíveis (≥ 20 UHs) do grupo
+        var elegiveis = camareiras.filter(function(c){ return c[1] >= CAM_MIN_UHS; });
+        var maxUHs = elegiveis.length
+            ? Math.max.apply(null, elegiveis.map(function(c){ return c[1]; }))
+            : 1;
+
+        var data = camareiras.map(function(c){
+            var uh=c[1], nc=c[2], r=c[3];
+            if (uh < CAM_MIN_UHS)
+                return { nome:c[0], uh:uh, nc:nc, retrab:r, nota:null, iNC:null, iR:null };
+
+            var vis      = uh * CAM_VIS_RATE;                                  // quartos vistoriados (estimado)
+            var prodComp = (uh / maxUHs) * 100;                                // produtividade relativa ao grupo
+            var ncComp   = vis>0 ? Math.max(0, 100 - (nc/vis*100)) : 0;        // 100 = zero erros
+            var retComp  = vis>0 ? Math.max(0, 100 - (r /vis*100)) : 0;
+            var score    = prodComp*CAM_PESO_PROD + ncComp*CAM_PESO_NC + retComp*CAM_PESO_RET;
+            var nota     = Math.max(1.0, Math.round(score) / 10);             // escala 1–10, 1 casa decimal
+
+            return { nome:c[0], uh:uh, nc:nc, retrab:r, nota:nota,
+                     iNC: vis>0 ? nc/vis*100 : 0,                              // NC / vistoriados %
+                     iR:  vis>0 ? r /vis*100 : 0 };
+        });
+
+        // elegíveis por nota desc; inelegíveis (sem dados) por último
+        data.sort(function(a,b){
+            if (a.nota===null && b.nota===null) return b.uh-a.uh;
+            if (a.nota===null) return 1;
+            if (b.nota===null) return -1;
+            return b.nota-a.nota;
+        });
+
         var tbody=document.getElementById('rankingGeralBody');
         data.forEach(function(r,i){
             var pos=i+1,rk=pos===1?'dg-rank-1':pos===2?'dg-rank-2':pos===3?'dg-rank-3':'dg-rank-n';
-            var nk=r.nota>=2.5?'dg-nota-green':r.nota>=1.5?'dg-nota-yellow':'dg-nota-red';
-            var sk=r.nota>=2.5?'dg-status-green':r.nota>=1.5?'dg-status-yellow':'dg-status-red';
-            var st=r.nota>=2.5?'● Excelente':r.nota>=1.5?'● Regular':'● Atenção';
+            var semDados = r.nota===null, nk, sk, st;
+            if (semDados)              { nk='dg-nota-yellow'; sk='dg-status-yellow'; st='— Sem dados'; }
+            else if (r.nota>=9.0)      { nk='dg-nota-green';  sk='dg-status-green';  st='● Excelente'; }
+            else if (r.nota>=7.0)      { nk='dg-nota-green';  sk='dg-status-green';  st='● Bom'; }
+            else if (r.nota>=5.0)      { nk='dg-nota-yellow'; sk='dg-status-yellow'; st='● Regular'; }
+            else                       { nk='dg-nota-red';    sk='dg-status-red';    st='● Atenção'; }
             var tr=document.createElement('tr');
+            if (semDados) tr.style.opacity='.5';
             tr.innerHTML='<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'
                 +'<td class="font-w600">'+r.nome+'</td>'
                 +'<td class="text-center font-w700">'+r.uh+'</td>'
                 +'<td class="text-center font-w700" style="color:#EF5350;">'+r.nc+'</td>'
                 +'<td class="text-center font-w700" style="color:#EA580C;">'+r.retrab+'</td>'
-                +'<td class="text-center">'+fmt1(r.iNC)+'%</td>'
-                +'<td class="text-center">'+fmt1(r.iR)+'%</td>'
-                +'<td class="text-center"><span class="dg-nota-badge '+nk+'">'+fmt2(r.nota)+'</span></td>'
+                +'<td class="text-center">'+(semDados?'—':fmt1(r.iNC)+'%')+'</td>'
+                +'<td class="text-center">'+(semDados?'—':fmt1(r.iR)+'%')+'</td>'
+                +'<td class="text-center"><span class="dg-nota-badge '+nk+'">'+(semDados?'—':fmt1(r.nota))+'</span></td>'
                 +'<td class="text-center"><span class="dg-status-pill '+sk+'">'+st+'</span></td>';
             tbody.appendChild(tr);
         });

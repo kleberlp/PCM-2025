@@ -505,6 +505,9 @@ namespace PCM.WEB.MODELS
         public List<EvolucaoDiariaItem> EvolucaoDiaria { get; set; } = new List<EvolucaoDiariaItem>();
         public List<CamareiraDesempenhoItem> Camareiras { get; set; } = new List<CamareiraDesempenhoItem>();
         public List<TopNcItem> TopNcItens { get; set; } = new List<TopNcItem>();
+
+        // Ranking da rede (mesma origem da tela "Todas as Unidades") — usado para o Score e a posição desta unidade
+        public List<DesempenhoGovernancaAllUnidadeItem> RankingUnidades { get; set; } = new List<DesempenhoGovernancaAllUnidadeItem>();
     }
 
     public class EvolucaoDiariaItem
@@ -557,6 +560,7 @@ namespace PCM.WEB.MODELS
         public int CodigoUnidade { get; set; }
         public string NomeUnidade { get; set; }
         public int QtdCamareira { get; set; }
+        public int QtdUH { get; set; }
         public int QtdVistoriador { get; set; }
         public int UHsArrumadas { get; set; }
         public int UHsSaida { get; set; }
@@ -567,6 +571,7 @@ namespace PCM.WEB.MODELS
         public int TotalNC { get; set; }
         public decimal NCPorUH { get; set; }
         public int TotalRetrabalho { get; set; }
+        public int QtdTrocaStatus { get; set; }
         public decimal RetrabPorUH { get; set; }
         public decimal Score { get; set; }
     }
