@@ -13281,6 +13281,28 @@ Public Class CadastroBasico
 
     End Function
 
+    Public Function LoadSetor(ByVal iCodigoEmpresa As Integer,
+                              ByVal iCodigoUnidade As Integer,
+                              ByVal sDescricao As String) As Object
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, iCodigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, iCodigoUnidade),
+                CriarParametro("descricao", SqlDbType.VarChar, sDescricao)
+            }
+
+            Return LoadDynamicGrid(sConnection, "sp_select_cadastro_basico_setor_grid", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     Public Function ValidaSetor(ByVal iCodigoEmpresa As Integer,
                                 ByVal iCodigoUnidade As Integer,
                                 ByVal sDescricao As String,

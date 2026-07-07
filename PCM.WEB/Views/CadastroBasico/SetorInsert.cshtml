@@ -96,7 +96,7 @@
                         </div>
                         <div class="block-content block-content-full">
                             <div class="form-group row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label>@PCM.WEB.Properties.Resources.local</label>
                                     <input type="text" class="form-control" style="text-transform: uppercase;" id="local" name="local" autocomplete="off" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); adicionarLocal(); return false; }">
                                 </div>
@@ -112,10 +112,11 @@
                                     <label>@PCM.WEB.Properties.Resources.intervalo</label>
                                     <input type="text" class="form-control" id="intervalo" name="intervalo" autocomplete="off" value="" maxlength="3">
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <label>&nbsp;</label>
-                                    <div>
-                                        <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus" onclick="adicionarLocal();"></button>
+                                    <div class="btn-group d-flex">
+                                        <button type="button" id="btnAddLocal" class="btn btn-square btn-secondary min-width-40" onclick="adicionarLocal();" title="@PCM.WEB.Properties.Resources.adicionar"><i class="fa fa-plus"></i></button>
+                                        <button type="button" id="btnCancelLocal" class="btn btn-square btn-danger min-width-40" style="display:none" onclick="cancelarEdicao();" title="@PCM.WEB.Properties.Resources.cancelar"><i class="fa fa-times"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -190,6 +191,26 @@
             $("#checklist").val("");
             $("#periodicidade").val("");
             $("#intervalo").val("");
+        }
+
+        function marcarEdicao(id) {
+            $("#table tbody tr").removeClass("table-warning");
+            $("input[name$='[" + id + "].local']").closest("tr").addClass("table-warning");
+            $("#btnAddLocal").removeClass("btn-secondary").addClass("btn-success").html("<i class='fa fa-check'></i>");
+            $("#btnCancelLocal").show();
+        }
+
+        function resetEdicao() {
+            $("#update").val("0");
+            $("#table tbody tr").removeClass("table-warning");
+            $("#btnAddLocal").removeClass("btn-success").addClass("btn-secondary").html("<i class='fa fa-plus'></i>");
+            $("#btnCancelLocal").hide();
+        }
+
+        function cancelarEdicao() {
+            limparCampos();
+            resetEdicao();
+            $("#local").focus();
         }
 
         function adicionarLocal() {
@@ -286,7 +307,7 @@
                         $("#text_checklist_" + id).html(checklist);
                         $("#text_periodicidade_" + id).html(periodicidade);
                         $("#text_intervalo_" + id).html(intervalo);
-                        $("#update").val("0");
+                        resetEdicao();
                     }
 
                     limparCampos();
@@ -297,8 +318,8 @@
         };
 
         function remove(item, id) {
-            $("#update").val("0");
             limparCampos();
+            resetEdicao();
             var tr = $(item).closest('tr');
             tr.fadeOut(400, function () {
                 tr.hide();
@@ -314,6 +335,7 @@
             $("#periodicidade").val($("input[name$='[" + id + "].codigo_periodicidade']").val() == "0" ? "" : $("input[name$='[" + id + "].codigo_periodicidade']").val());
             $("#intervalo").val($("input[name$='[" + id + "].intervalo']").val() == "0" ? "" : $("input[name$='[" + id + "].intervalo']").val());
             $("#update").val(id);
+            marcarEdicao(id);
             $("#local").focus();
         };
 

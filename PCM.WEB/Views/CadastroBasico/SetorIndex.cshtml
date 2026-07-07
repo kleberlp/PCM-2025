@@ -1,4 +1,15 @@
-﻿@model IEnumerable<PCM.WEB.MODELS.Setor>
+@using PCM.WEB.Properties
+@using Newtonsoft.Json
+
+@section Styles {
+    <!-- Table css -->
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+}
 
 <!-- Main Container -->
 <main id="main-container">
@@ -7,81 +18,78 @@
     <div class="bg-body-light border-b">
         <div class="content py-0 text-center">
             <nav class="breadcrumb bg-body-light mb-0">
-                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
-                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.setor</span>
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
+                <span class="breadcrumb-item active">@Resources.setor</span>
             </nav>
         </div>
     </div>
     <!-- END Breadcrumb -->
 
     <!-- Page Content -->
-    <div class="content">        
+    <div class="content">
 
-        <!-- Listagem -->
-        <div class="block block-rounded border">
+        @using (Html.BeginForm("SetorIndex", "CadastroBasico", FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "form" }))
+        {
+            @Html.AntiForgeryToken()
 
-            <div class="block-header block-header-default bg-gd-default">
-                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.setor</h3>
-                @if(ViewBag.inserir)
-                {
-                    <div class="block-options">
-                        <a href="@Url.Action("SetorInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
-                            <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.novo
-                        </a>
-                    </div>
-                }
-            </div>
-            
-            <div class="block-content block-content-full">
-                <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                <table class="table table-sm table-vcenter table-striped js-dataTable-list">
-                    <thead>
-                        <tr class="table-secondary">
-                            @if(Session["unidade"] == "")
-                            {
-                                <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
-                            }                                                                    
-                            <th>@PCM.WEB.Properties.Resources.descricao</th>
-                            <th class="d-none d-sm-table-cell text-center" style="width: 80px;">@PCM.WEB.Properties.Resources.ativo </th>
-                            @if(ViewBag.editar || ViewBag.excluir)
-                            {
-                                <th class="text-center" style="width: 80px;" data-sortable="false"></th>
-                            }
-                        </tr>
-                    </thead>
+            <!-- Toggle Mobile -->
+            <button type="button" class="btn btn-block btn-square btn-secondary d-md-none mb-10"
+                    data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">
+                @Resources.filtrar
+            </button>
 
-                    <tbody>                       
-                        @foreach (var item in Model)
+            <!-- FILTROS -->
+            <div class="js-tasks-nav d-none d-md-block">
+                <div class="block block-rounded border">
+
+                    <div class="block-header block-header-default bg-gd-default">
+                        <h3 class="block-title text-white font-w600">@Resources.setor</h3>
+
+                        @if (ViewBag.inserir)
                         {
-                            <tr>     
-                                @if(Session["unidade"] == "")
-                                {
-                                    <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
-                                }
-                                <td>@Html.DisplayFor(modelItem => item.descricao)</td>
-                                <td class="d-none d-sm-table-cell text-center" style="width: 80px;">
-                                    <label class="css-control-sm css-control-secondary css-checkbox">
-                                        @Html.CheckBoxFor(modelItem => item.ativo, new { @class = "css-control-input", @disabled="disabled"})
-                                        <span class="css-control-indicator"></span>
-                                    </label>
-                                </td>             
-                                @if(ViewBag.editar || ViewBag.excluir)
-                                {
-                                    <td class="text-center" style="width: 80px;" >
-                                        <div class="btn-group">          
-                                            @if(ViewBag.editar) { <a href="@Url.Action("SetorEdit", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
-                                            @if(ViewBag.excluir) { <a href="@Url.Action("SetorDelete", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
-                                        </div>
-                                    </td>
-                                }           
-                            </tr>
+                            <div class="block-options">
+                                <a href="@Url.Action("SetorInsert", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-plus mr-5"></i>@Resources.novo</a>
+                            </div>
                         }
-                    </tbody>
+                    </div>
 
-                </table>
+                    <div class="block-content">
+                        <ul class="list-group push">
+
+                            <li class="list-group-item">
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <label>@Resources.unidade</label>
+                                        @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label>@Resources.descricao</label>
+                                        <input type="text" class="form-control" id="descricao" autocomplete="off">
+                                    </div>
+
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="button" id="filtrar" name="filtrar" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
+                                    </div>
+
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
             </div>
-            
-        </div>
+
+            <!-- GRID -->
+            <div class="block block-rounded border">
+                <div class="block-content block-content-full">
+                    <table id="tbMain" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+                </div>
+            </div>
+
+        }
 
     </div>
     <!-- END Page Content -->
@@ -89,68 +97,49 @@
 </main>
 <!-- END Main Container -->
 
-@section Styles {
-    @Styles.Render("~/Content/dataTables")
-}
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        nothingRegister = Resources.emptyTable,
+        search = Resources.search,
+        filtrar = Resources.filtrar,
+        clickToEdit = Resources.clickToEdit,
+        clickToDelete = Resources.clickToDelete,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig,
+        checklist = Resources.checklist,
+        periodicidade = Resources.periodicidade,
+        intervalo = Resources.intervalo,
+        local = Resources.local,
+        editar = (bool)ViewBag.editar,
+        excluir = (bool)ViewBag.excluir,
+        urlLoadSetor = Url.Action("LoadSetor", "CadastroBasico"),
+        urlLoadSetorLocal = Url.Action("LoadSetorLocal", "CadastroBasico"),
+        urlSetorEdit = Url.Action("SetorEdit", "CadastroBasico"),
+        urlSetorDelete = Url.Action("SetorDelete", "CadastroBasico")
+    }))'>
+</div>
 
-@section Scripts {
-    @Scripts.Render("~/plugins/dataTables")
+@section scripts {
 
-    <script type="text/javascript">
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.fixedColumns.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+    <script src="~/Content/js/pcm.js"></script>
 
-        var BeTableDatatables = function () {
-            // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/
-            var exDataTable = function () {
-                jQuery.extend(jQuery.fn.dataTable.ext.classes, {
-                    sWrapper: "dataTables_wrapper dt-bootstrap4"
-                });
-            };
-
-            // Init simple DataTable, for more examples you can check out https://www.datatables.net/
-            var initDataTableSimple = function () {
-                jQuery('.js-dataTable-list').dataTable({
-                    fixedHeader: true,
-                    searching: true,
-                    lengthChange: false,
-                    pageLength: 15,
-                    autoWidth: false,
-                    scrollX: false,
-                    scrollColapse: true,
-                    dom: 'Bfrtip',
-                    buttons: [
-                        { extend: 'copy', text: 'Copiar' },
-                        {
-                            extend: 'print',
-                            text: 'Imprimir'
-                        },
-                        { extend: 'excel' },
-                        { extend: 'pdf', orientation: 'portrait' },
-                    ],
-                    language: {
-                        "search": "Procurar:",
-                        "lengthMenu": "Exibir _MENU_ ",
-                        "zeroRecords": "Nenhum Registro Encontrado",
-                        "info": "_MAX_ registro(s)",
-                        "infoEmpty": "Nenhum Registro encontrado",
-                        "infoFiltered": "(filtrado de _MAX_ registro(s))"
-                    }
-                });
-            };
-
-            return {
-                init: function () {
-                    // Override a few DataTable defaults
-                    exDataTable();
-
-                    // Init Datatables
-                    initDataTableSimple();
-                }
-            };
-        }();
-
-
-        // Initialize when page loads
-        jQuery(function () { $.fn.dataTable.moment('DD/MM/YYYY HH:mm'); BeTableDatatables.init(); });
-
-    </script>
+    <!-- Page -->
+    <script src="~/Content/js/pages/CadastroBasico/jquery.setorIndex.init.js"></script>
 }

@@ -7482,10 +7482,58 @@ namespace PCM.WEB.Controllers
                 ViewBag.editar = editar;
                 ViewBag.excluir = excluir;
 
-                return View(oCadastroBasico.IndexSetor(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
-                                                        iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                                        iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())));
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
+
+                return View();
         }
+        }
+
+        // POST: LOAD GRID (loadGridMain)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult LoadSetor(int unidade = -1, string descricao = "")
+        {
+            if (Session["empresa"] == null)
+            {
+                return Json(null);
+            }
+
+            var data = oCadastroBasico.LoadSetor(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                 iCodigoUnidade: unidade,
+                                                 sDescricao: descricao);
+
+            return new JsonResult
+            {
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue,
+                RecursionLimit = 100
+            };
+        }
+
+        // POST: LOAD LOCAIS DO SETOR (child +)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult LoadSetorLocal(int codigo, int unidade = -1)
+        {
+            if (Session["empresa"] == null)
+            {
+                return Json(null);
+            }
+
+            var data = oCadastroBasico.IndexSetorLocal(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                       iCodigoUnidade: (unidade <= 0) ? Convert.ToInt32(Session["codigo_unidade"].ToString()) : unidade,
+                                                       iCodigoSetor: codigo);
+
+            return new JsonResult
+            {
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue,
+                RecursionLimit = 100
+            };
         }
 
         // GET: INSERT

@@ -907,6 +907,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Cancelar.
+        /// </summary>
+        public static string cancelar {
+            get {
+                return ResourceManager.GetString("cancelar", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Deseja cancelar o registro selecionado?.
         /// </summary>
         public static string cancelarRegistro {
