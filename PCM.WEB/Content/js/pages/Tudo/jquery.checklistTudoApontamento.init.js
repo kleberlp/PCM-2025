@@ -14,11 +14,13 @@
             $(".js-datepicker").mask("99/99/9999");
         }
 
-        // ao escolher "Não", marca a reinspeção da própria linha
+        // mostra o controle de reinspeção apenas quando o item é "Não"
         $("#formApontamento").on("change", ".chk-radio", function () {
             var $row = $(this).closest(".chk-item");
-            if (this.checked && this.value === "NÃO") {
-                $row.find('input[type="checkbox"]').prop("checked", true);
+            var isNao = this.checked && this.value === "NÃO";
+            $row.toggleClass("is-nao", isNao);
+            if (!isNao) {
+                $row.find(".chk-nova input[type='checkbox']").prop("checked", false);
             }
         });
 

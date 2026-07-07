@@ -127,21 +127,30 @@
 .pcm-exec-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .pcm-exec-meta label { display: block; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--pcm-muted); margin-bottom: 4px; }
 .chk-group { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--pcm-accent); background: #EFF6FF; padding: 6px 12px; border-radius: 8px; margin: 14px 0 8px; }
-.chk-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 4px; border-bottom: 1px solid #F3F4F6; }
-.chk-item .chk-q { font-size: 12px; color: var(--pcm-ink-2); flex: 1; min-width: 0; }
-.chk-item .chk-q small { display: block; font-size: 10px; color: var(--pcm-faint); font-weight: 400; }
+.chk-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 4px; border-bottom: 1px solid #F3F4F6; flex-wrap: wrap; }
+.chk-item .chk-q { font-size: 12px; color: var(--pcm-ink-2); flex: 1 1 240px; min-width: 200px; }
+.chk-item .chk-q small { display: block; font-size: 10px; color: var(--pcm-faint); font-weight: 400; margin-top: 1px; }
+.chk-answer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .chk-opts { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
 
-/* opções SIM/NÃO/N-A como pílulas (radio real por baixo) */
-.chk-opt { position: relative; cursor: pointer; line-height: 0; }
-.chk-radio { position: absolute; opacity: 0; width: 0; height: 0; }
-.chk-pill { display: inline-block; font-size: 10px; font-weight: 700; border: 1px solid var(--pcm-line-2); border-radius: 7px; padding: 6px 12px; color: var(--pcm-muted); background: #fff; transition: all .12s; line-height: 1; }
+/* opções SIM/NÃO/N-A como pílulas (radio real por baixo, clicável pelo label) */
+.chk-opt { position: relative; cursor: pointer; display: inline-flex; }
+.chk-radio { position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.chk-pill { display: inline-block; font-size: 10px; font-weight: 700; border: 1px solid var(--pcm-line-2); border-radius: 7px; padding: 6px 13px; color: var(--pcm-muted); background: #fff; transition: all .12s; line-height: 1; }
 .chk-radio:checked + .pill-sim { border-color: var(--st-ok); color: var(--st-ok); background: #F0FDF4; }
 .chk-radio:checked + .pill-nao { border-color: var(--st-atrasado); color: var(--st-atrasado); background: #FEF2F2; }
 .chk-radio:checked + .pill-na  { border-color: var(--pcm-faint); color: var(--pcm-ink-2); background: #F3F4F6; }
 .chk-radio:focus-visible + .chk-pill { outline: 2px solid var(--pcm-accent); outline-offset: 2px; }
-.chk-obs { border: 1px solid var(--pcm-line-2); border-radius: 7px; height: 30px; padding: 0 8px; font-size: 11px; width: 150px; max-width: 30vw; }
-.chk-nova { display: inline-flex; align-items: center; gap: 4px; font-size: 9.5px; color: var(--pcm-faint); white-space: nowrap; }
+.chk-obs { border: 1px solid var(--pcm-line-2); border-radius: 7px; height: 32px; padding: 0 10px; font-size: 11px; width: 200px; max-width: 40vw; font-family: inherit; }
+.chk-obs:focus { outline: none; border-color: var(--pcm-accent); box-shadow: 0 0 0 3px rgba(37, 99, 235, .08); }
+
+/* reinspeção: só aparece quando o item é "Não" */
+.chk-nova { display: none; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; color: var(--st-vistoria); background: #EFF6FF; border: 1px solid #DBEAFE; border-radius: 999px; padding: 5px 11px; cursor: pointer; white-space: nowrap; }
+.chk-nova input { margin: 0; cursor: pointer; accent-color: var(--st-vistoria); }
+.chk-item.is-nao .chk-nova { display: inline-flex; }
+
+/* modo somente-leitura (checklist concluído) sem usar disabled */
+.pcm-readonly .chk-answer, .pcm-readonly select.pcm-fld { pointer-events: none; opacity: .7; }
 
 .pcm-fld, select.pcm-fld { border: 1px solid var(--pcm-line-2); border-radius: 8px; height: 34px; padding: 0 10px; font-size: 12px; font-weight: 600; color: var(--pcm-ink-2); background: #FAFAFA; width: 100%; font-family: inherit; }
 .pcm-fld:focus { outline: none; border-color: var(--pcm-accent); background: #fff; box-shadow: 0 0 0 3px rgba(37, 99, 235, .08); }

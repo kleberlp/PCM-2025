@@ -41,11 +41,11 @@
                     <span class="pcm-chip">@(string.IsNullOrEmpty(ap.checklist) ? "Sem checklist" : ap.checklist)</span>
                 </div>
 
-                <div class="block-content" style="padding:16px 18px;">
+                <div class="block-content @(somenteLeitura ? "pcm-readonly" : "")" style="padding:16px 18px;">
                     <div class="pcm-exec-meta">
                         <div>
                             <label>Responsável</label>
-                            @Html.DropDownList("funcionario_responsavel", (SelectList)ViewBag.funcionario, "", new { @class = "pcm-fld", @disabled = somenteLeitura ? "disabled" : null })
+                            @Html.DropDownList("funcionario_responsavel", (SelectList)ViewBag.funcionario, "", new { @class = "pcm-fld" })
                         </div>
                         <div>
                             <label>Início</label>
@@ -75,19 +75,21 @@
                                 grupoAtual = Model[i].grupo;
                                 <div class="chk-group">@(string.IsNullOrEmpty(grupoAtual) ? "Itens" : grupoAtual)</div>
                             }
-                            <div class="chk-item">
+                            <div class="chk-item@(Model[i].opcao == "NÃO" ? " is-nao" : "")">
                                 @Html.HiddenFor(m => m[i].codigo)
                                 @Html.HiddenFor(m => m[i].descricao)
                                 <div class="chk-q">
                                     @Model[i].descricao
                                     @if (!string.IsNullOrEmpty(Model[i].checklist)) { <small>@Model[i].checklist</small> }
                                 </div>
-                                <div class="chk-opts">
-                                    <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "SIM", new { @class = "chk-radio", @disabled = somenteLeitura ? "disabled" : null })<span class="chk-pill pill-sim">Sim</span></label>
-                                    <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "NÃO", new { @class = "chk-radio", @disabled = somenteLeitura ? "disabled" : null })<span class="chk-pill pill-nao">Não</span></label>
-                                    <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "N/A", new { @class = "chk-radio", @disabled = somenteLeitura ? "disabled" : null })<span class="chk-pill pill-na">N/A</span></label>
-                                    @Html.TextBoxFor(m => m[i].observacao, new { @class = "chk-obs", placeholder = "Observação", @readonly = somenteLeitura ? "readonly" : null })
-                                    <label class="chk-nova">@Html.CheckBoxFor(m => m[i].nova_vistoria, new { @disabled = somenteLeitura ? "disabled" : null }) reinsp.</label>
+                                <div class="chk-answer">
+                                    <div class="chk-opts">
+                                        <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "SIM", new { @class = "chk-radio" })<span class="chk-pill pill-sim">Sim</span></label>
+                                        <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "NÃO", new { @class = "chk-radio" })<span class="chk-pill pill-nao">Não</span></label>
+                                        <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "N/A", new { @class = "chk-radio" })<span class="chk-pill pill-na">N/A</span></label>
+                                    </div>
+                                    @Html.TextBoxFor(m => m[i].observacao, new { @class = "chk-obs", placeholder = "Observação" })
+                                    <label class="chk-nova" title="Agenda uma nova vistoria deste item">@Html.CheckBoxFor(m => m[i].nova_vistoria) Nova vistoria</label>
                                 </div>
                             </div>
                         }
