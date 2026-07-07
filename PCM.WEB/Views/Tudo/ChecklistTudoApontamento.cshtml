@@ -1,0 +1,114 @@
+@model List<PCM.WEB.MODELS.TudoApontamentoChecklist>
+@using PCM.WEB.Properties
+
+@{
+    var ap = (PCM.WEB.MODELS.TudoApontamento)ViewBag.apontamento;
+    var somenteLeitura = (bool)ViewBag.somenteLeitura;
+    var dataIni = string.IsNullOrEmpty(ap.data_inicio) ? (string)ViewBag.dataHoje : ap.data_inicio;
+    var dataFim = string.IsNullOrEmpty(ap.data_termino) ? (string)ViewBag.dataHoje : ap.data_termino;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/css/pcm-ui.css">
+}
+
+<main id="main-container">
+
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistTudo", "Tudo")">Tudo em Dia</a>
+                <span class="breadcrumb-item active">Execução</span>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content">
+
+        @using (Html.BeginForm("ChecklistTudoApontamento", "Tudo", FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "formApontamento" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="codigo_unidade" value="@ViewBag.codigo_unidade" />
+            <input type="hidden" name="codigo_apartamento" value="@ap.codigo_apartamento" />
+
+            <div class="pcm-card">
+                <div class="pcm-card-head">
+                    <div class="pcm-card-title">
+                        <i class="fa fa-building"></i> @ap.local
+                        <small>@(string.IsNullOrEmpty(ap.setor) ? "" : ap.setor)</small>
+                    </div>
+                    <span class="pcm-chip">@(string.IsNullOrEmpty(ap.checklist) ? "Sem checklist" : ap.checklist)</span>
+                </div>
+
+                <div class="block-content" style="padding:16px 18px;">
+                    <div class="pcm-exec-meta">
+                        <div>
+                            <label>Responsável</label>
+                            @Html.DropDownList("funcionario_responsavel", (SelectList)ViewBag.funcionario, "", new { @class = "pcm-fld", @disabled = somenteLeitura ? "disabled" : null })
+                        </div>
+                        <div>
+                            <label>Início</label>
+                            <input type="text" name="data_inicio" value="@dataIni" class="pcm-fld js-datepicker" autocomplete="off" @(somenteLeitura ? "readonly" : "") />
+                        </div>
+                        <div>
+                            <label>Término</label>
+                            <input type="text" name="data_termino" value="@dataFim" class="pcm-fld js-datepicker" autocomplete="off" @(somenteLeitura ? "readonly" : "") />
+                        </div>
+                        <div>
+                            <label>Periodicidade</label>
+                            <div class="pcm-fld" style="display:flex;align-items:center;">@(string.IsNullOrEmpty(ap.periodicidade) ? "—" : ap.periodicidade)@(ap.intervalo > 0 ? " · " + ap.intervalo : "")</div>
+                        </div>
+                    </div>
+
+                    @if (Model.Count == 0)
+                    {
+                        <div class="pcm-empty"><i class="fa fa-list"></i>Este local não tem itens de checklist configurados.</div>
+                    }
+                    else
+                    {
+                        var grupoAtual = "___";
+                        for (int i = 0; i < Model.Count; i++)
+                        {
+                            if (Model[i].grupo != grupoAtual)
+                            {
+                                grupoAtual = Model[i].grupo;
+                                <div class="chk-group">@(string.IsNullOrEmpty(grupoAtual) ? "Itens" : grupoAtual)</div>
+                            }
+                            <div class="chk-item">
+                                @Html.HiddenFor(m => m[i].codigo)
+                                @Html.HiddenFor(m => m[i].descricao)
+                                <div class="chk-q">
+                                    @Model[i].descricao
+                                    @if (!string.IsNullOrEmpty(Model[i].checklist)) { <small>@Model[i].checklist</small> }
+                                </div>
+                                <div class="chk-opts">
+                                    <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "SIM", new { @class = "chk-radio", @disabled = somenteLeitura ? "disabled" : null })<span class="chk-pill pill-sim">Sim</span></label>
+                                    <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "NÃO", new { @class = "chk-radio", @disabled = somenteLeitura ? "disabled" : null })<span class="chk-pill pill-nao">Não</span></label>
+                                    <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "N/A", new { @class = "chk-radio", @disabled = somenteLeitura ? "disabled" : null })<span class="chk-pill pill-na">N/A</span></label>
+                                    @Html.TextBoxFor(m => m[i].observacao, new { @class = "chk-obs", placeholder = "Observação", @readonly = somenteLeitura ? "readonly" : null })
+                                    <label class="chk-nova">@Html.CheckBoxFor(m => m[i].nova_vistoria, new { @disabled = somenteLeitura ? "disabled" : null }) reinsp.</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="pcm-exec-foot">
+                    <a href="@Url.Action("ChecklistTudo", "Tudo")" class="btn-pcm btn-pcm-ghost"><i class="fa fa-arrow-left"></i> Voltar</a>
+                    @if (!somenteLeitura && Model.Count > 0)
+                    {
+                        <button type="submit" class="btn-pcm btn-pcm-dark"><i class="fa fa-check"></i> Concluir checklist</button>
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+</main>
+
+@section scripts {
+    @Scripts.Render("~/plugins/validation")
+    @Scripts.Render("~/plugins/maskedinput")
+    <script src="~/Content/js/pages/Tudo/jquery.checklistTudoApontamento.init.js"></script>
+}

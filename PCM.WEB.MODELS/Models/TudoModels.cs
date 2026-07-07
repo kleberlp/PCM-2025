@@ -48,13 +48,18 @@ namespace PCM.WEB.MODELS
         public bool nova_vistoria { get; set; }
     }
 
-    // Cabeçalho do apontamento (execução) — Fase 2
+    // Cabeçalho do apontamento (execução) + contexto do local — Fase 2
     public class TudoApontamento
     {
         public long codigo { get; set; }
-        public int codigo_unidade { get; set; }
         public int codigo_apartamento { get; set; }
+        public string local { get; set; }
+        public string setor { get; set; }
         public long codigo_checklist { get; set; }
+        public string checklist { get; set; }
+        public string periodicidade { get; set; }
+        public int intervalo { get; set; }
+        public string data_proxima { get; set; }
         public int codigo_funcionario_responsavel { get; set; }
         public string data_inicio { get; set; }
         public string data_termino { get; set; }
