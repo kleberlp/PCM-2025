@@ -1215,4 +1215,168 @@ Public Class Administracao
 
 #End Region
 
+#Region "::: GOVERNANÇA - METAS E PARÂMETROS (AD07) :::"
+
+    Public Function ConfiguracaoGovernancaParametros(ByVal iCodigoEmpresa As Integer) As MetasParametrosGovernancaViewModel
+
+        Try
+
+            Dim oReturn As New MetasParametrosGovernancaViewModel
+            Dim oSqlDataReader As SqlDataReader
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, iCodigoEmpresa)
+            }
+
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_configuracao_governanca_parametros", oSqlParameter)
+
+            While oSqlDataReader.Read
+
+                oReturn.PctMetaAtendimentoPadrao = oSqlDataReader.Item("pct_meta_atendimento")
+                oReturn.MetaAptosDiaCamareiraPadrao = oSqlDataReader.Item("meta_aptos_dia_camareira")
+                oReturn.MetaPctVistoriaPadrao = oSqlDataReader.Item("meta_pct_vistoria")
+                oReturn.PesoNCUnidades = oSqlDataReader.Item("peso_nc_unidades")
+                oReturn.PesoVistoriaUnidades = oSqlDataReader.Item("peso_vistoria_unidades")
+                oReturn.PesoProdutividadeUnidades = oSqlDataReader.Item("peso_produtividade_unidades")
+                oReturn.PesoRetrabalhoUnidades = oSqlDataReader.Item("peso_retrabalho_unidades")
+                oReturn.QtdMinimaElegivelUnidades = oSqlDataReader.Item("qtd_minima_elegivel_unidades")
+                oReturn.PesoProdutividadeIndividual = oSqlDataReader.Item("peso_produtividade_individual")
+                oReturn.PesoNCIndividual = oSqlDataReader.Item("peso_nc_individual")
+                oReturn.PesoRetrabalhoIndividual = oSqlDataReader.Item("peso_retrabalho_individual")
+                oReturn.QtdMinimaElegivelIndividual = oSqlDataReader.Item("qtd_minima_elegivel_individual")
+                oReturn.PctVistoriadosEstimado = oSqlDataReader.Item("pct_vistoriados_estimado")
+
+            End While
+
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Function LoadMetaUnidadeGovernanca(ByVal iCodigoEmpresa As Integer,
+                                              ByVal iMes As Integer,
+                                              ByVal iAno As Integer) As List(Of MetaUnidadeItem)
+
+        Try
+
+            Dim oReturn As New List(Of MetaUnidadeItem)
+            Dim oSqlDataReader As SqlDataReader
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, iCodigoEmpresa),
+                CriarParametro("mes", SqlDbType.Int, iMes),
+                CriarParametro("ano", SqlDbType.Int, iAno)
+            }
+
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_configuracao_governanca_meta_unidade", oSqlParameter)
+
+            While oSqlDataReader.Read
+
+                Dim oItem As New MetaUnidadeItem
+                oItem.UnidadeId = oSqlDataReader.Item("codigo_unidade")
+                oItem.NomeUnidade = oSqlDataReader.Item("nome_unidade")
+                oItem.AptosTotaisPMS = oSqlDataReader.Item("aptos_totais_pms")
+                oItem.PctMetaCustom = If(IsDBNull(oSqlDataReader.Item("pct_meta_custom")), Nothing, oSqlDataReader.Item("pct_meta_custom"))
+                oItem.MetaAptosDiaCamareiraCustom = If(IsDBNull(oSqlDataReader.Item("meta_aptos_dia_camareira_custom")), Nothing, oSqlDataReader.Item("meta_aptos_dia_camareira_custom"))
+                oItem.MetaPctVistoriaCustom = If(IsDBNull(oSqlDataReader.Item("meta_pct_vistoria_custom")), Nothing, oSqlDataReader.Item("meta_pct_vistoria_custom"))
+
+                oReturn.Add(oItem)
+
+            End While
+
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Sub UpdateConfiguracaoGovernancaParametros(ByVal iCodigoEmpresa As Integer,
+                                                      ByVal iCodigoUsuario As Integer,
+                                                      ByVal dPctMetaAtendimento As Decimal,
+                                                      ByVal iMetaAptosDiaCamareira As Integer,
+                                                      ByVal dMetaPctVistoria As Decimal,
+                                                      ByVal dPesoNCUnidades As Decimal,
+                                                      ByVal dPesoVistoriaUnidades As Decimal,
+                                                      ByVal dPesoProdutividadeUnidades As Decimal,
+                                                      ByVal dPesoRetrabalhoUnidades As Decimal,
+                                                      ByVal iQtdMinimaElegivelUnidades As Integer,
+                                                      ByVal dPesoProdutividadeIndividual As Decimal,
+                                                      ByVal dPesoNCIndividual As Decimal,
+                                                      ByVal dPesoRetrabalhoIndividual As Decimal,
+                                                      ByVal iQtdMinimaElegivelIndividual As Integer,
+                                                      ByVal dPctVistoriadosEstimado As Decimal)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, iCodigoEmpresa),
+                CriarParametro("codigo_usuario", SqlDbType.Int, iCodigoUsuario),
+                CriarParametro("pct_meta_atendimento", SqlDbType.Decimal, dPctMetaAtendimento),
+                CriarParametro("meta_aptos_dia_camareira", SqlDbType.Int, iMetaAptosDiaCamareira),
+                CriarParametro("meta_pct_vistoria", SqlDbType.Decimal, dMetaPctVistoria),
+                CriarParametro("peso_nc_unidades", SqlDbType.Decimal, dPesoNCUnidades),
+                CriarParametro("peso_vistoria_unidades", SqlDbType.Decimal, dPesoVistoriaUnidades),
+                CriarParametro("peso_produtividade_unidades", SqlDbType.Decimal, dPesoProdutividadeUnidades),
+                CriarParametro("peso_retrabalho_unidades", SqlDbType.Decimal, dPesoRetrabalhoUnidades),
+                CriarParametro("qtd_minima_elegivel_unidades", SqlDbType.Int, iQtdMinimaElegivelUnidades),
+                CriarParametro("peso_produtividade_individual", SqlDbType.Decimal, dPesoProdutividadeIndividual),
+                CriarParametro("peso_nc_individual", SqlDbType.Decimal, dPesoNCIndividual),
+                CriarParametro("peso_retrabalho_individual", SqlDbType.Decimal, dPesoRetrabalhoIndividual),
+                CriarParametro("qtd_minima_elegivel_individual", SqlDbType.Int, iQtdMinimaElegivelIndividual),
+                CriarParametro("pct_vistoriados_estimado", SqlDbType.Decimal, dPctVistoriadosEstimado)
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_configuracao_governanca_parametros", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    Public Sub UpdateMetaUnidadeGovernanca(ByVal iCodigoEmpresa As Integer,
+                                           ByVal iCodigoUnidade As Integer,
+                                           ByVal iCodigoUsuario As Integer,
+                                           ByVal sPctMetaCustom As String,
+                                           ByVal sMetaAptosDiaCamareiraCustom As String,
+                                           ByVal sMetaPctVistoriaCustom As String)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, iCodigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, iCodigoUnidade),
+                CriarParametro("codigo_usuario", SqlDbType.Int, iCodigoUsuario),
+                CriarParametro("pct_meta_custom", SqlDbType.Decimal, If(String.IsNullOrEmpty(sPctMetaCustom), DBNull.Value, CDec(sPctMetaCustom.Replace(".", ",")))),
+                CriarParametro("meta_aptos_dia_camareira_custom", SqlDbType.Int, If(String.IsNullOrEmpty(sMetaAptosDiaCamareiraCustom), DBNull.Value, CInt(sMetaAptosDiaCamareiraCustom))),
+                CriarParametro("meta_pct_vistoria_custom", SqlDbType.Decimal, If(String.IsNullOrEmpty(sMetaPctVistoriaCustom), DBNull.Value, CDec(sMetaPctVistoriaCustom.Replace(".", ","))))
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_configuracao_governanca_meta_unidade", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+#End Region
+
 End Class

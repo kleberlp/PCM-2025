@@ -575,4 +575,47 @@ namespace PCM.WEB.MODELS
         public decimal RetrabPorUH { get; set; }
         public decimal Score { get; set; }
     }
+
+    // ===== AD07 - Metas e Parâmetros de Governança =====
+    public class MetasParametrosGovernancaViewModel
+    {
+        // ---- Meta de Atendimento — Padrão da empresa ----
+        public decimal PctMetaAtendimentoPadrao { get; set; }   // ex: 90
+        public int MetaAptosDiaCamareiraPadrao { get; set; }    // ex: 18 (UHs/dia)
+        public decimal MetaPctVistoriaPadrao { get; set; }      // ex: 95
+
+        // ---- Pesos — Ranking de Todas as Unidades (somam 100) ----
+        public decimal PesoNCUnidades { get; set; }             // ex: 30
+        public decimal PesoVistoriaUnidades { get; set; }       // ex: 30
+        public decimal PesoProdutividadeUnidades { get; set; }  // ex: 30
+        public decimal PesoRetrabalhoUnidades { get; set; }     // ex: 10
+        public int QtdMinimaElegivelUnidades { get; set; }      // ex: 100 (UHs arrumadas/mês)
+
+        // ---- Pesos — Ranking Individual "Governança Nota 10" (somam 100) ----
+        public decimal PesoProdutividadeIndividual { get; set; } // ex: 60
+        public decimal PesoNCIndividual { get; set; }            // ex: 30
+        public decimal PesoRetrabalhoIndividual { get; set; }    // ex: 10
+        public int QtdMinimaElegivelIndividual { get; set; }     // ex: 20 (UHs arrumadas/mês)
+        public decimal PctVistoriadosEstimado { get; set; }      // ex: 80
+
+        public string MesReferenciaLabel { get; set; }           // ex: "Julho/2026"
+
+        public List<MetaUnidadeItem> Unidades { get; set; }
+
+        public MetasParametrosGovernancaViewModel()
+        {
+            Unidades = new List<MetaUnidadeItem>();
+        }
+    }
+
+    public class MetaUnidadeItem
+    {
+        public int UnidadeId { get; set; }
+        public string NomeUnidade { get; set; }
+        public int AptosTotaisPMS { get; set; }                  // total de aptos a arrumar no período (fonte PMS)
+        public decimal? PctMetaCustom { get; set; }              // null = usa PctMetaAtendimentoPadrao
+        public int? MetaAptosDiaCamareiraCustom { get; set; }    // null = usa MetaAptosDiaCamareiraPadrao
+        public decimal? MetaPctVistoriaCustom { get; set; }      // null = usa MetaPctVistoriaPadrao
+        public int MetaCalculada { get; set; }                   // AptosTotaisPMS * (% Meta efetivo / 100)
+    }
 }

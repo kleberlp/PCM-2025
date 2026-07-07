@@ -2474,6 +2474,7 @@
     <Content Include="Views\Home\DesempenhoUnidades.cshtml" />
     <Content Include="Views\PMOC\PMOC2.cshtml" />
     <Content Include="Views\Administracao\ConfiguracaoDesempenhoUnidade.cshtml" />
+    <Content Include="Views\Administracao\MetasParametrosGovernanca.cshtml" />
     <Content Include="Views\Excel\PlanoAcaoQA.cshtml" />
     <Content Include="Views\Agenda\AreaComumDelete.cshtml" />
     <Content Include="Views\Agenda\AreaComumEdit.cshtml" />

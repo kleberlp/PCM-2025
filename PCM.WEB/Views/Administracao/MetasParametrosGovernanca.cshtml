@@ -1,0 +1,383 @@
+@model PCM.WEB.MODELS.MetasParametrosGovernancaViewModel
+@using PCM.WEB.Properties
+
+@{
+    ViewBag.Title = "Metas e Parâmetros de Governança";
+}
+
+@functions {
+    // Renderiza decimais sempre com ponto (invariant) para não quebrar <input type="number"> em cultura pt-BR
+    string Inv(decimal d) { return d.ToString(System.Globalization.CultureInfo.InvariantCulture); }
+}
+
+@section Styles {
+<style>
+/* === PAGE HEADER === */
+.page-header { margin-bottom: 14px; }
+.page-header h1 { font-size: 16px; font-weight: 800; color: #1F2937; letter-spacing: -.3px; margin: 0; }
+.page-header .page-subtitle { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
+
+/* === DASHBOARD CARD — Parâmetros Gerais === */
+.dashboard-card { background: #fff; border-radius: 14px; box-shadow: rgba(0,0,0,.06) 0 4px 14px; padding: 18px; margin-bottom: 24px; }
+.section-title { font-size: .82rem; font-weight: 600; color: #374151; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.section-title span:first-child { display: flex; align-items: center; gap: 8px; }
+.section-note { font-size: 10.5px; color: #9CA3AF; margin-bottom: 18px; }
+
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #6B7280; margin: 0 0 10px 2px; display: flex; align-items: center; gap: 6px; }
+.sub-label .sub-label-tag { font-size: 9px; font-weight: 700; padding: 1px 7px; border-radius: 20px; background: #EFF6FF; color: #2563EB; text-transform: none; letter-spacing: 0; }
+.sub-label .total-pill { font-size: 9.5px; font-weight: 800; padding: 2px 9px; border-radius: 20px; text-transform: none; letter-spacing: 0; margin-left: auto; }
+.sub-label .total-pill.ok  { background: #F0FDF4; color: #16A34A; }
+.sub-label .total-pill.bad { background: #FEF2F2; color: #DC2626; }
+.sub-label::after { content: ''; flex: 1; height: 1px; background: #F0F1F3; }
+.sub-label.has-total::after { flex: 0 0 12px; }
+.param-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 22px; }
+.param-row:last-of-type { margin-bottom: 0; }
+.param-field label { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #6B7280; margin-bottom: 5px; }
+.param-field .input-suffix-wrap { position: relative; }
+.param-field input.form-control { border-radius: 8px; border: 1px solid #E5E7EB; font-size: 13px; font-weight: 700; color: #374151; background: #FAFAFA; height: 36px; padding: 0 38px 0 12px; width: 100%; transition: background .15s, border-color .15s; }
+.param-field input.form-control:focus { outline: none; border-color: #2563EB; background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
+.param-field .input-suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 10.5px; color: #9CA3AF; font-weight: 600; pointer-events: none; }
+.param-field .param-hint { font-size: 9.5px; color: #9CA3AF; margin-top: 4px; }
+.param-field.is-weight input.form-control { color: #1E40AF; }
+
+.dashboard-card-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #F0F1F3; }
+.btn-pcm { border-radius: 8px; padding: 8px 18px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: none; text-decoration: none; }
+.btn-pcm-dark { background: #374151; color: #fff; }
+.btn-pcm-dark:hover { background: #111827; color:#fff; }
+.btn-pcm-ghost { background: transparent; color: #374151; border: 1px solid #E5E7EB; }
+.btn-pcm-ghost:hover { border-color: #374151; }
+
+/* === TABLE CARD — Metas por Unidade === */
+.table-card { background: #fff; border-radius: 14px; box-shadow: rgba(0,0,0,.06) 0 4px 14px; overflow: hidden; margin-bottom: 24px; }
+.table-card-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid #F0F1F3; flex-wrap: wrap; gap: 8px; background: #F9FAFB; }
+.table-card-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #374151; display: flex; align-items: center; gap: 8px; }
+.table-card-title small { font-weight: 500; text-transform: none; letter-spacing: 0; color: #9CA3AF; font-size: 10.5px; margin-left: 4px; }
+.ref-mes-badge { font-size: 10px; font-weight: 600; color: #6B7280; background: #fff; border: 1px solid #E5E7EB; border-radius: 20px; padding: 4px 12px; display: inline-flex; align-items: center; gap: 6px; }
+.ref-mes-badge i { color: #9CA3AF; }
+
+.table-card .table { border-collapse: separate !important; border-spacing: 0 !important; border: none !important; margin: 0; width: 100%; }
+.table-card .table thead th { background: #F9FAFB !important; color: #374151 !important; font-weight: 700 !important; font-size: 10.5px !important; text-transform: uppercase !important; letter-spacing: .04em !important; border-bottom: 2px solid #E5E7EB !important; border-left: none !important; border-right: none !important; white-space: nowrap; padding: 10px 14px !important; text-align: left; }
+.table-card .table thead th.col-num { text-align: center; }
+.table-card .table thead tr.row-group th { border-bottom: none !important; padding-bottom: 6px !important; }
+.table-card .table thead tr.row-sub th { background: #EFF6FF !important; color: #1E40AF !important; font-size: 9.5px !important; font-weight: 700 !important; border-bottom: 2px solid #E5E7EB !important; padding: 6px 10px !important; text-align: center; }
+.table-card .table thead tr.row-sub th.col-eq { color: #2563EB !important; }
+.table-card .table tbody td { font-size: 12px; color: #374151; padding: 8px 14px; vertical-align: middle; border-bottom: 1px solid #F3F4F6; }
+.table-card .table tbody tr:hover td { background: #F8F9FB; }
+.table-card .table tbody td.col-num { text-align: center; }
+.table-card .table tbody td.col-group { background: #FAFBFF; }
+.table-card .table tbody tr:hover td.col-group { background: #F0F5FF; }
+
+.unidade-cell { display: flex; align-items: center; gap: 9px; }
+.unidade-icon { width: 28px; height: 28px; border-radius: 8px; background: #EFF6FF; color: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+.unidade-nome { font-weight: 700; color: #1F2937; }
+
+.table-inline-input { width: 72px; text-align: center; font-size: 13px; font-weight: 700; color: #374151; border: 1px solid transparent; border-radius: 7px; background: transparent; padding: 6px 4px; transition: background .15s, border-color .15s; }
+.table-inline-input:hover { background: #F3F4F6; }
+.table-inline-input:focus { outline: none; background: #fff; border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
+.table-inline-input.is-custom { color: #1E40AF; }
+.table-inline-input[readonly] { background: #F3F4F6; color: #6B7280; cursor: not-allowed; }
+
+.meta-calculada { font-size: 14px; font-weight: 800; color: #16A34A; }
+.meta-calculada-sub { display: block; font-size: 9px; color: #9CA3AF; font-weight: 500; margin-top: 1px; }
+
+.status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+.status-pill.custom  { background: #EFF6FF; color: #1E40AF; }
+.status-pill.default { background: #F3F4F6; color: #9CA3AF; }
+.status-pill i { font-size: 8px; }
+
+.link-reset { font-size: 10px; color: #9CA3AF; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; margin-top: 3px; }
+.link-reset:hover { color: #374151; }
+.col-cell-stack { display: flex; flex-direction: column; align-items: center; }
+.alert-erro { background:#FEF2F2; color:#DC2626; border:1px solid #FECACA; border-radius:10px; padding:10px 14px; font-size:11px; font-weight:600; margin-bottom:16px; }
+</style>
+}
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
+                <span class="breadcrumb-item">@Resources.administracao</span>
+                <span class="breadcrumb-item active">Metas e Parâmetros de Governança</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <div class="content">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <h1><i class="fa fa-sliders" style="color:#2563EB;font-size:14px;margin-right:6px;"></i>Metas e Parâmetros de Governança</h1>
+            <div class="page-subtitle">Configura os indicadores usados em Desempenho de Governança (individual e todas as unidades)</div>
+        </div>
+
+        @if (ViewBag.erro != null)
+        {
+            <div class="alert-erro"><i class="fa fa-exclamation-triangle mr-5"></i>@ViewBag.erro</div>
+        }
+
+        <!-- Parâmetros Gerais da Empresa -->
+        @using (Html.BeginForm("SalvarParametrosGerais", "Administracao", FormMethod.Post, new { id = "formParametrosGerais" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="dashboard-card">
+                <div class="section-title">
+                    <span><i class="fa fa-building" style="color:#9CA3AF"></i> Parâmetros Gerais da Empresa</span>
+                </div>
+                <div class="section-note">Valem como padrão para todas as unidades — exceto onde houver uma meta individual definida na tabela abaixo.</div>
+
+                <div class="sub-label">Meta de Atendimento — Padrão <span class="sub-label-tag">alimenta a tabela abaixo</span></div>
+                <div class="param-row">
+                    <div class="param-field">
+                        <label>% Meta de Atendimento</label>
+                        <div class="input-suffix-wrap">
+                            <input type="number" step="any" class="form-control" id="pctMetaGlobal" name="PctMetaAtendimentoPadrao" value="@Inv(Model.PctMetaAtendimentoPadrao)" />
+                            <span class="input-suffix">%</span>
+                        </div>
+                        <div class="param-hint">Aplicado sobre os Aptos Totais PMS do mês (ver tabela)</div>
+                    </div>
+                    <div class="param-field">
+                        <label>Meta Aptos Dia / Camareira</label>
+                        <div class="input-suffix-wrap">
+                            <input type="number" class="form-control" name="MetaAptosDiaCamareiraPadrao" value="@Model.MetaAptosDiaCamareiraPadrao" />
+                            <span class="input-suffix">UHs/dia</span>
+                        </div>
+                        <div class="param-hint">Qtde. de apartamentos que 1 camareira deve arrumar por dia</div>
+                    </div>
+                    <div class="param-field">
+                        <label>Meta — % Vistoria</label>
+                        <div class="input-suffix-wrap">
+                            <input type="number" step="any" class="form-control" name="MetaPctVistoriaPadrao" value="@Inv(Model.MetaPctVistoriaPadrao)" />
+                            <span class="input-suffix">%</span>
+                        </div>
+                        <div class="param-hint">UHs vistoriadas sobre a quantidade de UHs arrumadas</div>
+                    </div>
+                </div>
+
+                <div class="sub-label has-total">
+                    Pesos — Ranking de Todas as Unidades
+                    <span class="sub-label-tag">rede completa</span>
+                    <span class="total-pill ok" id="totalUnidades">Total: 100%</span>
+                </div>
+                <div class="param-row">
+                    <div class="param-field is-weight">
+                        <label>NC</label>
+                        <div class="input-suffix-wrap"><input type="number" step="any" class="form-control peso-unidades" name="PesoNCUnidades" value="@Inv(Model.PesoNCUnidades)" /><span class="input-suffix">%</span></div>
+                    </div>
+                    <div class="param-field is-weight">
+                        <label>Vistoria</label>
+                        <div class="input-suffix-wrap"><input type="number" step="any" class="form-control peso-unidades" name="PesoVistoriaUnidades" value="@Inv(Model.PesoVistoriaUnidades)" /><span class="input-suffix">%</span></div>
+                    </div>
+                    <div class="param-field is-weight">
+                        <label>Produtividade</label>
+                        <div class="input-suffix-wrap"><input type="number" step="any" class="form-control peso-unidades" name="PesoProdutividadeUnidades" value="@Inv(Model.PesoProdutividadeUnidades)" /><span class="input-suffix">%</span></div>
+                    </div>
+                    <div class="param-field is-weight">
+                        <label>Retrabalho</label>
+                        <div class="input-suffix-wrap"><input type="number" step="any" class="form-control peso-unidades" name="PesoRetrabalhoUnidades" value="@Inv(Model.PesoRetrabalhoUnidades)" /><span class="input-suffix">%</span></div>
+                    </div>
+                </div>
+                <div class="param-row">
+                    <div class="param-field">
+                        <label>Qtd. Mínima Elegível</label>
+                        <div class="input-suffix-wrap">
+                            <input type="number" class="form-control" name="QtdMinimaElegivelUnidades" value="@Model.QtdMinimaElegivelUnidades" />
+                            <span class="input-suffix">UHs</span>
+                        </div>
+                        <div class="param-hint">Unidades com menos UHs arrumadas no mês não entram no ranking</div>
+                    </div>
+                </div>
+
+                <div class="sub-label has-total">
+                    Pesos — Ranking Individual
+                    <span class="sub-label-tag">Governança Nota 10</span>
+                    <span class="total-pill ok" id="totalIndividual">Total: 100%</span>
+                </div>
+                <div class="param-row">
+                    <div class="param-field is-weight">
+                        <label>Produtividade</label>
+                        <div class="input-suffix-wrap"><input type="number" step="any" class="form-control peso-individual" name="PesoProdutividadeIndividual" value="@Inv(Model.PesoProdutividadeIndividual)" /><span class="input-suffix">%</span></div>
+                    </div>
+                    <div class="param-field is-weight">
+                        <label>NC</label>
+                        <div class="input-suffix-wrap"><input type="number" step="any" class="form-control peso-individual" name="PesoNCIndividual" value="@Inv(Model.PesoNCIndividual)" /><span class="input-suffix">%</span></div>
+                    </div>
+                    <div class="param-field is-weight">
+                        <label>Retrabalho</label>
+                        <div class="input-suffix-wrap"><input type="number" step="any" class="form-control peso-individual" name="PesoRetrabalhoIndividual" value="@Inv(Model.PesoRetrabalhoIndividual)" /><span class="input-suffix">%</span></div>
+                    </div>
+                </div>
+                <div class="param-row">
+                    <div class="param-field">
+                        <label>Qtd. Mínima Elegível</label>
+                        <div class="input-suffix-wrap">
+                            <input type="number" class="form-control" name="QtdMinimaElegivelIndividual" value="@Model.QtdMinimaElegivelIndividual" />
+                            <span class="input-suffix">UHs</span>
+                        </div>
+                        <div class="param-hint">Camareiras com menos UHs arrumadas no mês não entram no ranking</div>
+                    </div>
+                    <div class="param-field">
+                        <label>Base NC/Retrabalho — % Vistoriados Estimado</label>
+                        <div class="input-suffix-wrap">
+                            <input type="number" step="any" class="form-control" name="PctVistoriadosEstimado" value="@Inv(Model.PctVistoriadosEstimado)" />
+                            <span class="input-suffix">%</span>
+                        </div>
+                        <div class="param-hint">NC e Retrabalho são calculados sobre UHs vistoriados = UHs arrumadas × este %</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card-footer">
+                    <button type="submit" class="btn-pcm btn-pcm-dark"><i class="fa fa-check"></i> Salvar Parâmetros Gerais</button>
+                </div>
+            </div>
+        }
+
+        <!-- Metas por Unidade -->
+        @using (Html.BeginForm("SalvarMetasUnidade", "Administracao", FormMethod.Post, new { id = "formMetasUnidade" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Unidades.Count" value="@Model.Unidades.Count" />
+            <div class="table-card">
+                <div class="table-card-header">
+                    <div class="table-card-title"><i class="fa fa-building"></i> Metas por Unidade <small>Sobrescreve o padrão da empresa quando preenchida</small></div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span class="ref-mes-badge"><i class="fa fa-calendar"></i> Período de referência: @Model.MesReferenciaLabel</span>
+                        <button type="submit" class="btn-pcm btn-pcm-dark"><i class="fa fa-check"></i> Salvar Metas por Unidade</button>
+                    </div>
+                </div>
+                <table class="table" id="tblMetas">
+                    <thead>
+                        <tr class="row-group">
+                            <th rowspan="2">Unidade</th>
+                            <th colspan="3" class="col-num">Meta de UHs Arrumadas / Mês</th>
+                            <th rowspan="2" class="col-num">Meta Aptos Dia<br>/ Camareira</th>
+                            <th rowspan="2" class="col-num">Meta<br>% Vistoria</th>
+                            <th rowspan="2" class="col-num">Status</th>
+                        </tr>
+                        <tr class="row-sub">
+                            <th>Aptos Totais PMS</th>
+                            <th>% Meta</th>
+                            <th class="col-eq">= Meta Calculada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Unidades.Count; i++)
+                        {
+                            var u = Model.Unidades[i];
+                            var pctEfetivo = u.PctMetaCustom ?? Model.PctMetaAtendimentoPadrao;
+                            var camareiraEfetivo = u.MetaAptosDiaCamareiraCustom ?? Model.MetaAptosDiaCamareiraPadrao;
+                            var vistoriaEfetivo = u.MetaPctVistoriaCustom ?? Model.MetaPctVistoriaPadrao;
+                            var isCustom = u.PctMetaCustom.HasValue || u.MetaAptosDiaCamareiraCustom.HasValue || u.MetaPctVistoriaCustom.HasValue;
+                            <tr>
+                                <td>
+                                    <div class="unidade-cell">
+                                        <div class="unidade-icon"><i class="fa fa-building"></i></div>
+                                        <span class="unidade-nome">@u.NomeUnidade</span>
+                                        <input type="hidden" name="Unidades[@i].UnidadeId" value="@u.UnidadeId" />
+                                    </div>
+                                </td>
+                                <td class="col-num col-group">
+                                    <input type="number" class="table-inline-input aptos-totais" name="Unidades[@i].AptosTotaisPMS" value="@u.AptosTotaisPMS" readonly title="Vem da governança/PMS — somente leitura" />
+                                </td>
+                                <td class="col-num col-group">
+                                    <input type="number" step="any" class="table-inline-input pct-meta @(u.PctMetaCustom.HasValue ? "is-custom" : "")" name="Unidades[@i].PctMetaCustom" value="@Inv(pctEfetivo)" />
+                                </td>
+                                <td class="col-num col-group">
+                                    <span class="meta-calculada">@u.MetaCalculada.ToString("N0")</span>
+                                    <span class="meta-calculada-sub">@u.AptosTotaisPMS × @pctEfetivo%</span>
+                                </td>
+                                <td class="col-num">
+                                    <div class="col-cell-stack">
+                                        <input type="number" class="table-inline-input @(u.MetaAptosDiaCamareiraCustom.HasValue ? "is-custom" : "")" name="Unidades[@i].MetaAptosDiaCamareiraCustom" value="@camareiraEfetivo" placeholder="@Model.MetaAptosDiaCamareiraPadrao" />
+                                    </div>
+                                </td>
+                                <td class="col-num">
+                                    <input type="number" step="any" class="table-inline-input @(u.MetaPctVistoriaCustom.HasValue ? "is-custom" : "")" name="Unidades[@i].MetaPctVistoriaCustom" value="@Inv(vistoriaEfetivo)" />
+                                </td>
+                                <td class="col-num">
+                                    @if (isCustom)
+                                    {
+                                        <span class="status-pill custom"><i class="fa fa-circle"></i> Personalizado</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-pill default"><i class="fa fa-circle"></i> Padrão</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+</main>
+<!-- END Main Container -->
+
+@section scripts {
+<script>
+// Recalcula ao vivo: Meta Calculada = Aptos Totais PMS × (% Meta / 100)
+function calcularMetaLinha(tr) {
+    var aptos = parseFloat(tr.querySelector('.aptos-totais').value || '0');
+    var pct = parseFloat(tr.querySelector('.pct-meta').value || '0');
+    var resultado = Math.round(aptos * (pct / 100));
+    var out = tr.querySelector('.meta-calculada');
+    var sub = tr.querySelector('.meta-calculada-sub');
+    out.textContent = isNaN(resultado) ? '—' : resultado.toLocaleString('pt-BR');
+    sub.textContent = aptos + ' × ' + pct + '%';
+}
+document.querySelectorAll('#tblMetas tbody tr').forEach(function (tr) {
+    tr.querySelectorAll('.pct-meta').forEach(function (inp) {
+        inp.addEventListener('input', function () {
+            inp.classList.add('is-custom');
+            calcularMetaLinha(tr);
+        });
+    });
+});
+
+// Marca como custom ao alterar Meta Aptos Dia / Meta % Vistoria
+document.querySelectorAll('#tblMetas .table-inline-input').forEach(function (inp) {
+    inp.addEventListener('input', function () {
+        if (!inp.classList.contains('aptos-totais') && !inp.classList.contains('pct-meta')) {
+            inp.classList.add('is-custom');
+        }
+    });
+});
+
+// % Meta global — ao alterar, atualiza linhas ainda no padrão (sem override)
+document.getElementById('pctMetaGlobal').addEventListener('input', function () {
+    var v = this.value;
+    document.querySelectorAll('.pct-meta:not(.is-custom)').forEach(function (inp) {
+        inp.placeholder = v;
+        inp.value = v;
+        var tr = inp.closest('tr');
+        if (tr) calcularMetaLinha(tr);
+    });
+});
+
+// Validação visual: soma dos pesos de cada ranking deve fechar em 100%
+function validarPesos(selector, totalId) {
+    var inputs = document.querySelectorAll(selector);
+    var soma = 0;
+    inputs.forEach(function (inp) { soma += parseFloat(inp.value || '0'); });
+    var pill = document.getElementById(totalId);
+    pill.textContent = 'Total: ' + soma + '%';
+    pill.classList.toggle('ok', soma === 100);
+    pill.classList.toggle('bad', soma !== 100);
+}
+document.querySelectorAll('.peso-unidades').forEach(function (inp) {
+    inp.addEventListener('input', function () { validarPesos('.peso-unidades', 'totalUnidades'); });
+});
+document.querySelectorAll('.peso-individual').forEach(function (inp) {
+    inp.addEventListener('input', function () { validarPesos('.peso-individual', 'totalIndividual'); });
+});
+// Estado inicial
+validarPesos('.peso-unidades', 'totalUnidades');
+validarPesos('.peso-individual', 'totalIndividual');
+</script>
+}

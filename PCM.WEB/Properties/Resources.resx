@@ -1989,6 +1989,9 @@
   <data name="cancelar" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="metas_governanca" xml:space="preserve">
+    <value>Metas de Governança</value>
+  </data>
   <data name="cancelarRegistro" xml:space="preserve">
     <value>Deseja cancelar o registro selecionado?</value>
   </data>

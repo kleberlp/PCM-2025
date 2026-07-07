@@ -189,6 +189,9 @@
                                     <li>
                                         <a class="@Html.IsSelected(action: "ConfiguracaoDesempenhoUnidade", cssClass: "active") font-size-sm" href="@Url.Action("ConfiguracaoDesempenhoUnidade", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.desempenho_unidades</span></a>
                                     </li>
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "MetasParametrosGovernanca", cssClass: "active") font-size-sm" href="@Url.Action("MetasParametrosGovernanca", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.metas_governanca</span></a>
+                                    </li>
                                 }
                                 @if ((bool)Session["adm_usuario"])
                                 {

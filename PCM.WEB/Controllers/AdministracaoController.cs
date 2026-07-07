@@ -1439,5 +1439,161 @@ namespace PCM.WEB.Controllers
 
         #endregion
 
+        #region ::: GOVERNANÇA - METAS E PARÂMETROS (AD07) :::
+
+        private static readonly string[] _mesesPtBr = { "", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" };
+
+        private static decimal ParseDec(string valor)
+        {
+            decimal d;
+            decimal.TryParse((valor ?? "").Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out d);
+            return d;
+        }
+
+        private static int ParseInt(string valor)
+        {
+            int i;
+            int.TryParse((valor ?? "").Trim(), out i);
+            return i;
+        }
+
+        // GET: /Administracao/MetasParametrosGovernanca
+        public ActionResult MetasParametrosGovernanca()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                int empresa = Convert.ToInt32(Session["empresa"].ToString());
+                DateTime hoje = DateTime.Now;
+
+                MetasParametrosGovernancaViewModel vm = oAdministracao.ConfiguracaoGovernancaParametros(iCodigoEmpresa: empresa);
+                vm.MesReferenciaLabel = _mesesPtBr[hoje.Month] + "/" + hoje.Year;
+                vm.Unidades = oAdministracao.LoadMetaUnidadeGovernanca(iCodigoEmpresa: empresa, iMes: hoje.Month, iAno: hoje.Year);
+
+                foreach (var u in vm.Unidades)
+                {
+                    decimal pctEfetivo = u.PctMetaCustom ?? vm.PctMetaAtendimentoPadrao;
+                    u.MetaCalculada = (int)Math.Round(u.AptosTotaisPMS * (pctEfetivo / 100m));
+                }
+
+                if (TempData["erro"] != null) ViewBag.erro = TempData["erro"].ToString();
+
+                return View(vm);
+            }
+        }
+
+        // POST: Parâmetros Gerais da Empresa
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SalvarParametrosGerais(FormCollection form)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                decimal pesoNCUni = ParseDec(form["PesoNCUnidades"]);
+                decimal pesoVistUni = ParseDec(form["PesoVistoriaUnidades"]);
+                decimal pesoProdUni = ParseDec(form["PesoProdutividadeUnidades"]);
+                decimal pesoRetrUni = ParseDec(form["PesoRetrabalhoUnidades"]);
+
+                decimal pesoProdInd = ParseDec(form["PesoProdutividadeIndividual"]);
+                decimal pesoNCInd = ParseDec(form["PesoNCIndividual"]);
+                decimal pesoRetrInd = ParseDec(form["PesoRetrabalhoIndividual"]);
+
+                // Validação: pesos de cada ranking devem somar 100
+                if ((pesoNCUni + pesoVistUni + pesoProdUni + pesoRetrUni) != 100 ||
+                    (pesoProdInd + pesoNCInd + pesoRetrInd) != 100)
+                {
+                    TempData["erro"] = "A soma dos pesos de cada ranking deve ser exatamente 100%.";
+                    return RedirectToAction("MetasParametrosGovernanca");
+                }
+
+                oAdministracao.UpdateConfiguracaoGovernancaParametros(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                     iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                     dPctMetaAtendimento: ParseDec(form["PctMetaAtendimentoPadrao"]),
+                                                                     iMetaAptosDiaCamareira: ParseInt(form["MetaAptosDiaCamareiraPadrao"]),
+                                                                     dMetaPctVistoria: ParseDec(form["MetaPctVistoriaPadrao"]),
+                                                                     dPesoNCUnidades: pesoNCUni,
+                                                                     dPesoVistoriaUnidades: pesoVistUni,
+                                                                     dPesoProdutividadeUnidades: pesoProdUni,
+                                                                     dPesoRetrabalhoUnidades: pesoRetrUni,
+                                                                     iQtdMinimaElegivelUnidades: ParseInt(form["QtdMinimaElegivelUnidades"]),
+                                                                     dPesoProdutividadeIndividual: pesoProdInd,
+                                                                     dPesoNCIndividual: pesoNCInd,
+                                                                     dPesoRetrabalhoIndividual: pesoRetrInd,
+                                                                     iQtdMinimaElegivelIndividual: ParseInt(form["QtdMinimaElegivelIndividual"]),
+                                                                     dPctVistoriadosEstimado: ParseDec(form["PctVistoriadosEstimado"]));
+
+                return RedirectToAction("MetasParametrosGovernanca");
+            }
+        }
+
+        // POST: Metas por Unidade (overrides)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SalvarMetasUnidade(FormCollection form)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                int empresa = Convert.ToInt32(Session["empresa"].ToString());
+                int usuario = Convert.ToInt32(User.Identity.GetUserName());
+
+                // Padrões da empresa (para decidir o que é override real x herdado do padrão)
+                MetasParametrosGovernancaViewModel padrao = oAdministracao.ConfiguracaoGovernancaParametros(iCodigoEmpresa: empresa);
+
+                int total = ParseInt(form["Unidades.Count"]);
+                if (total <= 0)
+                {
+                    // fallback: descobre o maior índice postado
+                    foreach (string key in form.AllKeys)
+                    {
+                        if (key != null && key.StartsWith("Unidades[") && key.Contains("].UnidadeId"))
+                        {
+                            int idx = ParseInt(key.Substring(9, key.IndexOf(']') - 9));
+                            if (idx + 1 > total) total = idx + 1;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < total; i++)
+                {
+                    string prefix = "Unidades[" + i + "].";
+                    string unidadeStr = form[prefix + "UnidadeId"];
+                    if (string.IsNullOrEmpty(unidadeStr)) continue;
+
+                    int unidade = ParseInt(unidadeStr);
+
+                    // Se o valor informado for igual ao padrão, grava NULL (herda o padrão)
+                    decimal pctInformado = ParseDec(form[prefix + "PctMetaCustom"]);
+                    int camareiraInformado = ParseInt(form[prefix + "MetaAptosDiaCamareiraCustom"]);
+                    decimal vistoriaInformado = ParseDec(form[prefix + "MetaPctVistoriaCustom"]);
+
+                    string pctCustom = (pctInformado == padrao.PctMetaAtendimentoPadrao) ? "" : pctInformado.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    string camareiraCustom = (camareiraInformado == padrao.MetaAptosDiaCamareiraPadrao) ? "" : camareiraInformado.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    string vistoriaCustom = (vistoriaInformado == padrao.MetaPctVistoriaPadrao) ? "" : vistoriaInformado.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+                    oAdministracao.UpdateMetaUnidadeGovernanca(iCodigoEmpresa: empresa,
+                                                               iCodigoUnidade: unidade,
+                                                               iCodigoUsuario: usuario,
+                                                               sPctMetaCustom: pctCustom,
+                                                               sMetaAptosDiaCamareiraCustom: camareiraCustom,
+                                                               sMetaPctVistoriaCustom: vistoriaCustom);
+                }
+
+                return RedirectToAction("MetasParametrosGovernanca");
+            }
+        }
+
+        #endregion
+
     }
 }
