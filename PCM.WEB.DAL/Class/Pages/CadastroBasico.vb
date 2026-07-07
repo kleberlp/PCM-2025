@@ -13344,10 +13344,13 @@ Public Class CadastroBasico
                                 ByVal iCodigoUsuario As Integer,
                                 ByVal iCodigoUnidade As Integer,
                                 ByVal iCodigoSetor As Integer,
-                                ByVal sLocal As String)
+                                ByVal sLocal As String,
+                                ByVal iCodigoChecklist As Long,
+                                ByVal iCodigoPeriodicidade As Integer,
+                                ByVal iIntervalo As Integer)
 
         'Variaveis Locais
-        Dim oSqlParameter(4) As SqlParameter
+        Dim oSqlParameter(7) As SqlParameter
         Dim i As Integer = 0
 
         Try
@@ -13386,7 +13389,28 @@ Public Class CadastroBasico
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.VarChar
             oSqlParameter(i).Size = 100
-            oSqlParameter(i).Value = sLocal.ToUpper()
+            oSqlParameter(i).Value = sLocal.ToUpper() : i += 1
+
+            'Seta Parametros - Código Checklist
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_checklist"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.BigInt
+            oSqlParameter(i).Value = If(iCodigoChecklist > 0, iCodigoChecklist, DBNull.Value) : i += 1
+
+            'Seta Parametros - Código Periodicidade
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_periodicidade"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = If(iCodigoPeriodicidade > 0, iCodigoPeriodicidade, DBNull.Value) : i += 1
+
+            'Seta Parametros - Intervalo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "intervalo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = If(iIntervalo > 0, iIntervalo, DBNull.Value)
 
             'Executa Query
             ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_cadastro_basico_setor_local", oSqlParameter)
@@ -13441,6 +13465,11 @@ Public Class CadastroBasico
 
                 oInfo.codigo = oSqlDataReader.Item("codigo")
                 oInfo.local = oSqlDataReader.Item("local")
+                oInfo.codigo_checklist = If(IsDBNull(oSqlDataReader.Item("codigo_checklist")), 0, oSqlDataReader.Item("codigo_checklist"))
+                oInfo.checklist = If(IsDBNull(oSqlDataReader.Item("checklist")), "", oSqlDataReader.Item("checklist"))
+                oInfo.codigo_periodicidade = If(IsDBNull(oSqlDataReader.Item("codigo_periodicidade")), 0, oSqlDataReader.Item("codigo_periodicidade"))
+                oInfo.periodicidade = If(IsDBNull(oSqlDataReader.Item("periodicidade")), "", oSqlDataReader.Item("periodicidade"))
+                oInfo.intervalo = If(IsDBNull(oSqlDataReader.Item("intervalo")), 0, oSqlDataReader.Item("intervalo"))
                 oInfo.excluido = 0
 
                 oReturn.Add(oInfo)
@@ -13467,10 +13496,13 @@ Public Class CadastroBasico
                                 ByVal iCodigoSetor As Integer,
                                 ByVal sLocal As String,
                                 ByVal iExcluido As Integer,
-                                ByVal iCodigo As Integer)
+                                ByVal iCodigo As Integer,
+                                ByVal iCodigoChecklist As Long,
+                                ByVal iCodigoPeriodicidade As Integer,
+                                ByVal iIntervalo As Integer)
 
         'Variaveis Locais
-        Dim oSqlParameter(6) As SqlParameter
+        Dim oSqlParameter(9) As SqlParameter
         Dim i As Integer = 0
 
         Try
@@ -13523,7 +13555,28 @@ Public Class CadastroBasico
             oSqlParameter(i).ParameterName = "codigo"
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.Int
-            oSqlParameter(i).Value = iCodigo
+            oSqlParameter(i).Value = iCodigo : i += 1
+
+            'Seta Parametros - Código Checklist
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_checklist"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.BigInt
+            oSqlParameter(i).Value = If(iCodigoChecklist > 0, iCodigoChecklist, DBNull.Value) : i += 1
+
+            'Seta Parametros - Código Periodicidade
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_periodicidade"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = If(iCodigoPeriodicidade > 0, iCodigoPeriodicidade, DBNull.Value) : i += 1
+
+            'Seta Parametros - Intervalo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "intervalo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = If(iIntervalo > 0, iIntervalo, DBNull.Value)
 
             'Executa Query
             ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_cadastro_basico_setor_local", oSqlParameter)

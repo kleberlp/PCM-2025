@@ -96,13 +96,26 @@
                         </div>
                         <div class="block-content block-content-full">
                             <div class="form-group row">
-                                <div class="col-md-8">
+                                <div class="col-md-4">
                                     <label>@PCM.WEB.Properties.Resources.local</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="local" name="local" autocomplete="off" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); adicionarLocal(); return false; }">
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" onclick="adicionarLocal();"></button>
-                                        </div>
+                                    <input type="text" class="form-control" style="text-transform: uppercase;" id="local" name="local" autocomplete="off" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); adicionarLocal(); return false; }">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>@PCM.WEB.Properties.Resources.checklist</label>
+                                    @Html.DropDownList("checklist", null, "", new { @class = "form-control", @id = "checklist" })
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.periodicidade</label>
+                                    @Html.DropDownList("periodicidade", null, "", new { @class = "form-control", @id = "periodicidade" })
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@PCM.WEB.Properties.Resources.intervalo</label>
+                                    <input type="text" class="form-control" id="intervalo" name="intervalo" autocomplete="off" value="" maxlength="3">
+                                </div>
+                                <div class="col-md-1">
+                                    <label>&nbsp;</label>
+                                    <div>
+                                        <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus" onclick="adicionarLocal();"></button>
                                     </div>
                                 </div>
                             </div>
@@ -111,6 +124,9 @@
                                 <thead>
                                     <tr class="table-secondary">
                                         <th>@PCM.WEB.Properties.Resources.local</th>
+                                        <th>@PCM.WEB.Properties.Resources.checklist</th>
+                                        <th>@PCM.WEB.Properties.Resources.periodicidade</th>
+                                        <th>@PCM.WEB.Properties.Resources.intervalo</th>
                                         <th class="text-center" style="width:80px" data-sortable="false"></th>
                                     </tr>
                                 </thead>
@@ -119,9 +135,15 @@
                                     {
                                         <tr id='linha'>
                                             @Html.HiddenFor(m => m[i].local)
+                                            @Html.HiddenFor(m => m[i].codigo_checklist)
+                                            @Html.HiddenFor(m => m[i].codigo_periodicidade)
+                                            @Html.HiddenFor(m => m[i].intervalo)
                                             @Html.HiddenFor(m => m[i].excluido)
                                             @Html.HiddenFor(m => m[i].codigo)
                                             <td id="text_@i">@Html.DisplayFor(m => m[i].local)</td>
+                                            <td id="text_checklist_@i">@Html.DisplayFor(m => m[i].checklist)</td>
+                                            <td id="text_periodicidade_@i">@Html.DisplayFor(m => m[i].periodicidade)</td>
+                                            <td id="text_intervalo_@i">@Html.DisplayFor(m => m[i].intervalo)</td>
                                             <td class="text-center">
                                                 <div class="btn-group">
                                                     <a href="#" onclick="remove(this, @i);" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>
@@ -168,14 +190,45 @@
         $(document).ready(function () { $("#carga_termica").maskMoney({ prefix: '', thousands: '.', decimal: ",", precision: 2, allowNegative: false, 'placeholder': '' }); });
         $(document).ready(function () { $("#numero_pessoas_fixas").maskMoney({ prefix: '', thousands: '', decimal: ",", precision: 0, allowNegative: false, 'placeholder': '' }); });
         $(document).ready(function () { $("#numero_pessoas_volantes").maskMoney({ prefix: '', thousands: '', decimal: ",", precision: 0, allowNegative: false, 'placeholder': '' }); });
-    
+        $(document).ready(function () { $("#intervalo").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' }); });
+
+        function limparCampos() {
+            $("#local").val("");
+            $("#checklist").val("");
+            $("#periodicidade").val("");
+            $("#intervalo").val("");
+        }
+
         function adicionarLocal() {
 
             var local = $("#local").val().toUpperCase().trim();
 
+            var codigoChecklist = $("#checklist").val();
+            var checklist = $("#checklist option:selected").text();
+            var codigoPeriodicidade = $("#periodicidade").val();
+            var periodicidade = $("#periodicidade option:selected").text();
+            var intervalo = $("#intervalo").val().trim();
+
+            if (codigoChecklist == "") { checklist = ""; }
+            if (codigoPeriodicidade == "") { periodicidade = ""; }
+
             if (local != "") {
 
-                if (registros.indexOf(local) >= 0) {
+                //Se informou o checklist, exige periodicidade e intervalo
+                if (codigoChecklist != "" && (codigoPeriodicidade == "" || intervalo == "")) {
+                    swal({
+                        title: 'Atenção',
+                        text: 'Informe a periodicidade e o intervalo do checklist!',
+                        type: 'error',
+                        allowEscapeKey: false,
+                        allowEnterKey: false
+                    });
+                    return;
+                }
+
+                id = $("#update").val();
+
+                if (parseInt(id) == 0 && registros.indexOf(local) >= 0) {
 
                     //Alerta para o problema encontrado
                     document.getElementById("local").disabled = true;
@@ -194,8 +247,6 @@
                 }
                 else {
 
-                    id = $("#update").val();
-
                     if (parseInt(id) == 0) {
 
                         registros.push(local);
@@ -205,11 +256,23 @@
                         var colsItem = "";
                         colsItem = '<input data-val="true" name="[' + codigo + '].local" type="hidden" value="' + local + '" />';
                         newRowItem.append(colsItem);
+                        colsItem = '<input data-val="true" name="[' + codigo + '].codigo_checklist" type="hidden" value="' + (codigoChecklist == "" ? "0" : codigoChecklist) + '" />';
+                        newRowItem.append(colsItem);
+                        colsItem = '<input data-val="true" name="[' + codigo + '].codigo_periodicidade" type="hidden" value="' + (codigoPeriodicidade == "" ? "0" : codigoPeriodicidade) + '" />';
+                        newRowItem.append(colsItem);
+                        colsItem = '<input data-val="true" name="[' + codigo + '].intervalo" type="hidden" value="' + (intervalo == "" ? "0" : intervalo) + '" />';
+                        newRowItem.append(colsItem);
                         colsItem = '<input data-val="true" name="[' + codigo + '].excluido" type="hidden" value="0" />';
                         newRowItem.append(colsItem);
                         colsItem = '<input data-val="true" name="[' + codigo + '].codigo" type="hidden" value="0" />';
                         newRowItem.append(colsItem);
                         colsItem = '<td id="text_' + codigo + '">' + local + '</td>';
+                        newRowItem.append(colsItem);
+                        colsItem = '<td id="text_checklist_' + codigo + '">' + checklist + '</td>';
+                        newRowItem.append(colsItem);
+                        colsItem = '<td id="text_periodicidade_' + codigo + '">' + periodicidade + '</td>';
+                        newRowItem.append(colsItem);
+                        colsItem = '<td id="text_intervalo_' + codigo + '">' + intervalo + '</td>';
                         newRowItem.append(colsItem);
                         colsItem = '<td class="text-center"><div class="btn-group">';
                         colsItem += '<a href="#" onclick="remove(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>';
@@ -223,26 +286,36 @@
                     else {
                         registros[id] = local;
                         $("input[name$='[" + id + "].local']").val(local);
+                        $("input[name$='[" + id + "].codigo_checklist']").val(codigoChecklist == "" ? "0" : codigoChecklist);
+                        $("input[name$='[" + id + "].codigo_periodicidade']").val(codigoPeriodicidade == "" ? "0" : codigoPeriodicidade);
+                        $("input[name$='[" + id + "].intervalo']").val(intervalo == "" ? "0" : intervalo);
                         $("#text_" + id).html(local);
+                        $("#text_checklist_" + id).html(checklist);
+                        $("#text_periodicidade_" + id).html(periodicidade);
+                        $("#text_intervalo_" + id).html(intervalo);
+                        $("#update").val("0");
                     }
-                    document.getElementById("local").value = "";
+                    limparCampos();
                     document.getElementById("local").focus();
                 }
             }
         };
-    
+
         function edit(item, id) {
             $("#local").val($("input[name$='[" + id + "].local']").val());
+            $("#checklist").val($("input[name$='[" + id + "].codigo_checklist']").val() == "0" ? "" : $("input[name$='[" + id + "].codigo_checklist']").val());
+            $("#periodicidade").val($("input[name$='[" + id + "].codigo_periodicidade']").val() == "0" ? "" : $("input[name$='[" + id + "].codigo_periodicidade']").val());
+            $("#intervalo").val($("input[name$='[" + id + "].intervalo']").val() == "0" ? "" : $("input[name$='[" + id + "].intervalo']").val());
             $("#update").val(id);
             $("#local").focus();
         };
 
         function remove(item, id) {
             $("#update").val("0");
-            $("#local").val("");
+            limparCampos();
             var tr = $(item).closest('tr');
             tr.fadeOut(400, function () {
-                tr.hide();                
+                tr.hide();
                 $("input[name$='[" + id + "].excluido']").val("1");
                 delete registros[id];
             });

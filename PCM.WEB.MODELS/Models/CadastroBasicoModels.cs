@@ -620,6 +620,11 @@ namespace PCM.WEB.MODELS
     {
         public int codigo { get; set; }
         public string local { get; set; }
+        public long codigo_checklist { get; set; }
+        public string checklist { get; set; }
+        public int codigo_periodicidade { get; set; }
+        public string periodicidade { get; set; }
+        public int intervalo { get; set; }
         public int excluido { get; set; }
     }
 

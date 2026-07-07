@@ -30,7 +30,7 @@ namespace PCM.WEB.Controllers
         private Excel oExcel = new Excel(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
-        private enum eTipoChecklist { Preventiva = 1, Rotina = 2, PMOC = 3, UH = 4, Auditoria = 5, Qualidade = 6, Tarefa = 8, Governanca=10 };
+        private enum eTipoChecklist { Preventiva = 1, Rotina = 2, PMOC = 3, UH = 4, Auditoria = 5, Qualidade = 6, Tarefa = 8, Governanca=10, TudoEmDia = 11 };
 
         #region ::: JSON :::
 
@@ -7501,6 +7501,11 @@ namespace PCM.WEB.Controllers
                                                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                                 bCadastro: true), "codigo", "descricao", Session["codigo_unidade"].ToString());
 
+                ViewBag.checklist = new SelectList(oCombo.Checklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                    iCodigoTipoChecklist: Convert.ToInt32(eTipoChecklist.TudoEmDia)), "codigo", "descricao", null);
+                ViewBag.periodicidade = new SelectList(oCombo.Periodicidade(bChecklist: false), "codigo", "descricao", null);
+
 
                 List<SetorLocal> registros = new List<SetorLocal>();
 
@@ -7551,7 +7556,10 @@ namespace PCM.WEB.Controllers
                                                             iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                                             iCodigoUnidade: unidade,
                                                             iCodigoSetor: codigo,
-                                                            sLocal: reg.local);
+                                                            sLocal: reg.local,
+                                                            iCodigoChecklist: reg.codigo_checklist,
+                                                            iCodigoPeriodicidade: reg.codigo_periodicidade,
+                                                            iIntervalo: reg.intervalo);
                     }
                 }
 
@@ -7579,6 +7587,11 @@ namespace PCM.WEB.Controllers
                 {
                     return HttpNotFound();
                 }
+
+                ViewBag.checklist = new SelectList(oCombo.Checklist(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: setor.codigo_unidade,
+                                                                    iCodigoTipoChecklist: Convert.ToInt32(eTipoChecklist.TudoEmDia)), "codigo", "descricao", null);
+                ViewBag.periodicidade = new SelectList(oCombo.Periodicidade(bChecklist: false), "codigo", "descricao", null);
 
                 ViewBag.ativo = (setor.ativo) ? "checked" : "";
                 ViewBag.setor = setor;
@@ -7621,7 +7634,10 @@ namespace PCM.WEB.Controllers
                                                         iCodigoSetor: codigo,
                                                         sLocal: reg.local,
                                                         iExcluido: reg.excluido,
-                                                        iCodigo: reg.codigo);
+                                                        iCodigo: reg.codigo,
+                                                        iCodigoChecklist: reg.codigo_checklist,
+                                                        iCodigoPeriodicidade: reg.codigo_periodicidade,
+                                                        iIntervalo: reg.intervalo);
                 }
 
                 //Redireciona para Index
