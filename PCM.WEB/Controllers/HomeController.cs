@@ -21,6 +21,7 @@ namespace PCM.WEB.Controllers
         private DAL.Qualidade oQualidade = new DAL.Qualidade(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private DAL.Dashboard oDashboard = new DAL.Dashboard(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private DAL.Governanca oGovernanca = new DAL.Governanca(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.Administracao oAdministracao = new DAL.Administracao(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private DAL.LogBook oLogBook = new DAL.LogBook(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
@@ -1931,7 +1932,41 @@ namespace PCM.WEB.Controllers
             vm.TotalNcGeral = vm.TopNcItens.Sum(x => x.Quantidade);
             vm.RankingUnidades = LoadRankingUnidadesDoMes(codigoEmpresa, data);
 
+            SetGovParamsViewBag(codigoEmpresa);
+
             return View(vm);
+        }
+
+        // Injeta os pesos/parâmetros cadastrados (AD07) no ViewBag para os rankings das telas D03.
+        // Fracões renderizadas com InvariantCulture para não quebrar os literais JS em cultura pt-BR.
+        private void SetGovParamsViewBag(int codigoEmpresa)
+        {
+            var gov = oAdministracao.ConfiguracaoGovernancaParametros(codigoEmpresa);
+            var inv = CultureInfo.InvariantCulture;
+
+            // Ranking de todas as unidades
+            ViewBag.gUniPesoNC = (gov.PesoNCUnidades / 100m).ToString(inv);
+            ViewBag.gUniPesoVis = (gov.PesoVistoriaUnidades / 100m).ToString(inv);
+            ViewBag.gUniPesoRet = (gov.PesoRetrabalhoUnidades / 100m).ToString(inv);
+            ViewBag.gUniPesoProd = (gov.PesoProdutividadeUnidades / 100m).ToString(inv);
+            ViewBag.gUniMinUhs = gov.QtdMinimaElegivelUnidades;
+
+            // Ranking individual (Governança Nota 10)
+            ViewBag.gIndPesoProd = (gov.PesoProdutividadeIndividual / 100m).ToString(inv);
+            ViewBag.gIndPesoNC = (gov.PesoNCIndividual / 100m).ToString(inv);
+            ViewBag.gIndPesoRet = (gov.PesoRetrabalhoIndividual / 100m).ToString(inv);
+            ViewBag.gIndMinUhs = gov.QtdMinimaElegivelIndividual;
+            ViewBag.gVisRate = (gov.PctVistoriadosEstimado / 100m).ToString(inv);
+
+            // Versões em % inteiro (para rótulos de texto)
+            ViewBag.gUniPesoNCPct = (int)Math.Round(gov.PesoNCUnidades);
+            ViewBag.gUniPesoVisPct = (int)Math.Round(gov.PesoVistoriaUnidades);
+            ViewBag.gUniPesoRetPct = (int)Math.Round(gov.PesoRetrabalhoUnidades);
+            ViewBag.gUniPesoProdPct = (int)Math.Round(gov.PesoProdutividadeUnidades);
+            ViewBag.gIndPesoProdPct = (int)Math.Round(gov.PesoProdutividadeIndividual);
+            ViewBag.gIndPesoNCPct = (int)Math.Round(gov.PesoNCIndividual);
+            ViewBag.gIndPesoRetPct = (int)Math.Round(gov.PesoRetrabalhoIndividual);
+            ViewBag.gVisRatePct = (int)Math.Round(gov.PctVistoriadosEstimado);
         }
 
         // Ranking da rede (mesma query da tela "Todas as Unidades") para o mês da data informada
@@ -1970,6 +2005,8 @@ namespace PCM.WEB.Controllers
             vm.TotalNcGeral = vm.TopNcItens.Sum(x => x.Quantidade);
             vm.RankingUnidades = LoadRankingUnidadesDoMes(codigoEmpresa, data);
 
+            SetGovParamsViewBag(codigoEmpresa);
+
             return View(vm);
         }
 
@@ -1994,6 +2031,8 @@ namespace PCM.WEB.Controllers
             vm.MesReferencia = dataInicio.Month;
             vm.AnoReferencia = dataInicio.Year;
             vm.Unidades = oGovernanca.LoadDesempenhoGovernancaAllUnidades(codigoEmpresa, dataInicio, dataTermino);
+
+            SetGovParamsViewBag(codigoEmpresa);
 
             return View(vm);
         }
@@ -2022,6 +2061,8 @@ namespace PCM.WEB.Controllers
             vm.MesReferencia = dataInicio.Month;
             vm.AnoReferencia = dataInicio.Year;
             vm.Unidades = oGovernanca.LoadDesempenhoGovernancaAllUnidades(codigoEmpresa, dataInicio, dataTermino);
+
+            SetGovParamsViewBag(codigoEmpresa);
 
             return View(vm);
         }

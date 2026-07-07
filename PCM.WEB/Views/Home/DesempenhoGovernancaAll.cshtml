@@ -183,7 +183,7 @@
         <div class="dashboard-section">
             <div class="section-title">
                 Avaliação Geral por Unidade
-                <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Score (0–100) = NC×30% + Vistoria×30% + Produtividade×30% + Retrabalho×10% · elegível ≥ 100 UHs · Meta mínima: 85</span>
+                <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Score (0–100) = NC×@(ViewBag.gUniPesoNCPct)% + Vistoria×@(ViewBag.gUniPesoVisPct)% + Produtividade×@(ViewBag.gUniPesoProdPct)% + Retrabalho×@(ViewBag.gUniPesoRetPct)% · elegível ≥ @ViewBag.gUniMinUhs UHs · Meta mínima: 85</span>
             </div>
             <div class="block dashboard-card chart-card">
                 <div class="chart-wrapper" style="height:260px;">
@@ -252,12 +252,12 @@
 
     // ===== Ranking de Desempenho de Unidades (0–100) — FORMULA-RANKING-GOVERNANCA sec.2 =====
     (function(){
-        var UNI_MIN_UHS   = 100;   // elegibilidade: < 100 UHs fica fora do ranking
+        var UNI_MIN_UHS   = @ViewBag.gUniMinUhs;   // elegibilidade (AD07 - Qtd. Mínima Elegível Unidades)
         var UNI_META_VIS  = 0.50;  // alerta se vistoria < 50%
-        var UNI_PESO_NC   = 0.30;
-        var UNI_PESO_VIS  = 0.30;
-        var UNI_PESO_RET  = 0.10;
-        var UNI_PESO_PROD = 0.30;
+        var UNI_PESO_NC   = @ViewBag.gUniPesoNC;   // AD07 - Peso NC (Unidades)
+        var UNI_PESO_VIS  = @ViewBag.gUniPesoVis;  // AD07 - Peso Vistoria (Unidades)
+        var UNI_PESO_RET  = @ViewBag.gUniPesoRet;  // AD07 - Peso Retrabalho (Unidades)
+        var UNI_PESO_PROD = @ViewBag.gUniPesoProd; // AD07 - Peso Produtividade (Unidades)
 
         unidades.forEach(function(u){
             u.uhVal  = parseFloat(u.uh)  || 0;

@@ -181,7 +181,7 @@
                 <div class="section-title">
                     Ranking Geral de Camareiras
                     <span class="dg-section-badge">@(Model != null ? Model.Camareiras.Count : 0) camareiras</span>
-                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Nota (1–10) = Produtividade×60% + NC×30% + Retrabalho×10% · elegível ≥ 20 UHs · NC/Retrab sobre vistoriados (UHs×80%)</span>
+                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Nota (1–10) = Produtividade×@(ViewBag.gIndPesoProdPct)% + NC×@(ViewBag.gIndPesoNCPct)% + Retrabalho×@(ViewBag.gIndPesoRetPct)% · elegível ≥ @ViewBag.gIndMinUhs UHs · NC/Retrab sobre vistoriados (UHs×@(ViewBag.gVisRatePct)%)</span>
                 </div>
                 <div class="block dashboard-card" style="padding:0;overflow:hidden;">
                     <div style="overflow-x:auto;">
@@ -337,8 +337,8 @@
     var unidadeAtualId  = @unidadeId;
 
     (function(){
-        var MIN_UHS=100, META=85;
-        var PNC=0.30, PVIS=0.30, PRET=0.10, PPROD=0.30;
+        var MIN_UHS=@ViewBag.gUniMinUhs, META=85;
+        var PNC=@ViewBag.gUniPesoNC, PVIS=@ViewBag.gUniPesoVis, PRET=@ViewBag.gUniPesoRet, PPROD=@ViewBag.gUniPesoProd;
 
         rankingUnidades.forEach(function(u){ u.uhVal=parseFloat(u.uh)||0; u.visVal=parseFloat(u.vis)||0; });
 
@@ -427,11 +427,11 @@
     })();
 
     // ===== Ranking Camareira Nota 10 (0–10) — FORMULA-RANKING-GOVERNANCA sec.1 =====
-    var CAM_MIN_UHS   = 20;    // elegibilidade: < 20 UHs fica fora do ranking
-    var CAM_VIS_RATE  = 0.80;  // estimativa de vistoriados (substituir por dado real quando disponível)
-    var CAM_PESO_PROD = 0.60;
-    var CAM_PESO_NC   = 0.30;
-    var CAM_PESO_RET  = 0.10;
+    var CAM_MIN_UHS   = @ViewBag.gIndMinUhs;   // AD07 - Qtd. Mínima Elegível Individual
+    var CAM_VIS_RATE  = @ViewBag.gVisRate;     // AD07 - % Vistoriados Estimado (fallback quando não há vistoria individual real)
+    var CAM_PESO_PROD = @ViewBag.gIndPesoProd; // AD07 - Peso Produtividade (Individual)
+    var CAM_PESO_NC   = @ViewBag.gIndPesoNC;   // AD07 - Peso NC (Individual)
+    var CAM_PESO_RET  = @ViewBag.gIndPesoRet;  // AD07 - Peso Retrabalho (Individual)
 
     function indNC(nc,uh){ return uh?nc/uh*100:0; }
     function indR(r,uh){ return uh?r/uh*100:0; }
