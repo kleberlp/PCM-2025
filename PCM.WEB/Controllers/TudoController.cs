@@ -179,6 +179,45 @@ namespace PCM.WEB.Controllers
             }
         }
 
+        // GET: HISTÓRICO
+        public ActionResult ChecklistTudoHistorico(int unidade = 0, int apartamento = -1, string data_inicio = null, string data_termino = null)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                int empresa = Convert.ToInt32(Session["empresa"].ToString());
+                int usuario = Convert.ToInt32(User.Identity.GetUserName());
+
+                if (unidade == 0)
+                    unidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
+
+                if (string.IsNullOrEmpty(data_inicio))
+                    data_inicio = DateTime.Now.AddMonths(-1).ToString("dd/MM/yyyy");
+                if (string.IsNullOrEmpty(data_termino))
+                    data_termino = DateTime.Now.ToString("dd/MM/yyyy");
+
+                bool editar = false, inserir = false, excluir = false, administrador = false;
+                oAccount.LoadPerfil(iCodigoEmpresa: empresa, iCodigoUsuario: usuario, sFormulario: "uh_checklist",
+                                    bInserir: ref inserir, bEditar: ref editar, bExcluir: ref excluir, bAdministrador: ref administrador);
+
+                ViewBag.unidadeSel = unidade;
+                ViewBag.apartamentoSel = apartamento;
+                ViewBag.data_inicio = data_inicio;
+                ViewBag.data_termino = data_termino;
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: empresa, iCodigoUsuario: usuario, bCadastro: false), "codigo", "descricao", unidade);
+                ViewBag.apartamento = new SelectList(oCombo.Apartamento(iCodigoEmpresa: empresa, iCodigoUnidade: unidade), "codigo", "descricao", apartamento);
+
+                return View(oTudo.LoadTudoChecklistHistorico(codigoEmpresa: empresa,
+                                                             codigoUnidade: unidade,
+                                                             dataInicio: data_inicio,
+                                                             dataTermino: data_termino,
+                                                             codigoApartamento: apartamento));
+            }
+        }
+
         #endregion
     }
 }

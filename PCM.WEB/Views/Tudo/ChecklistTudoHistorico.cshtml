@@ -1,0 +1,90 @@
+@model List<PCM.WEB.MODELS.TudoChecklistHistorico>
+@using PCM.WEB.Properties
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/css/pcm-ui.css">
+}
+
+<main id="main-container">
+
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistTudo", "Tudo")">Tudo em Dia</a>
+                <span class="breadcrumb-item active">Histórico</span>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="pcm-page-header">
+            <div>
+                <h1><i class="fa fa-history"></i>Histórico — Tudo em Dia</h1>
+                <div class="pcm-sub">Checklists executados por período</div>
+            </div>
+            <form method="get" action="@Url.Action("ChecklistTudoHistorico", "Tudo")" class="pcm-filter" id="formFiltro">
+                @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "pcm-select", onchange = "document.getElementById('formFiltro').submit();" })
+                @Html.DropDownList("apartamento", (SelectList)ViewBag.apartamento, "Todos os locais", new { @class = "pcm-select" })
+                <input type="text" name="data_inicio" value="@ViewBag.data_inicio" class="pcm-select js-datepicker" style="width:110px" autocomplete="off" />
+                <input type="text" name="data_termino" value="@ViewBag.data_termino" class="pcm-select js-datepicker" style="width:110px" autocomplete="off" />
+                <button type="submit" class="btn-pcm btn-pcm-dark"><i class="si si-magnifier"></i></button>
+            </form>
+        </div>
+
+        <div class="pcm-card">
+            <div class="pcm-card-head">
+                <div class="pcm-card-title"><i class="fa fa-history"></i> Execuções <small>@Model.Count registro(s)</small></div>
+            </div>
+
+            @if (Model.Count == 0)
+            {
+                <div class="pcm-empty"><i class="fa fa-inbox"></i>Nenhuma execução no período selecionado.</div>
+            }
+            else
+            {
+                <div class="pcm-table-wrap">
+                    <table class="pcm-table">
+                        <thead>
+                            <tr>
+                                <th>Setor</th>
+                                <th>Local</th>
+                                <th>Checklist</th>
+                                <th>Responsável</th>
+                                <th class="num">Início</th>
+                                <th class="num">Término</th>
+                                <th class="num">Tempo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var h in Model)
+                            {
+                                <tr>
+                                    <td>@(string.IsNullOrEmpty(h.setor) ? "—" : h.setor)</td>
+                                    <td>@h.local</td>
+                                    <td>@(string.IsNullOrEmpty(h.checklist) ? "—" : h.checklist)</td>
+                                    <td>@(string.IsNullOrEmpty(h.responsavel) ? "—" : h.responsavel)</td>
+                                    <td class="num">@h.data_inicio</td>
+                                    <td class="num">@h.data_termino</td>
+                                    <td class="num">@(string.IsNullOrEmpty(h.tempo) ? "—" : h.tempo)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+    </div>
+</main>
+
+@section scripts {
+    @Scripts.Render("~/plugins/maskedinput")
+    <script>
+        (function ($) {
+            "use strict";
+            $(function () { if ($.fn.mask) { $(".js-datepicker").mask("99/99/9999"); } });
+        })(jQuery);
+    </script>
+}

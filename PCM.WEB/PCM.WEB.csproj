@@ -2283,6 +2283,7 @@
     <Content Include="Views\UH\ChecklistUH.cshtml" />
     <Content Include="Views\Tudo\ChecklistTudo.cshtml" />
     <Content Include="Views\Tudo\ChecklistTudoApontamento.cshtml" />
+    <Content Include="Views\Tudo\ChecklistTudoHistorico.cshtml" />
     <Content Include="Views\CadastroBasico\UHGrupoChecklistDelete.cshtml" />
     <Content Include="Views\CadastroBasico\UHGrupoChecklistEdit.cshtml" />
     <Content Include="Views\CadastroBasico\UHGrupoChecklistIndex.cshtml" />

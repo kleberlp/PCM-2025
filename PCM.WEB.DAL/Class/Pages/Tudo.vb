@@ -333,4 +333,63 @@ Public Class Tudo
 
 #End Region
 
+#Region "::: TUDO EM DIA - HISTÓRICO :::"
+
+    Public Function LoadTudoChecklistHistorico(ByVal codigoEmpresa As Integer,
+                                               ByVal codigoUnidade As Integer,
+                                               ByVal dataInicio As String,
+                                               ByVal dataTermino As String,
+                                               ByVal codigoApartamento As Integer) As List(Of TudoChecklistHistorico)
+
+        Try
+
+            Dim oReturn As New List(Of TudoChecklistHistorico)
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, Convert.ToDateTime(dataInicio, New Globalization.CultureInfo("pt-BR"))),
+                CriarParametro("data_termino", SqlDbType.Date, Convert.ToDateTime(dataTermino, New Globalization.CultureInfo("pt-BR"))),
+                CriarParametro("codigo_apartamento", SqlDbType.Int, codigoApartamento)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_tudo_checklist_historico", oSqlParameter)
+
+                If oSqlDataReader.HasRows Then
+
+                    While oSqlDataReader.Read
+
+                        Dim oInfo As New TudoChecklistHistorico
+
+                        oInfo.codigo_unidade = SafeGetInt32(oSqlDataReader, "codigo_unidade")
+                        oInfo.unidade = SafeGetString(oSqlDataReader, "unidade")
+                        oInfo.setor = SafeGetString(oSqlDataReader, "setor")
+                        oInfo.codigo_apartamento = SafeGetInt32(oSqlDataReader, "codigo_apartamento")
+                        oInfo.local = SafeGetString(oSqlDataReader, "local")
+                        oInfo.codigo = SafeGetInt64(oSqlDataReader, "codigo")
+                        oInfo.checklist = SafeGetString(oSqlDataReader, "checklist")
+                        oInfo.responsavel = SafeGetString(oSqlDataReader, "responsavel")
+                        oInfo.data_inicio = SafeGetString(oSqlDataReader, "data_inicio")
+                        oInfo.data_termino = SafeGetString(oSqlDataReader, "data_termino")
+                        oInfo.tempo = SafeGetString(oSqlDataReader, "tempo")
+
+                        oReturn.Add(oInfo)
+
+                    End While
+
+                End If
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
 End Class
