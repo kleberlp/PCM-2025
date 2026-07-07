@@ -1,0 +1,127 @@
+/* =====================================================================
+   pcm-ui.css — Design System PADRÃO do PCM (telas novas)
+   ---------------------------------------------------------------------
+   Extraído do padrão visual das telas de Desempenho / AD07 / Tudo em Dia.
+   Usar este arquivo como base das PRÓXIMAS telas: inclua-o na view e
+   escreva apenas o JS específico da página. Evite <style> inline.
+
+   Componentes:
+     .pcm-page-header  cabeçalho de página (título + subtítulo + filtros)
+     .pcm-kpi/.pcm-torre  faixa de KPIs / torre de status (clicável)
+     .pcm-card  cartão de conteúdo (header + body)
+     .setor-group  cabeçalho de grupo (ex.: por setor)
+     .local-card + .badge  cartão de item + selo de status
+     .btn-pcm  botões
+     .pcm-exec  bloco de execução/apontamento
+   ===================================================================== */
+
+:root {
+    --pcm-bg: #F8F9FB;
+    --pcm-surface: #fff;
+    --pcm-line: #F0F1F3;
+    --pcm-line-2: #E5E7EB;
+    --pcm-ink: #1F2937;
+    --pcm-ink-2: #374151;
+    --pcm-muted: #6B7280;
+    --pcm-faint: #9CA3AF;
+    --pcm-accent: #2563EB;
+
+    /* semânticos (status) — separados do accent */
+    --st-atrasado: #EF5350;
+    --st-pendente: #D97706;
+    --st-manut: #2FACB2;
+    --st-vistoria: #42A5F5;
+    --st-ok: #6EAB4D;
+
+    --pcm-radius: 14px;
+    --pcm-radius-sm: 10px;
+    --pcm-shadow: rgba(0, 0, 0, .06) 0 4px 14px;
+    --pcm-shadow-hover: rgba(0, 0, 0, .08) 0 6px 16px;
+    --pcm-font: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---------- PAGE HEADER ---------- */
+.pcm-page-header { margin-bottom: 14px; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.pcm-page-header h1 { font-size: 16px; font-weight: 800; color: var(--pcm-ink); letter-spacing: -.3px; margin: 0; }
+.pcm-page-header h1 i { color: var(--pcm-accent); font-size: 14px; margin-right: 6px; }
+.pcm-page-header .pcm-sub { font-size: 11px; color: var(--pcm-faint); margin-top: 2px; }
+.pcm-filter { display: flex; gap: 8px; align-items: center; }
+.pcm-select { border: 1px solid var(--pcm-line-2); border-radius: 8px; height: 34px; padding: 0 12px; font-size: 11px; color: var(--pcm-ink-2); background: #FAFAFA; font-family: inherit; }
+.pcm-select:focus { outline: none; border-color: var(--pcm-accent); background: #fff; box-shadow: 0 0 0 3px rgba(37, 99, 235, .08); }
+
+/* ---------- KPI STRIP / TORRE DE STATUS ---------- */
+.pcm-kpi { background: var(--pcm-surface); border-radius: var(--pcm-radius); box-shadow: var(--pcm-shadow); margin-bottom: 16px; overflow: hidden; display: flex; flex-wrap: wrap; }
+.pcm-torre { flex: 1 1 150px; padding: 14px 16px; border-right: 1px solid var(--pcm-line); display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; text-decoration: none; color: inherit; transition: background .15s; position: relative; }
+.pcm-torre:last-child { border-right: none; }
+.pcm-torre:hover { background: #F8F9FB; }
+.pcm-torre.active { background: #F2F6FF; }
+.pcm-torre.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: currentColor; }
+.pcm-torre .pcm-torre-h { display: flex; align-items: center; justify-content: center; gap: 7px; }
+.pcm-torre .pcm-dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.pcm-torre .pcm-torre-lb { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--pcm-ink-2); }
+.pcm-torre .pcm-torre-val { font-size: 24px; font-weight: 800; line-height: 1; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.pcm-torre .pcm-torre-meta { font-size: 9px; color: var(--pcm-faint); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+
+/* cores semânticas reutilizáveis */
+.c-atrasado { color: var(--st-atrasado); }
+.c-pendente { color: var(--st-pendente); }
+.c-manut    { color: var(--st-manut); }
+.c-vistoria { color: var(--st-vistoria); }
+.c-ok       { color: var(--st-ok); }
+
+/* ---------- CONTENT CARD ---------- */
+.pcm-card { background: var(--pcm-surface); border-radius: var(--pcm-radius); box-shadow: var(--pcm-shadow); overflow: hidden; margin-bottom: 24px; }
+.pcm-card-head { background: #F9FAFB; border-bottom: 1px solid var(--pcm-line); display: flex; align-items: center; justify-content: space-between; padding: 11px 18px; }
+.pcm-card-title { font-size: 11px; font-weight: 700; color: var(--pcm-ink-2); text-transform: uppercase; letter-spacing: .04em; display: flex; align-items: center; gap: 8px; }
+.pcm-card-title small { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--pcm-faint); font-size: 10.5px; margin-left: 8px; }
+.pcm-card-actions { display: flex; gap: 14px; color: var(--pcm-faint); }
+.pcm-card-actions i { cursor: pointer; transition: color .15s; }
+.pcm-card-actions i:hover, .pcm-card-actions i.active { color: var(--pcm-ink-2); }
+
+/* ---------- GRUPO (ex.: por setor) ---------- */
+.setor-group { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; color: #111827; text-transform: uppercase; letter-spacing: .03em; padding: 16px 18px 12px; border-top: 1px solid var(--pcm-line); }
+.setor-group:first-of-type { border-top: none; }
+.setor-group i { color: var(--pcm-faint); font-size: 12px; }
+.setor-group .pcm-cnt { font-size: 9.5px; font-weight: 700; color: var(--pcm-faint); background: #F3F4F6; border-radius: 20px; padding: 2px 9px; letter-spacing: 0; text-transform: none; }
+
+/* ---------- GRID DE LOCAIS / ITENS ---------- */
+.local-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; padding: 0 18px 20px; }
+.local-card { background: var(--pcm-surface); border: 1px solid var(--pcm-line-2); border-radius: 12px; padding: 13px 14px; display: flex; gap: 12px; align-items: center; text-decoration: none; color: inherit; transition: box-shadow .15s, border-color .15s, transform .1s; }
+.local-card:hover { box-shadow: var(--pcm-shadow-hover); border-color: #D1D5DB; transform: translateY(-1px); }
+.local-card:focus-visible { outline: 2px solid var(--pcm-accent); outline-offset: 2px; }
+.local-ic { width: 38px; height: 38px; border-radius: var(--pcm-radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; }
+.local-bd { min-width: 0; flex: 1; }
+.local-nm { font-size: 12.5px; font-weight: 700; color: var(--pcm-ink-2); line-height: 1.35; margin: 0 0 5px; }
+.local-meta { font-size: 10px; color: var(--pcm-faint); display: flex; gap: 8px; margin-bottom: 7px; flex-wrap: wrap; }
+
+/* selos de status */
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+.badge .pcm-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.b-atrasado, .i-atrasado { background: #FEF2F2; color: var(--st-atrasado); }
+.b-pendente, .i-pendente { background: #FFFBEB; color: var(--st-pendente); }
+.b-manut,    .i-manut    { background: #ECFEFF; color: var(--st-manut); }
+.b-vistoria, .i-vistoria { background: #EFF6FF; color: var(--st-vistoria); }
+.b-ok,       .i-ok       { background: #F0FDF4; color: var(--st-ok); }
+
+/* ---------- BOTÕES ---------- */
+.btn-pcm { border-radius: 8px; padding: 8px 18px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; border: none; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; text-decoration: none; transition: all .15s; }
+.btn-pcm-dark { background: var(--pcm-ink-2); color: #fff; }
+.btn-pcm-dark:hover { background: #111827; color: #fff; }
+.btn-pcm-ghost { background: transparent; color: var(--pcm-ink-2); border: 1px solid var(--pcm-line-2); }
+.btn-pcm-ghost:hover { border-color: var(--pcm-ink-2); }
+
+/* ---------- ESTADO VAZIO ---------- */
+.pcm-empty { text-align: center; padding: 40px 18px; color: var(--pcm-faint); font-size: 12px; }
+.pcm-empty i { display: block; font-size: 26px; margin-bottom: 8px; color: var(--pcm-line-2); }
+
+/* ---------- EXECUÇÃO / APONTAMENTO ---------- */
+.pcm-exec-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.pcm-exec-meta label { display: block; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--pcm-muted); margin-bottom: 4px; }
+.chk-group { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--pcm-accent); background: #EFF6FF; padding: 6px 12px; border-radius: 8px; margin: 14px 0 8px; }
+.chk-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 4px; border-bottom: 1px solid #F3F4F6; }
+.chk-item .chk-q { font-size: 12px; color: var(--pcm-ink-2); }
+.chk-opts { display: flex; gap: 6px; flex-shrink: 0; }
+
+@media (max-width: 640px) {
+    .local-grid { grid-template-columns: 1fr; }
+}

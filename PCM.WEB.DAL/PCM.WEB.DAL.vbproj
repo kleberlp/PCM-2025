@@ -150,6 +150,7 @@
     <Compile Include="Class\Pages\WebApi.vb" />
     <Compile Include="Class\Pages\Governanca.vb" />
     <Compile Include="Class\Pages\UH.vb" />
+    <Compile Include="Class\Pages\Tudo.vb" />
     <Compile Include="Class\Pages\OrdemServico.vb" />
     <Compile Include="Class\Pages\LogBook.vb" />
     <Compile Include="Class\Pages\PMOC.vb" />

@@ -1992,6 +1992,9 @@
   <data name="metas_governanca" xml:space="preserve">
     <value>Metas de Governança</value>
   </data>
+  <data name="tudo_em_dia" xml:space="preserve">
+    <value>Tudo em Dia</value>
+  </data>
   <data name="cancelarRegistro" xml:space="preserve">
     <value>Deseja cancelar o registro selecionado?</value>
   </data>

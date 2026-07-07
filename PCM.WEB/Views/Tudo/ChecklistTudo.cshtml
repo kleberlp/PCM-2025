@@ -1,0 +1,127 @@
+@model List<PCM.WEB.MODELS.TudoLocal>
+@using PCM.WEB.Properties
+@using System.Linq
+
+@functions {
+    // status (tb_stc_status_uh_dia) -> classe do design system + rótulo
+    string StatusKey(int s)
+    {
+        switch (s) { case 1: return "atrasado"; case 2: return "pendente"; case 3: return "manut"; case 4: return "vistoria"; default: return "ok"; }
+    }
+    string StatusLabel(int s)
+    {
+        switch (s) { case 1: return "Atrasado"; case 2: return "Pendente"; case 3: return "Em Manutenção"; case 4: return "Nova Vistoria"; default: return "Em Dia"; }
+    }
+    bool StatusActive(string selected, int s)
+    {
+        return ("," + (selected ?? "") + ",").Contains("," + s + ",");
+    }
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/css/pcm-ui.css">
+}
+
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
+                <span class="breadcrumb-item">Tudo em Dia</span>
+                <span class="breadcrumb-item active">Checklist</span>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content">
+
+        @{
+            var statusSel = (string)ViewBag.statusSelected;
+            var uni = (int)ViewBag.unidadeSel;
+            var setor = (int)ViewBag.setorSel;
+            var st = (PCM.WEB.MODELS.TudoStatus)ViewBag.status;
+        }
+
+        <!-- Page header + filtros -->
+        <div class="pcm-page-header">
+            <div>
+                <h1><i class="fa fa-check-square-o"></i>Tudo em Dia</h1>
+                <div class="pcm-sub">Execução do checklist de manutenção dos locais — agrupado por setor</div>
+            </div>
+            <form method="get" action="@Url.Action("ChecklistTudo", "Tudo")" class="pcm-filter" id="formFiltro">
+                <input type="hidden" name="statusSelected" value="@statusSel" />
+                @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "pcm-select", onchange = "document.getElementById('formFiltro').submit();" })
+                @Html.DropDownList("setor", (SelectList)ViewBag.setor, "Todos os setores", new { @class = "pcm-select", onchange = "document.getElementById('formFiltro').submit();" })
+            </form>
+        </div>
+
+        <!-- Torre de status (clicável = filtra) -->
+        <div class="pcm-kpi">
+            @foreach (var item in new[] {
+                new { s = 1, cls = "c-atrasado", lb = "Atrasado",      v = st.atrasado },
+                new { s = 2, cls = "c-pendente", lb = "Pendente",      v = st.pendente },
+                new { s = 3, cls = "c-manut",    lb = "Em Manutenção", v = st.manutencao },
+                new { s = 4, cls = "c-vistoria", lb = "Nova Vistoria", v = st.nova_vistoria },
+                new { s = 5, cls = "c-ok",       lb = "Em Dia",        v = st.realizada } })
+            {
+                <a class="pcm-torre @item.cls @(StatusActive(statusSel, item.s) ? "active" : "")"
+                   href="@Url.Action("ChecklistTudo", "Tudo", new { unidade = uni, setor = setor, status = item.s, statusSelected = statusSel })">
+                    <div class="pcm-torre-h"><span class="pcm-dot"></span><span class="pcm-torre-lb">@item.lb</span></div>
+                    <span class="pcm-torre-val">@item.v</span>
+                    <span class="pcm-torre-meta">locais</span>
+                </a>
+            }
+        </div>
+
+        <!-- Lista agrupada por setor -->
+        <div class="pcm-card">
+            <div class="pcm-card-head">
+                <div class="pcm-card-title"><i class="fa fa-table"></i> Locais por Setor <small>@Model.Count local(is)</small></div>
+                <div class="pcm-card-actions">
+                    <i class="fa fa-th active" id="btnGrid" title="Grade"></i>
+                    <i class="fa fa-list" id="btnList" title="Lista"></i>
+                </div>
+            </div>
+
+            @if (Model.Count == 0)
+            {
+                <div class="pcm-empty"><i class="fa fa-check-circle"></i>Nenhum local encontrado com os filtros atuais.</div>
+            }
+            else
+            {
+                foreach (var grupo in Model.GroupBy(x => x.setor))
+                {
+                    <div class="setor-group">
+                        <i class="fa fa-sitemap"></i> @(string.IsNullOrEmpty(grupo.Key) ? "Sem setor" : grupo.Key)
+                        <span class="pcm-cnt">@grupo.Count() local(is)</span>
+                    </div>
+                    <div class="local-grid">
+                        @foreach (var l in grupo)
+                        {
+                            var key = StatusKey(l.status);
+                            <a class="local-card"
+                               href="@Url.Action("ChecklistTudoApontamento", "Tudo", new { codigo_unidade = l.codigo_unidade, codigo_apartamento = l.codigo, codigo_apontamento = l.codigo_apontamento, status = l.status })">
+                                <div class="local-ic i-@key"><i class="fa fa-building"></i></div>
+                                <div class="local-bd">
+                                    <p class="local-nm">@l.local</p>
+                                    <div class="local-meta">
+                                        <span>@(string.IsNullOrEmpty(l.data_proxima) ? "Sem data" : "Venc. " + l.data_proxima)</span>
+                                        @if (!string.IsNullOrEmpty(l.periodicidade)) { <span>· @l.periodicidade</span> }
+                                    </div>
+                                    <span class="badge b-@key"><span class="pcm-dot"></span>@StatusLabel(l.status)</span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                }
+            }
+        </div>
+
+    </div>
+</main>
+
+@section scripts {
+    <script src="~/Content/js/pages/Tudo/jquery.checklistTudo.init.js"></script>
+}

@@ -1281,6 +1281,18 @@
                         </li>
                     }
 
+                    @if ((bool)Session["uh_checklist"])
+                    {
+                        <li class="@Html.IsSelected(controller: "Tudo", cssClass: "open")">
+                            <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="fa fa-check-square-o"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.tudo_em_dia</span></a>
+                            <ul>
+                                <li>
+                                    <a class="@Html.IsSelected(action: "ChecklistTudo", cssClass: "active") font-size-sm" href="@Url.Action("ChecklistTudo", "Tudo")">@PCM.WEB.Properties.Resources.checklist</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
                     @if ((bool)Session["upload_excel"] || (bool)Session["upload_pmoc"])
                     {
                         <li class="@Html.IsSelected(controller: "Upload", cssClass: "open")">

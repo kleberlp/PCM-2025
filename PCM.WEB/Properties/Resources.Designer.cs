@@ -925,6 +925,15 @@ namespace PCM.WEB.Properties {
         }
 
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Tudo em Dia.
+        /// </summary>
+        public static string tudo_em_dia {
+            get {
+                return ResourceManager.GetString("tudo_em_dia", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Deseja cancelar o registro selecionado?.
         /// </summary>
         public static string cancelarRegistro {

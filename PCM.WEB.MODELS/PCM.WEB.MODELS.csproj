@@ -64,6 +64,7 @@
     <Compile Include="Models\AuditoriaModels.cs" />
     <Compile Include="Models\AdministracaoModels.cs" />
     <Compile Include="Models\GovernancaModels.cs" />
+    <Compile Include="Models\TudoModels.cs" />
     <Compile Include="Models\ExcelModels.cs" />
     <Compile Include="Models\QualidadeModels.cs" />
     <Compile Include="Models\DashboardModels.cs" />
