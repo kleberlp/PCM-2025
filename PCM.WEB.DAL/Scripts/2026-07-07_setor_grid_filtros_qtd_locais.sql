@@ -25,13 +25,10 @@ GO
 -- Description : Grid dinamico de Setor (filtros + Qtd. Locais)
 -- =============================================
 CREATE PROCEDURE [dbo].[sp_select_cadastro_basico_setor_grid]
-
 @codigo_empresa	smallint,
 @codigo_unidade	int	= -1,
 @descricao		varchar(255) = ''
-
 AS
-
 BEGIN
 
 	SET NOCOUNT ON;

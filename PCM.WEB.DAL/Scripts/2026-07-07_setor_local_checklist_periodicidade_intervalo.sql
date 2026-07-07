@@ -46,9 +46,7 @@ ALTER PROCEDURE [dbo].[sp_insert_cadastro_basico_setor_local]
 @codigo_checklist		bigint		= NULL,
 @codigo_periodicidade	smallint	= NULL,
 @intervalo				smallint	= NULL
-
 AS
-
 BEGIN
 
 	DECLARE @codigo	AS int
@@ -100,9 +98,7 @@ ALTER PROCEDURE [dbo].[sp_update_cadastro_basico_setor_local]
 @codigo_checklist		bigint		= NULL,
 @codigo_periodicidade	smallint	= NULL,
 @intervalo				smallint	= NULL
-
 AS
-
 BEGIN
 
 	IF @excluido = 1 BEGIN
@@ -174,9 +170,7 @@ ALTER PROCEDURE [dbo].[sp_select_cadastro_basico_setor_local]
 @codigo_empresa	smallint,
 @codigo_unidade	int,
 @codigo_setor	int
-
 AS
-
 BEGIN
 
 	SELECT

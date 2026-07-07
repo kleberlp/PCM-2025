@@ -108,12 +108,9 @@ IF OBJECT_ID('dbo.sp_update_interface_uh_reservas_stg', 'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE [dbo].[sp_update_interface_uh_reservas_stg]
-
 @codigo_empresa	smallint,
 @hotel_id		varchar(20)
-
 AS
-
 BEGIN
 
 	DECLARE @codigo_unidade	AS int
