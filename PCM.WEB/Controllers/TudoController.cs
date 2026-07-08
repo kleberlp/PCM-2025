@@ -205,6 +205,12 @@ namespace PCM.WEB.Controllers
                                        codigoUnidade: codigo_unidade,
                                        codigoTudoApontamento: codigo);
 
+                // marca como concluído o item planejado na agenda (se houver)
+                oTudo.ConcluirAgendaTudo(codigoEmpresa: empresa,
+                                         codigoUnidade: codigo_unidade,
+                                         codigoApartamento: codigo_apartamento,
+                                         codigoTudoApontamento: codigo);
+
                 return RedirectToAction("ChecklistTudo");
             }
         }
@@ -379,6 +385,125 @@ namespace PCM.WEB.Controllers
 
                 // O grid é carregado via loadGridMain (LoadTudoHistorico)
                 return View();
+            }
+        }
+
+        #endregion
+
+        #region ::: TUDO EM DIA - AGENDA / AUTO-PLANEJAMENTO :::
+
+        // GET: PAINEL / AGENDA
+        public ActionResult AgendaTudo(int unidade = 0, int funcionario = -1, string data_inicio = null, string data_termino = null, int capacidade = 10)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                int empresa = Convert.ToInt32(Session["empresa"].ToString());
+                int usuario = Convert.ToInt32(User.Identity.GetUserName());
+
+                if (unidade == 0)
+                    unidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
+
+                if (string.IsNullOrEmpty(data_inicio))
+                    data_inicio = DateTime.Now.ToString("dd/MM/yyyy");
+                if (string.IsNullOrEmpty(data_termino))
+                    data_termino = DateTime.Now.AddDays(30).ToString("dd/MM/yyyy");
+
+                bool editar = false, inserir = false, excluir = false, administrador = false;
+                oAccount.LoadPerfil(iCodigoEmpresa: empresa, iCodigoUsuario: usuario, sFormulario: "uh_checklist",
+                                    bInserir: ref inserir, bEditar: ref editar, bExcluir: ref excluir, bAdministrador: ref administrador);
+
+                ViewBag.unidadeSel = unidade;
+                ViewBag.funcionarioSel = funcionario;
+                ViewBag.data_inicio = data_inicio;
+                ViewBag.data_termino = data_termino;
+                ViewBag.capacidade = capacidade;
+                ViewBag.inserir = inserir;
+                ViewBag.excluir = excluir;
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: empresa, iCodigoUsuario: usuario, bCadastro: false), "codigo", "descricao", unidade);
+                ViewBag.funcionario = new SelectList(oCombo.Funcionario(iCodigoEmpresa: empresa, iCodigoUnidade: unidade, iCodigoModulo: Convert.ToInt32(Session["codigo_modulo"])), "codigo", "descricao", funcionario);
+
+                ViewBag.kpi = oTudo.LoadAgendaTudoKpi(codigoEmpresa: empresa,
+                                                      codigoUnidade: unidade,
+                                                      dataInicio: data_inicio,
+                                                      dataTermino: data_termino,
+                                                      codigoFuncionario: funcionario);
+
+                return View();
+            }
+        }
+
+        // POST: GRID DA AGENDA (loadGridMain)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult LoadAgenda(int unidade = -1, int funcionario = -1, int status = -1, string data_inicio = null, string data_termino = null)
+        {
+            int empresa = Convert.ToInt32(Session["empresa"].ToString());
+
+            if (unidade <= 0)
+                unidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
+            if (string.IsNullOrEmpty(data_inicio))
+                data_inicio = DateTime.Now.ToString("dd/MM/yyyy");
+            if (string.IsNullOrEmpty(data_termino))
+                data_termino = DateTime.Now.AddDays(30).ToString("dd/MM/yyyy");
+
+            var data = oTudo.LoadAgendaTudoGrid(codigoEmpresa: empresa,
+                                                codigoUnidade: unidade,
+                                                dataInicio: data_inicio,
+                                                dataTermino: data_termino,
+                                                codigoFuncionario: funcionario,
+                                                status: status);
+
+            return new JsonResult { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+        }
+
+        // POST: GERA O PLANEJAMENTO AUTOMÁTICO
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GerarAgenda(int unidade, string data_inicio, string data_termino, int capacidade = 10)
+        {
+            try
+            {
+                int empresa = Convert.ToInt32(Session["empresa"].ToString());
+                int usuario = Convert.ToInt32(User.Identity.GetUserName());
+
+                int total = oTudo.GerarAgendaTudo(codigoEmpresa: empresa,
+                                                  codigoUnidade: unidade,
+                                                  codigoUsuario: usuario,
+                                                  dataInicio: data_inicio,
+                                                  dataTermino: data_termino,
+                                                  capacidade: capacidade);
+
+                return Json(new { success = true, total = total });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        // POST: LIMPA O PLANEJAMENTO EM ABERTO DO PERÍODO
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult LimparAgenda(int unidade, string data_inicio, string data_termino)
+        {
+            try
+            {
+                int empresa = Convert.ToInt32(Session["empresa"].ToString());
+
+                oTudo.LimparAgendaTudo(codigoEmpresa: empresa,
+                                       codigoUnidade: unidade,
+                                       dataInicio: data_inicio,
+                                       dataTermino: data_termino);
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
             }
         }
 

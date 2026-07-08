@@ -629,4 +629,168 @@ Public Class Tudo
 
 #End Region
 
+#Region "::: TUDO EM DIA - AGENDA / AUTO-PLANEJAMENTO :::"
+
+    ' Gera o planejamento automático no período. Retorna a quantidade de itens agendados.
+    Public Function GerarAgendaTudo(ByVal codigoEmpresa As Integer,
+                                    ByVal codigoUnidade As Integer,
+                                    ByVal codigoUsuario As Integer,
+                                    ByVal dataInicio As String,
+                                    ByVal dataTermino As String,
+                                    ByVal capacidade As Integer) As Integer
+
+        Try
+
+            Dim iReturn As Integer = 0
+            Dim ptBr = New Globalization.CultureInfo("pt-BR")
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, Convert.ToDateTime(dataInicio, ptBr)),
+                CriarParametro("data_fim", SqlDbType.Date, Convert.ToDateTime(dataTermino, ptBr)),
+                CriarParametro("capacidade", SqlDbType.Int, capacidade),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_gerar_agenda_tudo", oSqlParameter)
+                If oSqlDataReader.HasRows Then
+                    While oSqlDataReader.Read
+                        iReturn = SafeGetInt32(oSqlDataReader, "total")
+                    End While
+                End If
+            End Using
+
+            Return iReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    ' Grid da agenda (loadGridMain)
+    Public Function LoadAgendaTudoGrid(ByVal codigoEmpresa As Integer,
+                                       ByVal codigoUnidade As Integer,
+                                       ByVal dataInicio As String,
+                                       ByVal dataTermino As String,
+                                       ByVal codigoFuncionario As Integer,
+                                       ByVal status As Integer) As Object
+
+        Try
+
+            Dim ptBr = New Globalization.CultureInfo("pt-BR")
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, Convert.ToDateTime(dataInicio, ptBr)),
+                CriarParametro("data_fim", SqlDbType.Date, Convert.ToDateTime(dataTermino, ptBr)),
+                CriarParametro("codigo_funcionario", SqlDbType.Int, codigoFuncionario),
+                CriarParametro("status", SqlDbType.SmallInt, status)
+            }
+
+            Return LoadDynamicGrid(sConnection, "sp_select_tudo_agenda_grid", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    ' KPIs da agenda
+    Public Function LoadAgendaTudoKpi(ByVal codigoEmpresa As Integer,
+                                      ByVal codigoUnidade As Integer,
+                                      ByVal dataInicio As String,
+                                      ByVal dataTermino As String,
+                                      ByVal codigoFuncionario As Integer) As TudoAgendaKpi
+
+        Try
+
+            Dim oReturn As New TudoAgendaKpi
+            Dim ptBr = New Globalization.CultureInfo("pt-BR")
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, Convert.ToDateTime(dataInicio, ptBr)),
+                CriarParametro("data_fim", SqlDbType.Date, Convert.ToDateTime(dataTermino, ptBr)),
+                CriarParametro("codigo_funcionario", SqlDbType.Int, codigoFuncionario)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_tudo_agenda_kpi", oSqlParameter)
+                If oSqlDataReader.HasRows Then
+                    While oSqlDataReader.Read
+                        oReturn.planejados = SafeGetInt32(oSqlDataReader, "planejados")
+                        oReturn.atrasados = SafeGetInt32(oSqlDataReader, "atrasados")
+                        oReturn.hoje = SafeGetInt32(oSqlDataReader, "hoje")
+                        oReturn.concluidos = SafeGetInt32(oSqlDataReader, "concluidos")
+                    End While
+                End If
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    ' Marca como concluído o item planejado do local (chamado ao finalizar o apontamento)
+    Public Sub ConcluirAgendaTudo(ByVal codigoEmpresa As Integer,
+                                  ByVal codigoUnidade As Integer,
+                                  ByVal codigoApartamento As Integer,
+                                  ByVal codigoTudoApontamento As Long)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo_apartamento", SqlDbType.Int, codigoApartamento),
+                CriarParametro("codigo_tudo_apontamento", SqlDbType.BigInt, codigoTudoApontamento)
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_concluir_agenda_tudo", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    ' Limpa o planejamento em aberto do período
+    Public Sub LimparAgendaTudo(ByVal codigoEmpresa As Integer,
+                                ByVal codigoUnidade As Integer,
+                                ByVal dataInicio As String,
+                                ByVal dataTermino As String)
+
+        Try
+
+            Dim ptBr = New Globalization.CultureInfo("pt-BR")
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, Convert.ToDateTime(dataInicio, ptBr)),
+                CriarParametro("data_fim", SqlDbType.Date, Convert.ToDateTime(dataTermino, ptBr))
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_delete_tudo_agenda", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+#End Region
+
 End Class

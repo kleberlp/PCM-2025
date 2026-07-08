@@ -791,6 +791,7 @@
     <Content Include="Content\js\pages\Tudo\jquery.checklistTudo.init.js" />
     <Content Include="Content\js\pages\Tudo\jquery.checklistTudoApontamento.init.js" />
     <Content Include="Content\js\pages\Tudo\jquery.checklistTudoHistorico.init.js" />
+    <Content Include="Content\js\pages\Tudo\jquery.agendaTudo.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.tipoPerdaEdit.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.tipoPerdaInsert.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.tipoPerda.init.js" />
@@ -2285,6 +2286,7 @@
     <Content Include="Views\Tudo\ChecklistTudo.cshtml" />
     <Content Include="Views\Tudo\ChecklistTudoApontamento.cshtml" />
     <Content Include="Views\Tudo\ChecklistTudoHistorico.cshtml" />
+    <Content Include="Views\Tudo\AgendaTudo.cshtml" />
     <Content Include="Views\CadastroBasico\UHGrupoChecklistDelete.cshtml" />
     <Content Include="Views\CadastroBasico\UHGrupoChecklistEdit.cshtml" />
     <Content Include="Views\CadastroBasico\UHGrupoChecklistIndex.cshtml" />

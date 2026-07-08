@@ -2013,6 +2013,33 @@
   <data name="erro_excluir" xml:space="preserve">
     <value>Não foi possível excluir o apontamento.</value>
   </data>
+  <data name="gerar_planejamento" xml:space="preserve">
+    <value>Gerar planejamento</value>
+  </data>
+  <data name="capacidade" xml:space="preserve">
+    <value>Capacidade/dia</value>
+  </data>
+  <data name="planejados" xml:space="preserve">
+    <value>Planejados</value>
+  </data>
+  <data name="atrasados" xml:space="preserve">
+    <value>Atrasados</value>
+  </data>
+  <data name="concluidos" xml:space="preserve">
+    <value>Concluídos</value>
+  </data>
+  <data name="limpar" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
+  <data name="para_hoje" xml:space="preserve">
+    <value>Para hoje</value>
+  </data>
+  <data name="planejamento_gerado" xml:space="preserve">
+    <value>Planejamento gerado com sucesso</value>
+  </data>
+  <data name="confirma_limpar" xml:space="preserve">
+    <value>Deseja remover o planejamento em aberto do período?</value>
+  </data>
   <data name="cancelarRegistro" xml:space="preserve">
     <value>Deseja cancelar o registro selecionado?</value>
   </data>

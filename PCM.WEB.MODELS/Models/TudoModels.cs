@@ -26,6 +26,15 @@ namespace PCM.WEB.MODELS
         public long codigo_apontamento { get; set; }
     }
 
+    // KPIs da agenda de vencimentos (Fase 5)
+    public class TudoAgendaKpi
+    {
+        public int planejados { get; set; }
+        public int atrasados { get; set; }
+        public int hoje { get; set; }
+        public int concluidos { get; set; }
+    }
+
     // Contadores da torre de status
     public class TudoStatus
     {

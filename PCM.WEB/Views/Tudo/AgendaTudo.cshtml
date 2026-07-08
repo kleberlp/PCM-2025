@@ -1,0 +1,142 @@
+@using PCM.WEB.Properties
+@using Newtonsoft.Json
+
+@{
+    var kpi = (PCM.WEB.MODELS.TudoAgendaKpi)ViewBag.kpi;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/css/pcm-ui.css">
+    @Styles.Render("~/Content/datepicker")
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+}
+
+<main id="main-container">
+
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistTudo", "Tudo")">@Resources.tudo_em_dia</a>
+                <span class="breadcrumb-item active">@Resources.agenda</span>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="pcm-page-header">
+            <div>
+                <h1><i class="fa fa-calendar-check-o"></i>@Resources.agenda — @Resources.tudo_em_dia</h1>
+                <div class="pcm-sub">Agenda de vencimentos e auto-planejamento por responsável</div>
+            </div>
+            <div class="pcm-filter" id="filtro">
+                @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "pcm-select", id = "unidade" })
+                @Html.DropDownList("funcionario", (SelectList)ViewBag.funcionario, Resources.responsavel, new { @class = "pcm-select", id = "funcionario" })
+                <input type="text" id="data_inicio" value="@ViewBag.data_inicio" class="pcm-select js-datepicker" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" style="width:110px" autocomplete="off" />
+                <input type="text" id="data_termino" value="@ViewBag.data_termino" class="pcm-select js-datepicker" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" style="width:110px" autocomplete="off" />
+                <button type="button" id="filtrar" class="btn-pcm btn-pcm-ghost"><i class="si si-magnifier"></i></button>
+            </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="pcm-kpi">
+            <div class="pcm-torre c-pendente">
+                <div class="pcm-torre-h"><span class="pcm-dot"></span><span class="pcm-torre-lb">@Resources.planejados</span></div>
+                <div class="pcm-torre-val">@kpi.planejados</div>
+            </div>
+            <div class="pcm-torre c-atrasado">
+                <div class="pcm-torre-h"><span class="pcm-dot"></span><span class="pcm-torre-lb">@Resources.atrasados</span></div>
+                <div class="pcm-torre-val">@kpi.atrasados</div>
+            </div>
+            <div class="pcm-torre c-manut">
+                <div class="pcm-torre-h"><span class="pcm-dot"></span><span class="pcm-torre-lb">@Resources.para_hoje</span></div>
+                <div class="pcm-torre-val">@kpi.hoje</div>
+            </div>
+            <div class="pcm-torre c-ok">
+                <div class="pcm-torre-h"><span class="pcm-dot"></span><span class="pcm-torre-lb">@Resources.concluidos</span></div>
+                <div class="pcm-torre-val">@kpi.concluidos</div>
+            </div>
+        </div>
+
+        <!-- Ações de planejamento -->
+        @if (ViewBag.inserir)
+        {
+            <div class="pcm-card">
+                <div class="block-content" style="padding:14px 18px;display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+                    <div>
+                        <label style="display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#9aa0a6;margin-bottom:4px;">@Resources.capacidade</label>
+                        <input type="number" id="capacidade" value="@ViewBag.capacidade" min="0" class="pcm-select" style="width:110px" />
+                    </div>
+                    <button type="button" id="gerar" class="btn-pcm btn-pcm-dark"><i class="fa fa-magic"></i> @Resources.gerar_planejamento</button>
+                    @if (ViewBag.excluir)
+                    {
+                        <button type="button" id="limpar" class="btn-pcm btn-pcm-ghost"><i class="fa fa-eraser"></i> @Resources.limpar</button>
+                    }
+                    <span class="pcm-sub" style="margin-left:auto;">O planejamento distribui os locais por responsável (do setor ou automático) respeitando a capacidade/dia.</span>
+                </div>
+            </div>
+        }
+
+        <!-- Agenda -->
+        <div class="pcm-card">
+            <div class="pcm-card-head">
+                <div class="pcm-card-title"><i class="fa fa-calendar"></i> @Resources.agenda</div>
+            </div>
+            <div class="block-content block-content-full">
+                <table id="tbMain" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+@Html.AntiForgeryToken()
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        nothingRegister = Resources.emptyTable,
+        search = Resources.search,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig,
+        executar = Resources.execucao,
+        gerarOk = Resources.planejamento_gerado,
+        confirmaLimpar = Resources.confirma_limpar,
+        limpar = Resources.limpar,
+        podeInserir = (bool)ViewBag.inserir,
+        urlLoad = Url.Action("LoadAgenda", "Tudo"),
+        urlAgenda = Url.Action("AgendaTudo", "Tudo"),
+        urlGerar = Url.Action("GerarAgenda", "Tudo"),
+        urlLimpar = Url.Action("LimparAgenda", "Tudo"),
+        urlApontamento = Url.Action("ChecklistTudoApontamento", "Tudo")
+    }))'>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/datepicker")
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+    <script src="~/Content/js/pcm.js"></script>
+
+    <script src="~/Content/js/pages/Tudo/jquery.agendaTudo.init.js"></script>
+}

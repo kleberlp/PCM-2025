@@ -988,6 +988,87 @@ namespace PCM.WEB.Properties {
         }
 
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Gerar planejamento.
+        /// </summary>
+        public static string gerar_planejamento {
+            get {
+                return ResourceManager.GetString("gerar_planejamento", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Capacidade/dia.
+        /// </summary>
+        public static string capacidade {
+            get {
+                return ResourceManager.GetString("capacidade", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Planejados.
+        /// </summary>
+        public static string planejados {
+            get {
+                return ResourceManager.GetString("planejados", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Atrasados.
+        /// </summary>
+        public static string atrasados {
+            get {
+                return ResourceManager.GetString("atrasados", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Concluídos.
+        /// </summary>
+        public static string concluidos {
+            get {
+                return ResourceManager.GetString("concluidos", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Limpar.
+        /// </summary>
+        public static string limpar {
+            get {
+                return ResourceManager.GetString("limpar", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Para hoje.
+        /// </summary>
+        public static string para_hoje {
+            get {
+                return ResourceManager.GetString("para_hoje", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Planejamento gerado com sucesso.
+        /// </summary>
+        public static string planejamento_gerado {
+            get {
+                return ResourceManager.GetString("planejamento_gerado", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Deseja remover o planejamento em aberto do período?.
+        /// </summary>
+        public static string confirma_limpar {
+            get {
+                return ResourceManager.GetString("confirma_limpar", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Deseja cancelar o registro selecionado?.
         /// </summary>
         public static string cancelarRegistro {
