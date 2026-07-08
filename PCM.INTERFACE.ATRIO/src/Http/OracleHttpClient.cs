@@ -1,19 +1,20 @@
 using PCM.INTERFACE.ATRIO.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace PCM.INTERFACE.ATRIO.Http;
 
 /// <summary>
 /// HttpClient tipado para chamadas de API Oracle Hospitality (reservas, perfis etc).
 /// NÃO é usado para o endpoint de token — este tem cliente próprio no OracleAuthService.
+/// A configuração (BaseUrl/headers) vem da propriedade em processamento no escopo atual,
+/// permitindo atender vários hotéis num único serviço.
 /// </summary>
 public class OracleHttpClient
 {
     public HttpClient Client { get; }
 
-    public OracleHttpClient(HttpClient client, IOptions<OracleHospitalitySettings> options)
+    public OracleHttpClient(HttpClient client, IPropertyContext context)
     {
-        var settings = options.Value;
+        var settings = context.Current;
 
         client.BaseAddress = new Uri(settings.BaseUrl);
         client.Timeout = TimeSpan.FromSeconds(30);

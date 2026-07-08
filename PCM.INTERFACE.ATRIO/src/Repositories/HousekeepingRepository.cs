@@ -1,6 +1,5 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using PCM.INTERFACE.ATRIO.Configuration;
 using System.Data;
 
@@ -26,10 +25,10 @@ public class HousekeepingRepository : IHousekeepingRepository
     private readonly ILogger<HousekeepingRepository> _logger;
 
     public HousekeepingRepository(
-        IOptions<ServiceSettings> settings,
+        IPropertyContext context,
         ILogger<HousekeepingRepository> logger)
     {
-        _connectionString = settings.Value.ConnectionString;
+        _connectionString = context.Current.ConnectionString;
         _logger           = logger;
     }
 

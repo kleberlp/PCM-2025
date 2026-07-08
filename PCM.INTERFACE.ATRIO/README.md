@@ -68,25 +68,63 @@ sc start OracleHospitalityService
 
 ## Configurações (`appsettings.json`)
 
+O serviço atende **N hotéis (propriedades) em um único serviço** através da lista
+`Properties`. Cada item combina as credenciais Oracle com o destino no PCM
+(empresa/conexão) e as flags de sync. Basta acrescentar um novo objeto ao array
+para monitorar mais um hotel — **não é preciso instalar um segundo serviço**.
+
+```jsonc
+{
+  "Properties": [
+    {
+      "Name": "ATRIO A2501",        // rótulo p/ log/auditoria/e-mail
+      "Enabled": true,              // false => propriedade ignorada no ciclo
+      "BaseUrl": "https://mtcu11pr.hospitality-api.us-ashburn-1.ocs.oraclecloud.com",
+      "AppKey": "...",
+      "EnterpriseId": "ATRIO",
+      "HotelId": "A2501",
+      "Scope": "urn:opc:hgbu:ws:__myscopes__",
+      "ClientId": "...",
+      "ClientSecret": "...",
+      "TokenEndpoint": "/oauth/v1/tokens",
+      "TokenExpiryBufferSeconds": 60,
+      "CodigoEmpresa": 905,         // empresa PCM de destino
+      "ConnectionString": "Server=...;Database=PCM;...",
+      "SyncHousekeeping": true,
+      "SyncReservations": false
+    },
+    { "Name": "NOVO HOTEL", "Enabled": false, "...": "..." }
+  ],
+  "ServiceSettings": { "IntervalMinutes": 5 }  // intervalo entre ciclos (global)
+}
+```
+
 | Chave | Descrição |
 |---|---|
-| `OracleHospitality:BaseUrl` | URL base da API Oracle |
-| `OracleHospitality:AppKey` | Chave da aplicação (x-app-key) |
-| `OracleHospitality:EnterpriseId` | ID do enterprise (ATRIO) |
-| `OracleHospitality:HotelId` | ID do hotel (A2501) |
-| `OracleHospitality:ClientId` | OAuth2 Client ID |
-| `OracleHospitality:ClientSecret` | OAuth2 Client Secret |
-| `OracleHospitality:Scope` | Escopo OAuth2 |
-| `ServiceSettings:IntervalMinutes` | Intervalo entre ciclos |
-| `ServiceSettings:ConnectionString` | String de conexão SQL (PCM) |
+| `Properties[]` | Lista de propriedades (hotéis) processadas em cada ciclo |
+| `Properties[].Name` | Rótulo amigável (log/auditoria/e-mail) |
+| `Properties[].Enabled` | Liga/desliga a propriedade |
+| `Properties[].BaseUrl / AppKey / EnterpriseId / HotelId / Scope / ClientId / ClientSecret` | Credenciais Oracle OHIP daquele hotel |
+| `Properties[].CodigoEmpresa` | Empresa PCM de destino |
+| `Properties[].ConnectionString` | Conexão SQL (PCM) daquele hotel |
+| `Properties[].SyncHousekeeping / SyncReservations` | Flags de sync por propriedade |
+| `ServiceSettings:IntervalMinutes` | Intervalo entre ciclos (compartilhado) |
+
+O token OAuth é cacheado **por propriedade** (cada hotel tem credenciais próprias),
+então um único serviço mantém sessões independentes para todos os hotéis.
+
+> **Compatibilidade:** se a seção `Properties` não existir, o serviço monta
+> automaticamente **uma** propriedade a partir das seções legadas
+> `OracleHospitality` + `ServiceSettings` (formato antigo continua funcionando).
 
 > **Atenção:** Em produção, use **User Secrets** ou **variáveis de ambiente** para ClientId e ClientSecret.
 > Nunca suba credenciais no repositório.
 
 ### Variáveis de ambiente (produção)
 ```
-OracleHospitality__ClientSecret=sua-secret-aqui
-OracleHospitality__ClientId=seu-client-id-aqui
+Properties__0__ClientSecret=sua-secret-aqui
+Properties__0__ClientId=seu-client-id-aqui
+Properties__1__ClientSecret=secret-do-segundo-hotel
 ```
 
 ---

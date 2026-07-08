@@ -36,12 +36,51 @@ try
             // -------------------------------------------------------
             // CONFIGURAÇÕES TIPADAS
             // -------------------------------------------------------
-            services.Configure<OracleHospitalitySettings>(
-                cfg.GetSection(OracleHospitalitySettings.Section));
             services.Configure<ServiceSettings>(
                 cfg.GetSection(ServiceSettings.Section));
             services.Configure<EmailSettings>(
                 cfg.GetSection(EmailSettings.Section));
+
+            // -------------------------------------------------------
+            // PROPRIEDADES (N hotéis em um único serviço)
+            //   Lê a seção "Properties". Se ausente, monta UMA propriedade a
+            //   partir das seções legadas "OracleHospitality" + "ServiceSettings".
+            // -------------------------------------------------------
+            var properties = cfg.GetSection(PropertySettings.Section).Get<List<PropertySettings>>()
+                             ?? new List<PropertySettings>();
+
+            if (properties.Count == 0)
+            {
+                var oracle = cfg.GetSection(OracleHospitalitySettings.Section).Get<OracleHospitalitySettings>()
+                             ?? new OracleHospitalitySettings();
+                var svc = cfg.GetSection(ServiceSettings.Section).Get<ServiceSettings>()
+                          ?? new ServiceSettings();
+
+                properties.Add(new PropertySettings
+                {
+                    Name                     = string.IsNullOrWhiteSpace(oracle.EnterpriseId) ? "default" : oracle.EnterpriseId,
+                    Enabled                  = true,
+                    BaseUrl                  = oracle.BaseUrl,
+                    AppKey                   = oracle.AppKey,
+                    EnterpriseId             = oracle.EnterpriseId,
+                    HotelId                  = oracle.HotelId,
+                    Scope                    = oracle.Scope,
+                    ClientId                 = oracle.ClientId,
+                    ClientSecret             = oracle.ClientSecret,
+                    TokenEndpoint            = oracle.TokenEndpoint,
+                    TokenExpiryBufferSeconds = oracle.TokenExpiryBufferSeconds,
+                    CodigoEmpresa            = svc.CodigoEmpresa,
+                    ConnectionString         = svc.ConnectionString,
+                    SyncHousekeeping         = svc.SyncHousekeeping,
+                    SyncReservations         = svc.SyncReservations
+                });
+            }
+
+            services.AddSingleton<IReadOnlyList<PropertySettings>>(properties);
+
+            // Contexto por escopo (propriedade em processamento) + cache de token por propriedade
+            services.AddScoped<IPropertyContext, PropertyContext>();
+            services.AddSingleton<IOracleTokenCache, OracleTokenCache>();
 
             // -------------------------------------------------------
             // HTTP — cliente limpo para OAuth (sem headers de API)
@@ -70,7 +109,7 @@ try
             // -------------------------------------------------------
             // SERVIÇOS
             // -------------------------------------------------------
-            services.AddSingleton<IOracleAuthService, OracleAuthService>();
+            services.AddScoped<IOracleAuthService, OracleAuthService>();
             services.AddScoped<IOracleHousekeepingService, OracleHousekeepingService>();
             services.AddScoped<IOracleReservationService, OracleReservationService>();
 

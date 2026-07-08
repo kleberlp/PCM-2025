@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PCM.INTERFACE.ATRIO.Configuration;
 using PCM.INTERFACE.ATRIO.Http;
@@ -19,24 +18,21 @@ public class OracleHousekeepingService : IOracleHousekeepingService
     private readonly OracleHttpClient _oracleHttp;
     private readonly IOracleAuthService _authService;
     private readonly IHousekeepingRepository _repository;
-    private readonly OracleHospitalitySettings _oracleSettings;
-    private readonly ServiceSettings _serviceSettings;
+    private readonly PropertySettings _property;
     private readonly ILogger<OracleHousekeepingService> _logger;
 
     public OracleHousekeepingService(
         OracleHttpClient oracleHttp,
         IOracleAuthService authService,
         IHousekeepingRepository repository,
-        IOptions<OracleHospitalitySettings> oracleOptions,
-        IOptions<ServiceSettings> serviceOptions,
+        IPropertyContext context,
         ILogger<OracleHousekeepingService> logger)
     {
-        _oracleHttp      = oracleHttp;
-        _authService     = authService;
-        _repository      = repository;
-        _oracleSettings  = oracleOptions.Value;
-        _serviceSettings = serviceOptions.Value;
-        _logger          = logger;
+        _oracleHttp  = oracleHttp;
+        _authService = authService;
+        _repository  = repository;
+        _property    = context.Current;
+        _logger      = logger;
     }
 
     public async Task<(bool Success, int Registros)> SyncAllRoomsAsync(CancellationToken ct = default)
@@ -46,8 +42,8 @@ public class OracleHousekeepingService : IOracleHousekeepingService
         var totalRows    = 0;
         const int limit  = 100;
 
-        _logger.LogInformation("Iniciando sync housekeeping (hotel: {HotelId})...",
-            _oracleSettings.HotelId);
+        _logger.LogInformation("Iniciando sync housekeeping ({Property} | hotel: {HotelId})...",
+            _property.Label, _property.HotelId);
 
         do
         {
@@ -68,8 +64,8 @@ public class OracleHousekeepingService : IOracleHousekeepingService
 
             // Envia o JSON bruto desta página para a SP — processamento em massa via OPENJSON
             var rows = await _repository.InterfaceHotelRoomsAsync(
-                codigoEmpresa : _serviceSettings.CodigoEmpresa,
-                hotelId       : _oracleSettings.HotelId,
+                codigoEmpresa : _property.CodigoEmpresa,
+                hotelId       : _property.HotelId,
                 json          : rawJson,
                 type          : "OPERA",
                 ct            : ct);
@@ -91,12 +87,12 @@ public class OracleHousekeepingService : IOracleHousekeepingService
         try
         {
             var token = await _authService.GetAccessTokenAsync(ct);
-            var url   = $"/hsk/v1/hotels/{_oracleSettings.HotelId}/housekeepingOverview" +
+            var url   = $"/hsk/v1/hotels/{_property.HotelId}/housekeepingOverview" +
                         $"?limit={limit}&offset={offset}";
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            request.Headers.Add("x-hotelId", _oracleSettings.HotelId);
+            request.Headers.Add("x-hotelId", _property.HotelId);
 
             _logger.LogDebug("GET {Url}", url);
 

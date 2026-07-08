@@ -1,6 +1,5 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using PCM.INTERFACE.ATRIO.Configuration;
 using System.Data;
 
@@ -22,10 +21,10 @@ public class AuditService : IAuditService
     private readonly ILogger<AuditService> _logger;
 
     public AuditService(
-        IOptions<ServiceSettings> settings,
+        IPropertyContext context,
         ILogger<AuditService> logger)
     {
-        _connectionString = settings.Value.ConnectionString;
+        _connectionString = context.Current.ConnectionString;
         _logger           = logger;
     }
 

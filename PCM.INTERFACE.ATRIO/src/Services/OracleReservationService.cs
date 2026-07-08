@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PCM.INTERFACE.ATRIO.Configuration;
 using PCM.INTERFACE.ATRIO.Http;
@@ -20,18 +19,18 @@ public class OracleReservationService : IOracleReservationService
 {
     private readonly OracleHttpClient _oracleHttp;
     private readonly IOracleAuthService _authService;
-    private readonly OracleHospitalitySettings _settings;
+    private readonly PropertySettings _settings;
     private readonly ILogger<OracleReservationService> _logger;
 
     public OracleReservationService(
         OracleHttpClient oracleHttp,
         IOracleAuthService authService,
-        IOptions<OracleHospitalitySettings> options,
+        IPropertyContext context,
         ILogger<OracleReservationService> logger)
     {
         _oracleHttp = oracleHttp;
         _authService = authService;
-        _settings = options.Value;
+        _settings = context.Current;
         _logger = logger;
     }
 
