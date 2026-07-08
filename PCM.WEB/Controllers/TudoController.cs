@@ -85,7 +85,7 @@ namespace PCM.WEB.Controllers
         }
 
         // GET: EXECUÇÃO DO CHECKLIST
-        public ActionResult ChecklistTudoApontamento(int codigo_unidade, int codigo_apartamento, long codigo_apontamento = 0, int status = 0, bool visualizar = false)
+        public ActionResult ChecklistTudoApontamento(int codigo_unidade, int codigo_apartamento, long codigo_apontamento = 0, int status = 0, bool visualizar = false, string origem = "")
         {
             if (Session["empresa"] == null)
             {
@@ -134,6 +134,7 @@ namespace PCM.WEB.Controllers
                 ViewBag.somenteLeitura = somenteLeitura;
                 ViewBag.codigo_unidade = codigo_unidade;
                 ViewBag.codigo_apontamento = codigoApontamento;
+                ViewBag.origem = origem;
                 ViewBag.dataHoje = DateTime.Now.ToString("dd/MM/yyyy");
                 ViewBag.horaAgora = DateTime.Now.ToString("HH:mm");
                 ViewBag.inserir = inserir;

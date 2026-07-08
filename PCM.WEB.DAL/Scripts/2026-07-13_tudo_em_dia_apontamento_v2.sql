@@ -460,9 +460,11 @@ BEGIN
     IF @era_corrente = 1
     BEGIN
 
+        DECLARE @mesAtual date = DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1);
         DECLARE @codigo_anterior bigint;
+        DECLARE @dt date;
 
-        SELECT TOP 1 @codigo_anterior = ap.codigo
+        SELECT TOP 1 @codigo_anterior = ap.codigo, @dt = ap.data_termino
         FROM tb_tudo_apontamento ap
         WHERE ap.codigo_empresa = @codigo_empresa AND ap.codigo_unidade = @codigo_unidade
         AND   ap.codigo_apartamento = @codigo_apartamento AND ISNULL(ap.finalizado, 0) = 1
@@ -470,7 +472,7 @@ BEGIN
 
         IF @codigo_anterior IS NULL
         BEGIN
-            -- não há histórico: volta para Pendente
+            -- não há histórico: volta para o estado "a fazer" (sem data => Pendente)
             UPDATE tb_cad_apartamento SET
                 status_tudo = 2,
                 data_ultimo_tudo = NULL,
@@ -480,11 +482,31 @@ BEGIN
         END
         ELSE
         BEGIN
-            -- aponta para o anterior e recalcula (reusa a regra de status/próxima data)
-            UPDATE tb_cad_apartamento SET codigo_tudo_apontamento = @codigo_anterior
-            WHERE codigo = @codigo_apartamento AND codigo_empresa = @codigo_empresa AND codigo_unidade = @codigo_unidade;
+            -- aponta para o anterior e recalcula a próxima data pela periodicidade do local
+            UPDATE tb_cad_apartamento SET
+                codigo_tudo_apontamento = @codigo_anterior,
+                data_ultimo_tudo = @dt,
+                data_proximo_tudo = CASE a.codigo_periodicidade
+                    WHEN 1 THEN DATEADD(DAY, ISNULL(a.intervalo, 1), @dt)
+                    WHEN 2 THEN DATEADD(DAY, -DATEPART(WEEKDAY, DATEADD(WEEK, ISNULL(a.intervalo, 1), @dt)) + 1, DATEADD(WEEK, ISNULL(a.intervalo, 1), @dt))
+                    WHEN 3 THEN DATEFROMPARTS(YEAR(DATEADD(MONTH, ISNULL(a.intervalo, 1), @dt)), MONTH(DATEADD(MONTH, ISNULL(a.intervalo, 1), @dt)), 1)
+                    WHEN 5 THEN DATEADD(MONTH, ((DATEDIFF(MONTH, 0, @dt) / 2) + 1) * 2, 0)
+                    WHEN 6 THEN DATEADD(MONTH, ((DATEDIFF(MONTH, 0, @dt) / 3) + 1) * 3, 0)
+                    WHEN 7 THEN DATEADD(MONTH, ((DATEDIFF(MONTH, 0, @dt) / 6) + 1) * 6, 0)
+                    ELSE DATEFROMPARTS(YEAR(DATEADD(MONTH, ISNULL(a.intervalo, 1), @dt)), MONTH(DATEADD(MONTH, ISNULL(a.intervalo, 1), @dt)), 1)
+                END
+            FROM tb_cad_apartamento a
+            WHERE a.codigo = @codigo_apartamento AND a.codigo_empresa = @codigo_empresa AND a.codigo_unidade = @codigo_unidade;
 
-            EXEC sp_status_tudo_dia @codigo_empresa, @codigo_unidade, @codigo_anterior;
+            -- status derivado pela data (Atrasado / Pendente / Em Dia)
+            UPDATE tb_cad_apartamento SET
+                status_tudo = CASE
+                    WHEN data_proximo_tudo IS NULL THEN 2
+                    WHEN DATEFROMPARTS(YEAR(data_proximo_tudo), MONTH(data_proximo_tudo), 1) < @mesAtual THEN 1
+                    WHEN DATEFROMPARTS(YEAR(data_proximo_tudo), MONTH(data_proximo_tudo), 1) = @mesAtual THEN 2
+                    ELSE 5
+                END
+            WHERE codigo = @codigo_apartamento AND codigo_empresa = @codigo_empresa AND codigo_unidade = @codigo_unidade;
         END
 
     END

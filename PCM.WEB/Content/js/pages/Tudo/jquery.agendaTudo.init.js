@@ -72,7 +72,8 @@ function carregarGrid() {
 function executar(row) {
     window.location = messages.urlApontamento +
         '?codigo_unidade=' + row.codigo_unidade +
-        '&codigo_apartamento=' + row.codigo_apartamento;
+        '&codigo_apartamento=' + row.codigo_apartamento +
+        '&origem=agenda';
 }
 
 function gerarPlanejamento() {

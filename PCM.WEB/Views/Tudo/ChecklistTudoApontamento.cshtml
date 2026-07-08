@@ -9,6 +9,13 @@
     var horaIni = string.IsNullOrEmpty(ap.hora_inicio) ? (string)ViewBag.horaAgora : ap.hora_inicio;
     var horaFim = string.IsNullOrEmpty(ap.hora_termino) ? (string)ViewBag.horaAgora : ap.hora_termino;
     var ro = somenteLeitura ? "readonly" : "";
+    var origem = (string)ViewBag.origem ?? "";
+    var voltarUrl = origem == "historico" ? Url.Action("ChecklistTudoHistorico", "Tudo")
+                    : origem == "agenda" ? Url.Action("AgendaTudo", "Tudo")
+                    : Url.Action("ChecklistTudo", "Tudo");
+    var voltarLabel = origem == "historico" ? Resources.historico
+                      : origem == "agenda" ? Resources.agenda
+                      : Resources.tudo_em_dia;
 }
 
 @section Styles {
@@ -24,7 +31,7 @@
         <div class="content py-0 text-center">
             <nav class="breadcrumb bg-body-light mb-0">
                 <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
-                <a class="breadcrumb-item" href="@Url.Action("ChecklistTudo", "Tudo")">@Resources.tudo_em_dia</a>
+                <a class="breadcrumb-item" href="@voltarUrl">@voltarLabel</a>
                 <span class="breadcrumb-item active">@Resources.execucao</span>
             </nav>
         </div>
@@ -157,7 +164,7 @@
                 </div>
 
                 <div class="pcm-exec-foot">
-                    <a href="@Url.Action("ChecklistTudo", "Tudo")" class="btn-pcm btn-pcm-ghost"><i class="fa fa-arrow-left"></i> @Resources.voltar</a>
+                    <a href="@voltarUrl" class="btn-pcm btn-pcm-ghost"><i class="fa fa-arrow-left"></i> @Resources.voltar</a>
                     @if (!somenteLeitura && Model.Count > 0)
                     {
                         <button type="submit" class="btn-pcm btn-pcm-dark"><i class="fa fa-check"></i> @Resources.concluir</button>

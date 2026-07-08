@@ -66,7 +66,8 @@ function visualizar(row) {
         '?codigo_unidade=' + row.codigo_unidade +
         '&codigo_apartamento=' + row.codigo_apartamento +
         '&codigo_apontamento=' + row.codigo +
-        '&visualizar=true';
+        '&visualizar=true' +
+        '&origem=historico';
 }
 
 async function excluir(row) {
