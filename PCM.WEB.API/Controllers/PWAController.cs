@@ -19,6 +19,8 @@ namespace PCM.WEB.API.Controllers
 
         Api oAPI = new Api(sCon: ConfigurationManager.ConnectionStrings["DefaultConnectionAPI"].ConnectionString, sConIntercity: ConfigurationManager.ConnectionStrings["DefaultConnectionIntercity"].ConnectionString);
 
+        Tudo oTudo = new Tudo(sCon: ConfigurationManager.ConnectionStrings["DefaultConnectionAPI"].ConnectionString);
+
         Function oFunction = new Function();
 
         #region ::: GERAL :::
@@ -663,6 +665,74 @@ namespace PCM.WEB.API.Controllers
                                   iCodigoUsuario: uhDia.codigoUsuario,
                                   sEndpoint: Request.RequestUri.PathAndQuery,
                                   sRequestBody: oFunction.ConverteObjectParaJSon(uhDia),
+                                  sResponseBody: oFunction.ConverteObjectParaJSon(response));
+            }
+        }
+
+        #endregion
+
+        #region ::: TUDO EM DIA :::
+
+        // GET api/PWA/getListTudoDia
+        [HttpGet]
+        [Route("api/PWA/getListTudoDia")]
+        public IHttpActionResult getListTudoDia(int codigoEmpresa, int codigoUnidade, int codigoUsuario, int page = 1)
+        {
+            pwaTudoDiaList tudoDia = new pwaTudoDiaList();
+
+            try
+            {
+
+                tudoDia = oTudo.getListTudoDiaList(codigoEmpresa: codigoEmpresa,
+                                                   codigoUnidade: codigoUnidade,
+                                                   page: page);
+
+                return Ok(tudoDia);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            finally
+            {
+                //GRAVA LOG
+                oAPI.insertLogAPI(iCodigoEmpresa: codigoEmpresa,
+                                  iCodigoUnidade: codigoUnidade,
+                                  iCodigoUsuario: codigoUsuario,
+                                  sEndpoint: Request.RequestUri.PathAndQuery,
+                                  sRequestBody: "",
+                                  sResponseBody: oFunction.ConverteObjectParaJSon(tudoDia));
+
+            }
+
+        }
+
+        // PUT api/PWA/insertApontamentoTudoDia
+        [HttpPut]
+        [Route("api/PWA/insertApontamentoTudoDia")]
+        public IHttpActionResult insertApontamentoTudoDia([FromBody] pwaTudoDiaApontamento tudoDia)
+        {
+            pwaApontamentoResponse response = new pwaApontamentoResponse();
+
+            try
+            {
+                response = oTudo.insertTudoDiaApontamento(oApontamento: tudoDia);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            finally
+            {
+                //GRAVA LOG
+                oAPI.insertLogAPI(iCodigoEmpresa: tudoDia.codigoEmpresa,
+                                  iCodigoUnidade: tudoDia.codigoUnidade,
+                                  iCodigoUsuario: tudoDia.codigoUsuario,
+                                  sEndpoint: Request.RequestUri.PathAndQuery,
+                                  sRequestBody: oFunction.ConverteObjectParaJSon(tudoDia),
                                   sResponseBody: oFunction.ConverteObjectParaJSon(response));
             }
         }

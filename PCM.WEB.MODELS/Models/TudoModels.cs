@@ -68,6 +68,39 @@ namespace PCM.WEB.MODELS
         public bool nova_vistoria { get; set; }
     }
 
+    // ===== PWA (app) — Fase 4 =====
+    public class pwaTudoDiaList
+    {
+        public int page { get; set; }
+        public List<pwaTudoDia> results { get; set; }
+        public int totalResults { get; set; }
+        public int totalPages { get; set; }
+    }
+
+    public class pwaTudoDia
+    {
+        public long codigoApartamento { get; set; }
+        public long codigoChecklist { get; set; }
+        public string local { get; set; }
+        public string setor { get; set; }
+        public string dataUltimoTudo { get; set; }
+        public string dataProximoTudo { get; set; }
+        public pwaStatus status { get; set; }
+    }
+
+    public class pwaTudoDiaApontamento
+    {
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public int codigoUsuario { get; set; }
+        public int codigoFuncionario { get; set; }
+        public long codigoApartamento { get; set; }
+        public string dataInicio { get; set; }
+        public string dataTermino { get; set; }
+        public string observacao { get; set; }
+        public bool concluido { get; set; }
+    }
+
     // Linha do histórico — Fase 3
     public class TudoChecklistHistorico
     {

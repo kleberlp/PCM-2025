@@ -392,4 +392,143 @@ Public Class Tudo
 
 #End Region
 
+#Region "::: TUDO EM DIA - PWA (APP) :::"
+
+    ' Lista paginada de locais a executar (para o app)
+    Public Function getListTudoDiaList(ByVal codigoEmpresa As Integer,
+                                       ByVal codigoUnidade As Integer,
+                                       ByVal page As Integer) As pwaTudoDiaList
+
+        Try
+
+            Dim oReturn As New pwaTudoDiaList
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("page", SqlDbType.SmallInt, page)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_pwa_select_pcm_tudo_dia_list", oSqlParameter)
+
+                If oSqlDataReader.HasRows Then
+
+                    While oSqlDataReader.Read
+
+                        oReturn.totalPages = SafeGetInt32(oSqlDataReader, "total_pages")
+                        oReturn.totalResults = SafeGetInt32(oSqlDataReader, "total_results")
+                        oReturn.page = SafeGetInt32(oSqlDataReader, "page")
+
+                    End While
+
+                End If
+
+            End Using
+
+            oReturn.results = getListTudoDia(codigoEmpresa, codigoUnidade, page)
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    Public Function getListTudoDia(ByVal codigoEmpresa As Integer,
+                                   ByVal codigoUnidade As Integer,
+                                   ByVal page As Integer) As List(Of pwaTudoDia)
+
+        Try
+
+            Dim oReturn As New List(Of pwaTudoDia)
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("page", SqlDbType.SmallInt, page)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_pwa_select_pcm_tudo_dia", oSqlParameter)
+
+                If oSqlDataReader.HasRows Then
+
+                    While oSqlDataReader.Read
+
+                        Dim oInfo As New pwaTudoDia
+
+                        oInfo.codigoApartamento = SafeGetInt64(oSqlDataReader, "codigo_apartamento")
+                        oInfo.codigoChecklist = SafeGetInt64(oSqlDataReader, "codigo_checklist")
+                        oInfo.local = SafeGetString(oSqlDataReader, "local")
+                        oInfo.setor = SafeGetString(oSqlDataReader, "setor")
+                        oInfo.dataUltimoTudo = SafeGetString(oSqlDataReader, "data_ultimo_tudo")
+                        oInfo.dataProximoTudo = SafeGetString(oSqlDataReader, "data_proximo_tudo")
+
+                        oInfo.status = New pwaStatus
+                        oInfo.status.codigo = SafeGetInt32(oSqlDataReader, "status_codigo")
+                        oInfo.status.descricao = SafeGetString(oSqlDataReader, "status_descricao")
+                        oInfo.status.cssClass = SafeGetString(oSqlDataReader, "status_css_class")
+
+                        oReturn.Add(oInfo)
+
+                    End While
+
+                End If
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    ' Registra o apontamento vindo do app
+    Public Function insertTudoDiaApontamento(ByVal oApontamento As pwaTudoDiaApontamento) As pwaApontamentoResponse
+
+        Dim oReturn As New pwaApontamentoResponse
+
+        Try
+
+            Dim pCodigo As SqlParameter = CriarParametro("codigo", SqlDbType.BigInt, DBNull.Value, ParameterDirection.Output)
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, oApontamento.codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, oApontamento.codigoUnidade),
+                CriarParametro("codigo_usuario", SqlDbType.Int, oApontamento.codigoUsuario),
+                CriarParametro("codigo_funcionario", SqlDbType.Int, oApontamento.codigoFuncionario),
+                CriarParametro("codigo_apartamento", SqlDbType.BigInt, oApontamento.codigoApartamento),
+                CriarParametro("data_inicio", SqlDbType.DateTime, Convert.ToDateTime(oApontamento.dataInicio)),
+                CriarParametro("data_termino", SqlDbType.DateTime, Convert.ToDateTime(oApontamento.dataTermino)),
+                CriarParametro("concluido", SqlDbType.Bit, oApontamento.concluido),
+                CriarParametro("observacao", SqlDbType.VarChar, If(String.IsNullOrEmpty(oApontamento.observacao), "", oApontamento.observacao)),
+                pCodigo
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_pwa_insert_pcm_tudo_dia_apontamento", oSqlParameter)
+
+            oReturn.codigo = If(IsDBNull(pCodigo.Value), 0L, Convert.ToInt64(pCodigo.Value))
+            oReturn.success = True
+            oReturn.message = "Apontamento registrado com sucesso."
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            oReturn.success = False
+            oReturn.message = SqlEx.Message
+            Return oReturn
+        Catch ex As Exception
+            oReturn.success = False
+            oReturn.message = ex.Message
+            Return oReturn
+        End Try
+
+    End Function
+
+#End Region
+
 End Class
