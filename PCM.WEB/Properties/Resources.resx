@@ -1995,6 +1995,24 @@
   <data name="tudo_em_dia" xml:space="preserve">
     <value>Tudo em Dia</value>
   </data>
+  <data name="execucao" xml:space="preserve">
+    <value>Execução</value>
+  </data>
+  <data name="abrir_os" xml:space="preserve">
+    <value>Abrir O.S.</value>
+  </data>
+  <data name="concluir" xml:space="preserve">
+    <value>Concluir checklist</value>
+  </data>
+  <data name="confirma_exclusao" xml:space="preserve">
+    <value>Deseja realmente excluir este apontamento? A próxima execução será recalculada.</value>
+  </data>
+  <data name="registro_excluido" xml:space="preserve">
+    <value>Apontamento excluído com sucesso.</value>
+  </data>
+  <data name="erro_excluir" xml:space="preserve">
+    <value>Não foi possível excluir o apontamento.</value>
+  </data>
   <data name="cancelarRegistro" xml:space="preserve">
     <value>Deseja cancelar o registro selecionado?</value>
   </data>

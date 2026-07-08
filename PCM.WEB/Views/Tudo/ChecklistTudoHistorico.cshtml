@@ -1,8 +1,14 @@
-@model List<PCM.WEB.MODELS.TudoChecklistHistorico>
 @using PCM.WEB.Properties
+@using Newtonsoft.Json
 
 @section Styles {
     <link rel="stylesheet" type="text/css" href="~/Content/css/pcm-ui.css">
+    @Styles.Render("~/Content/datepicker")
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
 }
 
 <main id="main-container">
@@ -11,8 +17,8 @@
         <div class="content py-0 text-center">
             <nav class="breadcrumb bg-body-light mb-0">
                 <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
-                <a class="breadcrumb-item" href="@Url.Action("ChecklistTudo", "Tudo")">Tudo em Dia</a>
-                <span class="breadcrumb-item active">Histórico</span>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistTudo", "Tudo")">@Resources.tudo_em_dia</a>
+                <span class="breadcrumb-item active">@Resources.historico</span>
             </nav>
         </div>
     </div>
@@ -21,70 +27,71 @@
 
         <div class="pcm-page-header">
             <div>
-                <h1><i class="fa fa-history"></i>Histórico — Tudo em Dia</h1>
+                <h1><i class="fa fa-history"></i>@Resources.historico — @Resources.tudo_em_dia</h1>
                 <div class="pcm-sub">Checklists executados por período</div>
             </div>
-            <form method="get" action="@Url.Action("ChecklistTudoHistorico", "Tudo")" class="pcm-filter" id="formFiltro">
-                @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "pcm-select", onchange = "document.getElementById('formFiltro').submit();" })
-                @Html.DropDownList("apartamento", (SelectList)ViewBag.apartamento, "Todos os locais", new { @class = "pcm-select" })
-                <input type="text" name="data_inicio" value="@ViewBag.data_inicio" class="pcm-select js-datepicker" style="width:110px" autocomplete="off" />
-                <input type="text" name="data_termino" value="@ViewBag.data_termino" class="pcm-select js-datepicker" style="width:110px" autocomplete="off" />
-                <button type="submit" class="btn-pcm btn-pcm-dark"><i class="si si-magnifier"></i></button>
-            </form>
+            <div class="pcm-filter" id="filtro">
+                @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "pcm-select", id = "unidade" })
+                @Html.DropDownList("apartamento", (SelectList)ViewBag.apartamento, Resources.local, new { @class = "pcm-select", id = "apartamento" })
+                <input type="text" id="data_inicio" value="@ViewBag.data_inicio" class="pcm-select js-datepicker" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" style="width:110px" autocomplete="off" />
+                <input type="text" id="data_termino" value="@ViewBag.data_termino" class="pcm-select js-datepicker" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" style="width:110px" autocomplete="off" />
+                <button type="button" id="filtrar" class="btn-pcm btn-pcm-dark"><i class="si si-magnifier"></i></button>
+            </div>
         </div>
 
         <div class="pcm-card">
             <div class="pcm-card-head">
-                <div class="pcm-card-title"><i class="fa fa-history"></i> Execuções <small>@Model.Count registro(s)</small></div>
+                <div class="pcm-card-title"><i class="fa fa-history"></i> @Resources.execucao</div>
             </div>
-
-            @if (Model.Count == 0)
-            {
-                <div class="pcm-empty"><i class="fa fa-inbox"></i>Nenhuma execução no período selecionado.</div>
-            }
-            else
-            {
-                <div class="pcm-table-wrap">
-                    <table class="pcm-table">
-                        <thead>
-                            <tr>
-                                <th>Setor</th>
-                                <th>Local</th>
-                                <th>Checklist</th>
-                                <th>Responsável</th>
-                                <th class="num">Início</th>
-                                <th class="num">Término</th>
-                                <th class="num">Tempo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var h in Model)
-                            {
-                                <tr>
-                                    <td>@(string.IsNullOrEmpty(h.setor) ? "—" : h.setor)</td>
-                                    <td>@h.local</td>
-                                    <td>@(string.IsNullOrEmpty(h.checklist) ? "—" : h.checklist)</td>
-                                    <td>@(string.IsNullOrEmpty(h.responsavel) ? "—" : h.responsavel)</td>
-                                    <td class="num">@h.data_inicio</td>
-                                    <td class="num">@h.data_termino</td>
-                                    <td class="num">@(string.IsNullOrEmpty(h.tempo) ? "—" : h.tempo)</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
+            <div class="block-content block-content-full">
+                <table id="tbMain" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+            </div>
         </div>
 
     </div>
 </main>
 
+@Html.AntiForgeryToken()
+
+<div id="resource-messages"
+     data-messages='@Html.Raw(JsonConvert.SerializeObject(new
+    {
+        emptyTable = Resources.emptyTable,
+        nothingRegister = Resources.emptyTable,
+        search = Resources.search,
+        clickToCopy = Resources.clickToCopy,
+        clickToExcel = Resources.clickToExcel,
+        clickToPdf = Resources.clickToPdf,
+        clickToConfig = Resources.clickToConfig,
+        visualizar = Resources.visualizar,
+        excluir = Resources.excluir,
+        confirmaExclusao = Resources.confirma_exclusao,
+        registroExcluido = Resources.registro_excluido,
+        erroExcluir = Resources.erro_excluir,
+        podeExcluir = (bool)ViewBag.excluir,
+        urlLoad = Url.Action("LoadTudoHistorico", "Tudo"),
+        urlExcluir = Url.Action("ExcluirTudoApontamento", "Tudo"),
+        urlApontamento = Url.Action("ChecklistTudoApontamento", "Tudo")
+    }))'>
+</div>
+
 @section scripts {
     @Scripts.Render("~/plugins/maskedinput")
-    <script>
-        (function ($) {
-            "use strict";
-            $(function () { if ($.fn.mask) { $(".js-datepicker").mask("99/99/9999"); } });
-        })(jQuery);
-    </script>
+    @Scripts.Render("~/plugins/datepicker")
+
+    <script src="~/Content/js/lib/datatables/dataTables.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.buttons.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.bootstrap5.js"></script>
+    <script src="~/Content/js/lib/datatables/jszip.min.js"></script>
+    <script src="~/Content/js/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/Content/js/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/Content/js/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/Content/js/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Content/js/lib/datatables/responsive.dataTables.js"></script>
+    <script src="~/Content/js/pcm.js"></script>
+
+    <script src="~/Content/js/pages/Tudo/jquery.checklistTudoHistorico.init.js"></script>
 }

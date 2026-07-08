@@ -41,11 +41,19 @@ namespace PCM.WEB.MODELS
     {
         public string grupo { get; set; }
         public int codigo { get; set; }              // codigo do item do checklist
+        public int codigo_tipo_item_checklist { get; set; } // 1 Sim/Não, 2 Numérico, 3 Texto, 4 Data, 5 Hora, 8 Sim/Não/N.A.
         public string checklist { get; set; }
         public string descricao { get; set; }
-        public string opcao { get; set; }            // SIM / NÃO / N/A
+        public string opcao { get; set; }            // SIM / NÃO / N/A (tipos 1 e 8)
+        public string resposta { get; set; }         // valor livre (texto/numérico/data/hora)
         public string observacao { get; set; }
+        public bool allow_picture { get; set; }      // tb_chk_checklist_item.allow_picture
+        public decimal valor_minimo { get; set; }
+        public decimal valor_maximo { get; set; }
+        public string unidade_medida { get; set; }
+        public bool abre_os { get; set; }            // usuário optou por abrir OS neste item
         public bool nova_vistoria { get; set; }
+        public long codigo_ordem_servico { get; set; }
     }
 
     // Cabeçalho do apontamento (execução) + contexto do local — Fase 2
@@ -66,6 +74,7 @@ namespace PCM.WEB.MODELS
         public string hora_inicio { get; set; }
         public string hora_termino { get; set; }
         public bool nova_vistoria { get; set; }
+        public bool finalizado { get; set; }
     }
 
     // ===== PWA (app) — Fase 4 =====

@@ -790,6 +790,7 @@
     <Content Include="Content\js\pages\CadastroBasico\jquery.setorIndex.init.js" />
     <Content Include="Content\js\pages\Tudo\jquery.checklistTudo.init.js" />
     <Content Include="Content\js\pages\Tudo\jquery.checklistTudoApontamento.init.js" />
+    <Content Include="Content\js\pages\Tudo\jquery.checklistTudoHistorico.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.tipoPerdaEdit.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.tipoPerdaInsert.init.js" />
     <Content Include="Content\js\pages\Governanca\jquery.tipoPerda.init.js" />

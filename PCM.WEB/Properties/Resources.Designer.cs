@@ -934,6 +934,60 @@ namespace PCM.WEB.Properties {
         }
 
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Execução.
+        /// </summary>
+        public static string execucao {
+            get {
+                return ResourceManager.GetString("execucao", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Abrir O.S..
+        /// </summary>
+        public static string abrir_os {
+            get {
+                return ResourceManager.GetString("abrir_os", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Concluir checklist.
+        /// </summary>
+        public static string concluir {
+            get {
+                return ResourceManager.GetString("concluir", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Deseja realmente excluir este apontamento? A próxima execução será recalculada..
+        /// </summary>
+        public static string confirma_exclusao {
+            get {
+                return ResourceManager.GetString("confirma_exclusao", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Apontamento excluído com sucesso.
+        /// </summary>
+        public static string registro_excluido {
+            get {
+                return ResourceManager.GetString("registro_excluido", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não foi possível excluir o apontamento.
+        /// </summary>
+        public static string erro_excluir {
+            get {
+                return ResourceManager.GetString("erro_excluir", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Deseja cancelar o registro selecionado?.
         /// </summary>
         public static string cancelarRegistro {

@@ -6,10 +6,16 @@
     var somenteLeitura = (bool)ViewBag.somenteLeitura;
     var dataIni = string.IsNullOrEmpty(ap.data_inicio) ? (string)ViewBag.dataHoje : ap.data_inicio;
     var dataFim = string.IsNullOrEmpty(ap.data_termino) ? (string)ViewBag.dataHoje : ap.data_termino;
+    var horaIni = string.IsNullOrEmpty(ap.hora_inicio) ? (string)ViewBag.horaAgora : ap.hora_inicio;
+    var horaFim = string.IsNullOrEmpty(ap.hora_termino) ? (string)ViewBag.horaAgora : ap.hora_termino;
+    var ro = somenteLeitura ? "readonly" : "";
 }
 
 @section Styles {
     <link rel="stylesheet" type="text/css" href="~/Content/css/pcm-ui.css">
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/clockpicker")
+    @Styles.Render("~/Content/select")
 }
 
 <main id="main-container">
@@ -18,8 +24,8 @@
         <div class="content py-0 text-center">
             <nav class="breadcrumb bg-body-light mb-0">
                 <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
-                <a class="breadcrumb-item" href="@Url.Action("ChecklistTudo", "Tudo")">Tudo em Dia</a>
-                <span class="breadcrumb-item active">Execução</span>
+                <a class="breadcrumb-item" href="@Url.Action("ChecklistTudo", "Tudo")">@Resources.tudo_em_dia</a>
+                <span class="breadcrumb-item active">@Resources.execucao</span>
             </nav>
         </div>
     </div>
@@ -29,8 +35,9 @@
         @using (Html.BeginForm("ChecklistTudoApontamento", "Tudo", FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "formApontamento" }))
         {
             @Html.AntiForgeryToken()
-            <input type="hidden" name="codigo_unidade" value="@ViewBag.codigo_unidade" />
+            <input type="hidden" name="codigo_unidade" id="codigo_unidade" value="@ViewBag.codigo_unidade" />
             <input type="hidden" name="codigo_apartamento" value="@ap.codigo_apartamento" />
+            <input type="hidden" name="codigo_apontamento" id="codigo_apontamento" value="@ViewBag.codigo_apontamento" />
 
             <div class="pcm-card">
                 <div class="pcm-card-head">
@@ -44,19 +51,31 @@
                 <div class="block-content @(somenteLeitura ? "pcm-readonly" : "")" style="padding:16px 18px;">
                     <div class="pcm-exec-meta">
                         <div>
-                            <label>Responsável</label>
-                            @Html.DropDownList("funcionario_responsavel", (SelectList)ViewBag.funcionario, "", new { @class = "pcm-fld" })
+                            <label>@Resources.responsavel</label>
+                            @Html.DropDownList("funcionario_responsavel", (SelectList)ViewBag.funcionario, "", new { @class = "pcm-fld js-select2" })
                         </div>
                         <div>
-                            <label>Início</label>
-                            <input type="text" name="data_inicio" value="@dataIni" class="pcm-fld js-datepicker" autocomplete="off" @(somenteLeitura ? "readonly" : "") />
+                            <label>@Resources.data_inicio</label>
+                            <input type="text" name="data_inicio" id="data_inicio" value="@dataIni" class="pcm-fld js-datepicker" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" autocomplete="off" @ro />
                         </div>
                         <div>
-                            <label>Término</label>
-                            <input type="text" name="data_termino" value="@dataFim" class="pcm-fld js-datepicker" autocomplete="off" @(somenteLeitura ? "readonly" : "") />
+                            <label>@Resources.hora_inicio</label>
+                            <div class="hora_inicio" data-autoclose="true">
+                                <input type="text" name="hora_inicio" id="hora_inicio" value="@horaIni" class="pcm-fld" autocomplete="off" @ro />
+                            </div>
                         </div>
                         <div>
-                            <label>Periodicidade</label>
+                            <label>@Resources.data_termino</label>
+                            <input type="text" name="data_termino" id="data_termino" value="@dataFim" class="pcm-fld js-datepicker" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" autocomplete="off" @ro />
+                        </div>
+                        <div>
+                            <label>@Resources.hora_termino</label>
+                            <div class="hora_termino" data-autoclose="true">
+                                <input type="text" name="hora_termino" id="hora_termino" value="@horaFim" class="pcm-fld" autocomplete="off" @ro />
+                            </div>
+                        </div>
+                        <div>
+                            <label>@Resources.periodicidade</label>
                             <div class="pcm-fld" style="display:flex;align-items:center;">@(string.IsNullOrEmpty(ap.periodicidade) ? "—" : ap.periodicidade)@(ap.intervalo > 0 ? " · " + ap.intervalo : "")</div>
                         </div>
                     </div>
@@ -70,26 +89,67 @@
                         var grupoAtual = "___";
                         for (int i = 0; i < Model.Count; i++)
                         {
+                            var tipo = Model[i].codigo_tipo_item_checklist;
+
                             if (Model[i].grupo != grupoAtual)
                             {
                                 grupoAtual = Model[i].grupo;
                                 <div class="chk-group">@(string.IsNullOrEmpty(grupoAtual) ? "Itens" : grupoAtual)</div>
                             }
-                            <div class="chk-item@(Model[i].opcao == "NÃO" ? " is-nao" : "")">
+                            <div class="chk-item@(Model[i].opcao == "NÃO" ? " is-nao" : "")" data-index="@i">
                                 @Html.HiddenFor(m => m[i].codigo)
+                                @Html.HiddenFor(m => m[i].codigo_tipo_item_checklist)
                                 @Html.HiddenFor(m => m[i].descricao)
                                 <div class="chk-q">
                                     @Model[i].descricao
                                     @if (!string.IsNullOrEmpty(Model[i].checklist)) { <small>@Model[i].checklist</small> }
                                 </div>
                                 <div class="chk-answer">
-                                    <div class="chk-opts">
-                                        <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "SIM", new { @class = "chk-radio" })<span class="chk-pill pill-sim">Sim</span></label>
-                                        <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "NÃO", new { @class = "chk-radio" })<span class="chk-pill pill-nao">Não</span></label>
-                                        <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "N/A", new { @class = "chk-radio" })<span class="chk-pill pill-na">N/A</span></label>
+                                    @if (tipo == 1)
+                                    {
+                                        <div class="chk-opts">
+                                            <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "SIM", new { @class = "chk-radio" })<span class="chk-pill pill-sim">@Resources.sim</span></label>
+                                            <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "NÃO", new { @class = "chk-radio" })<span class="chk-pill pill-nao">@Resources.nao</span></label>
+                                        </div>
+                                    }
+                                    else if (tipo == 8)
+                                    {
+                                        <div class="chk-opts">
+                                            <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "SIM", new { @class = "chk-radio" })<span class="chk-pill pill-sim">@Resources.sim</span></label>
+                                            <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "NÃO", new { @class = "chk-radio" })<span class="chk-pill pill-nao">@Resources.nao</span></label>
+                                            <label class="chk-opt">@Html.RadioButtonFor(m => m[i].opcao, "N/A", new { @class = "chk-radio" })<span class="chk-pill pill-na">@Resources.na</span></label>
+                                        </div>
+                                    }
+                                    else if (tipo == 2)
+                                    {
+                                        @Html.TextBoxFor(m => m[i].resposta, new { @class = "chk-resp js-num", type = "number", step = "any", data_min = Model[i].valor_minimo.ToString(System.Globalization.CultureInfo.InvariantCulture), data_max = Model[i].valor_maximo.ToString(System.Globalization.CultureInfo.InvariantCulture), placeholder = "0" })
+                                        <span class="chk-resp-un">@Model[i].unidade_medida</span>
+                                    }
+                                    else if (tipo == 4)
+                                    {
+                                        @Html.TextBoxFor(m => m[i].resposta, new { @class = "chk-resp js-datepicker", data_date_format = "dd/mm/yyyy", data_autoclose = "true", autocomplete = "off", placeholder = "dd/mm/aaaa" })
+                                    }
+                                    else if (tipo == 5)
+                                    {
+                                        <div class="hora_item" data-autoclose="true" style="display:inline-block">
+                                            @Html.TextBoxFor(m => m[i].resposta, new { @class = "chk-resp js-hora", autocomplete = "off", placeholder = "hh:mm" })
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m[i].resposta, new { @class = "chk-resp", placeholder = "..." })
+                                    }
+
+                                    @Html.TextBoxFor(m => m[i].observacao, new { @class = "chk-obs", placeholder = Resources.observacao, maxlength = "200" })
+
+                                    <div class="chk-flags">
+                                        <label class="chk-chip chk-nova" title="@Resources.nova_vistoria">@Html.CheckBoxFor(m => m[i].nova_vistoria)@Resources.nova_vistoria</label>
+                                        <label class="chk-chip chk-os" title="@Resources.abrir_os">@Html.CheckBoxFor(m => m[i].abre_os)@Resources.abrir_os</label>
+                                        @if (Model[i].allow_picture)
+                                        {
+                                            <button type="button" class="chk-foto-btn" data-item="@Model[i].codigo" onclick="abrirFoto(@Model[i].codigo);"><i class="fa fa-camera"></i> @Resources.foto</button>
+                                        }
                                     </div>
-                                    @Html.TextBoxFor(m => m[i].observacao, new { @class = "chk-obs", placeholder = "Observação" })
-                                    <label class="chk-nova" title="Agenda uma nova vistoria deste item">@Html.CheckBoxFor(m => m[i].nova_vistoria) Nova vistoria</label>
                                 </div>
                             </div>
                         }
@@ -97,10 +157,10 @@
                 </div>
 
                 <div class="pcm-exec-foot">
-                    <a href="@Url.Action("ChecklistTudo", "Tudo")" class="btn-pcm btn-pcm-ghost"><i class="fa fa-arrow-left"></i> Voltar</a>
+                    <a href="@Url.Action("ChecklistTudo", "Tudo")" class="btn-pcm btn-pcm-ghost"><i class="fa fa-arrow-left"></i> @Resources.voltar</a>
                     @if (!somenteLeitura && Model.Count > 0)
                     {
-                        <button type="submit" class="btn-pcm btn-pcm-dark"><i class="fa fa-check"></i> Concluir checklist</button>
+                        <button type="submit" class="btn-pcm btn-pcm-dark"><i class="fa fa-check"></i> @Resources.concluir</button>
                     }
                 </div>
             </div>
@@ -109,8 +169,47 @@
     </div>
 </main>
 
+<!-- Modal de fotos -->
+<div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-hidden="true"
+     data-url-upload="@Url.Action("UploadFoto", "Tudo")"
+     data-url-load="@Url.Action("LoadFoto", "Tudo")"
+     data-url-delete="@Url.Action("ExcluirFoto", "Tudo")"
+     data-readonly="@(somenteLeitura ? "1" : "0")">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-camera mr-5"></i> @Resources.foto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="foto_item" />
+                @if (!somenteLeitura)
+                {
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" id="fotoInput" name="fotoInput" multiple accept=".png, .jpg, .jpeg" />
+                    </div>
+                }
+                <div class="pcm-gallery" id="fotoGaleria"></div>
+            </div>
+            <div class="modal-footer">
+                @if (!somenteLeitura)
+                {
+                    <button type="button" class="btn btn-primary" id="btnSalvarFoto"><i class="fa fa-upload mr-5"></i> @Resources.salvar</button>
+                }
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.voltar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     @Scripts.Render("~/plugins/validation")
     @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/clockpicker")
+    @Scripts.Render("~/plugins/select")
+    <script>
+        var tudoMsg = { campoRequerido: '@Resources.campo_requerido' };
+    </script>
     <script src="~/Content/js/pages/Tudo/jquery.checklistTudoApontamento.init.js"></script>
 }

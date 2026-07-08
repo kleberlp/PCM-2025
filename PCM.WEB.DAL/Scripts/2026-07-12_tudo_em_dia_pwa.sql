@@ -11,6 +11,11 @@
         - Procedure : sp_pwa_insert_pcm_tudo_dia_apontamento
 **********************************************************************************************/
 
+-- Garante a coluna finalizado (também criada no script 2026-07-13); torna este script auto-suficiente.
+IF COL_LENGTH('dbo.tb_tudo_apontamento', 'finalizado') IS NULL
+    ALTER TABLE [dbo].[tb_tudo_apontamento] ADD [finalizado] [bit] NULL
+GO
+
 /*--------------------------------------------------------------------------------------------
     1) LISTA de locais a executar (status Atrasado/Pendente)
 --------------------------------------------------------------------------------------------*/
@@ -123,15 +128,15 @@ BEGIN
     DECLARE @codigo_checklist bigint = (SELECT codigo_checklist FROM tb_cad_apartamento
                                         WHERE codigo_empresa = @codigo_empresa AND codigo_unidade = @codigo_unidade AND codigo = @codigo_apartamento);
 
-    -- cabeçalho
+    -- cabeçalho (finalizado = 1: concluído pelo app; aparece no histórico web)
     INSERT INTO tb_tudo_apontamento(
         codigo, codigo_empresa, codigo_unidade, codigo_apartamento, codigo_checklist,
         codigo_funcionario_responsavel, data_inicio, data_termino, hora_inicio, hora_termino,
-        nova_vistoria, origem, codigo_usuario_input, data_input)
+        nova_vistoria, origem, finalizado, codigo_usuario_input, data_input)
     VALUES(
         @codigo, @codigo_empresa, @codigo_unidade, @codigo_apartamento, @codigo_checklist,
         @codigo_funcionario, CONVERT(date, @data_inicio), CONVERT(date, @data_termino), CONVERT(time(0), @data_inicio), CONVERT(time(0), @data_termino),
-        0, 'PWA', @codigo_usuario, GETDATE());
+        0, 'PWA', 1, @codigo_usuario, GETDATE());
 
     -- itens do template do checklist do local (respostas padrão SIM)
     INSERT INTO tb_tudo_apontamento_checklist(
