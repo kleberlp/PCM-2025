@@ -35,6 +35,21 @@ namespace PCM.WEB.MODELS
         public int concluidos { get; set; }
     }
 
+    // Evento do calendário (Fase 5.1)
+    public class TudoAgendaEvento
+    {
+        public long codigo { get; set; }
+        public int codigo_unidade { get; set; }
+        public int codigo_apartamento { get; set; }
+        public string data { get; set; }          // yyyy-MM-dd
+        public string local { get; set; }
+        public string setor { get; set; }
+        public string responsavel { get; set; }
+        public int status_codigo { get; set; }     // 0 planejado, 1 concluído, 2 cancelado
+        public string situacao { get; set; }
+        public bool atrasado { get; set; }
+    }
+
     // Contadores da torre de status
     public class TudoStatus
     {

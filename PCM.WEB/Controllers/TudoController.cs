@@ -461,10 +461,33 @@ namespace PCM.WEB.Controllers
             return new JsonResult { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
         }
 
-        // POST: GERA O PLANEJAMENTO AUTOMÁTICO
+        // POST: EVENTOS DO CALENDÁRIO (intervalo visível)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult GerarAgenda(int unidade, string data_inicio, string data_termino, int capacidade = 10)
+        public JsonResult LoadAgendaCalendario(int unidade = -1, int funcionario = -1, string data_inicio = null, string data_termino = null)
+        {
+            int empresa = Convert.ToInt32(Session["empresa"].ToString());
+
+            if (unidade <= 0)
+                unidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
+            if (string.IsNullOrEmpty(data_inicio))
+                data_inicio = DateTime.Now.ToString("dd/MM/yyyy");
+            if (string.IsNullOrEmpty(data_termino))
+                data_termino = DateTime.Now.AddDays(45).ToString("dd/MM/yyyy");
+
+            var eventos = oTudo.LoadAgendaTudoEventos(codigoEmpresa: empresa,
+                                                      codigoUnidade: unidade,
+                                                      dataInicio: data_inicio,
+                                                      dataTermino: data_termino,
+                                                      codigoFuncionario: funcionario);
+
+            return new JsonResult { Data = eventos, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+        }
+
+        // POST: GERA O PLANEJAMENTO AUTOMÁTICO (capacidade 0 = distribuição uniforme no período)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GerarAgenda(int unidade, string data_inicio, string data_termino, int capacidade = 0)
         {
             try
             {

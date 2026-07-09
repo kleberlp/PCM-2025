@@ -700,6 +700,54 @@ Public Class Tudo
 
     End Function
 
+    ' Eventos do calendário (intervalo visível)
+    Public Function LoadAgendaTudoEventos(ByVal codigoEmpresa As Integer,
+                                          ByVal codigoUnidade As Integer,
+                                          ByVal dataInicio As String,
+                                          ByVal dataTermino As String,
+                                          ByVal codigoFuncionario As Integer) As List(Of TudoAgendaEvento)
+
+        Try
+
+            Dim oReturn As New List(Of TudoAgendaEvento)
+            Dim ptBr = New Globalization.CultureInfo("pt-BR")
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, Convert.ToDateTime(dataInicio, ptBr)),
+                CriarParametro("data_fim", SqlDbType.Date, Convert.ToDateTime(dataTermino, ptBr)),
+                CriarParametro("codigo_funcionario", SqlDbType.Int, codigoFuncionario)
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_tudo_agenda_calendario", oSqlParameter)
+                If oSqlDataReader.HasRows Then
+                    While oSqlDataReader.Read
+                        Dim oInfo As New TudoAgendaEvento
+                        oInfo.codigo = SafeGetInt64(oSqlDataReader, "codigo")
+                        oInfo.codigo_unidade = SafeGetInt32(oSqlDataReader, "codigo_unidade")
+                        oInfo.codigo_apartamento = SafeGetInt32(oSqlDataReader, "codigo_apartamento")
+                        oInfo.data = SafeGetString(oSqlDataReader, "data")
+                        oInfo.local = SafeGetString(oSqlDataReader, "local")
+                        oInfo.setor = SafeGetString(oSqlDataReader, "setor")
+                        oInfo.responsavel = SafeGetString(oSqlDataReader, "responsavel")
+                        oInfo.status_codigo = SafeGetInt32(oSqlDataReader, "status_codigo")
+                        oInfo.situacao = SafeGetString(oSqlDataReader, "situacao")
+                        oInfo.atrasado = SafeGetBoolean(oSqlDataReader, "atrasado")
+                        oReturn.Add(oInfo)
+                    End While
+                End If
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     ' KPIs da agenda
     Public Function LoadAgendaTudoKpi(ByVal codigoEmpresa As Integer,
                                       ByVal codigoUnidade As Integer,
