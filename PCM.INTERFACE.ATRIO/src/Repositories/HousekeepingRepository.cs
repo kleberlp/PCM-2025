@@ -29,7 +29,7 @@ public class HousekeepingRepository : IHousekeepingRepository
         ILogger<HousekeepingRepository> logger)
     {
         _connectionString = context.Current.ConnectionString;
-        _logger           = logger;
+        _logger = logger;
     }
 
     public async Task<int> InterfaceHotelRoomsAsync(
@@ -42,24 +42,18 @@ public class HousekeepingRepository : IHousekeepingRepository
         try
         {
             await using var conn = new SqlConnection(_connectionString);
-            await using var cmd  = new SqlCommand("sp_interface_cadastro_basico_apartamento_opera_json", conn)
+            await using var cmd = new SqlCommand("sp_interface_cadastro_basico_apartamento_opera_json", conn)
             {
-                CommandType    = CommandType.StoredProcedure,
+                CommandType = CommandType.StoredProcedure,
                 CommandTimeout = 120
             };
 
-            cmd.Parameters.Add(new SqlParameter("@codigo_empresa", SqlDbType.SmallInt)
-                { Value = codigoEmpresa });
-
-            cmd.Parameters.Add(new SqlParameter("@hotel_id", SqlDbType.VarChar, 20)
-                { Value = hotelId });
+            cmd.Parameters.Add(new SqlParameter("@codigo_empresa", SqlDbType.SmallInt) { Value = codigoEmpresa });
+            cmd.Parameters.Add(new SqlParameter("@hotel_id", SqlDbType.VarChar, 20) { Value = hotelId });
 
             // JSON completo da página — SP usa OPENJSON para processar em massa
-            cmd.Parameters.Add(new SqlParameter("@json", SqlDbType.VarChar, -1)
-                { Value = json });
-
-            cmd.Parameters.Add(new SqlParameter("@type", SqlDbType.VarChar, 50)
-                { Value = type });
+            cmd.Parameters.Add(new SqlParameter("@json", SqlDbType.VarChar, -1) { Value = json });
+            cmd.Parameters.Add(new SqlParameter("@type", SqlDbType.VarChar, 50) { Value = type });
 
             await conn.OpenAsync(ct);
             var rows = await cmd.ExecuteNonQueryAsync(ct);

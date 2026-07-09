@@ -36,43 +36,38 @@ try
             // -------------------------------------------------------
             // CONFIGURAÇÕES TIPADAS
             // -------------------------------------------------------
-            services.Configure<ServiceSettings>(
-                cfg.GetSection(ServiceSettings.Section));
-            services.Configure<EmailSettings>(
-                cfg.GetSection(EmailSettings.Section));
+            services.Configure<ServiceSettings>(cfg.GetSection(ServiceSettings.Section));
+            services.Configure<EmailSettings>(cfg.GetSection(EmailSettings.Section));
 
             // -------------------------------------------------------
             // PROPRIEDADES (N hotéis em um único serviço)
             //   Lê a seção "Properties". Se ausente, monta UMA propriedade a
             //   partir das seções legadas "OracleHospitality" + "ServiceSettings".
             // -------------------------------------------------------
-            var properties = cfg.GetSection(PropertySettings.Section).Get<List<PropertySettings>>()
-                             ?? new List<PropertySettings>();
+            var properties = cfg.GetSection(PropertySettings.Section).Get<List<PropertySettings>>() ?? new List<PropertySettings>();
 
             if (properties.Count == 0)
             {
-                var oracle = cfg.GetSection(OracleHospitalitySettings.Section).Get<OracleHospitalitySettings>()
-                             ?? new OracleHospitalitySettings();
-                var svc = cfg.GetSection(ServiceSettings.Section).Get<ServiceSettings>()
-                          ?? new ServiceSettings();
+                var oracle = cfg.GetSection(OracleHospitalitySettings.Section).Get<OracleHospitalitySettings>() ?? new OracleHospitalitySettings();
+                var svc = cfg.GetSection(ServiceSettings.Section).Get<ServiceSettings>() ?? new ServiceSettings();
 
                 properties.Add(new PropertySettings
                 {
-                    Name                     = string.IsNullOrWhiteSpace(oracle.EnterpriseId) ? "default" : oracle.EnterpriseId,
-                    Enabled                  = true,
-                    BaseUrl                  = oracle.BaseUrl,
-                    AppKey                   = oracle.AppKey,
-                    EnterpriseId             = oracle.EnterpriseId,
-                    HotelId                  = oracle.HotelId,
-                    Scope                    = oracle.Scope,
-                    ClientId                 = oracle.ClientId,
-                    ClientSecret             = oracle.ClientSecret,
-                    TokenEndpoint            = oracle.TokenEndpoint,
+                    Name = string.IsNullOrWhiteSpace(oracle.EnterpriseId) ? "default" : oracle.EnterpriseId,
+                    Enabled = true,
+                    BaseUrl = oracle.BaseUrl,
+                    AppKey = oracle.AppKey,
+                    EnterpriseId = oracle.EnterpriseId,
+                    HotelId = oracle.HotelId,
+                    Scope = oracle.Scope,
+                    ClientId = oracle.ClientId,
+                    ClientSecret = oracle.ClientSecret,
+                    TokenEndpoint = oracle.TokenEndpoint,
                     TokenExpiryBufferSeconds = oracle.TokenExpiryBufferSeconds,
-                    CodigoEmpresa            = svc.CodigoEmpresa,
-                    ConnectionString         = svc.ConnectionString,
-                    SyncHousekeeping         = svc.SyncHousekeeping,
-                    SyncReservations         = svc.SyncReservations
+                    CodigoEmpresa = svc.CodigoEmpresa,
+                    ConnectionString = svc.ConnectionString,
+                    SyncHousekeeping = svc.SyncHousekeeping,
+                    SyncReservations = svc.SyncReservations
                 });
             }
 
@@ -85,8 +80,7 @@ try
             // -------------------------------------------------------
             // HTTP — cliente limpo para OAuth (sem headers de API)
             // -------------------------------------------------------
-            services.AddHttpClient("OracleAuth")
-                .ConfigureHttpClient(c => c.Timeout = TimeSpan.FromSeconds(30));
+            services.AddHttpClient("OracleAuth").ConfigureHttpClient(c => c.Timeout = TimeSpan.FromSeconds(30));
 
             // -------------------------------------------------------
             // HTTP — cliente tipado para chamadas de API
@@ -147,5 +141,5 @@ static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy() =>
         .CircuitBreakerAsync(
             handledEventsAllowedBeforeBreaking: 5,
             durationOfBreak: TimeSpan.FromSeconds(30),
-            onBreak:  (_, d) => Log.Warning("Circuit breaker ABERTO por {D}s.", d.TotalSeconds),
-            onReset:  ()     => Log.Information("Circuit breaker FECHADO."));
+            onBreak: (_, d) => Log.Warning("Circuit breaker ABERTO por {D}s.", d.TotalSeconds),
+            onReset: () => Log.Information("Circuit breaker FECHADO."));
