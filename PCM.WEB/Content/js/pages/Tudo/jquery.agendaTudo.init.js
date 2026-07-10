@@ -16,7 +16,10 @@ $(document).ready(function () {
         themeSystem: 'bootstrap',
         locale: 'pt-br',
         firstDay: 0,
-        height: 'auto',
+        height: alturaCalendario(),   // altura fixa -> cabeçalho da página fica visível
+        stickyHeaderDates: true,      // mantém os nomes dos dias ao rolar o calendário
+        dayMaxEvents: 4,              // mostra até 4 por dia; o resto vira "+N mais"
+        moreLinkText: function (n) { return "+" + n + " mais"; },
         initialView: 'dayGridMonth',
         headerToolbar: {
             left: 'prev,next today',
@@ -35,10 +38,22 @@ $(document).ready(function () {
 
     calendar.render();
 
+    // reajusta a altura do calendário quando a janela muda de tamanho
+    $(window).on('resize', function () {
+        if (calendar) calendar.setOption('height', alturaCalendario());
+    });
+
     $('#unidade, #funcionario').change(function () { calendar.refetchEvents(); });
     $('#gerar').click(function () { gerarPlanejamento(); });
     $('#limpar').click(function () { limparPlanejamento(); });
 });
+
+// altura do calendário = espaço abaixo do topo da tela (mantém cabeçalho visível)
+function alturaCalendario() {
+    var el = document.getElementById('tudo-calendar');
+    var top = el ? el.getBoundingClientRect().top : 320;
+    return Math.max(460, window.innerHeight - top - 24);
+}
 
 // -------------------------------------------------------------------
 // Eventos do calendário

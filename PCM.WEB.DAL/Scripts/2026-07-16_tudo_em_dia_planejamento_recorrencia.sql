@@ -143,17 +143,28 @@ BEGIN
     WHERE c.periodicidade NOT IN (1, 2) AND c.due_start <= @data_fim;
 
     /* =====================================================================
-       DISTRIBUIÇÃO DAS FLEXÍVEIS (semanal + mensal) por dia / responsável
-         capacidade: @capacidade > 0 => limite fixo/dia
-                     @capacidade = 0 => automático = teto(qtde / dias da janela)
+       DISTRIBUIÇÃO DAS FLEXÍVEIS (semanal + mensal) por dia — CAPACIDADE DA UNIDADE
+         A capacidade é GLOBAL (o quanto a unidade faz por dia), independente do
+         número de funcionários. Os responsáveis só definem QUEM faz cada tarefa
+         (por isso são intercalados na ordem, variando quem executa por dia).
+           @capacidade > 0 => N por dia; o excedente que não cabe até o fim do mês
+                              vai para o ÚLTIMO dia (mostra o que atrasaria).
+           @capacidade = 0 => automático = teto(qtde / dias) por dia (espalha tudo).
        ===================================================================== */
-    ;WITH f AS (
+    ;WITH ranked AS (
+        -- posição de cada tarefa dentro do seu responsável (para intercalar quem faz por dia)
         SELECT
             codigo_apartamento, resp, win_ini, win_fim,
-            ROW_NUMBER() OVER (PARTITION BY resp, win_ini, win_fim ORDER BY codigo_apartamento) - 1 AS rn,
-            COUNT(*)     OVER (PARTITION BY resp, win_ini, win_fim) AS cnt,
-            DATEDIFF(DAY, win_ini, win_fim) + 1 AS wdays
+            ROW_NUMBER() OVER (PARTITION BY win_ini, win_fim, resp ORDER BY codigo_apartamento) AS seq_resp
         FROM #flex
+    ),
+    f AS (
+        SELECT
+            codigo_apartamento, resp, win_ini, win_fim,
+            ROW_NUMBER() OVER (PARTITION BY win_ini, win_fim ORDER BY seq_resp, resp, codigo_apartamento) - 1 AS rn,
+            COUNT(*)     OVER (PARTITION BY win_ini, win_fim) AS cnt,
+            DATEDIFF(DAY, win_ini, win_fim) + 1 AS wdays
+        FROM ranked
     )
     INSERT INTO #occ (codigo_apartamento, resp, data_planejada)
     SELECT
