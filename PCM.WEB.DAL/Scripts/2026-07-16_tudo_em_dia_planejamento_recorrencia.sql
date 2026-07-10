@@ -143,38 +143,73 @@ BEGIN
     WHERE c.periodicidade NOT IN (1, 2) AND c.due_start <= @data_fim;
 
     /* =====================================================================
-       DISTRIBUIÇÃO DAS FLEXÍVEIS (semanal + mensal) por dia — CAPACIDADE DA UNIDADE
-         A capacidade é GLOBAL (o quanto a unidade faz por dia), independente do
-         número de funcionários. Os responsáveis só definem QUEM faz cada tarefa
-         (por isso são intercalados na ordem, variando quem executa por dia).
-           @capacidade > 0 => N por dia; o excedente que não cabe até o fim do mês
-                              vai para o ÚLTIMO dia (mostra o que atrasaria).
-           @capacidade = 0 => automático = teto(qtde / dias) por dia (espalha tudo).
+       DISTRIBUIÇÃO por dia — CAPACIDADE DA UNIDADE (global), contando as DIÁRIAS
+         A capacidade é o quanto a unidade faz por dia (independe de nº de
+         funcionários). As DIÁRIAS já foram fixadas em #occ e OCUPAM capacidade;
+         as flexíveis (semanal/mensal) preenchem o que sobra:
+           - cada flexível vai no PRIMEIRO dia com vaga dentro da sua janela
+             (semanal = a semana; mensal = o mês);
+           - o que não couber até o fim vai para o ÚLTIMO dia da janela (mostra
+             o que atrasaria);
+           @capacidade > 0 => N por dia;
+           @capacidade = 0 => automático = teto((diárias + flexíveis) / dias).
        ===================================================================== */
-    ;WITH ranked AS (
-        -- posição de cada tarefa dentro do seu responsável (para intercalar quem faz por dia)
-        SELECT
-            codigo_apartamento, resp, win_ini, win_fim,
-            ROW_NUMBER() OVER (PARTITION BY win_ini, win_fim, resp ORDER BY codigo_apartamento) AS seq_resp
-        FROM #flex
-    ),
-    f AS (
-        SELECT
-            codigo_apartamento, resp, win_ini, win_fim,
-            ROW_NUMBER() OVER (PARTITION BY win_ini, win_fim ORDER BY seq_resp, resp, codigo_apartamento) - 1 AS rn,
-            COUNT(*)     OVER (PARTITION BY win_ini, win_fim) AS cnt,
-            DATEDIFF(DAY, win_ini, win_fim) + 1 AS wdays
-        FROM ranked
-    )
-    INSERT INTO #occ (codigo_apartamento, resp, data_planejada)
+
+    -- carga das diárias por dia (já estão em #occ)
+    SELECT data_planejada AS d, COUNT(*) AS dcount
+    INTO #dload
+    FROM #occ
+    GROUP BY data_planejada;
+
+    DECLARE @cnt_daily int = (SELECT COUNT(*) FROM #occ);
+    DECLARE @cnt_flex  int = (SELECT COUNT(*) FROM #flex);
+    DECLARE @dias_win  int = (SELECT COUNT(*) FROM #datas);
+    IF @dias_win < 1 SET @dias_win = 1;
+
+    DECLARE @cap_auto int = CAST(CEILING((@cnt_daily + @cnt_flex) * 1.0 / @dias_win) AS int);
+    IF @cap_auto < 1 SET @cap_auto = 1;
+
+    -- capacidade restante por dia = capacidade do dia menos as diárias já alocadas
     SELECT
-        codigo_apartamento, resp,
-        CASE
-            WHEN DATEADD(DAY, rn / (CASE WHEN @capacidade > 0 THEN @capacidade ELSE CAST(CEILING(cnt * 1.0 / wdays) AS int) END), win_ini) > win_fim
-                THEN win_fim
-            ELSE DATEADD(DAY, rn / (CASE WHEN @capacidade > 0 THEN @capacidade ELSE CAST(CEILING(cnt * 1.0 / wdays) AS int) END), win_ini)
-        END
-    FROM f;
+        dt.d,
+        (CASE WHEN @capacidade > 0 THEN @capacidade ELSE @cap_auto END) - ISNULL(dl.dcount, 0) AS restante
+    INTO #cap
+    FROM #datas dt
+        LEFT JOIN #dload dl ON dl.d = dt.d;
+
+    -- aloca as flexíveis: janelas menores primeiro (semanais antes das mensais),
+    -- cada uma no primeiro dia com vaga dentro da janela; sem vaga -> último dia
+    DECLARE @ca int, @rp int, @wi date, @wf date, @dd date;
+
+    DECLARE cur CURSOR LOCAL FAST_FORWARD FOR
+        SELECT codigo_apartamento, resp, win_ini, win_fim
+        FROM #flex
+        ORDER BY DATEDIFF(DAY, win_ini, win_fim), win_ini, codigo_apartamento;
+
+    OPEN cur;
+    FETCH NEXT FROM cur INTO @ca, @rp, @wi, @wf;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        SET @dd = NULL;
+
+        SELECT TOP 1 @dd = d
+        FROM #cap
+        WHERE d BETWEEN @wi AND @wf AND restante > 0
+        ORDER BY d;
+
+        IF @dd IS NULL SET @dd = @wf;  -- sem vaga na janela -> último dia (atraso)
+
+        INSERT INTO #occ (codigo_apartamento, resp, data_planejada) VALUES (@ca, @rp, @dd);
+        UPDATE #cap SET restante = restante - 1 WHERE d = @dd;
+
+        FETCH NEXT FROM cur INTO @ca, @rp, @wi, @wf;
+    END
+
+    CLOSE cur;
+    DEALLOCATE cur;
+
+    DROP TABLE #dload; DROP TABLE #cap;
 
     /* =====================================================================
        GRAVA
