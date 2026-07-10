@@ -169,7 +169,7 @@ BEGIN
         ISNULL(f.nome, 'Sem responsável')                           AS responsavel,
         ag.status                                                   AS status_codigo,
         CASE ag.status WHEN 0 THEN 'Planejado' WHEN 1 THEN 'Concluído' WHEN 2 THEN 'Cancelado' ELSE '' END AS situacao,
-        CASE WHEN ag.status = 0 AND ag.data_planejada < @hoje THEN 1 ELSE 0 END AS atrasado
+        CONVERT(bit, CASE WHEN ag.status = 0 AND ag.data_planejada < @hoje THEN 1 ELSE 0 END) AS atrasado
     FROM
         tb_tudo_agenda ag
         INNER JOIN tb_cad_apartamento a ON a.codigo = ag.codigo_apartamento AND a.codigo_empresa = ag.codigo_empresa AND a.codigo_unidade = ag.codigo_unidade
