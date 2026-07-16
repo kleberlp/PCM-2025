@@ -378,6 +378,11 @@
 
         loadApontamento();
 
+        // Força o carregamento correto dos combos na abertura da tela   
+	    if (unidade.val() !== "") {
+            unidade.trigger("change");
+        }
+
         $('#btnApontarAprovacao').click(function () {
 
             $("#camareira").val("");
