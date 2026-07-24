@@ -1527,7 +1527,7 @@ var Codebase = function () {
         jQuery('.js-masked-ssn:not(.js-masked-enabled)').mask('999-99-9999');
         jQuery('.js-masked-pkey:not(.js-masked-enabled)').mask('a*-999-a999');
         jQuery('.js-masked-time:not(.js-masked-enabled)').mask('99:99');
-        jQuery('.js-masked-number:not(.js-masked-enabled)').maskMoney({ prefix: '', thousands: '.', decimal: ",", precision: 2, allowNegative: false, 'placeholder': '' });
+        jQuery('.js-masked-number:not(.js-masked-enabled)').maskMoney({ prefix: '', thousands: '.', decimal: ",", precision: 2, allowNegative: true, 'placeholder': '' });
         jQuery('.js-masked-number-int:not(.js-masked-enabled)').maskMoney({ prefix: '', thousands: '.', decimal: ",", precision: 0, allowNegative: false, 'placeholder': '' });
 
         jQuery('.js-masked-date')

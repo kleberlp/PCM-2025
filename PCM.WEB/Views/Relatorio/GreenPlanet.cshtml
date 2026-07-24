@@ -225,7 +225,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/chart")
 
-    <script>
+<script>
 
     function PrintGreenPlanet() {
 
@@ -490,7 +490,7 @@
             //scrollY: '40vh',
             paging: false,
             fixedHeader: true,
-            processing: true,   
+            processing: true,
             destroy: true,
             searching: false,
             lengthChange: false,
@@ -599,6 +599,8 @@
                 }
             }
         });
+
+        $("#modalFoto").modal("show");
 
     }
 
@@ -709,5 +711,5 @@
         $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
     });
 
-    </script>
+</script>
 }

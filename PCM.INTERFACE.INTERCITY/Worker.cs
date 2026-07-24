@@ -8,6 +8,7 @@ namespace PCM.INTERFACE.INTERCITY
         private readonly ILoggerFactory _loggerFactory;
         private readonly List<EmpresaSettings> _empresas;
         private readonly int _timer;
+        private readonly IConfiguration _config;
 
         public Worker(
             ILogger<Worker> logger,
@@ -19,6 +20,7 @@ namespace PCM.INTERFACE.INTERCITY
             _loggerFactory = loggerFactory;
             _empresas = empresas;
             _timer = config.GetValue<int>("timer");
+            _config = config;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -54,7 +56,7 @@ namespace PCM.INTERFACE.INTERCITY
         private async Task ProcessEmpresa(EmpresaSettings empresa)
         {
             // DAL por empresa (usa a conexão SQL/Oracle daquela empresa)
-            var sqlHelper = new SqlHelper(empresa.DefaultConnection, _loggerFactory.CreateLogger<SqlHelper>());
+            var sqlHelper = new SqlHelper(_config, _loggerFactory.CreateLogger<SqlHelper>(), "DefaultConnection");
             var apiOracle = new InterfaceApiOracle(empresa.ConnectionStringIntercity, sqlHelper, _loggerFactory.CreateLogger<InterfaceApiOracle>());
 
             List<string> hotelIds = await apiOracle.LoadHotelIdAsync(empresa.CodigoEmpresa);
