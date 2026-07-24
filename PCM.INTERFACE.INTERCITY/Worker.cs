@@ -1,62 +1,74 @@
 using PCM.INTERFACE.DAL;
-using System.Threading.Tasks;
 
 namespace PCM.INTERFACE.INTERCITY
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly InterfaceApiOracle _apiOracle;
-        private readonly int _codigoEmpresa;
+        private readonly ILoggerFactory _loggerFactory;
+        private readonly List<EmpresaSettings> _empresas;
         private readonly int _timer;
 
-        public Worker(ILogger<Worker> logger, IConfiguration config, InterfaceApiOracle apiOracle)
+        public Worker(
+            ILogger<Worker> logger,
+            ILoggerFactory loggerFactory,
+            IConfiguration config,
+            List<EmpresaSettings> empresas)
         {
             _logger = logger;
-            _apiOracle = apiOracle;
-
-            _codigoEmpresa = config.GetValue<int>("codigoEmpresa");
+            _loggerFactory = loggerFactory;
+            _empresas = empresas;
             _timer = config.GetValue<int>("timer");
         }
 
-
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("PCM INTERCITY Worker iniciado.");
+            _logger.LogInformation("PCM INTERCITY Worker iniciado. Empresas: {Count}", _empresas.Count);
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                try
+                foreach (var empresa in _empresas)
                 {
-                    List<string> hotelIds = await _apiOracle.LoadHotelIdAsync(_codigoEmpresa);
+                    if (stoppingToken.IsCancellationRequested) break;
 
-                    foreach (var hotel in hotelIds)
+                    if (!empresa.Enabled)
                     {
-                        await ProcessHotel(hotel);
+                        _logger.LogDebug("Empresa {Empresa} desabilitada — ignorada.", empresa.Label);
+                        continue;
                     }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Erro geral no ciclo do Worker.");
+
+                    try
+                    {
+                        await ProcessEmpresa(empresa);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Erro no ciclo da empresa {Empresa} ({Codigo}).", empresa.Label, empresa.CodigoEmpresa);
+                    }
                 }
 
                 await Task.Delay(_timer, stoppingToken);
             }
         }
 
-
-        private async Task ProcessHotel(string hotel)
+        private async Task ProcessEmpresa(EmpresaSettings empresa)
         {
-            // STATUS UH
-            await _apiOracle.GetStatusUH(_codigoEmpresa, hotel);
-            _logger.LogInformation("PCM - Status UH ({hotel})", hotel);
-            
+            // DAL por empresa (usa a conexão SQL/Oracle daquela empresa)
+            var sqlHelper = new SqlHelper(empresa.DefaultConnection, _loggerFactory.CreateLogger<SqlHelper>());
+            var apiOracle = new InterfaceApiOracle(empresa.ConnectionStringIntercity, sqlHelper, _loggerFactory.CreateLogger<InterfaceApiOracle>());
 
-            // RESERVA UH
-            await _apiOracle.GetReservasUH(_codigoEmpresa, hotel);
-            _logger.LogInformation("PCM - Reservas UH ({hotel})", hotel);
-        
+            List<string> hotelIds = await apiOracle.LoadHotelIdAsync(empresa.CodigoEmpresa);
+
+            foreach (var hotel in hotelIds)
+            {
+                // STATUS UH
+                await apiOracle.GetStatusUH(empresa.CodigoEmpresa, hotel);
+                _logger.LogInformation("PCM - Status UH ({Empresa} / {Hotel})", empresa.Label, hotel);
+
+                // RESERVA UH
+                await apiOracle.GetReservasUH(empresa.CodigoEmpresa, hotel);
+                _logger.LogInformation("PCM - Reservas UH ({Empresa} / {Hotel})", empresa.Label, hotel);
+            }
         }
     }
 }

@@ -1,4 +1,3 @@
-using PCM.INTERFACE.DAL;
 using PCM.INTERFACE.INTERCITY;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,32 +7,38 @@ var builder = Host.CreateApplicationBuilder(args);
 //Windows Service (NET 8)
 builder.Services.AddWindowsService();
 
-//SqlHelper como Singleton
-builder.Services.AddSingleton<ISqlHelper>(sp =>
+// -------------------------------------------------------------------
+// EMPRESAS (N empresas em um único serviço)
+//   Lê a seção "Empresas". Se ausente, monta UMA empresa a partir do
+//   "codigoEmpresa" legado + as ConnectionStrings compartilhadas.
+//   Conexões vazias na empresa herdam as compartilhadas.
+// -------------------------------------------------------------------
+var cfg = builder.Configuration;
+
+var sqlDefault = cfg.GetConnectionString("DefaultConnection");
+var oracleDefault = cfg.GetConnectionString("ConnectionStringIntercity");
+
+var empresas = cfg.GetSection("Empresas").Get<List<EmpresaSettings>>() ?? new List<EmpresaSettings>();
+
+if (empresas.Count == 0)
 {
-    var config = sp.GetRequiredService<IConfiguration>();
-    var logger = sp.GetRequiredService<ILogger<SqlHelper>>();
+    empresas.Add(new EmpresaSettings
+    {
+        Nome = "default",
+        Enabled = true,
+        CodigoEmpresa = cfg.GetValue<int>("codigoEmpresa"),
+        DefaultConnection = sqlDefault,
+        ConnectionStringIntercity = oracleDefault
+    });
+}
 
-    return new SqlHelper(
-        config,
-        logger,
-        "DefaultConnection"
-    );
-});
-
-//InterfaceApiOracle como Singleton
-builder.Services.AddSingleton<InterfaceApiOracle>(sp =>
+foreach (var e in empresas)
 {
-    var config = sp.GetRequiredService<IConfiguration>();
-    var sqlHelper = sp.GetRequiredService<ISqlHelper>();
-    var logger = sp.GetRequiredService<ILogger<InterfaceApiOracle>>();
+    if (string.IsNullOrWhiteSpace(e.DefaultConnection)) e.DefaultConnection = sqlDefault;
+    if (string.IsNullOrWhiteSpace(e.ConnectionStringIntercity)) e.ConnectionStringIntercity = oracleDefault;
+}
 
-    return new InterfaceApiOracle(
-        oracleConnectionString: config.GetConnectionString("ConnectionStringIntercity"),
-        sqlHelper: sqlHelper,
-        logger: logger
-    );
-});
+builder.Services.AddSingleton(empresas);
 
 //Worker
 builder.Services.AddHostedService<Worker>();

@@ -18,12 +18,21 @@ Public Class SqlHelper
         End Get
     End Property
 
+    ' Conexão por NOME (lê de ConnectionStrings)
     Public Sub New(
         config As IConfiguration,
         logger As ILogger(Of SqlHelper),
         connectionName As String
     )
-        _connectionString = config.GetConnectionString(connectionName)
+        Me.New(config.GetConnectionString(connectionName), logger)
+    End Sub
+
+    ' Conexão direta (string) — permite conexão por empresa/instância
+    Public Sub New(
+        connectionString As String,
+        logger As ILogger(Of SqlHelper)
+    )
+        _connectionString = connectionString
         _logger = logger
 
         _retryPolicy = Policy _
