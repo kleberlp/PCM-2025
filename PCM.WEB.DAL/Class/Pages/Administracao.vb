@@ -309,6 +309,7 @@ Public Class Administracao
                     oInfo.email = SafeGetString(oSqlDataReader, "email")
                     oInfo.emailSenha = SafeGetString(oSqlDataReader, "email_senha")
                     oInfo.departamento = SafeGetString(oSqlDataReader, "departamento")
+                    oInfo.colaborador = SafeGetString(oSqlDataReader, "colaborador")
                     oInfo.ativo = SafeGetBoolean(oSqlDataReader, "ativo")
 
                     oUsuario.Add(oInfo)
