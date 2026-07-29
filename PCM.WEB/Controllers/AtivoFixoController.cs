@@ -468,16 +468,16 @@ namespace PCM.WEB.Controllers
         public ActionResult assetInventoryInsert(int unidade, string descricao, string contadoresJson)
         {
 
-            defaultResponse _response = new defaultResponse();
+            defaultResponse _response = _ativoFixo.InsertInventory(codigoEmpresa: codigoEmpresa,
+                                                                   codigoUnidade: unidade,
+                                                                   descricao: descricao,
+                                                                   codigoUsuario: codigoUsuario,
+                                                                   contadoresJson: contadoresJson);
 
-            _ativoFixo.InsertInventory(codigoEmpresa: codigoEmpresa,
-                                       codigoUnidade: unidade,
-                                       descricao: descricao,
-                                       codigoUsuario: codigoUsuario,
-                                       contadoresJson: contadoresJson);
-
-            _response.success = true;
-            _response.message = Resources.inventoryInsertedSuccefully;
+            if (_response.success)
+            {
+                _response.message = Resources.inventoryInsertedSuccefully;
+            }
             return RedirectToAction("assetInventoryInsert");
         }
 

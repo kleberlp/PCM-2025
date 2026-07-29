@@ -1,5 +1,5 @@
 ﻿Imports System.Data
-Imports System.Data.SqlClient
+Imports Microsoft.Data.SqlClient
 Imports PCM.WEB.OS.MODELS
 Imports PCM.WEB.OS.DAL.SQLHelper
 
@@ -130,8 +130,8 @@ Public Class AtivoFixo
     Public Function LoadAssetInventory(ByVal codigoInventario As Long,
                                        ByVal codigoEmpresa As Integer,
                                        ByVal codigoUnidade As Integer,
-                                       ByVal codigoSetor As Integer,
-                                       ByVal codigoApartamento As Integer) As List(Of AssetInventoryItem)
+                                    ByVal codigoSetor As Integer,
+                                    ByVal codigoApartamento As Integer) As List(Of AssetInventoryItem)
 
         Dim oSqlParameter As List(Of SqlParameter) = New List(Of SqlParameter)
 

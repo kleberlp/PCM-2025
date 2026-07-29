@@ -1,5 +1,5 @@
 Imports System.Data
-Imports System.Data.SqlClient
+Imports Microsoft.Data.SqlClient
 Imports PCM.WEB.OS.MODELS
 Imports PCM.WEB.OS.DAL.SQLHelper
 
