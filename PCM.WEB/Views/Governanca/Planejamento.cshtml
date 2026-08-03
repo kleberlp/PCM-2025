@@ -341,7 +341,7 @@
             denyButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)",
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
+            if (result) {
 
                 jQuery.ajax({
                     type: "POST",
@@ -362,7 +362,7 @@
                             showDenyButton: false,
                             showCancelButton: false,
                         }).then((result) => {
-                            if (result.isConfirmed) {
+                            if (result) {
                                 table.ajax.reload(null, false);
                             }
                         });

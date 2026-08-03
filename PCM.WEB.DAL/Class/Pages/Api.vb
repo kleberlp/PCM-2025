@@ -3246,6 +3246,12 @@ Public Class Api
                         .naoPerturbe = oSqlDataReader.Item("nao_perturbe"),
                         .dataUltimaGovernaca = oSqlDataReader.Item("data_ultima_governanca"),
                         .alertaCheckInOut = oSqlDataReader.Item("alert_checkin_out"),
+                        .dataChegada = oSqlDataReader.Item("data_chegada"),
+                        .dataSaida = oSqlDataReader.Item("data_saida"),
+                        .adultos = oSqlDataReader.Item("adultos"),
+                        .criancas1 = oSqlDataReader.Item("criancas1"),
+                        .criancas2 = oSqlDataReader.Item("criancas2"),
+                        .observacoes = oSqlDataReader.Item("observacoes"),
                         .poolCondominio = IIf(oSqlDataReader.Item("pool_condominio") = 2, "C", "P"),
                         .status = New pwaStatus With {
                             .codigo = oSqlDataReader.Item("status_codigo"),

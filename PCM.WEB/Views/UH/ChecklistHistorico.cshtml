@@ -271,7 +271,7 @@
                                 closeOnConfirm: false,
                                 closeOnCancel: false
                             }).then((result) => {
-                                if (result.isConfirmed) {
+                                if (result) {
                                     $("#form").submit();
                                 }
                             });

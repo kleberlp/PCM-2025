@@ -170,13 +170,21 @@ Public Class InterfaceApiOracle
                     :HotelId AS hotel_id,
                     CODUH AS uh,
                     MAX(NVL(DATACHEGADAREAL, DATACHEGPREVISTA)) AS data_chegada,
-                    MAX(NVL(DATAPARTIDAREAL, DATAPARTPREVISTA)) AS data_saida
+                    MAX(NVL(DATAPARTIDAREAL, DATAPARTPREVISTA)) AS data_saida,
+                    ADULTOS AS adultos,
+                    CRIANCAS1 AS criancas1,
+                    CRIANCAS2 AS criancas2,
+                    OBSERVACOES AS observacoes
                  FROM RESERVASFRONT
                  WHERE IDHOTEL = :HotelId
                    AND CODUH IS NOT NULL
                    AND SYSDATE BETWEEN NVL(DATACHEGADAREAL, DATACHEGPREVISTA)
                                    AND NVL(DATAPARTIDAREAL, DATAPARTPREVISTA)
-                 GROUP BY CODUH"
+                 GROUP BY CODUH,
+                    ADULTOS,
+                    CRIANCAS1,
+                    CRIANCAS2,
+                    OBSERVACOES"
 
                     Using oracleCmd As New OracleCommand(query, oracleConn)
                         oracleCmd.BindByName = True
@@ -200,6 +208,10 @@ Public Class InterfaceApiOracle
                                 bulk.ColumnMappings.Add("uh", "uh")
                                 bulk.ColumnMappings.Add("data_chegada", "data_chegada")
                                 bulk.ColumnMappings.Add("data_saida", "data_saida")
+                                bulk.ColumnMappings.Add("adultos", "adultos")
+                                bulk.ColumnMappings.Add("criancas1", "criancas1")
+                                bulk.ColumnMappings.Add("criancas2", "criancas2")
+                                bulk.ColumnMappings.Add("observacoes", "observacoes")
 
                                 Await bulk.WriteToServerAsync(reader)
                             End Using
@@ -222,7 +234,7 @@ Public Class InterfaceApiOracle
             End Using
 
         Catch ex As Exception
-            _logger.LogError(ex, "Erro no GetReservasUH (Bulk). HotelId={hotelId}", hotelId)
+            _logger.LogError(ex, "Erro no GetReservasUH (Bulk). HotelId={hotelId}. Empresa={codigoEmpresa}", hotelId, codigoEmpresa.ToString())
             Throw ' mantém stack trace (recomendado em Worker)
         End Try
 
