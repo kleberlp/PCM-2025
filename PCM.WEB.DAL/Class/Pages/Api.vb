@@ -3252,6 +3252,7 @@ Public Class Api
                         .criancas1 = oSqlDataReader.Item("criancas1"),
                         .criancas2 = oSqlDataReader.Item("criancas2"),
                         .observacoes = oSqlDataReader.Item("observacoes"),
+                        .hospede = oSqlDataReader.Item("hospede"),
                         .poolCondominio = IIf(oSqlDataReader.Item("pool_condominio") = 2, "C", "P"),
                         .status = New pwaStatus With {
                             .codigo = oSqlDataReader.Item("status_codigo"),

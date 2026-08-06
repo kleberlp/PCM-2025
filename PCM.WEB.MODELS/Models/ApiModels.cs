@@ -472,6 +472,7 @@ namespace PCM.WEB.MODELS
         public string criancas1 { get; set; }
         public string criancas2 { get; set; }
         public string observacoes { get; set; }
+        public string hospede { get; set; }
         public string tipoGovernanca { get; set; }
         public bool naoPerturbe { get; set; }
         public string dataUltimaGovernaca { get; set; }

@@ -168,23 +168,31 @@ Public Class InterfaceApiOracle
                 "SELECT 
                     :CodigoEmpresa AS codigo_empresa,
                     :HotelId AS hotel_id,
-                    CODUH AS uh,
-                    MAX(NVL(DATACHEGADAREAL, DATACHEGPREVISTA)) AS data_chegada,
-                    MAX(NVL(DATAPARTIDAREAL, DATAPARTPREVISTA)) AS data_saida,
-                    ADULTOS AS adultos,
-                    CRIANCAS1 AS criancas1,
-                    CRIANCAS2 AS criancas2,
-                    OBSERVACOES AS observacoes
-                 FROM RESERVASFRONT
-                 WHERE IDHOTEL = :HotelId
-                   AND CODUH IS NOT NULL
-                   AND SYSDATE BETWEEN NVL(DATACHEGADAREAL, DATACHEGPREVISTA)
-                                   AND NVL(DATAPARTIDAREAL, DATAPARTPREVISTA)
+                    RESERVASFRONT.CODUH AS uh,
+                    MAX(NVL(RESERVASFRONT.DATACHEGADAREAL, RESERVASFRONT.DATACHEGPREVISTA)) AS data_chegada,
+                    MAX(NVL(RESERVASFRONT.DATAPARTIDAREAL, RESERVASFRONT.DATAPARTPREVISTA)) AS data_saida,
+                    RESERVASFRONT.ADULTOS AS adultos,
+                    RESERVASFRONT.CRIANCAS1 AS criancas1,
+                    RESERVASFRONT.CRIANCAS2 AS criancas2,
+                    RESERVASFRONT.OBSERVACOES AS observacoes,
+                    HOSPEDE.NOME AS hospede
+                 FROM 
+                    RESERVASFRONT 
+                    LEFT JOIN MOVIMENTOHOSPEDES 
+                    ON RESERVASFRONT.IDRESERVASFRONT = MOVIMENTOHOSPEDES.IDRESERVASFRONT 
+                    AND MOVIMENTOHOSPEDES.PRINCIPAL = 'S'
+                    LEFT JOIN HOSPEDE 
+                    ON MOVIMENTOHOSPEDES.IDHOSPEDE = HOSPEDE.IDHOSPEDE
+                 WHERE RESERVASFRONT.IDHOTEL = :HotelId
+                   AND RESERVASFRONT.CODUH IS NOT NULL
+                   AND SYSDATE BETWEEN NVL(RESERVASFRONT.DATACHEGADAREAL, RESERVASFRONT.DATACHEGPREVISTA)
+                                   AND NVL(RESERVASFRONT.DATAPARTIDAREAL, RESERVASFRONT.DATAPARTPREVISTA)
                  GROUP BY CODUH,
-                    ADULTOS,
-                    CRIANCAS1,
-                    CRIANCAS2,
-                    OBSERVACOES"
+                    RESERVASFRONT.ADULTOS,
+                    RESERVASFRONT.CRIANCAS1,
+                    RESERVASFRONT.CRIANCAS2,
+                    RESERVASFRONT.OBSERVACOES,
+                    HOSPEDE.NOME"
 
                     Using oracleCmd As New OracleCommand(query, oracleConn)
                         oracleCmd.BindByName = True
@@ -212,6 +220,7 @@ Public Class InterfaceApiOracle
                                 bulk.ColumnMappings.Add("criancas1", "criancas1")
                                 bulk.ColumnMappings.Add("criancas2", "criancas2")
                                 bulk.ColumnMappings.Add("observacoes", "observacoes")
+                                bulk.ColumnMappings.Add("hospede", "hospede")
 
                                 Await bulk.WriteToServerAsync(reader)
                             End Using
