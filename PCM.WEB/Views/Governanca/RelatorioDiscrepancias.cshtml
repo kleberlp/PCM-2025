@@ -1,192 +1,240 @@
-@using PCM.WEB.Properties
 @{
     var kpi = (PCM.WEB.MODELS.RelatorioDiscrepanciaKpi)ViewBag.kpi;
 }
 
+<!-- Main Container -->
 <main id="main-container">
 
+    <!-- Breadcrumb -->
     <div class="bg-body-light border-b">
         <div class="content py-0 text-center">
             <nav class="breadcrumb bg-body-light mb-0">
-                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
-                <span class="breadcrumb-item">@Resources.relatorio</span>
-                <span class="breadcrumb-item active">Relatório de Discrepâncias</span>
+                <a class="breadcrumb-item font-w600" href="@Url.Action("Index", "Home")">@PCM.WEB.Properties.Resources.nome_sistema</a>
+                <span class="breadcrumb-item">@PCM.WEB.Properties.Resources.governanca</span>
+                <a class="breadcrumb-item active">Relatório de Discrepâncias</a>
             </nav>
         </div>
     </div>
 
+    <!-- Page Content -->
     <div class="content">
 
-        <!-- FILTROS -->
-        <div class="block block-rounded border">
-            <div class="block-header block-header-default">
-                <h3 class="block-title"><i class="fa fa-sliders mr-1"></i> @Resources.filtros</h3>
-            </div>
-            <div class="block-content">
-                <div class="row items-push">
-                    <div class="col-md-4">
-                        <label class="font-w600">@Resources.unidade</label>
-                        @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "form-control", id = "unidade" })
+        @using (Html.BeginForm("RelatorioDiscrepancias", "Governanca", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", @name = "form", @id = "form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="page landscape-parent">
+
+                <div class="block d-print-normal p-10 m-10" style="display:none">
+                    <div class="form-row">
+                        <div class="col-3">
+                            <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
+                        </div>
+                        <div class="col-6 text-center">
+                            <label class="h2">Relatório de Discrepâncias</label>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <label class="font-w600">@Resources.data_inicio</label>
-                        <input type="text" id="data_inicio" name="data_inicio" value="@ViewBag.data_inicio" class="js-datepicker form-control" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" autocomplete="off" />
+                    <hr />
+                </div>
+
+                <div class="col-md-12 col-xl-12">
+                    <!-- Toggle Tasks Navigation on mobile -->
+                    <button type="button" class="btn btn-block btn-primary d-md-none mb-10" data-toggle="class-toggle" data-target=".js-tasks-nav" data-class="d-none d-md-block">@PCM.WEB.Properties.Resources.filtros</button>
+
+                    <!-- Collapsible Tasks Navigation -->
+                    <div class="js-tasks-nav d-none d-md-block">
+                        <div class="block">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.filtro</h3>
+                            </div>
+                            <div class="block-content">
+                                <ul class="list-group push">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-4 col-lg-4 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.unidade</label>
+                                                <div>@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>
+                                            </div>
+                                            <div class="col-md-4 col-lg-4 col-12">
+                                                <label>@PCM.WEB.Properties.Resources.data</label>
+                                                <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                                                    <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" value="@ViewBag.data_inicio">
+                                                    <div class="input-group-prepend input-group-append">
+                                                        <span class="input-group-text font-w600">-</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" value="@ViewBag.data_termino">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item text-right d-print-none">
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <label class="font-w600">@Resources.data_termino</label>
-                        <input type="text" id="data_termino" name="data_termino" value="@ViewBag.data_termino" class="js-datepicker form-control" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" autocomplete="off" />
+                    <!-- END Collapsible Tasks Navigation -->
+
+                    <!-- KPIs -->
+                    <div class="block">
+                        <div class="block-content block-content-full">
+                            <div class="row text-center">
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700" id="kTotalPlanejado">@kpi.totalPlanejado</div><div class="font-size-sm text-muted text-uppercase">Total Planejado</div></div>
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700" id="kTotalArrumado">@kpi.totalArrumado</div><div class="font-size-sm text-muted text-uppercase">Total Arrumado</div></div>
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700" id="kTotalPermanencia">@kpi.totalPermanencia</div><div class="font-size-sm text-muted text-uppercase">Permanência</div></div>
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700" id="kTotalSaida">@kpi.totalSaida</div><div class="font-size-sm text-muted text-uppercase">Saída</div></div>
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700 text-danger" id="kDivergencias">@kpi.divergencias</div><div class="font-size-sm text-muted text-uppercase">Divergências</div></div>
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700 text-danger" id="kPlanejadoSemExecucao">@kpi.planejadoSemExecucao</div><div class="font-size-sm text-muted text-uppercase">Planej. s/ Execução</div></div>
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700 text-warning" id="kExecutadoSemVistoria">@kpi.executadoSemVistoria</div><div class="font-size-sm text-muted text-uppercase">Exec. s/ Vistoria</div></div>
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700 text-warning" id="kQuartosNqa">@kpi.quartosNqa</div><div class="font-size-sm text-muted text-uppercase">Quartos N.Q.A</div></div>
+                                <div class="col-6 col-md py-2"><div class="font-size-h3 font-w700 text-warning" id="kQuartosNaoPerturbe">@kpi.quartosNaoPerturbe</div><div class="font-size-sm text-muted text-uppercase">Não Perturbe</div></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-4 d-flex align-items-end justify-content-end">
-                        <button type="button" id="btnFiltrar" class="btn btn-secondary"><i class="fa fa-search mr-1"></i> @Resources.filtrar</button>
+
+                    <div class="block">
+
+                        <div class="block-header block-header-default bg-gd-default">
+                            <h3 class="block-title text-white font-w600">Relatório de Discrepâncias</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-dark font-w600" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                            </div>
+                        </div>
+
+                        <div class="block-content">
+
+                            <div class="table-responsive table-sm push">
+                                <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tbMain">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th>Local / U.H.</th>
+                                            <th>@PCM.WEB.Properties.Resources.data</th>
+                                            <th>Planejado Para</th>
+                                            <th>Executado Por</th>
+                                            <th>Vistoriado Por</th>
+                                            <th>Hora Término</th>
+                                            <th>Stat. Gov</th>
+                                            <th>Divergência</th>
+                                            <th>AD/Cr1/Cr2</th>
+                                            <th>Bagagem</th>
+                                            <th>Observação</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                        </div>
+
                     </div>
+
                 </div>
             </div>
-        </div>
 
-        <!-- KPIs -->
-        <div class="rd-kpi-strip block block-rounded border">
-            <div class="rd-kpi-group">Contexto do Período</div>
-            <div class="rd-kpi-grid">
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-clipboard" style="color:#42A5F5"></i><span>Total Planejado</span></div><span class="rd-val" id="kTotalPlanejado">@kpi.totalPlanejado</span><span class="rd-meta">apontamentos no período</span></div>
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-check-circle" style="color:#6EAB4D"></i><span>Total Arrumado</span></div><span class="rd-val" id="kTotalArrumado">@kpi.totalArrumado</span><span class="rd-meta">com execução registrada</span></div>
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-bed" style="color:#3F48CC"></i><span>Total Permanência</span></div><span class="rd-val" id="kTotalPermanencia">@kpi.totalPermanencia</span><span class="rd-meta">limpeza planejada</span></div>
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-sign-out" style="color:#EA580C"></i><span>Total Saída</span></div><span class="rd-val" id="kTotalSaida">@kpi.totalSaida</span><span class="rd-meta">limpeza planejada</span></div>
-            </div>
-            <div class="rd-kpi-group">Discrepâncias</div>
-            <div class="rd-kpi-grid">
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-exclamation-triangle" style="color:#EF5350"></i><span>Divergências</span></div><span class="rd-val" style="color:#EF5350" id="kDivergencias">@kpi.divergencias</span><span class="rd-meta">Planejado ≠ Executado</span></div>
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-user-times" style="color:#EF5350"></i><span>Planejado s/ Execução</span></div><span class="rd-val" style="color:#EF5350" id="kPlanejadoSemExecucao">@kpi.planejadoSemExecucao</span><span class="rd-meta">ninguém executou</span></div>
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-eye-slash" style="color:#D97706"></i><span>Executado s/ Vistoria</span></div><span class="rd-val" style="color:#D97706" id="kExecutadoSemVistoria">@kpi.executadoSemVistoria</span><span class="rd-meta">arrumado sem vistoria</span></div>
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-ban" style="color:#D97706"></i><span>Quartos c/ N.Q.A</span></div><span class="rd-val" style="color:#D97706" id="kQuartosNqa">@kpi.quartosNqa</span><span class="rd-meta">no período</span></div>
-                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-moon-o" style="color:#D97706"></i><span>Quartos c/ Não Perturbe</span></div><span class="rd-val" style="color:#D97706" id="kQuartosNaoPerturbe">@kpi.quartosNaoPerturbe</span><span class="rd-meta">no período</span></div>
-            </div>
-        </div>
-
-        <!-- TABELA -->
-        <div class="block block-rounded border">
-            <div class="block-header block-header-default">
-                <h3 class="block-title"><i class="fa fa-exclamation-triangle text-danger mr-1"></i> Relatório de Discrepâncias</h3>
-            </div>
-            <div class="block-content block-content-full">
-                <table id="tb_main" class="table table-bordered table-striped table-vcenter font-size-sm js-dataTable-full">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Local / U.H.</th>
-                            <th class="text-center">Data</th>
-                            <th class="text-center">Planejado Para</th>
-                            <th class="text-center">Executado Por</th>
-                            <th class="text-center">Vistoriado Por</th>
-                            <th class="text-center">Hora Término</th>
-                            <th class="text-center">Stat. Gov</th>
-                            <th class="text-center">Divergência</th>
-                            <th class="text-center">AD/Cr1/Cr2</th>
-                            <th class="text-center">Bagagem</th>
-                            <th>Observação</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
+        }
 
     </div>
+    <!-- END Page Content -->
 </main>
+<!-- END Main Container -->
 
 @section Styles {
     @Styles.Render("~/Content/datepicker")
     @Styles.Render("~/Content/dataTables")
     @Styles.Render("~/Content/select")
-    <style>
-        .rd-kpi-strip { overflow:hidden; margin-bottom:16px; }
-        .rd-kpi-group { padding:8px 14px 4px; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#9CA3AF; background:#FBFBFC; border-top:1px solid #F0F1F3; }
-        .rd-kpi-grid { display:flex; flex-wrap:wrap; }
-        .rd-torre { flex:1 1 120px; padding:9px 12px; border-right:1px solid #F0F1F3; border-bottom:1px solid #F0F1F3; display:flex; flex-direction:column; align-items:center; text-align:center; gap:2px; }
-        .rd-torre-h { display:flex; align-items:center; gap:7px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#6B7280; }
-        .rd-val { font-size:20px; font-weight:800; letter-spacing:-1px; line-height:1; color:#374151; }
-        .rd-meta { font-size:10px; color:#9CA3AF; }
-        .badge-divergente { display:inline-flex; padding:3px 10px; border-radius:999px; font-size:9.5px; font-weight:700; text-transform:uppercase; background:#FEE2E2; color:#991B1B; }
-        .badge-sem-vistoria { display:inline-flex; padding:2px 8px; border-radius:999px; font-size:9px; font-weight:700; background:#FEF3C7; color:#92400E; }
-        .badge-sem-execucao { display:inline-flex; padding:2px 8px; border-radius:999px; font-size:9px; font-weight:700; background:#F3F4F6; color:#6B7280; }
-    </style>
 }
 
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/validation")
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/select")
 
     <script>
-        var table = null;
 
-        $(document).ready(function () {
+        jQuery(function () {
 
-            $(".js-datepicker").mask("99/99/9999");
-            Codebase.helpers(['datepicker', 'select2']);
+            $.fn.dataTable.moment('DD/MM/YYYY');
+            Codebase.helpers(['datepicker', 'maxlength', 'select2', 'table-tools']);
 
-            table = $('#tb_main').DataTable({
-                info: true,
-                processing: true,
+            var table = $("#tbMain").DataTable({
+                order: [[1, 'asc']],
+                info: false,
+                scrollCollapse: false,
+                scrollY: '50vh',
+                paging: false,
+                fixedHeader: true,
                 destroy: true,
+                searching: true,
+                lengthChange: false,
                 autoWidth: false,
-                pageLength: 25,
-                order: [[1, "asc"]],
-                language: {
-                    emptyTable: "Nenhuma discrepância encontrada no período selecionado",
-                    zeroRecords: "Nenhuma discrepância encontrada",
-                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                    infoEmpty: "0 registros",
-                    search: "Procurar:",
-                    paginate: { previous: "Anterior", next: "Próximo" }
-                },
                 ajax: {
                     url: "LoadRelatorioDiscrepancias",
                     type: "POST",
                     datatype: "json",
                     data: function (d) {
-                        d.unidade = $("#unidade").val() == "" ? -1 : $("#unidade").val();
-                        d.data_inicio = $("#data_inicio").val();
-                        d.data_termino = $("#data_termino").val();
+                        d.unidade = $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                        d.data_inicio = $("#dataInicio").val(),
+                        d.data_termino = $("#dataTermino").val()
                     },
                     dataSrc: ""
                 },
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'copy', text: 'Copiar' },
+                    { extend: 'print', text: 'Imprimir' },
+                    { extend: 'excel' },
+                    { extend: 'pdf', orientation: 'landscape' }
+                ],
                 columns: [
-                    { data: "local", className: "text-center font-w600" },
-                    { data: "data", className: "text-center" },
-                    { data: "planejadoPara", className: "text-center" },
+                    { data: "local" },
+                    { data: "data" },
+                    { data: "planejadoPara" },
                     {
-                        data: null, className: "text-center",
-                        render: function (r) { return r.semExecucao ? "<span class='badge-sem-execucao'>Sem execução</span>" : (r.executadoPor || "—"); }
+                        data: null,
+                        render: function (r) { return r.semExecucao ? "<span class='badge badge-secondary'>Sem execução</span>" : (r.executadoPor || "—"); }
                     },
                     {
-                        data: null, className: "text-center",
-                        render: function (r) { return r.semVistoria ? "<span class='badge-sem-vistoria'>Sem vistoria</span>" : (r.vistoriadoPor || "—"); }
+                        data: null,
+                        render: function (r) { return r.semVistoria ? "<span class='badge badge-warning'>Sem vistoria</span>" : (r.vistoriadoPor || "—"); }
                     },
-                    { data: "horaTermino", className: "text-center" },
-                    { data: "statusGov", className: "text-center" },
+                    { data: "horaTermino" },
+                    { data: "statusGov" },
                     {
-                        data: "divergencia", className: "text-center",
-                        render: function (v) { return (v && v.toUpperCase() === "SIM") ? "<span class='badge-divergente'>N/OK</span>" : (v || ""); }
+                        data: "divergencia",
+                        render: function (v) { return (v && v.toUpperCase() === "SIM") ? "<span class='badge badge-danger'>N/OK</span>" : (v || ""); }
                     },
-                    { data: "ocupacao", className: "text-center" },
-                    { data: "bagagem", className: "text-center" },
-                    { data: "observacao", className: "text-muted" }
-                ]
+                    { data: "ocupacao" },
+                    { data: "bagagem" },
+                    { data: "observacao" }
+                ],
+                columnDefs: [
+                    { className: 'text-center', targets: [1, 3, 4, 5, 6, 7, 8, 9] }
+                ],
+                language: {
+                    "search": "@Html.Raw(PCM.WEB.Properties.Resources.search):",
+                    "lengthMenu": "@Html.Raw(PCM.WEB.Properties.Resources.display) _MENU_ ",
+                    "zeroRecords": "@Html.Raw(PCM.WEB.Properties.Resources.zero_records)",
+                    "info": "_MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)",
+                    "infoEmpty": "",
+                    "infoFiltered": "@Html.Raw(PCM.WEB.Properties.Resources.filtered_from) _MAX_ @Html.Raw(PCM.WEB.Properties.Resources.records)"
+                }
             });
 
-            $("#btnFiltrar").click(function () {
-                table.ajax.reload();
+            $('#filtrar').click(function () {
+                table.ajax.reload(null, false);
                 carregarKpis();
             });
 
-            $("#unidade").change(function () { table.ajax.reload(); carregarKpis(); });
         });
 
         function carregarKpis() {
             $.post("LoadRelatorioDiscrepanciasKpi", {
-                unidade: $("#unidade").val() == "" ? -1 : $("#unidade").val(),
-                data_inicio: $("#data_inicio").val(),
-                data_termino: $("#data_termino").val()
+                unidade: $("#unidade").val() == "" ? "-1" : $("#unidade").val(),
+                data_inicio: $("#dataInicio").val(),
+                data_termino: $("#dataTermino").val()
             }, function (k) {
                 if (!k) return;
                 $("#kTotalPlanejado").text(k.totalPlanejado);
@@ -200,5 +248,6 @@
                 $("#kQuartosNaoPerturbe").text(k.quartosNaoPerturbe);
             });
         }
+
     </script>
 }
