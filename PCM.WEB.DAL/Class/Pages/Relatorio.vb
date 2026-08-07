@@ -5215,4 +5215,105 @@ Public Class Relatorio
 
 #End Region
 
+#Region "::: RELATÓRIO DE DISCREPÂNCIAS (RE18) :::"
+
+    ' Linhas do relatório (planejado x executado x vistoriado + status/divergência)
+    Public Function RelatorioDiscrepancias(ByVal codigoEmpresa As Integer,
+                                           ByVal codigoUnidade As Integer,
+                                           ByVal dataInicio As String,
+                                           ByVal dataTermino As String) As List(Of RelatorioDiscrepancia)
+
+        Try
+
+            Dim oReturn As New List(Of RelatorioDiscrepancia)
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, IIf(IsDate(dataInicio), dataInicio, DBNull.Value)),
+                CriarParametro("data_termino", SqlDbType.Date, IIf(IsDate(dataTermino), dataTermino, DBNull.Value))
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_report_governanca_discrepancias", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New RelatorioDiscrepancia
+                    oInfo.codigoApartamento = SafeGetInt64(oSqlDataReader, "codigo_apartamento")
+                    oInfo.codigoUnidade = SafeGetInt32(oSqlDataReader, "codigo_unidade")
+                    oInfo.local = SafeGetString(oSqlDataReader, "local")
+                    oInfo.data = SafeGetString(oSqlDataReader, "data")
+                    oInfo.planejadoPara = SafeGetString(oSqlDataReader, "planejado_para")
+                    oInfo.executadoPor = SafeGetString(oSqlDataReader, "executado_por")
+                    oInfo.vistoriadoPor = SafeGetString(oSqlDataReader, "vistoriado_por")
+                    oInfo.horaTermino = SafeGetString(oSqlDataReader, "hora_termino")
+                    oInfo.statusGov = SafeGetString(oSqlDataReader, "status_gov")
+                    oInfo.divergencia = SafeGetString(oSqlDataReader, "divergencia")
+                    oInfo.ocupacao = SafeGetString(oSqlDataReader, "ocupacao")
+                    oInfo.bagagem = SafeGetString(oSqlDataReader, "bagagem")
+                    oInfo.observacao = SafeGetString(oSqlDataReader, "observacao")
+                    oInfo.semVistoria = SafeGetBoolean(oSqlDataReader, "sem_vistoria")
+                    oInfo.semExecucao = SafeGetBoolean(oSqlDataReader, "sem_execucao")
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    ' KPIs do relatório (contexto do período + discrepâncias)
+    Public Function RelatorioDiscrepanciasKpi(ByVal codigoEmpresa As Integer,
+                                              ByVal codigoUnidade As Integer,
+                                              ByVal dataInicio As String,
+                                              ByVal dataTermino As String) As RelatorioDiscrepanciaKpi
+
+        Try
+
+            Dim oReturn As New RelatorioDiscrepanciaKpi
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("data_inicio", SqlDbType.Date, IIf(IsDate(dataInicio), dataInicio, DBNull.Value)),
+                CriarParametro("data_termino", SqlDbType.Date, IIf(IsDate(dataTermino), dataTermino, DBNull.Value))
+            }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_report_governanca_discrepancias_kpi", oSqlParameter)
+
+                While oSqlDataReader.Read
+                    oReturn.totalPlanejado = SafeGetInt32(oSqlDataReader, "total_planejado")
+                    oReturn.totalArrumado = SafeGetInt32(oSqlDataReader, "total_arrumado")
+                    oReturn.totalPermanencia = SafeGetInt32(oSqlDataReader, "total_permanencia")
+                    oReturn.totalSaida = SafeGetInt32(oSqlDataReader, "total_saida")
+                    oReturn.divergencias = SafeGetInt32(oSqlDataReader, "divergencias")
+                    oReturn.planejadoSemExecucao = SafeGetInt32(oSqlDataReader, "planejado_sem_execucao")
+                    oReturn.executadoSemVistoria = SafeGetInt32(oSqlDataReader, "executado_sem_vistoria")
+                    oReturn.quartosNqa = SafeGetInt32(oSqlDataReader, "quartos_nqa")
+                    oReturn.quartosNaoPerturbe = SafeGetInt32(oSqlDataReader, "quartos_nao_perturbe")
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+#End Region
+
 End Class

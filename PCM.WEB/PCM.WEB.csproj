@@ -2615,6 +2615,7 @@
     <Content Include="Views\UH\DedetizacaoHistorico.cshtml" />
     <Content Include="Views\UH\MapaManutencaoHistorico.cshtml" />
     <Content Include="Views\Governanca\RelatorioUHNC.cshtml" />
+    <Content Include="Views\Governanca\RelatorioDiscrepancias.cshtml" />
     <Content Include="Views\Home\IndexGovernanca_old.cshtml" />
     <Content Include="Views\Home\Index_OLD.cshtml" />
     <Content Include="Views\CadastroBasico\ChecklistEdit2.cshtml" />

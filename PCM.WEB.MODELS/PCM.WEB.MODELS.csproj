@@ -74,6 +74,7 @@
     <Compile Include="Models\PMOCModels.cs" />
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\RelatorioModels.cs" />
+    <Compile Include="Models\RelatorioDiscrepanciaModels.cs" />
     <Compile Include="Models\FinancasModels.cs" />
     <Compile Include="Models\GreenPlanetModels.cs" />
     <Compile Include="Models\PCMModels.cs" />

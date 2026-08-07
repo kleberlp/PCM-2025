@@ -1,0 +1,204 @@
+@using PCM.WEB.Properties
+@{
+    var kpi = (PCM.WEB.MODELS.RelatorioDiscrepanciaKpi)ViewBag.kpi;
+}
+
+<main id="main-container">
+
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@Resources.sistema</a>
+                <span class="breadcrumb-item">@Resources.relatorio</span>
+                <span class="breadcrumb-item active">Relatório de Discrepâncias</span>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- FILTROS -->
+        <div class="block block-rounded border">
+            <div class="block-header block-header-default">
+                <h3 class="block-title"><i class="fa fa-sliders mr-1"></i> @Resources.filtros</h3>
+            </div>
+            <div class="block-content">
+                <div class="row items-push">
+                    <div class="col-md-4">
+                        <label class="font-w600">@Resources.unidade</label>
+                        @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "form-control", id = "unidade" })
+                    </div>
+                    <div class="col-md-3">
+                        <label class="font-w600">@Resources.data_inicio</label>
+                        <input type="text" id="data_inicio" name="data_inicio" value="@ViewBag.data_inicio" class="js-datepicker form-control" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" autocomplete="off" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="font-w600">@Resources.data_termino</label>
+                        <input type="text" id="data_termino" name="data_termino" value="@ViewBag.data_termino" class="js-datepicker form-control" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" autocomplete="off" />
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end justify-content-end">
+                        <button type="button" id="btnFiltrar" class="btn btn-secondary"><i class="fa fa-search mr-1"></i> @Resources.filtrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="rd-kpi-strip block block-rounded border">
+            <div class="rd-kpi-group">Contexto do Período</div>
+            <div class="rd-kpi-grid">
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-clipboard" style="color:#42A5F5"></i><span>Total Planejado</span></div><span class="rd-val" id="kTotalPlanejado">@kpi.totalPlanejado</span><span class="rd-meta">apontamentos no período</span></div>
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-check-circle" style="color:#6EAB4D"></i><span>Total Arrumado</span></div><span class="rd-val" id="kTotalArrumado">@kpi.totalArrumado</span><span class="rd-meta">com execução registrada</span></div>
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-bed" style="color:#3F48CC"></i><span>Total Permanência</span></div><span class="rd-val" id="kTotalPermanencia">@kpi.totalPermanencia</span><span class="rd-meta">limpeza planejada</span></div>
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-sign-out" style="color:#EA580C"></i><span>Total Saída</span></div><span class="rd-val" id="kTotalSaida">@kpi.totalSaida</span><span class="rd-meta">limpeza planejada</span></div>
+            </div>
+            <div class="rd-kpi-group">Discrepâncias</div>
+            <div class="rd-kpi-grid">
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-exclamation-triangle" style="color:#EF5350"></i><span>Divergências</span></div><span class="rd-val" style="color:#EF5350" id="kDivergencias">@kpi.divergencias</span><span class="rd-meta">Planejado ≠ Executado</span></div>
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-user-times" style="color:#EF5350"></i><span>Planejado s/ Execução</span></div><span class="rd-val" style="color:#EF5350" id="kPlanejadoSemExecucao">@kpi.planejadoSemExecucao</span><span class="rd-meta">ninguém executou</span></div>
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-eye-slash" style="color:#D97706"></i><span>Executado s/ Vistoria</span></div><span class="rd-val" style="color:#D97706" id="kExecutadoSemVistoria">@kpi.executadoSemVistoria</span><span class="rd-meta">arrumado sem vistoria</span></div>
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-ban" style="color:#D97706"></i><span>Quartos c/ N.Q.A</span></div><span class="rd-val" style="color:#D97706" id="kQuartosNqa">@kpi.quartosNqa</span><span class="rd-meta">no período</span></div>
+                <div class="rd-torre"><div class="rd-torre-h"><i class="fa fa-moon-o" style="color:#D97706"></i><span>Quartos c/ Não Perturbe</span></div><span class="rd-val" style="color:#D97706" id="kQuartosNaoPerturbe">@kpi.quartosNaoPerturbe</span><span class="rd-meta">no período</span></div>
+            </div>
+        </div>
+
+        <!-- TABELA -->
+        <div class="block block-rounded border">
+            <div class="block-header block-header-default">
+                <h3 class="block-title"><i class="fa fa-exclamation-triangle text-danger mr-1"></i> Relatório de Discrepâncias</h3>
+            </div>
+            <div class="block-content block-content-full">
+                <table id="tb_main" class="table table-bordered table-striped table-vcenter font-size-sm js-dataTable-full">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Local / U.H.</th>
+                            <th class="text-center">Data</th>
+                            <th class="text-center">Planejado Para</th>
+                            <th class="text-center">Executado Por</th>
+                            <th class="text-center">Vistoriado Por</th>
+                            <th class="text-center">Hora Término</th>
+                            <th class="text-center">Stat. Gov</th>
+                            <th class="text-center">Divergência</th>
+                            <th class="text-center">AD/Cr1/Cr2</th>
+                            <th class="text-center">Bagagem</th>
+                            <th>Observação</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+@section Styles {
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/dataTables")
+    @Styles.Render("~/Content/select")
+    <style>
+        .rd-kpi-strip { overflow:hidden; margin-bottom:16px; }
+        .rd-kpi-group { padding:8px 14px 4px; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#9CA3AF; background:#FBFBFC; border-top:1px solid #F0F1F3; }
+        .rd-kpi-grid { display:flex; flex-wrap:wrap; }
+        .rd-torre { flex:1 1 120px; padding:9px 12px; border-right:1px solid #F0F1F3; border-bottom:1px solid #F0F1F3; display:flex; flex-direction:column; align-items:center; text-align:center; gap:2px; }
+        .rd-torre-h { display:flex; align-items:center; gap:7px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#6B7280; }
+        .rd-val { font-size:20px; font-weight:800; letter-spacing:-1px; line-height:1; color:#374151; }
+        .rd-meta { font-size:10px; color:#9CA3AF; }
+        .badge-divergente { display:inline-flex; padding:3px 10px; border-radius:999px; font-size:9.5px; font-weight:700; text-transform:uppercase; background:#FEE2E2; color:#991B1B; }
+        .badge-sem-vistoria { display:inline-flex; padding:2px 8px; border-radius:999px; font-size:9px; font-weight:700; background:#FEF3C7; color:#92400E; }
+        .badge-sem-execucao { display:inline-flex; padding:2px 8px; border-radius:999px; font-size:9px; font-weight:700; background:#F3F4F6; color:#6B7280; }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/plugins/maskedinput")
+    @Scripts.Render("~/plugins/datepicker")
+    @Scripts.Render("~/plugins/select")
+
+    <script>
+        var table = null;
+
+        $(document).ready(function () {
+
+            $(".js-datepicker").mask("99/99/9999");
+            Codebase.helpers(['datepicker', 'select2']);
+
+            table = $('#tb_main').DataTable({
+                info: true,
+                processing: true,
+                destroy: true,
+                autoWidth: false,
+                pageLength: 25,
+                order: [[1, "asc"]],
+                language: {
+                    emptyTable: "Nenhuma discrepância encontrada no período selecionado",
+                    zeroRecords: "Nenhuma discrepância encontrada",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    infoEmpty: "0 registros",
+                    search: "Procurar:",
+                    paginate: { previous: "Anterior", next: "Próximo" }
+                },
+                ajax: {
+                    url: "LoadRelatorioDiscrepancias",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.unidade = $("#unidade").val() == "" ? -1 : $("#unidade").val();
+                        d.data_inicio = $("#data_inicio").val();
+                        d.data_termino = $("#data_termino").val();
+                    },
+                    dataSrc: ""
+                },
+                columns: [
+                    { data: "local", className: "text-center font-w600" },
+                    { data: "data", className: "text-center" },
+                    { data: "planejadoPara", className: "text-center" },
+                    {
+                        data: null, className: "text-center",
+                        render: function (r) { return r.semExecucao ? "<span class='badge-sem-execucao'>Sem execução</span>" : (r.executadoPor || "—"); }
+                    },
+                    {
+                        data: null, className: "text-center",
+                        render: function (r) { return r.semVistoria ? "<span class='badge-sem-vistoria'>Sem vistoria</span>" : (r.vistoriadoPor || "—"); }
+                    },
+                    { data: "horaTermino", className: "text-center" },
+                    { data: "statusGov", className: "text-center" },
+                    {
+                        data: "divergencia", className: "text-center",
+                        render: function (v) { return (v && v.toUpperCase() === "SIM") ? "<span class='badge-divergente'>N/OK</span>" : (v || ""); }
+                    },
+                    { data: "ocupacao", className: "text-center" },
+                    { data: "bagagem", className: "text-center" },
+                    { data: "observacao", className: "text-muted" }
+                ]
+            });
+
+            $("#btnFiltrar").click(function () {
+                table.ajax.reload();
+                carregarKpis();
+            });
+
+            $("#unidade").change(function () { table.ajax.reload(); carregarKpis(); });
+        });
+
+        function carregarKpis() {
+            $.post("LoadRelatorioDiscrepanciasKpi", {
+                unidade: $("#unidade").val() == "" ? -1 : $("#unidade").val(),
+                data_inicio: $("#data_inicio").val(),
+                data_termino: $("#data_termino").val()
+            }, function (k) {
+                if (!k) return;
+                $("#kTotalPlanejado").text(k.totalPlanejado);
+                $("#kTotalArrumado").text(k.totalArrumado);
+                $("#kTotalPermanencia").text(k.totalPermanencia);
+                $("#kTotalSaida").text(k.totalSaida);
+                $("#kDivergencias").text(k.divergencias);
+                $("#kPlanejadoSemExecucao").text(k.planejadoSemExecucao);
+                $("#kExecutadoSemVistoria").text(k.executadoSemVistoria);
+                $("#kQuartosNqa").text(k.quartosNqa);
+                $("#kQuartosNaoPerturbe").text(k.quartosNaoPerturbe);
+            });
+        }
+    </script>
+}

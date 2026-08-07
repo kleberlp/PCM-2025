@@ -841,6 +841,12 @@
                                                 <a class="@Html.IsSelected(action: "RelatorioUHNC", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioUHNC", "Governanca")">@PCM.WEB.Properties.Resources.relatorio_uh_nc</a>
                                             </li>
                                         }
+                                        @if (Session["rel_gov_discrepancias"] != null && (bool)Session["rel_gov_discrepancias"])
+                                        {
+                                            <li>
+                                                <a class="@Html.IsSelected(action: "RelatorioDiscrepancias", cssClass: "active") font-size-sm" href="@Url.Action("RelatorioDiscrepancias", "Governanca")">Relatório de Discrepâncias</a>
+                                            </li>
+                                        }
                                         @if ((bool)Session["gov_log_alteracao_status_gov"])
                                         {
                                             <li>

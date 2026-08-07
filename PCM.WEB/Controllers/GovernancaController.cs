@@ -2432,6 +2432,80 @@ namespace PCM.WEB.Controllers
 
         #endregion
 
+        #region ::: RELATÓRIO DE DISCREPÂNCIAS (RE18) :::
+
+        public ActionResult RelatorioDiscrepancias(int unidade = 0, string data_inicio = null, string data_termino = null)
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                int empresa = Convert.ToInt32(Session["empresa"].ToString());
+
+                if (unidade == 0)
+                    unidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
+
+                if (string.IsNullOrEmpty(data_inicio))
+                    data_inicio = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd/MM/yyyy");
+                if (string.IsNullOrEmpty(data_termino))
+                    data_termino = DateTime.Now.ToString("dd/MM/yyyy");
+
+                bool editar = false, inserir = false, excluir = false, imprimir = false, administrador = false;
+                oAccount.LoadPerfil(iCodigoEmpresa: empresa,
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "rel_gov_discrepancias",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bAdministrador: ref administrador,
+                                    bImprimir: ref imprimir);
+
+                ViewBag.imprimir = imprimir;
+                ViewBag.data_inicio = data_inicio;
+                ViewBag.data_termino = data_termino;
+                ViewBag.unidadeSel = unidade;
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: empresa,
+                                                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                                bCadastro: false), "codigo", "descricao", unidade);
+                ViewBag.kpi = oRelatorio.RelatorioDiscrepanciasKpi(codigoEmpresa: empresa,
+                                                                   codigoUnidade: unidade,
+                                                                   dataInicio: data_inicio,
+                                                                   dataTermino: data_termino);
+
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult LoadRelatorioDiscrepancias(string data_inicio, string data_termino, int unidade = -1)
+        {
+            int empresa = Convert.ToInt32(Session["empresa"].ToString());
+            if (unidade <= 0)
+                unidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
+
+            return Json(oRelatorio.RelatorioDiscrepancias(codigoEmpresa: empresa,
+                                                          codigoUnidade: unidade,
+                                                          dataInicio: data_inicio,
+                                                          dataTermino: data_termino));
+        }
+
+        [HttpPost]
+        public JsonResult LoadRelatorioDiscrepanciasKpi(string data_inicio, string data_termino, int unidade = -1)
+        {
+            int empresa = Convert.ToInt32(Session["empresa"].ToString());
+            if (unidade <= 0)
+                unidade = Convert.ToInt32(Session["codigo_unidade"].ToString());
+
+            return Json(oRelatorio.RelatorioDiscrepanciasKpi(codigoEmpresa: empresa,
+                                                             codigoUnidade: unidade,
+                                                             dataInicio: data_inicio,
+                                                             dataTermino: data_termino));
+        }
+
+        #endregion
+
         #region ::: STATUS UH :::
 
         public ActionResult StatusUH()
