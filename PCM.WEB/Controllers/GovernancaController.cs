@@ -18,11 +18,11 @@ namespace PCM.WEB.Controllers
 {
     public class GovernancaController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Governanca oGovernanca = new DAL.Governanca(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Relatorio oRelatorio = new DAL.Relatorio(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Api oAPI = new DAL.Api(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, sConIntercity: ConfigurationManager.ConnectionStrings["DefaultConnectionIntercity2"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Governanca oGovernanca = new DAL.Governanca(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Relatorio oRelatorio = new DAL.Relatorio(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Api oAPI = new DAL.Api(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString, sConIntercity: ConfigurationManager.ConnectionStrings["DefaultConnectionIntercity2"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
       
         #region ::: JSON :::
 

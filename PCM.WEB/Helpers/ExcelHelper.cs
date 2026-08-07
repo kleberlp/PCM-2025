@@ -146,7 +146,7 @@ public static class ExcelHelper
         }
         else if (col.TipoValidacao == "LISTA_BANCO")
         {
-            Excel excel = new Excel(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            Excel excel = new Excel(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
             var valores = excel.LoadValidacaoExcel(
                 codigoEmpresa,

@@ -17,8 +17,8 @@ namespace PCM.WEB.Controllers
     public class AccountController : Controller
     {
 
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: MESSAGE :::
 
@@ -145,7 +145,7 @@ namespace PCM.WEB.Controllers
         public ActionResult Login(string email, string senha, string returnUrl)
         {
             //Váriaveis
-            Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
             bool bAtivo = false;
             string sCodigoFuncionario = "";
             bool bFornecedorPMOC = false;
@@ -362,6 +362,7 @@ namespace PCM.WEB.Controllers
                     Session["rel_responsavel_vistoria_uh"] = formulario_visualizar.rel_responsavel_vistoria_uh;
                     Session["rel_camareira_nc"] = formulario_visualizar.rel_camareira_nc;
                     Session["rel_uh_nc"] = formulario_visualizar.rel_uh_nc;
+                    Session["rel_gov_discrepancias"] = formulario_visualizar.rel_gov_discrepancias;
 
                     Session["uh_checklist"] = formulario_visualizar.uh_checklist;
                     Session["uh_checklist_historico"] = formulario_visualizar.uh_checklist_historico;
@@ -715,6 +716,7 @@ namespace PCM.WEB.Controllers
             Session["rel_responsavel_vistoria_uh"] = null;
             Session["rel_camareira_nc"] = null;
             Session["rel_uh_nc"] = null;
+            Session["rel_gov_discrepancias"] = null;
             Session["uh_checklist"] = null;
             Session["uh_checklist_historico"] = null;
             Session["uh_dedetizacao"] = null;

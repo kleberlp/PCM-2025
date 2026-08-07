@@ -15,11 +15,11 @@ namespace PCM.WEB.Controllers
 {
     public class AuditoriaController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Auditoria oAuditoria = new DAL.Auditoria(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Qualidade oQualidade = new DAL.Qualidade(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Auditoria oAuditoria = new DAL.Auditoria(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Qualidade oQualidade = new DAL.Qualidade(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: JSON :::
 

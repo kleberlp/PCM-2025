@@ -20,12 +20,12 @@ namespace PCM.WEB.Controllers
 {
     public class QualidadeController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Qualidade oQualidade = new Qualidade(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Picture oPicture = new Picture(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.PCM oPCM = new DAL.PCM(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.OrdemServico oOrdemServico = new DAL.OrdemServico(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Qualidade oQualidade = new Qualidade(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Picture oPicture = new Picture(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.PCM oPCM = new DAL.PCM(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.OrdemServico oOrdemServico = new DAL.OrdemServico(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: JSON :::
 

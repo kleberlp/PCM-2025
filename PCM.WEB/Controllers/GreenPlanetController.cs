@@ -13,9 +13,9 @@ namespace PCM.WEB.Controllers
 {
     public class GreenPlanetController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.GreenPlanet oGreenPlanet = new DAL.GreenPlanet(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.GreenPlanet oGreenPlanet = new DAL.GreenPlanet(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: JSON :::
 

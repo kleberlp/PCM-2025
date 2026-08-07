@@ -13,11 +13,11 @@ namespace PCM.WEB.Controllers
 {
     public class RelatorioController : Controller
     {
-        private DAL.Combo oCombo = new DAL.Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Relatorio oRelatorio = new DAL.Relatorio(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.GreenPlanet oGreenPlanet = new DAL.GreenPlanet(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Account oAccount = new DAL.Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.Combo oCombo = new DAL.Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Relatorio oRelatorio = new DAL.Relatorio(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.GreenPlanet oGreenPlanet = new DAL.GreenPlanet(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Account oAccount = new DAL.Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: JSON :::
 

@@ -260,6 +260,7 @@ namespace PCM.ADM.WEB.Controllers
             Session["rel_responsavel_vistoria_uh"] = null;
             Session["rel_camareira_nc"] = null;
             Session["rel_uh_nc"] = null;
+            Session["rel_gov_discrepancias"] = null;
             Session["uh_checklist"] = null;
             Session["uh_checklist_historico"] = null;
             Session["uh_dedetizacao"] = null;

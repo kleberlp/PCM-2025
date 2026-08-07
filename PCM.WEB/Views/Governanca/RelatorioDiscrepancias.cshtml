@@ -28,15 +28,15 @@
                         <label class="font-w600">@Resources.unidade</label>
                         @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "form-control", id = "unidade" })
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="font-w600">@Resources.data_inicio</label>
                         <input type="text" id="data_inicio" name="data_inicio" value="@ViewBag.data_inicio" class="js-datepicker form-control" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" autocomplete="off" />
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="font-w600">@Resources.data_termino</label>
                         <input type="text" id="data_termino" name="data_termino" value="@ViewBag.data_termino" class="js-datepicker form-control" data-week-start="1" data-autoclose="true" data-date-format="dd/mm/yyyy" autocomplete="off" />
                     </div>
-                    <div class="col-md-2 d-flex align-items-end justify-content-end">
+                    <div class="col-md-4 d-flex align-items-end justify-content-end">
                         <button type="button" id="btnFiltrar" class="btn btn-secondary"><i class="fa fa-search mr-1"></i> @Resources.filtrar</button>
                     </div>
                 </div>

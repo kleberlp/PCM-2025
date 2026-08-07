@@ -21,10 +21,10 @@ namespace PCM.WEB.Controllers
     public class PlanoAcaoController : Controller
     {
         private const int V = 1;
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.PlanoAcao oPlanoAcao = new DAL.PlanoAcao(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private DAL.Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.PlanoAcao oPlanoAcao = new DAL.PlanoAcao(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private DAL.Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: JSON :::
 

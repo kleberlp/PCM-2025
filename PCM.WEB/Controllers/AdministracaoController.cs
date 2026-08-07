@@ -15,10 +15,10 @@ namespace PCM.WEB.Controllers
 {
     public class AdministracaoController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Administracao oAdministracao = new Administracao(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private CadastroBasico oCadastroBasico = new CadastroBasico(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Administracao oAdministracao = new Administracao(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private CadastroBasico oCadastroBasico = new CadastroBasico(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: JSON :::
 
@@ -422,7 +422,8 @@ namespace PCM.WEB.Controllers
                 Session["rel_responsavel_vistoria_uh"] = formulario_visualizar.rel_responsavel_vistoria_uh;
                 Session["rel_camareira_nc"] = formulario_visualizar.rel_camareira_nc;
                 Session["rel_uh_nc"] = formulario_visualizar.rel_uh_nc;
-                
+                Session["rel_gov_discrepancias"] = formulario_visualizar.rel_gov_discrepancias;
+
                 Session["uh_checklist"] = formulario_visualizar.uh_checklist;
                 Session["uh_checklist_historico"] = formulario_visualizar.uh_checklist_historico;
                 Session["uh_dedetizacao"] = formulario_visualizar.uh_dedetizacao;
@@ -913,7 +914,8 @@ namespace PCM.WEB.Controllers
                 Session["rel_responsavel_vistoria_uh"] = formulario_visualizar.rel_responsavel_vistoria_uh;
                 Session["rel_camareira_nc"] = formulario_visualizar.rel_camareira_nc;
                 Session["rel_uh_nc"] = formulario_visualizar.rel_uh_nc;
-                
+                Session["rel_gov_discrepancias"] = formulario_visualizar.rel_gov_discrepancias;
+
                 Session["uh_checklist"] = formulario_visualizar.uh_checklist;
                 Session["uh_checklist_historico"] = formulario_visualizar.uh_checklist_historico;
                 Session["uh_dedetizacao"] = formulario_visualizar.uh_dedetizacao;

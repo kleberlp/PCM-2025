@@ -11,10 +11,10 @@ namespace PCM.WEB.Controllers
 {
     public class LavanderiaController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Lavanderia oLavanderia = new Lavanderia(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Excel oExcel = new Excel(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Lavanderia oLavanderia = new Lavanderia(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Excel oExcel = new Excel(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: JSON :::
 

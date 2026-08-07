@@ -16,9 +16,9 @@ namespace PCM.WEB.Controllers
     [Authorize]
     public class AtivoFixoController : BaseController
     {
-        private Combo _combo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private AtivoFixo _ativoFixo = new AtivoFixo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        private Account _account = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Combo _combo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private AtivoFixo _ativoFixo = new AtivoFixo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Account _account = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
 
         #region ::: JSON :::
 
