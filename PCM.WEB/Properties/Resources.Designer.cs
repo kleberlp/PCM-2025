@@ -988,6 +988,15 @@ namespace PCM.WEB.Properties {
         }
 
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Discrepância.
+        /// </summary>
+        public static string discrepancia {
+            get {
+                return ResourceManager.GetString("discrepancia", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Gerar planejamento.
         /// </summary>
         public static string gerar_planejamento {
