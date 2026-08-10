@@ -142,6 +142,15 @@ namespace PCM.WEB.MODELS
         public string descricao { get; set; }
     }
 
+    // Combo do item de checklist (discrepância). O codigo é string porque as listas
+    // configuradas em tb_cad_discrepancia_gov.procedure_lista são alfanuméricas
+    // (ex.: BAGAGEM = P / M / G).
+    public class pwaChecklistCombo
+    {
+        public string codigo { get; set; }
+        public string descricao { get; set; }
+    }
+
     #endregion
 
     #region ::: PCM - ORDEM DE SERVIÇO :::
@@ -768,6 +777,7 @@ namespace PCM.WEB.MODELS
         public int associarEquipamento { get; set; }
         public long codigoEquipamento { get; set; }
         public List<pwaImagem> arquivo { get; set; }
+        public List<pwaChecklistCombo> listaCombo { get; set; }
     }
 
     public class pwaChecklistApontamento

@@ -13,9 +13,9 @@ namespace PCM.WEB.Controllers
 {
     public class LogBookController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private DAL.LogBook oLogBook = new DAL.LogBook(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.LogBook oLogBook = new DAL.LogBook(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: JSON :::
 

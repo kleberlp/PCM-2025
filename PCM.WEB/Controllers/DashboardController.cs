@@ -9,9 +9,9 @@ namespace PCM.WEB.Controllers
 {
     public class DashboardController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private DAL.Dashboard oDashboard = new DAL.Dashboard(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.Dashboard oDashboard = new DAL.Dashboard(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: CHART :::
 

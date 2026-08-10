@@ -9,9 +9,9 @@ namespace PCM.WEB.Controllers
 {
     public class AgendaController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Agenda oAgenda = new Agenda(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Agenda oAgenda = new Agenda(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: JSON :::
 

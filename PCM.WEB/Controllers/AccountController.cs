@@ -17,8 +17,8 @@ namespace PCM.WEB.Controllers
     public class AccountController : Controller
     {
 
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: MESSAGE :::
 
@@ -145,7 +145,7 @@ namespace PCM.WEB.Controllers
         public ActionResult Login(string email, string senha, string returnUrl)
         {
             //Váriaveis
-            Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+            Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
             bool bAtivo = false;
             string sCodigoFuncionario = "";
             bool bFornecedorPMOC = false;

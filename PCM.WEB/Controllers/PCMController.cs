@@ -20,14 +20,14 @@ namespace PCM.WEB.Controllers
 {
     public class PCMController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private CadastroBasico oCadastroBasico = new CadastroBasico(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private DAL.PCM oPCM = new DAL.PCM(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private DAL.Relatorio oRelatorio = new DAL.Relatorio(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private DAL.OrdemServico oOrdemServico = new DAL.OrdemServico(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private DAL.Estoque oEstoque = new DAL.Estoque(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private DAL.Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private CadastroBasico oCadastroBasico = new CadastroBasico(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.PCM oPCM = new DAL.PCM(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.Relatorio oRelatorio = new DAL.Relatorio(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.OrdemServico oOrdemServico = new DAL.OrdemServico(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.Estoque oEstoque = new DAL.Estoque(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private DAL.Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: JSON :::
 

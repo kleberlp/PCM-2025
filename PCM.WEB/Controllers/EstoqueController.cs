@@ -12,10 +12,10 @@ namespace PCM.WEB.Controllers
 {
     public class EstoqueController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Estoque oEstoque = new Estoque(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Stock oStock = new Stock(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Estoque oEstoque = new Estoque(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Stock oStock = new Stock(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
 
         #region ::: JSON :::

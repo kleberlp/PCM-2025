@@ -8,9 +8,9 @@ namespace PCM.WEB.Controllers
 {
     public class ConfiguracaoController : Controller
     {
-        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Configuracao oConfig = new Configuracao(sCon: ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
-        private Account oAccount = new Account(sCon: ConfigurationManager.ConnectionStrings["DefaultConnectionQA"].ConnectionString);
+        private Combo oCombo = new Combo(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Configuracao oConfig = new Configuracao(sCon: ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Account oAccount = new Account(sCon: ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: INTERFACE OPERA :::
 

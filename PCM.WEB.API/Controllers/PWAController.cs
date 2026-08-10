@@ -1396,7 +1396,8 @@ namespace PCM.WEB.API.Controllers
                                                                iIntervalo: intervalo,
                                                                sTipo: tipo,
                                                                oChecklist: checklistG,
-                                                               bExoval: (grupo.descricao == "00 - ENXOVAL") ? true : false);
+                                                               bExoval: (grupo.descricao == "00 - ENXOVAL") ? true : false,
+                                                               bDiscrepancia: (grupo.descricao == "00 - DISCREPÂNCIA") ? true : false);
 
                             empresa = checklist.codigoEmpresa;
                             unidade = checklist.codigoUnidade;
@@ -1408,6 +1409,7 @@ namespace PCM.WEB.API.Controllers
                         }
 
                     }
+
                 }
 
                 try
@@ -1426,6 +1428,18 @@ namespace PCM.WEB.API.Controllers
                 response.success = true;
                 response.message = "";
 
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.success = false;
+                response.message = ex.Message.ToString();
+
+                return Ok(response);
+            } 
+            finally
+            {
+
                 //GRAVA LOG
                 oAPI.insertLogAPI(iCodigoEmpresa: empresa,
                                   iCodigoUnidade: unidade,
@@ -1434,22 +1448,6 @@ namespace PCM.WEB.API.Controllers
                                   sRequestBody: oFunction.ConverteObjectParaJSon(checklist),
                                   sResponseBody: oFunction.ConverteObjectParaJSon(response));
 
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                //GRAVA LOG
-                oAPI.insertLogAPI(iCodigoEmpresa: empresa,
-                                  iCodigoUnidade: unidade,
-                                  iCodigoUsuario: codigoUsuario,
-                                  sEndpoint: Request.RequestUri.PathAndQuery,
-                                  sRequestBody: oFunction.ConverteObjectParaJSon(checklist),
-                                  sResponseBody: ex.Message);
-
-                response.success = false;
-                response.message = ex.Message.ToString();
-
-                return Ok(response);
             }
         }
 

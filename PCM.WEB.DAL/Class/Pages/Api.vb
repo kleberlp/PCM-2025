@@ -4855,6 +4855,7 @@ Public Class Api
         Dim gruposMap As New Dictionary(Of String, pwaChecklistGrupo)(StringComparer.OrdinalIgnoreCase)
         Dim subgruposMap As New Dictionary(Of String, pwaChecklistSubGrupo)(StringComparer.OrdinalIgnoreCase)
         Dim arquivosPorItem As New Dictionary(Of Integer, List(Of pwaImagem))()
+        Dim combosPorItem As New Dictionary(Of Integer, List(Of pwaChecklistCombo))()
 
         Try
             ' Parametros
@@ -4947,7 +4948,8 @@ Public Class Api
                 .color = If(Convert.IsDBNull(oReader("color")), "#000000", Convert.ToString(oReader("color"))),
                 .associarEquipamento = SafeGetLong(oReader, "associar_equipamento"),
                 .codigoEquipamento = SafeGetLong(oReader, "codigo_equipamento"),
-                .arquivo = New List(Of pwaImagem)()
+                .arquivo = New List(Of pwaImagem)(),
+                .listaCombo = New List(Of pwaChecklistCombo)()
             }
 
                 ' Alocar item no lugar certo:
@@ -4971,6 +4973,11 @@ Public Class Api
                 If Not arquivosPorItem.ContainsKey(codigoItem) Then
                     arquivosPorItem.Add(codigoItem, item.arquivo)
                 End If
+
+                ' Mesmo esquema para as opções de combo (itens de discrepância)
+                If Not combosPorItem.ContainsKey(codigoItem) Then
+                    combosPorItem.Add(codigoItem, item.listaCombo)
+                End If
             End While
 
             If Not oReader.NextResult() Then Return oReturn
@@ -4991,6 +4998,28 @@ Public Class Api
 
                 If arquivosPorItem.ContainsKey(codigoItem) Then
                     arquivosPorItem(codigoItem).Add(img)
+                End If
+            End While
+
+            If Not oReader.NextResult() Then Return oReturn
+
+            ' ==========================================================
+            ' RESULTSET 5: LISTA COMBO (itens de discrepância)
+            ' colunas esperadas:
+            ' codigo_item, codigo, descricao
+            ' OBS: codigo_item aqui é NEGATIVO (tb_cad_discrepancia_gov.codigo * -1)
+            ' ==========================================================
+            While oReader.Read()
+                Dim codigoItem As Integer = If(Convert.IsDBNull(oReader("codigo_item")), 0, Convert.ToInt32(oReader("codigo_item")))
+                If codigoItem = 0 Then Continue While
+
+                Dim opcao As New pwaChecklistCombo With {
+                .codigo = If(Convert.IsDBNull(oReader("codigo")), "", Convert.ToString(oReader("codigo"))),
+                .descricao = If(Convert.IsDBNull(oReader("descricao")), "", Convert.ToString(oReader("descricao")))
+            }
+
+                If combosPorItem.ContainsKey(codigoItem) Then
+                    combosPorItem(codigoItem).Add(opcao)
                 End If
             End While
 
@@ -5628,10 +5657,11 @@ Public Class Api
                                              ByVal iIntervalo As Integer,
                                              ByVal sTipo As String,
                                              ByVal oChecklist As pwaChecklistItem,
-                                             Optional ByVal bExoval As Boolean = False)
+                                             Optional ByVal bExoval As Boolean = False,
+                                             Optional ByVal bDiscrepancia As Boolean = False)
 
         'Variaveis Locais
-        Dim oSqlParameter(11) As SqlParameter
+        Dim oSqlParameter(12) As SqlParameter
         Dim i As Integer = 0
 
         Try
@@ -5721,7 +5751,14 @@ Public Class Api
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).ParameterName = "enxoval"
             oSqlParameter(i).SqlDbType = SqlDbType.Bit
-            oSqlParameter(i).Value = bExoval
+            oSqlParameter(i).Value = bExoval : i += 1
+
+            'Seta Parametros - Discrepancia
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).ParameterName = "discrepancia"
+            oSqlParameter(i).SqlDbType = SqlDbType.Bit
+            oSqlParameter(i).Value = bDiscrepancia
 
             'Executa Query
             ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_pwa_insert_checklist", oSqlParameter)
