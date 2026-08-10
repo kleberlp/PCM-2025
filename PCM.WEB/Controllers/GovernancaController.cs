@@ -1600,6 +1600,11 @@ namespace PCM.WEB.Controllers
                                                                      iCodigoUnidade: unidade,
                                                                      lCodigoVistoria: codigo);
 
+                // Discrepância apontada (somente leitura)
+                ViewBag.discrepancia = oGovernanca.LoadGovernancaDiscrepanciaCampos(iCodigoEmpresa: empresa,
+                                                                                    iCodigoUnidade: unidade,
+                                                                                    lCodigoApontamento: codigo);
+
                 return View(oGovernanca.LoadGovernancaApontamento(iCodigoEmpresa: empresa,
                                                                   iCodigoUnidade: unidade,
                                                                   iCodigoApartamento: -1,
