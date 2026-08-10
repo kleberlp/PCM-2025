@@ -1,4 +1,7 @@
 ﻿@model PCM.WEB.MODELS.GovernancaApto
+@{
+    var discrepancia = ViewBag.discrepancia as List<PCM.WEB.MODELS.GovernancaApontamentoDiscrepancia>;
+}
 
 <!-- Main Container -->
 <main id="main-container">
@@ -59,61 +62,59 @@
                     </div>
 
                     <!-- Dynamic Table Full Pagination -->
-                    <div class="block block-rounded border">
-                        <div class="block-header block-header-default bg-gd-default">
-                            <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.enxoval</h3>
-                        </div>
-                        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
-                        <table class="table table-bordered table-sm table-striped table-vcenter" id="enxoval-table" name="enxoval-table">
-                            <thead>
-                                <tr>
-                                    <th>@PCM.WEB.Properties.Resources.descricao</th>
-                                    <th class="text-center" style="width:150px">Quantidade</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table_linha" name="table_linha">
-                                @for (int i = 0; i < Model.enxoval.Count; i++)
-                                {
-                                    <tr>
-                                        @Html.HiddenFor(m => Model.enxoval[i].codigo_enxoval)
-                                        <td>@Html.DisplayFor(m => Model.enxoval[i].enxoval)</td>
-                                        <td class="text-center">@Model.enxoval[i].quantidade</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- END Dynamic Table Full Pagination -->
+            <div class="block block-rounded border">
+                <div class="block-header block-header-default bg-gd-default">
+                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.enxoval</h3>
+                </div>
+                <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality initialized in js/pages/be_tables_datatables.js -->
+                <table class="table table-bordered table-sm table-striped table-vcenter" id="enxoval-table" name="enxoval-table">
+                    <thead>
+                        <tr>
+                            <th>@PCM.WEB.Properties.Resources.descricao</th>
+                            <th class="text-center" style="width:150px">Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table_linha" name="table_linha">
+                        @for (int i = 0; i < Model.enxoval.Count; i++)
+                        {
+                            <tr>
+                                @Html.HiddenFor(m => Model.enxoval[i].codigo_enxoval)
+                                <td>@Html.DisplayFor(m => Model.enxoval[i].enxoval)</td>
+                                <td class="text-center">@Model.enxoval[i].quantidade</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- END Dynamic Table Full Pagination -->
 
                     <!-- Discrepância (somente leitura) -->
-                    @{var discrepancia = ViewBag.discrepancia as List<PCM.WEB.MODELS.GovernancaApontamentoDiscrepancia>;
-                        if (discrepancia != null && discrepancia.Count > 0)
-                        {
-                            <div class="block block-rounded border">
-                                <div class="block-header block-header-default bg-gd-default">
-                                    <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.discrepancia</h3>
-                                </div>
-                                <div class="block-content">
-                                    <div class="row">
-                                        @foreach (var campo in discrepancia)
+                    @if (discrepancia != null && discrepancia.Count > 0)
+                    {
+                        <div class="block block-rounded border">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.discrepancia</h3>
+                            </div>
+                            <div class="block-content">
+                                <div class="row">
+                                    @foreach (var campo in discrepancia)
+                                    {
+                                        var col = (campo.campo_apontamento == "observacao") ? "col-12" : "col-md-4 col-lg-3";
+                                        var valorExibicao = campo.valor;
+                                        if (campo.codigo_tipo_item_checklist == 10 && campo.opcoes != null)
                                         {
-                                            var col = (campo.campo_apontamento == "observacao") ? "col-12" : "col-md-4 col-lg-3";
-                                            var valorExibicao = campo.valor;
-                                            if (campo.codigo_tipo_item_checklist == 10 && campo.opcoes != null)
-                                            {
-                                                var op = campo.opcoes.FirstOrDefault(o => o.codigo == campo.valor);
-                                                if (op != null) { valorExibicao = op.descricao; }
-                                            }
-                                            <div class="@col mb-3">
-                                                <label class="font-w600">@campo.descricao</label>
-                                                <input type="text" class="form-control" disabled value="@valorExibicao" />
-                                            </div>
+                                            var op = campo.opcoes.FirstOrDefault(o => o.codigo == campo.valor);
+                                            if (op != null) { valorExibicao = op.descricao; }
                                         }
-                                    </div>
+                                        <div class="@col mb-3">
+                                            <label class="font-w600">@campo.descricao</label>
+                                            <input type="text" class="form-control" disabled value="@valorExibicao" />
+                                        </div>
+                                    }
                                 </div>
                             </div>
-                            }
-                        }
+                        </div>
+                    }
                     <!-- END Discrepância -->
 
                     <!-- Dynamic Table Full Pagination -->
@@ -144,32 +145,32 @@
                                         </tr>
                                     }
 
-                                    <tr id="linha" name="linha">
-                                        @Html.HiddenFor(m => Model.checklist[i].codigo)
-                                        @Html.HiddenFor(m => Model.checklist[i].descricao)
-                                        <td class="text-center">@Html.DisplayFor(m => Model.checklist[i].checklist)</td>
-                                        <td>@Html.DisplayFor(m => Model.checklist[i].descricao)</td>
-                                        <td class="text-center">@Html.DisplayFor(m => Model.checklist[i].resultado_descricao)</td>
-                                        <td class="text-center" style="width:100px">
-                                            <label class="css-control css-control-success css-checkbox">
-                                                @Html.RadioButtonFor(m => Model.checklist[i].resultado, "OK", new { @class = "css-control-input", @checked = "true" })
-                                                <span class="css-control-indicator"></span>
-                                            </label>
-                                        </td>
-                                        <td class="text-center" style="width:100px">
-                                            <label class="css-control css-control-danger css-checkbox">
-                                                @Html.RadioButtonFor(m => Model.checklist[i].resultado, "NOK", new { @class = "css-control-input" })
-                                                <span class="css-control-indicator"></span>
-                                            </label>
-                                        </td>
-                                        <td class="text-center" style="width:100px">
-                                            <label class="css-control-sm css-control-secondary css-checkbox">
-                                                @Html.RadioButtonFor(m => Model.checklist[i].resultado, "Retrabalho", new { @class = "css-control-input" })
-                                                <span class="css-control-indicator"></span>
-                                            </label>
-                                        </td>
-                                        <td>@Html.TextBoxFor(m => Model.checklist[i].observacao, new { @class = "form-control col-12", @maxlength = "200" })</td>
-                                    </tr>
+                            <tr id="linha" name="linha">
+                                @Html.HiddenFor(m => Model.checklist[i].codigo)
+                                @Html.HiddenFor(m => Model.checklist[i].descricao)
+                                <td class="text-center">@Html.DisplayFor(m => Model.checklist[i].checklist)</td>
+                                <td>@Html.DisplayFor(m => Model.checklist[i].descricao)</td>
+                                <td class="text-center">@Html.DisplayFor(m => Model.checklist[i].resultado_descricao)</td>
+                                <td class="text-center" style="width:100px">
+                                    <label class="css-control css-control-success css-checkbox">
+                                        @Html.RadioButtonFor(m => Model.checklist[i].resultado, "OK", new { @class = "css-control-input", @checked = "true" })
+                                        <span class="css-control-indicator"></span>
+                                    </label>
+                                </td>
+                                <td class="text-center" style="width:100px">
+                                    <label class="css-control css-control-danger css-checkbox">
+                                        @Html.RadioButtonFor(m => Model.checklist[i].resultado, "NOK", new { @class = "css-control-input" })
+                                        <span class="css-control-indicator"></span>
+                                    </label>
+                                </td>
+                                <td class="text-center" style="width:100px">
+                                    <label class="css-control-sm css-control-secondary css-checkbox">
+                                        @Html.RadioButtonFor(m => Model.checklist[i].resultado, "Retrabalho", new { @class = "css-control-input" })
+                                        <span class="css-control-indicator"></span>
+                                    </label>
+                                </td>
+                                <td>@Html.TextBoxFor(m => Model.checklist[i].observacao, new { @class = "form-control col-12", @maxlength = "200" })</td>
+                            </tr>
                                 }
                             </tbody>
                         </table>

@@ -1,4 +1,7 @@
 ﻿@model PCM.WEB.MODELS.GovernancaApto
+@{
+    var discrepancia = ViewBag.discrepancia as List<PCM.WEB.MODELS.GovernancaApontamentoDiscrepancia>;
+}
 
 <!-- Main Container -->
 <main id="main-container">
@@ -109,9 +112,6 @@
                     <!-- END Dynamic Table Full Pagination -->
 
                     <!-- Discrepância (tb_cad_discrepancia_gov) -->
-                    @{
-                        var discrepancia = ViewBag.discrepancia as List<PCM.WEB.MODELS.GovernancaApontamentoDiscrepancia>;
-                    }
                     @if (discrepancia != null && discrepancia.Count > 0)
                     {
                         <div class="block block-rounded border">
