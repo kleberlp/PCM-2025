@@ -227,6 +227,12 @@ namespace PCM.WEB.Controllers
                                                                                            iCodigoUnidade: codigo_unidade), "codigo", "descricao", governanca.codigo_funcionario);
                 ViewBag.vistoriador = new SelectList(oCombo.FuncionarioGovernancaVistoriador(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                              iCodigoUnidade: codigo_unidade), "codigo", "descricao", governanca.codigo_funcionario_responsavel_vistoria);
+
+                // Campos de discrepância (tb_cad_discrepancia_gov) por empresa + valores atuais (edição)
+                ViewBag.discrepancia = oGovernanca.LoadGovernancaDiscrepanciaCampos(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                    iCodigoUnidade: codigo_unidade,
+                                                                                    lCodigoApontamento: codigo_vistoria);
+
                 return View(oGovernanca.LoadGovernancaApontamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                   iCodigoUnidade: codigo_unidade,
                                                                   iCodigoApartamento: codigo_apartamento,
@@ -298,6 +304,19 @@ namespace PCM.WEB.Controllers
                                                                            iQuantidade: enxoval.quantidade);
                         }
                     }
+
+                    // Discrepância — grava os valores dos campos exibidos (tb_gov_apontamento)
+                    oGovernanca.UpdateGovernancaApontamentoDiscrepancia(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                        iCodigoUnidade: codigo_unidade,
+                                                                        lCodigoApontamento: codigo,
+                                                                        sStatusUh: Request.Form["status_uh_discrepancia"],
+                                                                        sStatusGov: Request.Form["status_governanca_discrepancia"],
+                                                                        sDiscrepancia: Request.Form["discrepancia"],
+                                                                        sAdultos: Request.Form["adultos"],
+                                                                        sCriancas1: Request.Form["criancas1"],
+                                                                        sCriancas2: Request.Form["criancas2"],
+                                                                        sBagagem: Request.Form["bagagem"],
+                                                                        sObservacao: Request.Form["observacao"]);
 
                 }
 

@@ -208,6 +208,24 @@ namespace PCM.WEB.MODELS
         public List<GovernancaApontamentoChecklist> checklist { get; set; }
         public List<GovernancaApontamentoEnxoval> enxoval { get; set; }
     }
+
+    // Campo de discrepância (tb_cad_discrepancia_gov) exibido no apontamento
+    public class GovernancaApontamentoDiscrepancia
+    {
+        public int codigo { get; set; }
+        public string descricao { get; set; }
+        public int codigo_tipo_item_checklist { get; set; }   // 10 = combo, 1 = texto
+        public string campo_apontamento { get; set; }          // coluna destino em tb_gov_apontamento
+        public string valor { get; set; }                      // valor atual (edição)
+        public List<GovernancaComboItem> opcoes { get; set; } = new List<GovernancaComboItem>();
+    }
+
+    // Item de combo (codigo/descricao) carregado da procedure_lista
+    public class GovernancaComboItem
+    {
+        public string codigo { get; set; }
+        public string descricao { get; set; }
+    }
     
     public class GovernancaApontamentoChecklist
     {

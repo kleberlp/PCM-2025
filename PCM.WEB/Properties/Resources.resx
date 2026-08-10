@@ -2013,6 +2013,9 @@
   <data name="erro_excluir" xml:space="preserve">
     <value>Não foi possível excluir o apontamento.</value>
   </data>
+  <data name="discrepancia" xml:space="preserve">
+    <value>Discrepância</value>
+  </data>
   <data name="gerar_planejamento" xml:space="preserve">
     <value>Gerar planejamento</value>
   </data>

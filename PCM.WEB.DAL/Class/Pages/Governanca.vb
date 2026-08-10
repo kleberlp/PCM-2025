@@ -4292,4 +4292,138 @@ Public Class Governanca
 
 #End Region
 
+#Region "::: GOVERNANÇA - DISCREPÂNCIA (APONTAMENTO) :::"
+
+    ' Campos de discrepância (tb_cad_discrepancia_gov) + opções das combos + valores (edição)
+    Public Function LoadGovernancaDiscrepanciaCampos(ByVal iCodigoEmpresa As Integer,
+                                                     ByVal iCodigoUnidade As Integer,
+                                                     ByVal lCodigoApontamento As Long) As List(Of GovernancaApontamentoDiscrepancia)
+
+        Try
+
+            Dim oReturn As New List(Of GovernancaApontamentoDiscrepancia)
+            Dim listaProc As New List(Of String)
+
+            ' 1) Campos cadastrados por empresa
+            Dim oParam As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, iCodigoEmpresa)
+            }
+
+            Using dr As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_discrepancia_campos", oParam)
+                While dr.Read
+                    Dim c As New GovernancaApontamentoDiscrepancia
+                    c.codigo = SafeGetInt32(dr, "codigo")
+                    c.descricao = SafeGetString(dr, "descricao")
+                    c.codigo_tipo_item_checklist = SafeGetInt32(dr, "codigo_tipo_item_checklist")
+                    c.campo_apontamento = SafeGetString(dr, "campo_apontamento")
+                    oReturn.Add(c)
+                    listaProc.Add(SafeGetString(dr, "procedure_lista"))
+                End While
+            End Using
+
+            ' 2) Opções das combos (executa a procedure_lista de cada campo tipo 10)
+            For i As Integer = 0 To oReturn.Count - 1
+                If oReturn(i).codigo_tipo_item_checklist = 10 AndAlso Not String.IsNullOrWhiteSpace(listaProc(i)) Then
+                    Using drc As SqlDataReader = ExecuteReader(sConnection, CommandType.Text, listaProc(i), New SqlParameter() {})
+                        While drc.Read
+                            Dim item As New GovernancaComboItem
+                            item.codigo = If(drc.IsDBNull(0), "", drc.GetValue(0).ToString())
+                            item.descricao = If(drc.FieldCount > 1 AndAlso Not drc.IsDBNull(1), drc.GetValue(1).ToString(), item.codigo)
+                            oReturn(i).opcoes.Add(item)
+                        End While
+                    End Using
+                End If
+            Next
+
+            ' 3) Valores atuais (edição de apontamento existente)
+            If lCodigoApontamento > 0 Then
+
+                Dim valores As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase)
+
+                Dim oParam2 As SqlParameter() = {
+                    CriarParametro("codigo_empresa", SqlDbType.SmallInt, iCodigoEmpresa),
+                    CriarParametro("codigo_unidade", SqlDbType.Int, iCodigoUnidade),
+                    CriarParametro("codigo_apontamento", SqlDbType.BigInt, lCodigoApontamento)
+                }
+
+                Using drv As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_apontamento_discrepancia", oParam2)
+                    If drv.Read Then
+                        For col As Integer = 0 To drv.FieldCount - 1
+                            valores(drv.GetName(col)) = If(drv.IsDBNull(col), "", drv.GetValue(col).ToString())
+                        Next
+                    End If
+                End Using
+
+                For Each c In oReturn
+                    If Not String.IsNullOrEmpty(c.campo_apontamento) AndAlso valores.ContainsKey(c.campo_apontamento) Then
+                        c.valor = valores(c.campo_apontamento)
+                    End If
+                Next
+
+            End If
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    ' Grava a discrepância no apontamento (COALESCE mantém o valor atual quando o parâmetro é Nothing)
+    Public Sub UpdateGovernancaApontamentoDiscrepancia(ByVal iCodigoEmpresa As Integer,
+                                                       ByVal iCodigoUnidade As Integer,
+                                                       ByVal lCodigoApontamento As Long,
+                                                       ByVal sStatusUh As String,
+                                                       ByVal sStatusGov As String,
+                                                       ByVal sDiscrepancia As String,
+                                                       ByVal sAdultos As String,
+                                                       ByVal sCriancas1 As String,
+                                                       ByVal sCriancas2 As String,
+                                                       ByVal sBagagem As String,
+                                                       ByVal sObservacao As String)
+
+        Try
+
+            Dim oParam As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, iCodigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, iCodigoUnidade),
+                CriarParametro("codigo_apontamento", SqlDbType.BigInt, lCodigoApontamento),
+                CriarParametro("status_uh", SqlDbType.Int, IntOuNulo(sStatusUh)),
+                CriarParametro("status_gov", SqlDbType.Int, IntOuNulo(sStatusGov)),
+                CriarParametro("discrepancia", SqlDbType.VarChar, TextoOuNulo(sDiscrepancia)),
+                CriarParametro("adultos", SqlDbType.Int, IntOuNulo(sAdultos)),
+                CriarParametro("criancas1", SqlDbType.Int, IntOuNulo(sCriancas1)),
+                CriarParametro("criancas2", SqlDbType.Int, IntOuNulo(sCriancas2)),
+                CriarParametro("bagagem", SqlDbType.VarChar, TextoOuNulo(sBagagem)),
+                CriarParametro("observacao", SqlDbType.VarChar, TextoOuNulo(sObservacao))
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_governanca_apontamento_discrepancia", oParam)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    Private Function IntOuNulo(ByVal s As String) As Object
+        Dim n As Integer
+        If Not String.IsNullOrWhiteSpace(s) AndAlso Integer.TryParse(s, n) Then
+            Return n
+        End If
+        Return DBNull.Value
+    End Function
+
+    Private Function TextoOuNulo(ByVal s As String) As Object
+        If s Is Nothing Then Return DBNull.Value
+        Return s
+    End Function
+
+#End Region
+
 End Class

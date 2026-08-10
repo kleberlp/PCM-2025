@@ -108,6 +108,52 @@
                     </div>
                     <!-- END Dynamic Table Full Pagination -->
 
+                    <!-- Discrepância (tb_cad_discrepancia_gov) -->
+                    @{
+                        var discrepancia = ViewBag.discrepancia as List<PCM.WEB.MODELS.GovernancaApontamentoDiscrepancia>;
+                    }
+                    @if (discrepancia != null && discrepancia.Count > 0)
+                    {
+                        <div class="block block-rounded border">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.discrepancia</h3>
+                            </div>
+                            <div class="block-content">
+                                <div class="row">
+                                    @foreach (var campo in discrepancia)
+                                    {
+                                        var col = (campo.campo_apontamento == "observacao") ? "col-12" : "col-md-4 col-lg-3";
+                                        <div class="@col mb-3">
+                                            <label class="font-w600">@campo.descricao</label>
+                                            @if (campo.codigo_tipo_item_checklist == 10)
+                                            {
+                                                <select name="@campo.campo_apontamento" class="form-control">
+                                                    <option value="">Selecione...</option>
+                                                    @foreach (var op in campo.opcoes)
+                                                    {
+                                                        if (op.codigo == campo.valor)
+                                                        {
+                                                            <option value="@op.codigo" selected>@op.descricao</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@op.codigo">@op.descricao</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+                                            else
+                                            {
+                                                <input type="text" name="@campo.campo_apontamento" class="form-control" maxlength="200" value="@campo.valor" />
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <!-- END Discrepância -->
+
                     <!-- Dynamic Table Full Pagination -->
                     <div class="block block-rounded border">
                         <div class="block-header block-header-default bg-gd-default">
