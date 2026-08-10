@@ -1,6 +1,9 @@
 ﻿@model PCM.WEB.MODELS.GovernancaApto
+@using System.Collections.Generic
+@using System.Linq
+@using PCM.WEB.MODELS
 @{
-    var discrepancia = ViewBag.discrepancia as List<PCM.WEB.MODELS.GovernancaApontamentoDiscrepancia>;
+    var discrepancia = ViewBag.discrepancia as List<GovernancaApontamentoDiscrepancia>;
 }
 
 <!-- Main Container -->
