@@ -1,4 +1,15 @@
 ﻿@model List<PCM.WEB.MODELS.Governanca>
+@functions {
+    static string GovColor(string css)
+    {
+        css = (css ?? "").ToLower();
+        if (css.Contains("danger")) return "gov-pend";
+        if (css.Contains("success")) return "gov-ok";
+        if (css.Contains("primary")) return "gov-lib";
+        if (css.Contains("warning")) return "gov-ret";
+        return "gov-vago";
+    }
+}
 
 <!-- Main Container -->
 <main id="main-container">
@@ -103,6 +114,14 @@
             </div>
 
             <div class="block-content" id="div_grid" style="display:block">
+                <div class="gov-legend">
+                    <b>Legenda:</b>
+                    <span><i style="background:#EF5350"></i> Pendente</span>
+                    <span><i style="background:#42A5F5"></i> Aguardando liberação</span>
+                    <span><i style="background:#43A047"></i> Concluído</span>
+                    <span><i style="background:#F59E0B"></i> Retrabalho</span>
+                    <span><i style="background:#9CA3AF"></i> Sem apontamento</span>
+                </div>
                 @{
                     int aux = 0;
 
@@ -160,8 +179,8 @@
 
                         if ((int)Model[i].status == 2)
                         {
-            <div class="col-md-2 col-xl-1">
-                <div class="block block-rounded block-bordered block-link-shadow">
+            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                <div class="block block-rounded block-bordered block-link-shadow gov-tile @GovColor(Model[i].css_class)">
                     <div class="text-center">
                         <i class="fa fa-hotel fa-2x @Model[i].css_class"></i>                        
                         @if (Model[i].nao_perturbe)
@@ -181,8 +200,8 @@
                         }
                         else if ((int)Model[i].status == 3)
                         {
-            <div class="col-md-2 col-xl-1">
-                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ChecklistGovernancaVistoria", "Governanca", new { codigo_apartamento = @Model[i].codigo_apartamento, codigo_unidade = @Model[i].codigo_unidade, codigo_vistoria = @Model[i].codigo_vistoria, status = @Model[i].status, codigo_tipo_governanca = @Model[i].codigo_tipo_governanca , codigo_checklist = @Model[i].codigo_checklist })">
+            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                <a class="block block-rounded block-bordered block-link-shadow gov-tile @GovColor(Model[i].css_class)" href="@Url.Action("ChecklistGovernancaVistoria", "Governanca", new { codigo_apartamento = @Model[i].codigo_apartamento, codigo_unidade = @Model[i].codigo_unidade, codigo_vistoria = @Model[i].codigo_vistoria, status = @Model[i].status, codigo_tipo_governanca = @Model[i].codigo_tipo_governanca , codigo_checklist = @Model[i].codigo_checklist })">
                     <div class="text-center">
                         <i class="fa fa-hotel fa-2x @Model[i].css_class"></i>
                         @if (Model[i].nao_perturbe)
@@ -202,8 +221,8 @@
                         }
                         else
                         {
-            <div class="col-md-2 col-xl-1">
-                <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("ChecklistGovernancaApontamento", "Governanca", new { codigo_apartamento = @Model[i].codigo_apartamento, codigo_unidade = @Model[i].codigo_unidade, codigo_vistoria = @Model[i].codigo_vistoria, status = @Model[i].status, codigo_tipo_governanca = @Model[i].codigo_tipo_governanca , codigo_checklist = @Model[i].codigo_checklist })">
+            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                <a class="block block-rounded block-bordered block-link-shadow gov-tile @GovColor(Model[i].css_class)" href="@Url.Action("ChecklistGovernancaApontamento", "Governanca", new { codigo_apartamento = @Model[i].codigo_apartamento, codigo_unidade = @Model[i].codigo_unidade, codigo_vistoria = @Model[i].codigo_vistoria, status = @Model[i].status, codigo_tipo_governanca = @Model[i].codigo_tipo_governanca , codigo_checklist = @Model[i].codigo_checklist })">
                     <div class="text-center">
                         <i class="fa fa-hotel fa-2x @Model[i].css_class"></i>
                         @if (Model[i].nao_perturbe)
@@ -295,6 +314,22 @@
     @Styles.Render("~/Content/datepicker")
     @Styles.Render("~/Content/dataTables")
     @Styles.Render("~/Content/select")
+    <style>
+        /* Tiles de quarto com identidade de status */
+        #div_grid .gov-tile { border-left: 4px solid var(--c) !important; background: var(--bg) !important; transition: transform .12s, box-shadow .12s; }
+        #div_grid a.gov-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.10); border-color: var(--c) !important; }
+        #div_grid .gov-tile .fa-hotel { font-size: 18px !important; color: var(--c) !important; }
+        #div_grid .gov-tile h6.font-w700 { font-size: 17px; letter-spacing: -.3px; }
+        .gov-pend { --c:#EF5350; --bg:#FEF2F2; }
+        .gov-ok   { --c:#43A047; --bg:#F1FBF3; }
+        .gov-lib  { --c:#42A5F5; --bg:#EFF7FF; }
+        .gov-ret  { --c:#F59E0B; --bg:#FEF9EF; }
+        .gov-vago { --c:#9CA3AF; --bg:#F8F9FB; }
+        .gov-legend { display:flex; gap:16px; flex-wrap:wrap; align-items:center; padding:10px 4px 2px; font-size:11.5px; color:#6B7280; }
+        .gov-legend b { color:#374151; font-weight:700; }
+        .gov-legend span { display:inline-flex; align-items:center; gap:6px; font-weight:600; }
+        .gov-legend i { width:11px; height:11px; border-radius:3px; display:inline-block; }
+    </style>
 }
 
 @section Scripts {
