@@ -39,14 +39,15 @@ BEGIN
     SELECT
         ap.codigo_apartamento                                           AS codigo_apartamento,
         ap.codigo_unidade                                               AS codigo_unidade,
-        ISNULL(a.local, ap.codigo_apartamento)                          AS local,            -- >>> AJUSTE: coluna do local/UH
+        ISNULL(CONVERT(varchar(50), a.apartamento), CONVERT(varchar(50), ap.codigo_apartamento)) AS local,  -- Nº do apartamento  (>>> AJUSTE se a coluna não for 'apartamento')
         CONVERT(varchar(10), ap.data, 103)                              AS data,
         ISNULL(fp.nome, '')                                             AS planejado_para,   -- >>> AJUSTE: camareira PLANEJADA (planejamento)
         ISNULL(fe.nome, '')                                             AS executado_por,    -- >>> AJUSTE: nome do funcionário (executou)
         ISNULL(fv.nome, '')                                             AS vistoriado_por,   -- >>> AJUSTE: nome do vistoriador
         ISNULL(CONVERT(varchar(5), ap.hora_termino, 108), '')          AS hora_termino,
+        ISNULL(suh.descricao, '')                                       AS status_uh,        -- status UH da discrepância
         ISNULL(sgd.descricao, '')                                       AS status_gov,       -- status governança da discrepância
-        CASE WHEN ap.discrepancia = 'N/OK' THEN 'SIM' ELSE 'NÃO' END    AS divergencia,
+        ISNULL(ap.discrepancia, '')                                     AS divergencia,      -- valor bruto enviado no app (OK / N/OK)
         CONCAT(ISNULL(ap.adultos,0), ' / ', ISNULL(ap.criancas1,0), ' / ', ISNULL(ap.criancas2,0)) AS ocupacao,
         ISNULL(ap.bagagem, '')                                          AS bagagem,
         ISNULL(ap.observacao, '')                                       AS observacao,
@@ -58,12 +59,11 @@ BEGIN
         LEFT JOIN tb_gov_funcionario fe ON fe.codigo = ap.codigo_funcionario  AND fe.codigo_empresa = ap.codigo_empresa   -- >>> AJUSTE: tabela/colunas de funcionário de governança
         LEFT JOIN tb_gov_funcionario fv ON fv.codigo = ap.codigo_vistoriador AND fv.codigo_empresa = ap.codigo_empresa
         LEFT JOIN tb_gov_funcionario fp ON fp.codigo = ap.codigo_camareira_planejada AND fp.codigo_empresa = ap.codigo_empresa  -- >>> AJUSTE: camareira planejada
+        LEFT JOIN tb_stc_status_uh_divergencia         suh ON suh.codigo = ap.status_uh_discrepancia
         LEFT JOIN tb_stc_status_governanca_divergencia sgd ON sgd.codigo = ap.status_governanca_discrepancia
     WHERE ap.codigo_empresa = @codigo_empresa
     AND   ap.codigo_unidade = @codigo_unidade
     AND   ap.data BETWEEN @data_inicio AND @data_termino
-    -- só as discrepâncias (arrumação marcada como N/OK na tela de apontamento)
-    AND   ap.discrepancia = 'N/OK'
     ORDER BY ap.data, local;
 
 END

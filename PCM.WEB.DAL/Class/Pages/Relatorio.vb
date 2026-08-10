@@ -5247,6 +5247,7 @@ Public Class Relatorio
                     oInfo.executadoPor = SafeGetString(oSqlDataReader, "executado_por")
                     oInfo.vistoriadoPor = SafeGetString(oSqlDataReader, "vistoriado_por")
                     oInfo.horaTermino = SafeGetString(oSqlDataReader, "hora_termino")
+                    oInfo.statusUh = SafeGetString(oSqlDataReader, "status_uh")
                     oInfo.statusGov = SafeGetString(oSqlDataReader, "status_gov")
                     oInfo.divergencia = SafeGetString(oSqlDataReader, "divergencia")
                     oInfo.ocupacao = SafeGetString(oSqlDataReader, "ocupacao")

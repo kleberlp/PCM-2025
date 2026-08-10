@@ -11,6 +11,7 @@ namespace PCM.WEB.MODELS
         public string executadoPor { get; set; }     // camareira que executou
         public string vistoriadoPor { get; set; }    // supervisora
         public string horaTermino { get; set; }
+        public string statusUh { get; set; }           // status UH da discrepância
         public string statusGov { get; set; }         // LIMPO / NÃO PERTURBE / N.Q.A / etc.
         public string divergencia { get; set; }       // SIM / NÃO
         public string ocupacao { get; set; }          // AD / Cr1 / Cr2  (ex.: "2 / 1 / 0")
