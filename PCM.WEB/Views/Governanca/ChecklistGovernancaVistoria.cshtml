@@ -1,4 +1,10 @@
 ﻿@model PCM.WEB.MODELS.GovernancaApto
+@using System.Collections.Generic
+@using System.Linq
+@using PCM.WEB.MODELS
+@{
+    var discrepancia = ViewBag.discrepancia as List<GovernancaApontamentoDiscrepancia>;
+}
 
 <!-- Main Container -->
 <main id="main-container">
@@ -109,6 +115,35 @@
                         </table>
                     </div>
                     <!-- END Dynamic Table Full Pagination -->
+
+                    <!-- Discrepância (somente leitura) -->
+                    @if (discrepancia != null && discrepancia.Count > 0)
+                    {
+                        <div class="block block-rounded border">
+                            <div class="block-header block-header-default bg-gd-default">
+                                <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.discrepancia</h3>
+                            </div>
+                            <div class="block-content">
+                                <div class="row">
+                                    @foreach (var campo in discrepancia)
+                                    {
+                                        var col = (campo.campo_apontamento == "observacao") ? "col-12" : "col-md-4 col-lg-3";
+                                        var valorExibicao = campo.valor;
+                                        if (campo.codigo_tipo_item_checklist == 10 && campo.opcoes != null)
+                                        {
+                                            var op = campo.opcoes.FirstOrDefault(o => o.codigo == campo.valor);
+                                            if (op != null) { valorExibicao = op.descricao; }
+                                        }
+                                        <div class="@col mb-3">
+                                            <label class="font-w600">@campo.descricao</label>
+                                            <input type="text" class="form-control" disabled value="@valorExibicao" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <!-- END Discrepância -->
 
                     <!-- Dynamic Table Full Pagination -->
                     <div class="block block-rounded border">

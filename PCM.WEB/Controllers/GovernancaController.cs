@@ -371,6 +371,12 @@ namespace PCM.WEB.Controllers
                 ViewBag.governanca = governanca;
                 ViewBag.camareira = new SelectList(oCombo.FuncionarioGovernancaCamareira(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                                          iCodigoUnidade: codigo_unidade), "codigo", "descricao", governanca.codigo_funcionario);
+
+                // Discrepância apontada (para a vistoria visualizar)
+                ViewBag.discrepancia = oGovernanca.LoadGovernancaDiscrepanciaCampos(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                    iCodigoUnidade: codigo_unidade,
+                                                                                    lCodigoApontamento: codigo_vistoria);
+
                 return View(oGovernanca.LoadGovernancaApontamento(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                   iCodigoUnidade: codigo_unidade,
                                                                   iCodigoApartamento: codigo_apartamento,
