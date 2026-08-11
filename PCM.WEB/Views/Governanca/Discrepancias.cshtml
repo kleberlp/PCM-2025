@@ -194,7 +194,6 @@
                             <th class="text-center">Dt Chegada</th>
                             <th class="text-center">Dt Saída</th>
                             <th class="text-center">Dias</th>
-                            <th class="text-center">Tipo Hóspede</th>
                             <th class="text-center">Planejado Para</th>
                             <th class="text-center">Executado Por</th>
                             <th class="text-center">Hora Término</th>
@@ -295,6 +294,11 @@
         /* Discrepâncias - destaques e controles */
         .discrepancia-divergente { background-color: #FFF3CD !important; }
         .select-center-text { text-align: center; text-align-last: center; -moz-text-align-last: center; }
+
+        /* Combos Stat. UH / Stat. Gov / Divergência com padding interno reduzido */
+        #tb_main select.disc-campo[data-campo="status_uh_discrepancia"],
+        #tb_main select.disc-campo[data-campo="status_governanca_discrepancia"],
+        #tb_main select.disc-campo[data-campo="discrepancia"] { padding: 1px 2px; }
         .adcr-cell { cursor: pointer; display: inline-block; min-width: 70px; padding: 3px 6px; border: 1px solid #D3D7DC; border-radius: 4px; background: #F5F6F7; font-size: 11px; }
         .adcr-cell:hover { background: #EAECEE; }
         .adcr-cell.disabled { cursor: not-allowed; opacity: .5; }
@@ -818,7 +822,6 @@
                 { data: "dataChegada" },
                 { data: "dataSaida" },
                 { data: "dias" },
-                { data: "tipoHospede" },
                 { data: "planejadoPara" },
                 { data: "executadoPor" },
                 { data: "horaTermino" },
@@ -858,13 +861,16 @@
                 }
             ],
             columnDefs: [
-                { className: 'text-center', targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] },
-                { width: '110px', targets: [1, 4, 5, 10] },
-                { width: '60px', targets: [6, 7] },
-                { width: '140px', targets: [2, 3, 8, 9, 11, 12, 13] },
-                { width: '90px', targets: [14, 16] },
-                { width: '100px', targets: [15] },
-                { width: '200px', targets: [17] },
+                { className: 'text-center', targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
+                { width: '99px', targets: [1, 9, 13] },
+                { width: '110px', targets: [4, 5] },
+                { width: '60px', targets: [6] },
+                { width: '126px', targets: [3] },
+                { width: '140px', targets: [2, 7, 8, 10] },
+                { width: '168px', targets: [11, 12] },
+                { width: '90px', targets: [15] },
+                { width: '100px', targets: [14] },
+                { width: '240px', targets: [16] },
                 {
                     targets: 0, // Index of the column starting from 0
                     type: 'html',
@@ -885,7 +891,7 @@
                         }
 
                         //Destaca divergência entre planejado e executado
-                        if ((col === 8 || col === 9) &&
+                        if ((col === 7 || col === 8) &&
                             rowData.planejadoPara !== "" &&
                             rowData.executadoPor !== "" &&
                             rowData.planejadoPara !== rowData.executadoPor) {
@@ -893,7 +899,7 @@
                         }
 
                     },
-                    targets: [3, 8, 9]
+                    targets: [3, 7, 8]
                 }
             ],
             rowCallback: function (row, data) {
