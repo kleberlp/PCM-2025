@@ -496,6 +496,7 @@ Public Class Account
                 oFormularioVisualizar.gov_historico = IIf(IsDBNull(oSqlDataReader.Item("gov_historico")) = False AndAlso oSqlDataReader.Item("gov_historico") = "S", True, False)
                 oFormularioVisualizar.gov_dashboard = IIf(IsDBNull(oSqlDataReader.Item("gov_dashboard")) = False AndAlso oSqlDataReader.Item("gov_dashboard") = "S", True, False)
                 oFormularioVisualizar.gov_apontamento = IIf(IsDBNull(oSqlDataReader.Item("gov_apontamento")) = False AndAlso oSqlDataReader.Item("gov_apontamento") = "S", True, False)
+                oFormularioVisualizar.gov_discrepancias = IIf(IsDBNull(oSqlDataReader.Item("gov_discrepancias")) = False AndAlso oSqlDataReader.Item("gov_discrepancias") = "S", True, False)
                 oFormularioVisualizar.gov_status_uh = IIf(IsDBNull(oSqlDataReader.Item("gov_status_uh")) = False AndAlso oSqlDataReader.Item("gov_status_uh") = "S", True, False)
                 oFormularioVisualizar.gov_lavanderia = IIf(IsDBNull(oSqlDataReader.Item("gov_lavanderia")) = False AndAlso oSqlDataReader.Item("gov_lavanderia") = "S", True, False)
                 oFormularioVisualizar.gov_log_alteracao_status_gov = IIf(IsDBNull(oSqlDataReader.Item("gov_log_alteracao_status_gov")) = False AndAlso oSqlDataReader.Item("gov_log_alteracao_status_gov") = "S", True, False)

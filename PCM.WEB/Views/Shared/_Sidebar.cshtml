@@ -862,6 +862,12 @@
                                         <a class="@Html.IsSelected(action: "Apontamento", cssClass: "active") font-size-sm" href="@Url.Action("Apontamento", "Governanca")">@PCM.WEB.Properties.Resources.apontamento Camareira</a>
                                     </li>
                                 }
+                                @if (Session["gov_discrepancias"] != null && (bool)Session["gov_discrepancias"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "Discrepancias", cssClass: "active") font-size-sm" href="@Url.Action("Discrepancias", "Governanca")">Discrepâncias</a>
+                                    </li>
+                                }
                                 @if ((bool)Session["gov_historico"])
                                 {
                                     <li>

@@ -84,6 +84,7 @@ namespace PCM.WEB.MODELS
         public bool gov_historico { get; set; }
         public bool gov_dashboard { get; set; }
         public bool gov_apontamento { get; set; }
+        public bool gov_discrepancias { get; set; }
         public bool gov_status_uh { get; set; }
         public bool gov_lavanderia { get; set; }
         public bool gov_log_alteracao_status_gov { get; set; }

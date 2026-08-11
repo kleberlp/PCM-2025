@@ -1373,7 +1373,7 @@ namespace PCM.WEB.Controllers
 
                 oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                     iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
-                                    sFormulario: "gov_apontamento",
+                                    sFormulario: "gov_discrepancias",
                                     bInserir: ref inserir,
                                     bEditar: ref editar,
                                     bExcluir: ref excluir,

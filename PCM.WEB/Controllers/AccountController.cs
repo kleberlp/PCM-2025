@@ -305,6 +305,7 @@ namespace PCM.WEB.Controllers
                     Session["gov_historico"] = formulario_visualizar.gov_historico;
                     Session["gov_dashboard"] = formulario_visualizar.gov_dashboard;
                     Session["gov_apontamento"] = formulario_visualizar.gov_apontamento;
+                    Session["gov_discrepancias"] = formulario_visualizar.gov_discrepancias;
                     Session["gov_status_uh"] = formulario_visualizar.gov_status_uh;
                     Session["gov_lavanderia"] = formulario_visualizar.gov_lavanderia;
                     Session["gov_log_alteracao_status_gov"] = formulario_visualizar.gov_log_alteracao_status_gov;
@@ -666,6 +667,7 @@ namespace PCM.WEB.Controllers
             Session["gov_historico"] = null;
             Session["gov_dashboard"] = null;
             Session["gov_apontamento"] = null;
+            Session["gov_discrepancias"] = null;
             Session["gov_status_uh"] = null;
             Session["log_book"] = null;
             Session["ordem_servico"] = null;
