@@ -44,59 +44,12 @@
                     </div>
                 </div>
 
-                <div class="block-content block-content-full">
-                    <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario" />
-                    <div class="form-group row">
-                        <div class="col-md-2">
-                            <label>@PCM.WEB.Properties.Resources.unidade</label>
-                            @Html.DropDownList("unidade", null, "", new { @class = "js-select2 form-control" })
-                        </div>
-                        <div class="col-md-2">
-                            <label>@PCM.WEB.Properties.Resources.data</label>
-                            <input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data">
-                        </div>
-                    </div>
-                </div>
             </div>
             <!-- END Collapsible Tasks Navigation -->
 
-            <div class="block block-rounded border">
-
-                <div class="block-content block-content-full">
-                    <div class="form-group row">
-                        <div class="col-md-2">
-                            <label>@PCM.WEB.Properties.Resources.bloco</label>
-                            @Html.DropDownList("bloco", null, "", new { @class = "js-select2 form-control" })
-                        </div>
-                        <div class="col-md-2">
-                            <label>@PCM.WEB.Properties.Resources.andar</label>
-                            @Html.DropDownList("andar", null, "", new { @class = "js-select2 form-control" })
-                        </div>
-                        <div class="col-md-2">
-                            <label>U.H.</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control text-center" id="uhInicio" name="uhInicio" placeholder="De">
-                                <div class="input-group-prepend input-group-append">
-                                    <span class="input-group-text font-w600">-</span>
-                                </div>
-                                <input type="number" class="form-control text-center" id="uhTermino" name="uhTermino" placeholder="Até">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Status Front Office</label>
-                            @Html.DropDownList("frontOfficeStatus", null, "", new { @class = "js-select2 form-control" })
-                        </div>
-                        <div class="col-md-2">
-                            <label>Status Quarto</label>
-                            @Html.DropDownList("roomStatus", null, "", new { @class = "js-select2 form-control" })
-                        </div>
-                        <div class="col-md-2">
-                            <label>Tipo de limpeza</label>
-                            @Html.DropDownList("tipoGovernanca", null, "", new { @class = "js-select2 form-control" })
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Unidade vem do seletor do Header (sessão) -->
+            <input type="hidden" name="usuario" id="usuario" value="@ViewBag.usuario" />
+            <input type="hidden" name="unidade" id="unidade" value="@Session["codigo_unidade"]" />
 
             <!-- KPI Strip - Contadores de Discrepâncias -->
             <div class="os-kpi-strip">
@@ -186,6 +139,48 @@
                 </div>
             </div>
             <!-- END KPI Strip -->
+
+            <div class="block block-rounded border">
+
+                <div class="block-content block-content-full">
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            <label>@PCM.WEB.Properties.Resources.data</label>
+                            <input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data">
+                        </div>
+                        <div class="col-md-1">
+                            <label>@PCM.WEB.Properties.Resources.bloco</label>
+                            @Html.DropDownList("bloco", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                        <div class="col-md-1">
+                            <label>@PCM.WEB.Properties.Resources.andar</label>
+                            @Html.DropDownList("andar", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>U.H.</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control text-center" id="uhInicio" name="uhInicio" placeholder="De">
+                                <div class="input-group-prepend input-group-append">
+                                    <span class="input-group-text font-w600">-</span>
+                                </div>
+                                <input type="number" class="form-control text-center" id="uhTermino" name="uhTermino" placeholder="Até">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Status Front Office</label>
+                            @Html.DropDownList("frontOfficeStatus", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>Status Quarto</label>
+                            @Html.DropDownList("roomStatus", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                        <div class="col-md-2">
+                            <label>Tipo de limpeza</label>
+                            @Html.DropDownList("tipoGovernanca", null, "", new { @class = "js-select2 form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="table-responsive table-sm push block block-content-full p-10">
                 <table class="table table-bordered table-hover js-dataTable-list" name="tbList" id="tb_main">
