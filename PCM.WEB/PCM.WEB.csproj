@@ -2562,6 +2562,7 @@
     <Content Include="Views\Home\DesempenhoGovernanca.cshtml" />
     <Content Include="Views\Governanca\Dashboard.cshtml" />
     <Content Include="Views\Governanca\Apontamento.cshtml" />
+    <Content Include="Views\Governanca\Discrepancias.cshtml" />
     <Content Include="Views\CadastroBasico\JustificativaCancelamentoOrdemServicoDelete.cshtml" />
     <Content Include="Views\CadastroBasico\JustificativaCancelamentoOrdemServicoEdit.cshtml" />
     <Content Include="Views\CadastroBasico\JustificativaCancelamentoOrdemServicoIndex.cshtml" />

@@ -1356,6 +1356,114 @@ namespace PCM.WEB.Controllers
 
         }
 
+        //GET: /GOVERNANCA/DISCREPANCIAS  (cópia do Apontamento + campos de discrepância)
+        public ActionResult Discrepancias()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+            else
+            {
+                //Váriaveis
+                bool editar = false;
+                bool inserir = false;
+                bool excluir = false;
+                bool administrador = false;
+
+                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                    iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                    sFormulario: "gov_apontamento",
+                                    bInserir: ref inserir,
+                                    bEditar: ref editar,
+                                    bExcluir: ref excluir,
+                                    bAdministrador: ref administrador);
+
+                ViewBag.inserir = inserir;
+                ViewBag.editar = editar;
+                ViewBag.excluir = excluir;
+
+                ViewBag.usuario = User.Identity.GetUserName();
+                ViewBag.data = DateTime.Now.ToShortDateString();
+                ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                               iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                               bCadastro: false), "codigo", "descricao", Session["codigo_unidade"].ToString());
+                ViewBag.camareira = new SelectList(oCombo.FuncionarioGovernancaCamareira(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                         iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.bloco = new SelectList(oCombo.Bloco(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.andar = new SelectList(oCombo.Andar(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.frontOfficeStatus = new SelectList(oCombo.StatusFrontOffice(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.roomStatus = new SelectList(oCombo.StatusRoom(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                      iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString())), "codigo", "descricao", null);
+                ViewBag.lastUpdate = oGovernanca.LoadLastUploadStatus(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                      codigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()));
+                ViewBag.tipoGovernanca = new SelectList(oCombo.TipoGovernanca(), "codigo", "descricao", null);
+
+                //Campos/combos de discrepância cadastrados por empresa (tb_cad_discrepancia_gov)
+                ViewBag.discrepancia = oGovernanca.LoadGovernancaDiscrepanciaCampos(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                                    iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                                                                    lCodigoApontamento: -1);
+
+                return View();
+
+            }
+        }
+
+        //JSON: /CARREGA GRADE DE DISCREPÂNCIAS
+        public JsonResult LoadDiscrepancias(int unidade, int tipoGovernanca, string data, string bloco, string andar, string frontOfficeStatus, string roomStatus, int uhInicio = -1, int uhTermino = -1)
+        {
+
+            return Json(oGovernanca.LoadApontamentoDiscrepancia(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                codigoUnidade: unidade,
+                                                                codigoTipoGovernanca: tipoGovernanca,
+                                                                data: data,
+                                                                bloco: bloco,
+                                                                andar: andar,
+                                                                statusFrontOffice: frontOfficeStatus,
+                                                                statusRoom: roomStatus,
+                                                                uhInicio: uhInicio,
+                                                                uhTermino: uhTermino));
+
+        }
+
+        //JSON: /SALVA CAMPO(S) DE DISCREPÂNCIA DE UM APONTAMENTO
+        //Somente os parâmetros enviados são gravados (a SP usa COALESCE e mantém os demais)
+        public JsonResult SalvarDiscrepancia(int unidade, long codigoApontamento, string statusUh = null, string statusGov = null, string divergencia = null, string adultos = null, string criancas1 = null, string criancas2 = null, string bagagem = null, string observacao = null)
+        {
+
+            try
+            {
+
+                if (codigoApontamento <= 0)
+                {
+                    return Json("U.H. sem apontamento: registre a limpeza antes de lançar a discrepância.");
+                }
+
+                oGovernanca.UpdateGovernancaApontamentoDiscrepancia(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                                    iCodigoUnidade: unidade,
+                                                                    lCodigoApontamento: codigoApontamento,
+                                                                    sStatusUh: statusUh,
+                                                                    sStatusGov: statusGov,
+                                                                    sDiscrepancia: divergencia,
+                                                                    sAdultos: adultos,
+                                                                    sCriancas1: criancas1,
+                                                                    sCriancas2: criancas2,
+                                                                    sBagagem: bagagem,
+                                                                    sObservacao: observacao);
+
+                return Json("OK");
+
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message.ToString());
+            }
+
+        }
+
         //JSON: /LIMPA PLANEJAMENTO
         public JsonResult ClearApontamento(int unidade, int usuario, string data, string json)
         {

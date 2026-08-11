@@ -330,6 +330,36 @@ namespace PCM.WEB.MODELS
         public string statusRoom { get; set; }
     }
 
+    public class GovernancaDiscrepanciaLista
+    {
+        public long codigoApartamento { get; set; }
+        public long codigoApontamento { get; set; }
+        public string apartamento { get; set; }
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string statusFrontOffice { get; set; }
+        public string statusRoom { get; set; }
+        public string tipoGovernanca { get; set; }
+        public string cssClassTipoGovernaca { get; set; }
+        public string dataChegada { get; set; }
+        public string dataSaida { get; set; }
+        public string dias { get; set; }
+        public string tipoHospede { get; set; }
+        public string planejadoPara { get; set; }
+        public string executadoPor { get; set; }
+        public string horaTermino { get; set; }
+        public string vistoriadoPor { get; set; }
+        public string statusUh { get; set; }
+        public string statusGov { get; set; }
+        public string divergencia { get; set; }
+        public string adultos { get; set; }
+        public string criancas1 { get; set; }
+        public string criancas2 { get; set; }
+        public string bagagem { get; set; }
+        public string observacao { get; set; }
+        public string selecionado { get; set; }
+    }
+
     public class GovernancaHistorico
     {
         public long codigo { get; set; }

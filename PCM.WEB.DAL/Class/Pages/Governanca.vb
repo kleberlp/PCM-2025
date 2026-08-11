@@ -4411,6 +4411,85 @@ Public Class Governanca
 
     End Sub
 
+    ' Grade da tela Discrepancias (cópia do Apontamento + campos de discrepância)
+    Public Function LoadApontamentoDiscrepancia(ByVal codigoEmpresa As Integer,
+                                                ByVal codigoUnidade As Integer,
+                                                ByVal data As String,
+                                                ByVal codigoTipoGovernanca As Integer,
+                                                ByVal bloco As String,
+                                                ByVal andar As String,
+                                                ByVal statusFrontOffice As String,
+                                                ByVal statusRoom As String,
+                                                ByVal uhInicio As Integer,
+                                                ByVal uhTermino As Integer) As List(Of GovernancaDiscrepanciaLista)
+
+        Try
+
+            'Variaveis Locais
+            Dim oReturn As New List(Of GovernancaDiscrepanciaLista)
+            Dim oSqlParameter As SqlParameter() = {
+                    CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                    CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                    CriarParametro("data", SqlDbType.Date, data),
+                    CriarParametro("codigo_tipo_governanca", SqlDbType.SmallInt, codigoTipoGovernanca),
+                    CriarParametro("bloco", SqlDbType.VarChar, bloco),
+                    CriarParametro("andar", SqlDbType.VarChar, andar),
+                    CriarParametro("front_office_status", SqlDbType.VarChar, statusFrontOffice),
+                    CriarParametro("room_status", SqlDbType.VarChar, statusRoom),
+                    CriarParametro("uhInicio", SqlDbType.Int, uhInicio),
+                    CriarParametro("uhTermino", SqlDbType.Int, uhTermino)
+                }
+
+            Using oSqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_governanca_apontamento_discrepancia_lista", oSqlParameter)
+
+                While oSqlDataReader.Read
+
+                    Dim oInfo As New GovernancaDiscrepanciaLista
+
+                    oInfo.codigoApartamento = SafeGetLong(oSqlDataReader, "codigo_apartamento")
+                    oInfo.codigoApontamento = SafeGetLong(oSqlDataReader, "codigo_apontamento")
+                    oInfo.apartamento = SafeGetString(oSqlDataReader, "apartamento")
+                    oInfo.bloco = SafeGetString(oSqlDataReader, "bloco")
+                    oInfo.andar = SafeGetString(oSqlDataReader, "andar")
+                    oInfo.statusFrontOffice = SafeGetString(oSqlDataReader, "front_office_status")
+                    oInfo.statusRoom = SafeGetString(oSqlDataReader, "room_status")
+                    oInfo.tipoGovernanca = SafeGetString(oSqlDataReader, "tipo_governanca")
+                    oInfo.cssClassTipoGovernaca = SafeGetString(oSqlDataReader, "css_class_tipo_governanca")
+                    oInfo.dataChegada = SafeGetString(oSqlDataReader, "data_chegada")
+                    oInfo.dataSaida = SafeGetString(oSqlDataReader, "data_saida")
+                    oInfo.dias = SafeGetString(oSqlDataReader, "dias")
+                    oInfo.tipoHospede = SafeGetString(oSqlDataReader, "tipo_hospede")
+                    oInfo.planejadoPara = SafeGetString(oSqlDataReader, "planejado_para")
+                    oInfo.executadoPor = SafeGetString(oSqlDataReader, "executado_por")
+                    oInfo.horaTermino = SafeGetString(oSqlDataReader, "hora_termino")
+                    oInfo.vistoriadoPor = SafeGetString(oSqlDataReader, "vistoriado_por")
+                    oInfo.statusUh = SafeGetString(oSqlDataReader, "status_uh")
+                    oInfo.statusGov = SafeGetString(oSqlDataReader, "status_gov")
+                    oInfo.divergencia = SafeGetString(oSqlDataReader, "divergencia")
+                    oInfo.adultos = SafeGetString(oSqlDataReader, "adultos")
+                    oInfo.criancas1 = SafeGetString(oSqlDataReader, "criancas1")
+                    oInfo.criancas2 = SafeGetString(oSqlDataReader, "criancas2")
+                    oInfo.bagagem = SafeGetString(oSqlDataReader, "bagagem")
+                    oInfo.observacao = SafeGetString(oSqlDataReader, "observacao")
+                    oInfo.selecionado = SafeGetString(oSqlDataReader, "selecionado")
+
+                    oReturn.Add(oInfo)
+
+                End While
+
+            End Using
+
+            'Retorno da Função
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     Private Function IntOuNulo(ByVal s As String) As Object
         Dim n As Integer
         If Not String.IsNullOrWhiteSpace(s) AndAlso Integer.TryParse(s, n) Then
