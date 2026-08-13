@@ -809,7 +809,7 @@ namespace PCM.WEB.API.Controllers
                         responseStatus = await oAPI.updateUHStatusPost(uhStatus: statusUpdate, origem: "CHECKLIST");
 
                     }
-                    else if (governanca.codigoEmpresa == 926)
+                    else if (governanca.codigoEmpresa == 926 || governanca.codigoEmpresa == 11)
                     {
                         // Aguardando a conclusão do método assíncrono
                         responseStatus = oAPI.updateUHStatusIntercity(uhStatus: statusUpdate, origem: "CHECKLIST");
@@ -898,7 +898,7 @@ namespace PCM.WEB.API.Controllers
                     // Aguardando a conclusão do método assíncrono
                     response = await oAPI.updateUHStatusPost(uhStatus: uh, origem: "STATUS");
                 }
-                else if(uh.codigoEmpresa == 926)
+                else if(uh.codigoEmpresa == 926 || uh.codigoEmpresa == 11)
                 {
                     // Aguardando a conclusão do método assíncrono
                     response = oAPI.updateUHStatusIntercity(uhStatus: uh, origem: "STATUS");
