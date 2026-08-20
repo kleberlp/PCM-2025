@@ -150,6 +150,8 @@ Public Class AtivoFixo
 
         Try
 
+            ' @uniqueId é obrigatório na SP: é por ele que ela resolve o nome do contador
+            AddSqlParameter(oSqlParameter, "uniqueId", SqlDbType.VarChar, 50, If(uniqueId, ""))
             AddSqlParameter(oSqlParameter, "codigo_inventario", SqlDbType.BigInt, 0, codigoInventario)
             AddSqlParameter(oSqlParameter, "codigo_empresa", SqlDbType.Int, 0, codigoEmpresa)
             AddSqlParameter(oSqlParameter, "codigo_unidade", SqlDbType.Int, 0, codigoUnidade)
@@ -162,7 +164,10 @@ Public Class AtivoFixo
             AddSqlParameter(oSqlParameter, "status_ok", SqlDbType.Bit, 0, statusOk)
             AddSqlParameter(oSqlParameter, "observacao", SqlDbType.VarChar, 500, If(String.IsNullOrWhiteSpace(observacao), DBNull.Value, CObj(observacao)))
             AddSqlParameter(oSqlParameter, "foto_path", SqlDbType.VarChar, 500, If(String.IsNullOrWhiteSpace(fotoPath), DBNull.Value, CObj(fotoPath)))
-            AddSqlParameter(oSqlParameter, "movimentar", SqlDbType.Bit, 0, movimentar)
+
+            ' movimentar NÃO é enviado: a sp_insert_asset_inventory_count não declara esse
+            ' parâmetro (enviá-lo derruba a contagem com "too many arguments"). A movimentação
+            ' do ativo é feita no fechamento, pela sp_update_asset_inventory_close.
 
             ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_asset_inventory_count", oSqlParameter.ToArray())
 

@@ -738,7 +738,12 @@ Public Class AtivoFixo
 
         Try
 
+            ' @uniqueId é obrigatório na SP (identifica o contador do app). Na tela web não há
+            ' contador, então vai vazio — a SP apenas não resolve o nome.
+            ' movimentar NÃO é enviado: a SP não declara esse parâmetro e enviá-lo derruba a
+            ' contagem; a movimentação do ativo ocorre no fechamento do inventário.
             Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("uniqueId", SqlDbType.VarChar, ""),
                 CriarParametro("codigo_inventario", SqlDbType.BigInt, codigoInventario),
                 CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
                 CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
@@ -747,8 +752,7 @@ Public Class AtivoFixo
                 CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario),
                 CriarParametro("asset_code", SqlDbType.VarChar, assetCode),
                 CriarParametro("ativo_cadastrado", SqlDbType.Bit, ativoCadastrado),
-                CriarParametro("descricao_informada", SqlDbType.VarChar, If(descricaoInformada, "")),
-                CriarParametro("movimentar", SqlDbType.Bit, movimentar)
+                CriarParametro("descricao_informada", SqlDbType.VarChar, If(descricaoInformada, ""))
             }
 
             ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_asset_inventory_count", oSqlParameter)

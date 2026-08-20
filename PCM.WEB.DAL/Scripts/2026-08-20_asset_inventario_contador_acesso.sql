@@ -10,11 +10,8 @@
       tb_ast_inventario_contador (codigo_inventario, uniqueId, nome, email, celular)
       tb_ast_inventario          (codigo, ..., descricao, data_inicio, status)
 
-    >>> AJUSTE (única parte desconhecida): o ENFILEIRAMENTO do e-mail.
-        A composição/envio já existe na sp_insert_asset_inventario, que hoje manda o link ao
-        contador na criação do inventário. COPIE AQUI aquele mesmo trecho de INSERT na fila de
-        e-mail (a fila consumida pelo PCM.SERVICE.MESSAGE via sp_select_email/sp_update_email),
-        trocando apenas o corpo pelo @link recebido.
+    A fila de e-mail é a tb_log_email (ordem_servico, para, body), a mesma usada pela
+    sp_insert_asset_inventario ao enviar o link na criação do inventário.
 
     Retorno: 1 quando um e-mail foi enfileirado, 0 quando o e-mail não corresponde a nenhum
              contador de inventário em aberto (status 1 ou 2).
@@ -65,17 +62,19 @@ BEGIN
         '<p><a href="' + @link + '">Abrir inventário</a></p>' +
         '<p style="font-size:12px;color:#6c757d">Se você não solicitou este acesso, ignore este e-mail.</p>';
 
-    /*--------------------------------------------------------------------------------------
-        >>> AJUSTE: enfileirar o e-mail
-        Substitua o bloco abaixo pelo MESMO INSERT usado na sp_insert_asset_inventario para
-        enviar o link ao contador (mantendo as colunas reais da fila de e-mail).
-
-        Exemplo do formato esperado pelo PCM.SERVICE.MESSAGE (sp_select_email devolve
-        para / body / ordem_servico / codigo):
-
-        INSERT INTO tb_email (para, body, ordem_servico, enviado, input_date)
-        VALUES (@email, @body, 'Inventário de Ativos', 0, GETDATE());
-    --------------------------------------------------------------------------------------*/
+    -- Enfileira na mesma tabela usada pela sp_insert_asset_inventario
+    INSERT INTO tb_log_email
+    (
+        ordem_servico,
+        para,
+        body
+    )
+    VALUES
+    (
+        'INVENTARIO_ACESSO_' + CAST(@codigo_inventario AS varchar),
+        @email,
+        @body
+    );
 
     SELECT 1;   -- e-mail enfileirado
 
