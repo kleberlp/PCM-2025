@@ -129,6 +129,40 @@ Public Class AtivoFixo
 
     End Sub
 
+    ' Última avaliação do estado de conservação do ativo (ponto 4 do teste)
+    Public Function GetAssetLastEvaluation(ByVal codigoEmpresa As Integer,
+                                           ByVal codigoUnidade As Integer,
+                                           ByVal assetCode As String) As AssetLastEvaluation
+
+        Dim oSqlParameter As List(Of SqlParameter) = New List(Of SqlParameter)
+        Dim _result As New AssetLastEvaluation
+
+        Try
+
+            AddSqlParameter(oSqlParameter, "codigo_empresa", SqlDbType.Int, 0, codigoEmpresa)
+            AddSqlParameter(oSqlParameter, "codigo_unidade", SqlDbType.Int, 0, codigoUnidade)
+            AddSqlParameter(oSqlParameter, "asset_code", SqlDbType.VarChar, 50, assetCode)
+
+            Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_asset_last_evaluation", oSqlParameter.ToArray())
+
+                If _sqlDataReader.Read Then
+                    _result.possuiAvaliacao = True
+                    _result.statusOk = SafeGetBoolean(_sqlDataReader, "status_ok")
+                    _result.observacao = SafeGetString(_sqlDataReader, "observacao")
+                End If
+
+            End Using
+
+            Return _result
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     ' Verifica se o ativo já foi contado neste inventário e em qual local (ponto 5 do teste)
     Public Function CheckInventoryAssetLocation(ByVal codigoInventario As Long,
                                                 ByVal assetCode As String,

@@ -149,7 +149,7 @@ async function processBarcode() {
             return;
         }
 
-        abrirModal(barcode, true, null, true); // conta e movimenta para o local atual
+        abrirModal(barcode, true, null, true, validacao); // conta e movimenta para o local atual
         return;
     }
 
@@ -164,13 +164,13 @@ async function processBarcode() {
     }
 
     // 2c) Primeira contagem — abre modal de status
-    abrirModal(barcode, true, null);
+    abrirModal(barcode, true, null, false, validacao);
 }
 
 // ============================================================
 //  Abre o modal de confirmação de status
 // ============================================================
-function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar) {
+function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar, avaliacao) {
     // Guarda contexto no modal via data attributes
     $('#modalConfirmacao')
         .data('barcode', barcode)
@@ -178,13 +178,21 @@ function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar) {
         .data('descricaoInformada', descricaoInformada)
         .data('movimentar', movimentar === true);
 
-    // Reset estado
-    $('#stOk').prop('checked', true);
-    $('#areaNok').removeClass('show');
-    $('#modalObservacao').val('');
+    // Ponto 4: item encontrado vem pré-classificado com a última avaliação (edição opcional)
+    const temAvaliacao = !!(avaliacao && avaliacao.possuiAvaliacao);
+    const statusOk = temAvaliacao ? avaliacao.statusOk === true : true;
+
+    $('#stOk').prop('checked', statusOk);
+    $('#stNok').prop('checked', !statusOk);
+    $('#areaNok').toggleClass('show', !statusOk);
+    $('#modalObservacao').val(!statusOk && temAvaliacao ? (avaliacao.observacao || '') : '');
     $('#inputFoto').val('');
     $('#fotoPreview').attr('src', '#').removeClass('show');
     $('#modalAssetCode').text('Ativo: ' + barcode);
+
+    // Mensagens do modal: encontrado na base / pré-classificado
+    $('#modalEncontrado').toggle(ativoCadastrado === true);
+    $('#modalPreClassificado').toggle(temAvaliacao);
 
     $('#modalConfirmacao').addClass('show');
     $('#btnModalConfirmar').prop('disabled', false);

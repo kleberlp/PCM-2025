@@ -73,7 +73,30 @@ namespace PCM.WEB.OS.Controllers
                                                  codigoUnidade: unidade,
                                                  assetCode: assetCode);
 
-            return Json(new { success = exists });
+            //Ponto 4: ativo encontrado já vem pré-classificado com a última avaliação
+            var avaliacao = new AssetLastEvaluation();
+
+            if (exists)
+            {
+                try
+                {
+                    avaliacao = _ativoFixo.GetAssetLastEvaluation(codigoEmpresa: empresa,
+                                                                  codigoUnidade: unidade,
+                                                                  assetCode: assetCode);
+                }
+                catch (Exception)
+                {
+                    //Sem a SP de avaliação, segue sem pré-classificação
+                }
+            }
+
+            return Json(new
+            {
+                success = exists,
+                possuiAvaliacao = avaliacao.possuiAvaliacao,
+                statusOk = avaliacao.statusOk,
+                observacao = avaliacao.observacao
+            });
         }
 
         [HttpPost]

@@ -28,4 +28,11 @@ namespace PCM.WEB.OS.MODELS
         public string localAtual { get; set; } = "";
     }
 
+    public class AssetLastEvaluation
+    {
+        public bool possuiAvaliacao { get; set; } = false;
+        public bool statusOk { get; set; } = true;
+        public string observacao { get; set; } = "";
+    }
+
 }
