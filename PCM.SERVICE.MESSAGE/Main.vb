@@ -137,14 +137,19 @@ Public Class Main
 
         Dim oSmtpClient As New SmtpClient()
         oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
-        oSmtpClient.Port = 465
+        ' 587 = STARTTLS, que é o modo suportado pelo System.Net.Mail.
+        ' Na 465 (SSL implícito) o cliente espera o banner do servidor e o servidor
+        ' espera o handshake TLS: ninguém fala primeiro e o envio estoura em timeout.
+        oSmtpClient.Port = 587
         oSmtpClient.Host = "smtpout.secureserver.net"
         oSmtpClient.EnableSsl = True
+        oSmtpClient.Timeout = 30000   ' falha em 30s em vez de travar o ciclo por 100s
 
         Try
             oSmtpClient.Send(oEmail)
         Catch ex As Exception
-            Debug.Print(ex.Message)
+            ' Debug.Print não aparece no serviço em produção: registra no log
+            WriteLog("SendEmailLaudo/Send (" & sEmail & "): " & ex.Message)
         End Try
 
     End Sub
@@ -488,16 +493,24 @@ Public Class Main
 
                 Dim oSmtpClient As New SmtpClient()
                 oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
-                oSmtpClient.Port = 465
+                ' 587 = STARTTLS, que é o modo suportado pelo System.Net.Mail.
+                ' Na 465 (SSL implícito) o cliente espera o banner do servidor e o servidor
+                ' espera o handshake TLS: ninguém fala primeiro e o envio estoura em timeout.
+                oSmtpClient.Port = 587
                 oSmtpClient.Host = "smtpout.secureserver.net"
                 oSmtpClient.EnableSsl = True
+                oSmtpClient.Timeout = 30000   ' falha em 30s em vez de travar o ciclo por 100s
 
                 Try
                     oSmtpClient.Send(oMailMessage)
                 Catch ex As Exception
-
+                    ' Sem log a falha ficava invisível: o e-mail sumia da fila sem
+                    ' nunca ter sido entregue e sem deixar rastro
+                    WriteLog("SendEmail/Send (" & oMessage.sTo & "): " & ex.Message)
                 End Try
 
+                ' Mantém a marcação mesmo em falha, para não reprocessar em laço a
+                ' cada minuto; o log acima é o rastro para conferir o que não saiu
                 UpdateEmail(oMessage.lCodigo)
 
             Next
