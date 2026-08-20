@@ -143,8 +143,7 @@ async function closeInventory() {
                         confirmButtonText: messages.ok
                     });
 
-                    carregarGrid();
-                    hasInventoryOpened();
+                    window.location = messages.urlAssetInventoryMng;
 
                 } else {
 
@@ -154,6 +153,45 @@ async function closeInventory() {
                         icon: "error",
                         confirmButtonText: messages.ok
                     });
+                }
+            }
+        });
+
+    }
+
+}
+
+// Cancela o inventário aberto (ponto 1 do teste): confirma, cancela e volta ao gerenciamento
+async function cancelInventory() {
+
+    const confirmed = await rfConfirm({
+        title: messages.msgQuestionCancelInventory,
+        message: messages.msgNotPossibleReverse,
+        confirmButtonText: messages.yes,
+        cancelButtonText: messages.no
+    });
+
+    if (confirmed) {
+
+        jQuery.ajax({
+            method: "POST",
+            url: messages.urlCancelInventory,
+            async: true,
+            data: {
+                "unidade": $("#unidade").val()
+            },
+            dataType: "json",
+            success: async function (response) {
+
+                await rfAlert({
+                    title: response.message,
+                    message: "",
+                    icon: response.success ? "success" : "error",
+                    confirmButtonText: messages.ok
+                });
+
+                if (response.success) {
+                    window.location = messages.urlAssetInventoryMng;
                 }
             }
         });

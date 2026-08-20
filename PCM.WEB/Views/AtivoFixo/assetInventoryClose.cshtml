@@ -40,7 +40,8 @@
                 <h3 class="block-title text-white font-w600">@Resources.asset</h3>
 
                 <div class="block-options">
-                    <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@Resources.closeInventory</button>
+                    <button type="button" id="btnCancelInventory" name="btnCancelInventory" class="btn btn-square btn-secondary min-width-100 h-75 bg-danger-light" onclick="cancelInventory()"><i class="fa fa-ban mr-5"></i>Cancelar inventário</button>
+                    <button type="button" id="btnCloseInventory" name="btnCloseInventory" class="btn btn-square btn-secondary min-width-100 h-75" onclick="closeInventory()"><i class="fa fa-save mr-5"></i>@Resources.closeInventory</button>
                     <a href="@Url.Action("AssetInventoryMng", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-action-undo mr-5"></i>@Resources.voltar</a>
                 </div>
             </div>
@@ -252,6 +253,11 @@
         validaBancoDados = Resources.valida_bd,
         requiredField = Resources.campo_requerido,
         msgQuestionConfirmMovement = Resources.msgQuestionConfirmMovement,
+        msgQuestionCancelInventory = "Deseja cancelar este inventário?",
+        ok = Resources.ok,
+        urlCloseInventory = Url.Action("closeInventory", "AtivoFixo"),
+        urlCancelInventory = Url.Action("cancelInventory", "AtivoFixo"),
+        urlAssetInventoryMng = Url.Action("assetInventoryMng", "AtivoFixo"),
         urlLoadAssetInventoried = Url.Action("loadAssetInventoried", "AtivoFixo"),
         urlLoadAssetNotFinded = Url.Action("loadAssetNotFinded", "AtivoFixo"),
         urlLoadAssetNotRegistered = Url.Action("loadAssetNotRegistered", "AtivoFixo"),

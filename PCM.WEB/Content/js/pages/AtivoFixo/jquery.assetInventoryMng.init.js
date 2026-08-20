@@ -72,7 +72,7 @@ function carregarGrid() {
                 icon: "fa fa-list",
                 class: "btn btn-sm",
                 title: messages.clickToManagerInventory,
-                visible: (row) => row.status != "FINALIZADO",
+                visible: (row) => row.status != "FINALIZADO" && row.status != "CANCELADO",
                 onClick: (row) => {
                     managerInventory(row);
                 }

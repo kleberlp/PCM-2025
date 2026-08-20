@@ -508,6 +508,31 @@ namespace PCM.WEB.Controllers
             return Json(_response);
         }
 
+        //Cancela o inventário aberto da unidade (ponto 1 do teste)
+        [HttpPost]
+        public JsonResult cancelInventory(int unidade)
+        {
+            defaultResponse _response = new defaultResponse();
+
+            try
+            {
+
+                _ativoFixo.CancelAssetInventory(codigoEmpresa: codigoEmpresa,
+                                                codigoUnidade: unidade,
+                                                codigoUsuario: codigoUsuario);
+
+                _response.success = true;
+                _response.message = "Inventário cancelado com sucesso.";
+            }
+            catch (Exception ex)
+            {
+                _response.success = false;
+                _response.message = ex.Message;
+            }
+
+            return Json(_response);
+        }
+
         public ActionResult assetInventoryClose(long codigo)
         {
             if (!IsSessionValid())

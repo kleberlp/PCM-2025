@@ -550,6 +550,29 @@ Public Class AtivoFixo
 
     End Sub
 
+    ' Cancela o inventário aberto da unidade (ponto 1 do teste)
+    Public Sub CancelAssetInventory(ByVal codigoEmpresa As Long,
+                                    ByVal codigoUnidade As Integer,
+                                    ByVal codigoUsuario As Integer)
+
+        Try
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.Int, codigoEmpresa),
+                CriarParametro("codigo_unidade", SqlDbType.Int, codigoUnidade),
+                CriarParametro("codigo_usuario", SqlDbType.Int, codigoUsuario)
+            }
+
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_update_asset_inventory_cancel", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
     Public Function LoadAssetInventoried(ByVal codigo As Long,
                                          ByVal type As Integer) As Object
 
