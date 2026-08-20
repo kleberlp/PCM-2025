@@ -188,13 +188,19 @@
             color: #fff;
         }
 
-        #areaNok {
+        #areaNok, #areaFoto {
             display: none;
         }
 
-            #areaNok.show {
+            #areaNok.show, #areaFoto.show {
                 display: block;
             }
+
+        .foto-hint {
+            font-size: 0.72rem;
+            color: #6c757d;
+            margin: 6px 0 0;
+        }
 
         #fotoPreview {
             display: none;
@@ -355,16 +361,20 @@
 
             <div id="areaNok">
                 <div class="mb-2">
-                    <label class="form-label" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">Observação</label>
+                    <label class="form-label" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">Observação <span class="text-danger">*</span></label>
                     <textarea id="modalObservacao" class="form-control form-control-sm" rows="2" maxlength="500" placeholder="Descreva o problema encontrado..."></textarea>
                 </div>
+            </div>
+
+            <div id="areaFoto">
                 <div class="mb-2">
-                    <label class="form-label" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">Foto</label>
+                    <label class="form-label" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">Foto <span class="text-danger">*</span></label>
                     <label class="btn-foto" for="inputFoto">
                         <i class="fas fa-camera"></i> Tirar foto / selecionar imagem
                     </label>
                     <input type="file" id="inputFoto" accept="image/*" capture="environment">
                     <img id="fotoPreview" src="#" alt="Preview">
+                    <p class="foto-hint" id="fotoHint">Foto obrigatória para concluir o registro.</p>
                 </div>
             </div>
 

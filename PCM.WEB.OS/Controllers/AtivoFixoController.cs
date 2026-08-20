@@ -118,9 +118,29 @@ namespace PCM.WEB.OS.Controllers
 
             try
             {
+                bool possuiFoto = foto != null && foto.Length > 0;
+
+                //Observação obrigatória quando o item é apontado como Não OK
+                if (!statusOk && string.IsNullOrWhiteSpace(observacao))
+                {
+                    return Json(new { success = false, message = "Descreva o problema encontrado para registrar o item como Não OK." });
+                }
+
+                //Foto obrigatória em avaliação Não OK e em novos cadastros
+                if ((!statusOk || !ativoCadastrado) && !possuiFoto)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = !ativoCadastrado
+                            ? "É necessário tirar uma foto para concluir o cadastro do novo ativo."
+                            : "É necessário tirar uma foto para registrar o item como Não OK."
+                    });
+                }
+
                 string fotoPath = string.Empty;
 
-                if (foto != null && foto.Length > 0)
+                if (possuiFoto)
                 {
                     var uploadDir = Path.Combine("C:\\SIM\\PCM\\SITE\\IMAGE\\OS", "INVENTARIO");
                     Directory.CreateDirectory(uploadDir);
