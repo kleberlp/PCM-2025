@@ -42,6 +42,27 @@ Public Class AtivoFixo
 
     End Function
 
+    ' Identifica o contador pelo e-mail quando o app é aberto sem uniqueId
+    ' (atalho do PWA / link expirado). Só considera inventários em aberto.
+    Public Function GetUniqueIdByEmail(ByVal email As String) As String
+
+        Dim oSqlParameter As List(Of SqlParameter) = New List(Of SqlParameter)
+
+        Try
+            AddSqlParameter(oSqlParameter, "email", SqlDbType.VarChar, 150, email)
+
+            Dim result As Object = ExecuteScalar(sConnection, CommandType.StoredProcedure, "sp_select_asset_inventario_contador_email", oSqlParameter.ToArray())
+
+            Return If(result Is Nothing OrElse IsDBNull(result), String.Empty, CStr(result))
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     Public Function GetInventarioAtivo(ByVal codigoEmpresa As Integer,
                                        ByVal codigoUnidade As Integer) As Long
 

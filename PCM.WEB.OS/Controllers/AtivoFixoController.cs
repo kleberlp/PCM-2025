@@ -25,6 +25,16 @@ namespace PCM.WEB.OS.Controllers
         {
             var inventory = _ativoFixo.InfoInventario(uniqueId);
 
+            // Sem uniqueId (atalho do PWA) ou link inválido/expirado: a tela abre
+            // pedindo o e-mail do contador para localizar o inventário em aberto
+            if (string.IsNullOrWhiteSpace(uniqueId) || inventory.codigoEmpresa <= 0)
+            {
+                ViewBag.solicitarEmail = true;
+                ViewBag.uniqueId = "";
+
+                return View(new AssetInventoryViewModel { inventory = inventory });
+            }
+
             // Persiste empresa e unidade na Session para as chamadas AJAX subsequentes
             HttpContext.Session.SetInt32("inv_codigoEmpresa", inventory.codigoEmpresa);
             HttpContext.Session.SetInt32("inv_codigoUnidade", inventory.codigoUnidade);
@@ -52,6 +62,34 @@ namespace PCM.WEB.OS.Controllers
             };
 
             return View(viewModel);
+        }
+
+        // Localiza o inventário em aberto pelo e-mail do contador (app aberto sem uniqueId)
+        [HttpPost]
+        public JsonResult identificarContador(string email)
+        {
+            try
+            {
+                email = (email ?? "").Trim();
+
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    return Json(new { success = false, message = "Informe o e-mail cadastrado." });
+                }
+
+                string uniqueId = _ativoFixo.GetUniqueIdByEmail(email);
+
+                if (string.IsNullOrWhiteSpace(uniqueId))
+                {
+                    return Json(new { success = false, message = "Nenhum inventário em aberto foi encontrado para este e-mail." });
+                }
+
+                return Json(new { success = true, uniqueId = uniqueId });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
         [HttpPost]

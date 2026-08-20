@@ -4,6 +4,23 @@
 
 $(document).ready(function () {
 
+    // ---- App aberto sem uniqueId (atalho do PWA / link expirado) ----
+    if ($('#solicitarEmail').val() === '1') {
+        $('#modalEmail').addClass('show');
+        $('#emailContador').trigger('focus');
+    }
+
+    $('#btnEmailEntrar').on('click', function () {
+        identificarContador();
+    });
+
+    $('#emailContador').on('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            identificarContador();
+        }
+    });
+
     // ---- Filtro: setor -> recarrega apartamentos ----
     $('#codigoSetor').on('change', function () {
         const unidade = $('#codigoUnidade').val();
@@ -82,6 +99,49 @@ $(document).ready(function () {
     $('#barcode').focus();
 
 });
+
+// ============================================================
+//  Identificação por e-mail: localiza o inventário em aberto
+//  vinculado ao contador e entra na aplicação
+// ============================================================
+function identificarContador() {
+
+    var email = ($('#emailContador').val() || '').trim();
+    var $erro = $('#emailErro');
+
+    $erro.removeClass('show').text('');
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        $erro.text('Informe um e-mail válido.').addClass('show');
+        $('#emailContador').trigger('focus');
+        return;
+    }
+
+    var $btn = $('#btnEmailEntrar');
+    $btn.prop('disabled', true).text('Verificando...');
+
+    $.ajax({
+        type: 'POST',
+        url: urlIdentificarContador,
+        data: { email: email },
+        success: function (response) {
+
+            if (response && response.success) {
+                // Entra no inventário do contador
+                window.location.href = urlAssetInventory + '?uniqueId=' + encodeURIComponent(response.uniqueId);
+                return;
+            }
+
+            $erro.text((response && response.message) || 'Não foi possível localizar o inventário.').addClass('show');
+            $btn.prop('disabled', false).text('Entrar');
+        },
+        error: function () {
+            $erro.text('Erro ao consultar. Tente novamente.').addClass('show');
+            $btn.prop('disabled', false).text('Entrar');
+        }
+    });
+
+}
 
 // ============================================================
 //  Processa leitura do barcode

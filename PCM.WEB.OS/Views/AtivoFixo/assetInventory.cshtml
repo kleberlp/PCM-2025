@@ -243,6 +243,17 @@
         #inputFoto {
             display: none;
         }
+
+        .email-erro {
+            display: none;
+            font-size: 0.78rem;
+            color: #dc3545;
+            margin: 6px 0 0;
+        }
+
+            .email-erro.show {
+                display: block;
+            }
     </style>
 </head>
 <body class="account-body">
@@ -250,6 +261,7 @@
     <input type="hidden" id="codigoInventario" value="@ViewBag.codigoInventario" />
     <input type="hidden" id="codigoUnidade" value="@ViewBag.codigoUnidade" />
     <input type="hidden" id="uniqueId" value="@ViewBag.uniqueId" />
+    <input type="hidden" id="solicitarEmail" value="@(ViewBag.solicitarEmail == true ? "1" : "0")" />
 
     <div class="inventory-wrapper">
 
@@ -349,6 +361,25 @@
 
     </div>
 
+    <!-- MODAL IDENTIFICAÇÃO POR E-MAIL (app aberto sem uniqueId) -->
+    <div class="modal-confirmacao" id="modalEmail">
+        <div class="modal-card">
+            <p class="modal-title">Identificação</p>
+            <p class="modal-asset">Informe o e-mail cadastrado para abrir o seu inventário.</p>
+
+            <div class="mb-2">
+                <label class="form-label" for="emailContador" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">E-mail</label>
+                <input type="email" id="emailContador" class="form-control form-control-sm"
+                       placeholder="seu.email@exemplo.com" autocomplete="email" inputmode="email" maxlength="150">
+                <p class="email-erro" id="emailErro"></p>
+            </div>
+
+            <div class="d-flex gap-2 mt-3">
+                <button type="button" class="btn btn-primary btn-sm flex-fill" id="btnEmailEntrar">Entrar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CONFIRMAÇÃO DE ATIVO -->
     <div class="modal-confirmacao" id="modalConfirmacao">
         <div class="modal-card">
@@ -401,6 +432,8 @@
         var urlInsertAssetInventory = '@Url.Action("insertAssetInventory", "AtivoFixo")';
         var urlLoadAssetInventory = '@Url.Action("loadAssetInventory", "AtivoFixo")';
         var urlLoadListApartamento = '@Url.Action("loadListApartamento", "AtivoFixo")';
+        var urlIdentificarContador = '@Url.Action("identificarContador", "AtivoFixo")';
+        var urlAssetInventory = '@Url.Action("assetInventory", "AtivoFixo")';
     </script>
     <script src="~/js/pages/ativoFixo/jquery.assetInventory.init.js"></script>
     <script src="~/js/pwa.js"></script>
