@@ -254,6 +254,18 @@
             .email-erro.show {
                 display: block;
             }
+
+        .email-enviado {
+            display: none;
+            font-size: 0.85rem;
+            color: #198754;
+            line-height: 1.4;
+            margin: 4px 0 0;
+        }
+
+            .email-enviado.show {
+                display: block;
+            }
     </style>
 </head>
 <body class="account-body">
@@ -365,18 +377,23 @@
     <div class="modal-confirmacao" id="modalEmail">
         <div class="modal-card">
             <p class="modal-title">Identificação</p>
-            <p class="modal-asset">Informe o e-mail cadastrado para abrir o seu inventário.</p>
 
-            <div class="mb-2">
-                <label class="form-label" for="emailContador" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">E-mail</label>
-                <input type="email" id="emailContador" class="form-control form-control-sm"
-                       placeholder="seu.email@exemplo.com" autocomplete="email" inputmode="email" maxlength="150">
-                <p class="email-erro" id="emailErro"></p>
+            <div id="emailFormArea">
+                <p class="modal-asset">Informe o e-mail cadastrado e enviaremos o link de acesso ao seu inventário.</p>
+
+                <div class="mb-2">
+                    <label class="form-label" for="emailContador" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">E-mail</label>
+                    <input type="email" id="emailContador" class="form-control form-control-sm"
+                           placeholder="seu.email@exemplo.com" autocomplete="email" inputmode="email" maxlength="150">
+                    <p class="email-erro" id="emailErro"></p>
+                </div>
+
+                <div class="d-flex gap-2 mt-3">
+                    <button type="button" class="btn btn-primary btn-sm flex-fill" id="btnEmailEntrar">Enviar link de acesso</button>
+                </div>
             </div>
 
-            <div class="d-flex gap-2 mt-3">
-                <button type="button" class="btn btn-primary btn-sm flex-fill" id="btnEmailEntrar">Entrar</button>
-            </div>
+            <p class="email-enviado" id="emailEnviado"></p>
         </div>
     </div>
 

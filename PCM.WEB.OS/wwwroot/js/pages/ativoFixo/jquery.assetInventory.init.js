@@ -118,7 +118,7 @@ function identificarContador() {
     }
 
     var $btn = $('#btnEmailEntrar');
-    $btn.prop('disabled', true).text('Verificando...');
+    $btn.prop('disabled', true).text('Enviando...');
 
     $.ajax({
         type: 'POST',
@@ -127,17 +127,18 @@ function identificarContador() {
         success: function (response) {
 
             if (response && response.success) {
-                // Entra no inventário do contador
-                window.location.href = urlAssetInventory + '?uniqueId=' + encodeURIComponent(response.uniqueId);
+                // O link de acesso é enviado ao e-mail cadastrado
+                $('#emailFormArea').hide();
+                $('#emailEnviado').text(response.message).addClass('show');
                 return;
             }
 
-            $erro.text((response && response.message) || 'Não foi possível localizar o inventário.').addClass('show');
-            $btn.prop('disabled', false).text('Entrar');
+            $erro.text((response && response.message) || 'Não foi possível concluir.').addClass('show');
+            $btn.prop('disabled', false).text('Enviar link de acesso');
         },
         error: function () {
             $erro.text('Erro ao consultar. Tente novamente.').addClass('show');
-            $btn.prop('disabled', false).text('Entrar');
+            $btn.prop('disabled', false).text('Enviar link de acesso');
         }
     });
 

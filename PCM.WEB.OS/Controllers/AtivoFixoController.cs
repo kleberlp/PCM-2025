@@ -79,12 +79,21 @@ namespace PCM.WEB.OS.Controllers
 
                 string uniqueId = _ativoFixo.GetUniqueIdByEmail(email);
 
-                if (string.IsNullOrWhiteSpace(uniqueId))
+                //O acesso não é liberado direto na tela: o link vai para o e-mail
+                //cadastrado, que é quem de fato comprova a identidade do contador
+                if (!string.IsNullOrWhiteSpace(uniqueId))
                 {
-                    return Json(new { success = false, message = "Nenhum inventário em aberto foi encontrado para este e-mail." });
+                    string link = $"{Request.Scheme}://{Request.Host}{Url.Action("assetInventory", "AtivoFixo", new { uniqueId = uniqueId })}";
+
+                    _ativoFixo.EnviarAcessoContador(email: email, link: link);
                 }
 
-                return Json(new { success = true, uniqueId = uniqueId });
+                //Resposta igual achando ou não: não revela quais e-mails estão cadastrados
+                return Json(new
+                {
+                    success = true,
+                    message = "Se este e-mail estiver vinculado a um inventário em aberto, você receberá o link de acesso em instantes. Verifique também a caixa de spam."
+                });
             }
             catch (Exception ex)
             {

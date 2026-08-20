@@ -63,6 +63,29 @@ Public Class AtivoFixo
 
     End Function
 
+    ' Enfileira o e-mail com o link de acesso do contador (mesmo caminho usado na
+    ' criação do inventário). Retorna False quando não há nada a enviar.
+    Public Function EnviarAcessoContador(ByVal email As String,
+                                         ByVal link As String) As Boolean
+
+        Dim oSqlParameter As List(Of SqlParameter) = New List(Of SqlParameter)
+
+        Try
+            AddSqlParameter(oSqlParameter, "email", SqlDbType.VarChar, 150, email)
+            AddSqlParameter(oSqlParameter, "link", SqlDbType.VarChar, 500, link)
+
+            Dim result As Object = ExecuteScalar(sConnection, CommandType.StoredProcedure, "sp_insert_asset_inventario_contador_acesso", oSqlParameter.ToArray())
+
+            Return Not (result Is Nothing OrElse IsDBNull(result)) AndAlso CInt(result) > 0
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     Public Function GetInventarioAtivo(ByVal codigoEmpresa As Integer,
                                        ByVal codigoUnidade As Integer) As Long
 
