@@ -328,7 +328,7 @@ window.onHeaderReady = function () {
 
     });
 
-});
+};
 
 // unidade e modulo são gerenciados pelo header global (codebase.js)
 // apenas o filtro de data é local a esta tela
