@@ -87,7 +87,8 @@ namespace PCM.WEB.OS.Controllers
                                                            string descricaoInformada,
                                                            bool statusOk = true,
                                                            string? observacao = null,
-                                                           IFormFile? foto = null)
+                                                           IFormFile? foto = null,
+                                                           bool movimentar = false)
         {
             int empresa = HttpContext.Session.GetInt32("inv_codigoEmpresa") ?? -1;
             string codigoUsuario = HttpContext.Session.GetString("inv_codigoUsuario") ?? "";
@@ -126,13 +127,32 @@ namespace PCM.WEB.OS.Controllers
                                                 descricaoInformada: descricaoInformada,
                                                 statusOk: statusOk,
                                                 observacao: observacao ?? string.Empty,
-                                                fotoPath: fotoPath);
+                                                fotoPath: fotoPath,
+                                                movimentar: movimentar);
 
                 return Json(new { success = true, message = "" });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        //Verifica se o ativo já foi contado neste inventário e onde (ponto 5 do teste)
+        [HttpPost]
+        public JsonResult checkAssetInventoried(long codigoInventario, string assetCode, int setor, int apartamento = -1)
+        {
+            try
+            {
+                return Json(_ativoFixo.CheckInventoryAssetLocation(codigoInventario: codigoInventario,
+                                                                   assetCode: assetCode,
+                                                                   codigoSetor: setor,
+                                                                   codigoApartamento: apartamento));
+            }
+            catch (Exception)
+            {
+                //Em caso de falha na verificação, segue o fluxo normal de contagem
+                return Json(new AssetInventoryCheck());
             }
         }
 

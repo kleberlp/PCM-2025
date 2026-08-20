@@ -98,7 +98,8 @@ Public Class AtivoFixo
                                     ByVal codigoUsuario As String,
                                     Optional ByVal statusOk As Boolean = True,
                                     Optional ByVal observacao As String = "",
-                                    Optional ByVal fotoPath As String = "")
+                                    Optional ByVal fotoPath As String = "",
+                                    Optional ByVal movimentar As Boolean = False)
 
         Dim oSqlParameter As List(Of SqlParameter) = New List(Of SqlParameter)
 
@@ -116,6 +117,7 @@ Public Class AtivoFixo
             AddSqlParameter(oSqlParameter, "status_ok", SqlDbType.Bit, 0, statusOk)
             AddSqlParameter(oSqlParameter, "observacao", SqlDbType.VarChar, 500, If(String.IsNullOrWhiteSpace(observacao), DBNull.Value, CObj(observacao)))
             AddSqlParameter(oSqlParameter, "foto_path", SqlDbType.VarChar, 500, If(String.IsNullOrWhiteSpace(fotoPath), DBNull.Value, CObj(fotoPath)))
+            AddSqlParameter(oSqlParameter, "movimentar", SqlDbType.Bit, 0, movimentar)
 
             ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_insert_asset_inventory_count", oSqlParameter.ToArray())
 
@@ -126,6 +128,42 @@ Public Class AtivoFixo
         End Try
 
     End Sub
+
+    ' Verifica se o ativo já foi contado neste inventário e em qual local (ponto 5 do teste)
+    Public Function CheckInventoryAssetLocation(ByVal codigoInventario As Long,
+                                                ByVal assetCode As String,
+                                                ByVal codigoSetor As Integer,
+                                                ByVal codigoApartamento As Integer) As AssetInventoryCheck
+
+        Dim oSqlParameter As List(Of SqlParameter) = New List(Of SqlParameter)
+        Dim _result As New AssetInventoryCheck
+
+        Try
+
+            AddSqlParameter(oSqlParameter, "codigo_inventario", SqlDbType.BigInt, 0, codigoInventario)
+            AddSqlParameter(oSqlParameter, "asset_code", SqlDbType.VarChar, 50, assetCode)
+            AddSqlParameter(oSqlParameter, "codigo_setor", SqlDbType.Int, 0, codigoSetor)
+            AddSqlParameter(oSqlParameter, "codigo_apartamento", SqlDbType.Int, 0, If(codigoApartamento = -1, DBNull.Value, CObj(codigoApartamento)))
+
+            Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_asset_inventory_count_location", oSqlParameter.ToArray())
+
+                If _sqlDataReader.Read Then
+                    _result.alreadyCounted = SafeGetBoolean(_sqlDataReader, "already_counted")
+                    _result.sameLocation = SafeGetBoolean(_sqlDataReader, "same_location")
+                    _result.localAtual = SafeGetString(_sqlDataReader, "local_atual")
+                End If
+
+            End Using
+
+            Return _result
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
 
     Public Function LoadAssetInventory(ByVal codigoInventario As Long,
                                        ByVal codigoEmpresa As Integer,

@@ -128,19 +128,55 @@ async function processBarcode() {
         return;
     }
 
-    // 2) Ativo existe — abre modal de status
+    // 2) Ativo existe — verifica se já foi contado neste inventário
+    const check = await checkInventoried(barcode);
+
+    // 2a) Já contado em OUTRO local: pergunta se deseja movimentar
+    if (check.alreadyCounted && !check.sameLocation) {
+
+        const movimentarResult = await Swal.fire({
+            title: 'Ativo já inventariado' + (check.localAtual ? ' em: ' + check.localAtual : ''),
+            text: 'Deseja movimentar o item para o local atual?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+        });
+
+        const movimentar = movimentarResult === true || (movimentarResult && movimentarResult.isConfirmed);
+        if (!movimentar) {
+            $('#barcode').val('').focus();
+            return;
+        }
+
+        abrirModal(barcode, true, null, true); // conta e movimenta para o local atual
+        return;
+    }
+
+    // 2b) Já contado NESTE local: apenas avisa
+    if (check.alreadyCounted && check.sameLocation) {
+        await Swal.fire({
+            title: 'Ativo já inventariado neste local.',
+            icon: 'info'
+        });
+        $('#barcode').val('').focus();
+        return;
+    }
+
+    // 2c) Primeira contagem — abre modal de status
     abrirModal(barcode, true, null);
 }
 
 // ============================================================
 //  Abre o modal de confirmação de status
 // ============================================================
-function abrirModal(barcode, ativoCadastrado, descricaoInformada) {
+function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar) {
     // Guarda contexto no modal via data attributes
     $('#modalConfirmacao')
         .data('barcode', barcode)
         .data('ativoCadastrado', ativoCadastrado)
-        .data('descricaoInformada', descricaoInformada);
+        .data('descricaoInformada', descricaoInformada)
+        .data('movimentar', movimentar === true);
 
     // Reset estado
     $('#stOk').prop('checked', true);
@@ -184,6 +220,7 @@ async function confirmarRegistro() {
     fd.append('descricaoInformada', descricaoInformada);
     fd.append('statusOk', statusOk);
     fd.append('observacao', observacao);
+    fd.append('movimentar', modal.data('movimentar') === true);
     if (fotoFile) fd.append('foto', fotoFile);
 
     try {
@@ -206,6 +243,25 @@ async function confirmarRegistro() {
         $('#btnModalConfirmar').prop('disabled', false);
         Swal.fire({ title: 'Erro ao registrar ativo.', icon: 'error' });
     }
+}
+
+// ============================================================
+//  Consulta se o ativo já foi contado neste inventário e onde
+// ============================================================
+function checkInventoried(assetCode) {
+    return $.ajax({
+        type: 'POST',
+        url: urlCheckAssetInventoried,
+        data: {
+            codigoInventario: $('#codigoInventario').val(),
+            assetCode: assetCode,
+            setor: $('#codigoSetor').val() || -1,
+            apartamento: $('#codigoApartamento').val() || -1
+        }
+    }).catch(function () {
+        // Falha na verificação não bloqueia a contagem
+        return { alreadyCounted: false, sameLocation: false, localAtual: '' };
+    });
 }
 
 // ============================================================

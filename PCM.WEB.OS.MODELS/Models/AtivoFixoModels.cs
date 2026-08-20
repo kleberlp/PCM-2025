@@ -21,4 +21,11 @@ namespace PCM.WEB.OS.MODELS
         public int codigoUnidade { get; set; }
     }
 
+    public class AssetInventoryCheck
+    {
+        public bool alreadyCounted { get; set; } = false;
+        public bool sameLocation { get; set; } = false;
+        public string localAtual { get; set; } = "";
+    }
+
 }
