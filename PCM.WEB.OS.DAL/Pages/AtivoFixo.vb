@@ -87,7 +87,8 @@ Public Class AtivoFixo
 
     End Function
 
-    Public Sub InsertInventoryAsset(ByVal codigoInventario As Long,
+    Public Sub InsertInventoryAsset(ByVal uniqueId As String,
+                                    ByVal codigoInventario As Long,
                                     ByVal codigoEmpresa As Integer,
                                     ByVal codigoUnidade As Integer,
                                     ByVal codigoSetor As Integer,

@@ -495,7 +495,7 @@ Public Class Main
                 Try
                     oSmtpClient.Send(oMailMessage)
                 Catch ex As Exception
-
+                    WriteLog("Erro Envio de e-mail. Ordem de Serviço: " & oMessage.sOrdemServico & " - " & ex.Message)
                 End Try
 
                 UpdateEmail(oMessage.lCodigo)

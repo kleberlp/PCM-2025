@@ -78,7 +78,8 @@ namespace PCM.WEB.OS.Controllers
 
         [HttpPost]
         [RequestFormLimits(MultipartBodyLengthLimit = 10_000_000)]
-        public async Task<JsonResult> insertAssetInventory(long codigoInventario,
+        public async Task<JsonResult> insertAssetInventory(string uniqueId,
+                                                           long codigoInventario,
                                                            int unidade,
                                                            int setor,
                                                            int apartamento,
@@ -115,7 +116,8 @@ namespace PCM.WEB.OS.Controllers
                     fotoPath = fullPath;
                 }
 
-                _ativoFixo.InsertInventoryAsset(codigoInventario: codigoInventario,
+                _ativoFixo.InsertInventoryAsset(uniqueId: uniqueId,
+                                                codigoInventario: codigoInventario,
                                                 codigoEmpresa: empresa,
                                                 codigoUnidade: unidade,
                                                 codigoSetor: setor,

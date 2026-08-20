@@ -175,6 +175,7 @@ async function confirmarRegistro() {
 
     // Monta FormData para suportar envio de arquivo
     const fd = new FormData();
+    fd.append('uniqueId', $('#uniqueId').val());
     fd.append('codigoInventario', $('#codigoInventario').val());
     fd.append('unidade', $('#codigoUnidade').val());
     fd.append('setor', $('#codigoSetor').val() || -1);
