@@ -61,13 +61,13 @@ $('#form').validate({
 
     submitHandler: async function (form, event) {
 
-        event.preventDefault(); 
+        event.preventDefault();
 
         const barcode = $("#barcode").val();
 
         let response = await validateAsset(barcode);
 
-        // 1) Ativo NÃO existe
+        // 1) Ativo Nï¿½O existe
         if (!response.success) {
 
             const confirmed = await rfConfirm({
@@ -82,7 +82,7 @@ $('#form').validate({
                 return false;
             }
 
-            // Solicita descrição
+            // Solicita descriï¿½ï¿½o
             const result = await Swal.fire({
                 title: messages.msgInformarDescricao,
                 input: 'text',
@@ -94,12 +94,50 @@ $('#form').validate({
                 return false;
             }
 
-            await insertInventory(false, result.value); // não cadastrado
+            await insertInventory(false, result.value); // nï¿½o cadastrado
 
             return false;
         }
 
-        // 2) Ativo existe
+        // 2) Ativo existe: verifica se jï¿½ foi contado neste inventï¿½rio
+        const check = await checkInventoried(barcode);
+
+        // 2a) Jï¿½ contado em OUTRO local: pergunta se deseja movimentar
+        if (check.alreadyCounted && !check.sameLocation) {
+
+            const movimentar = await rfConfirm({
+                title: messages.msgAtivoJaInventariado + (check.localAtual ? " (" + check.localAtual + ")" : ""),
+                message: messages.msgQuestionMovimentarAtivo,
+                confirmButtonText: messages.yes,
+                cancelButtonText: messages.no
+            });
+
+            if (!movimentar) {
+                $("#barcode").val('').focus();
+                return false;
+            }
+
+            await insertInventory(true, null, true); // conta e movimenta para o local atual
+
+            return false;
+        }
+
+        // 2b) Jï¿½ contado NESTE local: apenas avisa
+        if (check.alreadyCounted && check.sameLocation) {
+
+            await rfAlert({
+                title: messages.msgAtivoJaInventariadoLocal,
+                message: "",
+                icon: "info",
+                confirmButtonText: messages.ok
+            });
+
+            $("#barcode").val('').focus();
+
+            return false;
+        }
+
+        // 2c) Primeira contagem
         await insertInventory(true, null);
 
         return false;
@@ -120,19 +158,39 @@ function validateAsset(assetCode) {
 
 }
 
-function insertInventory(isValidAsset, descricao) {
+// Consulta se o ativo jÃ¡ foi contado neste inventÃ¡rio e em qual local
+function checkInventoried(assetCode) {
+
+    return $.ajax({
+        type: "POST",
+        url: messages.urlCheckAssetInventoried,
+        data: {
+            codigoInventario: $("#codigoInventario").val(),
+            assetCode: assetCode,
+            setor: $("#codigoSetor").val(),
+            apartamento: $("#codigoApartamento").val() || -1
+        }
+    }).catch(function () {
+        // Falha na verificaÃ§Ã£o nÃ£o bloqueia a contagem
+        return { alreadyCounted: false, sameLocation: false, localAtual: "" };
+    });
+
+}
+
+function insertInventory(isValidAsset, descricao, movimentar) {
 
     $.ajax({
         type: "POST",
         url: messages.urlInsertAssetInventory,
         data: {
-            codigoInventario: $("#codigoInventario").val(), 
+            codigoInventario: $("#codigoInventario").val(),
             unidade: $("#codigoUnidade").val(),
             setor: $("#codigoSetor").val(),
             apartamento: $("#codigoApartamento").val() || -1,
             assetCode: $("#barcode").val(),
             ativoCadastrado: isValidAsset,
-            descricaoInformada: descricao
+            descricaoInformada: descricao,
+            movimentar: movimentar === true
         },
         success: function (response) {
 
@@ -159,7 +217,7 @@ function openAssetModal(barcode) {
     Swal.fire({
         title: 'Cadastro de Ativo',
         html: `
-            <input id="assetDescription" class="swal2-input" placeholder="Descrição">
+            <input id="assetDescription" class="swal2-input" placeholder="Descriï¿½ï¿½o">
         `,
         confirmButtonText: 'Salvar',
         showCancelButton: true,

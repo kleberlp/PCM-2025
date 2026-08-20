@@ -648,7 +648,7 @@ namespace PCM.WEB.Controllers
         }
 
         [HttpPost]
-        public JsonResult insertAssetInventory(long codigoInventario, int unidade, int setor, int apartamento, string assetCode, bool ativoCadastrado, string descricaoInformada)
+        public JsonResult insertAssetInventory(long codigoInventario, int unidade, int setor, int apartamento, string assetCode, bool ativoCadastrado, string descricaoInformada, bool movimentar = false)
         {
             defaultResponse response = new defaultResponse();
 
@@ -662,7 +662,8 @@ namespace PCM.WEB.Controllers
                                                 assetCode: assetCode,
                                                 codigoUsuario: codigoUsuario,
                                                 ativoCadastrado: ativoCadastrado,
-                                                descricaoInformada: descricaoInformada);
+                                                descricaoInformada: descricaoInformada,
+                                                movimentar: movimentar);
 
                 response.success = true;
             }
@@ -673,6 +674,24 @@ namespace PCM.WEB.Controllers
             }
 
             return Json(response);
+        }
+
+        //Verifica se o ativo já foi contado neste inventário e onde (ponto 5 do teste)
+        [HttpPost]
+        public JsonResult checkAssetInventoried(long codigoInventario, string assetCode, int setor, int apartamento = -1)
+        {
+            try
+            {
+                return Json(_ativoFixo.CheckInventoryAssetLocation(codigoInventario: codigoInventario,
+                                                                   assetCode: assetCode,
+                                                                   codigoSetor: setor,
+                                                                   codigoApartamento: apartamento));
+            }
+            catch (Exception)
+            {
+                //Em caso de falha na verificação, segue o fluxo normal de contagem
+                return Json(new AssetInventoryCheck());
+            }
         }
 
         [HttpPost]

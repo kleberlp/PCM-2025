@@ -59,6 +59,13 @@ namespace PCM.WEB.MODELS
         public int codigoUnidade { get; set; } = 0;
     }
 
+    public class AssetInventoryCheck
+    {
+        public bool alreadyCounted { get; set; } = false;
+        public bool sameLocation { get; set; } = false;
+        public string localAtual { get; set; } = "";
+    }
+
     public class AssetTipoMovimentacaoConfig
     {
         public bool success { get; set; } = true;
