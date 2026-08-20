@@ -8,6 +8,16 @@ $(document).ready(function () {
 
     Codebase.helpers(['datepicker', 'maxlength', 'select2']);
 
+    // Mensagem vinda do redirect (ex.: inventário salvo com sucesso)
+    if (messages.inventoryMessage) {
+        rfAlert({
+            title: messages.inventoryMessage,
+            message: "",
+            icon: "success",
+            confirmButtonText: messages.ok
+        });
+    }
+
     carregarFiltro();
     carregarGrid();
 
@@ -140,15 +150,22 @@ function hasInventoryOpened() {
 function loadChildTable(data) {
 
     var table_info = '';
+    var codigoInventario = data.codigoInventario ?? data.codigo;
 
     $.ajax({
         type: "POST",
         url: messages.urlLoadAssetInventoryMngDetails,
         async: false,
+        dataType: "json",
         data: {
-            codigoInventario: data.codigoInventario
+            codigoInventario: codigoInventario
         },
         success: function (response) {
+
+            if (!response || response.length === 0) {
+                table_info = `<div class="bg-light p-10 text-muted">${messages.nothingRegister}</div>`;
+                return;
+            }
 
             table_info = `<div class="bg-light">
                 <table class="table table-striped table-bordered">
@@ -168,17 +185,21 @@ function loadChildTable(data) {
             response.forEach(r => {
                 table_info += `
                     <tr>
-                        <td class="text-center">${r.assetCode}</td>
-                        <td>${r.descricao}</td>
-                        <td>${r.origem}</td>
-                        <td>${r.destino}</td>
-                        <td class="text-center">${r.usuario}</td>
-                        <td class="text-center">${r.data}</td>
-                        <td class="text-center">${r.ativoCadastrado}</td>
+                        <td class="text-center">${r.assetCode ?? ''}</td>
+                        <td>${r.descricao ?? ''}</td>
+                        <td>${r.origem ?? ''}</td>
+                        <td>${r.destino ?? ''}</td>
+                        <td class="text-center">${r.usuario ?? ''}</td>
+                        <td class="text-center">${r.data ?? ''}</td>
+                        <td class="text-center">${r.ativoCadastrado ?? ''}</td>
                     </tr>`;
             });
 
             table_info += "</tbody></table></div>";
+        },
+        error: function (xhr) {
+            console.error("loadAssetInventoryMngDetails:", xhr.status, xhr.responseText);
+            table_info = `<div class="bg-light p-10 text-danger">Erro ao carregar os detalhes do inventário (${xhr.status}). Verifique a procedure sp_select_asset_inventory_manager_details.</div>`;
         }
     });
 

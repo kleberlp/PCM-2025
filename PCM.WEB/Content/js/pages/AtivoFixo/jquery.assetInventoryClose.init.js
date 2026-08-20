@@ -12,6 +12,21 @@ $(document).ready(function () {
 
 });
 
+// Atualiza contador: o widget countTo do Codebase cacheia o data-to inicial (0) e
+// atropela o texto ao animar; aqui atualizamos .data/.attr/.text e re-disparamos
+// a animação com o valor correto
+function setCountTo(sel, val) {
+
+    var $el = $(sel);
+
+    $el.data("to", val).attr("data-to", val).text(val);
+
+    if ($.fn.countTo) {
+        $el.countTo({ from: 0, to: val, speed: 500, refreshInterval: 50 });
+    }
+
+}
+
 function carregarGrid() {
 
     var data = {
@@ -34,7 +49,7 @@ function carregarGrid() {
         textNothingRegister: messages.nothingRegister,
         enableChild: false,
         onLoaded: function (response, rows) {
-            $("#ativoInventariado").attr("data-to", rows.length).text(rows.length);
+            setCountTo("#ativoInventariado", rows.length);
         }
     });
 
@@ -65,7 +80,7 @@ function carregarGrid() {
             }
         ],
         onLoaded: function (response, rows) {
-            $("#ativoNaoEncontrado").attr("data-to", rows.length).text(rows.length);
+            setCountTo("#ativoNaoEncontrado", rows.length);
         }
     });
 
@@ -85,7 +100,7 @@ function carregarGrid() {
         textNothingRegister: messages.nothingRegister,
         enableChild: false,
         onLoaded: function (response, rows) {
-            $("#ativoNaoCadastrado").attr("data-to", rows.length).text(rows.length);
+            setCountTo("#ativoNaoCadastrado", rows.length);
         }
     });
 

@@ -90,6 +90,16 @@ $(document).on('click', '.btn-remove-contador', function () {
 
 jQuery(function () {
     Codebase.helpers(['datepicker', 'maxlength', 'select2']);
+
+    // Erro vindo do redirect (falha ao salvar o inventário)
+    if (messages.inventoryError) {
+        rfAlert({
+            title: messages.inventoryError,
+            message: "",
+            icon: "error",
+            confirmButtonText: messages.ok
+        });
+    }
 });
 
 $('#form').validate({

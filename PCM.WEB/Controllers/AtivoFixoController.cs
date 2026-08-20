@@ -476,8 +476,11 @@ namespace PCM.WEB.Controllers
 
             if (_response.success)
             {
-                _response.message = Resources.inventoryInsertedSuccefully;
+                TempData["inventoryMessage"] = Resources.inventoryInsertedSuccefully;
+                return RedirectToAction("assetInventoryMng");
             }
+
+            TempData["inventoryError"] = _response.message;
             return RedirectToAction("assetInventoryInsert");
         }
 
@@ -498,7 +501,7 @@ namespace PCM.WEB.Controllers
             }
             catch (Exception ex)
             {
-                _response.success = true;
+                _response.success = false;
                 _response.message = ex.Message;
             }
 
