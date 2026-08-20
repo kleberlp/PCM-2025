@@ -1,0 +1,26 @@
+@*
+    Meta tags do PWA (manifesto, tema e ícones iOS).
+    Incluir no <head> de todas as telas — inclusive nas que não usam o _Layout.
+
+    ViewBag.uniqueId   -> mantido no start_url para o atalho instalado abrir com contexto
+    ViewBag.pwaOrigem  -> "inventario" abre o app direto na tela de inventário
+*@
+@{
+    //null (e não "") para o Url.Action omitir os parâmetros vazios
+    var pwaUniqueId = string.IsNullOrWhiteSpace(ViewBag.uniqueId as string) ? null : (string)ViewBag.uniqueId;
+    var pwaOrigem = string.IsNullOrWhiteSpace(ViewBag.pwaOrigem as string) ? null : (string)ViewBag.pwaOrigem;
+    var pwaManifest = Url.Action("Manifest", "Pwa", new { uniqueId = pwaUniqueId, origem = pwaOrigem });
+}
+
+<link rel="manifest" href="@pwaManifest">
+<meta name="theme-color" content="#2B1A6A">
+<meta name="application-name" content="PCM">
+
+<!-- iOS: permite abrir em tela cheia (sem a barra de URL) -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PCM">
+<link rel="apple-touch-icon" href="~/images/pwa/apple-touch-icon-180.png">
+
+<link href="~/css/pwa.css" rel="stylesheet" type="text/css" />

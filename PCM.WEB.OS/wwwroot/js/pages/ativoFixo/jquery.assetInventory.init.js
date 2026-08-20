@@ -4,6 +4,23 @@
 
 $(document).ready(function () {
 
+    // ---- App aberto sem uniqueId (atalho do PWA / link expirado) ----
+    if ($('#solicitarEmail').val() === '1') {
+        $('#modalEmail').addClass('show');
+        $('#emailContador').trigger('focus');
+    }
+
+    $('#btnEmailEntrar').on('click', function () {
+        identificarContador();
+    });
+
+    $('#emailContador').on('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            identificarContador();
+        }
+    });
+
     // ---- Filtro: setor -> recarrega apartamentos ----
     $('#codigoSetor').on('change', function () {
         const unidade = $('#codigoUnidade').val();
@@ -39,11 +56,21 @@ $(document).ready(function () {
     // ---- Toggle OK / Não OK no modal ----
     $('input[name="statusOk"]').on('change', function () {
         const isOk = $(this).val() === 'true';
+        const novoCadastro = $('#modalConfirmacao').data('ativoCadastrado') === false;
+
         $('#areaNok').toggleClass('show', !isOk);
+
+        // Foto é exigida em avaliação N/OK e em novos cadastros
+        $('#areaFoto').toggleClass('show', !isOk || novoCadastro);
+
         if (isOk) {
             $('#modalObservacao').val('');
-            $('#inputFoto').val('');
-            $('#fotoPreview').attr('src', '#').removeClass('show');
+
+            // Em novo cadastro a foto continua obrigatória, então é preservada
+            if (!novoCadastro) {
+                $('#inputFoto').val('');
+                $('#fotoPreview').attr('src', '#').removeClass('show');
+            }
         }
     });
 
@@ -72,6 +99,50 @@ $(document).ready(function () {
     $('#barcode').focus();
 
 });
+
+// ============================================================
+//  Identificação por e-mail: localiza o inventário em aberto
+//  vinculado ao contador e entra na aplicação
+// ============================================================
+function identificarContador() {
+
+    var email = ($('#emailContador').val() || '').trim();
+    var $erro = $('#emailErro');
+
+    $erro.removeClass('show').text('');
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        $erro.text('Informe um e-mail válido.').addClass('show');
+        $('#emailContador').trigger('focus');
+        return;
+    }
+
+    var $btn = $('#btnEmailEntrar');
+    $btn.prop('disabled', true).text('Enviando...');
+
+    $.ajax({
+        type: 'POST',
+        url: urlIdentificarContador,
+        data: { email: email },
+        success: function (response) {
+
+            if (response && response.success) {
+                // O link de acesso é enviado ao e-mail cadastrado
+                $('#emailFormArea').hide();
+                $('#emailEnviado').text(response.message).addClass('show');
+                return;
+            }
+
+            $erro.text((response && response.message) || 'Não foi possível concluir.').addClass('show');
+            $btn.prop('disabled', false).text('Enviar link de acesso');
+        },
+        error: function () {
+            $erro.text('Erro ao consultar. Tente novamente.').addClass('show');
+            $btn.prop('disabled', false).text('Enviar link de acesso');
+        }
+    });
+
+}
 
 // ============================================================
 //  Processa leitura do barcode
@@ -128,27 +199,80 @@ async function processBarcode() {
         return;
     }
 
-    // 2) Ativo existe — abre modal de status
-    abrirModal(barcode, true, null);
+    // 2) Ativo existe — verifica se já foi contado neste inventário
+    const check = await checkInventoried(barcode);
+
+    // 2a) Já contado em OUTRO local: pergunta se deseja movimentar
+    if (check.alreadyCounted && !check.sameLocation) {
+
+        const movimentarResult = await Swal.fire({
+            title: 'Ativo já inventariado' + (check.localAtual ? ' em: ' + check.localAtual : ''),
+            text: 'Deseja movimentar o item para o local atual?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+        });
+
+        const movimentar = movimentarResult === true || (movimentarResult && movimentarResult.isConfirmed);
+        if (!movimentar) {
+            $('#barcode').val('').focus();
+            return;
+        }
+
+        abrirModal(barcode, true, null, true, validacao); // conta e movimenta para o local atual
+        return;
+    }
+
+    // 2b) Já contado NESTE local: apenas avisa
+    if (check.alreadyCounted && check.sameLocation) {
+        await Swal.fire({
+            title: 'Ativo já inventariado neste local.',
+            icon: 'info'
+        });
+        $('#barcode').val('').focus();
+        return;
+    }
+
+    // 2c) Primeira contagem — abre modal de status
+    abrirModal(barcode, true, null, false, validacao);
 }
 
 // ============================================================
 //  Abre o modal de confirmação de status
 // ============================================================
-function abrirModal(barcode, ativoCadastrado, descricaoInformada) {
+function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar, avaliacao) {
     // Guarda contexto no modal via data attributes
     $('#modalConfirmacao')
         .data('barcode', barcode)
         .data('ativoCadastrado', ativoCadastrado)
-        .data('descricaoInformada', descricaoInformada);
+        .data('descricaoInformada', descricaoInformada)
+        .data('movimentar', movimentar === true);
 
-    // Reset estado
-    $('#stOk').prop('checked', true);
-    $('#areaNok').removeClass('show');
-    $('#modalObservacao').val('');
+    // Ponto 4: item encontrado vem pré-classificado com a última avaliação (edição opcional)
+    const temAvaliacao = !!(avaliacao && avaliacao.possuiAvaliacao);
+    const statusOk = temAvaliacao ? avaliacao.statusOk === true : true;
+
+    const novoCadastro = ativoCadastrado === false;
+
+    $('#stOk').prop('checked', statusOk);
+    $('#stNok').prop('checked', !statusOk);
+    $('#areaNok').toggleClass('show', !statusOk);
+    $('#modalObservacao').val(!statusOk && temAvaliacao ? (avaliacao.observacao || '') : '');
+
+    // Foto obrigatória: avaliação N/OK ou novo cadastro
+    $('#areaFoto').toggleClass('show', !statusOk || novoCadastro);
+    $('#fotoHint').text(novoCadastro
+        ? 'Foto obrigatória para concluir o cadastro do novo ativo.'
+        : 'Foto obrigatória para registrar o item como Não OK.');
+
     $('#inputFoto').val('');
     $('#fotoPreview').attr('src', '#').removeClass('show');
     $('#modalAssetCode').text('Ativo: ' + barcode);
+
+    // Mensagens do modal: encontrado na base / pré-classificado
+    $('#modalEncontrado').toggle(ativoCadastrado === true);
+    $('#modalPreClassificado').toggle(temAvaliacao);
 
     $('#modalConfirmacao').addClass('show');
     $('#btnModalConfirmar').prop('disabled', false);
@@ -163,15 +287,41 @@ function fecharModal() {
 //  Confirma e envia para o servidor
 // ============================================================
 async function confirmarRegistro() {
-    $('#btnModalConfirmar').prop('disabled', true);
 
     const modal = $('#modalConfirmacao');
     const barcode = modal.data('barcode');
     const ativoCadastrado = modal.data('ativoCadastrado');
     const descricaoInformada = modal.data('descricaoInformada') || '';
     const statusOk = $('input[name="statusOk"]:checked').val() === 'true';
+    const novoCadastro = ativoCadastrado === false;
     const observacao = statusOk ? '' : $('#modalObservacao').val().trim();
-    const fotoFile = statusOk ? null : ($('#inputFoto')[0].files[0] || null);
+    const fotoFile = $('#inputFoto')[0].files[0] || null;
+
+    // ---- Validações obrigatórias ----
+
+    // Observação é obrigatória quando o item é apontado como Não OK
+    if (!statusOk && !observacao) {
+        Swal.fire({
+            title: 'Observação obrigatória',
+            text: 'Descreva o problema encontrado para registrar o item como Não OK.',
+            icon: 'warning'
+        }).then(function () { $('#modalObservacao').focus(); });
+        return;
+    }
+
+    // Foto é obrigatória em avaliação Não OK e em novos cadastros
+    if ((!statusOk || novoCadastro) && !fotoFile) {
+        Swal.fire({
+            title: 'Foto obrigatória',
+            text: novoCadastro
+                ? 'É necessário tirar uma foto para concluir o cadastro do novo ativo.'
+                : 'É necessário tirar uma foto para registrar o item como Não OK.',
+            icon: 'warning'
+        });
+        return;
+    }
+
+    $('#btnModalConfirmar').prop('disabled', true);
 
     // Monta FormData para suportar envio de arquivo
     const fd = new FormData();
@@ -185,6 +335,7 @@ async function confirmarRegistro() {
     fd.append('descricaoInformada', descricaoInformada);
     fd.append('statusOk', statusOk);
     fd.append('observacao', observacao);
+    fd.append('movimentar', modal.data('movimentar') === true);
     if (fotoFile) fd.append('foto', fotoFile);
 
     try {
@@ -207,6 +358,25 @@ async function confirmarRegistro() {
         $('#btnModalConfirmar').prop('disabled', false);
         Swal.fire({ title: 'Erro ao registrar ativo.', icon: 'error' });
     }
+}
+
+// ============================================================
+//  Consulta se o ativo já foi contado neste inventário e onde
+// ============================================================
+function checkInventoried(assetCode) {
+    return $.ajax({
+        type: 'POST',
+        url: urlCheckAssetInventoried,
+        data: {
+            codigoInventario: $('#codigoInventario').val(),
+            assetCode: assetCode,
+            setor: $('#codigoSetor').val() || -1,
+            apartamento: $('#codigoApartamento').val() || -1
+        }
+    }).catch(function () {
+        // Falha na verificação não bloqueia a contagem
+        return { alreadyCounted: false, sameLocation: false, localAtual: '' };
+    });
 }
 
 // ============================================================
