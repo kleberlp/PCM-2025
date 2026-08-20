@@ -34,12 +34,8 @@ connection.start()
 
 
 
-// ✅ Register Service Worker for background notifications (if needed)
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log("✅ Service Worker Registered", reg))
-        .catch(err => console.error("❌ Service Worker registration failed:", err));
-}
+// ✅ O registro do Service Worker foi centralizado em /js/pwa.js (PWA),
+//    que também cuida do fluxo de atualização e do convite de instalação.
 
 //// ✅ Connect to SignalR Hub
 //const connection = new signalR.HubConnectionBuilder()

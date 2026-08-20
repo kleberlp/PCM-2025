@@ -1,0 +1,56 @@
+/* ============================================================
+   PCM.WEB.OS - PWA (banners de instalação / atualização)
+   ============================================================ */
+
+.pwa-banner {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #2B1A6A;
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .22);
+    font-size: .85rem;
+}
+
+.pwa-banner-text {
+    flex: 1;
+    line-height: 1.25;
+}
+
+.pwa-banner-btn {
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 6px;
+    padding: 7px 14px;
+    background: #6475FF;
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pwa-banner-btn:hover {
+    background: #5163e6;
+}
+
+.pwa-banner-close {
+    flex-shrink: 0;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, .75);
+    font-size: 1.2rem;
+    line-height: 1;
+    padding: 0 2px;
+    cursor: pointer;
+}
+
+.pwa-banner-close:hover {
+    color: #fff;
+}

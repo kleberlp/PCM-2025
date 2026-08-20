@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
 });
 
 
-// Configuração de localização
+// Configuraï¿½ï¿½o de localizaï¿½ï¿½o
 var supportedCultures = new[] { "pt-BR", "es-MX", "en-US" };
 var localizationOptions = new RequestLocalizationOptions()
 {
@@ -31,15 +31,15 @@ builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(filesPath)
 
 builder.Services.AddScoped<ImageService>();
 
-// Configuração do esquema de autenticação padrão (Cookies)
+// Configuraï¿½ï¿½o do esquema de autenticaï¿½ï¿½o padrï¿½o (Cookies)
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login"; // Caminho para a página de login
-        options.AccessDeniedPath = "/Account/AccessDenied"; // Caminho para página de acesso negado
+        options.LoginPath = "/Account/Login"; // Caminho para a pï¿½gina de login
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Caminho para pï¿½gina de acesso negado
     });
 
 // Add services to the container.
@@ -67,7 +67,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//// Configuração do Content-Security-Policy (CSP)
+//// Configuraï¿½ï¿½o do Content-Security-Policy (CSP)
 app.Use(async (context, next) =>
 {
 
@@ -80,6 +80,9 @@ app.Use(async (context, next) =>
             "font-src 'self' https://fonts.gstatic.com; " +
             "img-src 'self' data: blob:;" +
             "frame-src 'none'; " +
+            // PWA: service worker e manifesto sÃ£o servidos pela prÃ³pria origem
+            "worker-src 'self'; " +
+            "manifest-src 'self'; " +
             "connect-src 'self' https://www.simservices.com.br  ws://www.simservices.com.br https://viacep.com.br;");
 
         await next();
@@ -87,7 +90,7 @@ app.Use(async (context, next) =>
     catch (Exception ex)
     {
         Console.WriteLine($"[CSP Middleware] Erro: {ex.Message}");
-        throw; // relança para não engolir o erro original
+        throw; // relanï¿½a para nï¿½o engolir o erro original
     }
 });
 
@@ -96,7 +99,22 @@ var fileProvider = app.Services.GetRequiredService<IFileProvider>();
 //app.UsePathBase("/VC");
 app.UseHsts();
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        // O service worker nÃ£o pode ficar preso em cache, senÃ£o novas versÃµes
+        // do app demoram a chegar aos aparelhos
+        var caminho = ctx.File.Name;
+
+        if (string.Equals(caminho, "sw.js", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(caminho, "offline.html", StringComparison.OrdinalIgnoreCase))
+        {
+            ctx.Context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+        }
+    }
+});
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = fileProvider,
@@ -108,7 +126,7 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseSession();
 app.UseCors("AllowCorsPolicy");
 
-// Configuração das rotas MVC
+// Configuraï¿½ï¿½o das rotas MVC
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
