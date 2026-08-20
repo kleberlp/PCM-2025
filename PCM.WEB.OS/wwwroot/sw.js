@@ -7,33 +7,41 @@
 //  IMPORTANTE: ao alterar este arquivo, suba a versão do CACHE_VERSION.
 // ============================================================
 
-const CACHE_VERSION = 'pcm-os-v1';
-const OFFLINE_URL = '/offline.html';
+const CACHE_VERSION = 'pcm-os-v2';
+
+// Tudo é resolvido a partir do escopo do próprio service worker, e não de "/",
+// para o app funcionar também quando publicado em um diretório virtual
+const SCOPE_URL = self.registration.scope;                 // ex.: https://host/ ou https://host/OS/
+const SCOPE_PATH = new URL(SCOPE_URL).pathname;            // ex.: /        ou /OS/
+
+const url = caminho => new URL(caminho, SCOPE_URL).href;
+
+const OFFLINE_URL = url('offline.html');
 
 // Somente recursos estáticos: nada de HTML de páginas (dependem de sessão/uniqueId)
 const PRECACHE_URLS = [
     OFFLINE_URL,
-    '/css/bootstrap.min.css',
-    '/css/icons.min.css',
-    '/css/metisMenu.min.css',
-    '/css/app.css',
-    '/js/jquery.min.js',
-    '/js/bootstrap.bundle.min.js',
-    '/lib/sweet-alert2/sweetalert2.min.css',
-    '/lib/sweet-alert2/sweetalert2.min.js',
-    '/lib/select2/select2.min.css',
-    '/lib/select2/select2.min.js',
-    '/js/pages/ativoFixo/jquery.assetInventory.init.js',
-    '/images/pwa/icon-192.png',
-    '/images/pwa/icon-512.png',
-    '/images/favicon.png'
+    url('css/bootstrap.min.css'),
+    url('css/icons.min.css'),
+    url('css/metisMenu.min.css'),
+    url('css/app.css'),
+    url('js/jquery.min.js'),
+    url('js/bootstrap.bundle.min.js'),
+    url('lib/sweet-alert2/sweetalert2.min.css'),
+    url('lib/sweet-alert2/sweetalert2.min.js'),
+    url('lib/select2/select2.min.css'),
+    url('lib/select2/select2.min.js'),
+    url('js/pages/ativoFixo/jquery.assetInventory.init.js'),
+    url('images/pwa/icon-192.png'),
+    url('images/pwa/icon-512.png'),
+    url('images/favicon.png')
 ];
 
 // Pastas tratadas como estáticas (cache-first)
-const STATIC_PATHS = ['/css/', '/js/', '/lib/', '/images/', '/fonts/', '/scss/'];
+const STATIC_PATHS = ['css/', 'js/', 'lib/', 'images/', 'fonts/', 'scss/'];
 
-function isStaticAsset(url) {
-    return STATIC_PATHS.some(p => url.pathname.startsWith(p));
+function isStaticAsset(u) {
+    return STATIC_PATHS.some(p => u.pathname.startsWith(SCOPE_PATH + p));
 }
 
 // ---------------- Install: precache tolerante a falhas ----------------
@@ -43,7 +51,7 @@ self.addEventListener('install', event => {
 
         // allSettled: um arquivo ausente não invalida a instalação inteira
         await Promise.allSettled(
-            PRECACHE_URLS.map(url => cache.add(new Request(url, { cache: 'reload' })))
+            PRECACHE_URLS.map(item => cache.add(new Request(item, { cache: 'reload' })))
         );
     })());
 });
@@ -71,11 +79,11 @@ self.addEventListener('fetch', event => {
     // Só GET é cacheável; POST (bipagem, uploads) sempre vai à rede
     if (request.method !== 'GET') return;
 
-    const url = new URL(request.url);
+    const reqUrl = new URL(request.url);
 
     // Não intercepta outras origens nem o próprio manifesto (start_url por uniqueId)
-    if (url.origin !== self.location.origin) return;
-    if (url.pathname === '/manifest.webmanifest') return;
+    if (reqUrl.origin !== self.location.origin) return;
+    if (reqUrl.pathname === SCOPE_PATH + 'manifest.webmanifest') return;
 
     // Navegação: network-first com fallback offline
     if (request.mode === 'navigate') {
@@ -91,7 +99,7 @@ self.addEventListener('fetch', event => {
     }
 
     // Estáticos: cache-first + revalidação em segundo plano
-    if (isStaticAsset(url)) {
+    if (isStaticAsset(reqUrl)) {
         event.respondWith((async () => {
             const cache = await caches.open(CACHE_VERSION);
             const cached = await cache.match(request);
@@ -116,8 +124,8 @@ self.addEventListener('push', function (event) {
     const data = event.data.json();
     const options = {
         body: data.message,
-        icon: '/images/notification_icon.png',
-        badge: '/images/notification_badge.png'
+        icon: url('images/notification_icon.png'),
+        badge: url('images/notification_badge.png')
     };
 
     event.waitUntil(
@@ -128,6 +136,6 @@ self.addEventListener('push', function (event) {
 self.addEventListener('notificationclick', function (event) {
     event.notification.close();
     event.waitUntil(
-        clients.openWindow('/')
+        clients.openWindow(SCOPE_URL)
     );
 });

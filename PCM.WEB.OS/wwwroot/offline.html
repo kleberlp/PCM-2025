@@ -4,21 +4,87 @@
     <meta charset="utf-8" />
     <title>PCM - Sem conexão</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <link rel="icon" href="/images/favicon.png">
-    <link href="/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/css/offline.css" rel="stylesheet" />
+
+    <!--
+        Página autocontida de propósito: ela é exibida no lugar de uma URL que falhou,
+        e a barra de endereços continua mostrando aquela URL. Qualquer css/js externo
+        seria resolvido a partir dela e daria 404. Sem imagens e sem scripts: o botão
+        é um form GET para a própria URL, que refaz a navegação.
+    -->
+    <style>
+        body {
+            margin: 0;
+            background: #f7f7fb;
+            font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            color: #212529;
+        }
+
+        .offline-wrapper {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .offline-mark {
+            width: 84px;
+            height: 84px;
+            border-radius: 18px;
+            background: #2B1A6A;
+            color: #6475FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .offline-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 8px;
+        }
+
+        .offline-text {
+            font-size: .9rem;
+            color: #6c757d;
+            max-width: 320px;
+            margin: 0 0 22px;
+            line-height: 1.45;
+        }
+
+        .offline-btn {
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 24px;
+            background: #2B1A6A;
+            color: #fff;
+            font-size: .9rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .offline-btn:hover {
+            background: #3a2489;
+        }
+    </style>
 </head>
 <body>
     <div class="offline-wrapper">
-        <img src="/images/pwa/icon-192.png" alt="PCM" class="offline-logo">
+        <div class="offline-mark">PCM</div>
         <h1 class="offline-title">Sem conexão</h1>
         <p class="offline-text">
             Não foi possível carregar esta tela. Verifique a conexão com a internet
             e tente novamente.
         </p>
-        <button type="button" class="offline-btn" id="btnTentarNovamente">Tentar novamente</button>
+        <form method="get">
+            <button type="submit" class="offline-btn">Tentar novamente</button>
+        </form>
     </div>
-
-    <script src="/js/offline.js"></script>
 </body>
 </html>

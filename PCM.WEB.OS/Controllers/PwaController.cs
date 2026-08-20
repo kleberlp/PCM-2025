@@ -12,27 +12,30 @@ namespace PCM.WEB.OS.Controllers
         [Route("manifest.webmanifest")]
         public IActionResult Manifest(string uniqueId = "", string origem = "")
         {
-            string startUrl = "/";
+            //Url.Content/Url.Action respeitam o PathBase: se o site rodar em um diretório
+            //virtual (ex.: /OS), caminhos absolutos como "/images/..." apontariam para a raiz
+            //do domínio e voltariam 404
+            string raiz = Url.Content("~/");
+
+            string startUrl = raiz;
 
             if (!string.IsNullOrWhiteSpace(uniqueId))
             {
-                string destino = string.Equals(origem, "inventario", StringComparison.OrdinalIgnoreCase)
-                    ? "/AtivoFixo/assetInventory"
-                    : "/Home/index";
-
-                startUrl = $"{destino}?uniqueId={Uri.EscapeDataString(uniqueId)}";
+                startUrl = string.Equals(origem, "inventario", StringComparison.OrdinalIgnoreCase)
+                    ? Url.Action("assetInventory", "AtivoFixo", new { uniqueId = uniqueId })
+                    : Url.Action("index", "Home", new { uniqueId = uniqueId });
             }
 
             var manifest = new
             {
-                id = "/pcm-os",
+                id = raiz + "pcm-os",
                 name = "PCM by SIM",
                 short_name = "PCM",
                 description = "Inventário de ativos e ordens de serviço - PCM by SIM",
                 lang = "pt-BR",
                 dir = "ltr",
                 start_url = startUrl,
-                scope = "/",
+                scope = raiz,
                 display = "standalone",
                 display_override = new[] { "standalone", "minimal-ui" },
                 orientation = "portrait",
@@ -43,10 +46,10 @@ namespace PCM.WEB.OS.Controllers
                 //anônimo é inferido e o serializador enxerga as propriedades
                 icons = new[]
                 {
-                    new { src = "/images/pwa/icon-192.png", sizes = "192x192", type = "image/png", purpose = "any" },
-                    new { src = "/images/pwa/icon-512.png", sizes = "512x512", type = "image/png", purpose = "any" },
-                    new { src = "/images/pwa/icon-192-maskable.png", sizes = "192x192", type = "image/png", purpose = "maskable" },
-                    new { src = "/images/pwa/icon-512-maskable.png", sizes = "512x512", type = "image/png", purpose = "maskable" }
+                    new { src = Url.Content("~/images/pwa/icon-192.png"), sizes = "192x192", type = "image/png", purpose = "any" },
+                    new { src = Url.Content("~/images/pwa/icon-512.png"), sizes = "512x512", type = "image/png", purpose = "any" },
+                    new { src = Url.Content("~/images/pwa/icon-192-maskable.png"), sizes = "192x192", type = "image/png", purpose = "maskable" },
+                    new { src = Url.Content("~/images/pwa/icon-512-maskable.png"), sizes = "512x512", type = "image/png", purpose = "maskable" }
                 }
             };
 

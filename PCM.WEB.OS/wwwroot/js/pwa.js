@@ -11,6 +11,14 @@
     var deferredPrompt = null;
     var refreshing = false;
 
+    // Raiz da aplicação derivada do próprio src deste arquivo (.../js/pwa.js).
+    // Assim o service worker funciona tanto na raiz do site quanto em um
+    // diretório virtual, sem precisar fixar "/" no código.
+    var thisScript = document.currentScript;
+    var appRoot = thisScript
+        ? thisScript.src.replace(/js\/pwa\.js(\?.*)?$/, '')
+        : '/';
+
     // ---------- Utilitários de UI ----------
     function criarBanner(texto, textoBotao, onClick) {
         var banner = document.createElement('div');
@@ -49,7 +57,7 @@
     // ---------- Registro do service worker ----------
     window.addEventListener('load', function () {
 
-        navigator.serviceWorker.register('/sw.js').then(function (reg) {
+        navigator.serviceWorker.register(appRoot + 'sw.js', { scope: appRoot }).then(function (reg) {
 
             // Já existe uma versão nova aguardando (aba anterior deixou pendente)
             if (reg.waiting && navigator.serviceWorker.controller) {
