@@ -40,6 +40,10 @@ function loadGridMain({
     enableChild = false,
     childRender = null,
 
+    // Formatação opcional por coluna: { nomeDaColuna: function (valor, linha) { return html } }
+    // Só afeta a exibição — ordenação e exportação continuam usando o valor original.
+    cellRender = null,
+
     onLoaded = null
 }) {
 
@@ -76,15 +80,29 @@ function loadGridMain({
             // =========================
             // COLUMNS
             // =========================
-            let dynamicColumns = columnsResponse.map(col => ({
-                data: col.data,
-                title: col.title,
-                visible: col.visible ?? true,
-                orderable: col.orderable ?? true,
-                width: col.width ?? "",
-                className: col.align ? "text-" + col.align : "",
-                defaultContent: ""
-            }));
+            let dynamicColumns = columnsResponse.map(col => {
+
+                const coluna = {
+                    data: col.data,
+                    title: col.title,
+                    visible: col.visible ?? true,
+                    orderable: col.orderable ?? true,
+                    width: col.width ?? "",
+                    className: col.align ? "text-" + col.align : "",
+                    defaultContent: ""
+                };
+
+                const formatador = cellRender ? cellRender[col.data] : null;
+
+                if (formatador) {
+                    coluna.render = function (data, type, row) {
+                        // fora de 'display' devolve o valor cru, para não quebrar ordenação/export
+                        return type === "display" ? formatador(data, row) : data;
+                    };
+                }
+
+                return coluna;
+            });
 
             // =========================
             // CHILD CONTROL (+ / -)

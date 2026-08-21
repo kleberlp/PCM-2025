@@ -81,6 +81,40 @@ function carregarGrid() {
         childRender: function (row) {
             return loadChildTable(row);
         },
+        cellRender: {
+            // Barra de progresso a partir de contados/previstos (Fase 2 da SP)
+            progresso: function (valor, row) {
+                var pct = parseInt(valor, 10);
+                if (isNaN(pct)) return "—";
+
+                var classe = pct >= 100 ? " af-ok" : (pct > 0 ? " af-warn" : "");
+                var detalhe = (row.contados != null && row.previstos != null)
+                    ? row.contados + " de " + row.previstos
+                    : "";
+
+                return "<span class='af-bar' title='" + detalhe + "'>" +
+                       "<span class='af-track'><span class='af-fill" + classe + "' style='width:" + pct + "%'></span></span>" +
+                       "<span class='af-pct'>" + pct + "%</span></span>";
+            },
+            contadores: function (valor) {
+                var qtd = parseInt(valor, 10) || 0;
+                return "<span class='af-pill'>" + qtd + "</span>";
+            },
+            status: function (valor) {
+                if (!valor) return "";
+
+                var mapa = {
+                    "ABERTO": "af-brand",
+                    "FINALIZADO": "af-ok",
+                    "CANCELADO": ""
+                };
+
+                var classe = mapa[String(valor).toUpperCase()];
+                classe = (classe === undefined) ? "af-warn" : classe;
+
+                return "<span class='af-chip " + classe + "'>" + valor + "</span>";
+            }
+        },
         onLoaded: function (response, rows) {
             var total = (rows || []).length;
             $("#contagemInventarios").text(total === 1 ? "1 inventário" : total + " inventários");

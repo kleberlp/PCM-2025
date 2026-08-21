@@ -50,6 +50,31 @@ function carregarGrid() {
         onDelete: (row) => {
             deleteRegister(row);
         },
+        cellRender: {
+            assetCode: function (valor) {
+                return valor ? "<span class='af-code'>" + valor + "</span>" : "";
+            },
+            status: function (valor) {
+                if (!valor) return "";
+
+                var mapa = {
+                    "ATIVO": "af-ok",
+                    "MANUTENÇÃO": "af-warn",
+                    "MANUTENCAO": "af-warn",
+                    "BAIXADO": "af-crit",
+                    "TRANSFERIDO": "af-brand"
+                };
+
+                var classe = mapa[String(valor).toUpperCase()] || "";
+                return "<span class='af-chip " + classe + "'>" + valor + "</span>";
+            },
+            ultimaMovimentacao: function (valor) {
+                return valor && valor !== "—" ? "<span class='af-code'>" + valor + "</span>" : "—";
+            },
+            valorCompra: function (valor) {
+                return valor && valor !== "—" ? "<span class='af-code'>" + valor + "</span>" : "—";
+            }
+        },
         onLoaded: function (response, rows) {
             var total = (rows || []).length;
             $("#contagemAtivos").text(total === 1 ? "1 resultado" : total + " resultados");

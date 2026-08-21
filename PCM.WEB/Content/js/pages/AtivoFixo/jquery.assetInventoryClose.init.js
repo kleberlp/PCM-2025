@@ -81,6 +81,30 @@ function carregarGrid() {
         textSearch: messages.search,
         textNothingRegister: messages.nothingRegister,
         enableChild: false,
+        cellRender: {
+            asset_code: function (valor) {
+                return valor ? "<span class='af-code'>" + valor + "</span>" : "";
+            },
+            // A avaliação não tem coluna própria nesta grid (as colunas vêm de
+            // tb_stc_grid_column); por isso o chip acompanha a descrição.
+            descricao: function (valor, row) {
+                var texto = valor || "";
+
+                if (row.status_ok === true || row.status_ok === 1) {
+                    return "<span class='af-chip af-ok'>OK</span> " + texto;
+                }
+
+                if (row.status_ok === false || row.status_ok === 0) {
+                    var foto = row.foto_path ? " <i class='fa fa-camera' title='Com foto'></i>" : "";
+                    return "<span class='af-chip af-warn'>Não OK</span> " + texto + foto;
+                }
+
+                return texto;
+            },
+            data: function (valor) {
+                return valor ? "<span class='af-code'>" + valor + "</span>" : "";
+            }
+        },
         onLoaded: function (response, rows) {
             setCountTo("#ativoInventariado", rows.length);
             afAtualizarResumo("inventariado", rows.length);
