@@ -305,6 +305,17 @@ var buscaTimer = null;
 
 function abrirNovoAtivo(barcode) {
 
+    // O modal vive na view (compilada na DLL). Se o publish levou só o wwwroot,
+    // o elemento não existe e a tela ficaria em branco sem nenhum aviso.
+    if ($('#modalNovoAtivo').length === 0) {
+        Swal.fire({
+            title: 'Versão desatualizada',
+            text: 'A tela publicada não tem o cadastro de novo ativo. Recarregue a página; se continuar, republique a aplicação (não apenas os arquivos estáticos).',
+            icon: 'error'
+        });
+        return;
+    }
+
     novoAtivo = { barcode: barcode, descricao: '', foto: null };
 
     $('#novoAssetCode').text('Código: ' + barcode);
