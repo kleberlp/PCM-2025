@@ -59,13 +59,11 @@ $(document).ready(function () {
 
         $('#areaNok').toggleClass('show', !isOk);
 
-        // Foto é exigida apenas na avaliação Não OK
-        $('#areaFoto').toggleClass('show', !isOk);
+        // A foto continua disponível nos dois casos; só a obrigatoriedade muda
+        marcarFotoObrigatoria(!isOk);
 
         if (isOk) {
             $('#modalObservacao').val('');
-            $('#inputFoto').val('');
-            $('#fotoPreview').attr('src', '#').removeClass('show');
         }
     });
 
@@ -234,6 +232,16 @@ async function processBarcode() {
 }
 
 // ============================================================
+//  Marca a foto como obrigatória (Não OK) ou opcional (OK)
+// ============================================================
+function marcarFotoObrigatoria(obrigatoria) {
+    $('#fotoObrigatoria').toggle(obrigatoria);
+    $('#fotoHint').text(obrigatoria
+        ? 'Foto obrigatória para registrar o item como Não OK.'
+        : 'Foto opcional.');
+}
+
+// ============================================================
 //  Abre o modal de confirmação de status
 // ============================================================
 function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar, avaliacao) {
@@ -253,9 +261,8 @@ function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar, av
     $('#areaNok').toggleClass('show', !statusOk);
     $('#modalObservacao').val(!statusOk && temAvaliacao ? (avaliacao.observacao || '') : '');
 
-    // Foto obrigatória apenas na avaliação Não OK
-    $('#areaFoto').toggleClass('show', !statusOk);
-    $('#fotoHint').text('Foto obrigatória para registrar o item como Não OK.');
+    // Foto sempre disponível; obrigatória apenas na avaliação Não OK
+    marcarFotoObrigatoria(!statusOk);
 
     $('#inputFoto').val('');
     $('#fotoPreview').attr('src', '#').removeClass('show');

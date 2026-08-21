@@ -193,11 +193,13 @@
             color: #fff;
         }
 
-        #areaNok, #areaFoto {
+        /* O bloco da foto fica sempre visível (a foto é opcional no OK);
+           só a observação aparece/some conforme o status */
+        #areaNok {
             display: none;
         }
 
-            #areaNok.show, #areaFoto.show {
+            #areaNok.show {
                 display: block;
             }
 
@@ -421,7 +423,7 @@
 
             <div id="areaFoto">
                 <div class="mb-2">
-                    <label class="form-label" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">Foto <span class="text-danger">*</span></label>
+                    <label class="form-label" style="font-size:0.78rem;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:.04em;">Foto <span class="text-danger" id="fotoObrigatoria">*</span></label>
                     <label class="btn-foto" for="inputFoto">
                         <i class="fas fa-camera"></i> Tirar foto / selecionar imagem
                     </label>
