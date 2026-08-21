@@ -1,0 +1,310 @@
+/* ============================================================
+   Ativo Fixo — camada de layout do módulo
+   Tudo prefixado com .af- para não afetar as demais telas.
+   Cores ancoradas na marca (#2B1A6A / #6475FF); a semântica
+   (ok / atenção / crítico) é separada do acento da marca.
+   ============================================================ */
+
+.af-scope {
+    --af-brand: #2B1A6A;
+    --af-brand-bright: #6475FF;
+    --af-brand-soft: #EDEEFF;
+    --af-ink: #1A1730;
+    --af-ink-2: #55516E;
+    --af-ink-3: #86829E;
+    --af-line: #E4E2EE;
+    --af-line-strong: #D2CFE0;
+    --af-surface: #FFFFFF;
+    --af-surface-2: #FAFAFD;
+    --af-ok: #17855C;
+    --af-ok-soft: #E2F3EC;
+    --af-warn: #B87503;
+    --af-warn-soft: #FAEFDB;
+    --af-crit: #C4323F;
+    --af-crit-soft: #FBE6E8;
+    --af-neutral: #6F6B87;
+    --af-neutral-soft: #EEEDF4;
+}
+
+/* ---------- Cabeçalho da página ---------- */
+.af-pagehead {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.af-pagehead .af-title {
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -.015em;
+    color: var(--af-ink);
+    margin: 0;
+}
+
+.af-pagehead .af-sub {
+    font-size: 12.5px;
+    color: var(--af-ink-3);
+    margin: 2px 0 0;
+}
+
+.af-pagehead .af-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Faixa de indicadores ---------- */
+.af-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    background: var(--af-surface);
+    border: 1px solid var(--af-line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.af-kpi {
+    padding: 13px 16px;
+    border-right: 1px solid var(--af-line);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.af-kpi:last-child {
+    border-right: 0;
+}
+
+.af-kpi .af-kpi-lbl {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--af-ink-3);
+}
+
+.af-kpi .af-kpi-val {
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--af-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.af-kpi .af-kpi-val.af-ok { color: var(--af-ok); }
+.af-kpi .af-kpi-val.af-warn { color: var(--af-warn); }
+.af-kpi .af-kpi-val.af-crit { color: var(--af-crit); }
+
+.af-kpi .af-kpi-meta {
+    font-size: 11px;
+    color: var(--af-ink-3);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Barra de filtros (substitui o cartão alto) ---------- */
+.af-toolbar {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 12px 14px;
+    background: var(--af-surface);
+    border: 1px solid var(--af-line);
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.af-toolbar .af-f {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.af-toolbar .af-f.af-grow {
+    flex: 1 1 200px;
+}
+
+.af-toolbar .af-f > label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--af-ink-3);
+    margin: 0;
+}
+
+.af-toolbar .form-control,
+.af-toolbar .select2-container {
+    height: 34px;
+    min-height: 34px;
+    font-size: 13px;
+}
+
+.af-toolbar .af-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.af-count {
+    font-size: 12.5px;
+    color: var(--af-ink-3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* ---------- Abas com contagem ---------- */
+.af-scope .nav-tabs-block .nav-link {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--af-ink-3);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.af-scope .nav-tabs-block .nav-link.active {
+    color: var(--af-ink);
+    font-weight: 600;
+    border-bottom-color: var(--af-brand-bright);
+    background: transparent;
+}
+
+.af-pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: var(--af-neutral-soft);
+    color: var(--af-ink-2);
+    font-variant-numeric: tabular-nums;
+}
+
+.nav-link.active .af-pill { background: var(--af-brand-soft); color: var(--af-brand-bright); }
+.af-pill.af-crit { background: var(--af-crit-soft); color: var(--af-crit); }
+.af-pill.af-warn { background: var(--af-warn-soft); color: var(--af-warn); }
+
+/* ---------- Chips de estado ---------- */
+.af-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--af-neutral-soft);
+    color: var(--af-neutral);
+    white-space: nowrap;
+}
+
+.af-chip::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex: none;
+}
+
+.af-chip.af-ok { background: var(--af-ok-soft); color: var(--af-ok); }
+.af-chip.af-warn { background: var(--af-warn-soft); color: var(--af-warn); }
+.af-chip.af-crit { background: var(--af-crit-soft); color: var(--af-crit); }
+.af-chip.af-brand { background: var(--af-brand-soft); color: var(--af-brand-bright); }
+
+/* ---------- Tabela ---------- */
+.af-scope table.dataTable thead th {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--af-ink-3);
+    border-bottom: 1px solid var(--af-line);
+    white-space: nowrap;
+}
+
+.af-scope table.dataTable tbody td {
+    font-size: 13px;
+    color: var(--af-ink-2);
+    vertical-align: middle;
+    border-bottom: 1px solid var(--af-line);
+}
+
+.af-scope table.dataTable tbody tr:hover td {
+    background: var(--af-surface-2);
+}
+
+/* Código de patrimônio, datas e horas: monoespaçado e alinhado em coluna */
+.af-code {
+    font-family: "IBM Plex Mono", "Consolas", "SFMono-Regular", monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--af-ink);
+    letter-spacing: -.01em;
+    font-variant-numeric: tabular-nums;
+}
+
+.af-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Origem → Destino ---------- */
+.af-move {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+
+.af-move .af-arw { color: var(--af-ink-3); }
+.af-move .af-to { color: var(--af-ink); font-weight: 500; }
+
+/* ---------- Progresso ---------- */
+.af-bar {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 140px;
+}
+
+.af-bar .af-track {
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--af-neutral-soft);
+    overflow: hidden;
+}
+
+.af-bar .af-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--af-brand-bright);
+}
+
+.af-bar .af-fill.af-ok { background: var(--af-ok); }
+.af-bar .af-fill.af-warn { background: var(--af-warn); }
+
+.af-bar .af-pct {
+    font-size: 12px;
+    color: var(--af-ink-2);
+    font-variant-numeric: tabular-nums;
+    min-width: 34px;
+    text-align: right;
+}
+
+/* ---------- Impressão ---------- */
+@media print {
+    .af-toolbar, .af-pagehead .af-actions { display: none !important; }
+    .af-kpis { break-inside: avoid; }
+}

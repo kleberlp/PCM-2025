@@ -1,4 +1,4 @@
-
+﻿
 const messagesData = document.getElementById('resource-messages').getAttribute('data-messages');
 const messages = JSON.parse(messagesData);
 
@@ -27,6 +27,39 @@ function setCountTo(sel, val) {
 
 }
 
+// Totais e progresso derivados das três listas já carregadas (sem consulta extra).
+// A base da unidade é o que foi contado mais o que era previsto e não apareceu;
+// o que está fora do cadastro não entra no denominador.
+var afTotais = { inventariado: null, naoEncontrado: null, naoCadastrado: null };
+
+function afAtualizarResumo(chave, quantidade) {
+
+    afTotais[chave] = quantidade;
+
+    var pills = {
+        inventariado: "#pillInventariado",
+        naoEncontrado: "#pillNaoEncontrado",
+        naoCadastrado: "#pillNaoCadastrado"
+    };
+
+    $(pills[chave]).text(quantidade);
+
+    // Só calcula quando as duas listas que formam a base já chegaram
+    if (afTotais.inventariado === null || afTotais.naoEncontrado === null) return;
+
+    var base = afTotais.inventariado + afTotais.naoEncontrado;
+    var pct = base > 0 ? Math.round(afTotais.inventariado / base * 100) : 0;
+
+    $("#ativoTotal").text(base);
+    $("#ativoPercentual").text(pct + "%");
+    $("#ativoInventariadoMeta").text(base > 0 ? pct + "% da base" : "itens contados");
+
+    $("#ativoProgresso")
+        .css("width", pct + "%")
+        .toggleClass("af-ok", pct === 100)
+        .toggleClass("af-warn", pct > 0 && pct < 100);
+}
+
 function carregarGrid() {
 
     var data = {
@@ -50,6 +83,7 @@ function carregarGrid() {
         enableChild: false,
         onLoaded: function (response, rows) {
             setCountTo("#ativoInventariado", rows.length);
+            afAtualizarResumo("inventariado", rows.length);
         }
     });
 
@@ -81,6 +115,7 @@ function carregarGrid() {
         ],
         onLoaded: function (response, rows) {
             setCountTo("#ativoNaoEncontrado", rows.length);
+            afAtualizarResumo("naoEncontrado", rows.length);
         }
     });
 
@@ -101,6 +136,7 @@ function carregarGrid() {
         enableChild: false,
         onLoaded: function (response, rows) {
             setCountTo("#ativoNaoCadastrado", rows.length);
+            afAtualizarResumo("naoCadastrado", rows.length);
         }
     });
 

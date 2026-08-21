@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
     <link rel="stylesheet" type="text/css" href="~/Content/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+    <!-- Layout do módulo Ativo Fixo -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/ativofixo.css">
 }
 
 
@@ -28,7 +30,7 @@
     </div>
 
     <!-- Page Content -->
-    <div class="content">
+    <div class="content af-scope">
 
         <input type="hidden" id="codigoInventario" name="codigoInventario" value="@ViewBag.info.codigoInventario" />
         <input type="hidden" id="unidade" name="unidade" value="@ViewBag.info.codigoUnidade" />
@@ -70,37 +72,39 @@
 
         </div>
 
-        <!-- LINHA PADRÃO (POOL) -->
-        <div class="row invisible g-3 mb-20" data-toggle="appear">
+        <!-- FAIXA DE INDICADORES: resumo antes do detalhe -->
+        <div class="af-kpis">
 
-            <div class="col-4">
-                <div class="block block-rounded block-bordered">
-                    <div class="block-content block-content-full clearfix">
-                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bank fa-2x text-success"></i></div>
-                        <div class="font-size-h4 font-w600 text-success" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoInventariado" name="ativoInventariado">0</div>
-                        <div class="font-size-sm font-w600 text-uppercase text-muted">@Resources.ativoInventariado</div>
-                    </div>
-                </div>
+            <div class="af-kpi">
+                <span class="af-kpi-lbl">@Resources.ativoInventariado</span>
+                <span class="af-kpi-val af-ok" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoInventariado" name="ativoInventariado">0</span>
+                <span class="af-kpi-meta" id="ativoInventariadoMeta">itens contados</span>
             </div>
 
-            <div class="col-4">
-                <div class="block block-rounded block-bordered">
-                    <div class="block-content block-content-full clearfix">
-                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bank fa-2x text-warning"></i></div>
-                        <div class="font-size-h4 font-w600 text-warning" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoNaoEncontrado" name="ativoNaoEncontrado">0</div>
-                        <div class="font-size-sm font-w600 text-uppercase text-muted">@Resources.ativoNaoEncontrado</div>
-                    </div>
-                </div>
+            <div class="af-kpi">
+                <span class="af-kpi-lbl">@Resources.ativoNaoEncontrado</span>
+                <span class="af-kpi-val af-crit" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoNaoEncontrado" name="ativoNaoEncontrado">0</span>
+                <span class="af-kpi-meta">previstos e não bipados</span>
             </div>
 
-            <div class="col-4">
-                <div class="block block-rounded block-bordered">
-                    <div class="block-content block-content-full clearfix">
-                        <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-bank fa-2x text-pulse"></i></div>
-                        <div class="font-size-h4 font-w600 text-pulse" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoNaoCadastrado" name="ativoNaoCadastrado">0</div>
-                        <div class="font-size-sm font-w600 text-uppercase text-muted">@Resources.ativoNaoCadastrado</div>
-                    </div>
-                </div>
+            <div class="af-kpi">
+                <span class="af-kpi-lbl">@Resources.ativoNaoCadastrado</span>
+                <span class="af-kpi-val af-warn" data-toggle="countTo" data-speed="1000" data-to="0" id="ativoNaoCadastrado" name="ativoNaoCadastrado">0</span>
+                <span class="af-kpi-meta">aguardam regularização</span>
+            </div>
+
+            <div class="af-kpi">
+                <span class="af-kpi-lbl">@Resources.total</span>
+                <span class="af-kpi-val" id="ativoTotal">0</span>
+                <span class="af-kpi-meta">base da unidade</span>
+            </div>
+
+            <div class="af-kpi">
+                <span class="af-kpi-lbl">Conclusão</span>
+                <span class="af-kpi-val" id="ativoPercentual">0%</span>
+                <span class="af-kpi-meta">
+                    <span class="af-bar"><span class="af-track"><span class="af-fill" id="ativoProgresso" style="width:0"></span></span></span>
+                </span>
             </div>
 
         </div>
@@ -109,13 +113,13 @@
         <div class="block block-rounded overflow-hidden">
             <ul class="nav nav-tabs nav-tabs-block" role="tablist">
                 <li class="nav-item">
-                    <button type="button" class="nav-link active" id="btabs-ativoInventariado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoInventariado" role="tab" aria-controls="btabs-ativoInventariado" aria-selected="true">@Resources.ativoInventariado</button>
+                    <button type="button" class="nav-link active" id="btabs-ativoInventariado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoInventariado" role="tab" aria-controls="btabs-ativoInventariado" aria-selected="true">@Resources.ativoInventariado <span class="af-pill" id="pillInventariado">0</span></button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link" id="btabs-ativoNaoEncontrado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoNaoEncontrado" role="tab" aria-controls="btabs-ativoNaoEncontrado" aria-selected="false">@Resources.ativoNaoEncontrado</button>
+                    <button type="button" class="nav-link" id="btabs-ativoNaoEncontrado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoNaoEncontrado" role="tab" aria-controls="btabs-ativoNaoEncontrado" aria-selected="false">@Resources.ativoNaoEncontrado <span class="af-pill af-crit" id="pillNaoEncontrado">0</span></button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link" id="btabs-ativoNaoCadastrado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoNaoCadastrado" role="tab" aria-controls="btabs-ativoNaoCadastrado" aria-selected="false">@Resources.ativoNaoCadastrado</button>
+                    <button type="button" class="nav-link" id="btabs-ativoNaoCadastrado-tab" data-bs-toggle="tab" data-bs-target="#btabs-ativoNaoCadastrado" role="tab" aria-controls="btabs-ativoNaoCadastrado" aria-selected="false">@Resources.ativoNaoCadastrado <span class="af-pill af-warn" id="pillNaoCadastrado">0</span></button>
                 </li>
             </ul>
             <div class="block-content tab-content pb-10">
