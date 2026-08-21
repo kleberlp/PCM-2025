@@ -33,6 +33,7 @@ namespace PCM.WEB.OS.MODELS
         public bool possuiAvaliacao { get; set; } = false;
         public bool statusOk { get; set; } = true;
         public string observacao { get; set; } = "";
+        public bool possuiFoto { get; set; } = false;
     }
 
 }

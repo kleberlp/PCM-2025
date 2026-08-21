@@ -59,12 +59,95 @@ $(document).ready(function () {
 
         $('#areaNok').toggleClass('show', !isOk);
 
-        // A foto continua disponível nos dois casos; só a obrigatoriedade muda
-        marcarFotoObrigatoria(!isOk);
+        // Regra da foto reavaliada: Não OK sempre exige; no OK, só se o ativo não tiver foto
+        atualizarAreaFoto(!isOk, $('#modalConfirmacao').data('semFoto') === true);
 
         if (isOk) {
             $('#modalObservacao').val('');
         }
+    });
+
+    // ---- Cadastro de novo ativo: busca do nome (mínimo 3 caracteres) ----
+    $('#novoBusca').on('input', function () {
+
+        var termo = $(this).val().trim();
+
+        novoAtivo.descricao = '';
+        $('#btnNovoAvancar1').prop('disabled', true);
+
+        clearTimeout(buscaTimer);
+
+        if (termo.length < 3) {
+            $('#novoSugestoes').empty().removeClass('show');
+            $('#novoBuscaHint').text('Digite ao menos 3 caracteres para buscar.');
+            return;
+        }
+
+        // Pequeno atraso para não consultar a cada tecla
+        buscaTimer = setTimeout(function () {
+            buscarDescricao(termo);
+        }, 300);
+    });
+
+    // ---- Seleção do equipamento na lista ----
+    $(document).on('click', '#novoSugestoes li', function () {
+        $('#novoSugestoes li').removeClass('selected');
+        $(this).addClass('selected');
+
+        novoAtivo.descricao = $(this).text();
+        $('#novoBusca').val(novoAtivo.descricao);
+        $('#btnNovoAvancar1').prop('disabled', false);
+    });
+
+    // ---- Navegação entre as etapas ----
+    $('#btnNovoAvancar1').on('click', function () {
+        if (!novoAtivo.descricao) return;
+        irParaEtapa(2);
+    });
+
+    $('#btnNovoVoltar2').on('click', function () {
+        irParaEtapa(1);
+    });
+
+    $('#btnNovoAvancar2').on('click', function () {
+        if (!novoAtivo.foto) return;
+
+        $('#novoResumoCodigo').text(novoAtivo.barcode);
+        $('#novoResumoNome').text(novoAtivo.descricao);
+        $('#novoResumoLocal').text(
+            ($('#codigoSetor option:selected').text() || 'Todos') +
+            ' / ' + ($('#codigoApartamento option:selected').text() || 'Todos')
+        );
+        $('#novoResumoFoto').attr('src', $('#novoFotoPreview').attr('src')).addClass('show');
+
+        irParaEtapa(3);
+    });
+
+    $('#btnNovoVoltar3').on('click', function () {
+        irParaEtapa(2);
+    });
+
+    $('#btnNovoCancelar').on('click', function () {
+        cancelarNovoAtivo();
+    });
+
+    $('#btnNovoConfirmar').on('click', function () {
+        confirmarNovoAtivo();
+    });
+
+    // ---- Foto do novo ativo (obrigatória) ----
+    $('#novoInputFoto').on('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        novoAtivo.foto = file;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $('#novoFotoPreview').attr('src', e.target.result).addClass('show');
+            $('#btnNovoAvancar2').prop('disabled', false);
+        };
+        reader.readAsDataURL(file);
     });
 
     // ---- Preview da foto ----
@@ -169,26 +252,8 @@ async function processBarcode() {
             return;
         }
 
-        // Solicita descrição para o novo ativo
-        const descResult = await Swal.fire({
-            title: 'Informe a descrição do ativo',
-            input: 'text',
-            inputPlaceholder: 'Descrição do ativo fixo',
-            showCancelButton: true,
-            confirmButtonText: 'Salvar',
-            cancelButtonText: 'Cancelar'
-        });
-
-        const cancelado = descResult === false ||
-            (descResult && descResult.dismiss === Swal.DismissReason.cancel) ||
-            !descResult.value;
-        if (cancelado) {
-            $('#barcode').val('').focus();
-            return;
-        }
-
-        const desc = typeof descResult === 'string' ? descResult : descResult.value;
-        abrirModal(barcode, false, desc);
+        // Cadastro do novo ativo em etapas (nome -> foto -> confirmação)
+        abrirNovoAtivo(barcode);
         return;
     }
 
@@ -232,13 +297,163 @@ async function processBarcode() {
 }
 
 // ============================================================
-//  Marca a foto como obrigatória (Não OK) ou opcional (OK)
+//  Cadastro de novo ativo (código não encontrado na base)
+//  Etapas: nome (cadastro pré-definido) -> foto -> confirmação
 // ============================================================
-function marcarFotoObrigatoria(obrigatoria) {
-    $('#fotoObrigatoria').toggle(obrigatoria);
-    $('#fotoHint').text(obrigatoria
+var novoAtivo = { barcode: '', descricao: '', foto: null };
+var buscaTimer = null;
+
+function abrirNovoAtivo(barcode) {
+
+    novoAtivo = { barcode: barcode, descricao: '', foto: null };
+
+    $('#novoAssetCode').text('Código: ' + barcode);
+    $('#novoBusca').val('');
+    $('#novoSugestoes').empty().removeClass('show');
+    $('#novoBuscaHint').text('Digite ao menos 3 caracteres para buscar.');
+    $('#novoInputFoto').val('');
+    $('#novoFotoPreview').attr('src', '#').removeClass('show');
+    $('#novoResumoFoto').attr('src', '#').removeClass('show');
+    $('#btnNovoAvancar1').prop('disabled', true);
+    $('#btnNovoAvancar2').prop('disabled', true);
+
+    irParaEtapa(1);
+    $('#modalNovoAtivo').addClass('show');
+    $('#novoBusca').trigger('focus');
+}
+
+function irParaEtapa(n) {
+    $('.novo-step').removeClass('show');
+    $('#novoStep' + n).addClass('show');
+}
+
+function fecharNovoAtivo() {
+    $('#modalNovoAtivo').removeClass('show');
+    novoAtivo = { barcode: '', descricao: '', foto: null };
+}
+
+// Etapa 1: busca no cadastro pré-definido a partir de 3 caracteres
+function buscarDescricao(termo) {
+
+    $.ajax({
+        type: 'POST',
+        url: urlBuscarDescricaoAtivo,
+        data: { termo: termo },
+        success: function (lista) {
+
+            var $ul = $('#novoSugestoes').empty();
+
+            if (!lista || lista.length === 0) {
+                $ul.removeClass('show');
+                $('#novoBuscaHint').text('Nenhum equipamento encontrado com esse termo.');
+                return;
+            }
+
+            lista.forEach(function (nome) {
+                $('<li>').text(nome).appendTo($ul);
+            });
+
+            $ul.addClass('show');
+            $('#novoBuscaHint').text('Selecione o equipamento na lista.');
+        },
+        error: function () {
+            $('#novoSugestoes').empty().removeClass('show');
+            $('#novoBuscaHint').text('Não foi possível buscar agora. Tente novamente.');
+        }
+    });
+
+}
+
+// Etapa 4 do fluxo: confirma o cadastro
+function confirmarNovoAtivo() {
+
+    var $btn = $('#btnNovoConfirmar');
+    $btn.prop('disabled', true).text('Salvando...');
+
+    var fd = new FormData();
+    fd.append('uniqueId', $('#uniqueId').val());
+    fd.append('codigoInventario', $('#codigoInventario').val());
+    fd.append('unidade', $('#codigoUnidade').val());
+    fd.append('setor', $('#codigoSetor').val() || -1);
+    fd.append('apartamento', $('#codigoApartamento').val() || -1);
+    fd.append('assetCode', novoAtivo.barcode);
+    fd.append('ativoCadastrado', false);
+    fd.append('descricaoInformada', novoAtivo.descricao);
+    fd.append('statusOk', true);
+    fd.append('observacao', '');
+    if (novoAtivo.foto) fd.append('foto', novoAtivo.foto);
+
+    $.ajax({
+        type: 'POST',
+        url: urlInsertAssetInventory,
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+
+            $btn.prop('disabled', false).text('Confirmar cadastro');
+
+            if (response && response.success) {
+                fecharNovoAtivo();
+                limparParaNovaBipagem();
+                reloadGrid();
+                Swal.fire({ title: 'Cadastro concluído com sucesso!', icon: 'success' });
+                return;
+            }
+
+            Swal.fire({ title: (response && response.message) || 'Não foi possível cadastrar.', icon: 'error' });
+        },
+        error: function () {
+            $btn.prop('disabled', false).text('Confirmar cadastro');
+            Swal.fire({ title: 'Erro ao cadastrar o ativo.', icon: 'error' });
+        }
+    });
+
+}
+
+// Cancelamento: pergunta se descarta o código informado
+async function cancelarNovoAtivo() {
+
+    const result = await Swal.fire({
+        title: 'Descartar o código informado?',
+        text: 'Código: ' + novoAtivo.barcode,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, descartar',
+        cancelButtonText: 'Continuar cadastro'
+    });
+
+    const descartar = result === true || (result && result.isConfirmed);
+
+    if (descartar) {
+        fecharNovoAtivo();
+        limparParaNovaBipagem();
+    }
+
+}
+
+// Deixa a tela livre para um novo cadastro ou bipagem
+function limparParaNovaBipagem() {
+    $('#barcode').val('').trigger('focus');
+}
+
+// ============================================================
+//  Regra da foto: permitida somente em 3 casos
+//   1) ativo bipado que ainda não possui foto
+//   2) novo cadastro (fluxo próprio, acima)
+//   3) avaliação Não OK
+//  Fora deles o bloco nem aparece.
+// ============================================================
+function atualizarAreaFoto(naoOk, semFoto) {
+
+    var exigir = naoOk || semFoto;
+
+    $('#areaFoto').toggleClass('show', exigir);
+    $('#fotoObrigatoria').toggle(exigir);
+
+    $('#fotoHint').text(naoOk
         ? 'Foto obrigatória para registrar o item como Não OK.'
-        : 'Foto opcional.');
+        : 'Este ativo ainda não possui foto: é necessário tirar uma foto para concluir.');
 }
 
 // ============================================================
@@ -261,8 +476,11 @@ function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar, av
     $('#areaNok').toggleClass('show', !statusOk);
     $('#modalObservacao').val(!statusOk && temAvaliacao ? (avaliacao.observacao || '') : '');
 
-    // Foto sempre disponível; obrigatória apenas na avaliação Não OK
-    marcarFotoObrigatoria(!statusOk);
+    // Caso 1 da regra da foto: ativo bipado que ainda não possui foto
+    const semFoto = !(avaliacao && avaliacao.possuiFoto);
+    $('#modalConfirmacao').data('semFoto', semFoto);
+
+    atualizarAreaFoto(!statusOk, semFoto);
 
     $('#inputFoto').val('');
     $('#fotoPreview').attr('src', '#').removeClass('show');
@@ -306,11 +524,15 @@ async function confirmarRegistro() {
         return;
     }
 
-    // Foto é obrigatória apenas quando o item é apontado como Não OK
-    if (!statusOk && !fotoFile) {
+    // Foto obrigatória no Não OK e quando o ativo ainda não possui foto
+    const semFoto = modal.data('semFoto') === true;
+
+    if ((!statusOk || semFoto) && !fotoFile) {
         Swal.fire({
             title: 'Foto obrigatória',
-            text: 'É necessário tirar uma foto para registrar o item como Não OK.',
+            text: !statusOk
+                ? 'É necessário tirar uma foto para registrar o item como Não OK.'
+                : 'Este ativo ainda não possui foto. Tire uma foto para concluir.',
             icon: 'warning'
         });
         return;

@@ -193,13 +193,13 @@
             color: #fff;
         }
 
-        /* O bloco da foto fica sempre visível (a foto é opcional no OK);
-           só a observação aparece/some conforme o status */
-        #areaNok {
+        /* Foto só é permitida em 3 casos (ativo sem foto, novo cadastro e Não OK):
+           fora deles o bloco nem aparece */
+        #areaNok, #areaFoto {
             display: none;
         }
 
-            #areaNok.show {
+            #areaNok.show, #areaFoto.show {
                 display: block;
             }
 
@@ -255,6 +255,107 @@
 
             .email-erro.show {
                 display: block;
+            }
+
+        /* Cadastro de novo ativo (fluxo em 3 etapas) */
+        .novo-step {
+            display: none;
+        }
+
+            .novo-step.show {
+                display: block;
+            }
+
+        .novo-etapa {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: #0d6efd;
+            margin: 0 0 10px;
+        }
+
+        .novo-hint {
+            font-size: 0.72rem;
+            color: #6c757d;
+            margin: 6px 0 0;
+        }
+
+        .novo-sugestoes {
+            list-style: none;
+            margin: 6px 0 0;
+            padding: 0;
+            max-height: 190px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            display: none;
+        }
+
+            .novo-sugestoes.show {
+                display: block;
+            }
+
+            .novo-sugestoes li {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+                cursor: pointer;
+                border-bottom: 1px solid #f1f3f5;
+            }
+
+                .novo-sugestoes li:last-child {
+                    border-bottom: 0;
+                }
+
+                .novo-sugestoes li:hover,
+                .novo-sugestoes li.selected {
+                    background: #e7f1ff;
+                    color: #0d6efd;
+                    font-weight: 600;
+                }
+
+        #novoFotoPreview, #novoResumoFoto {
+            display: none;
+            width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-top: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+            #novoFotoPreview.show, #novoResumoFoto.show {
+                display: block;
+            }
+
+        .novo-resumo {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 4px 12px;
+            background: #f8f9fa;
+        }
+
+        .novo-resumo-linha {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 8px 0;
+            font-size: 0.82rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+            .novo-resumo-linha:last-child {
+                border-bottom: 0;
+            }
+
+            .novo-resumo-linha span {
+                color: #6c757d;
+            }
+
+            .novo-resumo-linha strong {
+                color: #212529;
+                text-align: right;
+                word-break: break-word;
             }
 
         .email-enviado {
@@ -399,6 +500,68 @@
         </div>
     </div>
 
+    <!-- MODAL CADASTRO DE NOVO ATIVO (código não encontrado na base) -->
+    <div class="modal-confirmacao" id="modalNovoAtivo">
+        <div class="modal-card">
+            <p class="modal-title">Cadastrar novo ativo</p>
+            <p class="modal-asset" id="novoAssetCode"></p>
+
+            <!-- ETAPA 1: nome vindo do cadastro pré-definido -->
+            <div class="novo-step" id="novoStep1">
+                <p class="novo-etapa">Etapa 1 de 3 · Nome do equipamento</p>
+
+                <div class="mb-2">
+                    <input type="text" id="novoBusca" class="form-control form-control-sm"
+                           placeholder="Digite ao menos 3 letras..." autocomplete="off" maxlength="100">
+                    <ul class="novo-sugestoes" id="novoSugestoes"></ul>
+                    <p class="novo-hint" id="novoBuscaHint">Digite ao menos 3 caracteres para buscar.</p>
+                </div>
+
+                <div class="d-flex gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary btn-sm flex-fill" id="btnNovoCancelar">Cancelar</button>
+                    <button type="button" class="btn btn-primary btn-sm flex-fill" id="btnNovoAvancar1" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- ETAPA 2: foto (obrigatória em novos cadastros) -->
+            <div class="novo-step" id="novoStep2">
+                <p class="novo-etapa">Etapa 2 de 3 · Foto</p>
+
+                <div class="mb-2">
+                    <label class="btn-foto" for="novoInputFoto">
+                        <i class="fas fa-camera"></i> Tirar foto / selecionar imagem
+                    </label>
+                    <input type="file" id="novoInputFoto" accept="image/*" capture="environment">
+                    <img id="novoFotoPreview" src="#" alt="Preview">
+                    <p class="novo-hint">Foto obrigatória para concluir o cadastro.</p>
+                </div>
+
+                <div class="d-flex gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary btn-sm flex-fill" id="btnNovoVoltar2">Voltar</button>
+                    <button type="button" class="btn btn-primary btn-sm flex-fill" id="btnNovoAvancar2" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- ETAPA 3: confirmação -->
+            <div class="novo-step" id="novoStep3">
+                <p class="novo-etapa">Etapa 3 de 3 · Confirmação</p>
+
+                <div class="novo-resumo">
+                    <div class="novo-resumo-linha"><span>Código</span><strong id="novoResumoCodigo"></strong></div>
+                    <div class="novo-resumo-linha"><span>Equipamento</span><strong id="novoResumoNome"></strong></div>
+                    <div class="novo-resumo-linha"><span>Local</span><strong id="novoResumoLocal"></strong></div>
+                </div>
+
+                <img id="novoResumoFoto" src="#" alt="Foto do ativo">
+
+                <div class="d-flex gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary btn-sm flex-fill" id="btnNovoVoltar3">Voltar</button>
+                    <button type="button" class="btn btn-primary btn-sm flex-fill" id="btnNovoConfirmar">Confirmar cadastro</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CONFIRMAÇÃO DE ATIVO -->
     <div class="modal-confirmacao" id="modalConfirmacao">
         <div class="modal-card">
@@ -452,6 +615,7 @@
         var urlLoadAssetInventory = '@Url.Action("loadAssetInventory", "AtivoFixo")';
         var urlLoadListApartamento = '@Url.Action("loadListApartamento", "AtivoFixo")';
         var urlIdentificarContador = '@Url.Action("identificarContador", "AtivoFixo")';
+        var urlBuscarDescricaoAtivo = '@Url.Action("buscarDescricaoAtivo", "AtivoFixo")';
         var urlAssetInventory = '@Url.Action("assetInventory", "AtivoFixo")';
     </script>
     <script src="~/js/pages/ativoFixo/jquery.assetInventory.init.js"></script>

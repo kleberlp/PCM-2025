@@ -142,8 +142,36 @@ namespace PCM.WEB.OS.Controllers
                 success = exists,
                 possuiAvaliacao = avaliacao.possuiAvaliacao,
                 statusOk = avaliacao.statusOk,
-                observacao = avaliacao.observacao
+                observacao = avaliacao.observacao,
+                possuiFoto = avaliacao.possuiFoto
             });
+        }
+
+        //Nomes do cadastro pré-definido, para o fluxo de cadastro de novo ativo
+        [HttpPost]
+        public JsonResult buscarDescricaoAtivo(string termo)
+        {
+            int empresa = HttpContext.Session.GetInt32("inv_codigoEmpresa") ?? -1;
+            int unidade = HttpContext.Session.GetInt32("inv_codigoUnidade") ?? -1;
+
+            termo = (termo ?? "").Trim();
+
+            //A busca só começa com 3 caracteres
+            if (termo.Length < 3)
+            {
+                return Json(new List<string>());
+            }
+
+            try
+            {
+                return Json(_ativoFixo.BuscarDescricaoAtivo(codigoEmpresa: empresa,
+                                                            codigoUnidade: unidade,
+                                                            termo: termo));
+            }
+            catch (Exception)
+            {
+                return Json(new List<string>());
+            }
         }
 
         [HttpPost]
@@ -174,14 +202,36 @@ namespace PCM.WEB.OS.Controllers
                     return Json(new { success = false, message = "Descreva o problema encontrado para registrar o item como Não OK." });
                 }
 
-                //Foto obrigatória apenas quando o item é apontado como Não OK
-                if (!statusOk && !possuiFoto)
+                //Foto é permitida/exigida em 3 casos: avaliação Não OK, novo cadastro e
+                //ativo que ainda não possui foto
+                if (!possuiFoto)
                 {
-                    return Json(new
+                    if (!statusOk)
                     {
-                        success = false,
-                        message = "É necessário tirar uma foto para registrar o item como Não OK."
-                    });
+                        return Json(new { success = false, message = "É necessário tirar uma foto para registrar o item como Não OK." });
+                    }
+
+                    if (!ativoCadastrado)
+                    {
+                        return Json(new { success = false, message = "É necessário tirar uma foto para concluir o cadastro do novo ativo." });
+                    }
+
+                    //Ativo já cadastrado e avaliado como OK: só exige foto se ele ainda não tiver uma
+                    try
+                    {
+                        var avaliacao = _ativoFixo.GetAssetLastEvaluation(codigoEmpresa: empresa,
+                                                                          codigoUnidade: unidade,
+                                                                          assetCode: assetCode);
+
+                        if (!avaliacao.possuiFoto)
+                        {
+                            return Json(new { success = false, message = "Este ativo ainda não possui foto. Tire uma foto para concluir." });
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        //Sem a SP de avaliação, não bloqueia a contagem
+                    }
                 }
 
                 string fotoPath = string.Empty;

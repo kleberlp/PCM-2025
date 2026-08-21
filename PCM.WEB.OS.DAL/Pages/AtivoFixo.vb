@@ -179,6 +179,38 @@ Public Class AtivoFixo
 
     End Sub
 
+    ' Nomes do cadastro pré-definido para o fluxo de novo ativo (busca a partir de 3 letras)
+    Public Function BuscarDescricaoAtivo(ByVal codigoEmpresa As Integer,
+                                         ByVal codigoUnidade As Integer,
+                                         ByVal termo As String) As List(Of String)
+
+        Dim oSqlParameter As List(Of SqlParameter) = New List(Of SqlParameter)
+        Dim _result As New List(Of String)
+
+        Try
+
+            AddSqlParameter(oSqlParameter, "codigo_empresa", SqlDbType.Int, 0, codigoEmpresa)
+            AddSqlParameter(oSqlParameter, "codigo_unidade", SqlDbType.Int, 0, codigoUnidade)
+            AddSqlParameter(oSqlParameter, "termo", SqlDbType.VarChar, 100, termo)
+
+            Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_asset_descricao_busca", oSqlParameter.ToArray())
+
+                While _sqlDataReader.Read
+                    _result.Add(SafeGetString(_sqlDataReader, "descricao"))
+                End While
+
+            End Using
+
+            Return _result
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     ' Última avaliação do estado de conservação do ativo (ponto 4 do teste)
     Public Function GetAssetLastEvaluation(ByVal codigoEmpresa As Integer,
                                            ByVal codigoUnidade As Integer,
@@ -196,9 +228,10 @@ Public Class AtivoFixo
             Using _sqlDataReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_asset_last_evaluation", oSqlParameter.ToArray())
 
                 If _sqlDataReader.Read Then
-                    _result.possuiAvaliacao = True
+                    _result.possuiAvaliacao = SafeGetBoolean(_sqlDataReader, "possui_avaliacao")
                     _result.statusOk = SafeGetBoolean(_sqlDataReader, "status_ok")
                     _result.observacao = SafeGetString(_sqlDataReader, "observacao")
+                    _result.possuiFoto = SafeGetBoolean(_sqlDataReader, "possui_foto")
                 End If
 
             End Using
