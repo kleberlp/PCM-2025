@@ -173,6 +173,47 @@ namespace PCM.WEB.Controllers
             return RedirectToAction("AssetInsert");
         }
 
+        //Ficha do ativo exibida no painel lateral da lista (dados + linha do tempo)
+        [HttpPost]
+        public JsonResult loadAssetFicha(long codigo)
+        {
+            try
+            {
+                var asset = _ativoFixo.LoadAssetInfo(codigoEmpresa: codigoEmpresa, codigo: codigo);
+
+                //Sem a SP de histórico a ficha ainda abre, só sem a linha do tempo
+                List<AssetHistoricoItem> historico;
+
+                try
+                {
+                    historico = _ativoFixo.LoadAssetHistorico(codigoEmpresa: codigoEmpresa, codigoAsset: codigo);
+                }
+                catch (Exception)
+                {
+                    historico = new List<AssetHistoricoItem>();
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    assetCode = asset.assetCode,
+                    descricao = asset.descricao,
+                    numeroSerie = asset.numeroSerie,
+                    tag = asset.tag,
+                    contaContabil = asset.contaContabil,
+                    notaFiscal = asset.notaFiscal,
+                    dataCompra = asset.dataCompra,
+                    valorCompra = asset.valorCompra,
+                    tempoDepreciacaoMes = asset.tempoDepreciacaoMes,
+                    historico = historico
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         public ActionResult AssetEdit(long codigo)
         {
             if (!IsSessionValid())

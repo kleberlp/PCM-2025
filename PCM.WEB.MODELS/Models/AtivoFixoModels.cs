@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace PCM.WEB.MODELS
 {
+    // Linha da linha do tempo da ficha do ativo (cadastro, movimentações e contagens)
+    public class AssetHistoricoItem
+    {
+        public string data { get; set; } = "";
+        public string titulo { get; set; } = "";
+        public string detalhe { get; set; } = "";
+        public string usuario { get; set; } = "";
+        public string marcador { get; set; } = "";   // ok | warn | neutro
+    }
+
     public class AssetModel
     {
         public long codigo { get; set; }

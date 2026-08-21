@@ -98,14 +98,42 @@
                 </div>
             </div>
 
-            <!-- GRID -->
-            <div class="block block-rounded border">
+            <!-- GRID + FICHA -->
+            <div class="af-split" id="afSplit">
 
-                <div class="block-content block-content-full">
+                <div class="block block-rounded border mb-0">
 
-                    <table id="tbMain" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+                    <div class="block-content block-content-full">
+
+                        <table id="tbMain" class="table table-bordered table-vcenter table-striped font-size-sm table-sm"></table>
+
+                    </div>
 
                 </div>
+
+                <!-- FICHA DO ATIVO -->
+                <aside class="af-panel" id="afPanel">
+
+                    <div class="af-panel-head">
+                        <div>
+                            <p class="af-panel-t" id="fichaDescricao"></p>
+                            <span class="af-panel-c" id="fichaCodigo"></span>
+                        </div>
+                        <button type="button" class="af-panel-close" id="fichaFechar" aria-label="@Resources.sair">&times;</button>
+                    </div>
+
+                    <div class="af-dl" id="fichaDados"></div>
+
+                    <div class="af-tl">
+                        <h4>@Resources.historico</h4>
+                        <div id="fichaHistorico"></div>
+                    </div>
+
+                    <div class="af-panel-foot">
+                        <a href="#" class="btn btn-square btn-secondary min-width-100 h-75" id="fichaEditar"><i class="fa fa-pencil mr-5"></i>@Resources.editar</a>
+                    </div>
+
+                </aside>
 
             </div>
 
@@ -130,7 +158,18 @@
         clickToConfig = Resources.clickToConfig,
         editar = ViewBag.editar,
         excluir = ViewBag.excluir,
+        status = Resources.status,
+        localizacao = Resources.localizacao,
+        numeroSerie = Resources.numeroSerie,
+        tag = Resources.tag,
+        contaContabil = Resources.contaContabil,
+        notaFiscal = Resources.notaFiscal,
+        dataCompra = Resources.dataCompra,
+        valorCompra = Resources.valorCompra,
+        tempoDepreciacaoMes = Resources.tempoDepreciacaoMes,
+        clickToView = Resources.visualizar,
         urlLoadAsset = Url.Action("LoadAsset", "AtivoFixo"),
+        urlLoadAssetFicha = Url.Action("loadAssetFicha", "AtivoFixo"),
         urlAssetEdit = Url.Action("AssetEdit", "AtivoFixo"),
         urlAssetDelete = Url.Action("AssetDelete", "AtivoFixo")
     }))'>

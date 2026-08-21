@@ -166,6 +166,47 @@ Public Class AtivoFixo
 
     End Function
 
+    ' Linha do tempo da ficha do ativo: cadastro, movimentações e contagens de inventário
+    Public Function LoadAssetHistorico(ByVal codigoEmpresa As Integer,
+                                       ByVal codigoAsset As Long) As List(Of AssetHistoricoItem)
+
+        Try
+
+            Dim oReturn As New List(Of AssetHistoricoItem)
+
+            Dim oSqlParameter As SqlParameter() = {
+                CriarParametro("codigo_empresa", SqlDbType.SmallInt, codigoEmpresa),
+                CriarParametro("codigo_asset", SqlDbType.BigInt, codigoAsset)
+            }
+
+            Using oReader As SqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_asset_historico", oSqlParameter)
+
+                While oReader.Read
+
+                    Dim oItem As New AssetHistoricoItem
+
+                    oItem.data = SafeGetString(oReader, "data")
+                    oItem.titulo = SafeGetString(oReader, "titulo")
+                    oItem.detalhe = SafeGetString(oReader, "detalhe")
+                    oItem.usuario = SafeGetString(oReader, "usuario")
+                    oItem.marcador = SafeGetString(oReader, "marcador")
+
+                    oReturn.Add(oItem)
+
+                End While
+
+            End Using
+
+            Return oReturn
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
     Public Function LoadAssetInfo(ByVal codigo As Long,
                                   ByVal codigoEmpresa As Integer) As AssetModel
 
