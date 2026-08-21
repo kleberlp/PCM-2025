@@ -391,6 +391,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\ativofixo.css" />
     <Content Include="Content\css\codebase.css" />
     <Content Include="Content\css\pcm-ui.css" />
     <Content Include="Content\css\pages\home\dashboard-governanca.css" />
