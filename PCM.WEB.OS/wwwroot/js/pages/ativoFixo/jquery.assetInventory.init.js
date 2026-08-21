@@ -56,21 +56,16 @@ $(document).ready(function () {
     // ---- Toggle OK / Não OK no modal ----
     $('input[name="statusOk"]').on('change', function () {
         const isOk = $(this).val() === 'true';
-        const novoCadastro = $('#modalConfirmacao').data('ativoCadastrado') === false;
 
         $('#areaNok').toggleClass('show', !isOk);
 
-        // Foto é exigida em avaliação N/OK e em novos cadastros
-        $('#areaFoto').toggleClass('show', !isOk || novoCadastro);
+        // Foto é exigida apenas na avaliação Não OK
+        $('#areaFoto').toggleClass('show', !isOk);
 
         if (isOk) {
             $('#modalObservacao').val('');
-
-            // Em novo cadastro a foto continua obrigatória, então é preservada
-            if (!novoCadastro) {
-                $('#inputFoto').val('');
-                $('#fotoPreview').attr('src', '#').removeClass('show');
-            }
+            $('#inputFoto').val('');
+            $('#fotoPreview').attr('src', '#').removeClass('show');
         }
     });
 
@@ -253,18 +248,14 @@ function abrirModal(barcode, ativoCadastrado, descricaoInformada, movimentar, av
     const temAvaliacao = !!(avaliacao && avaliacao.possuiAvaliacao);
     const statusOk = temAvaliacao ? avaliacao.statusOk === true : true;
 
-    const novoCadastro = ativoCadastrado === false;
-
     $('#stOk').prop('checked', statusOk);
     $('#stNok').prop('checked', !statusOk);
     $('#areaNok').toggleClass('show', !statusOk);
     $('#modalObservacao').val(!statusOk && temAvaliacao ? (avaliacao.observacao || '') : '');
 
-    // Foto obrigatória: avaliação N/OK ou novo cadastro
-    $('#areaFoto').toggleClass('show', !statusOk || novoCadastro);
-    $('#fotoHint').text(novoCadastro
-        ? 'Foto obrigatória para concluir o cadastro do novo ativo.'
-        : 'Foto obrigatória para registrar o item como Não OK.');
+    // Foto obrigatória apenas na avaliação Não OK
+    $('#areaFoto').toggleClass('show', !statusOk);
+    $('#fotoHint').text('Foto obrigatória para registrar o item como Não OK.');
 
     $('#inputFoto').val('');
     $('#fotoPreview').attr('src', '#').removeClass('show');
@@ -293,7 +284,6 @@ async function confirmarRegistro() {
     const ativoCadastrado = modal.data('ativoCadastrado');
     const descricaoInformada = modal.data('descricaoInformada') || '';
     const statusOk = $('input[name="statusOk"]:checked').val() === 'true';
-    const novoCadastro = ativoCadastrado === false;
     const observacao = statusOk ? '' : $('#modalObservacao').val().trim();
     const fotoFile = $('#inputFoto')[0].files[0] || null;
 
@@ -309,13 +299,11 @@ async function confirmarRegistro() {
         return;
     }
 
-    // Foto é obrigatória em avaliação Não OK e em novos cadastros
-    if ((!statusOk || novoCadastro) && !fotoFile) {
+    // Foto é obrigatória apenas quando o item é apontado como Não OK
+    if (!statusOk && !fotoFile) {
         Swal.fire({
             title: 'Foto obrigatória',
-            text: novoCadastro
-                ? 'É necessário tirar uma foto para concluir o cadastro do novo ativo.'
-                : 'É necessário tirar uma foto para registrar o item como Não OK.',
+            text: 'É necessário tirar uma foto para registrar o item como Não OK.',
             icon: 'warning'
         });
         return;

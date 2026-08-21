@@ -174,15 +174,13 @@ namespace PCM.WEB.OS.Controllers
                     return Json(new { success = false, message = "Descreva o problema encontrado para registrar o item como Não OK." });
                 }
 
-                //Foto obrigatória em avaliação Não OK e em novos cadastros
-                if ((!statusOk || !ativoCadastrado) && !possuiFoto)
+                //Foto obrigatória apenas quando o item é apontado como Não OK
+                if (!statusOk && !possuiFoto)
                 {
                     return Json(new
                     {
                         success = false,
-                        message = !ativoCadastrado
-                            ? "É necessário tirar uma foto para concluir o cadastro do novo ativo."
-                            : "É necessário tirar uma foto para registrar o item como Não OK."
+                        message = "É necessário tirar uma foto para registrar o item como Não OK."
                     });
                 }
 
