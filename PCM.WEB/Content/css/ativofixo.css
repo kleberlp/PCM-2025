@@ -303,6 +303,10 @@
     text-align: right;
 }
 
+/* ---------- Coluna de foto da contagem ---------- */
+.af-foto-sim { color: var(--af-ok); font-size: 14px; }
+.af-foto-nao { color: var(--af-ink-3); }
+
 /* ---------- Ficha do ativo em painel lateral ---------- */
 .af-split {
     display: grid;

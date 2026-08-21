@@ -85,21 +85,24 @@ function carregarGrid() {
             asset_code: function (valor) {
                 return valor ? "<span class='af-code'>" + valor + "</span>" : "";
             },
-            // A avaliação não tem coluna própria nesta grid (as colunas vêm de
-            // tb_stc_grid_column); por isso o chip acompanha a descrição.
-            descricao: function (valor, row) {
-                var texto = valor || "";
+            // Avaliação e Foto agora são colunas próprias (tb_stc_grid_column, grid 1002)
+            status_ok: function (valor) {
 
-                if (row.status_ok === true || row.status_ok === 1) {
-                    return "<span class='af-chip af-ok'>OK</span> " + texto;
+                if (valor === true || valor === 1) {
+                    return "<span class='af-chip af-ok'>OK</span>";
                 }
 
-                if (row.status_ok === false || row.status_ok === 0) {
-                    var foto = row.foto_path ? " <i class='fa fa-camera' title='Com foto'></i>" : "";
-                    return "<span class='af-chip af-warn'>Não OK</span> " + texto + foto;
+                if (valor === false || valor === 0) {
+                    return "<span class='af-chip af-warn'>Não OK</span>";
                 }
 
-                return texto;
+                // Ajuste manual de inventário não passa por avaliação
+                return "<span class='af-chip'>—</span>";
+            },
+            foto_path: function (valor) {
+                return valor
+                    ? "<i class='fa fa-camera af-foto-sim' title='Contagem com foto'></i>"
+                    : "<span class='af-foto-nao' title='Sem foto'>—</span>";
             },
             data: function (valor) {
                 return valor ? "<span class='af-code'>" + valor + "</span>" : "";
