@@ -94,7 +94,7 @@ $(document).ready(function () {
         $('#novoSugestoes li').removeClass('selected');
         $(this).addClass('selected');
 
-        novoAtivo.descricao = $(this).text();
+        novoAtivo.descricao = $(this).attr('data-descricao') || $(this).text();
         $('#novoBusca').val(novoAtivo.descricao);
         $('#btnNovoAvancar1').prop('disabled', false);
     });
@@ -343,14 +343,25 @@ function buscarDescricao(termo) {
 
             var $ul = $('#novoSugestoes').empty();
 
+            // Nada no cadastro pré-definido: permite seguir com o texto digitado,
+            // para o operador não ficar travado em campo
             if (!lista || lista.length === 0) {
-                $ul.removeClass('show');
-                $('#novoBuscaHint').text('Nenhum equipamento encontrado com esse termo.');
+
+                var $usar = $('<li>')
+                    .addClass('novo-usar-digitado')
+                    .attr('data-descricao', termo);
+
+                $usar.append(document.createTextNode('Usar '));
+                $usar.append($('<strong>').text('"' + termo + '"'));
+                $usar.appendTo($ul);
+
+                $ul.addClass('show');
+                $('#novoBuscaHint').text('Nenhum equipamento encontrado. Você pode seguir com o nome digitado.');
                 return;
             }
 
             lista.forEach(function (nome) {
-                $('<li>').text(nome).appendTo($ul);
+                $('<li>').text(nome).attr('data-descricao', nome).appendTo($ul);
             });
 
             $ul.addClass('show');
