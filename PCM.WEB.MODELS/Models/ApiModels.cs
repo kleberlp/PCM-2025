@@ -37,6 +37,7 @@ namespace PCM.WEB.MODELS
         public bool success { get; set; }
         public string message { get; set; }
         public string version { get; set; }
+        public string versionIOs { get; set; }
     }
 
     public class pwaEndpoint

@@ -582,6 +582,7 @@ Public Class Api
                     oReturn.success = oSqlDataReader.Item("success")
                     oReturn.message = oSqlDataReader.Item("message")
                     oReturn.version = oSqlDataReader.Item("versao")
+                    oReturn.versionIOs = oSqlDataReader.Item("versaoIOs")
 
                 Else
 
