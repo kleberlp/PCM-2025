@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
     <link rel="stylesheet" type="text/css" href="~/Content/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+    <!-- Layout do módulo Ativo Fixo -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/ativofixo.css">
 }
 
 
@@ -28,7 +30,7 @@
     </div>
 
     <!-- Page Content -->
-    <div class="content">
+    <div class="content af-scope">
 
         @using (Html.BeginForm("AssetIndex", "Asset", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "form", autocomplete = "off" }))
         {
@@ -40,58 +42,50 @@
                 Buscar
             </button>
 
-            <!-- FILTROS -->
+            <!-- CABEÇALHO DA PÁGINA -->
+            <div class="af-pagehead">
+                <div>
+                    <h3 class="af-title">@Resources.estInventario</h3>
+                    <p class="af-sub" id="resumoInventario">&nbsp;</p>
+                </div>
+                <div class="af-actions">
+                    <a href="@Url.Action("AssetInventoryInsert", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75" id="newInventory" name="newInventory"><i class="fa fa-plus mr-5"></i>@Resources.novo</a>
+                </div>
+            </div>
+
+            <!-- FILTROS: barra compacta no lugar do cartão -->
             <div class="js-tasks-nav d-none d-md-block">
-                <div class="block block-rounded border">
+                <div class="af-toolbar">
 
-                    <div class="block-header block-header-default bg-gd-primary">
-                        <h3 class="block-title text-white font-w600">@Resources.asset</h3>
+                    <div class="af-f">
+                        <label for="unidade">@Resources.unidade</label>
+                        @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
+                    </div>
 
-                        <div class="block-options">
-                            <a href="@Url.Action("AssetInventoryInsert", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75" id="newInventory" name="newInventory"><i class="fa fa-plus mr-5"></i>@Resources.novo</a>
+                    <div class="af-f af-grow">
+                        <label for="descricao">@Resources.descricao</label>
+                        <input type="text" class="form-control" id="descricao">
+                    </div>
+
+                    <div class="af-f">
+                        <label>@Resources.periodo</label>
+                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                            <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
+                            <div class="input-group-prepend input-group-append">
+                                <span class="input-group-text font-w600">-</span>
+                            </div>
+                            <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
                         </div>
                     </div>
 
-                    <div class="block-content">
-                        <ul class="list-group push">
+                    <div class="af-f">
+                        <label for="statusInventario">@Resources.status</label>
+                        @Html.DropDownList("statusInventario", null, "", new { @class = "form-control" })
+                    </div>
 
-                            <li class="list-group-item">
-                                <div class="row">
-
-                                    <div class="col-md-2">
-                                        <label>@Resources.unidade</label>
-                                        @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label>@Resources.descricao</label>
-                                        <input type="text" class="form-control" id="descricao">
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label>@Resources.periodo</label>
-                                        <div class="input-daterange input-group" data-date-format="dd/mm/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
-                                            <input type="text" class="form-control" id="dataInicio" name="dataInicio" placeholder="De" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataInicio">
-                                            <div class="input-group-prepend input-group-append">
-                                                <span class="input-group-text font-w600">-</span>
-                                            </div>
-                                            <input type="text" class="form-control" id="dataTermino" name="dataTermino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.dataTermino">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <label>@Resources.status</label>
-                                        @Html.DropDownList("statusInventario", null, "", new { @class = "form-control" })
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li class="list-group-item text-right">
-                                <button type="button" id="filtrar" name="filtrar" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
-                            </li>
-
-                        </ul>
+                    <div class="af-right">
+                        <span class="af-count" id="contagemInventarios"></span>
+                        <button type="button" id="filtrar" name="filtrar" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
                     </div>
 
                 </div>

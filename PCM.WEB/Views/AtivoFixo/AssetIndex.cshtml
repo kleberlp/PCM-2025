@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/fixedColumns.dataTables.css">
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/responsive.dataTables.css">
     <link rel="stylesheet" type="text/css" href="~/Content/js/lib/datatables/css/buttons.dataTables.css">
+    <!-- Layout do módulo Ativo Fixo -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/ativofixo.css">
 }
 
 
@@ -27,7 +29,7 @@
     </div>
 
     <!-- Page Content -->
-    <div class="content">
+    <div class="content af-scope">
 
         @using (Html.BeginForm("AssetIndex", "Asset", FormMethod.Post, new { @class = "js-validation-bootstrap", role = "form", id = "form" }))
         {
@@ -39,66 +41,58 @@
                 Buscar
             </button>
 
-            <!-- FILTROS -->
+            <!-- CABEÇALHO DA PÁGINA -->
+            <div class="af-pagehead">
+                <div>
+                    <h3 class="af-title">@Resources.asset</h3>
+                    <p class="af-sub" id="resumoAtivos">&nbsp;</p>
+                </div>
+                @if (ViewBag.inserir)
+                {
+                    <div class="af-actions">
+                        <a href="@Url.Action("AssetInsert", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-plus mr-5"></i>@Resources.novo</a>
+                    </div>
+                }
+            </div>
+
+            <!-- FILTROS: barra compacta no lugar do cartão -->
             <div class="js-tasks-nav d-none d-md-block">
-                <div class="block block-rounded border">
+                <div class="af-toolbar">
 
-                    <div class="block-header block-header-default bg-gd-primary">
-                        <h3 class="block-title text-white font-w600">@Resources.asset</h3>
-
-                        @if (ViewBag.inserir)
-                        {
-                            <div class="block-options">
-                                <a href="@Url.Action("AssetInsert", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-plus mr-5"></i>@Resources.novo</a>
-                            </div>
-                        }
+                    <div class="af-f">
+                        <label for="unidade">@Resources.unidade</label>
+                        @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
                     </div>
 
-                    <div class="block-content">
-                        <ul class="list-group push">
+                    <div class="af-f">
+                        <label for="codigo">@Resources.codigo</label>
+                        <input type="text" class="form-control" id="codigo">
+                    </div>
 
-                            <li class="list-group-item">
-                                <div class="row">
+                    <div class="af-f af-grow">
+                        <label for="descricao">@Resources.descricao</label>
+                        <input type="text" class="form-control" id="descricao">
+                    </div>
 
-                                    <div class="col-md-2">
-                                        <label>@Resources.unidade</label>
-                                        @Html.DropDownList("unidade", null, "", new { @class = "form-control" })
-                                    </div>
+                    <div class="af-f">
+                        <label for="status">@Resources.status</label>
+                        <select id="status" class="form-control">
+                            <option value="">Todos</option>
+                            <option value="1">Ativo</option>
+                            <option value="2">Manutenção</option>
+                            <option value="3">Baixado</option>
+                            <option value="4">Transferido</option>
+                        </select>
+                    </div>
 
-                                    <div class="col-md-2">
-                                        <label>@Resources.codigo</label>
-                                        <input type="text" class="form-control" id="codigo">
-                                    </div>
+                    <div class="af-f af-grow">
+                        <label for="localizacao">@Resources.localizacao</label>
+                        <input type="text" class="form-control" id="localizacao">
+                    </div>
 
-                                    <div class="col-md-3">
-                                        <label>@Resources.descricao</label>
-                                        <input type="text" class="form-control" id="descricao">
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <label>@Resources.status</label>
-                                        <select id="status" class="form-control">
-                                            <option value="">Todos</option>
-                                            <option value="1">Ativo</option>
-                                            <option value="2">Manutenção</option>
-                                            <option value="3">Baixado</option>
-                                            <option value="4">Transferido</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <label>@Resources.localizacao</label>
-                                        <input type="text" class="form-control" id="localizacao">
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li class="list-group-item text-right">
-                                <button type="button" id="filtrar" name="filtrar" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
-                            </li>
-
-                        </ul>
+                    <div class="af-right">
+                        <span class="af-count" id="contagemAtivos"></span>
+                        <button type="button" id="filtrar" name="filtrar" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-magnifier mr-5"></i>@Resources.filtrar</button>
                     </div>
 
                 </div>

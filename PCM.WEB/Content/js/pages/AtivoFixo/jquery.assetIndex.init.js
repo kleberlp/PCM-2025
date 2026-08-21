@@ -49,6 +49,11 @@ function carregarGrid() {
         },
         onDelete: (row) => {
             deleteRegister(row);
+        },
+        onLoaded: function (response, rows) {
+            var total = (rows || []).length;
+            $("#contagemAtivos").text(total === 1 ? "1 resultado" : total + " resultados");
+            $("#resumoAtivos").text(total === 1 ? "1 ativo listado" : total + " ativos listados");
         }
     });
 

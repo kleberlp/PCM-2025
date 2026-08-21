@@ -80,6 +80,10 @@ function carregarGrid() {
         ],
         childRender: function (row) {
             return loadChildTable(row);
+        },
+        onLoaded: function (response, rows) {
+            var total = (rows || []).length;
+            $("#contagemInventarios").text(total === 1 ? "1 inventário" : total + " inventários");
         }
     });
 
@@ -122,6 +126,7 @@ function hasInventoryOpened() {
     if (unidade === "" || unidade === "-1") {
         $("#newInventory").hide();
         $("#closeInventory").hide();
+        $("#resumoInventario").html("Selecione uma unidade para abrir um inventário.");
         return;
     }
     else
@@ -137,11 +142,13 @@ function hasInventoryOpened() {
                 if (response == 0) {
                     $("#newInventory").show();
                     $("#closeInventory").hide();
+                    $("#resumoInventario").html("Nenhum inventário aberto nesta unidade.");
                 } else {
                     $("#closeInventory").show();
                     $("#newInventory").hide();
+                    $("#resumoInventario").html("<span class='af-chip af-brand'>Inventário aberto</span> nesta unidade — finalize ou cancele antes de abrir outro.");
                 }
-                
+
             }
         });
     }   
