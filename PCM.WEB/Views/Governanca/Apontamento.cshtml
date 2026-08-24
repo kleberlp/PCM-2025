@@ -746,51 +746,94 @@
         submitHandler: function (form) {
 
             let codigosSelecionados = [];
+            let jaApontadas = [];
 
-            $("#tb_main input[type='checkbox']:checked").each(function () {
-                let codigo = $(this).val();
-                if (codigo && codigo !== "on") {
-                    codigosSelecionados.push({
-                        codigoApartamento: codigo.trim()
-                    });
+            table.rows().every(function () {
+
+                let rowData = this.data();
+                let checkbox = $(this.node()).find('input[type="checkbox"]');
+
+                if (checkbox.prop('checked') !== true) return;
+
+                let codigo = checkbox.val();
+                if (!codigo || codigo === "on") return;
+
+                codigosSelecionados.push({ codigoApartamento: codigo.trim() });
+
+                if (quantidadeApontamentos(rowData) > 0) {
+                    jaApontadas.push(rowData.apartamento);
                 }
             });
 
             if (codigosSelecionados.length === 0) {
                 Swal.fire("Nenhuma UH selecionada!", "", "warning");
-                return;
+                return false;
             }
 
             // Serializa o array em uma string JSON
             const jsonCodigos = JSON.stringify(codigosSelecionados);
 
-            // Envia via Ajax como parâmetros
-            $.ajax({
-                url: "ApontamentoCamareira",
-                type: "POST",
-                data: {
-                    unidade: $("#unidade").val(),
-                    data: $("#data").val(),
-                    camareira: $("#camareira").val(),
-                    usuario: $("#usuario").val(),
-                    json: jsonCodigos
-                },
-                success: function (response) {
-                    Swal.fire("Sucesso!", response, "success");
-                },
-                error: function (xhr, status, error) {
-                    Swal.fire("Erro!", "Erro ao salvar.", "error");
-                    console.error(error);
-                }
-            });
+            // UH que já possui apontamento: confirma antes de apontar de novo
+            if (jaApontadas.length > 0) {
 
-            table.ajax.reload(null, false);
-            $('#modCamareira').modal('hide');
+                Swal.fire({
+                    title: jaApontadas.length === 1 ? "Esta U.H. já possui apontamento" : "Estas U.H. já possuem apontamento",
+                    html: "<div style='text-align:left'>" + jaApontadas.join("<br>") + "</div><br>Deseja apontar novamente?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
+                    cancelButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        salvarApontamentoCamareira(jsonCodigos);
+                    }
+                });
+
+                return false;
+            }
+
+            salvarApontamentoCamareira(jsonCodigos);
 
             return false;
 
         }
     });
+
+    // A grid mostra o número da U.H. seguido da quantidade de apontamentos ("1000 - 1")
+    function quantidadeApontamentos(rowData) {
+
+        var texto = String((rowData && rowData.apartamento) || "");
+        var achado = texto.match(/-\s*(\d+)\s*$/);
+
+        return achado ? parseInt(achado[1], 10) : 0;
+    }
+
+    function salvarApontamentoCamareira(jsonCodigos) {
+
+        $.ajax({
+            url: "ApontamentoCamareira",
+            type: "POST",
+            data: {
+                unidade: $("#unidade").val(),
+                data: $("#data").val(),
+                camareira: $("#camareira").val(),
+                usuario: $("#usuario").val(),
+                json: jsonCodigos
+            },
+            success: function (response) {
+                Swal.fire("Sucesso!", response, "success");
+
+                // Recarrega e fecha só depois de gravar
+                table.ajax.reload(null, false);
+                $('#modCamareira').modal('hide');
+            },
+            error: function (xhr, status, error) {
+                Swal.fire("Erro!", "Erro ao salvar.", "error");
+                console.error(error);
+            }
+        });
+
+    }
 
     $('#formTipoGovernanca').validate({
         ignore: [],
