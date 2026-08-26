@@ -1,0 +1,255 @@
+@model PCM.WEB.MODELS.Report35ViewModel
+@using System
+@using System.Linq
+@using System.Globalization
+@{
+    ViewBag.Title = "Relatório de Execução";
+    Layout = null;
+
+    var cultura = CultureInfo.GetCultureInfo("pt-BR");
+    var emitidoEm = DateTime.Now.ToString("dd/MM/yyyy HH:mm", cultura);
+    var conformidadeGeral = Model.PercentualConformidade.ToString("0.0", cultura);
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <title>@Model.TipoOrdemServico - @Model.Unidade - @Model.Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/pages/reports/reports.css")" />
+</head>
+<body>
+    <div class="barra-topo no-print">
+        <strong>@Model.TipoOrdemServico</strong>
+        <span class="contador">@Model.Unidade &middot; @Model.Data</span>
+        <input type="text" id="filtroTexto" placeholder="Buscar por grupo, item ou observação..." />
+        <select id="filtroResultado">
+            <option value="">Todos os resultados</option>
+            <option value="ok">Somente conformes</option>
+            <option value="nok">Somente não conformes</option>
+        </select>
+        <span class="espaco-flex"></span>
+        <span class="contador"><span id="contadorVisivel">@Model.TotalItensAvaliaveis</span> de @Model.TotalItensAvaliaveis itens avaliáveis</span>
+        <button type="button" class="botao secundario" id="btnExpandir">Expandir tudo</button>
+        <button type="button" class="botao" id="btnImprimir"><i class="fa fa-print"></i> Imprimir / PDF</button>
+    </div>
+
+    <div class="folha">
+        <div class="doc-timbre">
+            <img class="logo-pcm" src="@Url.Content("~/Content/img/report35/logo-pcm.png")" alt="PCM by SIM" data-fallback-hide />
+            @if (!string.IsNullOrWhiteSpace(Model.ClienteLogoUrl))
+            {
+                <img class="logo-cliente" src="@Url.Content(Model.ClienteLogoUrl)" alt="@Model.Unidade" data-fallback-hide />
+            }
+        </div>
+        <header class="doc-cabecalho">
+            <div class="doc-cabecalho-linha">
+                <div>
+                    <div class="doc-id">Relatório PCM-035 &middot; Execução de Rotina/Serviço Programado</div>
+                    <span class="doc-tipo-badge">@Model.TipoOrdemServico</span>
+                    <h1 class="doc-titulo">@Model.Unidade</h1>
+                    <p class="doc-subtitulo">@Model.Servico</p>
+                </div>
+                <div class="doc-meta">
+                    <div>Empresa <b>@Model.CodigoEmpresa</b> &middot; Unidade <b>@Model.CodigoUnidade</b></div>
+                    <div>Ordem de serviço <b>@Model.CodigoOrdemServico</b></div>
+                    <div>Data <b>@Model.Data</b></div>
+                    <div>Emitido em <b>@emitidoEm</b></div>
+                </div>
+            </div>
+
+            <div class="ficha-info">
+                <div class="campo">
+                    <div class="rotulo">Serviço</div>
+                    <div class="valor">@Model.Servico</div>
+                </div>
+                <div class="campo">
+                    <div class="rotulo">Equipamento</div>
+                    <div class="valor">@(string.IsNullOrWhiteSpace(Model.Equipamento) ? "N/A" : Model.Equipamento)</div>
+                </div>
+                <div class="campo">
+                    <div class="rotulo">Categoria</div>
+                    <div class="valor">@Model.Categoria</div>
+                </div>
+                <div class="campo">
+                    <div class="rotulo">Tipo de serviço</div>
+                    <div class="valor">@Model.TipoServico</div>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.Solucao))
+                {
+                    <div class="campo" style="grid-column: 1 / -1;">
+                        <div class="rotulo">Solução</div>
+                        <div class="valor">@Model.Solucao</div>
+                    </div>
+                }
+            </div>
+
+            <div class="kpis">
+                <div class="kpi destaque">
+                    <div class="valor">@conformidadeGeral%</div>
+                    <div class="rotulo">Conformidade geral</div>
+                </div>
+                <div class="kpi">
+                    <div class="valor">@Model.TotalItensAvaliaveis</div>
+                    <div class="rotulo">Itens avaliáveis</div>
+                </div>
+                <div class="kpi">
+                    <div class="valor ok">@Model.TotalConformes</div>
+                    <div class="rotulo">Conformes</div>
+                </div>
+                <div class="kpi">
+                    <div class="valor @(Model.TotalNaoConformes > 0 ? "nok" : "")">@Model.TotalNaoConformes</div>
+                    <div class="rotulo">Não conformes</div>
+                </div>
+            </div>
+        </header>
+
+        @if (Model.Apontamentos.Any())
+        {
+            <section class="secao-apontamentos">
+                <p class="secao-titulo">Execução</p>
+                <table class="apontamentos">
+                    <thead>
+                        <tr>
+                            <th>Executor</th>
+                            <th>Início</th>
+                            <th>Término</th>
+                            <th style="text-align:right">Tempo gasto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var apontamento in Model.Apontamentos)
+                        {
+                            <tr>
+                                <td>@(string.IsNullOrWhiteSpace(apontamento.Executor) ? "-" : apontamento.Executor)</td>
+                                <td>@(apontamento.DataInicio.HasValue ? apontamento.DataInicio.Value.ToString("dd/MM/yyyy HH:mm:ss") : "-")</td>
+                                <td>@(apontamento.DataTermino.HasValue ? apontamento.DataTermino.Value.ToString("dd/MM/yyyy HH:mm:ss") : "-")</td>
+                                <td class="numero">@(apontamento.TempoGastoMinutos.HasValue ? apontamento.TempoGastoMinutos.Value + " min" : "-")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+        }
+
+        <div class="lista-grupos">
+            @if (!Model.Grupos.Any())
+            {
+                <p class="sem-item">Nenhum item de checklist encontrado para esta ordem de serviço.</p>
+            }
+
+            @foreach (var grupo in Model.Grupos)
+            {
+                var classeMediaGrupo = "neutro";
+                if (grupo.PercentualConformidade.HasValue)
+                {
+                    classeMediaGrupo = grupo.PercentualConformidade.Value >= 100 ? "ok" : (grupo.PercentualConformidade.Value < 70 ? "nok" : "neutro");
+                }
+                var buscaGrupo = (grupo.Nome ?? "").ToLowerInvariant();
+
+                <section class="grupo" data-busca-grupo="@buscaGrupo">
+                    <div class="grupo-cabecalho">
+                        <i class="seta fa fa-chevron-down"></i>
+                        <span class="grupo-titulo">@grupo.Nome</span>
+                        @if (grupo.PercentualConformidade.HasValue)
+                        {
+                            <span class="grupo-media @classeMediaGrupo">@grupo.PercentualConformidade.Value.ToString("0.#", cultura)% conforme (@grupo.TotalConformes/@grupo.TotalAvaliaveis)</span>
+                        }
+                    </div>
+                    <div class="grupo-corpo">
+                        @foreach (var subGrupo in grupo.SubGrupos)
+                        {
+                            <div class="subgrupo-titulo">
+                                <span>@subGrupo.Nome</span>
+                                @if (subGrupo.PercentualConformidade.HasValue)
+                                {
+                                    <span>&middot; @subGrupo.PercentualConformidade.Value.ToString("0.#", cultura)%</span>
+                                }
+                            </div>
+
+                            foreach (var item in subGrupo.Itens)
+                            {
+                                var busca = (item.Checklist + " " + item.Descricao + " " + item.Observacao + " " + grupo.Nome + " " + subGrupo.Nome).ToLowerInvariant();
+                                var statusFiltro = item.EhConforme ? "ok" : (item.EhNaoConforme ? "nok" : "");
+
+                                <div class="item-checklist" data-busca="@busca" data-status="@statusFiltro">
+                                    <div class="item-linha">
+                                        <div class="item-texto">
+                                            <div class="item-codigo">@item.Checklist</div>
+                                            <div class="item-descricao">@item.Descricao</div>
+                                            @if (!string.IsNullOrWhiteSpace(item.Observacao))
+                                            {
+                                                <div class="item-observacao">@item.Observacao</div>
+                                            }
+                                        </div>
+                                        <div class="item-resultado">
+                                            @if (item.EhConforme)
+                                            {
+                                                <span class="resultado-tag resultado-ok">SIM</span>
+                                            }
+                                            else if (item.EhNaoConforme)
+                                            {
+                                                <span class="resultado-tag resultado-nok">NÃO</span>
+                                            }
+                                            else if (item.EhNaoAplicavel)
+                                            {
+                                                <span class="resultado-tag resultado-na">N.A.</span>
+                                            }
+                                            else if (!string.IsNullOrWhiteSpace(item.Resultado))
+                                            {
+                                                <span class="resultado-valor">@item.Resultado</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="resultado-vazio">-</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    @if (item.Fotos.Any())
+                                    {
+                                        <div class="fotos-item">
+                                            @foreach (var foto in item.Fotos)
+                                            {
+                                                var urlFoto = Url.Action("Imagem", "Report35", new
+                                               {
+                                                   codigoEmpresa = Model.CodigoEmpresa,
+                                                   codigoUnidade = Model.CodigoUnidade,
+                                                   codigoOrdemServico = Model.CodigoOrdemServico,
+                                                   codigoItemChecklist = item.Codigo,
+                                                   tipo = Model.TipoOrdemServico
+                                               });
+                                                <div class="foto-card" data-foto="@urlFoto">
+                                                    <img src="@urlFoto" alt="Foto do item @item.Checklist" loading="lazy" />
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </section>
+            }
+        </div>
+
+        <div class="rodape">
+            <span class="rodape-marca">PCM by SIM</span>
+            <span>
+                Ordem de serviço @Model.CodigoOrdemServico &middot; emitido em @emitidoEm
+                @if (!string.IsNullOrWhiteSpace(Model.EmitidoPor))
+                {
+                    @:por @Model.EmitidoPor
+                }
+            </span>
+        </div>
+    </div>
+
+    <div class="lightbox no-print" id="lightbox">
+        <i class="fechar fa fa-times"></i>
+        <img id="lightboxImg" src="" alt="" />
+    </div>
+
+    <script src="@Url.Content("~/Content/js/pages/reports/reports.js")"></script>
+</body>
+</html>

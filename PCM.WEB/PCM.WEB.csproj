@@ -302,6 +302,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Report35Controller.cs" />
     <Compile Include="Controllers\AtivoFixoController.cs" />
     <Compile Include="Controllers\AEBController.cs" />
     <Compile Include="Controllers\AgendaController.cs" />
@@ -2633,6 +2634,7 @@
     <Content Include="Views\AtivoFixo\assetMovementInsert.cshtml" />
     <Content Include="Views\AtivoFixo\assetInventoryClose.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Report35\Index.cshtml" />
     <Content Include="Views\Shared\shared\_Footer.cshtml" />
     <Content Include="Views\Shared\shared\_Header.cshtml" />
     <Content Include="Views\Shared\shared\_HeaderApp.cshtml" />
