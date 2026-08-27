@@ -12,7 +12,7 @@ Imports PCM.WEB.MODELS
 ' O modelo e esta classe se chamam Manual, e dentro do namespace PCM.WEB.DAL o nome PCM
 ' bate na classe PCM desta mesma camada — PCM.WEB.MODELS.Manual nao resolveria. O alias
 ' diz de qual Manual se trata em cada assinatura.
-Imports ManualInfo = Global.PCM.WEB.MODELS.Manual
+Imports ManualInfo = PCM.WEB.MODELS.Manual
 
 Public Class Manual
 

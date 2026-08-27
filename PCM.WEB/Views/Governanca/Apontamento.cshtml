@@ -784,7 +784,7 @@
                     confirmButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.sim)",
                     cancelButtonText: "@Html.Raw(PCM.WEB.Properties.Resources.nao)"
                 }).then((result) => {
-                    if (result.isConfirmed) {
+                    if (result) {
                         salvarApontamentoCamareira(jsonCodigos);
                     }
                 });
