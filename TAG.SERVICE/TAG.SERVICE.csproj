@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <!-- Fase 2 da migração (docs/MANUAL-MIGRACAO-DOTNET10-SEGURANCA.md):
+       substituto Worker Service do PCM.SERVICE.TAG (VB.NET / .NET 4.8).
+       Padrão do MESSAGE.SERVICE: Dapper + Microsoft.Data.SqlClient +
+       BackgroundService + appsettings; SkiaSharp no lugar do System.Drawing. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TAG.SERVICE</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
+    <PackageReference Include="SkiaSharp" Version="3.119.4" />
+  </ItemGroup>
+
+</Project>
