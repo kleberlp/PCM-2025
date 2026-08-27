@@ -685,15 +685,15 @@
         }
         <div class="modal fade" id="modalFuncionario" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content" style="border-radius:14px;">
-                    <div class="modal-header" style="border-bottom:1px solid #E5E7EB;">
-                        <h5 class="modal-title" style="font-weight:600;">@PCM.WEB.Properties.Resources.funcionario</h5>
+                <div class="modal-content u-round-14">
+                    <div class="modal-header u-bb-line">
+                        <h5 class="modal-title u-fw-600">@PCM.WEB.Properties.Resources.funcionario</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         @Html.DropDownList("funcionario", null, "", new { @class = "js-select2 form-control h-75", @multiple = "multiple" })
                     </div>
-                    <div class="modal-footer" style="border-top:1px solid #E5E7EB;">
+                    <div class="modal-footer u-bt-line">
                         <button type="button" class="btn-pcm btn-pcm-ghost" data-dismiss="modal">@PCM.WEB.Properties.Resources.sair</button>
                         <button type="submit" class="btn-pcm btn-pcm-dark" id="confirmar">
                             <i class="fa fa-check mr-1"></i> @PCM.WEB.Properties.Resources.confirmado
@@ -711,18 +711,18 @@
         }
         <div class="modal fade" id="modalCancelar" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <div class="modal-content" style="border-radius:14px;">
-                    <div class="modal-header" style="border-bottom:1px solid #E5E7EB;">
-                        <h5 class="modal-title" style="font-weight:600;">@PCM.WEB.Properties.Resources.justificativa_cancelamento_ordem_servico</h5>
+                <div class="modal-content u-round-14">
+                    <div class="modal-header u-bb-line">
+                        <h5 class="modal-title u-fw-600">@PCM.WEB.Properties.Resources.justificativa_cancelamento_ordem_servico</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <label class="filter-label mb-1">@PCM.WEB.Properties.Resources.justificativa_cancelamento_ordem_servico</label>
                         @Html.DropDownList("justificativa_cancelamento", null, "", new { @class = "form-control h-75" })
                     </div>
-                    <div class="modal-footer" style="border-top:1px solid #E5E7EB;">
+                    <div class="modal-footer u-bt-line">
                         <button type="button" class="btn-pcm btn-pcm-ghost" data-dismiss="modal">@PCM.WEB.Properties.Resources.sair</button>
-                        <button type="submit" class="btn-pcm btn-pcm-dark" id="btnExcluirConfirmar" style="background:#EF5350;">
+                        <button type="submit" class="btn-pcm btn-pcm-dark u-bg-red-mat" id="btnExcluirConfirmar">
                             <i class="fa fa-trash mr-1"></i> @PCM.WEB.Properties.Resources.confirmado
                         </button>
                     </div>

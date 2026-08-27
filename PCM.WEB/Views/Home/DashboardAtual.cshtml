@@ -9,7 +9,7 @@
             <input type="hidden" name="unidade" id="hidden-unidade" value="@Session["codigo_unidade"]" />
             <input type="hidden" name="data" id="hidden-data" value="" />
 
-            <div class="text-right no-print" style="margin-bottom:10px;">
+            <div class="text-right no-print u-mb-10">
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-act="window.print"><i class="si si-printer"></i> Exportar PDF</button>
             </div>
 
@@ -21,20 +21,20 @@
                         <div class="col-12 col-md-8">
                             @{ var _notaGeral = ViewBag.notas_unidades != null ? ((IEnumerable<dynamic>)ViewBag.notas_unidades).Cast<dynamic>().FirstOrDefault() : null; }
                             <div class="block dashboard-card" style="padding:16px 24px;">
-                                <div style="display:flex;align-items:center;">
+                                <div class="u-flex-center">
                                     <div style="flex:1;text-align:center;border-right:1px solid #dee2e6;padding-right:24px;">
-                                        <div style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6c757d;letter-spacing:.08em;">Unidade</div>
-                                        <div style="font-size:22px;font-weight:700;color:#2c3e50;margin-top:2px;">@(_notaGeral != null ? (string)_notaGeral.unidade : (string)ViewBag.dashboard_info.unidade)</div>
+                                        <div class="u-kpi-label">Unidade</div>
+                                        <div class="u-kpi-value">@(_notaGeral != null ? (string)_notaGeral.unidade : (string)ViewBag.dashboard_info.unidade)</div>
                                     </div>
                                     <div style="flex:1;text-align:center;border-right:1px solid #dee2e6;padding:0 24px;">
-                                        <div style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6c757d;letter-spacing:.08em;">Nota Geral</div>
-                                        <div style="font-size:22px;font-weight:700;color:#2c3e50;margin-top:2px;">
+                                        <div class="u-kpi-label">Nota Geral</div>
+                                        <div class="u-kpi-value">
                                             @(_notaGeral != null ? ((string)_notaGeral.nota_final).Replace("%", "").Trim() : "—")
                                         </div>
                                     </div>
                                     <div style="flex:1;text-align:center;padding-left:24px;">
-                                        <div style="font-size:10px;font-weight:600;text-transform:uppercase;color:#6c757d;letter-spacing:.08em;">Ranking</div>
-                                        <div style="font-size:22px;font-weight:700;color:#2c3e50;margin-top:2px;">
+                                        <div class="u-kpi-label">Ranking</div>
+                                        <div class="u-kpi-value">
                                             <i class="si si-trophy" style="font-size:16px;color:#ffc90e;margin-right:4px;"></i>@ViewBag.dashboard_info.ranking°
                                         </div>
                                     </div>
@@ -126,7 +126,7 @@
                                     <th class="text-center u-w-130">OK</th>
                                     <th class="text-center u-w-130">Pend.</th>
                                     <th class="text-center u-w-130">Total</th>
-                                    <th style="min-width:180px;">% Atendido</th>
+                                    <th class="u-minw-180">% Atendido</th>
                                     <th class="text-center u-w-75">Peso</th>
                                     <th class="text-center u-w-75">Nota</th>
                                 </tr>
@@ -149,18 +149,18 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(linha.pct))
                                             {
-                                                <div style="display:flex;align-items:center;gap:6px;">
-                                                    <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                <div class="u-flex-center-g6">
+                                                    <div class="u-progress-track">
                                                         <div style="width:@(_w)%;height:100%;background:@_cor;border-radius:3px;transition:width .4s;"></div>
                                                     </div>
                                                     <span style="font-size:11px;font-weight:600;color:@_cor;white-space:nowrap;min-width:52px;text-align:right;">@linha.pct</span>
                                                 </div>
                                             }
                                             else
-                                            { <span class="text-muted" style="font-size:11px;">Sem dados</span>}
+                                            { <span class="text-muted u-fs-11">Sem dados</span>}
                                         </td>
-                                        <td class="text-center text-muted" style="font-size:12px;">@linha.peso</td>
-                                        <td class="text-center font-w600" style="color:#2c3e50;">@_nf</td>
+                                        <td class="text-center text-muted u-fs-12">@linha.peso</td>
+                                        <td class="text-center font-w600 u-c-navy">@_nf</td>
                                     </tr>
                                 }
                             </tbody>
@@ -174,7 +174,7 @@
                                     <th>Atividade</th>
                                     <th class="text-center u-w-140">Realizado</th>
                                     <th class="text-center u-w-80">Meta</th>
-                                    <th style="min-width:180px;">% Atendido</th>
+                                    <th class="u-minw-180">% Atendido</th>
                                     <th class="text-center u-w-75">Peso</th>
                                     <th class="text-center u-w-75">Nota</th>
                                 </tr>
@@ -195,18 +195,18 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(linha.pct))
                                             {
-                                                <div style="display:flex;align-items:center;gap:6px;">
-                                                    <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                                <div class="u-flex-center-g6">
+                                                    <div class="u-progress-track">
                                                         <div style="width:@(_w)%;height:100%;background:@_cor;border-radius:3px;transition:width .4s;"></div>
                                                     </div>
                                                     <span style="font-size:11px;font-weight:600;color:@_cor;white-space:nowrap;min-width:52px;text-align:right;">@linha.pct</span>
                                                 </div>
                                             }
                                             else
-                                            { <span class="text-muted" style="font-size:11px;">Sem dados</span>}
+                                            { <span class="text-muted u-fs-11">Sem dados</span>}
                                         </td>
-                                        <td class="text-center text-muted" style="font-size:12px;">@linha.peso</td>
-                                        <td class="text-center font-w600" style="color:#2c3e50;">@_nf</td>
+                                        <td class="text-center text-muted u-fs-12">@linha.peso</td>
+                                        <td class="text-center font-w600 u-c-navy">@_nf</td>
                                     </tr>
                                 }
                             </tbody>
@@ -230,27 +230,27 @@
                             <thead>
                                 <tr>
                                     <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" colspan="2" style="color:#22b14c;">No Dia</th>
-                                    <th class="text-center" colspan="2" style="color:#3f48cc;">1 Dia</th>
-                                    <th class="text-center" colspan="2" style="color:#b38f00;">2 a 3 Dias</th>
-                                    <th class="text-center" colspan="2" style="color:#ff8000;">4 a 5 Dias</th>
-                                    <th class="text-center" colspan="2" style="color:#800080;">&gt; 5 Dias</th>
-                                    <th class="text-center" colspan="2" style="color:#e74c3c;">Não Atendidas</th>
-                                    <th rowspan="2" style="min-width:160px;">Distribuição</th>
+                                    <th class="text-center u-c-green" colspan="2">No Dia</th>
+                                    <th class="text-center u-c-indigo" colspan="2">1 Dia</th>
+                                    <th class="text-center u-c-olive" colspan="2">2 a 3 Dias</th>
+                                    <th class="text-center u-c-orange" colspan="2">4 a 5 Dias</th>
+                                    <th class="text-center u-c-purple" colspan="2">&gt; 5 Dias</th>
+                                    <th class="text-center u-c-red-flat" colspan="2">Não Atendidas</th>
+                                    <th class="u-minw-160" rowspan="2">Distribuição</th>
                                 </tr>
                                 <tr>
-                                    <th class="text-center" style="width:55px;color:#22b14c;">Qtde</th>
-                                    <th class="text-center" style="width:65px;color:#22b14c;">%</th>
-                                    <th class="text-center" style="width:55px;color:#3f48cc;">Qtde</th>
-                                    <th class="text-center" style="width:65px;color:#3f48cc;">%</th>
-                                    <th class="text-center" style="width:55px;color:#b38f00;">Qtde</th>
-                                    <th class="text-center" style="width:65px;color:#b38f00;">%</th>
-                                    <th class="text-center" style="width:55px;color:#ff8000;">Qtde</th>
-                                    <th class="text-center" style="width:65px;color:#ff8000;">%</th>
-                                    <th class="text-center" style="width:55px;color:#800080;">Qtde</th>
-                                    <th class="text-center" style="width:65px;color:#800080;">%</th>
-                                    <th class="text-center" style="width:55px;color:#e74c3c;">Qtde</th>
-                                    <th class="text-center" style="width:65px;color:#e74c3c;">%</th>
+                                    <th class="text-center u-w-55 u-c-green">Qtde</th>
+                                    <th class="text-center u-w-65 u-c-green">%</th>
+                                    <th class="text-center u-w-55 u-c-indigo">Qtde</th>
+                                    <th class="text-center u-w-65 u-c-indigo">%</th>
+                                    <th class="text-center u-w-55 u-c-olive">Qtde</th>
+                                    <th class="text-center u-w-65 u-c-olive">%</th>
+                                    <th class="text-center u-w-55 u-c-orange">Qtde</th>
+                                    <th class="text-center u-w-65 u-c-orange">%</th>
+                                    <th class="text-center u-w-55 u-c-purple">Qtde</th>
+                                    <th class="text-center u-w-65 u-c-purple">%</th>
+                                    <th class="text-center u-w-55 u-c-red-flat">Qtde</th>
+                                    <th class="text-center u-w-65 u-c-red-flat">%</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -288,20 +288,20 @@
                                 {
                                     <tr>
                                         <td class="font-w600">@_di.unidade</td>
-                                        <td class="text-center" style="color:#22b14c;">@qNodia2</td>
-                                        <td class="text-center" style="font-weight:600;color:#22b14c;">@_di.os_atendimento_dia</td>
-                                        <td class="text-center" style="color:#3f48cc;">@q1dia2</td>
-                                        <td class="text-center" style="font-weight:600;color:#3f48cc;">@_di.os_atendimento_um_dia</td>
-                                        <td class="text-center" style="color:#b38f00;">@q232</td>
-                                        <td class="text-center" style="font-weight:600;color:#b38f00;">@_di.os_atendimento_tres_dias</td>
-                                        <td class="text-center" style="color:#ff8000;">@q452</td>
-                                        <td class="text-center" style="font-weight:600;color:#ff8000;">@_di.os_atendimento_cinco_dias</td>
-                                        <td class="text-center" style="color:#800080;">@q5mais2</td>
-                                        <td class="text-center" style="font-weight:600;color:#800080;">@_di.os_atendimento_acima_cinco_dias</td>
-                                        <td class="text-center" style="color:#e74c3c;">@qNao2</td>
-                                        <td class="text-center" style="font-weight:600;color:#e74c3c;">@_di.os_nao_atendido</td>
+                                        <td class="text-center u-c-green">@qNodia2</td>
+                                        <td class="text-center u-fw-600 u-c-green">@_di.os_atendimento_dia</td>
+                                        <td class="text-center u-c-indigo">@q1dia2</td>
+                                        <td class="text-center u-fw-600 u-c-indigo">@_di.os_atendimento_um_dia</td>
+                                        <td class="text-center u-c-olive">@q232</td>
+                                        <td class="text-center u-fw-600 u-c-olive">@_di.os_atendimento_tres_dias</td>
+                                        <td class="text-center u-c-orange">@q452</td>
+                                        <td class="text-center u-fw-600 u-c-orange">@_di.os_atendimento_cinco_dias</td>
+                                        <td class="text-center u-c-purple">@q5mais2</td>
+                                        <td class="text-center u-fw-600 u-c-purple">@_di.os_atendimento_acima_cinco_dias</td>
+                                        <td class="text-center u-c-red-flat">@qNao2</td>
+                                        <td class="text-center u-fw-600 u-c-red-flat">@_di.os_nao_atendido</td>
                                         <td>
-                                            <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;width:100%;">
+                                            <div class="u-bar-strip">
                                                 <div style="width:@bNodia2%;background:#22b14c;" title="No Dia: @_di.os_atendimento_dia (@qNodia2 OS)"></div>
                                                 <div style="width:@b1dia2%;background:#3f48cc;" title="1 Dia: @_di.os_atendimento_um_dia (@q1dia2 OS)"></div>
                                                 <div style="width:@b232%;background:#ffc90e;" title="2-3 Dias: @_di.os_atendimento_tres_dias (@q232 OS)"></div>

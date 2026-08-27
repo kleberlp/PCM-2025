@@ -6,7 +6,7 @@
         {
             @Html.AntiForgeryToken()
 
-            <div class="text-right no-print" style="margin-bottom:10px;">
+            <div class="text-right no-print u-mb-10">
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-act="window.print"><i class="si si-printer"></i> Exportar PDF</button>
             </div>
 
@@ -270,12 +270,12 @@
                                     <th class="text-center u-w-70">OS Aberto</th>
                                     <th class="text-center u-w-85">OS Concluído</th>
                                     <th class="text-center u-w-80">OS Pendente</th>
-                                    <th style="min-width:130px;">Laudo</th>
-                                    <th style="min-width:130px;">Preventiva</th>
-                                    <th style="min-width:130px;">Rotina</th>
-                                    <th style="min-width:130px;">PMOC</th>
-                                    <th style="min-width:130px;">UH Dia</th>
-                                    <th style="min-width:130px;">Green Planet</th>
+                                    <th class="u-minw-130">Laudo</th>
+                                    <th class="u-minw-130">Preventiva</th>
+                                    <th class="u-minw-130">Rotina</th>
+                                    <th class="u-minw-130">PMOC</th>
+                                    <th class="u-minw-130">UH Dia</th>
+                                    <th class="u-minw-130">Green Planet</th>
                                 </tr>
                             </thead>
                             <tbody id="tb-principais">
@@ -312,11 +312,11 @@
                         <div class="row mt-3 text-center">
                             <div class="col-4">
                                 <div class="kpi-title">Aberto</div>
-                                <div class="kpi-value" style="color:rgba(255,0,0);" id="aberto">0</div>
+                                <div class="kpi-value u-c-red" id="aberto">0</div>
                             </div>
                             <div class="col-4">
                                 <div class="kpi-title">Concluído</div>
-                                <div class="kpi-value" style="color:rgba(34,177,76);" id="concluido">0</div>
+                                <div class="kpi-value u-c-green" id="concluido">0</div>
                             </div>
                             <div class="col-4">
                                 <div class="kpi-title">Saldo</div>
@@ -335,11 +335,11 @@
                         <div class="row mt-3 text-center">
                             <div class="col">
                                 <div class="kpi-title">No Dia</div>
-                                <div class="kpi-value" style="color:rgba(34,177,76);" id="no_dia">0%</div>
+                                <div class="kpi-value u-c-green" id="no_dia">0%</div>
                             </div>
                             <div class="col">
                                 <div class="kpi-title">1 Dia</div>
-                                <div class="kpi-value" style="color:rgba(63,72,204);" id="um_dia">0%</div>
+                                <div class="kpi-value u-c-indigo" id="um_dia">0%</div>
                             </div>
                             <div class="col">
                                 <div class="kpi-title">3 Dias</div>
@@ -347,11 +347,11 @@
                             </div>
                             <div class="col">
                                 <div class="kpi-title">5 Dias</div>
-                                <div class="kpi-value" style="color:rgba(255,128,0);" id="cinco_dia">0%</div>
+                                <div class="kpi-value u-c-orange" id="cinco_dia">0%</div>
                             </div>
                             <div class="col">
                                 <div class="kpi-title">&gt;5 Dias</div>
-                                <div class="kpi-value" style="color:rgba(255,0,0);" id="mais_cinco_dia">0%</div>
+                                <div class="kpi-value u-c-red" id="mais_cinco_dia">0%</div>
                             </div>
                         </div>
                     </div>

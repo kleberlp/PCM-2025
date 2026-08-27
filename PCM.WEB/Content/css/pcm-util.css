@@ -45,3 +45,55 @@
 .u-pad0-clip { padding: 0; overflow: hidden; }
 .u-gold { color: rgb(255, 201, 14); }
 .u-pointer { cursor: pointer; }
+
+/* ---- segunda leva: cores e padrões repetidos dos dashboards ---- */
+.u-c-slate { color: #374151; }
+.u-c-navy { color: #2c3e50; }
+.u-c-gray { color: #9ca3af; }
+.u-c-gray2 { color: #6b7280; }
+.u-c-red { color: #ff0000; }
+.u-c-red-mat { color: #ef5350; }
+.u-c-red-flat { color: #e74c3c; }
+.u-c-green { color: #22b14c; }
+.u-c-green2 { color: #6eab4d; }
+.u-c-indigo { color: #3f48cc; }
+.u-c-blue-light { color: #42a5f5; }
+.u-c-orange { color: #ff8000; }
+.u-c-orange-deep { color: #ea580c; }
+.u-c-olive { color: #b38f00; }
+.u-c-purple { color: #800080; }
+.u-bg-red-mat { background: #ef5350; }
+.u-italic { font-style: italic; }
+.u-fw-600 { font-weight: 600; }
+.u-lower { text-transform: lowercase; }
+.u-fs-11 { font-size: 11px; }
+.u-fs-12 { font-size: 12px; }
+.u-fs-13 { font-size: 13px; }
+.u-label-mini { font-size: 10px; font-weight: 400; color: #9ca3af; }
+.u-cap-mini { font-size: 9px; color: #9ca3af; }
+.u-kpi-label { font-size: 10px; font-weight: 600; text-transform: uppercase; color: #6c757d; letter-spacing: .08em; }
+.u-kpi-value { font-size: 22px; font-weight: 700; color: #2c3e50; margin-top: 2px; }
+.u-block { display: block; }
+.u-flex-center { display: flex; align-items: center; }
+.u-flex-center-g6 { display: flex; align-items: center; gap: 6px; }
+.u-flex-col { display: flex; flex-direction: column; }
+.u-gap-12 { gap: 12px; }
+.u-pad-0 { padding: 0; }
+.u-mb-10 { margin-bottom: 10px; }
+.u-table-fixed { table-layout: fixed; width: 100%; }
+.u-minw-130 { min-width: 130px; }
+.u-minw-140 { min-width: 140px; }
+.u-minw-160 { min-width: 160px; }
+.u-minw-180 { min-width: 180px; }
+.u-minw-200 { min-width: 200px; }
+.u-h-260 { height: 260px; }
+.u-h-22-fix { height: 22px; flex-shrink: 0; }
+.u-scroll-y-510 { max-height: 510px; overflow-y: auto; }
+.u-scroll-x-only { overflow-x: scroll; overflow-y: hidden; }
+.u-round-14 { border-radius: 14px; }
+.u-bt-line { border-top: 1px solid #e5e7eb; }
+.u-bb-line { border-bottom: 1px solid #e5e7eb; }
+.u-progress-track { flex: 1; background: #e9ecef; border-radius: 3px; height: 14px; overflow: hidden; }
+.u-progress-track-sm { flex: 1; background: #e9ecef; border-radius: 3px; height: 10px; overflow: hidden; }
+.u-bar-strip { display: flex; height: 16px; border-radius: 3px; overflow: hidden; width: 100%; }
+.u-chart-box { flex: 1; min-height: 220px; position: relative; }

@@ -252,7 +252,7 @@
                                     <th class="text-center u-w-55">OK</th>
                                     <th class="text-center u-w-65">Pend.</th>
                                     <th class="text-center u-w-55">Total</th>
-                                    <th style="min-width:140px;">% Atend.</th>
+                                    <th class="u-minw-140">% Atend.</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -267,8 +267,8 @@
                                         <td class="text-center">@item.quantidade_pendente</td>
                                         <td class="text-center">@item.total</td>
                                         <td>
-                                            <div style="display:flex;align-items:center;gap:6px;">
-                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                            <div class="u-flex-center-g6">
+                                                <div class="u-progress-track">
                                                     <div style="width:@(pctRotina.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corRotina;border-radius:3px;transition:width .4s;"></div>
                                                 </div>
                                                 <span style="font-size:11px;font-weight:600;color:@corRotina;white-space:nowrap;">@item.percentual_atendido</span>
@@ -290,7 +290,7 @@
                                     <th class="text-center u-w-55">OK</th>
                                     <th class="text-center u-w-65">Pend.</th>
                                     <th class="text-center u-w-55">Total</th>
-                                    <th style="min-width:140px;">% Atend.</th>
+                                    <th class="u-minw-140">% Atend.</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -305,8 +305,8 @@
                                         <td class="text-center">@item.quantidade_pendente</td>
                                         <td class="text-center">@item.total</td>
                                         <td>
-                                            <div style="display:flex;align-items:center;gap:6px;">
-                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                            <div class="u-flex-center-g6">
+                                                <div class="u-progress-track">
                                                     <div style="width:@(pctPrev.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corPrev;border-radius:3px;transition:width .4s;"></div>
                                                 </div>
                                                 <span style="font-size:11px;font-weight:600;color:@corPrev;white-space:nowrap;">@item.percentual_atendido</span>
@@ -332,7 +332,7 @@
                                     <th class="text-center u-w-55">OK</th>
                                     <th class="text-center u-w-65">Pend.</th>
                                     <th class="text-center u-w-55">Total</th>
-                                    <th style="min-width:140px;">% Atend.</th>
+                                    <th class="u-minw-140">% Atend.</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -347,8 +347,8 @@
                                         <td class="text-center">@item.quantidade_pendente</td>
                                         <td class="text-center">@item.total</td>
                                         <td>
-                                            <div style="display:flex;align-items:center;gap:6px;">
-                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                            <div class="u-flex-center-g6">
+                                                <div class="u-progress-track">
                                                     <div style="width:@(pctPmoc.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corPmoc;border-radius:3px;transition:width .4s;"></div>
                                                 </div>
                                                 <span style="font-size:11px;font-weight:600;color:@corPmoc;white-space:nowrap;">@item.percentual_atendido</span>
@@ -370,7 +370,7 @@
                                     <th class="text-center u-w-55">OK</th>
                                     <th class="text-center u-w-65">Pend.</th>
                                     <th class="text-center u-w-55">Total</th>
-                                    <th style="min-width:140px;">% Atend.</th>
+                                    <th class="u-minw-140">% Atend.</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -385,8 +385,8 @@
                                         <td class="text-center">@item.quantidade_pendente</td>
                                         <td class="text-center">@item.total</td>
                                         <td>
-                                            <div style="display:flex;align-items:center;gap:6px;">
-                                                <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                            <div class="u-flex-center-g6">
+                                                <div class="u-progress-track">
                                                     <div style="width:@(pctLaudo.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corLaudo;border-radius:3px;transition:width .4s;"></div>
                                                 </div>
                                                 <span style="font-size:11px;font-weight:600;color:@corLaudo;white-space:nowrap;">@item.percentual_atendido</span>
@@ -411,7 +411,7 @@
                                 <th class="text-center u-w-70">OK</th>
                                 <th class="text-center u-w-80">Pend.</th>
                                 <th class="text-center u-w-70">Total</th>
-                                <th style="min-width:200px;">% Atend.</th>
+                                <th class="u-minw-200">% Atend.</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -426,8 +426,8 @@
                                     <td class="text-center">@item.quantidade_pendente</td>
                                     <td class="text-center">@item.total</td>
                                     <td>
-                                        <div style="display:flex;align-items:center;gap:6px;">
-                                            <div style="flex:1;background:#e9ecef;border-radius:3px;height:14px;overflow:hidden;">
+                                        <div class="u-flex-center-g6">
+                                            <div class="u-progress-track">
                                                 <div style="width:@(pctUh.ToString("0", System.Globalization.CultureInfo.InvariantCulture))%;height:100%;background:@corUh;border-radius:3px;transition:width .4s;"></div>
                                             </div>
                                             <span style="font-size:11px;font-weight:600;color:@corUh;white-space:nowrap;">@item.percentual_atendido</span>
@@ -530,27 +530,27 @@
                         <thead>
                             <tr>
                                 <th rowspan="2">@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-center" colspan="2" style="color:#22b14c;">No Dia</th>
-                                <th class="text-center" colspan="2" style="color:#3f48cc;">1 Dia</th>
-                                <th class="text-center" colspan="2" style="color:#b38f00;">2 a 3 Dias</th>
-                                <th class="text-center" colspan="2" style="color:#ff8000;">4 a 5 Dias</th>
-                                <th class="text-center" colspan="2" style="color:#800080;">&gt; 5 Dias</th>
-                                <th class="text-center" colspan="2" style="color:#e74c3c;">Não Atendidas</th>
-                                <th rowspan="2" style="min-width:160px;">Distribuição</th>
+                                <th class="text-center u-c-green" colspan="2">No Dia</th>
+                                <th class="text-center u-c-indigo" colspan="2">1 Dia</th>
+                                <th class="text-center u-c-olive" colspan="2">2 a 3 Dias</th>
+                                <th class="text-center u-c-orange" colspan="2">4 a 5 Dias</th>
+                                <th class="text-center u-c-purple" colspan="2">&gt; 5 Dias</th>
+                                <th class="text-center u-c-red-flat" colspan="2">Não Atendidas</th>
+                                <th class="u-minw-160" rowspan="2">Distribuição</th>
                             </tr>
                             <tr>
-                                <th class="text-center" style="width:55px;color:#22b14c;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#22b14c;">%</th>
-                                <th class="text-center" style="width:55px;color:#3f48cc;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#3f48cc;">%</th>
-                                <th class="text-center" style="width:55px;color:#b38f00;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#b38f00;">%</th>
-                                <th class="text-center" style="width:55px;color:#ff8000;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#ff8000;">%</th>
-                                <th class="text-center" style="width:55px;color:#800080;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#800080;">%</th>
-                                <th class="text-center" style="width:55px;color:#e74c3c;">Qtde</th>
-                                <th class="text-center" style="width:65px;color:#e74c3c;">%</th>
+                                <th class="text-center u-w-55 u-c-green">Qtde</th>
+                                <th class="text-center u-w-65 u-c-green">%</th>
+                                <th class="text-center u-w-55 u-c-indigo">Qtde</th>
+                                <th class="text-center u-w-65 u-c-indigo">%</th>
+                                <th class="text-center u-w-55 u-c-olive">Qtde</th>
+                                <th class="text-center u-w-65 u-c-olive">%</th>
+                                <th class="text-center u-w-55 u-c-orange">Qtde</th>
+                                <th class="text-center u-w-65 u-c-orange">%</th>
+                                <th class="text-center u-w-55 u-c-purple">Qtde</th>
+                                <th class="text-center u-w-65 u-c-purple">%</th>
+                                <th class="text-center u-w-55 u-c-red-flat">Qtde</th>
+                                <th class="text-center u-w-65 u-c-red-flat">%</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -584,20 +584,20 @@
                                 var bNao = Math.Round(slaNao / slaBase * 100, 1).ToString("0.#", _inv);
                                 <tr>
                                     <td class="font-w600">@item.unidade</td>
-                                    <td class="text-center" style="color:#22b14c;">@qNodia</td>
-                                    <td class="text-center" style="font-weight:600;color:#22b14c;">@item.os_atendimento_dia</td>
-                                    <td class="text-center" style="color:#3f48cc;">@q1dia</td>
-                                    <td class="text-center" style="font-weight:600;color:#3f48cc;">@item.os_atendimento_um_dia</td>
-                                    <td class="text-center" style="color:#b38f00;">@q23</td>
-                                    <td class="text-center" style="font-weight:600;color:#b38f00;">@item.os_atendimento_tres_dias</td>
-                                    <td class="text-center" style="color:#ff8000;">@q45</td>
-                                    <td class="text-center" style="font-weight:600;color:#ff8000;">@item.os_atendimento_cinco_dias</td>
-                                    <td class="text-center" style="color:#800080;">@q5mais</td>
-                                    <td class="text-center" style="font-weight:600;color:#800080;">@item.os_atendimento_acima_cinco_dias</td>
-                                    <td class="text-center" style="color:#e74c3c;">@qNao</td>
-                                    <td class="text-center" style="font-weight:600;color:#e74c3c;">@item.os_nao_atendido</td>
+                                    <td class="text-center u-c-green">@qNodia</td>
+                                    <td class="text-center u-fw-600 u-c-green">@item.os_atendimento_dia</td>
+                                    <td class="text-center u-c-indigo">@q1dia</td>
+                                    <td class="text-center u-fw-600 u-c-indigo">@item.os_atendimento_um_dia</td>
+                                    <td class="text-center u-c-olive">@q23</td>
+                                    <td class="text-center u-fw-600 u-c-olive">@item.os_atendimento_tres_dias</td>
+                                    <td class="text-center u-c-orange">@q45</td>
+                                    <td class="text-center u-fw-600 u-c-orange">@item.os_atendimento_cinco_dias</td>
+                                    <td class="text-center u-c-purple">@q5mais</td>
+                                    <td class="text-center u-fw-600 u-c-purple">@item.os_atendimento_acima_cinco_dias</td>
+                                    <td class="text-center u-c-red-flat">@qNao</td>
+                                    <td class="text-center u-fw-600 u-c-red-flat">@item.os_nao_atendido</td>
                                     <td>
-                                        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;width:100%;">
+                                        <div class="u-bar-strip">
                                             <div style="width:@bNodia%;background:#22b14c;" title="No Dia: @item.os_atendimento_dia (@qNodia OS)"></div>
                                             <div style="width:@b1dia%;background:#3f48cc;" title="1 Dia: @item.os_atendimento_um_dia (@q1dia OS)"></div>
                                             <div style="width:@b23%;background:#ffc90e;" title="2-3 Dias: @item.os_atendimento_tres_dias (@q23 OS)"></div>
@@ -984,7 +984,7 @@
                 html += '<th>' + '@PCM.WEB.Properties.Resources.unidade' + '</th>';
                 html += '<th class="text-center" style="width:160px;color:' + corOS  + ';">' + (serieOS.serie  || 'OS por Colaborador') + '</th>';
                 html += '<th class="text-center" style="width:160px;color:' + corQtd + ';">' + (serieQtd.serie || 'Qtd. Colaborador')   + '</th>';
-                html += '<th style="min-width:200px;">Distribuição</th>';
+                html += '<th class="u-minw-200">Distribuição</th>';
                 html += '</tr></thead><tbody>';
 
                 unidades.forEach(function(nome, i) {
@@ -998,12 +998,12 @@
                     html += '<td class="text-center" style="font-weight:600;color:' + corQtd + ';">' + vQtd + '</td>';
                     html += '<td>';
                     html += '<div style="display:flex;flex-direction:column;gap:3px;padding:2px 0;">';
-                    html += '<div style="display:flex;align-items:center;gap:6px;">';
-                    html += '<div style="flex:1;background:#e9ecef;border-radius:3px;height:10px;overflow:hidden;">';
+                    html += '<div class="u-flex-center-g6">';
+                    html += '<div class="u-progress-track-sm">';
                     html += '<div style="width:' + pOS + '%;height:100%;background:' + corOS + ';border-radius:3px;"></div></div>';
                     html += '<span style="font-size:10px;color:' + corOS + ';min-width:30px;">' + vOS + '</span></div>';
-                    html += '<div style="display:flex;align-items:center;gap:6px;">';
-                    html += '<div style="flex:1;background:#e9ecef;border-radius:3px;height:10px;overflow:hidden;">';
+                    html += '<div class="u-flex-center-g6">';
+                    html += '<div class="u-progress-track-sm">';
                     html += '<div style="width:' + pQtd + '%;height:100%;background:' + corQtd + ';border-radius:3px;"></div></div>';
                     html += '<span style="font-size:10px;color:' + corQtd + ';min-width:30px;">' + vQtd + '</span></div>';
                     html += '</div></td>';
