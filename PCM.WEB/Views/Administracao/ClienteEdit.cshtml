@@ -140,7 +140,7 @@
                                 <label class="col-12">@PCM.WEB.Properties.Resources.logo</label>
                                 <div class="col-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="imagem" name="imagem" onchange="Arquivo();" accept="image/*">
+                                        <input type="file" class="custom-file-input" id="imagem" name="imagem" data-act="Arquivo" data-on="change" accept="image/*">
                                         <label id="lblArquivo" class="custom-file-label" for="imagem">@ViewBag.arquivo</label>
                                     </div>
                                 </div>
@@ -163,7 +163,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("imagem").files[0].name;

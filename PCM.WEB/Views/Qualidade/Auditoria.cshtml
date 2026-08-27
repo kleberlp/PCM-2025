@@ -129,7 +129,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/easy_pie_chart")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         // Initialize when page loads
         jQuery(function () {

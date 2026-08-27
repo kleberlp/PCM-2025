@@ -63,13 +63,13 @@
                         <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.apontamento Múltiplos
                     </a>
                 }
-                <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
-                <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
-                <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>                
+                <button type="button" class="si si-grid btn-block-option text-white" data-show="#div_grid" data-hide="#div_list"></button>
+                <button type="button" class="si si-list btn-block-option text-white" data-show="#div_list" data-hide="#div_grid"></button>
+                <button type="button" class="si si-printer btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'></button>                
             </div>
         </div>
 
-        <div class="block-content" id="div_grid" style="display:block">
+        <div class="block-content u-block" id="div_grid">
             @{
                 int aux = 0;
 
@@ -146,7 +146,7 @@
 
             </div>
 
-        <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+        <div class="col-md-12 col-xl-12 u-hide" id="div_list">
 
             <div class="block-content block-content-full">
 
@@ -162,7 +162,7 @@
                             <th class="text-center">@PCM.WEB.Properties.Resources.apartamento</th>
                             <th class="text-center">@PCM.WEB.Properties.Resources.data</th>
                             <th class="text-center">@PCM.WEB.Properties.Resources.status_uh</th>
-                            <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                            <th data-sortable="false" class="text-center d-print-none u-w-80"></th>
                         </tr>
                     </thead>
 
@@ -179,7 +179,7 @@
                                 <td class="text-center @item.css_class">@Html.DisplayFor(modelItem => item.apartamento)</td>
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.data)</td>
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.room_status)</td>
-                                <td class="text-center d-print-none" style="width: 80px;">
+                                <td class="text-center d-print-none u-w-80">
                                     <div class="btn-group">
                                         @if ((item.status != 3))
                                         {<a href="@Url.Action("DedetizacaoApontamento", "UH", new { codigo_apartamento = item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_uh_atividade = item.codigo_uh_atividade, codigo = item.codigo, color = item.css_class})" class="btn btn-sm btn-secondary"><i class="fa fa-hotel"></i></a>}

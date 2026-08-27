@@ -120,33 +120,10 @@ Public Class Main
                                 ByVal sBody As String,
                                 ByVal sLaudo As String)
 
-        Dim sRemetente As String = "no-reply@pcmbysim.com.br"
-        Dim oEmail As New MailMessage()
-
-        For Each sTo As String In sEmail.Split(";")
-            oEmail.To.Add(sTo)
-        Next
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-        oEmail.From = New MailAddress(sRemetente, "PCM by SIM", System.Text.Encoding.UTF8)
-        oEmail.Subject = String.Concat("Vencimento do Laudo: ", sLaudo)
-        oEmail.SubjectEncoding = System.Text.Encoding.UTF8
-        oEmail.Body = sBody
-        oEmail.BodyEncoding = System.Text.Encoding.UTF8
-        oEmail.IsBodyHtml = True
-        oEmail.Priority = MailPriority.High
-
-        Dim oSmtpClient As New SmtpClient()
-        oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
-        ' 587 = STARTTLS, que é o modo suportado pelo System.Net.Mail.
-        ' Na 465 (SSL implícito) o cliente espera o banner do servidor e o servidor
-        ' espera o handshake TLS: ninguém fala primeiro e o envio estoura em timeout.
-        oSmtpClient.Port = 587
-        oSmtpClient.Host = "smtpout.secureserver.net"
-        oSmtpClient.EnableSsl = True
-        oSmtpClient.Timeout = 30000   ' falha em 30s em vez de travar o ciclo por 100s
-
         Try
-            oSmtpClient.Send(oEmail)
+            EnviarEmail(sPara:=sEmail,
+                        sAssunto:=String.Concat("Vencimento do Laudo: ", sLaudo),
+                        sCorpoHtml:=sBody)
         Catch ex As Exception
             ' Debug.Print não aparece no serviço em produção: registra no log
             WriteLog("SendEmailLaudo/Send (" & sEmail & "): " & ex.Message)
@@ -473,36 +450,10 @@ Public Class Main
 
             For Each oMessage As Email In oHashTable.Values
 
-                Dim sRemetente As String = "no-reply@pcmbysim.com.br"
-                Dim oMailMessage As New MailMessage()
-
-                For Each sEmail As String In oMessage.sTo.Split(";")
-                    If IsValidEmail(sEmail) Then
-                        oMailMessage.To.Add(sEmail)
-                    End If
-                Next
-
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                oMailMessage.From = New MailAddress(sRemetente, "PCM by SIM", System.Text.Encoding.UTF8)
-                oMailMessage.Subject = String.Concat("Ordem de Serviço: ", oMessage.sOrdemServico, " - ", DateTime.Now.ToShortTimeString())
-                oMailMessage.SubjectEncoding = System.Text.Encoding.UTF8
-                oMailMessage.Body = oMessage.sBody
-                oMailMessage.BodyEncoding = System.Text.Encoding.UTF8
-                oMailMessage.IsBodyHtml = True
-                oMailMessage.Priority = MailPriority.High
-
-                Dim oSmtpClient As New SmtpClient()
-                oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
-                ' 587 = STARTTLS, que é o modo suportado pelo System.Net.Mail.
-                ' Na 465 (SSL implícito) o cliente espera o banner do servidor e o servidor
-                ' espera o handshake TLS: ninguém fala primeiro e o envio estoura em timeout.
-                oSmtpClient.Port = 587
-                oSmtpClient.Host = "smtpout.secureserver.net"
-                oSmtpClient.EnableSsl = True
-                oSmtpClient.Timeout = 30000   ' falha em 30s em vez de travar o ciclo por 100s
-
                 Try
-                    oSmtpClient.Send(oMailMessage)
+                    EnviarEmail(sPara:=oMessage.sTo,
+                                sAssunto:=String.Concat("Ordem de Serviço: ", oMessage.sOrdemServico, " - ", DateTime.Now.ToShortTimeString()),
+                                sCorpoHtml:=oMessage.sBody)
                 Catch ex As Exception
                     ' Sem log a falha ficava invisível: o e-mail sumia da fila sem
                     ' nunca ter sido entregue e sem deixar rastro
@@ -520,12 +471,6 @@ Public Class Main
         End Try
 
     End Sub
-
-    Function IsValidEmail(email As String) As Boolean
-        Dim pattern As String = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        Dim regex As New Regex(pattern)
-        Return regex.IsMatch(email)
-    End Function
 
     Public Sub UpdateEmail(ByVal lCodigo As Long)
 

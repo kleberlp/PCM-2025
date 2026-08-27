@@ -69,7 +69,7 @@
                                 <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
                                 <div class="col-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="application/pdf">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" data-act="Arquivo" data-on="change" accept="application/pdf">
                                         <label id="lblArquivo" class="custom-file-label" for="arquivo">@ViewBag.arquivo</label>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
     @Scripts.Render("~/plugins/validation")
     @Scripts.Render("~/plugins/maxlenght")
     
-<script>
+<script @Csp.NonceAttr>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;

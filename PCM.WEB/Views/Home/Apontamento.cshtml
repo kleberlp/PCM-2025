@@ -89,7 +89,7 @@
 
                     <thead>
                         <tr class="table-secondary">
-                            <th class="text-md-center" style="width: 20px;" data-sortable="false"></th>
+                            <th class="text-md-center u-w-20" data-sortable="false"></th>
                             <th class="text-center">@PCM.WEB.Properties.Resources.apartamento</th>
                             <th class="text-center">Status Front Office</th>
                             <th class="text-center">Status Quarto</th>
@@ -127,7 +127,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
     $(function () {
 

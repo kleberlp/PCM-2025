@@ -90,7 +90,7 @@
                         </div>
                     </div>
 
-                    <div class="block block-rounded" id="registros" style="display:block">
+                    <div class="block block-rounded u-block" id="registros">
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.local</h3>
                         </div>
@@ -98,7 +98,7 @@
                             <div class="form-group row">
                                 <div class="col-md-3">
                                     <label>@PCM.WEB.Properties.Resources.local</label>
-                                    <input type="text" class="form-control" style="text-transform: uppercase;" id="local" name="local" autocomplete="off" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); adicionarLocal(); return false; }">
+                                    <input type="text" class="form-control u-upper" id="local" name="local" autocomplete="off" placeholder="" value="" data-enter-act="adicionarLocal">
                                 </div>
                                 <div class="col-md-3">
                                     <label>@PCM.WEB.Properties.Resources.checklist</label>
@@ -115,8 +115,8 @@
                                 <div class="col-md-2">
                                     <label>&nbsp;</label>
                                     <div class="btn-group d-flex">
-                                        <button type="button" id="btnAddLocal" class="btn btn-square btn-secondary min-width-40" onclick="adicionarLocal();" title="@PCM.WEB.Properties.Resources.adicionar"><i class="fa fa-plus"></i></button>
-                                        <button type="button" id="btnCancelLocal" class="btn btn-square btn-danger min-width-40" style="display:none" onclick="cancelarEdicao();" title="@PCM.WEB.Properties.Resources.cancelar"><i class="fa fa-times"></i></button>
+                                        <button type="button" id="btnAddLocal" class="btn btn-square btn-secondary min-width-40" data-act="adicionarLocal" title="@PCM.WEB.Properties.Resources.adicionar"><i class="fa fa-plus"></i></button>
+                                        <button type="button" id="btnCancelLocal" class="btn btn-square btn-danger min-width-40 u-hide" data-act="cancelarEdicao" title="@PCM.WEB.Properties.Resources.cancelar"><i class="fa fa-times"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                                         <th>@PCM.WEB.Properties.Resources.checklist</th>
                                         <th>@PCM.WEB.Properties.Resources.periodicidade</th>
                                         <th>@PCM.WEB.Properties.Resources.intervalo</th>
-                                        <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                        <th class="text-center u-w-80" data-sortable="false"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_linha" name="table_linha">
@@ -147,8 +147,8 @@
                                             <td id="text_intervalo_@i">@Html.DisplayFor(m => m[i].intervalo)</td>
                                             <td class="text-center">
                                                 <div class="btn-group">
-                                                    <a href="#" onclick="remove(this, @i);" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>
-                                                    <a href="#" onclick="edit(this, @i);" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>
+                                                    <a href="#" data-act="remove" data-args='["__self__", @i]' class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>
+                                                    <a href="#" data-act="edit" data-args='["__self__", @i]' class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -175,7 +175,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
 
-    <script>
+    <script @Csp.NonceAttr>
     
         var codigo = parseInt('@Model.Count');
         var registros = [];
@@ -296,8 +296,8 @@
                         colsItem = '<td id="text_intervalo_' + codigo + '">' + intervalo + '</td>';
                         newRowItem.append(colsItem);
                         colsItem = '<td class="text-center"><div class="btn-group">';
-                        colsItem += '<a href="#" onclick="remove(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>';
-                        colsItem += '<a href="#" onclick="edit(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>';
+                        colsItem += '<a href="#" data-act="remove" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>';
+                        colsItem += '<a href="#" data-act="edit" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>';
                         colsItem += '</div></td>';
                         newRowItem.append(colsItem);
                         $("#table").append(newRowItem);

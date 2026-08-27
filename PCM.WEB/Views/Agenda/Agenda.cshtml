@@ -123,7 +123,7 @@
     @Scripts.Render("~/plugins/calendar")
 
 
-<script>
+<script @Csp.NonceAttr>
 
     var calendar;
 

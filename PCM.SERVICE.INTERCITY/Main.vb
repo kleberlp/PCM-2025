@@ -322,31 +322,13 @@ Public Class Main
                           ByVal sBody As String,
                           ByVal sSubject As String)
 
-        Dim sRemetente As String = "pcm@simservices.com.br"
-        Dim oEmail As New MailMessage()
-
-        For Each sTo As String In sEmail.Split(";")
-            oEmail.To.Add(sTo)
-        Next
-
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-        oEmail.From = New MailAddress(sRemetente, "PCM by SIM", System.Text.Encoding.UTF8)
-        oEmail.Subject = sSubject
-        oEmail.SubjectEncoding = System.Text.Encoding.UTF8
-        oEmail.Body = sBody
-        oEmail.BodyEncoding = System.Text.Encoding.UTF8
-        oEmail.IsBodyHtml = True
-        oEmail.Priority = MailPriority.High
-        Dim oSmtpClient As New SmtpClient()
-        oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
-        oSmtpClient.Port = 465
-        oSmtpClient.Host = "smtpout.secureserver.net"
-        oSmtpClient.EnableSsl = True
-
         Try
-            oSmtpClient.Send(oEmail)
+            EnviarEmail(sPara:=sEmail,
+                        sAssunto:=sSubject,
+                        sCorpoHtml:=sBody)
         Catch ex As Exception
-            Debug.Print(ex.Message)
+            ' Debug.Print não aparece no serviço em produção
+            WriteLog("SendEmail (" & sEmail & "): " & ex.Message)
         End Try
 
     End Sub

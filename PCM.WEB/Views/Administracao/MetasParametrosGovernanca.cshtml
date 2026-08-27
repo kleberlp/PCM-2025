@@ -126,7 +126,7 @@
             @Html.AntiForgeryToken()
             <div class="dashboard-card">
                 <div class="section-title">
-                    <span><i class="fa fa-building" style="color:#9CA3AF"></i> Parâmetros Gerais da Empresa</span>
+                    <span><i class="fa fa-building u-c-gray"></i> Parâmetros Gerais da Empresa</span>
                 </div>
                 <div class="section-note">Valem como padrão para todas as unidades — exceto onde houver uma meta individual definida na tabela abaixo.</div>
 
@@ -320,7 +320,7 @@
 <!-- END Main Container -->
 
 @section scripts {
-<script>
+<script @Csp.NonceAttr>
 // Recalcula ao vivo: Meta Calculada = Aptos Totais PMS × (% Meta / 100)
 function calcularMetaLinha(tr) {
     var aptos = parseFloat(tr.querySelector('.aptos-totais').value || '0');

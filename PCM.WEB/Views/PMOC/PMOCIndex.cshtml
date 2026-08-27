@@ -48,7 +48,7 @@
                             <th class="text-center">@PCM.WEB.Properties.Resources.data_termino_vigencia</th>
                             @if (ViewBag.editar || ViewBag.excluir)
                             {
-                                <th class="text-center" style="width: 80px;" data-sortable="false"></th>
+                                <th class="text-center u-w-80" data-sortable="false"></th>
                             }
                         </tr>
                     </thead>
@@ -66,7 +66,7 @@
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.data_termino_vigencia_art_pmoc)</td>
                             @if (ViewBag.editar || ViewBag.excluir)
                             {
-                                <td class="text-center" style="width: 80px;">
+                                <td class="text-center u-w-80">
                                     <div class="btn-group">
                                         @if (ViewBag.editar){<a href="@Url.Action("PMOCEdit", "PMOC", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                         @if (ViewBag.excluir){<a href="@Url.Action("PMOCDelete", "PMOC", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
@@ -95,7 +95,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         function ImprimirRelatorio(unidade) {            
             window.open('PrintPMOCImplantacao' + '?unidade=' + unidade, '_blank');

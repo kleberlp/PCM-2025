@@ -449,7 +449,7 @@
         }
         <div class="os-kpi-strip mb-3" id="os-kpi-strip">
             <div class="torre-comando-grid" id="torre-os-kpi">
-                <a class="torre-item" href="javascript:void(0)" data-os-status="atrasada">
+                <a class="torre-item u-pointer" tabindex="0" data-os-status="atrasada">
                     <div class="torre-header">
                         <i class="fa fa-exclamation-triangle torre-icon text-danger"></i>
                         <span class="torre-label2 text-muted">O.S. Atrasada</span>
@@ -457,7 +457,7 @@
                     <div class="os-value text-danger">@_atrasada</div>
                     <div class="torre-meta"><span>ATRASADA</span></div>
                 </a>
-                <a class="torre-item" href="javascript:void(0)" data-os-status="1">
+                <a class="torre-item u-pointer" tabindex="0" data-os-status="1">
                     <div class="torre-header">
                         <i class="fa fa-folder-open torre-icon text-warning"></i>
                         <span class="torre-label2 text-muted">O.S. em Aberto</span>
@@ -465,7 +465,7 @@
                     <div class="os-value text-warning">@_pendente</div>
                     <div class="torre-meta"><span>EM ABERTO</span></div>
                 </a>
-                <a class="torre-item" href="javascript:void(0)" data-os-status="2">
+                <a class="torre-item u-pointer" tabindex="0" data-os-status="2">
                     <div class="torre-header">
                         <i class="fa fa-link torre-icon text-info"></i>
                         <span class="torre-label2 text-muted">O.S. Vinculada</span>
@@ -473,7 +473,7 @@
                     <div class="os-value text-info">@_vinculada</div>
                     <div class="torre-meta"><span>VINCULADA</span></div>
                 </a>
-                <a class="torre-item" href="javascript:void(0)" data-os-status="3">
+                <a class="torre-item u-pointer" tabindex="0" data-os-status="3">
                     <div class="torre-header">
                         <i class="fa fa-cogs torre-icon text-primary"></i>
                         <span class="torre-label2 text-muted">O.S. em Andamento</span>
@@ -481,7 +481,7 @@
                     <div class="os-value text-primary">@_andamento</div>
                     <div class="torre-meta"><span>EM ANDAMENTO</span></div>
                 </a>
-                <a class="torre-item" href="javascript:void(0)" data-os-status="4">
+                <a class="torre-item u-pointer" tabindex="0" data-os-status="4">
                     <div class="torre-header">
                         <i class="fa fa-check-circle torre-icon text-earth"></i>
                         <span class="torre-label2 text-muted">O.S. Concluídas</span>
@@ -489,7 +489,7 @@
                     <div class="os-value text-earth">@_concluida</div>
                     <div class="torre-meta"><span>CONCLUÍDAS</span></div>
                 </a>
-                <a class="torre-item" href="javascript:void(0)" data-os-status="5">
+                <a class="torre-item u-pointer" tabindex="0" data-os-status="5">
                     <div class="torre-header">
                         <i class="fa fa-clock-o torre-icon text-muted"></i>
                         <span class="torre-label2 text-muted">Backlog</span>
@@ -510,7 +510,7 @@
                 <div class="filter-card-title">
                     <i class="fa fa-sliders"></i>
                     Filtros
-                    <span class="badge-filtros-ativos ml-1" id="badge-filtros" style="display:none;">0</span>
+                    <span class="badge-filtros-ativos ml-1 u-hide" id="badge-filtros">0</span>
                 </div>
                 <i class="fa fa-chevron-down filter-toggle-icon"></i>
             </div>
@@ -605,7 +605,7 @@
                     </div>
 
                     <div class="col-md-7 d-flex justify-content-end align-items-center mt-1" style="gap:8px;">
-                        <button type="button" id="clearFilter" onclick="limpaFiltros();" class="btn-limpar">
+                        <button type="button" id="clearFilter" data-act="limpaFiltros" class="btn-limpar">
                             <i class="fa fa-ban mr-1"></i> Limpar
                         </button>
                         <button type="button" id="filtrar" class="btn-filtrar">
@@ -645,11 +645,11 @@
             </div>
 
             <div>
-                <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full" id="tb_main" style="width:100%">
+                <table class="table table-bordered table-vcenter table-sm table-striped js-dataTable-full u-wp-100" id="tb_main">
                     <thead>
                         <tr>
-                            <th class="text-center" style="width:32px;"></th>
-                            <th class="text-center" style="width:22px;"></th>
+                            <th class="text-center u-w-32"></th>
+                            <th class="text-center u-w-22"></th>
                             <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.ordem_servico</th>
                             <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data</th>
                             @if (Session["unidade"] == "")
@@ -666,7 +666,7 @@
                             <th class="d-none d-md-table-cell text-center">@PCM.WEB.Properties.Resources.status</th>
                             @if (ViewBag.editar || ViewBag.excluir || ViewBag.inserir)
                             {
-                                <th class="text-center" style="width:80px;" data-sortable="false">Ações</th>
+                                <th class="text-center u-w-80" data-sortable="false">Ações</th>
                             }
                         </tr>
                     </thead>
@@ -685,15 +685,15 @@
         }
         <div class="modal fade" id="modalFuncionario" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content" style="border-radius:14px;">
-                    <div class="modal-header" style="border-bottom:1px solid #E5E7EB;">
-                        <h5 class="modal-title" style="font-weight:600;">@PCM.WEB.Properties.Resources.funcionario</h5>
+                <div class="modal-content u-round-14">
+                    <div class="modal-header u-bb-line">
+                        <h5 class="modal-title u-fw-600">@PCM.WEB.Properties.Resources.funcionario</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         @Html.DropDownList("funcionario", null, "", new { @class = "js-select2 form-control h-75", @multiple = "multiple" })
                     </div>
-                    <div class="modal-footer" style="border-top:1px solid #E5E7EB;">
+                    <div class="modal-footer u-bt-line">
                         <button type="button" class="btn-pcm btn-pcm-ghost" data-dismiss="modal">@PCM.WEB.Properties.Resources.sair</button>
                         <button type="submit" class="btn-pcm btn-pcm-dark" id="confirmar">
                             <i class="fa fa-check mr-1"></i> @PCM.WEB.Properties.Resources.confirmado
@@ -711,18 +711,18 @@
         }
         <div class="modal fade" id="modalCancelar" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <div class="modal-content" style="border-radius:14px;">
-                    <div class="modal-header" style="border-bottom:1px solid #E5E7EB;">
-                        <h5 class="modal-title" style="font-weight:600;">@PCM.WEB.Properties.Resources.justificativa_cancelamento_ordem_servico</h5>
+                <div class="modal-content u-round-14">
+                    <div class="modal-header u-bb-line">
+                        <h5 class="modal-title u-fw-600">@PCM.WEB.Properties.Resources.justificativa_cancelamento_ordem_servico</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <label class="filter-label mb-1">@PCM.WEB.Properties.Resources.justificativa_cancelamento_ordem_servico</label>
                         @Html.DropDownList("justificativa_cancelamento", null, "", new { @class = "form-control h-75" })
                     </div>
-                    <div class="modal-footer" style="border-top:1px solid #E5E7EB;">
+                    <div class="modal-footer u-bt-line">
                         <button type="button" class="btn-pcm btn-pcm-ghost" data-dismiss="modal">@PCM.WEB.Properties.Resources.sair</button>
-                        <button type="submit" class="btn-pcm btn-pcm-dark" id="btnExcluirConfirmar" style="background:#EF5350;">
+                        <button type="submit" class="btn-pcm btn-pcm-dark u-bg-red-mat" id="btnExcluirConfirmar">
                             <i class="fa fa-trash mr-1"></i> @PCM.WEB.Properties.Resources.confirmado
                         </button>
                     </div>
@@ -740,7 +740,7 @@
         @Scripts.Render("~/plugins/datepicker")
         @Scripts.Render("~/plugins/select")
 
-        <script type="text/javascript">
+        <script type="text/javascript" @Csp.NonceAttr>
 
     var row;
     var tr;
@@ -946,14 +946,14 @@
                 success: function (response) {
                     table_info = '<table class="table table-sm table-vcenter table-striped table-bordered">' +
                         '<thead><tr class="table-secondary">' +
-                        '<th class="text-center" style="width:50px;"></th>' +
+                        '<th class="text-center u-w-50"></th>' +
                         '<th>@Html.Raw(PCM.WEB.Properties.Resources.executor)</th>' +
-                        '<th class="text-center" style="width:250px;">@Html.Raw(PCM.WEB.Properties.Resources.justificativa_apontamento)</th>' +
-                        '<th class="text-center" style="width:150px;">@Html.Raw(PCM.WEB.Properties.Resources.data_inicio)</th>' +
-                        '<th class="text-center" style="width:150px;">@Html.Raw(PCM.WEB.Properties.Resources.data_termino)</th>' +
-                        '<th class="text-center" style="width:100px;">@Html.Raw(PCM.WEB.Properties.Resources.tempo_gasto)</th>' +
+                        '<th class="text-center u-w-250">@Html.Raw(PCM.WEB.Properties.Resources.justificativa_apontamento)</th>' +
+                        '<th class="text-center u-w-150">@Html.Raw(PCM.WEB.Properties.Resources.data_inicio)</th>' +
+                        '<th class="text-center u-w-150">@Html.Raw(PCM.WEB.Properties.Resources.data_termino)</th>' +
+                        '<th class="text-center u-w-100">@Html.Raw(PCM.WEB.Properties.Resources.tempo_gasto)</th>' +
                         '<th>Apontado por</th>' +
-                        '<th class="text-center" style="width:300px;">Imagem</th>' +
+                        '<th class="text-center u-w-300">Imagem</th>' +
                         '</tr></thead><tbody>';
                     for (var i = 0; i < response.length; i++) {
                         table_info += '<tr class="bg-white">';

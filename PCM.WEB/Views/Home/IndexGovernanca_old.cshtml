@@ -57,8 +57,8 @@
                     <div class="col-6 col-sm-12 col-md-4 col-xl-2">
                         <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })">
                             <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x" style="color:rgb(255,201,14);"></i></div>
-                                <div class="font-size-h4 font-w600" style="color:rgb(255,201,14);" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_condo" id="quantidade_pendente_condo" name="quantidade_pendente_condo">0</div>
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x u-gold"></i></div>
+                                <div class="font-size-h4 font-w600 u-gold" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_condo" id="quantidade_pendente_condo" name="quantidade_pendente_condo">0</div>
                                 <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente CONDO</div>
                             </div>
                         </a>
@@ -110,8 +110,8 @@
                     <div class="col-6 col-sm-12 col-md-4 col-xl-2">
                         <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })">
                             <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x" style="color:rgb(255,201,14);"></i></div>
-                                <div class="font-size-h4 font-w600" style="color:rgb(255,201,14);" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool" name="quantidade_pendente_pool">0</div>
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x u-gold"></i></div>
+                                <div class="font-size-h4 font-w600 u-gold" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool" name="quantidade_pendente_pool">0</div>
                                 <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente POOL</div>
                             </div>
                         </a>
@@ -174,8 +174,8 @@
                     <div class="col-6 col-sm-12 col-md-4 col-xl-2">
                         <a class="block block-rounded block-bordered block-link-shadow" href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })">
                             <div class="block-content block-content-full clearfix">
-                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x" style="color:rgb(255,201,14);"></i></div>
-                                <div class="font-size-h4 font-w600" style="color:rgb(255,201,14);" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool" name="quantidade_pendente_pool">0</div>
+                                <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-gear fa-2x u-gold"></i></div>
+                                <div class="font-size-h4 font-w600 u-gold" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool" name="quantidade_pendente_pool">0</div>
                                 <div class="font-size-sm font-w600 text-uppercase text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente</div>
                             </div>
                         </a>
@@ -324,7 +324,7 @@
                     <h3 class="block-title text-white font-w600">Dados da Unidade</h3>
                     <div class="block-options">
                         <!-- Print Page functionality is initialized in Codebase() -> uiHelperPrint() -->
-                        <button type="button" class="btn-block-option text-white" onclick="Codebase.helpers('print-page');">
+                        <button type="button" class="btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'>
                             <i class="si si-printer text-white"></i> @PCM.WEB.Properties.Resources.imprimir
                         </button>
                         <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
@@ -396,13 +396,13 @@
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr class="table-secondary">
-                                <th class="text-center" style="width:100px;">#</th>
+                                <th class="text-center u-w-100">#</th>
                                 <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.camareira</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Qtde. NC</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Qtde. Retrabalho</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Nota (NC + Retrabalho)</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Qtde. UH</th>
-                                <th class="text-md-center" style="width: 150px;" data-sortable="false">Nota x UH</th>
+                                <th class="text-md-center u-w-150" data-sortable="false">Qtde. NC</th>
+                                <th class="text-md-center u-w-150" data-sortable="false">Qtde. Retrabalho</th>
+                                <th class="text-md-center u-w-150" data-sortable="false">Nota (NC + Retrabalho)</th>
+                                <th class="text-md-center u-w-150" data-sortable="false">Qtde. UH</th>
+                                <th class="text-md-center u-w-150" data-sortable="false">Nota x UH</th>
                             </tr>
                         </thead>
 
@@ -412,19 +412,19 @@
                                 <tr>
                                     @if (item.cssClass != "")
                                     {
-                                        <td class="text-center @item.cssClass" style="width:100px;">&nbsp;</td>
+                                        <td class="text-center @item.cssClass u-w-100">&nbsp;</td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="width:100px;">@item.ranking</td>
+                                        <td class="text-center u-w-100">@item.ranking</td>
                                     }
 
                                     <td class="d-none d-sm-table-cell">@item.camareira</td>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.qtdeNC</td>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.qtdeNCRetrabalho</td>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.pesoNCRetrabalho</td>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.qtdeUH</td>
-                                    <td class="text-md-center" style="width: 150px;" data-sortable="false">@item.percentualNC</td>
+                                    <td class="text-md-center u-w-150" data-sortable="false">@item.qtdeNC</td>
+                                    <td class="text-md-center u-w-150" data-sortable="false">@item.qtdeNCRetrabalho</td>
+                                    <td class="text-md-center u-w-150" data-sortable="false">@item.pesoNCRetrabalho</td>
+                                    <td class="text-md-center u-w-150" data-sortable="false">@item.qtdeUH</td>
+                                    <td class="text-md-center u-w-150" data-sortable="false">@item.percentualNC</td>
                                 </tr>
                             }
                         </tbody>
@@ -800,7 +800,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn bg-gray-light" onclick="confirmLogBook();" data-bs-dismiss="modal">
+                    <button type="button" class="btn bg-gray-light" data-act="confirmLogBook" data-bs-dismiss="modal">
                         <i class="fa fa-check"></i>@PCM.WEB.Properties.Resources.confirmado
                     </button>
                 </div>

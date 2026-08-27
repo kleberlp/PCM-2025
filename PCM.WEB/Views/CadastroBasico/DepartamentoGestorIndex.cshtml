@@ -48,7 +48,7 @@
                             <th>@PCM.WEB.Properties.Resources.gestor</th>
                             @if (ViewBag.editar || ViewBag.excluir)
                             {
-                                <th class="text-md-center" style="width: 80px;" data-sortable="false"></th>
+                                <th class="text-md-center u-w-80" data-sortable="false"></th>
                             }
                         </tr>
                     </thead>
@@ -65,7 +65,7 @@
                             <td>@Html.DisplayFor(modelItem => item.nome)</td>
                             @if (ViewBag.editar || ViewBag.excluir)
                             {
-                                <td class="text-md-center" style="width: 80px;">
+                                <td class="text-md-center u-w-80">
                                     <div class="btn-group">
                                         @if (ViewBag.editar)
                                         {<a href="@Url.Action("DepartamentoGestorEdit", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
@@ -96,7 +96,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/

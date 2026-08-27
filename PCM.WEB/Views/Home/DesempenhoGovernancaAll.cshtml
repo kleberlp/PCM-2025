@@ -49,23 +49,23 @@
         <div class="dashboard-section">
             <div class="section-title">
                 Desempenho de Governança — Todas as Unidades · @mesLabel
-                <span class="float-right"><button type="button" class="btn btn-sm btn-outline-secondary no-print" onclick="window.print();"><i class="si si-printer"></i> Exportar PDF</button></span>
+                <span class="float-right"><button type="button" class="btn btn-sm btn-outline-secondary no-print" data-act="window.print"><i class="si si-printer"></i> Exportar PDF</button></span>
             </div>
-            <div class="block dashboard-card os-kpi-strip" style="padding:0;">
+            <div class="block dashboard-card os-kpi-strip u-pad-0">
                 <div class="torre-comando-grid">
                     <div class="torre-item">
                         <div class="torre-header"><i class="fa fa-bed torre-icon text-info"></i><span class="torre-label2">UHs Arrumadas</span></div>
-                        <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalUHsArrumadas.ToString("N0") : "—")</div>
+                        <div class="os-value u-c-slate">@(Model != null ? Model.TotalUHsArrumadas.ToString("N0") : "—")</div>
                         <span class="torre-meta">total da rede no mês</span>
                     </div>
                     <div class="torre-item">
-                        <div class="torre-header"><i class="fa fa-users torre-icon" style="color:#6B7280;"></i><span class="torre-label2">Camareiras</span></div>
-                        <div class="os-value" style="color:#374151;">@(Model != null ? Model.QtdCamareira.ToString() : "—")</div>
+                        <div class="torre-header"><i class="fa fa-users torre-icon u-c-gray2"></i><span class="torre-label2">Camareiras</span></div>
+                        <div class="os-value u-c-slate">@(Model != null ? Model.QtdCamareira.ToString() : "—")</div>
                         <span class="torre-meta">ativas na rede</span>
                     </div>
                     <div class="torre-item">
                         <div class="torre-header"><i class="fa fa-eye torre-icon text-success"></i><span class="torre-label2">Vistoriadores</span></div>
-                        <div class="os-value" style="color:#374151;">@(Model != null ? Model.QtdVistoriador.ToString() : "—")</div>
+                        <div class="os-value u-c-slate">@(Model != null ? Model.QtdVistoriador.ToString() : "—")</div>
                         <span class="torre-meta">ativos na rede</span>
                     </div>
                     <div class="torre-item">
@@ -74,18 +74,18 @@
                         <span class="torre-meta">não conformidades</span>
                     </div>
                     <div class="torre-item">
-                        <div class="torre-header"><i class="fa fa-percent torre-icon" style="color:#9CA3AF;"></i><span class="torre-label2">Vistoria Média</span></div>
+                        <div class="torre-header"><i class="fa fa-percent torre-icon u-c-gray"></i><span class="torre-label2">Vistoria Média</span></div>
                         <div class="os-value" style="color:@pctVisColor;">@(Model != null ? Model.PctVistoriaMedia.ToString("N2") + "%" : "—")</div>
                         <span class="torre-meta">média da rede</span>
                     </div>
                     <div class="torre-item">
-                        <div class="torre-header"><i class="fa fa-refresh torre-icon" style="color:#EA580C;"></i><span class="torre-label2">Retrabalho</span></div>
-                        <div class="os-value" style="color:#EA580C;">@(Model != null ? Model.TotalRetrabalho.ToString("N0") : "—")</div>
+                        <div class="torre-header"><i class="fa fa-refresh torre-icon u-c-orange-deep"></i><span class="torre-label2">Retrabalho</span></div>
+                        <div class="os-value u-c-orange-deep">@(Model != null ? Model.TotalRetrabalho.ToString("N0") : "—")</div>
                         <span class="torre-meta">reinspecionados</span>
                     </div>
                     <div class="torre-item">
-                        <div class="torre-header"><i class="fa fa-wrench torre-icon" style="color:#6B7280;"></i><span class="torre-label2">OS Manutenção</span></div>
-                        <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalOSManutencao.ToString() : "—")</div>
+                        <div class="torre-header"><i class="fa fa-wrench torre-icon u-c-gray2"></i><span class="torre-label2">OS Manutenção</span></div>
+                        <div class="os-value u-c-slate">@(Model != null ? Model.TotalOSManutencao.ToString() : "—")</div>
                         <span class="torre-meta">abertas na rede</span>
                     </div>
                 </div>
@@ -99,13 +99,13 @@
                 Ranking de Desempenho por Unidade
                 <span class="dg-section-badge">@(Model != null ? Model.Unidades.Count : 0) unidades</span>
             </div>
-            <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+            <div class="block dashboard-card u-pad0-clip">
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <th style="width:40px;">#</th>
+                            <th class="u-w-40">#</th>
                             <th>Unidade</th>
-                            <th style="width:180px;">Score</th>
+                            <th class="u-w-180">Score</th>
                             <th class="text-center">% Vistoria</th>
                             <th class="text-center">NC (total)</th>
                             <th class="text-center">NC/UH</th>
@@ -126,8 +126,8 @@
                 Dados Consolidados por Unidade
                 <span class="dg-section-badge">@mesLabel</span>
             </div>
-            <div class="block dashboard-card" style="padding:0;overflow:hidden;">
-                <div style="overflow-x:auto;">
+            <div class="block dashboard-card u-pad0-clip">
+                <div class="u-scroll-x">
                     <table class="table mb-0 dg-sortable" id="tblConsolidado">
                         <thead>
                             <tr>
@@ -183,10 +183,10 @@
         <div class="dashboard-section">
             <div class="section-title">
                 Avaliação Geral por Unidade
-                <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Score (0–100) = NC×@(ViewBag.gUniPesoNCPct)% + Vistoria×@(ViewBag.gUniPesoVisPct)% + Produtividade×@(ViewBag.gUniPesoProdPct)% + Retrabalho×@(ViewBag.gUniPesoRetPct)% · elegível ≥ @ViewBag.gUniMinUhs UHs · Meta mínima: 85</span>
+                <span class="u-label-mini">Score (0–100) = NC×@(ViewBag.gUniPesoNCPct)% + Vistoria×@(ViewBag.gUniPesoVisPct)% + Produtividade×@(ViewBag.gUniPesoProdPct)% + Retrabalho×@(ViewBag.gUniPesoRetPct)% · elegível ≥ @ViewBag.gUniMinUhs UHs · Meta mínima: 85</span>
             </div>
             <div class="block dashboard-card chart-card">
-                <div class="chart-wrapper" style="height:260px;">
+                <div class="chart-wrapper u-h-260">
                     <canvas id="chartAvaliacaoGeral"></canvas>
                 </div>
             </div>
@@ -196,16 +196,16 @@
         <div class="dashboard-section row">
             <div class="col-md-6 d-flex flex-column">
                 <div class="section-title">Não Conformidades por Unidade</div>
-                <div class="block dashboard-card chart-card flex-fill" style="display:flex;flex-direction:column;">
-                    <div style="flex:1;min-height:220px;position:relative;">
+                <div class="block dashboard-card chart-card flex-fill u-flex-col">
+                    <div class="u-chart-box">
                         <canvas id="chartNC"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 d-flex flex-column">
                 <div class="section-title">% de Vistoria das Saídas</div>
-                <div class="block dashboard-card chart-card flex-fill" style="display:flex;flex-direction:column;">
-                    <div style="flex:1;min-height:220px;position:relative;">
+                <div class="block dashboard-card chart-card flex-fill u-flex-col">
+                    <div class="u-chart-box">
                         <canvas id="chartVistoria"></canvas>
                     </div>
                 </div>
@@ -216,10 +216,10 @@
         <div class="dashboard-section">
             <div class="section-title">
                 Arrumado × Vistoriado
-                <span style="font-size:10px;font-weight:400;color:#9CA3AF;">UHs por unidade — @mesLabel</span>
+                <span class="u-label-mini">UHs por unidade — @mesLabel</span>
             </div>
             <div class="block dashboard-card chart-card">
-                <div class="chart-wrapper" style="height:260px;">
+                <div class="chart-wrapper u-h-260">
                     <canvas id="chartArrumadoVistoriado"></canvas>
                 </div>
             </div>
@@ -246,7 +246,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/chart")
 
-    <script>
+    <script @Csp.NonceAttr>
     var unidades = @Html.Raw(unidadesJson);
     var META = 85;
 
@@ -482,16 +482,16 @@
                     '<div style="flex:1;height:8px;background:#F3F4F6;border-radius:99px;overflow:hidden;">'+
                       '<div style="width:'+sc+'%;height:100%;background:'+barC+';border-radius:99px;"></div>'+
                     '</div>'+
-                    '<span style="font-size:9px;color:#9CA3AF;">/ 100</span>'+
+                    '<span class="u-cap-mini">/ 100</span>'+
                   '</div>';
             var tr = document.createElement('tr');
             if (semDados) tr.style.opacity = '.5';
             tr.innerHTML =
                 '<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'+
-                '<td class="font-w700" style="font-size:13px;">'+u.nome+alerta+'</td>'+
+                '<td class="font-w700 u-fs-13">'+u.nome+alerta+'</td>'+
                 '<td>'+scoreCell+'</td>'+
                 '<td class="text-center font-w700" style="color:'+vColor+';">'+(parseFloat(u.pctVis)===0?'—':parseFloat(u.pctVis).toFixed(2)+'%')+'</td>'+
-                '<td class="text-center font-w700" style="color:#EF5350;">'+u.nc+'</td>'+
+                '<td class="text-center font-w700 u-c-red-mat">'+u.nc+'</td>'+
                 '<td class="text-center font-w700" style="color:'+ncColor+';">'+parseFloat(u.ncUH).toFixed(2)+'</td>'+
                 '<td class="text-center font-w700" style="color:'+rColor+';">'+u.retrab+'</td>'+
                 '<td class="text-center">'+u.uh+'</td>'+

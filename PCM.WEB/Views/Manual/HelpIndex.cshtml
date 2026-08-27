@@ -39,13 +39,13 @@
                     <thead>
                         <tr class="table-secondary">
                             <th>@PCM.WEB.Properties.Resources.titulo</th>
-                            <th class="d-none d-sm-table-cell" style="width: 110px;"></th>
+                            <th class="d-none d-sm-table-cell u-w-110"></th>
                             <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.manual_tela / @PCM.WEB.Properties.Resources.manual_processo</th>
-                            <th class="d-none d-sm-table-cell text-md-center" style="width: 90px;">@PCM.WEB.Properties.Resources.manual_secoes</th>
-                            <th class="d-none d-sm-table-cell text-md-center" style="width: 80px;">@PCM.WEB.Properties.Resources.ativo</th>
+                            <th class="d-none d-sm-table-cell text-md-center u-w-90">@PCM.WEB.Properties.Resources.manual_secoes</th>
+                            <th class="d-none d-sm-table-cell text-md-center u-w-80">@PCM.WEB.Properties.Resources.ativo</th>
                             @if (ViewBag.editar || ViewBag.excluir)
                             {
-                                <th class="text-md-center" style="width: 80px;" data-sortable="false"></th>
+                                <th class="text-md-center u-w-80" data-sortable="false"></th>
                             }
                         </tr>
                     </thead>
@@ -111,7 +111,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             var exDataTable = function () {

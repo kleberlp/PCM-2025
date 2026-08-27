@@ -75,7 +75,7 @@
                                     <th>@PCM.WEB.Properties.Resources.equipamento</th>
                                     <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.tipo_ar_condicionado</th>
                                     <th>@PCM.WEB.Properties.Resources.status</th>
-                                    <th data-sortable="false" class="text-center" style="width: 80px;"></th>
+                                    <th data-sortable="false" class="text-center u-w-80"></th>
                                 </tr>
                             </thead>
 
@@ -91,7 +91,7 @@
                                         <td>@Html.DisplayFor(modelItem => item.equipamento)</td>
                                         <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.tipo_ar_condicionado)</td>
                                         <td>@Html.DisplayFor(modelItem => item.status)</td>
-                                        <td class="text-center" style="width: 80px;">
+                                        <td class="text-center u-w-80">
                                             <div class="btn-group">
                                                 @if (ViewBag.editar)
                                                 {<a href="@Url.Action("OrdemServicoPMOC", "PMOC", new {codigo_unidade = item.codigo_unidade, codigo_pmoc_ordem_servico = item.codigo, view = "HistoricoPMOC" })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
@@ -127,7 +127,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         $(function () {
 

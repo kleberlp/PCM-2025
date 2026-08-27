@@ -29,7 +29,7 @@
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadastrar</h3>
                             <div class="block-options">
-                                <button type="button" onclick="$('#btnSave').hide(); $('#form').submit();" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75">
+                                <button type="button" data-hide="#btnSave" data-submit="#form" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75">
                                     <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
                                 </button>
                                 <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico")" class="btn btn-square btn-secondary min-width-100 h-75">
@@ -72,7 +72,7 @@
                                 <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
                                 <div class="col-12">
                                     <div class="custom-file">                                        
-                                        <input type="file" class="custom-file-input" id="fileInput" name="fileInput" onchange="Arquivo();" accept="image/*">
+                                        <input type="file" class="custom-file-input" id="fileInput" name="fileInput" data-act="Arquivo" data-on="change" accept="image/*">
                                         <label id="lblArquivo" class="custom-file-label" for="imagem">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
     
-<script>
+<script @Csp.NonceAttr>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("fileInput").files[0].name;

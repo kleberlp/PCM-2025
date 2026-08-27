@@ -333,6 +333,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CspHelper.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -393,6 +394,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\ativofixo.css" />
+    <Content Include="Content\css\pcm-util.css" />
+    <Content Include="Content\js\csp-actions.js" />
     <Content Include="Content\css\codebase.css" />
     <Content Include="Content\css\pcm-ui.css" />
     <Content Include="Content\css\manual.css" />

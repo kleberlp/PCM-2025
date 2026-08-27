@@ -68,10 +68,10 @@
                                 }
                                 <th>@PCM.WEB.Properties.Resources.descricao</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.peso</th>
-                                <th class="d-lg-table-cell text-center" style="width: 85px;">@PCM.WEB.Properties.Resources.ativo</th>
+                                <th class="d-lg-table-cell text-center u-w-85">@PCM.WEB.Properties.Resources.ativo</th>
                                 @if (ViewBag.editar || ViewBag.excluir)
                                 {
-                                    <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                    <th data-sortable="false" class="text-center u-w-100" data-sortable="false"></th>
                                 }
                             </tr>
                         </thead>
@@ -102,7 +102,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
     // Initialize when page loads
     jQuery(function () {

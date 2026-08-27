@@ -63,7 +63,7 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-12">@PCM.WEB.Properties.Resources.cep</label>
-                                <div class="col-md-3"><input type="text" class="form-control" id="cep" name="cep" value="" onblur="LoadCEP();"></div>
+                                <div class="col-md-3"><input type="text" class="form-control" id="cep" name="cep" value="" data-act="LoadCEP" data-on="blur"></div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-12">@PCM.WEB.Properties.Resources.uf</label>
@@ -125,7 +125,7 @@
                                 <label class="col-12">@PCM.WEB.Properties.Resources.logo</label>
                                 <div class="col-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="imagem" name="imagem" onchange="Arquivo();" accept="image/x-png,image/gif,image/jpeg">
+                                        <input type="file" class="custom-file-input" id="imagem" name="imagem" data-act="Arquivo" data-on="change" accept="image/x-png,image/gif,image/jpeg">
                                         <label id="lblArquivo" class="custom-file-label" for="imagem">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
                                     </div>
                                 </div>
@@ -167,7 +167,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/imagecropper")
 
-<script>
+<script @Csp.NonceAttr>
 
         //window.addEventListener('DOMContentLoaded', function () {
         //    var avatar = document.getElementById('avatar');

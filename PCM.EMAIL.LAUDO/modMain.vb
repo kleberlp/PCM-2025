@@ -38,29 +38,10 @@ Module modMain
                           ByVal sBody As String,
                           ByVal sLaudo As String)
 
-        Dim sRemetente As String = "no-reply@pcmbysim.com.br"
-        Dim oEmail As New MailMessage()
-
-        For Each sTo As String In sEmail.Split(";")
-            oEmail.To.Add(sTo)
-        Next
-
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-        oEmail.From = New MailAddress(sRemetente, "PCM by SIM", System.Text.Encoding.UTF8)
-        oEmail.Subject = String.Concat("Vencimento do Laudo: ", sLaudo)
-        oEmail.SubjectEncoding = System.Text.Encoding.UTF8
-        oEmail.Body = sBody
-        oEmail.BodyEncoding = System.Text.Encoding.UTF8
-        oEmail.IsBodyHtml = True
-        oEmail.Priority = MailPriority.High
-        Dim oSmtpClient As New SmtpClient()
-        oSmtpClient.Credentials = New System.Net.NetworkCredential(sRemetente, "$Noreply@2026$")
-        oSmtpClient.Port = 465
-        oSmtpClient.Host = "smtpout.secureserver.net"
-        oSmtpClient.EnableSsl = True
-
         Try
-            oSmtpClient.Send(oEmail)
+            EnviarEmail(sPara:=sEmail,
+                        sAssunto:=String.Concat("Vencimento do Laudo: ", sLaudo),
+                        sCorpoHtml:=sBody)
         Catch ex As Exception
             Debug.Print(ex.Message)
         End Try

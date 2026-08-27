@@ -73,7 +73,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
 
-<script>
+<script @Csp.NonceAttr>
 
         jQuery.validator.addMethod("validation_record", function (value, element) {
 

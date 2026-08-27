@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 
 <!-- URLs para o codebase.js usar — padrão do sistema -->
-<script>
+<script @Csp.NonceAttr>
     var urlHeaderCombos = '@Url.Action("HeaderCombos", "Home")';
     var urlHeaderPost   = '@Url.Action("Index", "Home")';
 </script>
@@ -20,9 +20,9 @@
 
         <!-- Center: logo + selects de unidade/módulo -->
         <div class="content-header-section header-center-section flex-fill px-3">
-            <div class="d-flex align-items-center" style="gap:12px;">
+            <div class="d-flex align-items-center u-gap-12">
 
-                <img src="@Session["imagem_header"]" style="height:22px; flex-shrink:0;" alt="" />
+                <img class="u-h-22-fix" src="@Session["imagem_header"]" alt="" />
 
                 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "form-header-filter", @class = "header-filter-form" }))
                 {

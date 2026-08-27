@@ -62,14 +62,14 @@
             <div class="block-header block-header-default bg-gd-default">
                 <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist</h3>
                 <div class="block-options">
-                    <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
-                    <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
-                    <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                    <button type="button" class="si si-grid btn-block-option text-white" data-show="#div_grid" data-hide="#div_list"></button>
+                    <button type="button" class="si si-list btn-block-option text-white" data-show="#div_list" data-hide="#div_grid"></button>
+                    <button type="button" class="si si-printer btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'></button>
                     <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
                 </div>
             </div>
 
-            <div class="block-content" id="div_grid" style="display:block">
+            <div class="block-content u-block" id="div_grid">
 
                 @for (int i = 0; i < Model.Count; i++)
                 {
@@ -126,7 +126,7 @@
             </div>
 
 
-            <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+            <div class="col-md-12 col-xl-12 u-hide" id="div_list">
 
                 <div class="block-content block-content-full">
 
@@ -142,7 +142,7 @@
                                 <th class="text-center">@PCM.WEB.Properties.Resources.apartamento</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.data_proxima_vistoria</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.status_uh</th>
-                                <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                                <th data-sortable="false" class="text-center d-print-none u-w-80"></th>
                             </tr>
                         </thead>
 
@@ -159,7 +159,7 @@
                                 <td class="text-center @item.bg_color">@Html.DisplayFor(modelItem => item.apartamento)</td>
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima)</td>
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.room_status)</td>
-                                <td class="text-center d-print-none" style="width: 80px;">
+                                <td class="text-center d-print-none u-w-80">
                                     <div class="btn-group">
                                         @if ((item.status != 2) && (item.status != 4))
                                         {<a href="@Url.Action("ChecklistUHApontamento", "UH", new { codigo_apartamento = @item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_vistoria = @item.codigo_vistoria, color = @item.color, status = @item.status })" class="btn btn-sm btn-secondary"><i class="fa fa-snowflake-o"></i></a>}

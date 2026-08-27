@@ -109,13 +109,13 @@
                                 <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.local</th>
                                 <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.solicitante</th>
                                 <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.executor</th>
-                                <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data_execucao</th>
-                                <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.prioridade</th>
-                                <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.prazo_execucao</th>
-                                <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.status</th>
+                                <th class="d-none d-md-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.data_execucao</th>
+                                <th class="d-none d-md-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.prioridade</th>
+                                <th class="d-none d-md-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.prazo_execucao</th>
+                                <th class="d-none d-md-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.status</th>
                                 @if (ViewBag.editar || ViewBag.excluir || ViewBag.inserir)
                                 {
-                                    <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                    <th data-sortable="false" class="text-center u-w-100" data-sortable="false"></th>
                                 }
                             </tr>
                         </thead>
@@ -143,7 +143,7 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 @if ((ViewBag.administrador_vincular) || Session["funcionario"] != "")
-                                                {<button type="button" class="btn btn-sm btn-secondary" id="btn.@item.codigo" onclick="UpdateStatus(@item.codigo, @item.codigo_unidade, '@item.data', 5);"><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                                {<button type="button" class="btn btn-sm btn-secondary" id="btn.@item.codigo" data-act="UpdateStatus" data-args='[@item.codigo, @item.codigo_unidade, "@item.data", 5]'><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                                 @if (ViewBag.apontamento)
                                                 {<a href="@Url.Action("ApontamentoOS", "PCM", new { codigo_pcm_ordem_servico = item.codigo, codigo_unidade = item.codigo_unidade, model = "OrdemServico", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
                                                 @if (ViewBag.editar)
@@ -175,7 +175,7 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 @if ((ViewBag.administrador_vincular) || Session["funcionario"] != "")
-                                                {<button type="button" class="btn btn-sm btn-secondary" id="btn.@item.codigo" onclick="UpdateStatus(@item.codigo, @item.codigo_unidade, '@item.data', 5);"><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                                {<button type="button" class="btn btn-sm btn-secondary" id="btn.@item.codigo" data-act="UpdateStatus" data-args='[@item.codigo, @item.codigo_unidade, "@item.data", 5]'><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                                 @if (ViewBag.apontamento)
                                                 {<a href="@Url.Action("ApontamentoOS", "PCM", new { codigo_pcm_ordem_servico = item.codigo, codigo_unidade = item.codigo_unidade, model = "OrdemServico", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
                                                 @if (ViewBag.editar)
@@ -207,7 +207,7 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 @if (ViewBag.administrador_vincular)
-                                                {<button type="button" class="btn btn-sm btn-danger" id="btn.@item.codigo" onclick="UpdateStatus(@item.codigo, @item.codigo_unidade, '@item.data', 1);"><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                                {<button type="button" class="btn btn-sm btn-danger" id="btn.@item.codigo" data-act="UpdateStatus" data-args='[@item.codigo, @item.codigo_unidade, "@item.data", 1]'><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                                 @if (ViewBag.apontamento)
                                                 {<a href="@Url.Action("ApontamentoOS", "PCM", new { codigo_pcm_ordem_servico = item.codigo, codigo_unidade = item.codigo_unidade, model = "OrdemServico", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
                                                 @if (ViewBag.editar)
@@ -273,7 +273,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         $(function () {
 

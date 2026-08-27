@@ -270,7 +270,7 @@
                                 <i class="si si-doc text-white"></i><h3 class="block-title text-white text-center font-w600">Laudo</h3>
                             </div>
                             <div class="block-content block-content-full clearfix">
-                                <canvas style="width:100%;text-align:center;display:inline" id="chartLaudo"></canvas>
+                                <canvas class="u-full-center-inline" id="chartLaudo"></canvas>
                                 <div class="font-size-h5 font-w600 text-center"><span id="text-laudo"></span><span>%</span></div>
                             </div>
                         </div>
@@ -282,7 +282,7 @@
                                 <i class="si si-settings text-white"></i><h3 class="block-title text-white text-center font-w600">Preventiva</h3>
                             </div>
                             <div class="block-content block-content-full clearfix">
-                                <canvas style="width:100%;text-align:center;display:inline" id="chartPreventiva"></canvas>
+                                <canvas class="u-full-center-inline" id="chartPreventiva"></canvas>
                                 <div class="font-size-h5 font-w600 text-center"><span id="text-preventiva"></span><span>%</span></div>
                             </div>
                         </div>
@@ -294,7 +294,7 @@
                                 <i class="fa fa-retweet text-white"></i><h3 class="block-title text-white text-center font-w600">UH em Dia</h3>
                             </div>
                             <div class="block-content block-content-full clearfix">
-                                <canvas style="width:100%;text-align:center;display:inline" id="chartUH"></canvas>
+                                <canvas class="u-full-center-inline" id="chartUH"></canvas>
                                 <div class="font-size-h5 font-w600 text-center"><span id="text-uh"></span><span>%</span></div>
                             </div>
                         </div>
@@ -306,7 +306,7 @@
                                 <i class="fa fa-snowflake-o text-white"></i><h3 class="block-title text-white text-center font-w600">PMOC</h3>
                             </div>
                             <div class="block-content block-content-full clearfix">
-                                <canvas style="width:100%;text-align:center;display:inline" id="chartPMOC"></canvas>
+                                <canvas class="u-full-center-inline" id="chartPMOC"></canvas>
                                 <div class="font-size-h5 font-w600 text-center"><span id="text-pmoc"></span><span>%</span></div>
                             </div>
                         </div>
@@ -337,15 +337,15 @@
                                 <div class="row items-push">
                                     <div class="col-6 col-sm-4 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">Aberto</div>
-                                        <div class="font-size-h2 font-w600" style="color:rgba(255, 0, 0);" id="aberto">0</div>
+                                        <div class="font-size-h2 font-w600 u-c-red" id="aberto">0</div>
                                     </div>
                                     <div class="col-6 col-sm-4 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">Concluído</div>
-                                        <div class="font-size-h2 font-w600" style="color:rgba(34, 177, 76);" id="concluido">0</div>
+                                        <div class="font-size-h2 font-w600 u-c-green" id="concluido">0</div>
                                     </div>
                                     <div class="col-12 col-sm-4 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">Saldo</div>
-                                        <div class="font-size-h2 font-w600" style="color:rgb(255,201,14);" id="saldo">0</div>
+                                        <div class="font-size-h2 font-w600 u-gold" id="saldo">0</div>
                                     </div>
                                 </div>
                             </div>
@@ -372,23 +372,23 @@
                                 <div class="row items-push">
                                     <div class="col-6 col-sm-2 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">NO DIA</div>
-                                        <div class="font-size-h2 font-w600" style="color: rgba(34, 177, 76);" id="no_dia">0%</div>
+                                        <div class="font-size-h2 font-w600 u-c-green" id="no_dia">0%</div>
                                     </div>
                                     <div class="col-6 col-sm-2 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">1 DIA</div>
-                                        <div class="font-size-h2 font-w600" style="color: rgba(63, 72, 204);" id="um_dia">0%</div>
+                                        <div class="font-size-h2 font-w600 u-c-indigo" id="um_dia">0%</div>
                                     </div>
                                     <div class="col-12 col-sm-2 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">3 DIAS</div>
-                                        <div class="font-size-h2 font-w600" style="color: rgb(255,201,14);" id="tres_dia">0%</div>
+                                        <div class="font-size-h2 font-w600 u-gold" id="tres_dia">0%</div>
                                     </div>
                                     <div class="col-12 col-sm-2 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">5 DIAS</div>
-                                        <div class="font-size-h2 font-w600" style="color: rgba(255, 128, 0);" id="cinco_dia">0%</div>
+                                        <div class="font-size-h2 font-w600 u-c-orange" id="cinco_dia">0%</div>
                                     </div>
                                     <div class="col-12 col-sm-2 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">>5 DIAS</div>
-                                        <div class="font-size-h2 font-w600" style="color: rgba(255, 0, 0);" id="mais_cinco_dia">0%</div>
+                                        <div class="font-size-h2 font-w600 u-c-red" id="mais_cinco_dia">0%</div>
                                     </div>
                                     <div class="col-12 col-sm-2 text-center text-sm-center">
                                         <div class="font-size-sm font-w600 text-uppercase text-muted">NÃO ATENDIDO</div>
@@ -428,7 +428,7 @@
                                         </div>
                                         <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-square btn-secondary fa fa-refresh" onclick="refreshGreenPlanet();" id="btnRefreshGreenPlanet" name="btnRefreshGreenPlanet"></button>
+                                            <button type="button" class="btn btn-square btn-secondary fa fa-refresh" data-act="refreshGreenPlanet" id="btnRefreshGreenPlanet" name="btnRefreshGreenPlanet"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -453,10 +453,10 @@
                             <h3 class="block-title text-white">Principas Ocorrências</h3>
                             <div class="dropdown float-right">
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(1);">Dia Anterior</button>
-                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(7);">Semana</button>
-                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(30);">Mês</button>
-                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(365);">Ano</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" data-act="PrincipaisOcorrencias" data-args='[1]'>Dia Anterior</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" data-act="PrincipaisOcorrencias" data-args='[7]'>Semana</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" data-act="PrincipaisOcorrencias" data-args='[30]'>Mês</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" data-act="PrincipaisOcorrencias" data-args='[365]'>Ano</button>
                                 </div>
                             </div>
                         </div>
@@ -464,17 +464,17 @@
                             <table class="table table-borderless table-striped" id="tb-principais-ocorrencias">
                                 <thead>
                                     <tr class="bg-gray">
-                                        <th class="text-center" style="width: 100px;">#</th>
+                                        <th class="text-center u-w-100">#</th>
                                         <th>@PCM.WEB.Properties.Resources.equipamento</th>
-                                        <th class="text-center" style="width: 150px;">Quantidade</th>
-                                        <th class="text-center" style="width: 150px;">Horas</th>
+                                        <th class="text-center u-w-150">Quantidade</th>
+                                        <th class="text-center u-w-150">Horas</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tb-principais-ocorrencias-body">
                                     @foreach (var item in ViewBag.PrincipaisOcorrencias)
                                     {
                                         <tr>
-                                            <td class="text-center" style="width: 100px;">@item.item</td>
+                                            <td class="text-center u-w-100">@item.item</td>
                                             <td class="font-w600">@item.local</td>
                                             <td class="text-center">@item.quantidade</td>
                                             <td class="text-center">@item.horas</td>
@@ -505,7 +505,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn bg-gray-light" onclick="confirmLogBook();" data-dismiss="modal">
+                            <button type="button" class="btn bg-gray-light" data-act="confirmLogBook" data-dismiss="modal">
                                 <i class="fa fa-check"></i>@PCM.WEB.Properties.Resources.confirmado
                             </button>
                         </div>
@@ -531,7 +531,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/easy_pie_chart")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var informacao = $("#informacao");
         var unidade = $("#unidade");
@@ -916,7 +916,7 @@
                     for (var i = 0; i < response.length; i++) {
                         var newRowItem = $("<tr>");
                         var colsItem = "";
-                        colsItem = '<td class="text-center" style="width: 100px;">' + response[i].item + '</td>';
+                        colsItem = '<td class="text-center u-w-100">' + response[i].item + '</td>';
                         newRowItem.append(colsItem);
                         colsItem = '<td class="font-w600">' + response[i].local + '</td>';
                         newRowItem.append(colsItem);

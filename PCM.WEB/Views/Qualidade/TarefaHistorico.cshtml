@@ -74,10 +74,10 @@
                             <tr class="table-secondary">
                                 <th>@PCM.WEB.Properties.Resources.unidade</th>
                                 <th>@PCM.WEB.Properties.Resources.tarefa</th>
-                                <th class="text-center" style="width: 200px;">@PCM.WEB.Properties.Resources.data_execucao</th>
+                                <th class="text-center u-w-200">@PCM.WEB.Properties.Resources.data_execucao</th>
                                 @if (ViewBag.excluir || ViewBag.imprimir)
                                 {
-                                    <th class="text-center" style="width: 15px;" data-sortable="false"></th>
+                                    <th class="text-center u-w-15" data-sortable="false"></th>
                                 }
                             </tr>
                         </thead>
@@ -106,7 +106,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
     $(function () {
 

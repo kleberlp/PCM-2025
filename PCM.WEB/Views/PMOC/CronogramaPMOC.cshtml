@@ -91,18 +91,18 @@
                                     }
                                     <td class="text-center">@Html.DisplayFor(modelItem => item.tag)</td>
                                     <td>@Html.DisplayFor(modelItem => item.descricao)</td>
-                                    <td class="text-center badge-@item.mes_1" style="width:75px">@Html.DisplayFor(modelItem => item.mes_1)</td>
-                                    <td class="text-center badge-@item.mes_2" style="width:75px">@Html.DisplayFor(modelItem => item.mes_2)</td>
-                                    <td class="text-center badge-@item.mes_3" style="width:75px">@Html.DisplayFor(modelItem => item.mes_3)</td>
-                                    <td class="text-center badge-@item.mes_4" style="width:75px">@Html.DisplayFor(modelItem => item.mes_4)</td>
-                                    <td class="text-center badge-@item.mes_5" style="width:75px">@Html.DisplayFor(modelItem => item.mes_5)</td>
-                                    <td class="text-center badge-@item.mes_6" style="width:75px">@Html.DisplayFor(modelItem => item.mes_6)</td>
-                                    <td class="text-center badge-@item.mes_7" style="width:75px">@Html.DisplayFor(modelItem => item.mes_7)</td>
-                                    <td class="text-center badge-@item.mes_8" style="width:75px">@Html.DisplayFor(modelItem => item.mes_8)</td>
-                                    <td class="text-center badge-@item.mes_9" style="width:75px">@Html.DisplayFor(modelItem => item.mes_9)</td>
-                                    <td class="text-center badge-@item.mes_10" style="width:75px">@Html.DisplayFor(modelItem => item.mes_10)</td>
-                                    <td class="text-center badge-@item.mes_11" style="width:75px">@Html.DisplayFor(modelItem => item.mes_11)</td>
-                                    <td class="text-center badge-@item.mes_12" style="width:75px">@Html.DisplayFor(modelItem => item.mes_12)</td>
+                                    <td class="text-center badge-@item.mes_1 u-w-75">@Html.DisplayFor(modelItem => item.mes_1)</td>
+                                    <td class="text-center badge-@item.mes_2 u-w-75">@Html.DisplayFor(modelItem => item.mes_2)</td>
+                                    <td class="text-center badge-@item.mes_3 u-w-75">@Html.DisplayFor(modelItem => item.mes_3)</td>
+                                    <td class="text-center badge-@item.mes_4 u-w-75">@Html.DisplayFor(modelItem => item.mes_4)</td>
+                                    <td class="text-center badge-@item.mes_5 u-w-75">@Html.DisplayFor(modelItem => item.mes_5)</td>
+                                    <td class="text-center badge-@item.mes_6 u-w-75">@Html.DisplayFor(modelItem => item.mes_6)</td>
+                                    <td class="text-center badge-@item.mes_7 u-w-75">@Html.DisplayFor(modelItem => item.mes_7)</td>
+                                    <td class="text-center badge-@item.mes_8 u-w-75">@Html.DisplayFor(modelItem => item.mes_8)</td>
+                                    <td class="text-center badge-@item.mes_9 u-w-75">@Html.DisplayFor(modelItem => item.mes_9)</td>
+                                    <td class="text-center badge-@item.mes_10 u-w-75">@Html.DisplayFor(modelItem => item.mes_10)</td>
+                                    <td class="text-center badge-@item.mes_11 u-w-75">@Html.DisplayFor(modelItem => item.mes_11)</td>
+                                    <td class="text-center badge-@item.mes_12 u-w-75">@Html.DisplayFor(modelItem => item.mes_12)</td>
                                 </tr>
                                 }
                             </tbody>
@@ -131,7 +131,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/

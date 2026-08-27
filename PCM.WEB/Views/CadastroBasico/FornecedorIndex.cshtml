@@ -83,10 +83,10 @@
                                 <th>@PCM.WEB.Properties.Resources.nome_fantasia</th>
                                 <th class="d-none d-sm-table-cell text-md-center">@PCM.WEB.Properties.Resources.telefone</th>
                                 <th class="d-none d-sm-table-cell text-md-center">@PCM.WEB.Properties.Resources.email</th>
-                                <th class="d-none d-sm-table-cell text-md-center" style="width: 80px;">@PCM.WEB.Properties.Resources.ativo</th>
+                                <th class="d-none d-sm-table-cell text-md-center u-w-80">@PCM.WEB.Properties.Resources.ativo</th>
                                 @if (ViewBag.editar || ViewBag.excluir)
                                 {
-                                    <th class="text-md-center" style="width: 80px;" data-sortable="false"></th>
+                                    <th class="text-md-center u-w-80" data-sortable="false"></th>
                                 }
                             </tr>
                         </thead>
@@ -104,7 +104,7 @@
                                     <td>@Html.DisplayFor(modelItem => item.nome_fantasia)</td>
                                     <td class="d-none d-sm-table-cell text-md-center">@Html.DisplayFor(modelItem => item.telefone)</td>
                                     <td class="d-none d-sm-table-cell text-md-center">@Html.DisplayFor(modelItem => item.email)</td>
-                                    <td class="d-none d-sm-table-cell text-md-center" style="width: 80px;">
+                                    <td class="d-none d-sm-table-cell text-md-center u-w-80">
                                         <label class="css-control-sm css-control-secondary css-checkbox">
                                             @Html.CheckBoxFor(modelItem => item.ativo, new { @class = "css-control-input", @disabled = "disabled" })
                                             <span class="css-control-indicator"></span>
@@ -112,7 +112,7 @@
                                     </td>
                                     @if (ViewBag.editar || ViewBag.excluir)
                                     {
-                                        <td class="text-md-center" style="width: 80px;">
+                                        <td class="text-md-center u-w-80">
                                             <div class="btn-group">
                                                 @if (ViewBag.editar)
                                                 {<a href="@Url.Action("FornecedorEdit", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
@@ -146,7 +146,7 @@
     @Scripts.Render("~/plugins/dataTables")
     @Scripts.Render("~/plugins/maskedinput")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         $(document).ready(function () { $("#cnpj").mask("99.999.999/9999-99"); });
 

@@ -10,7 +10,7 @@
                 <h3 class="block-title">@PCM.WEB.Properties.Resources.ordem_servico: @ViewBag.ordem_servico.numero_documento</h3>
                 <div class="block-options">
                     <!-- Print Page functionality is initialized in Codebase() -> uiHelperPrint() -->
-                    <button type="button" class="btn-block-option" onclick="Codebase.helpers('print-page');">
+                    <button type="button" class="btn-block-option" data-act="Codebase.helpers" data-args='["print-page"]'>
                         <i class="si si-printer"></i> @PCM.WEB.Properties.Resources.imprimir
                     </button>
                     <button type="button" class="btn-block-option" data-toggle="block-option" data-action="fullscreen_toggle"></button>
@@ -55,11 +55,11 @@
                 @if (ViewBag.ordem_servico.fotos.Count > 0)
                 {
                     <div class="row my-20 block-content border">
-                        <div class="col-md-9 h3 text-danger">@PCM.WEB.Properties.Resources.descricao.ToUpper(): <span class="h3" style="font-style:italic">@ViewBag.ordem_servico.descricao</span></div>
+                        <div class="col-md-9 h3 text-danger">@PCM.WEB.Properties.Resources.descricao.ToUpper(): <span class="h3 u-italic">@ViewBag.ordem_servico.descricao</span></div>
 
                         @if (ViewBag.ordem_servico.justificativa_cancelamento != "")
                         {
-                            <div class="col-md-9 h3 text-danger">JUSTIFICATIVA: <span class="h3" style="font-style:italic">@ViewBag.ordem_servico.justificativa_cancelamento</span></div>
+                            <div class="col-md-9 h3 text-danger">JUSTIFICATIVA: <span class="h3 u-italic">@ViewBag.ordem_servico.justificativa_cancelamento</span></div>
 
                         }
 
@@ -87,13 +87,13 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 50px;"></th>
+                                <th class="text-center u-w-50"></th>
                                 <th>@PCM.WEB.Properties.Resources.executor</th>
-                                <th class="text-center" style="width: 250px;">@PCM.WEB.Properties.Resources.justificativa_apontamento</th>
-                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_inicio</th>
-                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_termino</th>
-                                <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.tempo_gasto</th>
-                                <th class="text-center" style="width: 300px;">Imagem</th>
+                                <th class="text-center u-w-250">@PCM.WEB.Properties.Resources.justificativa_apontamento</th>
+                                <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.data_inicio</th>
+                                <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.data_termino</th>
+                                <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.tempo_gasto</th>
+                                <th class="text-center u-w-300">Imagem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -166,7 +166,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         // Initialize when page loads
         jQuery(function () {

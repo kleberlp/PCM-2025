@@ -31,7 +31,7 @@
                                     <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
                                     @if (ViewBag.imprimir)
                                     {
-                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" data-act="ImprimirRelatorio"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
                                     }
                                 </li>
                             </ul>
@@ -58,19 +58,19 @@
                                 <thead>
                                     <tr class="table-secondary">
                                         <th>@PCM.WEB.Properties.Resources.descricao</th>
-                                        <th class="text-center" style="width: 80px;">Jan.</th>
-                                        <th class="text-center" style="width: 80px;">Fev.</th>
-                                        <th class="text-center" style="width: 80px;">Mar.</th>
-                                        <th class="text-center" style="width: 80px;">Abr.</th>
-                                        <th class="text-center" style="width: 80px;">Mai.</th>
-                                        <th class="text-center" style="width: 80px;">Jun.</th>
-                                        <th class="text-center" style="width: 80px;">Jul.</th>
-                                        <th class="text-center" style="width: 80px;">Ago.</th>
-                                        <th class="text-center" style="width: 80px;">Set.</th>
-                                        <th class="text-center" style="width: 80px;">Out.</th>
-                                        <th class="text-center" style="width: 80px;">Nov.</th>
-                                        <th class="text-center" style="width: 80px;">Dez.</th>
-                                        <th class="text-center" style="width: 100px;">Total</th>
+                                        <th class="text-center u-w-80">Jan.</th>
+                                        <th class="text-center u-w-80">Fev.</th>
+                                        <th class="text-center u-w-80">Mar.</th>
+                                        <th class="text-center u-w-80">Abr.</th>
+                                        <th class="text-center u-w-80">Mai.</th>
+                                        <th class="text-center u-w-80">Jun.</th>
+                                        <th class="text-center u-w-80">Jul.</th>
+                                        <th class="text-center u-w-80">Ago.</th>
+                                        <th class="text-center u-w-80">Set.</th>
+                                        <th class="text-center u-w-80">Out.</th>
+                                        <th class="text-center u-w-80">Nov.</th>
+                                        <th class="text-center u-w-80">Dez.</th>
+                                        <th class="text-center u-w-100">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -108,7 +108,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/chart")
 
-    <script>
+    <script @Csp.NonceAttr>
 
     $(document).ready(function () {
 

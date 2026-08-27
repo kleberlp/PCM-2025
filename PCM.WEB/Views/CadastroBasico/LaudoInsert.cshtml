@@ -127,7 +127,7 @@
                     @Html.AntiForgeryToken()
 
                     <div class="block block-rounded border mt-10">
-                        <div class="block block-rounded" id="registros" style="display:block">
+                        <div class="block block-rounded u-block" id="registros">
                             <div class="block-header block-header-default bg-gd-default">
                                 <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.email</h3>
                             </div>
@@ -136,7 +136,7 @@
                                     <div class="col-md-8">
                                         <label>@PCM.WEB.Properties.Resources.email</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" style="text-transform: lowercase;" id="email" name="email" autocomplete="off" placeholder="" value="">
+                                            <input type="text" class="form-control u-lower" id="email" name="email" autocomplete="off" placeholder="" value="">
                                             <div class="input-group-append">
                                                 <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" id="btnEmail" name="btnEmail"></button>
                                             </div>
@@ -149,7 +149,7 @@
                                 <thead>
                                     <tr class="table-secondary">
                                         <th>@PCM.WEB.Properties.Resources.email</th>
-                                        <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                        <th class="text-center u-w-80" data-sortable="false"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_linha" name="table_linha">
@@ -187,7 +187,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
     var jsonData = [];
     var jsonDataAdd = [];

@@ -55,7 +55,7 @@
                                     <label>@PCM.WEB.Properties.Resources.periodicidade</label>
                                     <div>@Html.DropDownList("periodicidade", null, "", new { @class = "form-control js-select2" })</div>
                                 </div>
-                                <div class="col-md-2" style="display:none" id="div_intervalo">
+                                <div class="col-md-2 u-hide" id="div_intervalo">
                                     <label>@PCM.WEB.Properties.Resources.intervalo</label>
                                     <div><input type="text" class="form-control" id="intervalo" name="intervalo" maxlength="3" value="@Model.intervalo"></div>
                                 </div>
@@ -97,7 +97,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
                 
         $(document).ready(function () { $("#intervalo").maskMoney({ prefix: '', thousands: '.', precision: 0, allowNegative: false, 'placeholder': '' }); });
 

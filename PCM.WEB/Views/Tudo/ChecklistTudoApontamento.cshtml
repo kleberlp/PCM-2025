@@ -83,7 +83,7 @@
                         </div>
                         <div>
                             <label>@Resources.periodicidade</label>
-                            <div class="pcm-fld" style="display:flex;align-items:center;">@(string.IsNullOrEmpty(ap.periodicidade) ? "—" : ap.periodicidade)@(ap.intervalo > 0 ? " · " + ap.intervalo : "")</div>
+                            <div class="pcm-fld u-flex-center">@(string.IsNullOrEmpty(ap.periodicidade) ? "—" : ap.periodicidade)@(ap.intervalo > 0 ? " · " + ap.intervalo : "")</div>
                         </div>
                     </div>
 
@@ -154,7 +154,7 @@
                                         <label class="chk-chip chk-os" title="@Resources.abrir_os">@Html.CheckBoxFor(m => m[i].abre_os)@Resources.abrir_os</label>
                                         @if (Model[i].allow_picture)
                                         {
-                                            <button type="button" class="chk-foto-btn" data-item="@Model[i].codigo" onclick="abrirFoto(@Model[i].codigo);"><i class="fa fa-camera"></i> @Resources.foto</button>
+                                            <button type="button" class="chk-foto-btn" data-item="@Model[i].codigo" data-act="abrirFoto" data-args='[@Model[i].codigo]'><i class="fa fa-camera"></i> @Resources.foto</button>
                                         }
                                     </div>
                                 </div>
@@ -215,7 +215,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
-    <script>
+    <script @Csp.NonceAttr>
         var tudoMsg = { campoRequerido: '@Resources.campo_requerido' };
     </script>
     <script src="~/Content/js/pages/Tudo/jquery.checklistTudoApontamento.init.js"></script>

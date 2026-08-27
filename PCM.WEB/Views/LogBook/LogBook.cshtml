@@ -45,7 +45,7 @@
                                     <div>@Html.DropDownList("unidade", null, PCM.WEB.Properties.Resources.unidade, new { @class = "form-control" })</div>                                    
                                 </li>                          
                                 <li class="list-group-item text-right">                                                                                        
-                                    <button type="button" onclick="loadLogBook();" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                    <button type="button" data-act="loadLogBook" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
                                 </li>
                             </ul>
                         </div>
@@ -74,7 +74,7 @@
         @Scripts.Render("~/plugins/datepicker")
         @Scripts.Render("~/plugins/select")
 
-        <script type="text/javascript">
+        <script type="text/javascript" @Csp.NonceAttr>
 
             function loadLogBook() {
 

@@ -93,8 +93,8 @@
                                     <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.local</th>
                                     <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.descricao</th>
                                     <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.executor</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.prioridade</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.status</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.prioridade</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.status</th>
                                 </tr>
                             </thead>
 
@@ -154,7 +154,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         $(function () {
 

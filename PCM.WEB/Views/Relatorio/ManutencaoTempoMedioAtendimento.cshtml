@@ -32,7 +32,7 @@
                                     <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar" ><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
                                     @if(ViewBag.imprimir)
                                     {
-                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" data-act="ImprimirRelatorio"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
                                     }
                                 </li>
                             </ul>
@@ -74,11 +74,11 @@
                                 <thead>
                                     <tr class="table-secondary">
                                         <th>@PCM.WEB.Properties.Resources.mes</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.no_dia</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.um_dia</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.tres_dias</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.cinco_dias</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.acima_cinco_dias</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.no_dia</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.um_dia</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.tres_dias</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.cinco_dias</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.acima_cinco_dias</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -86,11 +86,11 @@
                                     {
                                         <tr>     
                                             <td>@Html.DisplayFor(modelItem => item.mes)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.no_dia)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.um_dia)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.tres_dias)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.cinco_dias)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.acima_cinco_dias)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.no_dia)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.um_dia)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.tres_dias)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.cinco_dias)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.acima_cinco_dias)</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -116,7 +116,7 @@
     @Scripts.Render("~/plugins/validation")
     @Scripts.Render("~/plugins/chart")
 
-<script>
+<script @Csp.NonceAttr>
 
     function ImprimirRelatorio() {
 

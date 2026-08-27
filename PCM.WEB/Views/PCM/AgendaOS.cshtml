@@ -80,12 +80,12 @@
                             <table class="js-table-sections table table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="width: 20px;"></th>
+                                        <th class="u-w-20"></th>
                                         <th></th>                                                                                       
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.ordem_servico</th>    
-                                        <th class="d-sm-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.ordem_servico</th>    
+                                        <th class="d-sm-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.data</th>
                                         <th class="d-sm-table-cell">@PCM.WEB.Properties.Resources.local</th>                                        
-                                        <th class="d-sm-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.prioridade</th>
+                                        <th class="d-sm-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.prioridade</th>
                                         <th class="d-sm-table-cell text-center">@PCM.WEB.Properties.Resources.status</th>                                        
                                     </tr>
                                 </thead>                      
@@ -93,7 +93,7 @@
                                 {
                                     <tbody class="js-table-sections-header">
                                         <tr>
-                                            <td class="text-center" style="width: 30px;"><i class="fa fa-angle-right"></i></td>
+                                            <td class="text-center u-w-30"><i class="fa fa-angle-right"></i></td>
                                             @if(item.ordem_servico.codigo_status == 1)
                                             {                                                                                                    
                                                 <td class="text-center">
@@ -103,9 +103,9 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-center">@Html.DisplayFor(modelItem => item.ordem_servico.ordem_servico)</td>    
-                                                <td class="d-sm-table-cell text-center " style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico.data)</td>
+                                                <td class="d-sm-table-cell text-center  u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico.data)</td>
                                                 <td class="d-sm-table-cell">@Html.DisplayFor(modelItem => item.ordem_servico.local)</td>  
-                                                <td class="d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico.prioridade)</td>                                                          
+                                                <td class="d-sm-table-cell text-center u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico.prioridade)</td>                                                          
                                                 <td class="d-sm-table-cell text-center"><button type="button" class="btn btn-sm btn-circle btn-alt-warning mr-5 mb-5"></button></td>
                                             }   
                                             @if(item.ordem_servico.codigo_status == 2)
@@ -116,9 +116,9 @@
                                                     </div>
                                                 </td>                  
                                                 <td class="text-center" >@Html.DisplayFor(modelItem => item.ordem_servico.ordem_servico)</td>    
-                                                <td class="d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico.data)</td>
+                                                <td class="d-sm-table-cell text-center u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico.data)</td>
                                                 <td class="d-sm-table-cell">@Html.DisplayFor(modelItem => item.ordem_servico.local)</td>   
-                                                <td class="d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico.prioridade)</td>    
+                                                <td class="d-sm-table-cell text-center u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico.prioridade)</td>    
                                                 <td class="d-sm-table-cell text-center"><button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5"></button></td>
                                             }  
                                             @if(item.ordem_servico.codigo_status == 3)
@@ -130,9 +130,9 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-center">@Html.DisplayFor(modelItem => item.ordem_servico.ordem_servico)</td>    
-                                                <td class="d-sm-table-cell text-center text-danger font-w600" style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico.data)</td>
+                                                <td class="d-sm-table-cell text-center text-danger font-w600 u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico.data)</td>
                                                 <td class="d-sm-table-cell">@Html.DisplayFor(modelItem => item.ordem_servico.local)</td>        
-                                                <td class="d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico.prioridade)</td>  
+                                                <td class="d-sm-table-cell text-center u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico.prioridade)</td>  
                                                 <td class="d-sm-table-cell text-center"><button type="button" class="btn btn-sm btn-circle btn-alt-danger mr-5 mb-5"></button></td> 
                                             }   
                                             @if(item.ordem_servico.codigo_status ==4)
@@ -144,9 +144,9 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-center">@Html.DisplayFor(modelItem => item.ordem_servico.ordem_servico)</td>    
-                                                <td class="d-sm-table-cell text-center " style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico.data)</td>
+                                                <td class="d-sm-table-cell text-center  u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico.data)</td>
                                                 <td class="d-sm-table-cell">@Html.DisplayFor(modelItem => item.ordem_servico.local)</td>  
-                                                <td class="d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico.prioridade)</td>          
+                                                <td class="d-sm-table-cell text-center u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico.prioridade)</td>          
                                                 <td class="d-sm-table-cell text-center"><button type="button" class="btn btn-sm btn-circle btn-alt-primary mr-5 mb-5"></button></td> 
                                             }   
                                         </tr>
@@ -200,11 +200,11 @@
                                                             <tr>
                                                                 @if((ViewBag.editar || ViewBag.excluir) && item.ordem_servico.codigo_status != 2)
                                                                 {    
-                                                                    <th style="width: 75px;"></th>                                                                                       
+                                                                    <th class="u-w-75"></th>                                                                                       
                                                                 }
                                                                 <th>@PCM.WEB.Properties.Resources.executor</th>    
-                                                                <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_inicio</th>
-                                                                <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_termino</th>
+                                                                <th class="d-none d-sm-table-cell text-center u-w-150">@PCM.WEB.Properties.Resources.data_inicio</th>
+                                                                <th class="d-none d-sm-table-cell text-center u-w-150">@PCM.WEB.Properties.Resources.data_termino</th>
                                                                 <th>@PCM.WEB.Properties.Resources.solucao</th>                                                    
                                                             </tr>
                                                         </thead> 
@@ -222,8 +222,8 @@
                                                                         </td>                  
                                                                     }
                                                                     <td>@Html.DisplayFor(modelItem => apontamento.executor)</td>    
-                                                                    <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@Html.DisplayFor(modelItem => apontamento.data_inicio)</td>
-                                                                    <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@Html.DisplayFor(modelItem => apontamento.data_termino)</td>
+                                                                    <td class="d-none d-sm-table-cell text-center u-w-150">@Html.DisplayFor(modelItem => apontamento.data_inicio)</td>
+                                                                    <td class="d-none d-sm-table-cell text-center u-w-150">@Html.DisplayFor(modelItem => apontamento.data_termino)</td>
                                                                     <td>@Html.DisplayFor(modelItem => apontamento.descricao_solucao)</tD>                                                    
                                                                 </tr>
                                                          }
@@ -262,7 +262,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         $(function () {
 
