@@ -2,9 +2,9 @@
 
   <!-- Fase 1 da migração (docs/MANUAL-MIGRACAO-DOTNET10-SEGURANCA.md):
        SDK-style multi-target. net48 continua servindo PCM.WEB/PCM.ADM.WEB;
-       net10.0 destrava os consumidores migrados. -->
+       net9.0 destrava os consumidores migrados. -->
   <PropertyGroup>
-    <TargetFrameworks>net48;net10.0</TargetFrameworks>
+    <TargetFrameworks>net48;net9.0</TargetFrameworks>
     <RootNamespace>PCM.WEB.MODELS</RootNamespace>
     <AssemblyName>PCM.WEB.MODELS</AssemblyName>
     <!-- Os atributos continuam em Properties\AssemblyInfo.cs -->

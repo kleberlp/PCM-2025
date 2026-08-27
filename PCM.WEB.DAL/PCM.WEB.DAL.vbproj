@@ -2,11 +2,11 @@
 
   <!-- Fase 1 da migração (docs/MANUAL-MIGRACAO-DOTNET10-SEGURANCA.md):
        SDK-style multi-target. net48 continua servindo PCM.WEB/PCM.ADM.WEB
-       e os serviços 4.8; net10.0 destrava os consumidores migrados.
+       e os serviços 4.8; net9.0 destrava os consumidores migrados.
        System.Data.SqlClient é mantido nesta fase — a troca por
        Microsoft.Data.SqlClient (Encrypt=True por padrão!) é passo próprio. -->
   <PropertyGroup>
-    <TargetFrameworks>net48;net10.0</TargetFrameworks>
+    <TargetFrameworks>net48;net9.0</TargetFrameworks>
     <RootNamespace>PCM.WEB.DAL</RootNamespace>
     <AssemblyName>PCM.WEB.DAL</AssemblyName>
     <MyType>Empty</MyType>
@@ -47,7 +47,7 @@
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="System.Data.OleDb" Version="9.0.4" />

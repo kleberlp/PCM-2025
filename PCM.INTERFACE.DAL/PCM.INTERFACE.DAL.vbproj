@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>PCM.INTERFACE.DAL</RootNamespace>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

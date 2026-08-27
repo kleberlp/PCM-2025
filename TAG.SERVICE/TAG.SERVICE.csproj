@@ -5,7 +5,7 @@
        Padrão do MESSAGE.SERVICE: Dapper + Microsoft.Data.SqlClient +
        BackgroundService + appsettings; SkiaSharp no lugar do System.Drawing. -->
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>TAG.SERVICE</RootNamespace>

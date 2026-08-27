@@ -71,6 +71,12 @@ para ~6–8 meses porque as fases 1–3 paralelizam com a 5.
 **Fase 0** — trocar `<TargetFramework>` para `net10.0`, atualizar pacotes, rodar testes.
 Projetos `net6.0-windows` (PCM.JSON, PCM.IMAGE.RESIZE) mantêm o sufixo `-windows`.
 
+> **ATENÇÃO — alvo interino net9.0 (2026-08-27):** o Visual Studio instalado não
+> compila net10 (NETSDK1209 exige VS ≥ 17.16), então todos os retargets abaixo
+> estão temporariamente em **net9.0** (STS, fim de suporte em maio/2026). Assim
+> que o VS for atualizado, trocar `net9.0` → `net10.0` nos .csproj/.vbproj/.pubxml
+> (busca e substituição direta; o JwtBearer 9.0.4 vira 10.x junto).
+>
 > **EXECUTADA em 2026-08-27** — 12 projetos retargetados para net10.0 (os 12 da
 > tabela 1.1 mais PCM.INTERFACE.ATRIO/DAL/MODELS, que não existiam no levantamento),
 > incluindo os perfis de publicação (.pubxml). Único pacote atualizado:
