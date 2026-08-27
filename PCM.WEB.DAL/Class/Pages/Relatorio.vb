@@ -4,7 +4,6 @@ Imports System.DirectoryServices.ActiveDirectory
 Imports PCM.WEB.DAL.SQLHelper
 Imports System.Data.SqlClient
 Imports System.Text
-Imports MS.Internal.Text.TextInterface
 
 Public Class Relatorio
 

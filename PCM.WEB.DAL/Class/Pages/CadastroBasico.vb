@@ -6,7 +6,6 @@ Imports System.IO
 Imports System.Net
 Imports System.Net.WebRequestMethods
 Imports System.Text
-Imports MS.Internal.Text.TextInterface
 Imports Newtonsoft.Json
 Imports OfficeOpenXml
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions

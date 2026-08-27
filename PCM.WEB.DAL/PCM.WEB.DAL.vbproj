@@ -1,228 +1,62 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Fase 1 da migração (docs/MANUAL-MIGRACAO-DOTNET10-SEGURANCA.md):
+       SDK-style multi-target. net48 continua servindo PCM.WEB/PCM.ADM.WEB
+       e os serviços 4.8; net10.0 destrava os consumidores migrados.
+       System.Data.SqlClient é mantido nesta fase — a troca por
+       Microsoft.Data.SqlClient (Encrypt=True por padrão!) é passo próprio. -->
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{622BAF3D-AC6D-4BCD-A8AB-9A70A4F29771}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <TargetFrameworks>net48;net10.0</TargetFrameworks>
     <RootNamespace>PCM.WEB.DAL</RootNamespace>
     <AssemblyName>PCM.WEB.DAL</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <DefineDebug>true</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>PCM.WEB.DAL.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>PCM.WEB.DAL.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
+    <MyType>Empty</MyType>
     <OptionExplicit>On</OptionExplicit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OptionCompare>Binary</OptionCompare>
-  </PropertyGroup>
-  <PropertyGroup>
     <OptionStrict>Off</OptionStrict>
-  </PropertyGroup>
-  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
     <OptionInfer>On</OptionInfer>
+    <!-- Os atributos continuam em My Project\AssemblyInfo.vb -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <!-- Imports globais do projeto antigo (o SDK já traz os demais padrão) -->
   <ItemGroup>
-    <Reference Include="EPPlus, Version=8.4.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.8.4.2\lib\net462\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="EPPlus.Interfaces, Version=8.4.0.0, Culture=neutral, PublicKeyToken=a694d7f3b0907a61, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.Interfaces.8.4.0\lib\net462\EPPlus.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.3.0.1\lib\netstandard2.0\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
-    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.23.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\packages\Oracle.ManagedDataAccess.23.6.1\lib\net472\Oracle.ManagedDataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=6.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.6.0.1\lib\net461\System.Diagnostics.DiagnosticSource.dll</HintPath>
-    </Reference>
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Formats.Asn1, Version=8.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Formats.Asn1.8.0.1\lib\net462\System.Formats.Asn1.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security" />
-    <Reference Include="System.Security.Cryptography.Xml, Version=8.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Xml.8.0.2\lib\net462\System.Security.Cryptography.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Text.Encodings.Web, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encodings.Web.8.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Json, Version=8.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Json.8.0.5\lib\net462\System.Text.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-  </ItemGroup>
-  <ItemGroup>
-    <Import Include="Microsoft.VisualBasic" />
-    <Import Include="System" />
-    <Import Include="System.Collections" />
-    <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
-    <Import Include="System.Diagnostics" />
-    <Import Include="System.Linq" />
-    <Import Include="System.Xml.Linq" />
-    <Import Include="System.Threading.Tasks" />
   </ItemGroup>
+
+  <!-- Designers do My Project: nada no código usa My.Settings/My.Resources;
+       fora do compile para não colidir com a geração do SDK -->
   <ItemGroup>
-    <Compile Include="Class\EmailSender.vb" />
-    <Compile Include="Class\Pages\AEB.vb" />
-    <Compile Include="Class\Pages\AtivoFixo.vb" />
-    <Compile Include="Class\Pages\Agenda.vb" />
-    <Compile Include="Class\Pages\InterfaceApi.vb" />
-    <Compile Include="Class\Pages\Configuracao.vb" />
-    <Compile Include="Class\Pages\InterfaceApiOracle.vb" />
-    <Compile Include="Class\Pages\Lavanderia.vb" />
-    <Compile Include="Class\Pages\OSHospede.vb" />
-    <Compile Include="Class\Pages\Stock.vb" />
-    <Compile Include="Class\Pages\Upload.vb" />
-    <Compile Include="Class\Pages\PlanoAcao.vb" />
-    <Compile Include="Class\Pages\Picture.vb" />
-    <Compile Include="Class\Pages\Qualidade.vb" />
-    <Compile Include="Class\Pages\Dashboard.vb" />
-    <Compile Include="Class\Pages\SIM.vb" />
-    <Compile Include="Class\Pages\CadastroBasico.vb" />
-    <Compile Include="Class\Pages\Auditoria.vb" />
-    <Compile Include="Class\Pages\Excel.vb" />
-    <Compile Include="Class\Pages\Estoque.vb" />
-    <Compile Include="Class\Pages\Api.vb" />
-    <Compile Include="Class\Pages\WebApi.vb" />
-    <Compile Include="Class\Pages\Governanca.vb" />
-    <Compile Include="Class\Pages\UH.vb" />
-    <Compile Include="Class\Pages\Tudo.vb" />
-    <Compile Include="Class\Pages\OrdemServico.vb" />
-    <Compile Include="Class\Pages\LogBook.vb" />
-    <Compile Include="Class\Pages\PMOC.vb" />
-    <Compile Include="Class\Pages\Home.vb" />
-    <Compile Include="Class\Pages\Relatorio.vb" />
-    <Compile Include="Class\Pages\Financas.vb" />
-    <Compile Include="Class\Pages\Administracao.vb" />
-    <Compile Include="Class\Pages\GreenPlanet.vb" />
-    <Compile Include="Class\Pages\PCM.vb" />
-    <Compile Include="Class\Pages\Account.vb" />
-    <Compile Include="Class\Pages\Combo.vb" />
-    <Compile Include="Class\Pages\Manual.vb" />
-    <Compile Include="Class\Database\SQLHelper.vb" />
-    <Compile Include="Module\modFuncion.vb" />
-    <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="My Project\Application.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Application.myapp</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="My Project\Settings.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <Compile Remove="My Project\Application.Designer.vb" />
+    <Compile Remove="My Project\Resources.Designer.vb" />
+    <Compile Remove="My Project\Settings.Designer.vb" />
+    <EmbeddedResource Remove="My Project\Resources.resx" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="My Project\Resources.resx">
-      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <PackageReference Include="EPPlus" Version="8.4.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Oracle.ManagedDataAccess" Version="23.6.1" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    <PackageReference Include="System.Data.OleDb" Version="9.0.4" />
+    <PackageReference Include="System.DirectoryServices" Version="9.0.4" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
+  </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="My Project\Application.myapp">
-      <Generator>MyApplicationCodeGenerator</Generator>
-      <LastGenOutput>Application.Designer.vb</LastGenOutput>
-    </None>
-    <None Include="My Project\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <CustomToolNamespace>My</CustomToolNamespace>
-      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
-    </None>
-    <None Include="Oracle.DataAccess.Common.Configuration.Section.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Oracle.ManagedDataAccess.Client.Configuration.Section.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\PCM.WEB.MODELS\PCM.WEB.MODELS.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PCM.WEB.MODELS\PCM.WEB.MODELS.csproj">
-      <Project>{eed03281-3a38-43c7-8166-e541b146c791}</Project>
-      <Name>PCM.WEB.MODELS</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

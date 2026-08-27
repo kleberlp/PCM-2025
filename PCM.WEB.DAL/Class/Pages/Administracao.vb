@@ -6,7 +6,6 @@ Imports System.Data.SqlClient
 Imports System.Text
 Imports System.Net
 Imports System.IO
-Imports MS.Internal.Text.TextInterface
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Math
 
 Public Class Administracao
