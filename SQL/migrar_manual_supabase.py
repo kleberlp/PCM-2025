@@ -47,6 +47,13 @@ import re
 import sys
 from datetime import datetime
 
+# O console do Windows nao usa UTF-8 por padrao, e o relatorio da previa tem acento —
+# sem isto, "python ... > saida.txt" morre com UnicodeEncodeError no primeiro titulo.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except (AttributeError, ValueError):
+    pass
+
 # ─────────────────────────────────────────────────────────────────────────────────────────
 # CONEXOES — ajuste aqui
 # ─────────────────────────────────────────────────────────────────────────────────────────
@@ -507,7 +514,9 @@ def main() -> None:
     if cmd == "previa":
         cmd_previa(manuais)
     elif cmd == "gerar-sql":
-        with open(ARQUIVO_SQL, "w", encoding="utf-8") as f:
+        # utf-8-sig: sem o BOM, o SSMS abre o arquivo como ANSI e "Ordens de Serviço"
+        # chega no banco com os acentos trocados.
+        with open(ARQUIVO_SQL, "w", encoding="utf-8-sig") as f:
             f.write(gerar_sql(manuais))
         print("Gerado %s — abra no SSMS (banco PCM) e execute." % ARQUIVO_SQL)
         cmd_previa(manuais)
