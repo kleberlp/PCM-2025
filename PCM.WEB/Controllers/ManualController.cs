@@ -1,4 +1,4 @@
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using PCM.WEB.MODELS;
 using System;
@@ -15,26 +15,32 @@ namespace PCM.WEB.Controllers
     /// <summary>
     /// Manual integrado: telas de cadastro (HelpIndex / HelpInsert / HelpEdit) e
     /// o JSON que alimenta o painel do botão "?" do cabeçalho (ManualTela).
-    /// O conteúdo mora no PostgreSQL do Supabase ("HelpConnection"); a permissão
-    /// segue o padrão do PCM, no SQL Server ("DefaultConnection").
+    /// Conteúdo e permissão vivem no banco PCM — a estrutura está em
+    /// PCM.WEB.DAL\Scripts\2026-08-27_manual_integrado.sql.
     /// </summary>
     public class ManualController : Controller
     {
-        private ManualDal oManual = new ManualDal(ConfigurationManager.ConnectionStrings["HelpConnection"].ConnectionString);
+        private ManualDal oManual = new ManualDal(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private PCM.WEB.DAL.Account oAccount = new PCM.WEB.DAL.Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: APOIO :::
 
+        private int codigoEmpresa
+        {
+            get { return Convert.ToInt32(Session["empresa"]); }
+        }
+
         /// <summary>
         /// Direitos da manutenção do manual. Enquanto o formulário 'adm_manual'
         /// não existir no cadastro de perfis, vale o direito de 'adm_perfil':
-        /// quem administra perfis também mantém o manual (ver SQL/manual_permissao_sqlserver.sql).
+        /// quem administra perfis também mantém o manual (ver o passo 8 de
+        /// PCM.WEB.DAL\Scripts\2026-08-27_manual_integrado.sql).
         /// </summary>
         private void LoadPerfilManual(ref bool inserir, ref bool editar, ref bool excluir)
         {
             bool administrador = false;
 
-            oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+            oAccount.LoadPerfil(iCodigoEmpresa: codigoEmpresa,
                                 iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                 sFormulario: "adm_manual",
                                 bInserir: ref inserir,
@@ -44,7 +50,7 @@ namespace PCM.WEB.Controllers
 
             if (!inserir && !editar && !excluir && !administrador)
             {
-                oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                oAccount.LoadPerfil(iCodigoEmpresa: codigoEmpresa,
                                     iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
                                     sFormulario: "adm_perfil",
                                     bInserir: ref inserir,
@@ -130,8 +136,10 @@ namespace PCM.WEB.Controllers
                 // codigo preenchido = o leitor pediu um manual pelo link "ver
                 // também" do rodapé; sem ele, é o manual da tela em que está.
                 Manual manual = codigo > 0
-                    ? oManual.InfoManual(iCodigo: codigo, bSomenteAtivo: true)
-                    : oManual.ManualTela(sController: screenController ?? "", sAction: screenAction ?? "");
+                    ? oManual.InfoManual(iCodigoEmpresa: codigoEmpresa, iCodigo: codigo, bSomenteAtivo: true)
+                    : oManual.ManualTela(iCodigoEmpresa: codigoEmpresa,
+                                         sController: screenController ?? "",
+                                         sAction: screenAction ?? "");
 
                 // Quem pode manter o manual vê o atalho de edição no rodapé.
                 bool inserir = false, editar = false, excluir = false;
@@ -172,7 +180,7 @@ namespace PCM.WEB.Controllers
                 ViewBag.editar = editar;
                 ViewBag.excluir = excluir;
 
-                return View(oManual.IndexManual());
+                return View(oManual.IndexManual(iCodigoEmpresa: codigoEmpresa));
             }
         }
 
@@ -191,7 +199,7 @@ namespace PCM.WEB.Controllers
 
                 if (!inserir) return RedirectToAction("HelpIndex");
 
-                ViewBag.processos = oManual.ComboProcesso();
+                ViewBag.processos = oManual.ComboProcesso(iCodigoEmpresa: codigoEmpresa);
                 ViewBag.telas = TelasDoSistema();
 
                 return View("HelpInsert", new Manual
@@ -218,10 +226,10 @@ namespace PCM.WEB.Controllers
 
                 if (!editar) return RedirectToAction("HelpIndex");
 
-                Manual manual = oManual.InfoManual(iCodigo: codigo);
+                Manual manual = oManual.InfoManual(iCodigoEmpresa: codigoEmpresa, iCodigo: codigo);
                 if (manual.codigo == 0) return HttpNotFound();
 
-                ViewBag.processos = oManual.ComboProcesso();
+                ViewBag.processos = oManual.ComboProcesso(iCodigoEmpresa: codigoEmpresa);
                 ViewBag.telas = TelasDoSistema();
 
                 return View("HelpEdit", manual);
@@ -272,7 +280,13 @@ namespace PCM.WEB.Controllers
                     }
                 }
 
-                int novoCodigo = oManual.SaveManual(oManual: manual, sUsuario: UsuarioAtual());
+                // Empresa 0 = manual do sistema, que é o que a tela cadastra: o manual
+                // descreve o PCM, e não os dados de um cliente. A coluna codigo_empresa
+                // continua servindo para uma empresa que precise do próprio texto de
+                // uma tela — essa exceção entra por script, e vence a global na leitura.
+                int novoCodigo = oManual.SaveManual(iCodigoEmpresa: 0,
+                                                    oManual: manual,
+                                                    sUsuario: UsuarioAtual());
 
                 return Json(new { success = true, codigo = novoCodigo });
             }

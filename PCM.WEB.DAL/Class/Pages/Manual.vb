@@ -2,12 +2,17 @@
 'Classe:        Manual                                                                          '
 'Objetivo:      Manual integrado (botao "?" do cabecalho e telas de cadastro do help).          '
 '                                                                                               '
-'               Diferente do restante do PCM, o conteudo do manual NAO mora no SQL Server:      '
-'               mora no banco PostgreSQL (Supabase) informado na connection string              '
-'               "HelpConnection" do Web.config. Por isso esta classe usa Npgsql e SQL           '
-'               parametrizado em vez de stored procedures.                                      '
+'               Estrutura e procedures em PCM.WEB.DAL\Scripts\2026-08-27_manual_integrado.sql.  '
+'               O conteudo migrado do Supabase entra por SQL\migrar_manual_supabase.py.         '
 '==============================================================================================='
-Imports Npgsql
+Imports System.Data.SqlClient
+Imports PCM.WEB.DAL.SQLHelper
+Imports PCM.WEB.MODELS
+
+' O modelo e esta classe se chamam Manual, e dentro do namespace PCM.WEB.DAL o nome PCM
+' bate na classe PCM desta mesma camada — PCM.WEB.MODELS.Manual nao resolveria. O alias
+' diz de qual Manual se trata em cada assinatura.
+Imports ManualInfo = Global.PCM.WEB.MODELS.Manual
 
 Public Class Manual
 
@@ -20,210 +25,271 @@ Public Class Manual
 #Region "::: Leitura :::"
 
     '-------------------------------------------------------------------------------------------'
-    'Manual da tela em que o usuario esta. A tela se identifica por controller + action, que e  '
-    'o que ela sabe de si mesma sem carregar nada. A busca tenta a tela exata e, se nao houver, '
-    'cai no manual do modulo (mesmo controller com action vazia) — melhor mostrar a visao do    '
-    'modulo do que abrir vazio.                                                                 '
+    'DESCRICAO     :   Manual da tela em que o usuario esta. A tela se identifica por controller '
+    '                  e action, que e o que ela sabe de si mesma sem carregar nada. Sem manual  '
+    '                  proprio, a procedure cai no manual do modulo (action vazia).              '
     '-------------------------------------------------------------------------------------------'
-    Public Function ManualTela(ByVal sController As String, ByVal sAction As String) As PCM.WEB.MODELS.Manual
+    Public Function ManualTela(ByVal iCodigoEmpresa As Integer,
+                               ByVal sController As String,
+                               ByVal sAction As String) As ManualInfo
 
-        Dim iCodigo As Integer = 0
+        'Variaveis Locais
+        Dim oSqlParameter(2) As SqlParameter
+        Dim oSqlDataReader As SqlDataReader
+        Dim oManual As New ManualInfo
+        Dim i As Integer = 0
 
-        Using oConnection As New NpgsqlConnection(sConnection)
+        Try
 
-            oConnection.Open()
+            'Seta Parametros - Codigo Empresa
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_empresa"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
 
-            Using oCommand As New NpgsqlCommand(
-                "SELECT h.help_id " &
-                "FROM tb_pcm_help h " &
-                "WHERE h.active = true " &
-                "  AND h.kind = 'S' " &
-                "  AND lower(COALESCE(h.controller, '')) = lower(@controller) " &
-                "  AND (lower(COALESCE(h.action, '')) = lower(@action) OR COALESCE(h.action, '') = '') " &
-                "ORDER BY CASE WHEN lower(COALESCE(h.action, '')) = lower(@action) THEN 0 ELSE 1 END, h.help_id " &
-                "LIMIT 1", oConnection)
+            'Seta Parametros - Controller
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "controller"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 100
+            oSqlParameter(i).Value = If(sController, "") : i += 1
 
-                oCommand.Parameters.AddWithValue("controller", If(sController, ""))
-                oCommand.Parameters.AddWithValue("action", If(sAction, ""))
+            'Seta Parametros - Action
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "action"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 100
+            oSqlParameter(i).Value = If(sAction, "")
 
-                Dim oResult As Object = oCommand.ExecuteScalar()
-                If oResult IsNot Nothing AndAlso IsDBNull(oResult) = False Then iCodigo = Convert.ToInt32(oResult)
+            'Executa Query
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_manual_tela", oSqlParameter)
 
-            End Using
+            LerManual(oSqlDataReader, oManual)
 
-            If iCodigo = 0 Then Return New PCM.WEB.MODELS.Manual
+            'Fecha o SqlDataReader
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
 
-            Return LerManual(oConnection, iCodigo, bSomenteAtivo:=True)
+            'Retorno da Funcao
+            Return oManual
 
-        End Using
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
 
     End Function
 
     '-------------------------------------------------------------------------------------------'
-    'Um manual pelo codigo (tela de manutencao e link "ver tambem" do painel).                  '
+    'DESCRICAO     :   Um manual pelo codigo — tela de manutencao e link "ver tambem" do painel. '
     '-------------------------------------------------------------------------------------------'
-    Public Function InfoManual(ByVal iCodigo As Integer, Optional ByVal bSomenteAtivo As Boolean = False) As PCM.WEB.MODELS.Manual
+    Public Function InfoManual(ByVal iCodigoEmpresa As Integer,
+                               ByVal iCodigo As Integer,
+                               Optional ByVal bSomenteAtivo As Boolean = False) As ManualInfo
 
-        Using oConnection As New NpgsqlConnection(sConnection)
-            oConnection.Open()
-            Return LerManual(oConnection, iCodigo, bSomenteAtivo)
-        End Using
+        'Variaveis Locais
+        Dim oSqlParameter(2) As SqlParameter
+        Dim oSqlDataReader As SqlDataReader
+        Dim oManual As New ManualInfo
+        Dim i As Integer = 0
 
-    End Function
+        Try
 
-    Private Function LerManual(ByVal oConnection As NpgsqlConnection, ByVal iCodigo As Integer, ByVal bSomenteAtivo As Boolean) As PCM.WEB.MODELS.Manual
+            'Seta Parametros - Codigo Empresa
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_empresa"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
 
-        Dim oManual As New PCM.WEB.MODELS.Manual
+            'Seta Parametros - Codigo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = iCodigo : i += 1
 
-        Using oCommand As New NpgsqlCommand(
-            "SELECT h.help_id, " &
-            "       h.kind, " &
-            "       COALESCE(h.controller, '')       AS controller, " &
-            "       COALESCE(h.action, '')           AS action, " &
-            "       COALESCE(h.processo_help_id, 0)  AS processo_help_id, " &
-            "       COALESCE(p.title, '')            AS processo_titulo, " &
-            "       h.title, " &
-            "       COALESCE(h.subtitle, '')         AS subtitle, " &
-            "       h.active " &
-            "FROM tb_pcm_help h " &
-            "LEFT JOIN tb_pcm_help p ON p.help_id = h.processo_help_id AND p.active = true " &
-            "WHERE h.help_id = @codigo" & If(bSomenteAtivo, " AND h.active = true", ""), oConnection)
+            'Seta Parametros - Somente Ativo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "somente_ativo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Bit
+            oSqlParameter(i).Value = bSomenteAtivo
 
-            oCommand.Parameters.AddWithValue("codigo", iCodigo)
+            'Executa Query
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_manual", oSqlParameter)
 
-            Using oReader As NpgsqlDataReader = oCommand.ExecuteReader()
-                If oReader.Read() Then
-                    oManual.codigo = Convert.ToInt32(oReader.Item("help_id"))
-                    oManual.tipo = oReader.Item("kind").ToString()
-                    oManual.controller = oReader.Item("controller").ToString()
-                    oManual.action = oReader.Item("action").ToString()
-                    oManual.processo_codigo = Convert.ToInt32(oReader.Item("processo_help_id"))
-                    oManual.processo_titulo = oReader.Item("processo_titulo").ToString()
-                    oManual.titulo = oReader.Item("title").ToString()
-                    oManual.subtitulo = oReader.Item("subtitle").ToString()
-                    oManual.ativo = Convert.ToBoolean(oReader.Item("active"))
-                End If
-            End Using
+            LerManual(oSqlDataReader, oManual)
 
-        End Using
+            'Fecha o SqlDataReader
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
 
-        If oManual.codigo = 0 Then Return oManual
+            'Retorno da Funcao
+            Return oManual
 
-        Using oCommand As New NpgsqlCommand(
-            "SELECT i.item_id, " &
-            "       i.sequence, " &
-            "       i.title, " &
-            "       COALESCE(i.content, '')   AS content, " &
-            "       COALESCE(i.note_type, '') AS note_type, " &
-            "       COALESCE(i.note, '')      AS note, " &
-            "       COALESCE(i.image, '')     AS image, " &
-            "       COALESCE(i.video, '')     AS video " &
-            "FROM tb_pcm_help_item i " &
-            "WHERE i.help_id = @codigo AND i.active = true " &
-            "ORDER BY i.sequence, i.item_id", oConnection)
-
-            oCommand.Parameters.AddWithValue("codigo", oManual.codigo)
-
-            Using oReader As NpgsqlDataReader = oCommand.ExecuteReader()
-                While oReader.Read()
-                    Dim oItem As New PCM.WEB.MODELS.ManualItem
-                    oItem.codigo = Convert.ToInt32(oReader.Item("item_id"))
-                    oItem.sequencia = Convert.ToInt32(oReader.Item("sequence"))
-                    oItem.titulo = oReader.Item("title").ToString()
-                    oItem.conteudo = oReader.Item("content").ToString()
-                    oItem.tipo_nota = oReader.Item("note_type").ToString()
-                    oItem.nota = oReader.Item("note").ToString()
-                    oItem.imagem = oReader.Item("image").ToString()
-                    oItem.video = oReader.Item("video").ToString()
-                    oManual.itens.Add(oItem)
-                End While
-            End Using
-
-        End Using
-
-        Return oManual
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
 
     End Function
 
     '-------------------------------------------------------------------------------------------'
-    'Grade da manutencao: de que tela (ou processo) e o manual e quantas secoes tem.            '
+    'DESCRICAO     :   Le os dois result sets das procedures do manual: o cabecalho e as secoes. '
+    '                  Cabecalho sem linha = tela sem manual, e o objeto volta vazio: o painel   '
+    '                  diz que a tela ainda nao tem manual em vez de dar erro.                   '
     '-------------------------------------------------------------------------------------------'
-    Public Function IndexManual(Optional ByVal sTitulo As String = "") As List(Of PCM.WEB.MODELS.ManualGrid)
+    Private Sub LerManual(ByRef oSqlDataReader As SqlDataReader,
+                          ByRef oManual As ManualInfo)
 
-        Dim oLista As New List(Of PCM.WEB.MODELS.ManualGrid)
+        If oSqlDataReader.Read() Then
 
-        Using oConnection As New NpgsqlConnection(sConnection)
+            oManual.codigo = CInt(SafeGetLong(oSqlDataReader, "codigo"))
+            oManual.tipo = SafeGetString(oSqlDataReader, "tipo")
+            oManual.controller = SafeGetString(oSqlDataReader, "controller")
+            oManual.action = SafeGetString(oSqlDataReader, "action")
+            oManual.processo_codigo = CInt(SafeGetLong(oSqlDataReader, "codigo_manual_processo"))
+            oManual.processo_titulo = SafeGetString(oSqlDataReader, "processo_titulo")
+            oManual.titulo = SafeGetString(oSqlDataReader, "titulo")
+            oManual.subtitulo = SafeGetString(oSqlDataReader, "subtitulo")
+            oManual.ativo = SafeGetBoolean(oSqlDataReader, "ativo")
 
-            oConnection.Open()
+        End If
 
-            Using oCommand As New NpgsqlCommand(
-                "SELECT h.help_id, " &
-                "       h.kind, " &
-                "       h.title, " &
-                "       COALESCE(h.subtitle, '') AS subtitle, " &
-                "       CASE WHEN h.kind = 'P' THEN '' " &
-                "            ELSE COALESCE(h.controller, '') || CASE WHEN COALESCE(h.action, '') = '' THEN '' ELSE '/' || h.action END END AS tela, " &
-                "       (SELECT COUNT(*) FROM tb_pcm_help_item i WHERE i.help_id = h.help_id AND i.active = true) AS secoes, " &
-                "       h.active " &
-                "FROM tb_pcm_help h " &
-                "WHERE (@titulo = '' OR h.title ILIKE '%' || @titulo || '%') " &
-                "ORDER BY h.title", oConnection)
+        If oManual.codigo = 0 Then Exit Sub
 
-                oCommand.Parameters.AddWithValue("titulo", If(sTitulo, ""))
+        oSqlDataReader.NextResult()
 
-                Using oReader As NpgsqlDataReader = oCommand.ExecuteReader()
-                    While oReader.Read()
-                        Dim oInfo As New PCM.WEB.MODELS.ManualGrid
-                        oInfo.codigo = Convert.ToInt32(oReader.Item("help_id"))
-                        oInfo.tipo = oReader.Item("kind").ToString()
-                        oInfo.titulo = oReader.Item("title").ToString()
-                        oInfo.subtitulo = oReader.Item("subtitle").ToString()
-                        oInfo.tela = oReader.Item("tela").ToString()
-                        oInfo.secoes = Convert.ToInt32(oReader.Item("secoes"))
-                        oInfo.ativo = Convert.ToBoolean(oReader.Item("active"))
-                        oLista.Add(oInfo)
-                    End While
-                End Using
+        While oSqlDataReader.Read()
 
-            End Using
+            Dim oItem As New ManualItem
 
-        End Using
+            oItem.codigo = CInt(SafeGetLong(oSqlDataReader, "codigo"))
+            oItem.sequencia = CInt(SafeGetLong(oSqlDataReader, "sequencia"))
+            oItem.titulo = SafeGetString(oSqlDataReader, "titulo")
+            oItem.conteudo = SafeGetString(oSqlDataReader, "conteudo")
+            oItem.tipo_nota = SafeGetString(oSqlDataReader, "tipo_nota")
+            oItem.nota = SafeGetString(oSqlDataReader, "nota")
+            oItem.imagem = SafeGetString(oSqlDataReader, "imagem")
+            oItem.video = SafeGetString(oSqlDataReader, "video")
 
-        Return oLista
+            oManual.itens.Add(oItem)
+
+        End While
+
+    End Sub
+
+    '-------------------------------------------------------------------------------------------'
+    'DESCRICAO     :   Grade da manutencao: de que tela (ou processo) e o manual e quantas       '
+    '                  secoes tem.                                                              '
+    '-------------------------------------------------------------------------------------------'
+    Public Function IndexManual(ByVal iCodigoEmpresa As Integer,
+                                Optional ByVal sTitulo As String = "") As List(Of ManualGrid)
+
+        'Variaveis Locais
+        Dim oSqlParameter(1) As SqlParameter
+        Dim oSqlDataReader As SqlDataReader
+        Dim oLista As New List(Of ManualGrid)
+        Dim i As Integer = 0
+
+        Try
+
+            'Seta Parametros - Codigo Empresa
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_empresa"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
+
+            'Seta Parametros - Titulo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "titulo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 200
+            oSqlParameter(i).Value = If(sTitulo, "")
+
+            'Executa Query
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_manual_index", oSqlParameter)
+
+            While oSqlDataReader.Read()
+
+                Dim oInfo As New ManualGrid
+
+                oInfo.codigo = CInt(SafeGetLong(oSqlDataReader, "codigo"))
+                oInfo.tipo = SafeGetString(oSqlDataReader, "tipo")
+                oInfo.titulo = SafeGetString(oSqlDataReader, "titulo")
+                oInfo.subtitulo = SafeGetString(oSqlDataReader, "subtitulo")
+                oInfo.tela = SafeGetString(oSqlDataReader, "tela")
+                oInfo.secoes = CInt(SafeGetLong(oSqlDataReader, "secoes"))
+                oInfo.ativo = SafeGetBoolean(oSqlDataReader, "ativo")
+
+                oLista.Add(oInfo)
+
+            End While
+
+            'Fecha o SqlDataReader
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+
+            'Retorno da Funcao
+            Return oLista
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
 
     End Function
 
     '-------------------------------------------------------------------------------------------'
-    'Manuais de processo, para o combo "ver tambem" da tela de cadastro.                        '
+    'DESCRICAO     :   Manuais de processo, para o combo "ver tambem" da tela de cadastro.       '
     '-------------------------------------------------------------------------------------------'
-    Public Function ComboProcesso() As List(Of PCM.WEB.MODELS.ListCombo)
+    Public Function ComboProcesso(ByVal iCodigoEmpresa As Integer) As List(Of ListCombo)
 
-        Dim oLista As New List(Of PCM.WEB.MODELS.ListCombo)
+        'Variaveis Locais
+        Dim oSqlParameter(0) As SqlParameter
+        Dim oSqlDataReader As SqlDataReader
+        Dim oLista As New List(Of ListCombo)
 
-        Using oConnection As New NpgsqlConnection(sConnection)
+        Try
 
-            oConnection.Open()
+            'Seta Parametros - Codigo Empresa
+            oSqlParameter(0) = New SqlParameter
+            oSqlParameter(0).ParameterName = "codigo_empresa"
+            oSqlParameter(0).Direction = ParameterDirection.Input
+            oSqlParameter(0).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(0).Value = iCodigoEmpresa
 
-            Using oCommand As New NpgsqlCommand(
-                "SELECT h.help_id, h.title " &
-                "FROM tb_pcm_help h " &
-                "WHERE h.kind = 'P' AND h.active = true " &
-                "ORDER BY h.title", oConnection)
+            'Executa Query
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_manual_combo_processo", oSqlParameter)
 
-                Using oReader As NpgsqlDataReader = oCommand.ExecuteReader()
-                    While oReader.Read()
-                        Dim oCombo As New PCM.WEB.MODELS.ListCombo
-                        oCombo.codigo = Convert.ToInt32(oReader.Item("help_id"))
-                        oCombo.descricao = oReader.Item("title").ToString()
-                        oLista.Add(oCombo)
-                    End While
-                End Using
+            While oSqlDataReader.Read()
 
-            End Using
+                Dim oCombo As New ListCombo
 
-        End Using
+                oCombo.codigo = CInt(SafeGetLong(oSqlDataReader, "codigo"))
+                oCombo.descricao = SafeGetString(oSqlDataReader, "descricao")
 
-        Return oLista
+                oLista.Add(oCombo)
+
+            End While
+
+            'Fecha o SqlDataReader
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+
+            'Retorno da Funcao
+            Return oLista
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
 
     End Function
 
@@ -232,145 +298,141 @@ Public Class Manual
 #Region "::: Manutencao :::"
 
     '-------------------------------------------------------------------------------------------'
-    'Grava o manual inteiro — cabecalho e secoes — em uma transacao. Editar manual e mexer no   '
-    'texto e na ordem das secoes ao mesmo tempo; gravar tudo de uma vez evita meio-caminho      '
-    'gravado se o navegador cair no meio da edicao. As secoes substituem as anteriores.         '
+    'DESCRICAO     :   Grava o manual inteiro — cabecalho e secoes — numa transacao da propria   '
+    '                  procedure. Editar manual e mexer no texto e na ordem das secoes ao mesmo  '
+    '                  tempo; gravar tudo de uma vez evita meio-caminho gravado se o navegador   '
+    '                  cair no meio da edicao. As secoes vao em JSON e substituem as anteriores. '
     '-------------------------------------------------------------------------------------------'
-    Public Function SaveManual(ByVal oManual As PCM.WEB.MODELS.Manual, ByVal sUsuario As String) As Integer
+    Public Function SaveManual(ByVal iCodigoEmpresa As Integer,
+                               ByVal oManual As ManualInfo,
+                               ByVal sUsuario As String) As Integer
 
-        'Um manual e de uma coisa so: processo nao tem tela, e tela nao aceita apontar para si.
-        Dim bProcesso As Boolean = (oManual.tipo = "P")
-        Dim sController As String = If(bProcesso, "", If(oManual.controller, "").Trim())
-        Dim sAction As String = If(bProcesso, "", If(oManual.action, "").Trim())
-        Dim iProcesso As Integer = If(bProcesso, 0, oManual.processo_codigo)
+        'Variaveis Locais
+        Dim oSqlParameter(10) As SqlParameter
+        Dim i As Integer = 0
 
-        If bProcesso = False AndAlso sController = "" Then
-            Throw New Exception("Informe a tela (controller) do manual.")
-        End If
+        Try
 
-        Using oConnection As New NpgsqlConnection(sConnection)
+            'Seta Parametros - Codigo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = oManual.codigo : i += 1
 
-            oConnection.Open()
+            'Seta Parametros - Codigo Empresa
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_empresa"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(i).Value = iCodigoEmpresa : i += 1
 
-            Using oTransaction As NpgsqlTransaction = oConnection.BeginTransaction()
+            'Seta Parametros - Tipo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "tipo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 1
+            oSqlParameter(i).Value = If(oManual.tipo = "P", "P", "S") : i += 1
 
-                Try
+            'Seta Parametros - Controller
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "controller"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 100
+            oSqlParameter(i).Value = If(oManual.controller, "") : i += 1
 
-                    If oManual.codigo = 0 Then
+            'Seta Parametros - Action
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "action"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 100
+            oSqlParameter(i).Value = If(oManual.action, "") : i += 1
 
-                        Using oCommand As New NpgsqlCommand(
-                            "INSERT INTO tb_pcm_help (kind, controller, action, processo_help_id, title, subtitle, active, username, date_input) " &
-                            "VALUES (@kind, NULLIF(@controller, ''), NULLIF(@action, ''), NULLIF(@processo, 0), @titulo, NULLIF(@subtitulo, ''), @ativo, @usuario, now()) " &
-                            "RETURNING help_id", oConnection, oTransaction)
+            'Seta Parametros - Manual do Processo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "codigo_manual_processo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Int
+            oSqlParameter(i).Value = oManual.processo_codigo : i += 1
 
-                            oCommand.Parameters.AddWithValue("kind", If(bProcesso, "P", "S"))
-                            oCommand.Parameters.AddWithValue("controller", sController)
-                            oCommand.Parameters.AddWithValue("action", sAction)
-                            oCommand.Parameters.AddWithValue("processo", iProcesso)
-                            oCommand.Parameters.AddWithValue("titulo", If(oManual.titulo, "").Trim())
-                            oCommand.Parameters.AddWithValue("subtitulo", If(oManual.subtitulo, "").Trim())
-                            oCommand.Parameters.AddWithValue("ativo", oManual.ativo)
-                            oCommand.Parameters.AddWithValue("usuario", If(sUsuario, ""))
+            'Seta Parametros - Titulo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "titulo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 200
+            oSqlParameter(i).Value = If(oManual.titulo, "") : i += 1
 
-                            oManual.codigo = Convert.ToInt32(oCommand.ExecuteScalar())
+            'Seta Parametros - Subtitulo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "subtitulo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 300
+            oSqlParameter(i).Value = If(oManual.subtitulo, "") : i += 1
 
-                        End Using
+            'Seta Parametros - Ativo
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "ativo"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.Bit
+            oSqlParameter(i).Value = oManual.ativo : i += 1
 
-                    Else
+            'Seta Parametros - Secoes (JSON)
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "itens"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.NVarChar
+            oSqlParameter(i).Size = -1
+            oSqlParameter(i).Value = Newtonsoft.Json.JsonConvert.SerializeObject(oManual.itens) : i += 1
 
-                        Using oCommand As New NpgsqlCommand(
-                            "UPDATE tb_pcm_help " &
-                            "SET kind = @kind, " &
-                            "    controller = NULLIF(@controller, ''), " &
-                            "    action = NULLIF(@action, ''), " &
-                            "    processo_help_id = NULLIF(@processo, 0), " &
-                            "    title = @titulo, " &
-                            "    subtitle = NULLIF(@subtitulo, ''), " &
-                            "    active = @ativo, " &
-                            "    username_update = @usuario, " &
-                            "    date_update = now() " &
-                            "WHERE help_id = @codigo", oConnection, oTransaction)
+            'Seta Parametros - Usuario
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "usuario"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).Size = 100
+            oSqlParameter(i).Value = If(sUsuario, "")
 
-                            oCommand.Parameters.AddWithValue("kind", If(bProcesso, "P", "S"))
-                            oCommand.Parameters.AddWithValue("controller", sController)
-                            oCommand.Parameters.AddWithValue("action", sAction)
-                            oCommand.Parameters.AddWithValue("processo", If(iProcesso = oManual.codigo, 0, iProcesso))
-                            oCommand.Parameters.AddWithValue("titulo", If(oManual.titulo, "").Trim())
-                            oCommand.Parameters.AddWithValue("subtitulo", If(oManual.subtitulo, "").Trim())
-                            oCommand.Parameters.AddWithValue("ativo", oManual.ativo)
-                            oCommand.Parameters.AddWithValue("usuario", If(sUsuario, ""))
-                            oCommand.Parameters.AddWithValue("codigo", oManual.codigo)
+            'Executa Query
+            Return CInt(ExecuteScalar(sConnection, CommandType.StoredProcedure, "sp_save_manual", oSqlParameter))
 
-                            oCommand.ExecuteNonQuery()
-
-                        End Using
-
-                        Using oCommand As New NpgsqlCommand("DELETE FROM tb_pcm_help_item WHERE help_id = @codigo", oConnection, oTransaction)
-                            oCommand.Parameters.AddWithValue("codigo", oManual.codigo)
-                            oCommand.ExecuteNonQuery()
-                        End Using
-
-                    End If
-
-                    Dim iSequencia As Integer = 0
-
-                    For Each oItem As PCM.WEB.MODELS.ManualItem In If(oManual.itens, New List(Of PCM.WEB.MODELS.ManualItem))
-
-                        'Secao sem titulo e linha em branco do editor, nao conteudo.
-                        If If(oItem.titulo, "").Trim() = "" Then Continue For
-
-                        iSequencia += 1
-
-                        Using oCommand As New NpgsqlCommand(
-                            "INSERT INTO tb_pcm_help_item (help_id, sequence, title, content, note_type, note, image, video, active) " &
-                            "VALUES (@help, @sequencia, @titulo, NULLIF(@conteudo, ''), NULLIF(@tipo_nota, ''), NULLIF(@nota, ''), NULLIF(@imagem, ''), NULLIF(@video, ''), true)",
-                            oConnection, oTransaction)
-
-                            oCommand.Parameters.AddWithValue("help", oManual.codigo)
-                            oCommand.Parameters.AddWithValue("sequencia", iSequencia)
-                            oCommand.Parameters.AddWithValue("titulo", oItem.titulo.Trim())
-                            oCommand.Parameters.AddWithValue("conteudo", If(oItem.conteudo, ""))
-                            oCommand.Parameters.AddWithValue("tipo_nota", If(oItem.tipo_nota, ""))
-                            oCommand.Parameters.AddWithValue("nota", If(oItem.nota, ""))
-                            oCommand.Parameters.AddWithValue("imagem", If(oItem.imagem, ""))
-                            oCommand.Parameters.AddWithValue("video", If(oItem.video, ""))
-
-                            oCommand.ExecuteNonQuery()
-
-                        End Using
-
-                    Next
-
-                    oTransaction.Commit()
-
-                Catch ex As Exception
-                    oTransaction.Rollback()
-                    Throw
-                End Try
-
-            End Using
-
-        End Using
-
-        Return oManual.codigo
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
 
     End Function
 
     '-------------------------------------------------------------------------------------------'
-    'Exclui o manual. As secoes saem junto pelo ON DELETE CASCADE.                              '
+    'DESCRICAO     :   Exclui o manual. As secoes saem junto pelo ON DELETE CASCADE.             '
     '-------------------------------------------------------------------------------------------'
     Public Sub DeleteManual(ByVal iCodigo As Integer)
 
-        Using oConnection As New NpgsqlConnection(sConnection)
+        'Variaveis Locais
+        Dim oSqlParameter(0) As SqlParameter
 
-            oConnection.Open()
+        Try
 
-            Using oCommand As New NpgsqlCommand("DELETE FROM tb_pcm_help WHERE help_id = @codigo", oConnection)
-                oCommand.Parameters.AddWithValue("codigo", iCodigo)
-                oCommand.ExecuteNonQuery()
-            End Using
+            'Seta Parametros - Codigo
+            oSqlParameter(0) = New SqlParameter
+            oSqlParameter(0).ParameterName = "codigo"
+            oSqlParameter(0).Direction = ParameterDirection.Input
+            oSqlParameter(0).SqlDbType = SqlDbType.Int
+            oSqlParameter(0).Value = iCodigo
 
-        End Using
+            'Executa Query
+            ExecuteNonQuery(sConnection, CommandType.StoredProcedure, "sp_delete_manual", oSqlParameter)
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
 
     End Sub
 
