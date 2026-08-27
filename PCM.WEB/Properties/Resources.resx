@@ -2398,7 +2398,7 @@
     <value>Subtítulo</value>
   </data>
   <data name="manual_conteudo_dica" xml:space="preserve">
-    <value>Texto da seção. Use **negrito** e linhas começando com "- " para listas.</value>
+    <value>Texto da seção em Markdown: **negrito**, listas com "- ", tabelas com | e imagens com ![](url).</value>
   </data>
   <data name="manual_video" xml:space="preserve">
     <value>Link de vídeo</value>

@@ -6,53 +6,89 @@ Migra o manual do Supabase (PostgreSQL) para o banco PCM (SQL Server).
 Precisa rodar numa maquina que enxergue os DOIS bancos — tipicamente o NOTE-KLEBER,
 onde o SQL Server e local e o Supabase esta a um NAT de distancia.
 
-    pip install pg8000            (obrigatorio: le o Postgres)
+    pip install pg8000            (obrigatorio: le o Supabase)
     pip install pyodbc            (opcional: grava direto no SQL Server)
 
-Sem pyodbc, o script gera um .sql com os INSERTs para voce rodar no SSMS — que costuma
-ser o caminho mais simples, e deixa voce conferir tudo antes de gravar.
+Sem pyodbc o script gera um .sql com a carga, para voce rodar no SSMS — que costuma ser
+o caminho mais simples, e deixa voce conferir tudo antes de gravar.
 
-Como usar, na ordem:
+DE ONDE VEM O QUE
+-----------------
+    public.chapters (12)  -> manual de PROCESSO (tipo 'P'): as trilhas.
+    public.articles (82)  -> manual de TELA (tipo 'S'): um manual por artigo.
 
-  1) Ver o que existe no Supabase (nao grava nada, so mostra tabelas, colunas e amostra):
+O texto do artigo esta em Markdown e vira SECOES do manual, quebradas nos titulos de
+nivel 2 ("## ..."). O que vem antes do primeiro "##" entra como a primeira secao. O
+video_url do artigo vai para a primeira secao.
+
+Cada artigo aponta para a trilha dele no rodape do painel ("Ver tambem").
+
+QUAL TELA E CADA ARTIGO
+-----------------------
+O Supabase organiza o manual por TRILHA DE TREINAMENTO, e nao por tela do sistema —
+articles nao tem controller/action. Como o botao "?" precisa saber a tela, o script
+casa o titulo do artigo com o nome que a tela tem NO MENU do PCM (telas_pcm.csv, 159
+telas extraidas do _Sidebar) e grava o palpite em mapa_telas.csv, para voce revisar.
+
+    Artigo                      -> Tela                     confianca
+    Categoria de Servico        -> CadastroBasico/CategoriaIndex   alta
+    Plano de Acao               -> PlanoAcao/PlanoAcaoIndex        alta
+    Rotinas e Rondas            -> CadastroBasico/RotinaIndex      media
+
+Artigo sem tela definida entra como manual de processo — continua no cadastro, visivel
+e editavel, e voce liga na tela pela tela de edicao quando quiser.
+
+COMO USAR, NA ORDEM
+-------------------
+  1) Ver o que existe no Supabase (nao grava nada):
 
          python migrar_manual_supabase.py inspecionar
 
-  2) Conferir o de-para que o script deduziu e o que ele traria (nao grava nada):
+  2) Ver um artigo inteiro e como ele vai ficar dividido em secoes:
+
+         python migrar_manual_supabase.py amostra
+         python migrar_manual_supabase.py amostra 2-8-categoria-de-servico
+
+  3) Gerar o de-para de telas para revisar (cria mapa_telas.csv):
+
+         python migrar_manual_supabase.py mapear
+
+     Abra o mapa_telas.csv no Excel, confira a coluna controller/action e corrija o que
+     estiver errado. Linha com controller vazio vira manual de processo.
+
+  4) Conferir o que seria migrado (nao grava nada):
 
          python migrar_manual_supabase.py previa
 
-  3) Gerar o arquivo .sql com a carga, para rodar no SSMS:
+  5) Gerar o arquivo .sql da carga, para rodar no SSMS:
 
          python migrar_manual_supabase.py gerar-sql
 
-  4) Ou gravar direto no SQL Server (precisa de pyodbc):
+     ou gravar direto no SQL Server (precisa de pyodbc):
 
          python migrar_manual_supabase.py migrar
 
-A estrutura de origem NAO precisa estar no padrao novo: o script procura, entre as tabelas
-do Supabase, quais parecem o cabecalho e a secao do manual, olhando os nomes das colunas
-(titulo/title, conteudo/content/texto, ordem/sequence, imagem/image, video/link...). Se ele
-errar o palpite, corrija o dicionario MAPA_MANUAL/MAPA_ITEM no fim do arquivo — o
-"inspecionar" mostra exatamente os nomes reais para voce preencher.
-
-Rodar de novo e seguro: a carga apaga so os manuais marcados com a origem 'supabase' antes
-de inserir (ver LIMPAR_ANTES).
+Rodar de novo e seguro: a carga apaga so os manuais marcados com a origem 'supabase'
+antes de inserir (ver LIMPAR_ANTES).
 """
 
 from __future__ import annotations
 
-import json
+import csv
+import os
 import re
 import sys
+import unicodedata
 from datetime import datetime
+from difflib import SequenceMatcher
 
-# O console do Windows nao usa UTF-8 por padrao, e o relatorio da previa tem acento —
-# sem isto, "python ... > saida.txt" morre com UnicodeEncodeError no primeiro titulo.
+# O console do Windows nao usa UTF-8 por padrao, e o relatorio tem acento — sem isto,
+# "python ... > saida.txt" morre com UnicodeEncodeError no primeiro titulo.
 try:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 except (AttributeError, ValueError):
     pass
+
 
 # ─────────────────────────────────────────────────────────────────────────────────────────
 # CONEXOES — ajuste aqui
@@ -87,14 +123,20 @@ CODIGO_EMPRESA = 0
 # Antes de inserir, apaga os manuais que vieram de uma carga anterior deste script.
 LIMPAR_ANTES = True
 
-ARQUIVO_SQL = "carga_manual.sql"
+# Traz tambem os artigos com is_published = false.
+INCLUIR_NAO_PUBLICADOS = False
+
+PASTA = os.path.dirname(os.path.abspath(__file__))
+ARQUIVO_SQL = os.path.join(PASTA, "carga_manual.sql")
+ARQUIVO_MAPA = os.path.join(PASTA, "mapa_telas.csv")
+ARQUIVO_TELAS = os.path.join(PASTA, "telas_pcm.csv")
 
 # Marca gravada em tb_manual.usuario para reconhecer o que veio daqui.
 ORIGEM = "supabase"
 
 
 # ─────────────────────────────────────────────────────────────────────────────────────────
-# Leitura do Postgres
+# Postgres
 # ─────────────────────────────────────────────────────────────────────────────────────────
 
 def conectar_pg():
@@ -112,224 +154,42 @@ def conectar_pg():
         sys.exit(
             "Nao consegui conectar no Supabase (%s@%s).\n  %r\n\n"
             "Confira host/usuario em Settings > Database > Connection pooling. O host direto\n"
-            "db.<ref>.supabase.co so resolve IPv6; em rede IPv4 use o pooler." % (PG["user"], PG["host"], e)
+            "db.<ref>.supabase.co so resolve IPv6; em rede IPv4 use o pooler."
+            % (PG["user"], PG["host"], e)
         )
 
-
-def tabelas(conn) -> list[tuple[str, str]]:
-    return [
-        (r[0], r[1])
-        for r in conn.run(
-            "SELECT table_schema, table_name FROM information_schema.tables "
-            "WHERE table_type = 'BASE TABLE' "
-            "AND table_schema NOT IN ('pg_catalog', 'information_schema') "
-            "ORDER BY 1, 2"
-        )
-    ]
-
-
-def colunas(conn, schema: str, tabela: str) -> list[str]:
-    return [
-        r[0]
-        for r in conn.run(
-            "SELECT column_name FROM information_schema.columns "
-            "WHERE table_schema = :s AND table_name = :t ORDER BY ordinal_position",
-            s=schema, t=tabela,
-        )
-    ]
-
-
-def contar(conn, schema: str, tabela: str) -> int:
-    return conn.run('SELECT COUNT(*) FROM "%s"."%s"' % (schema, tabela))[0][0]
-
-
-# ─────────────────────────────────────────────────────────────────────────────────────────
-# Descoberta do de-para
-#
-# Cada campo do destino tem uma lista de nomes prováveis na origem, do mais para o menos
-# específico. O primeiro que existir na tabela vence.
-# ─────────────────────────────────────────────────────────────────────────────────────────
-
-SINONIMOS_MANUAL = {
-    "titulo":     ["titulo", "title", "nome", "name", "assunto", "descricao_manual"],
-    "subtitulo":  ["subtitulo", "subtitle", "descricao", "description", "resumo", "subtexto"],
-    "controller": ["controller", "tela_controller", "modulo", "module", "tela", "screen", "form", "formulario"],
-    "action":     ["action", "tela_action", "acao", "pagina", "page", "metodo"],
-    "tipo":       ["tipo", "kind", "type", "categoria"],
-    "ativo":      ["ativo", "active", "habilitado", "enabled", "publicado", "published"],
-    "id":         ["help_id", "manual_id", "id", "codigo"],
-}
-
-SINONIMOS_ITEM = {
-    "titulo":    ["titulo", "title", "nome", "name", "cabecalho"],
-    "conteudo":  ["conteudo", "content", "texto", "text", "descricao", "description", "corpo", "body", "html"],
-    "sequencia": ["sequencia", "sequence", "ordem", "order", "posicao", "position", "seq", "indice"],
-    "tipo_nota": ["tipo_nota", "note_type", "tipo_destaque", "destaque_tipo"],
-    "nota":      ["nota", "note", "observacao", "destaque", "dica", "aviso"],
-    "imagem":    ["imagem", "image", "img", "foto", "picture", "url_imagem", "image_url", "figura"],
-    "video":     ["video", "video_url", "url_video", "link_video", "youtube", "midia", "media_url", "link"],
-    "pai":       ["help_id", "manual_id", "id_manual", "codigo_manual", "parent_id", "id_pai", "fk_manual"],
-    "id":        ["item_id", "id", "codigo"],
-}
-
-
-def casar(cols: list[str], sinonimos: list[str]) -> str | None:
-    baixa = {c.lower(): c for c in cols}
-    for s in sinonimos:
-        if s in baixa:
-            return baixa[s]
-    # Segunda passada: o nome do sinonimo dentro de um nome maior (ex.: "url_do_video").
-    for s in sinonimos:
-        for c in cols:
-            if s in c.lower():
-                return c
-    return None
-
-
-def mapear(cols: list[str], sinonimos: dict) -> dict:
-    return {destino: casar(cols, nomes) for destino, nomes in sinonimos.items()}
-
-
-def adivinhar(conn) -> tuple[tuple[str, str, dict] | None, tuple[str, str, dict] | None]:
-    """Escolhe a tabela de cabecalho e a de secoes, pela cara das colunas."""
-    cabecalho = None
-    item = None
-    melhor_c = melhor_i = 0
-
-    for schema, tabela in tabelas(conn):
-        cols = colunas(conn, schema, tabela)
-        mc = mapear(cols, SINONIMOS_MANUAL)
-        mi = mapear(cols, SINONIMOS_ITEM)
-
-        # Secao: tem chave para o pai E texto longo. Cabecalho: tem titulo E identificacao de tela.
-        nota_i = sum(1 for k in ("pai", "conteudo", "sequencia") if mi.get(k)) + (2 if mi.get("pai") else 0)
-        nota_c = sum(1 for k in ("titulo", "controller", "subtitulo") if mc.get(k))
-
-        if mi.get("pai") and mi.get("conteudo") and nota_i > melhor_i:
-            melhor_i, item = nota_i, (schema, tabela, mi)
-        elif mc.get("titulo") and nota_c > melhor_c:
-            melhor_c, cabecalho = nota_c, (schema, tabela, mc)
-
-    return cabecalho, item
-
-
-# ─────────────────────────────────────────────────────────────────────────────────────────
-# Extracao
-# ─────────────────────────────────────────────────────────────────────────────────────────
 
 def texto(v) -> str:
-    if v is None:
-        return ""
-    if isinstance(v, (dict, list)):
-        return json.dumps(v, ensure_ascii=False)
-    return str(v).strip()
+    return "" if v is None else str(v).strip()
 
 
-def booleano(v, padrao=True) -> bool:
-    if v is None:
-        return padrao
-    if isinstance(v, bool):
-        return v
-    return str(v).strip().lower() in ("1", "true", "t", "s", "sim", "y", "yes", "ativo")
+def ler_chapters(conn) -> list[dict]:
+    return [
+        {"id": texto(r[0]), "titulo": texto(r[1]), "descricao": texto(r[2]), "ordem": r[3] or 0}
+        for r in conn.run("SELECT id, title, description, ordem FROM public.chapters ORDER BY ordem, title")
+    ]
 
 
-def extrair(conn) -> list[dict]:
-    """Devolve os manuais ja no formato do destino."""
-    palpite_cab, palpite_itm = (None, None) if (MAPA_MANUAL and MAPA_ITEM) else adivinhar(conn)
-    cab = MAPA_MANUAL or palpite_cab
-    itm = MAPA_ITEM or palpite_itm
+def ler_articles(conn) -> list[dict]:
+    sql = ("SELECT id, title, content, chapter_id, ordem, video_url, section_number, is_published "
+           "FROM public.articles ")
+    if not INCLUIR_NAO_PUBLICADOS:
+        sql += "WHERE COALESCE(is_published, true) = true "
+    sql += "ORDER BY section_number, ordem, title"
 
-    if not cab:
-        sys.exit("Nao identifiquei a tabela do manual no Supabase.\n"
-                 "Rode 'inspecionar' e preencha MAPA_MANUAL/MAPA_ITEM no fim deste arquivo.")
-
-    schema_c, tab_c, mc = cab
-    manuais = []
-
-    campos = [c for c in mc.values() if c]
-    sel = ", ".join('"%s"' % c for c in campos)
-    linhas = conn.run('SELECT %s FROM "%s"."%s"' % (sel, schema_c, tab_c))
-    idx = {c: i for i, c in enumerate(campos)}
-
-    def val(linha, destino):
-        col = mc.get(destino)
-        return linha[idx[col]] if col else None
-
-    for linha in linhas:
-        controller = texto(val(linha, "controller"))
-        action = texto(val(linha, "action"))
-
-        # Alguns cadastros guardam a tela como "Controller/Action" numa coluna so.
-        if "/" in controller and not action:
-            controller, action = controller.split("/", 1)
-
-        tipo = texto(val(linha, "tipo")).upper()[:1]
-        if tipo not in ("S", "P"):
-            tipo = "S" if controller else "P"
-
-        manuais.append({
-            "origem_id": val(linha, "id"),
-            "tipo": tipo,
-            "controller": controller if tipo == "S" else "",
-            "action": action if tipo == "S" else "",
-            "titulo": texto(val(linha, "titulo"))[:200] or "(sem titulo)",
-            "subtitulo": texto(val(linha, "subtitulo"))[:300],
-            "ativo": booleano(val(linha, "ativo")),
-            "itens": [],
-        })
-
-    if itm:
-        schema_i, tab_i, mi = itm
-        campos_i = [c for c in mi.values() if c]
-        sel_i = ", ".join('"%s"' % c for c in campos_i)
-        ordem = mi.get("sequencia") or mi.get("id")
-        sql = 'SELECT %s FROM "%s"."%s"' % (sel_i, schema_i, tab_i)
-        if ordem:
-            sql += ' ORDER BY "%s"' % ordem
-        linhas_i = conn.run(sql)
-        idx_i = {c: i for i, c in enumerate(campos_i)}
-
-        por_pai: dict[str, list] = {}
-        for linha in linhas_i:
-            def vi(destino):
-                col = mi.get(destino)
-                return linha[idx_i[col]] if col else None
-
-            pai = texto(vi("pai"))
-            por_pai.setdefault(pai, []).append({
-                "titulo": texto(vi("titulo"))[:200],
-                "conteudo": limpar_html(texto(vi("conteudo"))),
-                "tipo_nota": texto(vi("tipo_nota")).upper()[:1],
-                "nota": texto(vi("nota"))[:1000],
-                "imagem": texto(vi("imagem"))[:500],
-                "video": url_valida(texto(vi("video"))),
-            })
-
-        for m in manuais:
-            secoes = por_pai.get(texto(m["origem_id"]), [])
-            for n, s in enumerate(secoes, start=1):
-                s["sequencia"] = n
-                if not s["titulo"]:
-                    s["titulo"] = "Passo %d" % n
-            m["itens"] = secoes
-
-    return manuais
-
-
-def limpar_html(t: str) -> str:
-    """O painel formata texto simples (negrito com ** e listas com '- '); conteudo que veio
-    como HTML vira esse texto, em vez de aparecer com as tags na tela."""
-    if "<" not in t:
-        return t
-    t = re.sub(r"(?i)<br\s*/?>", "\n", t)
-    t = re.sub(r"(?i)</p>", "\n\n", t)
-    t = re.sub(r"(?i)<li[^>]*>", "- ", t)
-    t = re.sub(r"(?i)</li>", "\n", t)
-    t = re.sub(r"(?i)<(b|strong)>(.*?)</\1>", r"**\2**", t, flags=re.S)
-    t = re.sub(r"<[^>]+>", "", t)
-    t = (t.replace("&nbsp;", " ").replace("&amp;", "&")
-          .replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", '"'))
-    return re.sub(r"\n{3,}", "\n\n", t).strip()
+    return [
+        {
+            "id": texto(r[0]),
+            "titulo": texto(r[1]),
+            "conteudo": r[2] or "",
+            "chapter_id": texto(r[3]),
+            "ordem": r[4] or 0,
+            "video": url_valida(texto(r[5])),
+            "secao_numero": texto(r[6]),
+            "publicado": bool(r[7]) if r[7] is not None else True,
+        }
+        for r in conn.run(sql)
+    ]
 
 
 def url_valida(u: str) -> str:
@@ -338,24 +198,269 @@ def url_valida(u: str) -> str:
 
 
 # ─────────────────────────────────────────────────────────────────────────────────────────
+# Markdown do artigo -> secoes do manual
+#
+# O painel do PCM renderiza Markdown, entao o texto vai como esta. O que o script faz e
+# quebrar o artigo em secoes: cada "## titulo" vira uma secao recolhivel no painel.
+# ─────────────────────────────────────────────────────────────────────────────────────────
+
+def dividir_em_secoes(conteudo: str, titulo_artigo: str) -> list[dict]:
+
+    txt = (conteudo or "").replace("\r\n", "\n").replace("\r", "\n")
+
+    # O H1 do topo repete o titulo do artigo, que ja e o titulo do manual.
+    txt = re.sub(r"\A\s*#\s+[^\n]*\n", "", txt)
+
+    # Quebra nos titulos de nivel 2, preservando o texto que vem antes do primeiro.
+    partes = re.split(r"^##\s+(.+)$", txt, flags=re.M)
+
+    secoes = []
+    abertura = partes[0].strip()
+    if abertura:
+        secoes.append({"titulo": "Visão geral", "conteudo": abertura})
+
+    for i in range(1, len(partes) - 1, 2):
+        titulo = partes[i].strip()
+        corpo = partes[i + 1].strip()
+        if titulo or corpo:
+            secoes.append({"titulo": titulo[:200] or "Passo %d" % (len(secoes) + 1), "conteudo": corpo})
+
+    # Artigo sem "##" nenhum: o texto inteiro e uma secao so.
+    if not secoes:
+        corpo = txt.strip()
+        if corpo:
+            secoes.append({"titulo": titulo_artigo[:200] or "Conteúdo", "conteudo": corpo})
+
+    # Uma secao unica chamada "Visão geral" nao diz nada: usa o titulo do artigo.
+    if len(secoes) == 1 and secoes[0]["titulo"] == "Visão geral":
+        secoes[0]["titulo"] = titulo_artigo[:200] or "Visão geral"
+
+    for n, s in enumerate(secoes, start=1):
+        s["sequencia"] = n
+        s["tipo_nota"] = ""
+        s["nota"] = ""
+        s["imagem"] = ""     # imagens do artigo ficam embutidas no Markdown, na posicao certa
+        s["video"] = ""
+
+    return secoes
+
+
+# ─────────────────────────────────────────────────────────────────────────────────────────
+# De-para de telas
+# ─────────────────────────────────────────────────────────────────────────────────────────
+
+RUIDO = {
+    "de", "do", "da", "dos", "das", "e", "a", "o", "as", "os", "em", "no", "na", "para",
+    "com", "por", "cadastro", "cadastros", "gestao", "gerenciamento", "controle",
+    "manual", "como", "usar", "modulo", "tela", "sistema", "pcm",
+}
+
+
+# O menu fala a lingua do sistema e o artigo fala a lingua de quem escreve o treinamento.
+SINONIMOS = {
+    "colaborador": "funcionario",
+    "ronda": "rotina",
+    "chamado": "requisicao",
+    "os": "ordem",
+    "insumo": "produto",
+    "material": "produto",
+    "peca": "produto",
+    "equipe": "funcionario",
+    "predio": "unidade",
+    "apartamento": "uh",
+    "quarto": "uh",
+}
+
+# O controller Excel sao os botoes de exportacao, e Relatorio sao as consultas: quando o
+# titulo bate igual numa tela e num deles, o manual e da tela.
+PENALIDADE = {"Excel": 0.35, "Relatorio": 0.12}
+
+
+def normalizar(s: str) -> str:
+    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9 ]+", " ", s.lower()).strip()
+
+
+def radical(p: str) -> str:
+    """Plural fora do caminho: 'rotinas' e 'rotina' precisam bater, e 'ordens'/'ordem'."""
+    p = SINONIMOS.get(p, p)
+    if len(p) > 4:
+        if p.endswith("oes") or p.endswith("aes"):
+            return p[:-3] + "ao"
+        if p.endswith("ns"):
+            return p[:-2] + "m"
+        if p.endswith("eis"):
+            return p[:-3] + "el"
+        if p.endswith("es") and not p.endswith("ses"):
+            return p[:-2]
+        if p.endswith("s"):
+            return p[:-1]
+    return p
+
+
+def palavras(s: str) -> set:
+    return {radical(p) for p in normalizar(s).split() if p and p not in RUIDO and len(p) > 2}
+
+
+def carregar_telas() -> list[tuple[str, str, str]]:
+    if not os.path.exists(ARQUIVO_TELAS):
+        sys.exit("Nao achei %s — ele vem junto no repositorio, na mesma pasta deste script."
+                 % os.path.basename(ARQUIVO_TELAS))
+
+    with open(ARQUIVO_TELAS, encoding="utf-8-sig", newline="") as f:
+        return [(l["nome_no_menu"], l["controller"], l["action"])
+                for l in csv.DictReader(f, delimiter=";")]
+
+
+def casar_tela(titulo: str, telas: list) -> tuple[str, str, float]:
+    """Melhor tela para o titulo do artigo, com a nota de 0 a 1."""
+    pa = palavras(titulo)
+    # "Logbook" no artigo e "Log Book" no menu: sem espaco, as duas viram a mesma coisa.
+    junto_artigo = normalizar(titulo).replace(" ", "")
+    melhor, nota_melhor = None, 0.0
+
+    for nome, controller, action in telas:
+        pt = palavras(nome)
+        if not pt:
+            continue
+
+        # Quanto do nome da tela aparece no titulo do artigo, com desempate por
+        # semelhanca das strings inteiras (pega genero e abreviacao).
+        cobertura = len(pa & pt) / len(pt)
+        semelhanca = SequenceMatcher(None, normalizar(titulo), normalizar(nome)).ratio()
+        nota = cobertura * 0.75 + semelhanca * 0.25
+
+        junto_tela = normalizar(nome).replace(" ", "")
+        if junto_tela and junto_tela in junto_artigo:
+            nota = max(nota, 0.80)
+
+        nota -= PENALIDADE.get(controller, 0.0)
+
+        if nota > nota_melhor:
+            melhor, nota_melhor = (controller, action), nota
+
+    if not melhor or nota_melhor < 0.45:
+        return "", "", nota_melhor
+
+    return melhor[0], melhor[1], nota_melhor
+
+
+def confianca(nota: float) -> str:
+    return "alta" if nota >= 0.75 else "media" if nota >= 0.55 else "baixa"
+
+
+def gerar_mapa(artigos: list[dict], chapters: dict) -> None:
+    telas = carregar_telas()
+
+    with open(ARQUIVO_MAPA, "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.writer(f, delimiter=";")
+        w.writerow(["artigo_id", "titulo", "trilha", "controller", "action", "confianca"])
+
+        contagem = {"alta": 0, "media": 0, "baixa": 0, "sem": 0}
+        for a in artigos:
+            controller, action, nota = casar_tela(a["titulo"], telas)
+            marca = confianca(nota) if controller else "sem"
+            contagem[marca] += 1
+            w.writerow([a["id"], a["titulo"], chapters.get(a["chapter_id"], {}).get("titulo", ""),
+                        controller, action, marca])
+
+    print("Gerado %s com %d artigos:" % (os.path.basename(ARQUIVO_MAPA), len(artigos)))
+    print("   %d alta, %d media, %d baixa, %d sem tela"
+          % (contagem["alta"], contagem["media"], contagem["baixa"], contagem["sem"]))
+    print("\nAbra no Excel e revise a coluna controller/action. As de confianca 'media' e")
+    print("'baixa' sao palpites — confira. Linha com controller vazio vira manual de processo.")
+    print("Depois rode:  python %s previa" % os.path.basename(__file__))
+
+
+def carregar_mapa() -> dict:
+    if not os.path.exists(ARQUIVO_MAPA):
+        return {}
+    with open(ARQUIVO_MAPA, encoding="utf-8-sig", newline="") as f:
+        return {l["artigo_id"]: (l["controller"].strip(), l["action"].strip())
+                for l in csv.DictReader(f, delimiter=";")}
+
+
+# ─────────────────────────────────────────────────────────────────────────────────────────
+# Monta os manuais no formato do destino
+# ─────────────────────────────────────────────────────────────────────────────────────────
+
+def montar(conn) -> tuple[list[dict], list[dict]]:
+    chapters = {c["id"]: c for c in ler_chapters(conn)}
+    artigos = ler_articles(conn)
+
+    mapa = carregar_mapa()
+    telas = carregar_telas() if not mapa else None
+
+    # ---- trilhas: manuais de processo ----
+    processos = []
+    usados = {a["chapter_id"] for a in artigos}
+    for c in sorted(chapters.values(), key=lambda x: (x["ordem"], x["titulo"])):
+        if c["id"] not in usados:
+            continue
+        processos.append({
+            "chave": "trilha:" + c["id"],
+            "tipo": "P",
+            "controller": "", "action": "",
+            "titulo": c["titulo"][:200],
+            "subtitulo": c["descricao"][:300],
+            "ativo": True,
+            "processo": "",
+            "itens": [{
+                "sequencia": 1,
+                "titulo": "Sobre esta trilha",
+                "conteudo": c["descricao"] or c["titulo"],
+                "tipo_nota": "", "nota": "", "imagem": "", "video": "",
+            }] if c["descricao"] else [],
+        })
+
+    # ---- artigos: manuais de tela ----
+    manuais = []
+    for a in artigos:
+        if a["id"] in mapa:
+            controller, action = mapa[a["id"]]
+        else:
+            controller, action, _ = casar_tela(a["titulo"], telas)
+
+        secoes = dividir_em_secoes(a["conteudo"], a["titulo"])
+        if a["video"] and secoes:
+            secoes[0]["video"] = a["video"]
+
+        manuais.append({
+            "chave": "artigo:" + a["id"],
+            "tipo": "S" if controller else "P",
+            "controller": controller,
+            "action": action,
+            "titulo": a["titulo"][:200] or a["id"],
+            "subtitulo": (("%s — " % a["secao_numero"]) if a["secao_numero"] else "")
+                         + chapters.get(a["chapter_id"], {}).get("titulo", ""),
+            "ativo": a["publicado"],
+            "processo": ("trilha:" + a["chapter_id"]) if a["chapter_id"] in chapters else "",
+            "itens": secoes,
+        })
+
+    return processos, manuais
+
+
+# ─────────────────────────────────────────────────────────────────────────────────────────
 # Escrita no SQL Server
 # ─────────────────────────────────────────────────────────────────────────────────────────
 
 def lit(v) -> str:
-    """Literal T-SQL. N'' para preservar acento em nvarchar."""
+    """Literal T-SQL. N'' para preservar acento e emoji."""
     if v is None or v == "":
         return "NULL"
     return "N'" + str(v).replace("'", "''") + "'"
 
 
-def gerar_sql(manuais: list[dict]) -> str:
+def gerar_sql(processos: list[dict], manuais: list[dict]) -> str:
     L = []
     A = L.append
     A("/* Carga do manual — gerada por migrar_manual_supabase.py em %s */"
       % datetime.now().strftime("%d/%m/%Y %H:%M"))
-    A("/* Rode DEPOIS de 2026-08-27_manual_integrado.sql, que cria as tabelas. */")
+    A("/* Rode DEPOIS de 2026-08-27_manual_integrado.sql, que cria as tabelas.        */")
     A("")
     A("SET NOCOUNT ON;")
+    A("SET XACT_ABORT ON;")
     A("BEGIN TRANSACTION;")
     A("")
 
@@ -366,17 +471,25 @@ def gerar_sql(manuais: list[dict]) -> str:
         A("DELETE FROM tb_manual WHERE usuario = %s;" % lit(ORIGEM))
         A("")
 
+    # As trilhas entram primeiro: os artigos apontam para elas.
     A("DECLARE @codigo int;")
+    A("DECLARE @trilha TABLE (chave varchar(200) PRIMARY KEY, codigo int);")
     A("")
 
-    for m in manuais:
-        A("-- %s%s" % (m["titulo"], (" (%s/%s)" % (m["controller"], m["action"])) if m["controller"] else ""))
+    def inserir(m, guarda_trilha=False):
+        A("-- %s%s" % (m["titulo"], (" [%s/%s]" % (m["controller"], m["action"])).replace("/]", "]")
+                       if m["controller"] else " [processo]"))
         A("INSERT INTO tb_manual (codigo_empresa, tipo, controller, [action], titulo, subtitulo, ativo, usuario, data_inclusao)")
         A("VALUES (%s, %s, %s, %s, %s, %s, %d, %s, GETDATE());" % (
             "NULL" if not CODIGO_EMPRESA else str(CODIGO_EMPRESA),
             lit(m["tipo"]), lit(m["controller"]), lit(m["action"]),
             lit(m["titulo"]), lit(m["subtitulo"]), 1 if m["ativo"] else 0, lit(ORIGEM)))
         A("SET @codigo = SCOPE_IDENTITY();")
+        if guarda_trilha:
+            A("INSERT INTO @trilha (chave, codigo) VALUES (%s, @codigo);" % lit(m["chave"]))
+        if m.get("processo"):
+            A("UPDATE tb_manual SET codigo_manual_processo = "
+              "(SELECT codigo FROM @trilha WHERE chave = %s) WHERE codigo = @codigo;" % lit(m["processo"]))
 
         for s in m["itens"]:
             A("INSERT INTO tb_manual_item (codigo_manual, sequencia, titulo, conteudo, tipo_nota, nota, imagem, video, ativo)")
@@ -386,6 +499,16 @@ def gerar_sql(manuais: list[dict]) -> str:
                 lit(s["nota"]), lit(s["imagem"]), lit(s["video"])))
         A("")
 
+    A("-- ---- Trilhas (manuais de processo) ----")
+    A("")
+    for p in processos:
+        inserir(p, guarda_trilha=True)
+
+    A("-- ---- Artigos ----")
+    A("")
+    for m in manuais:
+        inserir(m)
+
     A("COMMIT TRANSACTION;")
     A("")
     A("SELECT manuais = (SELECT COUNT(*) FROM tb_manual WHERE usuario = %s)," % lit(ORIGEM))
@@ -394,7 +517,7 @@ def gerar_sql(manuais: list[dict]) -> str:
     return "\n".join(L)
 
 
-def gravar_sqlserver(manuais: list[dict]) -> None:
+def gravar_sqlserver(processos: list[dict], manuais: list[dict]) -> None:
     try:
         import pyodbc
     except ImportError:
@@ -408,7 +531,8 @@ def gravar_sqlserver(manuais: list[dict]) -> None:
     cs = "DRIVER={%s};SERVER=%s;DATABASE=%s;UID=%s;PWD=%s;TrustServerCertificate=yes" % (
         driver, MSSQL["server"], MSSQL["database"], MSSQL["user"], MSSQL["password"])
 
-    with pyodbc.connect(cs, autocommit=False) as cn:
+    cn = pyodbc.connect(cs, autocommit=False)
+    try:
         cur = cn.cursor()
 
         if LIMPAR_ANTES:
@@ -417,8 +541,10 @@ def gravar_sqlserver(manuais: list[dict]) -> None:
             cur.execute("UPDATE tb_manual SET codigo_manual_processo = NULL WHERE usuario = ?", ORIGEM)
             cur.execute("DELETE FROM tb_manual WHERE usuario = ?", ORIGEM)
 
+        codigos = {}
         secoes = 0
-        for m in manuais:
+
+        for m in processos + manuais:
             cur.execute(
                 "INSERT INTO tb_manual (codigo_empresa, tipo, controller, [action], titulo, "
                 "subtitulo, ativo, usuario, data_inclusao) "
@@ -426,6 +552,11 @@ def gravar_sqlserver(manuais: list[dict]) -> None:
                 (CODIGO_EMPRESA or None), m["tipo"], m["controller"] or None, m["action"] or None,
                 m["titulo"], m["subtitulo"] or None, 1 if m["ativo"] else 0, ORIGEM)
             codigo = cur.fetchone()[0]
+            codigos[m["chave"]] = codigo
+
+            if m.get("processo") and m["processo"] in codigos:
+                cur.execute("UPDATE tb_manual SET codigo_manual_processo = ? WHERE codigo = ?",
+                            codigos[m["processo"]], codigo)
 
             for s in m["itens"]:
                 cur.execute(
@@ -437,65 +568,96 @@ def gravar_sqlserver(manuais: list[dict]) -> None:
                 secoes += 1
 
         cn.commit()
+    except Exception:
+        cn.rollback()
+        raise
+    finally:
+        cn.close()
 
-    print("Gravado no SQL Server: %d manuais, %d secoes." % (len(manuais), secoes))
+    print("Gravado no SQL Server: %d manuais, %d secoes." % (len(processos) + len(manuais), secoes))
 
 
 # ─────────────────────────────────────────────────────────────────────────────────────────
-# De-para manual — preencha SO se o palpite automatico errar
-#
-#   MAPA_MANUAL = ("public", "minha_tabela_manual", {
-#       "id": "id", "titulo": "titulo", "subtitulo": "descricao",
-#       "controller": "modulo", "action": "tela", "tipo": None, "ativo": "ativo"})
-#   MAPA_ITEM = ("public", "minha_tabela_secao", {
-#       "id": "id", "pai": "id_manual", "titulo": "titulo", "conteudo": "texto",
-#       "sequencia": "ordem", "tipo_nota": None, "nota": None,
-#       "imagem": "imagem", "video": "link_video"})
-# ─────────────────────────────────────────────────────────────────────────────────────────
-
-MAPA_MANUAL = None
-MAPA_ITEM = None
-
-
+# Comandos
 # ─────────────────────────────────────────────────────────────────────────────────────────
 
 def cmd_inspecionar(conn) -> None:
     print("Tabelas no Supabase\n" + "=" * 70)
-    for schema, tabela in tabelas(conn):
-        cols = colunas(conn, schema, tabela)
-        print("\n%s.%s  (%d linhas)" % (schema, tabela, contar(conn, schema, tabela)))
+    for schema, tabela in conn.run(
+        "SELECT table_schema, table_name FROM information_schema.tables "
+        "WHERE table_type = 'BASE TABLE' AND table_schema NOT IN ('pg_catalog', 'information_schema') "
+        "ORDER BY 1, 2"
+    ):
+        cols = [r[0] for r in conn.run(
+            "SELECT column_name FROM information_schema.columns "
+            "WHERE table_schema = :s AND table_name = :t ORDER BY ordinal_position", s=schema, t=tabela)]
+        n = conn.run('SELECT COUNT(*) FROM "%s"."%s"' % (schema, tabela))[0][0]
+        print("\n%s.%s  (%d linhas)" % (schema, tabela, n))
         print("  colunas: " + ", ".join(cols))
-        amostra = conn.run('SELECT * FROM "%s"."%s" LIMIT 2' % (schema, tabela))
-        for linha in amostra:
-            campos = ["%s=%s" % (c, texto(v)[:60]) for c, v in zip(cols, linha) if texto(v)]
-            print("    - " + " | ".join(campos[:8]))
-
-    cab, itm = adivinhar(conn)
-    print("\n\nPalpite do de-para\n" + "=" * 70)
-    print("cabecalho: %s" % ("%s.%s -> %s" % (cab[0], cab[1], cab[2]) if cab else "NAO IDENTIFICADO"))
-    print("secoes:    %s" % ("%s.%s -> %s" % (itm[0], itm[1], itm[2]) if itm else "NAO IDENTIFICADO"))
-    print("\nSe algo estiver errado, preencha MAPA_MANUAL/MAPA_ITEM no fim do script.")
 
 
-def cmd_previa(manuais: list[dict]) -> None:
-    total = sum(len(m["itens"]) for m in manuais)
+def cmd_amostra(conn, artigo_id: str = "") -> None:
+    artigos = ler_articles(conn)
+    if not artigos:
+        sys.exit("Nenhum artigo publicado em public.articles.")
+
+    a = next((x for x in artigos if x["id"] == artigo_id), None) if artigo_id else artigos[0]
+    if a is None:
+        print("Artigo '%s' nao encontrado. Alguns ids:" % artigo_id)
+        for x in artigos[:15]:
+            print("   %s" % x["id"])
+        return
+
+    print("=" * 74)
+    print("%s   (%s)" % (a["titulo"], a["id"]))
+    print("trilha: %s | secao: %s | video: %s" % (a["chapter_id"], a["secao_numero"], a["video"] or "—"))
+    print("=" * 74)
+    print("\n----- CONTEUDO ORIGINAL (Markdown) -----\n")
+    print(a["conteudo"][:4000] + ("\n[... cortado]" if len(a["conteudo"]) > 4000 else ""))
+
+    secoes = dividir_em_secoes(a["conteudo"], a["titulo"])
+    print("\n\n----- VIRA %d SECAO(OES) NO PCM -----" % len(secoes))
+    for s in secoes:
+        corpo = s["conteudo"]
+        print("\n  %d. %s   (%d caracteres)" % (s["sequencia"], s["titulo"], len(corpo)))
+        for linha in corpo.splitlines()[:4]:
+            print("       | " + linha[:90])
+        if len(corpo.splitlines()) > 4:
+            print("       | ...")
+
+
+def cmd_previa(processos: list[dict], manuais: list[dict]) -> None:
+    total = sum(len(m["itens"]) for m in processos + manuais)
     videos = sum(1 for m in manuais for s in m["itens"] if s["video"])
-    imagens = sum(1 for m in manuais for s in m["itens"] if s["imagem"])
-    print("%d manuais, %d secoes (%d com imagem, %d com video)\n" % (len(manuais), total, imagens, videos))
+    telas = sum(1 for m in manuais if m["tipo"] == "S")
+    sem = [m for m in manuais if m["tipo"] == "P"]
+
+    print("%d trilhas + %d artigos = %d manuais, %d secoes (%d com video)"
+          % (len(processos), len(manuais), len(processos) + len(manuais), total, videos))
+    print("%d artigos ligados a uma tela, %d ainda sem tela (entram como processo)\n"
+          % (telas, len(sem)))
+
+    for p in processos:
+        print("  [trilha]  %s" % p["titulo"])
+    print()
     for m in manuais:
-        alvo = ("%s/%s" % (m["controller"], m["action"])).rstrip("/") if m["controller"] else "(processo)"
-        print("- [%s] %s  ->  %s  (%d secoes)" % (m["tipo"], m["titulo"], alvo, len(m["itens"])))
-        for s in m["itens"][:3]:
-            marca = ("  video" if s["video"] else "") + ("  imagem" if s["imagem"] else "")
-            print("     %d. %s%s" % (s["sequencia"], s["titulo"][:60], marca))
-        if len(m["itens"]) > 3:
-            print("     ... mais %d" % (len(m["itens"]) - 3))
+        if m["tipo"] != "S":
+            continue
+        print("  %-46s -> %s/%s  (%d secoes)"
+              % (m["titulo"][:46], m["controller"], m["action"], len(m["itens"])))
+
+    if sem:
+        print("\n  Sem tela definida (viram manual de processo):")
+        for m in sem:
+            print("     %s" % m["titulo"])
+        print("\n  Para ligar a uma tela, edite %s e rode de novo." % os.path.basename(ARQUIVO_MAPA))
 
 
 def main() -> None:
     cmd = sys.argv[1] if len(sys.argv) > 1 else "previa"
+    arg = sys.argv[2] if len(sys.argv) > 2 else ""
 
-    if cmd not in ("inspecionar", "previa", "gerar-sql", "migrar"):
+    if cmd not in ("inspecionar", "amostra", "mapear", "previa", "gerar-sql", "migrar"):
         sys.exit(__doc__)
 
     conn = conectar_pg()
@@ -504,25 +666,38 @@ def main() -> None:
             cmd_inspecionar(conn)
             return
 
-        manuais = extrair(conn)
+        if cmd == "amostra":
+            cmd_amostra(conn, arg)
+            return
+
+        if cmd == "mapear":
+            chapters = {c["id"]: c for c in ler_chapters(conn)}
+            gerar_mapa(ler_articles(conn), chapters)
+            return
+
+        processos, manuais = montar(conn)
     finally:
         conn.close()
 
     if not manuais:
-        sys.exit("Nada encontrado para migrar. Rode 'inspecionar' e confira o de-para.")
+        sys.exit("Nada encontrado para migrar em public.articles.")
+
+    if not os.path.exists(ARQUIVO_MAPA):
+        print("(sem %s — usando o palpite automatico de telas; rode 'mapear' para revisar)\n"
+              % os.path.basename(ARQUIVO_MAPA))
 
     if cmd == "previa":
-        cmd_previa(manuais)
+        cmd_previa(processos, manuais)
     elif cmd == "gerar-sql":
         # utf-8-sig: sem o BOM, o SSMS abre o arquivo como ANSI e "Ordens de Serviço"
         # chega no banco com os acentos trocados.
         with open(ARQUIVO_SQL, "w", encoding="utf-8-sig") as f:
-            f.write(gerar_sql(manuais))
-        print("Gerado %s — abra no SSMS (banco PCM) e execute." % ARQUIVO_SQL)
-        cmd_previa(manuais)
+            f.write(gerar_sql(processos, manuais))
+        cmd_previa(processos, manuais)
+        print("\nGerado %s — abra no SSMS (banco PCM) e execute." % os.path.basename(ARQUIVO_SQL))
     elif cmd == "migrar":
-        cmd_previa(manuais)
-        gravar_sqlserver(manuais)
+        cmd_previa(processos, manuais)
+        gravar_sqlserver(processos, manuais)
 
 
 if __name__ == "__main__":

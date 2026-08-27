@@ -1,7 +1,7 @@
 # Manual integrado — como publicar
 
 O manual (botão "?" do cabeçalho + telas de cadastro) fica **no banco PCM, no SQL Server**.
-O conteúdo que hoje está no Supabase entra por uma migração de uma vez só.
+O conteúdo que está no Supabase entra por uma migração de uma vez só.
 
 ## 1. Criar a estrutura
 
@@ -22,26 +22,51 @@ manual já funciona**: quem tem `adm_perfil` mantém o manual.
 
 ## 2. Trazer o conteúdo do Supabase
 
-`migrar_manual_supabase.py` lê o Postgres e grava no SQL Server. Rode numa máquina que
-enxergue os dois bancos (o NOTE-KLEBER serve).
-
 ```bash
 pip install pg8000          # obrigatório, lê o Supabase
 pip install pyodbc          # opcional, grava direto no SQL Server
-
-python migrar_manual_supabase.py inspecionar   # 1. mostra tabelas, colunas e amostra
-python migrar_manual_supabase.py previa        # 2. mostra o que viria, sem gravar
-python migrar_manual_supabase.py gerar-sql     # 3. gera carga_manual.sql para o SSMS
-python migrar_manual_supabase.py migrar        #    (ou grava direto, se tiver pyodbc)
 ```
 
-A estrutura de origem **não precisa** estar no padrão novo: o script deduz o de-para pelos
-nomes das colunas (`titulo`/`title`, `conteudo`/`texto`/`content`, `ordem`/`sequence`,
-`imagem`, `video`/`link`…). Se errar o palpite, o `inspecionar` mostra os nomes reais e
-você corrige `MAPA_MANUAL` / `MAPA_ITEM` no fim do arquivo.
+### De onde vem o quê
 
-O que ele faz de bônus: conteúdo que veio como HTML vira o texto simples que o painel
-formata (`**negrito**`, listas com `- `), e link de vídeo sem `http(s)` não migra.
+| No Supabase | Vira no PCM |
+|---|---|
+| `public.chapters` (12 trilhas) | Manual de **processo** — aparece como "Ver também" no rodapé do painel |
+| `public.articles` (82 artigos) | Manual de **tela** — um por artigo, com o botão "?" da tela |
+| `articles.content` (Markdown) | **Seções** do manual, quebradas nos títulos `##` |
+| `articles.video_url` | Vídeo da primeira seção (YouTube/Vimeo abre incorporado) |
+
+### Qual tela é cada artigo
+
+O Supabase organiza o manual **por trilha de treinamento**, não por tela — `articles` não
+tem controller/action. Como o "?" precisa saber a tela, o script casa o título do artigo
+com o nome que a tela tem **no menu do PCM** (`telas_pcm.csv`, 159 telas extraídas do
+`_Sidebar`) e grava o palpite num CSV para você revisar.
+
+```bash
+python migrar_manual_supabase.py mapear
+```
+
+Abra o **`mapa_telas.csv`** no Excel. A coluna `confianca` diz o quanto confiar:
+
+- **alta** — bateu quase exato (`Categoria de Serviço` → `CadastroBasico/CategoriaIndex`)
+- **media** / **baixa** — palpite, confira
+- **sem** — não achou tela; o artigo entra como manual de processo
+
+Corrija o que estiver errado e salve. Linha com `controller` vazio vira manual de
+processo — continua no cadastro, visível e editável, e você liga na tela depois.
+
+### Rodar
+
+```bash
+python migrar_manual_supabase.py amostra    # vê um artigo inteiro e como fica dividido
+python migrar_manual_supabase.py previa     # o que seria migrado, sem gravar
+python migrar_manual_supabase.py gerar-sql  # gera carga_manual.sql para o SSMS
+python migrar_manual_supabase.py migrar     # ou grava direto (precisa de pyodbc)
+```
+
+Comece pelo `amostra`: ele mostra o Markdown original de um artigo e as seções que vão
+sair dele. É a maneira mais rápida de ver se a quebra ficou boa antes de migrar os 82.
 
 Rodar a migração de novo é seguro — a carga apaga só o que veio de uma execução anterior
 (os registros com `usuario = 'supabase'`).
@@ -51,11 +76,16 @@ Rodar a migração de novo é seguro — a carga apaga só o que veio de uma exe
 - **Administração → Manual** lista o que foi migrado.
 - O **"?"** no cabeçalho abre o manual da tela em que você está.
 
-Se o "?" abrir vazio numa tela que deveria ter manual, é porque `controller`/`action` do
-registro não batem com a URL. A grade mostra a rota de cada manual; a tela de edição tem
-os combos com as rotas válidas do sistema.
+Se o "?" abrir vazio numa tela que deveria ter manual, o `controller`/`action` do registro
+não bate com a URL. A grade mostra a rota de cada manual; a tela de edição tem os combos
+com as rotas válidas do sistema.
 
 ## Detalhes que valem saber
+
+**O conteúdo é Markdown.** O painel renderiza títulos, **negrito**, *itálico*, `código`,
+listas, **tabelas**, citação, imagem e link. Tudo é escapado antes de virar marcação, e
+link só passa se for `http(s)` ou caminho do próprio site — texto do manual não vira
+script na tela de quem lê. Tabela larga rola dentro dela mesma, sem esticar o painel.
 
 **Tela, módulo e processo.** `tipo = 'S'` com `action` preenchida é o manual daquela tela;
 com `action` vazia vale para o módulo inteiro (qualquer tela do mesmo controller que não
@@ -67,9 +97,10 @@ como "ver também" no rodapé do painel das telas que apontam para ele.
 cliente. Uma empresa que precise do próprio texto de uma tela recebe a linha com o código
 dela por script, e essa linha vence a global na leitura, sem afetar as demais.
 
-**Imagens.** Sobem para `~/Files/Manual` e a seção guarda o caminho relativo. Se a base
-antiga tinha imagens em outro lugar, o caminho vem como está: publique os arquivos nesse
-mesmo caminho ou ajuste a coluna `imagem` depois da carga.
+**Imagens.** As imagens dos artigos ficam embutidas no Markdown, na posição em que o autor
+colocou. Se apontam para um servidor que vai sair do ar, publique os arquivos em
+`~/Files/Manual` e ajuste as URLs no texto. O campo `imagem` da seção continua existindo
+para quem cadastra pela tela, com upload direto.
 
 **Vídeos.** YouTube e Vimeo abrem incorporados no painel (o player só carrega quando a
 seção é aberta); qualquer outra URL vira link para abrir em outra aba.

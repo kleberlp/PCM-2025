@@ -6901,7 +6901,7 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Texto da seção. Use **negrito** e linhas começando com &quot;- &quot; para listas..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Texto da seção em Markdown: **negrito**, listas com &quot;- &quot;, tabelas com | e imagens com ![](url)..
         /// </summary>
         public static string manual_conteudo_dica {
             get {

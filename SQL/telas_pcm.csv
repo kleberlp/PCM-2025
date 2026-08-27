@@ -1,0 +1,160 @@
+﻿nome_no_menu;controller;action
+Agenda;Agenda;Agenda
+Agenda;Tudo;AgendaTudo
+Apontamento;Governanca;Apontamento
+Apontamento;Lavanderia;Apontamento
+Ar Condicionado;CadastroBasico;ArCondicionadoIndex
+Ativo Fixo;AtivoFixo;AssetIndex
+Auditoria - Corporativo;Auditoria;AuditoriaCorporativoIndex
+Auditoria - Corporativo;CadastroBasico;AuditoriaCorporativoIndex
+Auditoria - Corporativo - Histórico;Auditoria;AuditoriaHistorico
+Auditoria - Cronograma;Qualidade;AuditoriaCronograma
+Auditoria - Externa;AEB;AuditoriaExternaIndex
+Auditoria - Externa;Auditoria;AuditoriaIndex
+Auditoria - Histórico;Qualidade;AuditoriaHistorico
+Auditoria - Qualidade;CadastroBasico;AuditoriaQualidadeIndex
+Auditoria - Qualidade;Qualidade;Auditoria
+Cadastro Básico;Upload;UploadExcel
+Cadastro de PMOC;PMOC;PMOCIndex
+Categoria - Serviço;CadastroBasico;CategoriaIndex
+Checklist;CadastroBasico;ChecklistIndex
+Checklist;Governanca;ChecklistGovernanca
+Checklist;Tudo;ChecklistTudo
+Checklist;UH;ChecklistUH
+Cliente;Administracao;ClienteIndex
+Cliente;CadastroBasico;ClienteIndex
+Cliente - Acordo Comercial;CadastroBasico;ClienteEnxoval
+Colaborador;CadastroBasico;FuncionarioIndex
+Contratos;AEB;ContratoIndex
+Contratos;Financas;ContratoIndex
+Controle de Gastos;Financas;ControleGastoIndex
+Controle de Lavagem;Lavanderia;RelatorioControleGeral
+Cronograma;PMOC;CronogramaPMOC
+Cronograma por Semana;PCM;CronogramaSemana
+Custo - Horas Trabalhadas;Relatorio;CustoHorasTrabalhadas
+Dashboard;Governanca;Dashboard
+Dedetização;CadastroBasico;Dedetizacao
+Dedetização;UH;Dedetizacao
+Dedetização - Histórico;UH;DedetizacaoHistorico
+Departamento;CadastroBasico;DepartamentoIndex
+Departamento - Gestor;CadastroBasico;DepartamentoGestorIndex
+Desempenho - Governança;Home;DesempenhoGovernanca
+Desempenho - Manutenção;Home;Desempenho
+Desempenho - Qualidade;Home;QualidadeDesempenho
+Desempenho das Unidades - Manutenção;Administracao;ConfiguracaoDesempenhoUnidade
+Empresa;Administracao;Empresa
+Entrada de Material;Estoque;Entrada
+Enxoval;CadastroBasico;EnxovalIndex
+Falta;PCM;FaltaIndex
+Família - Equipamento;CadastroBasico;FamiliaEquipamentoIndex
+Fornecedor;CadastroBasico;FornecedorIndex
+Funcionário % Ociosidade;Relatorio;FuncionarioOciosidade
+Função;CadastroBasico;FuncaoIndex
+Gestão de Inventário;AtivoFixo;assetInventoryMng
+Green Planet;Relatorio;GreenPlanet
+Grupo;CadastroBasico;GrupoProdutoIndex
+Grupo - Item de Medição;CadastroBasico;GrupoItemMedicaoIndex
+Histórico;Governanca;Historico
+Histórico;Lavanderia;Historico
+Histórico;Tudo;ChecklistTudoHistorico
+Histórico;UH;ChecklistHistorico
+Histórico - Laudo;PCM;HistoricoLaudo
+Histórico - PMOC;PMOC;HistoricoPMOC
+Histórico - PMOC;PMOC;PMOCHistorico
+Histórico - Preventiva;PCM;HistoricoPreventiva
+Histórico - Rotina;PCM;HistoricoRotina
+Horas Trabalhadas;Relatorio;FuncionarioHorasTrabalhadasNew
+Horas Trabalhadas (Governança);Governanca;FuncionarioHorasTrabalhadasGovernanca
+Interface Opera;Configuracao;InterfaceOpera
+Inventário;AtivoFixo;assetInventory
+Inventário;Estoque;Inventario
+Inventário - Enxoval;Governanca;InventarioEnxoval
+Item - Medição;CadastroBasico;ItemMedicaoIndex
+Item - OS Hóspede;CadastroBasico;ItemOSHospedeIndex
+Itens Gerais;CadastroBasico;ItensGeraisIndex
+Justificativa - Apontamento;CadastroBasico;JustificativaApontamentoIndex
+Justificativa - Cancelamento OS;CadastroBasico;JustificativaCancelamentoOrdemServicoIndex
+Justificativa - Falta;CadastroBasico;JustificativaFaltaIndex
+Lançamento de Despesa;Financas;DespesaIndex
+Laudo / Documentação;AEB;LaudoIndex
+Laudo / Documentação;Auditoria;LaudoIndex
+Laudo / Documentação;CadastroBasico;LaudoIndex
+Laudo / Documentação;PCM;ManutencaoLaudo
+Lavanderia;Governanca;ApontamentoLavanderia
+Listagem;Estoque;Listagem
+Log - Alteração de Status;Governanca;LogAlteracaoStatusGov
+Log Book;LogBook;LogBook
+Log Book;Relatorio;LogBookReport
+Manual;Manual;HelpIndex
+Manutenção;Relatorio;Manutencao
+Manutenção - Apontamento;PCM;ManutencaoApontamento2
+Manutenção x Categoria;Relatorio;ManutencaoCategoria
+Manutenção x Equipamento;Relatorio;ManutencaoEquipamento
+Manutenção x Executor;Relatorio;ManutencaoExecutor
+Manutenção x Setor;Relatorio;ManutencaoSetor
+Manutenção x Solicitante;Relatorio;ManutencaoSolicitante
+Manutenção x Tipo;Relatorio;ManutencaoTipoOrdemServico
+Mapa de Manutenção;CadastroBasico;AtividadeIndex
+Mapa de Manutenção;UH;UHAtividade
+Mapa de Manutenção - Histórico;UH;MapaManutencaoHistorico
+Medição;GreenPlanet;LancamentoIndex
+Metas de Governança;Administracao;MetasParametrosGovernanca
+Movimentação;AtivoFixo;assetMovement
+Movimentação - Enxoval;Governanca;MovimentacaoEnxoval
+Máquinas / Equipamentos;CadastroBasico;EquipamentoIndex
+Normas e Procedimentos;AEB;NormasProcedimentosIndex
+Normas e Procedimentos;Auditoria;NormasProcedimentosIndex
+Não Conformidade;Relatorio;NaoConformidade
+O.S. - Aberto x Concluído;Relatorio;ManutencaoAbertoConcluido
+Ordem de Serviço;Excel;OrdemServico
+Ordem de Serviço;OrdemServico;OrdemServicoIndex2
+Ordem de compra;Estoque;OrdemCompra
+PMOC;PMOC;PMOC2
+PMOC;PMOC;PMOCAndar
+PMOC;PMOC;PMOCBup
+PMOC;Upload;UploadPMOC
+PMOC Mensal;Relatorio;PMOCMes
+Perfil;Administracao;PerfilIndex
+Perfil - Hierarquia;Administracao;PerfilHierarquia
+Planejamento;Governanca;Planejamento
+Planejamento - Histórico;Governanca;PlanejamentoHistorico
+Plano de Ação;Excel;PlanoAcaoQA
+Plano de Ação;PlanoAcao;PlanoAcaoIndex
+Plano de Ação;Qualidade;OrdemServicoIndex
+Prenventiva Mensal;Relatorio;PreventivaMes
+Preventiva;CadastroBasico;PreventivaIndex
+Preventiva;PCM;ManutencaoPreventiva
+Prioridade;CadastroBasico;PrioridadeIndex
+Produto;CadastroBasico;ProdutoIndex
+Relatório - Camareira x NC;Governanca;RelatorioCamareiraNC
+Relatório - Camareira x UH;Governanca;RelatorioCamareiraUH
+Relatório - U.H. x NC;Governanca;RelatorioUHNC
+Relatório - Vistoriador x UH;Governanca;RelatorioVistoriadorUH
+Relatório Mensal - PCM;Auditoria;RelatorioMensal
+Relatório dinâmico;CadastroBasico;RelatorioItensAuditaveisIndex
+Relatório dinâmico;Relatorio;RelatorioDinamicoDia
+Relatório itens Auditáveis;Auditoria;Relatorio
+Requisiçao (Aprovar / Reprovar);PCM;RequisicaoAprovarReprovarIndex
+Requisição;PCM;Requisicao
+Requisição de compra;Estoque;RequisicaoCompra
+Rotina;CadastroBasico;RotinaIndex
+Rotina;PCM;ManutencaoRotina
+Saída de material;Estoque;Saida
+Setor;CadastroBasico;SetorIndex
+Status UH;Governanca;StatusUH
+Tarefa;CadastroBasico;TarefaIndex
+Tarefa;Qualidade;Tarefa
+Tarefa - Histórico;Qualidade;TarefaHistorico
+Tempo Médio - Atendimento;Relatorio;ManutencaoTempoMedioAtendimento
+Tipo da Cama;CadastroBasico;TipoCamaIndex
+Tipo de Ar Condicionado;CadastroBasico;TipoArCondicionadoIndex
+Tipo de Despesa;CadastroBasico;TipoDespesaIndex
+Tipo de U.H.;CadastroBasico;TipoApartamentoIndex
+Tipo de perda de enxoval;Governanca;TipoPerda
+Treinamento;CadastroBasico;TreinamentoIndex
+Treinamento;Treinamento;TreinamentoIndex
+U.H.;CadastroBasico;ApartamentoIndex
+Unidades;CadastroBasico;UnidadeIndex
+Uso de enxoval;Governanca;RelatorioConsumoEnxovalDia
+Usuários;Administracao;UsuarioIndex
+Área de Embarque/Desembarque;Agenda;AreaComumIndex

@@ -31,28 +31,142 @@
         return jQuery('<div>').text(txt == null ? '' : txt).html();
     }
 
-    /* O conteúdo é escrito por gente, não por programa: aceita quebra de linha e
-       uma marcação mínima (**negrito** e - lista), e nada de HTML solto — o
-       texto vem do banco e não pode virar script na tela de quem lê. */
-    function formatar(txt) {
-        var seguro = escapar(txt).replace(/\r/g, '');
+    /* ── Markdown ──
+       O conteúdo é escrito por gente, em Markdown, e chega do banco: tudo é escapado
+       ANTES de virar marcação, então nenhum texto do manual pode virar script na tela
+       de quem lê. O subconjunto é o que um manual usa de verdade: títulos, negrito,
+       itálico, código, listas, tabelas, citação, imagem e link. */
 
-        // Lista: linhas seguidas começando por "- ".
-        seguro = seguro.replace(/(^|\n)((?:- [^\n]*(?:\n|$))+)/g, function (todo, antes, bloco) {
-            var itens = bloco.replace(/\n+$/, '').split('\n').map(function (l) {
-                return '<li>' + l.replace(/^- /, '') + '</li>';
-            }).join('');
-            return antes + '<ul>' + itens + '</ul>';
-        });
+    // Só http(s) e caminho do próprio site. Fecha javascript:, data: e afins, que num
+    // href transformariam um link do manual em execução de código.
+    function urlSegura(u) {
+        u = (u || '').trim();
+        return (/^https?:\/\//i.test(u) || /^[/.#]/.test(u)) ? u : '';
+    }
 
-        return seguro
+    function emLinha(t) {
+        return t
+            // Imagem antes do link: a sintaxe do link é a mesma sem o "!".
+            .replace(/!\[([^\]]*)\]\(([^)\s]+)[^)]*\)/g, function (todo, alt, url) {
+                var src = urlSegura(url);
+                return src ? '<img class="manual-img" src="' + src + '" alt="' + alt + '">' : alt;
+            })
+            .replace(/\[([^\]]+)\]\(([^)\s]+)[^)]*\)/g, function (todo, texto, url) {
+                var href = urlSegura(url);
+                return href ? '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + texto + '</a>' : texto;
+            })
+            .replace(/`([^`]+)`/g, '<code>$1</code>')
             .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
-            .replace(/\n{2,}/g, '</p><p>')
-            .replace(/\n/g, '<br>')
-            .replace(/^/, '<p>')
-            .replace(/$/, '</p>')
-            .replace(/<p>(<ul>)/g, '$1')
-            .replace(/(<\/ul>)<\/p>/g, '$1');
+            .replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<i>$2</i>')
+            .replace(/(^|[\s(])_([^_\n]+)_/g, '$1<i>$2</i>');
+    }
+
+    function celulas(linha) {
+        return linha.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) {
+            return c.trim();
+        });
+    }
+
+    function ehSeparadorTabela(linha) {
+        return /^\s*\|?[\s:-]*-[\s|:-]*$/.test(linha) && linha.indexOf('-') >= 0 && linha.indexOf('|') >= 0;
+    }
+
+    // O texto chega escapado: o ">" do Markdown já é "&gt;" quando o bloco é lido.
+    var CITACAO = /^\s*&gt;\s?/;
+
+    function formatar(txt) {
+
+        var linhas = escapar(txt == null ? '' : txt).replace(/\r/g, '').split('\n');
+        var html = [];
+        var i = 0;
+
+        function paragrafo(bloco) {
+            if (bloco.length) html.push('<p>' + emLinha(bloco.join('<br>')) + '</p>');
+        }
+
+        while (i < linhas.length) {
+
+            var linha = linhas[i];
+
+            // Bloco de código: sai literal, sem passar pela marcação de linha.
+            if (/^\s*```/.test(linha)) {
+                var codigo = [];
+                i++;
+                while (i < linhas.length && !/^\s*```/.test(linhas[i])) { codigo.push(linhas[i]); i++; }
+                i++;
+                html.push('<pre><code>' + codigo.join('\n') + '</code></pre>');
+                continue;
+            }
+
+            // Tabela: linha de células seguida da linha de traços.
+            if (linha.indexOf('|') >= 0 && i + 1 < linhas.length && ehSeparadorTabela(linhas[i + 1])) {
+                var cab = celulas(linha);
+                i += 2;
+                var corpo = [];
+                while (i < linhas.length && linhas[i].indexOf('|') >= 0 && linhas[i].trim() !== '') {
+                    corpo.push(celulas(linhas[i])); i++;
+                }
+                html.push(
+                    '<div class="manual-tabela"><table><thead><tr>' +
+                    cab.map(function (c) { return '<th>' + emLinha(c) + '</th>'; }).join('') +
+                    '</tr></thead><tbody>' +
+                    corpo.map(function (l) {
+                        return '<tr>' + l.map(function (c) { return '<td>' + emLinha(c) + '</td>'; }).join('') + '</tr>';
+                    }).join('') +
+                    '</tbody></table></div>');
+                continue;
+            }
+
+            // Título. O manual já tem o título da seção no cabeçalho dela, então aqui
+            // tudo desce um nível: o "##" do texto vira subtítulo, e não outro topo.
+            var titulo = /^(#{1,6})\s+(.*)$/.exec(linha);
+            if (titulo) {
+                var nivel = Math.min(titulo[1].length + 3, 6);
+                html.push('<h' + nivel + '>' + emLinha(titulo[2]) + '</h' + nivel + '>');
+                i++;
+                continue;
+            }
+
+            if (/^\s*([-*_])\s*\1\s*\1[\s-*_]*$/.test(linha)) { html.push('<hr>'); i++; continue; }
+
+            // Citação. O texto já veio escapado, então o ">" do Markdown chega aqui
+            // como "&gt;" — procurar pelo sinal cru nunca acharia citação nenhuma.
+            if (CITACAO.test(linha)) {
+                var cita = [];
+                while (i < linhas.length && CITACAO.test(linhas[i])) {
+                    cita.push(linhas[i].replace(CITACAO, '')); i++;
+                }
+                html.push('<blockquote>' + emLinha(cita.join('<br>')) + '</blockquote>');
+                continue;
+            }
+
+            // Lista, com ou sem número.
+            var marcador = /^\s*([-*+]|\d+[.)])\s+/;
+            if (marcador.test(linha)) {
+                var ordenada = /^\s*\d/.test(linha);
+                var itens = [];
+                while (i < linhas.length && marcador.test(linhas[i])) {
+                    itens.push('<li>' + emLinha(linhas[i].replace(marcador, '')) + '</li>');
+                    i++;
+                }
+                html.push((ordenada ? '<ol>' : '<ul>') + itens.join('') + (ordenada ? '</ol>' : '</ul>'));
+                continue;
+            }
+
+            // Parágrafo: até a linha em branco.
+            var bloco = [];
+            while (i < linhas.length && linhas[i].trim() !== '' &&
+                   !marcador.test(linhas[i]) && !/^\s*#/.test(linhas[i]) &&
+                   !CITACAO.test(linhas[i]) &&
+                   !/^\s*```/.test(linhas[i])) {
+                bloco.push(linhas[i]); i++;
+            }
+            if (bloco.length) { paragrafo(bloco); continue; }
+
+            i++;
+        }
+
+        return html.join('');
     }
 
     /* ── vídeo ──

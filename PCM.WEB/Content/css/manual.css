@@ -99,8 +99,97 @@
 }
 
 .manual-painel .manual-sec-b p { margin: 0 0 8px; }
-.manual-painel .manual-sec-b ul { margin: 6px 0 8px; padding-left: 18px; }
+.manual-painel .manual-sec-b ul,
+.manual-painel .manual-sec-b ol { margin: 6px 0 8px; padding-left: 20px; }
 .manual-painel .manual-sec-b li { margin: 4px 0; }
+
+/* Markdown do conteúdo. O título da seção já é o topo, então o que vem do texto
+   entra como subtítulo — daí os tamanhos pequenos e o peso menor. */
+.manual-painel .manual-sec-b h4,
+.manual-painel .manual-sec-b h5,
+.manual-painel .manual-sec-b h6 {
+    margin: 12px 0 5px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #343a40;
+}
+
+.manual-painel .manual-sec-b h4 { font-size: 13px; }
+.manual-painel .manual-sec-b h5 { font-size: 12.5px; }
+.manual-painel .manual-sec-b h6 { font-size: 12px; color: #5b6675; }
+
+.manual-painel .manual-sec-b a { color: #35618f; text-decoration: underline; }
+
+.manual-painel .manual-sec-b code {
+    background: #f2f4f7;
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-size: 11.5px;
+    color: #b02a37;
+    word-break: break-word;
+}
+
+.manual-painel .manual-sec-b pre {
+    background: #f7f8fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 9px 11px;
+    margin: 8px 0;
+    overflow-x: auto;
+}
+
+.manual-painel .manual-sec-b pre code {
+    background: none;
+    padding: 0;
+    color: #495057;
+    white-space: pre;
+}
+
+.manual-painel .manual-sec-b blockquote {
+    margin: 8px 0;
+    padding: 6px 11px;
+    border-left: 3px solid #ced4da;
+    background: #f7f8fa;
+    color: #5b6675;
+}
+
+.manual-painel .manual-sec-b hr {
+    border: 0;
+    border-top: 1px solid #eef1f4;
+    margin: 12px 0;
+}
+
+/* Tabela do manual: o painel é estreito, então ela rola sozinha em vez de
+   empurrar o conteúdo para fora. */
+.manual-painel .manual-tabela {
+    overflow-x: auto;
+    margin: 9px 0;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+}
+
+.manual-painel .manual-tabela table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+}
+
+.manual-painel .manual-tabela th,
+.manual-painel .manual-tabela td {
+    padding: 6px 9px;
+    border-bottom: 1px solid #f2f4f6;
+    text-align: left;
+    vertical-align: top;
+}
+
+.manual-painel .manual-tabela th {
+    background: #f7f8fa;
+    font-weight: 700;
+    color: #343a40;
+    white-space: nowrap;
+}
+
+.manual-painel .manual-tabela tr:last-child td { border-bottom: 0; }
 
 .manual-painel .manual-nota {
     padding: 7px 10px;
