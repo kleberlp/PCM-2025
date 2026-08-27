@@ -70,12 +70,15 @@ namespace PCM.WEB
 
         /// <summary>
         /// Política: scripts próprios + nonce + os dois CDNs que as views usam;
-        /// style-src mantém unsafe-inline até o degrau 3 (2.737 style= inline).
+        /// style-src mantém unsafe-inline (restam styles dinâmicos e libs que
+        /// injetam style=); unsafe-eval é exigido por jquery.inputmask, pdfmake,
+        /// jszip, dataTables.editor e signalr (new Function/eval) — ele NÃO
+        /// reabre script inline: injeção continua bloqueada pelo nonce.
         /// </summary>
         public static string HeaderValue()
         {
             return "default-src 'self'; " +
-                   "script-src 'self' 'nonce-" + Nonce + "' https://cdn.datatables.net https://cdnjs.cloudflare.com; " +
+                   "script-src 'self' 'nonce-" + Nonce + "' 'unsafe-eval' https://cdn.datatables.net https://cdnjs.cloudflare.com; " +
                    "style-src 'self' 'unsafe-inline' https://cdn.datatables.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
                    "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; " +
                    "img-src 'self' data: blob:; " +
