@@ -1,0 +1,190 @@
+/* ============================================================
+   kanban.css — quadro Kanban de Ordens de Serviço
+   (OrdemServico/OrdemServicoKanban). Escopo kb-*; sem depender
+   de estilos inline (CSP degrau 3).
+   ============================================================ */
+
+/* ---- barra de ações ---- */
+.kb-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.kb-busca {
+    flex: 1 1 280px;
+    border-radius: 8px;
+}
+
+.kb-unidade { flex: 0 1 260px; }
+
+/* ---- quadro ---- */
+.kb-board {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    min-height: 420px;
+}
+
+.kb-col {
+    flex: 1 1 0;
+    min-width: 230px;
+    background: #f6f7f9;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 72vh;
+}
+
+.kb-col-header {
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kb-count {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6b7280;
+    background: #e5e7eb;
+    border-radius: 10px;
+    padding: 1px 8px;
+}
+
+.kb-cards {
+    padding: 10px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* coluna que recebe um arrasto */
+.kb-col.kb-drop-alvo { outline: 2px dashed #9ca3af; outline-offset: -4px; }
+
+/* ---- coluna Concluídas recolhida (como no mock) ---- */
+.kb-col-fechada {
+    flex: 0 0 46px;
+    min-width: 46px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.kb-col-fechada .kb-cards,
+.kb-col-fechada .kb-col-titulo-h { display: none; }
+
+.kb-col-fechada .kb-col-header {
+    border-bottom: none;
+    justify-content: center;
+    height: 100%;
+}
+
+.kb-col-titulo-v {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    letter-spacing: .03em;
+    color: #6b7280;
+}
+
+/* expandida: vira coluna normal */
+.kb-col-aberta { flex: 1 1 0; min-width: 230px; cursor: default; }
+.kb-col-aberta .kb-cards { display: flex; }
+.kb-col-aberta .kb-col-titulo-h { display: inline-flex; align-items: center; gap: 8px; }
+.kb-col-aberta .kb-col-titulo-v { display: none; }
+.kb-col-aberta .kb-col-header { border-bottom: 1px solid #e5e7eb; height: auto; justify-content: flex-start; }
+
+/* ---- cartão ---- */
+.kb-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.kb-card.kb-atrasada { border-color: #f3c1c1; }
+.kb-card.kb-arrastando { opacity: .5; }
+.kb-card[draggable="true"] { cursor: grab; }
+
+.kb-card-chips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+.kb-chip {
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 2px 9px;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.kb-chip-prioridade { background: #ef5350; border-color: #ef5350; color: #fff; }
+.kb-chip-prioridade-baixa { background: #22b14c; border-color: #22b14c; color: #fff; }
+.kb-chip-prioridade-media { background: #ff8000; border-color: #ff8000; color: #fff; }
+
+.kb-card-local {
+    font-weight: 700;
+    font-size: 15px;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kb-card-local .fa { color: #6b7280; font-size: 13px; }
+
+.kb-card-descricao {
+    font-size: 13px;
+    color: #374151;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.kb-card-numero {
+    font-weight: 700;
+    font-size: 12px;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.kb-card-numero .fa { color: #6b7280; }
+
+.kb-card-atraso {
+    font-size: 11px;
+    font-weight: 600;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.kb-card-executor { font-size: 11px; color: #6b7280; }
+
+.kb-vazio {
+    text-align: center;
+    color: #9ca3af;
+    padding: 30px 0;
+    font-size: 14px;
+}
+
+.kb-oculto { display: none; }

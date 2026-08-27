@@ -555,6 +555,40 @@ namespace PCM.WEB.Controllers
             return jsonResult;
         }
 
+        // GET: KANBAN
+        public ActionResult OrdemServicoKanban()
+        {
+            if (Session["empresa"] == null)
+            {
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+            }
+
+            bool editar = false;
+            bool inserir = false;
+            bool excluir = false;
+            bool administrador = false;
+
+            oAccount.LoadPerfil(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                sFormulario: "ordem_servico",
+                                bInserir: ref inserir,
+                                bEditar: ref editar,
+                                bExcluir: ref excluir,
+                                bAdministrador: ref administrador);
+
+            ViewBag.editar = editar;
+            ViewBag.empresa = Session["empresa"].ToString();
+            ViewBag.usuario = User.Identity.GetUserName();
+            ViewBag.codigo_unidade = Convert.ToInt32(Session["codigo_unidade"]);
+            ViewBag.data_inicio = DateTime.Now.AddMonths(-1).ToShortDateString();
+            ViewBag.data_termino = DateTime.Now.ToShortDateString();
+            ViewBag.unidade = new SelectList(oCombo.Unidade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
+                                                            iCodigoUsuario: Convert.ToInt32(User.Identity.GetUserName()),
+                                                            bCadastro: false), "codigo", "descricao", Convert.ToInt32(Session["codigo_unidade"]));
+
+            return View();
+        }
+
         // GET: INDEX
         public ActionResult OrdemServicoIndex(int status = 1, int responsavel_apartamento = -1)
         {
