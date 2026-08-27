@@ -94,10 +94,10 @@
                                 <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
                             }   
                             <th>@PCM.WEB.Properties.Resources.funcionario</th>                                                                 
-                            <th class="d-none d-sm-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data_inicio</th>
-                            <th class="d-none d-sm-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data_termino</th>
+                            <th class="d-none d-sm-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.data_inicio</th>
+                            <th class="d-none d-sm-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.data_termino</th>
                             <th>@PCM.WEB.Properties.Resources.justificativa_falta</th>
-                            <th class="text-center" style="width: 80px;" data-sortable="false"></th>
+                            <th class="text-center u-w-80" data-sortable="false"></th>
                         </tr>
                     </thead>
 
@@ -110,10 +110,10 @@
                                     <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
                                 }                                    
                                 <td>@Html.DisplayFor(modelItem => item.funcionario)</td>
-                                <td class="d-none d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.data_inicio)</td>    
-                                <td class="d-none d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.data_termino)</td>    
+                                <td class="d-none d-sm-table-cell text-center u-w-120">@Html.DisplayFor(modelItem => item.data_inicio)</td>    
+                                <td class="d-none d-sm-table-cell text-center u-w-120">@Html.DisplayFor(modelItem => item.data_termino)</td>    
                                 <td>@Html.DisplayFor(modelItem => item.justificativa_falta)</td>
-                                <td class="text-center" style="width: 80px;" >
+                                <td class="text-center u-w-80" >
                                     <div class="btn-group">          
                                         @if(ViewBag.excluir) { <a href="@Url.Action("FaltaDelete", "PCM", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
                                         @if(item.path_arquivo != "") { <a href="@Url.Content(item.path_arquivo)" target="_blank" class="btn btn-sm btn-secondary"><i class="fa fa-file-pdf-o"></i></a> }

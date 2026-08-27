@@ -15,7 +15,7 @@
     </div>
     <!-- END Breadcrumb -->
     <!-- Page Content -->
-    <div class="content" id="main" name="main" style="display:none">
+    <div class="content u-hide" id="main" name="main">
 
         <!-- Update Product -->
         <div class="row gutters-tiny">
@@ -115,8 +115,8 @@
                                             <tr class="table-primary">
                                                 <th colspan="4">@Model.checklist[i].subgrupo</th>
                                                 <th>@PCM.WEB.Properties.Resources.observacao</th>
-                                                <th style="width:100px">@PCM.WEB.Properties.Resources.prazo_dias</th>
-                                                <th style="width:50px">@PCM.WEB.Properties.Resources.foto</th>
+                                                <th class="u-w-100">@PCM.WEB.Properties.Resources.prazo_dias</th>
+                                                <th class="u-w-50">@PCM.WEB.Properties.Resources.foto</th>
                                             </tr>
                                         }
 
@@ -128,10 +128,10 @@
                                                 @Html.HiddenFor(m => m.checklist[i].codigo_tipo_item_checklist)
                                                 @Html.HiddenFor(m => m.checklist[i].resultado)
                                                 <td>@Html.DisplayFor(m => m.checklist[i].checklist) - @Html.DisplayFor(m => m.checklist[i].descricao)</td>
-                                                <td class="text-center" style="width:150px" colspan="3">@Model.checklist[i].resultado</td>
+                                                <td class="text-center u-w-150" colspan="3">@Model.checklist[i].resultado</td>
                                                 <td>@Model.checklist[i].observacao</td>
                                                 <td class="text-center">@Model.checklist[i].prazo</td>
-                                                <td style="width:50px">
+                                                <td class="u-w-50">
                                                     <div class="btn-group">
 
                                                         @if (Model.checklist[i].possui_foto)
@@ -169,7 +169,7 @@
                                                 }
                                                 @if (Model.checklist[i].codigo_tipo_item_checklist == 1)
                                                 {
-                                                    <td class="text-center" style="width:50px">
+                                                    <td class="text-center u-w-50">
                                                         <span class="text-center font-w600">SIM</span>
                                                         <label class="css-control css-control-success css-checkbox">
                                                             @if (Model.checklist[i].resultado == "SIM")
@@ -183,8 +183,8 @@
                                                             <span class="css-control-indicator"></span>
                                                         </label>
                                                     </td>
-                                                    <td class="text-center" style="width:50px"></td>
-                                                    <td class="text-center" style="width:50px">
+                                                    <td class="text-center u-w-50"></td>
+                                                    <td class="text-center u-w-50">
                                                         <span class="text-center font-w600">NÃO</span>
                                                         <label class="css-control css-control-danger css-checkbox">
                                                             @if (Model.checklist[i].resultado == "NÃO")
@@ -201,7 +201,7 @@
                                                 }
                                                 else if (Model.checklist[i].codigo_tipo_item_checklist == 8)
                                                 {
-                                                    <td class="text-center" style="width:50px">
+                                                    <td class="text-center u-w-50">
                                                         <span class="text-center font-w600">SIM</span>
                                                         <label class="css-control css-control-success css-checkbox">
                                                             @if (Model.checklist[i].resultado == "SIM")
@@ -215,7 +215,7 @@
                                                             <span class="css-control-indicator"></span>
                                                         </label>
                                                     </td>
-                                                    <td class="text-center" style="width:50px">
+                                                    <td class="text-center u-w-50">
                                                         <span class="text-center font-w600">NÃO</span>
                                                         <label class="css-control css-control-danger css-checkbox">
                                                             @if (Model.checklist[i].resultado == "NÃO")
@@ -229,7 +229,7 @@
                                                             <span class="css-control-indicator"></span>
                                                         </label>
                                                     </td>
-                                                    <td class="text-center" style="width:50px">
+                                                    <td class="text-center u-w-50">
                                                         <span class="text-center font-w600">N/A</span>
                                                         <label class="css-control css-control-secondary css-checkbox">
                                                             @if (Model.checklist[i].resultado == "N/A")

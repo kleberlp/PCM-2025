@@ -39,15 +39,15 @@
                             {
                                 <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
                             }                                                                    
-                            <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.numero_documento</th>
-                            <th class="d-none d-sm-table-cell text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.data_competencia</th>
+                            <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.numero_documento</th>
+                            <th class="d-none d-sm-table-cell text-center u-w-120">@PCM.WEB.Properties.Resources.data_competencia</th>
                             <th>@PCM.WEB.Properties.Resources.descricao</th>
                             <th class="d-none d-sm-table-cell" >@PCM.WEB.Properties.Resources.tipo_despesa</th>
                             <th class="d-none d-sm-table-cell" >@PCM.WEB.Properties.Resources.fornecedor</th>
-                            <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.valor</th>
+                            <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.valor</th>
                             @if(ViewBag.editar || ViewBag.excluir)
                             {
-                                <th class="text-center" style="width: 80px;" data-sortable="false"></th>
+                                <th class="text-center u-w-80" data-sortable="false"></th>
                             }
                         </tr>
                     </thead>
@@ -60,15 +60,15 @@
                                 {
                                     <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
                                 }   
-                                <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.numero_documento)</td>
-                                <td class="d-none d-sm-table-cell text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.data_competencia)</td>
+                                <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.numero_documento)</td>
+                                <td class="d-none d-sm-table-cell text-center u-w-120">@Html.DisplayFor(modelItem => item.data_competencia)</td>
                                 <td>@Html.DisplayFor(modelItem => item.descricao)</td>
                                 <td class="d-none d-sm-table-cell" >@Html.DisplayFor(modelItem => item.tipo_despesa)</td>
                                 <td class="d-none d-sm-table-cell" >@Html.DisplayFor(modelItem => item.fornecedor)</td>
-                                <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.valor)</td>                                 
+                                <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.valor)</td>                                 
                                 @if(ViewBag.editar || ViewBag.excluir)
                                 {
-                                    <td class="text-center" style="width: 80px;" >
+                                    <td class="text-center u-w-80" >
                                         <div class="btn-group">
                                             @if (ViewBag.editar)
                                             {<a href="@Url.Action("DespesaEdit", "Financas", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}

@@ -77,10 +77,10 @@
                                 <table class="js-table-sections table table-hover">
                                     <thead>                                    
                                         <tr>
-                                            <th class="text-center font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.periodo</th>
-                                            <th class="text-center" style="width: 25%;">@PCM.WEB.Properties.Resources.previsao_gasto</th>
-                                            <th class="text-center" style="width: 25%;">@PCM.WEB.Properties.Resources.gasto_real</th>
-                                            <th class="text-center" style="width: 25%;">@PCM.WEB.Properties.Resources.saldo</th>
+                                            <th class="text-center font-w600 u-wp-25">@PCM.WEB.Properties.Resources.periodo</th>
+                                            <th class="text-center u-wp-25">@PCM.WEB.Properties.Resources.previsao_gasto</th>
+                                            <th class="text-center u-wp-25">@PCM.WEB.Properties.Resources.gasto_real</th>
+                                            <th class="text-center u-wp-25">@PCM.WEB.Properties.Resources.saldo</th>
                                         </tr>
                                     </thead>
 
@@ -88,109 +88,109 @@
                                             @if(ViewBag.mes == 1)
                                             {
                                                 <tr>     
-                                                    <td class="text-center font-w600 table-warning" style="width: 25%;">@PCM.WEB.Properties.Resources.janeiro</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_janeiro, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_janeiro)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_janeiro)</td>
+                                                    <td class="text-center font-w600 table-warning u-wp-25">@PCM.WEB.Properties.Resources.janeiro</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_janeiro, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_janeiro)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_janeiro)</td>
                                                 </tr>
                                             }
                                             @if(ViewBag.mes <= 2)
                                             {
                                                 <tr>     
-                                                    <td class="text-center font-w600 table-warning" style="width: 25%;">@PCM.WEB.Properties.Resources.fevereiro</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_fevereiro, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_fevereiro)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_fevereiro)</td>
+                                                    <td class="text-center font-w600 table-warning u-wp-25">@PCM.WEB.Properties.Resources.fevereiro</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_fevereiro, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_fevereiro)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_fevereiro)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 3)
                                             {
                                                 <tr>     
-                                                    <td class="text-center font-w600 table-warning"  style="width: 25%;">@PCM.WEB.Properties.Resources.marco</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_marco, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_marco)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_marco)</td>
+                                                    <td class="text-center font-w600 table-warning u-wp-25" >@PCM.WEB.Properties.Resources.marco</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_marco, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_marco)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_marco)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 4)
                                             {
                                                 <tr>     
-                                                    <td class="text-center font-w600 table-warning" style="width: 25%;">@PCM.WEB.Properties.Resources.abril</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_abril, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_abril)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_abril)</td>
+                                                    <td class="text-center font-w600 table-warning u-wp-25">@PCM.WEB.Properties.Resources.abril</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_abril, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_abril)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_abril)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 5)
                                             {
                                                 <tr>     
-                                                    <td class="text-center table-warning font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.maio</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_maio, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_maio)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_maio)</td>
+                                                    <td class="text-center table-warning font-w600 u-wp-25">@PCM.WEB.Properties.Resources.maio</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_maio, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_maio)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_maio)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 6)
                                             {
                                                 <tr>     
-                                                    <td class="text-center table-warning font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.junho</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_junho, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_junho)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_junho)</td>
+                                                    <td class="text-center table-warning font-w600 u-wp-25">@PCM.WEB.Properties.Resources.junho</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_junho, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_junho)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_junho)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 7)
                                             {
                                                 <tr>     
-                                                    <td class="text-center table-warning font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.julho</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_julho, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_julho)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_julho)</td>
+                                                    <td class="text-center table-warning font-w600 u-wp-25">@PCM.WEB.Properties.Resources.julho</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_julho, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_julho)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_julho)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 8)
                                             {
                                                 <tr>     
-                                                    <td class="text-center table-warning font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.agosto</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_agosto, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_agosto)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_agosto)</td>
+                                                    <td class="text-center table-warning font-w600 u-wp-25">@PCM.WEB.Properties.Resources.agosto</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_agosto, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_agosto)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_agosto)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 9)
                                             {
                                                 <tr>     
-                                                    <td class="text-center table-warning font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.setembro</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_setembro, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_setembro)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_setembro)</td>
+                                                    <td class="text-center table-warning font-w600 u-wp-25">@PCM.WEB.Properties.Resources.setembro</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_setembro, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_setembro)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_setembro)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 10)
                                             {
                                                 <tr>     
-                                                    <td class="text-center table-warning font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.outubro</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_outubro, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_outubro)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_outubro)</td>
+                                                    <td class="text-center table-warning font-w600 u-wp-25">@PCM.WEB.Properties.Resources.outubro</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_outubro, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_outubro)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_outubro)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 11)
                                             {
                                                 <tr>     
-                                                    <td class="text-center table-warning font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.novembro</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_novembro, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_novembro)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_novembro)</td>
+                                                    <td class="text-center table-warning font-w600 u-wp-25">@PCM.WEB.Properties.Resources.novembro</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_novembro, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_novembro)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_novembro)</td>
                                                 </tr>
                                             } 
                                             @if(ViewBag.mes <= 12)
                                             {
                                                 <tr>     
-                                                    <td class="text-center table-warning font-w600" style="width: 25%;">@PCM.WEB.Properties.Resources.dezembro</td>                  
-                                                    <td class="text-center" style="width: 25%;">@Html.TextBoxFor(model => model.previsao_gasto_dezembro, new { @class = "form-control text-center"})</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.gasto_dezembro)</td>
-                                                    <td class="text-center" style="width: 25%;">@Html.DisplayFor(model => model.saldo_dezembro)</td>
+                                                    <td class="text-center table-warning font-w600 u-wp-25">@PCM.WEB.Properties.Resources.dezembro</td>                  
+                                                    <td class="text-center u-wp-25">@Html.TextBoxFor(model => model.previsao_gasto_dezembro, new { @class = "form-control text-center"})</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.gasto_dezembro)</td>
+                                                    <td class="text-center u-wp-25">@Html.DisplayFor(model => model.saldo_dezembro)</td>
                                                 </tr>
                                             }
                                         </tbody>

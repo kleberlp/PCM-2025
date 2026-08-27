@@ -226,7 +226,7 @@
             </div>
 
 
-            <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+            <div class="col-md-12 col-xl-12 u-hide" id="div_list">
 
                 <div class="block-content block-content-full">
 
@@ -243,7 +243,7 @@
                                 <th class="text-center">@PCM.WEB.Properties.Resources.data_proxima_vistoria</th>
                                 <th class="text-center">Status UH</th>
 								<th class="text-center">@PCM.WEB.Properties.Resources.status_uh</th>
-                                <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                                <th data-sortable="false" class="text-center d-print-none u-w-80"></th>
                             </tr>
                         </thead>
 
@@ -261,7 +261,7 @@
                                     <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima)</td>
 									<td class="text-center">@Html.DisplayFor(modelItem => item.front_office_status)</td>
                                     <td class="text-center">@Html.DisplayFor(modelItem => item.room_status)</td>
-                                    <td class="text-center d-print-none" style="width: 80px;">
+                                    <td class="text-center d-print-none u-w-80">
                                         <div class="btn-group">
                                             @if ((item.status != 3))
                                             {<a href="@Url.Action("ChecklistUHApontamento", "UH", new { codigo_apartamento = @item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_vistoria = @item.codigo_vistoria, status = @item.status })" class="btn btn-sm btn-secondary"><i class="fa fa-hotel"></i></a>}

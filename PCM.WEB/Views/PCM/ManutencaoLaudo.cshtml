@@ -70,19 +70,19 @@
                         <thead>
                             <tr class="table-secondary">
                                 <th>@PCM.WEB.Properties.Resources.manutencao</th>
-                                <th class="text-center" style="width:100px;">Data Validade</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[0]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[1]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[2]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[3]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[4]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[5]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[6]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[7]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[8]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[9]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[10]</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data[11]</th>
+                                <th class="text-center u-w-100">Data Validade</th>
+                                <th class="text-center u-w-75">@ViewBag.data[0]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[1]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[2]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[3]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[4]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[5]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[6]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[7]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[8]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[9]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[10]</th>
+                                <th class="text-center u-w-75">@ViewBag.data[11]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,291 +105,291 @@
 
                                     @if (item.mes_1 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_1 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_1 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_1 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_1 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_1 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_2 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_2 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_2 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_2 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_2 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_2 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_3 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_3 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_3 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_3 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_3 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_3 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_4 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_4 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_4 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_4 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_4 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_4 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_5 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_5 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_5 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_5 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_5 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_5 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_6 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_6 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_6 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_6 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_6 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_6 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_7 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_7 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_7 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_7 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_7 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_7 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_8 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_8 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_8 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_8 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_8 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_8 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_9 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_9 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_9 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_9 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_9 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_9 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_10 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_10 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_10 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_10 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_10 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_10 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_11 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_11 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_11 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_11 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_11 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_11 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                     @if (item.mes_12 == 0)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-primary">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-primary">X</span></td>
                                     }
                                     else if (item.mes_12 == -1)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-warning" })</td>
                                     }
                                     else if (item.mes_12 == -2)
                                     {
-                                        <td class="text-center" style="width:75px;"><span class="badge badge-danger">X</span></td>
+                                        <td class="text-center u-w-75"><span class="badge badge-danger">X</span></td>
                                     }
                                     else if (item.mes_12 == -4)
                                     {
-                                        <td class="text-center" style="width:75px;"></td>
+                                        <td class="text-center u-w-75"></td>
                                     }
                                     else if (item.mes_12 == -5)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "ApontamentoProgramada", new { codigo_pcm_programada = item.codigo_pcm_programada, codigo_unidade = item.codigo_unidade, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-danger" })</td>
                                     }
                                     else if (item.mes_12 > 0)
                                     {
-                                        <td class="text-center" style="width:75px;">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
+                                        <td class="text-center u-w-75">@Html.ActionLink("X", "OrdemServicoProgramada", new { codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo_pcm_programada_ordem_servico, formulario = "pcm_apontamento_laudo" }, new { @class = "badge badge-success" })</td>
                                     }
                                 </tr>
                             }

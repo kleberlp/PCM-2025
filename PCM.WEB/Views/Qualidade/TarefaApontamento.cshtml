@@ -118,15 +118,15 @@
                                             <td>@Html.DisplayFor(m => m[i].checklist) - @Html.DisplayFor(m => m[i].descricao)</td>
                                             @if (Model[i].codigo_tipo_item_checklist == 1)
                                             {
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">SIM</span>
                                                     <label class="css-control css-control-success css-checkbox">
                                                         @Html.RadioButtonFor(m => m[i].resultado, "SIM", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'SIM');" })
                                                         <span class="css-control-indicator"></span>
                                                     </label>
                                                 </td>
-                                                <td class="text-center" style="width:50px"></td>
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50"></td>
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">NÃO</span>
                                                     <label class="css-control css-control-danger css-checkbox">
                                                         @Html.RadioButtonFor(m => m[i].resultado, "NÃO", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'NÃO');" })
@@ -136,7 +136,7 @@
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 2)
                                             {
-                                                <td class="text-center" style="width:150px" colspan="3">
+                                                <td class="text-center u-w-150" colspan="3">
                                                     <div class="input-group">
                                                         @Html.TextBoxFor(m => m[i].resultado, new { @class = "js-masked-number form-control", @onChange = "setResultado(" + i + ", this.value);" })
                                                         <div class="input-group-append min-width-50 text-center">
@@ -147,39 +147,39 @@
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 3)
                                             {
-                                                <td class="text-center" style="width:150px" colspan="3">
+                                                <td class="text-center u-w-150" colspan="3">
                                                     <div>@Html.TextBoxFor(m => m[i].resultado, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);" })</div>
                                                 </td>
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 4)
                                             {
-                                                <td class="text-center" style="width:150px" colspan="3">
+                                                <td class="text-center u-w-150" colspan="3">
                                                     <div>@Html.TextBoxFor(m => m[i].resultado, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);" })</div>
                                                 </td>
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 5)
                                             {
-                                                <td class="text-center" style="width:150px" colspan="3">
+                                                <td class="text-center u-w-150" colspan="3">
                                                     <div>@Html.TextBoxFor(m => m[i].resultado, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);" })</div>
                                                 </td>
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 8)
                                             {
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">SIM</span>
                                                     <label class="css-control css-control-success css-checkbox">
                                                         @Html.RadioButtonFor(m => m[i].resultado, "SIM", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'SIM');" })
                                                         <span class="css-control-indicator"></span>
                                                     </label>
                                                 </td>
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">NÃO</span>
                                                     <label class="css-control css-control-danger css-checkbox">
                                                         @Html.RadioButtonFor(m => m[i].resultado, "NÃO", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'NÃO');" })
                                                         <span class="css-control-indicator"></span>
                                                     </label>
                                                 </td>
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">N/A</span>
                                                     <label class="css-control css-control-secondary css-checkbox">
                                                         @Html.RadioButtonFor(m => m[i].resultado, "N/A", new { @class = "css-control-input", @onChange = "setResultado(" + i + ", 'N/A');" })

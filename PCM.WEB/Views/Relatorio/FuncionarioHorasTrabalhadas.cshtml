@@ -107,19 +107,19 @@
                                 <th rowspan="2">@PCM.WEB.Properties.Resources.funcionario</th>
                                 @foreach (var item in ViewBag.meses)
                                 {
-                                    <th class="text-center" colspan="2" style="width: 80px;">@item</th>
+                                    <th class="text-center u-w-80" colspan="2">@item</th>
                                 }
-                                <th class="text-center" colspan="2" style="width: 100px;">Total</th>
+                                <th class="text-center u-w-100" colspan="2">Total</th>
                             </tr>
 
                             <tr class="table-secondary">
                                 @foreach (var item in ViewBag.meses)
                                 {
-                                    <th class="text-center" style="width: 80px;">Horas</th>
-                                    <th class="text-center" style="width: 80px;">Falta</th>
+                                    <th class="text-center u-w-80">Horas</th>
+                                    <th class="text-center u-w-80">Falta</th>
                                 }
-                                <th class="text-center" style="width: 80px;">Horas</th>
-                                <th class="text-center" style="width: 80px;">Falta</th>
+                                <th class="text-center u-w-80">Horas</th>
+                                <th class="text-center u-w-80">Falta</th>
                             </tr>
 
                         </thead>
@@ -134,7 +134,7 @@
                                     <td>@Html.DisplayFor(modelItem => item.funcionario)</td>
                                     @foreach (var valor in item.valores)
                                     {
-                                        <td class="text-center" style="width: 80px;">
+                                        <td class="text-center u-w-80">
                                             @if (valor.valor == "0:00")
                                             {
                                                 @Html.DisplayFor(modelItem => valor.valor)
@@ -145,14 +145,14 @@
                                             }
                                         </td>
 
-                                        <td class="text-center" style="width: 80px;">
+                                        <td class="text-center u-w-80">
                                             @Html.DisplayFor(modelItem => valor.falta)
                                         </td>
                                     }
-                                    <td class="text-center table-warning" style="width: 100px;">
+                                    <td class="text-center table-warning u-w-100">
                                         <b>@Html.DisplayFor(modelItem => item.total)</b>
                                     </td>
-                                    <td class="text-center table-warning" style="width: 100px;">
+                                    <td class="text-center table-warning u-w-100">
                                         <b>@Html.DisplayFor(modelItem => item.falta)</b>
                                     </td>
                                 </tr>

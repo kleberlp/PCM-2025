@@ -59,8 +59,8 @@
                                 <table class="table table-bordered table-hover js-dataTable-list">
                                     <thead>
                                         <tr class="table-secondary">
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.usuario</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.data</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.usuario</th>
                                             <th>@PCM.WEB.Properties.Resources.descricao</th>
                                         </tr>
                                     </thead>
@@ -68,8 +68,8 @@
                                         @foreach (var item in Model)
                                         {
                                             <tr>
-                                                <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.data)</td>
-                                                <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.usuario)</td>
+                                                <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.data)</td>
+                                                <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.usuario)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.descricao)</td>
                                             </tr>
                                         }

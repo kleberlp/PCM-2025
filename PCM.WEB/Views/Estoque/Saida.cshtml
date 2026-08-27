@@ -86,9 +86,9 @@
                         </div>
                         <div class="block-content block-content-full">
                             <div class="form-group row">
-                                <div class="col-md-2" id="div_barcode" name="div_barcode" style="display:none">
+                                <div class="col-md-2 u-hide" id="div_barcode" name="div_barcode">
                                     <label>@PCM.WEB.Properties.Resources.barcode</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" data-enter-focus="#quantidade" data-act="loadProductInfo" data-on="blur"></div>
+                                    <div><input type="text" class="form-control u-upper" id="barcode" name="barcode" placeholder="" value="" data-enter-focus="#quantidade" data-act="loadProductInfo" data-on="blur"></div>
                                 </div>
                                 <div class="col-md-2" id="div_product" name="div_product">
                                     <label>@PCM.WEB.Properties.Resources.produto</label>
@@ -97,7 +97,7 @@
                                 <div class="col-md-6">
                                     <label>@PCM.WEB.Properties.Resources.descricao</label>
                                     <div>
-                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="descricao" name="descricao" placeholder="" value="" disabled>
+                                        <input type="text" class="form-control u-upper" id="descricao" name="descricao" placeholder="" value="" disabled>
                                         <input type="hidden" class="form-control" id="produto" name="produto" value="0">
                                         <input type="hidden" class="form-control" id="quantidadeEstoque" name="quantidadeEstoque" value="0">
                                     </div>
@@ -109,7 +109,7 @@
                                 <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.quantidade <span id="lblSaldo" name="lblSaldo" class="font-w600"></span></label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="quantidade" name="quantidade" placeholder="" value="" data-enter-focus="#valorUnitario">
+                                        <input type="text" class="form-control u-upper" id="quantidade" name="quantidade" placeholder="" value="" data-enter-focus="#valorUnitario">
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-square btn-secondary min-width-125" id="btnSaveProduct" name="btnSaveProduct">@PCM.WEB.Properties.Resources.inserir</button>
                                         </div>

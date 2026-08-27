@@ -99,13 +99,13 @@
                 Ranking de Desempenho por Unidade
                 <span class="dg-section-badge">@(Model != null ? Model.Unidades.Count : 0) unidades</span>
             </div>
-            <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+            <div class="block dashboard-card u-pad0-clip">
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <th style="width:40px;">#</th>
+                            <th class="u-w-40">#</th>
                             <th>Unidade</th>
-                            <th style="width:180px;">Score</th>
+                            <th class="u-w-180">Score</th>
                             <th class="text-center">% Vistoria</th>
                             <th class="text-center">NC (total)</th>
                             <th class="text-center">NC/UH</th>
@@ -126,8 +126,8 @@
                 Dados Consolidados por Unidade
                 <span class="dg-section-badge">@mesLabel</span>
             </div>
-            <div class="block dashboard-card" style="padding:0;overflow:hidden;">
-                <div style="overflow-x:auto;">
+            <div class="block dashboard-card u-pad0-clip">
+                <div class="u-scroll-x">
                     <table class="table mb-0 dg-sortable" id="tblConsolidado">
                         <thead>
                             <tr>

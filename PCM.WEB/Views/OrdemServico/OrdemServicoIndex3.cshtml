@@ -360,7 +360,7 @@
     <div class="os-kpi-strip mb-3" id="os-kpi-strip">
         <div class="torre-comando-grid" id="torre-os-kpi">
 
-            <a class="torre-item" href="javascript:void(0)"
+            <a class="torre-item u-pointer" tabindex="0"
                id="kpi-nova" data-os-status="">
                 <div class="torre-header">
                     <i class="si si-wrench torre-icon text-primary"></i>
@@ -370,7 +370,7 @@
                 <div class="torre-meta"><span>NOVA</span></div>
             </a>
 
-            <a class="torre-item" href="javascript:void(0)"
+            <a class="torre-item u-pointer" tabindex="0"
                id="kpi-atrasada" data-os-status="atrasada">
                 <div class="torre-header">
                     <i class="fa fa-gear torre-icon text-danger"></i>
@@ -380,7 +380,7 @@
                 <div class="torre-meta"><span>ATRASADA</span></div>
             </a>
 
-            <a class="torre-item" href="javascript:void(0)"
+            <a class="torre-item u-pointer" tabindex="0"
                id="kpi-aberto" data-os-status="1">
                 <div class="torre-header">
                     <i class="fa fa-gear torre-icon text-warning"></i>
@@ -390,7 +390,7 @@
                 <div class="torre-meta"><span>EM ABERTO</span></div>
             </a>
 
-            <a class="torre-item" href="javascript:void(0)"
+            <a class="torre-item u-pointer" tabindex="0"
                id="kpi-vinculada" data-os-status="2">
                 <div class="torre-header">
                     <i class="fa fa-gear torre-icon text-info"></i>
@@ -400,7 +400,7 @@
                 <div class="torre-meta"><span>VINCULADA</span></div>
             </a>
 
-            <a class="torre-item" href="javascript:void(0)"
+            <a class="torre-item u-pointer" tabindex="0"
                id="kpi-andamento" data-os-status="3">
                 <div class="torre-header">
                     <i class="fa fa-gear torre-icon text-primary"></i>
@@ -410,7 +410,7 @@
                 <div class="torre-meta"><span>EM ANDAMENTO</span></div>
             </a>
 
-            <a class="torre-item" href="javascript:void(0)"
+            <a class="torre-item u-pointer" tabindex="0"
                id="kpi-concluida" data-os-status="4">
                 <div class="torre-header">
                     <i class="fa fa-check torre-icon text-earth"></i>
@@ -420,7 +420,7 @@
                 <div class="torre-meta"><span>CONCLUÍDAS</span></div>
             </a>
 
-            <a class="torre-item" href="javascript:void(0)"
+            <a class="torre-item u-pointer" tabindex="0"
                id="kpi-backlog" data-os-status="5">
                 <div class="torre-header">
                     <i class="fa fa-clock-o torre-icon text-muted"></i>
@@ -446,7 +446,7 @@
             <div class="filter-card-title">
                 <i class="fa fa-sliders"></i>
                 Filtros
-                <span class="badge-filtros-ativos ms-1" id="badge-filtros" style="display:none;">0</span>
+                <span class="badge-filtros-ativos ms-1 u-hide" id="badge-filtros">0</span>
             </div>
             <i class="fa fa-chevron-down filter-toggle-icon"></i>
         </div>
@@ -614,17 +614,17 @@
 
         <div style="padding: 0 18px 18px;">
             <table id="tableOS"
-                   class="table table-bordered table-striped table-vcenter js-dataTable-full dataTable"
-                   style="width:100%">
+                   class="table table-bordered table-striped table-vcenter js-dataTable-full dataTable u-wp-100"
+                  >
                 <thead>
                     <tr>
-                        <th class="text-center" style="width:32px;">
+                        <th class="text-center u-w-32">
                             <div class="css-control css-checkbox css-checkbox-default">
                                 <input type="checkbox" class="css-control-input select-all-checkbox" />
                                 <span class="css-control-indicator"></span>
                             </div>
                         </th>
-                        <th class="text-center details-control" style="width:22px;"></th>
+                        <th class="text-center details-control u-w-22"></th>
                         <th class="text-center d-md-table-cell">Ordem de Serviço</th>
                         <th class="text-center d-md-table-cell">Data</th>
                         <th class="d-none d-md-table-cell">Unidade</th>
@@ -636,7 +636,7 @@
                         <th class="d-none d-md-table-cell text-center">Prioridade</th>
                         <th class="d-none d-md-table-cell text-center">Prazo de Execução</th>
                         <th class="d-none d-md-table-cell text-center">Status</th>
-                        <th class="text-center" style="width:80px;">Ações</th>
+                        <th class="text-center u-w-80">Ações</th>
                     </tr>
                 </thead>
                 <tbody>

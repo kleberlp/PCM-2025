@@ -150,7 +150,7 @@
 
 
 
-                    <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+                    <div class="col-md-12 col-xl-12 u-hide" id="div_list">
 
                         <div class="block-content block-content-full">
 
@@ -162,7 +162,7 @@
                                         <th class="text-center">@PCM.WEB.Properties.Resources.apartamento</th>
                                         <th class="text-center">@PCM.WEB.Properties.Resources.status</th>
                                         <th class="text-center">@PCM.WEB.Properties.Resources.status_uh</th>
-                                        <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                                        <th data-sortable="false" class="text-center d-print-none u-w-80"></th>
                                     </tr>
                                 </thead>
 
@@ -180,7 +180,7 @@
                                         <td class="text-center">@Html.DisplayFor(modelItem => uh.apartamento)</td>
                                         <td class="text-center"><span class="badge @uh.color.ToString().Replace("text", "bg")">@Html.DisplayFor(modelItem => uh.descricao_status)</span></td>
                                         <td class="text-center">@Html.DisplayFor(modelItem => uh.room_status)</td>
-                                        <td class="text-center d-print-none" style="width: 80px;">
+                                        <td class="text-center d-print-none u-w-80">
                                             <div class="btn-group">
                                                 @if (uh.status == 2)
                                                 {

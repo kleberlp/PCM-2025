@@ -277,7 +277,7 @@
                             <i class="si si-doc text-white"></i><h3 class="block-title text-white text-center font-w600">Laudo</h3>
                         </div>
                         <div class="block-content block-content-full clearfix">
-                            <canvas style="width:100%;text-align:center;display:inline" id="chartLaudo"></canvas>
+                            <canvas class="u-full-center-inline" id="chartLaudo"></canvas>
                             <div class="font-size-h5 font-w600 text-center"><span id="text-laudo"></span><span>%</span></div>
                         </div>
                     </div>
@@ -289,7 +289,7 @@
                             <i class="si si-settings text-white"></i><h3 class="block-title text-white text-center font-w600">Preventiva</h3>
                         </div>
                         <div class="block-content block-content-full clearfix">
-                            <canvas style="width:100%;text-align:center;display:inline" id="chartPreventiva"></canvas>
+                            <canvas class="u-full-center-inline" id="chartPreventiva"></canvas>
                             <div class="font-size-h5 font-w600 text-center"><span id="text-preventiva"></span><span>%</span></div>
                         </div>
                     </div>
@@ -301,7 +301,7 @@
                             <i class="fa fa-retweet text-white"></i><h3 class="block-title text-white text-center font-w600">UH em Dia</h3>
                         </div>
                         <div class="block-content block-content-full clearfix">
-                            <canvas style="width:100%;text-align:center;display:inline" id="chartUH"></canvas>
+                            <canvas class="u-full-center-inline" id="chartUH"></canvas>
                             <div class="font-size-h5 font-w600 text-center"><span id="text-uh"></span><span>%</span></div>
                         </div>
                     </div>
@@ -313,7 +313,7 @@
                             <i class="fa fa-snowflake-o text-white"></i><h3 class="block-title text-white text-center font-w600">PMOC</h3>
                         </div>
                         <div class="block-content block-content-full clearfix">
-                            <canvas style="width:100%;text-align:center;display:inline" id="chartPMOC"></canvas>
+                            <canvas class="u-full-center-inline" id="chartPMOC"></canvas>
                             <div class="font-size-h5 font-w600 text-center"><span id="text-pmoc"></span><span>%</span></div>
                         </div>
                     </div>
@@ -410,17 +410,17 @@
                         <table class="table table-borderless table-striped" id="tb-principais-ocorrencias">
                             <thead>
                                 <tr class="bg-gray">
-                                    <th class="text-center" style="width: 100px;">#</th>
+                                    <th class="text-center u-w-100">#</th>
                                     <th>@PCM.WEB.Properties.Resources.equipamento</th>
-                                    <th class="text-center" style="width: 150px;">Quantidade</th>
-                                    <th class="text-center" style="width: 150px;">Horas</th>
+                                    <th class="text-center u-w-150">Quantidade</th>
+                                    <th class="text-center u-w-150">Horas</th>
                                 </tr>
                             </thead>
                             <tbody id="tb-principais-ocorrencias-body">
                                 @foreach (var item in ViewBag.PrincipaisOcorrencias)
                                 {
                                     <tr>
-                                        <td class="text-center" style="width: 100px;">@item.item</td>
+                                        <td class="text-center u-w-100">@item.item</td>
                                         <td class="font-w600">@item.local</td>
                                         <td class="text-center">@item.quantidade</td>
                                         <td class="text-center">@item.horas</td>
@@ -853,7 +853,7 @@
                     for (var i = 0; i < response.length; i++) {
                         var newRowItem = $("<tr>");
                         var colsItem = "";
-                        colsItem = '<td class="text-center" style="width: 100px;">' + response[i].item + '</td>';
+                        colsItem = '<td class="text-center u-w-100">' + response[i].item + '</td>';
                         newRowItem.append(colsItem);
                         colsItem = '<td class="font-w600">' + response[i].local + '</td>';
                         newRowItem.append(colsItem);

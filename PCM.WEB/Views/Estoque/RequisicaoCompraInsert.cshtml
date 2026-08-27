@@ -44,9 +44,9 @@
                                     <label>@PCM.WEB.Properties.Resources.unidade</label>
                                     <div>@Html.DropDownList("unidade", null, "", new { @class = "form-control js-select2" })</div>
                                 </div>
-                                <div class="col-md-2" id="div_barcode" name="div_barcode" style="display:none">
+                                <div class="col-md-2 u-hide" id="div_barcode" name="div_barcode">
                                     <label>@PCM.WEB.Properties.Resources.barcode</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" data-enter-focus="#quantity" data-act="loadProductInfo" data-on="blur"></div>
+                                    <div><input type="text" class="form-control u-upper" id="barcode" name="barcode" placeholder="" value="" data-enter-focus="#quantity" data-act="loadProductInfo" data-on="blur"></div>
                                 </div>
                                 <div class="col-md-2" id="div_product" name="div_product">
                                     <label>@PCM.WEB.Properties.Resources.produto</label>
@@ -59,14 +59,14 @@
                                 <div class="col-md-4">
                                     <label>@PCM.WEB.Properties.Resources.descricao</label>
                                     <div>
-                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="descricao" name="descricao" placeholder="" value="" disabled>
+                                        <input type="text" class="form-control u-upper" id="descricao" name="descricao" placeholder="" value="" disabled>
                                         <input type="hidden" class="form-control" id="quantidadeEstoque" name="quantidadeEstoque" value="0">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.quantidade</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="quantidade" name="quantidade" placeholder="" value="" data-enter-act="addProduct">
+                                        <input type="text" class="form-control u-upper" id="quantidade" name="quantidade" placeholder="" value="" data-enter-act="addProduct">
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" data-act="addProduct"></button>
                                         </div>
@@ -77,11 +77,11 @@
                             <table class="table table-bordered table-sm table-striped table-vcenter" id="tableMain" name="tableMain">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th class="text-center" style="width:200px">@PCM.WEB.Properties.Resources.produto</th>
+                                        <th class="text-center u-w-200">@PCM.WEB.Properties.Resources.produto</th>
                                         <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.descricao</th>
-                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.quantidade</th>
-                                        <th class="text-center" style="width:80px">@PCM.WEB.Properties.Resources.unidade_medida</th>
-                                        <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                        <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.quantidade</th>
+                                        <th class="text-center u-w-80">@PCM.WEB.Properties.Resources.unidade_medida</th>
+                                        <th class="text-center u-w-80" data-sortable="false"></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

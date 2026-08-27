@@ -68,12 +68,12 @@
                             <table class="table table-hover table-striped table-sm js-table-checkable">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.apartamento</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.apartamento</th>
                                         <th>@PCM.WEB.Properties.Resources.tipo_apartamento</th>
                                         <th>@PCM.WEB.Properties.Resources.setor</th>
-                                        <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.bloco</th>
-                                        <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.andar</th>
-                                        <th class="text-md-center" style="width: 50px;" data-sortable="false">
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.bloco</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.andar</th>
+                                        <th class="text-md-center u-w-50" data-sortable="false">
                                             <label class="css-control-sm css-control-secondary css-switch">
                                                 <input type="checkbox" class="css-control-input" id="check-all" name="check-all" value="0">
                                                 <span class="css-control-indicator"></span>
@@ -87,11 +87,11 @@
                                     {
                                         @Html.HiddenFor(m => m[i].codigo_apartamento)
                                         <tr>
-                                            <td class="font-w600 text-center" style="width:100px">@Html.DisplayFor(m => m[i].apartamento)</td>
+                                            <td class="font-w600 text-center u-w-100">@Html.DisplayFor(m => m[i].apartamento)</td>
                                             <td>@Html.DisplayFor(m => m[i].tipo_apartamento)</td>
                                             <td>@Html.DisplayFor(m => m[i].setor)</td>
-                                            <td class="text-center" style="width:100px">@Html.DisplayFor(m => m[i].bloco)</td>
-                                            <td class="text-center" style="width:100px">@Html.DisplayFor(m => m[i].andar)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(m => m[i].bloco)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(m => m[i].andar)</td>
                                             <td class="d-none d-sm-table-cell text-center">
                                                 <div class="col-12">
                                                     <label class="css-control-sm css-control-success css-switch">
@@ -234,8 +234,8 @@
                     colsItem = '<td class="font-w600 text-center" style = "width:100px" >' + result.apartamento + '</td>';
                     colsItem += '<td>' + result.tipo_apartamento + '</td>';
                     colsItem += '<td>' + result.setor + '</td>';
-                    colsItem += '<td class="text-center" style="width:100px">' + result.bloco + '</td>';
-                    colsItem += '<td class="text-center" style="width:100px">' + result.andar + '</td>';
+                    colsItem += '<td class="text-center u-w-100">' + result.bloco + '</td>';
+                    colsItem += '<td class="text-center u-w-100">' + result.andar + '</td>';
                     colsItem += '<td class="d-none d-sm-table-cell text-center">';
                     colsItem += '<div class="col-12">';
                     colsItem += '<label class="css-control-sm css-control-success css-switch">';

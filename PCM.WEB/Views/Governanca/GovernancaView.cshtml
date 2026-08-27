@@ -74,7 +74,7 @@
                     <thead>
                         <tr>
                             <th>@PCM.WEB.Properties.Resources.descricao</th>
-                            <th class="text-center" style="width:150px">Quantidade</th>
+                            <th class="text-center u-w-150">Quantidade</th>
                         </tr>
                     </thead>
                     <tbody id="table_linha" name="table_linha">
@@ -129,12 +129,12 @@
                         <table class="table table-bordered table-sm table-striped table-vcenter" id="checklist-table" name="checklist-table">
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="width:100px">Código</th>
+                                    <th class="text-center u-w-100">Código</th>
                                     <th>@PCM.WEB.Properties.Resources.descricao </th>
-                                    <th class="text-center" style="width:100px">Resultado</th>
-                                    <th class="text-center" style="width:100px">OK</th>
-                                    <th class="text-center" style="width:100px">NOK</th>
-                                    <th class="text-center" style="width:100px">Retrabalhado</th>
+                                    <th class="text-center u-w-100">Resultado</th>
+                                    <th class="text-center u-w-100">OK</th>
+                                    <th class="text-center u-w-100">NOK</th>
+                                    <th class="text-center u-w-100">Retrabalhado</th>
                                     <th>@PCM.WEB.Properties.Resources.observacao</th>
                                 </tr>
                             </thead>
@@ -154,19 +154,19 @@
                                 <td class="text-center">@Html.DisplayFor(m => Model.checklist[i].checklist)</td>
                                 <td>@Html.DisplayFor(m => Model.checklist[i].descricao)</td>
                                 <td class="text-center">@Html.DisplayFor(m => Model.checklist[i].resultado_descricao)</td>
-                                <td class="text-center" style="width:100px">
+                                <td class="text-center u-w-100">
                                     <label class="css-control css-control-success css-checkbox">
                                         @Html.RadioButtonFor(m => Model.checklist[i].resultado, "OK", new { @class = "css-control-input", @checked = "true" })
                                         <span class="css-control-indicator"></span>
                                     </label>
                                 </td>
-                                <td class="text-center" style="width:100px">
+                                <td class="text-center u-w-100">
                                     <label class="css-control css-control-danger css-checkbox">
                                         @Html.RadioButtonFor(m => Model.checklist[i].resultado, "NOK", new { @class = "css-control-input" })
                                         <span class="css-control-indicator"></span>
                                     </label>
                                 </td>
-                                <td class="text-center" style="width:100px">
+                                <td class="text-center u-w-100">
                                     <label class="css-control-sm css-control-secondary css-checkbox">
                                         @Html.RadioButtonFor(m => Model.checklist[i].resultado, "Retrabalho", new { @class = "css-control-input" })
                                         <span class="css-control-indicator"></span>

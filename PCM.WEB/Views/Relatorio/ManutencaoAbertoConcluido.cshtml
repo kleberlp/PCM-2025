@@ -82,9 +82,9 @@
                                 <thead>
                                     <tr class="table-secondary">
                                         <th>@PCM.WEB.Properties.Resources.dia</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.aberto</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.os_concluido</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.saldo</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.aberto</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.os_concluido</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.saldo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -92,16 +92,16 @@
                                     {
                                         <tr>     
                                             <td>@Html.DisplayFor(modelItem => item.dia)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.aberto)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.concluido)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.saldo)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.aberto)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.concluido)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.saldo)</td>
                                         </tr>
                                     }
                                     <tr class="table-warning">     
                                         <td><b></b>TOTAL<b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.aberto</b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.concluido</b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.saldo</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.aberto</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.concluido</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.saldo</b></td>
                                     </tr>
                                 </tbody>
                             </table>

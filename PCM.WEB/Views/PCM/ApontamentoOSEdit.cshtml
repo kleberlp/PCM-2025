@@ -96,11 +96,11 @@
                                         <div>@Html.DropDownList("tipo_ordem_servico", null, "", new { @class = "form-control" })</div>
                                     </div>
                                 </div>
-                                <div class="form-group row" id="div_funcionario" style="display:none">
+                                <div class="form-group row u-hide" id="div_funcionario">
                                     <label class="col-12">@PCM.WEB.Properties.Resources.funcionario</label>
                                     <div class="col-12">@Html.DropDownList("funcionario", null, "", new { @class = "form-control" })</div>
                                 </div>
-                                <div class="form-group row" id="div_fornecedor" style="display:none">
+                                <div class="form-group row u-hide" id="div_fornecedor">
                                     <label class="col-12">@PCM.WEB.Properties.Resources.fornecedor</label>
                                     <div class="col-12">@Html.DropDownList("fornecedor", null, "", new { @class = "form-control" })</div>
                                 </div>
@@ -151,7 +151,7 @@
                                 <thead>
                                     <tr>
                                         <th>@PCM.WEB.Properties.Resources.descricao </th>
-                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.conforme</th>
+                                        <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.conforme</th>
                                         <th>@PCM.WEB.Properties.Resources.comentario</th>
                                     </tr>
                                 </thead>
@@ -163,7 +163,7 @@
                                             @Html.HiddenFor(m => m[i].codigo)
                                             @Html.HiddenFor(m => m[i].descricao)
                                             <td>@Html.DisplayFor(m => m[i].descricao)</td>
-                                            <td class="text-center" style="width:150px">
+                                            <td class="text-center u-w-150">
                                                 <label class="css-control css-control-success css-switch">
                                                     @Html.CheckBoxFor(m => m[i].resultado, new { @class = "css-control-input" })
                                                     <span class="css-control-indicator"></span>

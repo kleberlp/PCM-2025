@@ -75,14 +75,14 @@
                             <thead>
                                 <tr class="table-secondary">
                                     <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.uh</th>
+                                    <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.uh</th>
                                     <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data_inicio</th>
                                     <th class="text-center d-md-table-cell">@PCM.WEB.Properties.Resources.data_termino</th>
                                     <th class="d-none d-lg-table-cell">@PCM.WEB.Properties.Resources.responsavel_vistoria</th>
-                                    <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.tempo_gasto</th>
+                                    <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.tempo_gasto</th>
                                     @if (ViewBag.editar || ViewBag.imprimir)
                                     {
-                                        <th data-sortable="false" class="text-center" style="width: 120px;"></th>
+                                        <th data-sortable="false" class="text-center u-w-120"></th>
                                     }
                                 </tr>
                             </thead>
@@ -92,11 +92,11 @@
                                 {
                                 <tr>
                                     <td class="d-none d-md-table-cell">@Html.DisplayFor(modelItem => item.unidade)</td>
-                                    <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.apartamento)</td>
+                                    <td class="text-center u-w-120">@Html.DisplayFor(modelItem => item.apartamento)</td>
                                     <td class="text-center d-md-table-cell">@Html.DisplayFor(modelItem => item.data_inicio)</td>
                                     <td class="text-center d-md-table-cell">@Html.DisplayFor(modelItem => item.data_termino)</td>
                                     <td class="d-none d-lg-table-cell">@Html.DisplayFor(modelItem => item.responsavel_vistoria)</td>
-                                    <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.tempo_gasto)</td>
+                                    <td class="text-center u-w-120">@Html.DisplayFor(modelItem => item.tempo_gasto)</td>
                                     @if (ViewBag.editar || ViewBag.imprimir)
                                     {
                                         <td class="text-center">

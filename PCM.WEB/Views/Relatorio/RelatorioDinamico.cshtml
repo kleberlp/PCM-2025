@@ -11,7 +11,7 @@
 
 <div class="page landscape-parent">
 
-            <div class="block d-print-normal p-10 m-10" style="display:none">
+            <div class="block d-print-normal p-10 m-10 u-hide">
                 <div class="form-row">
                     <div class="col-3">
                         <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
@@ -78,7 +78,7 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th class="text-md-center v-center col-md-1" style="width: 80px;" rowspan="3">@PCM.WEB.Properties.Resources.data</th>
+                                        <th class="text-md-center v-center col-md-1 u-w-80" rowspan="3">@PCM.WEB.Properties.Resources.data</th>
                                         @foreach (var item in ViewBag.informacao)
                                         {
                                             <th colspan="2" class="text-md-center">@item.checklist</th>

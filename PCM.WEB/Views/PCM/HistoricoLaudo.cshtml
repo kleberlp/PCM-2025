@@ -74,11 +74,11 @@
                                     <th>@PCM.WEB.Properties.Resources.descricao</th>
                                     <th class="d-none d-md-table-cell text-center">@PCM.WEB.Properties.Resources.tipo_servico</th>
                                     <th class="d-none d-md-table-cell text-center">@PCM.WEB.Properties.Resources.tipo_ordem_servico</th>
-                                    <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.quantidade_equipamento</th>
-                                    <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.valor</th>
+                                    <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.quantidade_equipamento</th>
+                                    <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.valor</th>
                                     @if(ViewBag.editar)
                                     {
-                                        <th data-sortable="false" class="text-center" style="width: 80px;"></th>
+                                        <th data-sortable="false" class="text-center u-w-80"></th>
                                     }
                                 </tr>
                             </thead>
@@ -92,11 +92,11 @@
                                         <td>@Html.DisplayFor(modelItem => item.descricao)</td>
                                         <td class="d-none d-md-table-cell text-center">@Html.DisplayFor(modelItem => item.tipo_servico)</td>
                                         <td class="d-none d-md-table-cell text-center">@Html.DisplayFor(modelItem => item.tipo_ordem_servico)</td>
-                                        <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.quantidade_equipamento)</td>
-                                        <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.valor)</td>
+                                        <td class="text-center u-w-120">@Html.DisplayFor(modelItem => item.quantidade_equipamento)</td>
+                                        <td class="text-center u-w-120">@Html.DisplayFor(modelItem => item.valor)</td>
                                         @if(ViewBag.editar || ViewBag.imprimir)
                                         {
-                                            <td class="text-center" style="width: 80px;" >
+                                            <td class="text-center u-w-80" >
                                                 <div class="btn-group">
                                                     @if (ViewBag.editar)
                                                     {<a href="@Url.Action("OrdemServicoProgramada", "PCM", new {codigo_unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo, formulario = item.formulario, view = ViewBag.view, tipo = "historico" })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}

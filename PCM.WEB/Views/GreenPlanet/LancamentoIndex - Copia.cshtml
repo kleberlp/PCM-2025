@@ -98,7 +98,7 @@
                                     <thead>
                                         <tr>
                                             <th>@PCM.WEB.Properties.Resources.item_medicao</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.medicao</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.medicao</th>
                                         </tr>
                                     </thead>
 
@@ -117,10 +117,10 @@
                                                 </td>
                                                 @if(Model[i].numero_digitos == 0)
                                                 {
-                                                    <td class="text-center" style="width: 150px;">@Html.TextBoxFor(m => m[i].valor, new { @class = "form-control text-center"})</td>                                
+                                                    <td class="text-center u-w-150">@Html.TextBoxFor(m => m[i].valor, new { @class = "form-control text-center"})</td>                                
                                                 }
                                                 else{
-                                                    <td class="text-center" style="width: 150px;">@Html.TextBoxFor(m => m[i].valor, new { @class = "form-control text-center", @maxlength=Model[i].numero_digitos})</td>                         
+                                                    <td class="text-center u-w-150">@Html.TextBoxFor(m => m[i].valor, new { @class = "form-control text-center", @maxlength=Model[i].numero_digitos})</td>                         
                                                 }
                                             </tr>
                                         }

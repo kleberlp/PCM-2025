@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <div class="block-content" id="div_grid" style="display:none">
+                <div class="block-content u-hide" id="div_grid">
 
                     @{
                         int aux = 1;
@@ -162,7 +162,7 @@
 
                 </div>
 
-                <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+                <div class="col-md-12 col-xl-12 u-hide" id="div_list">
 
                     <div class="block-content block-content-full">
 
@@ -179,7 +179,7 @@
                                     <th class="text-center">@PCM.WEB.Properties.Resources.data_ultimo_pmoc</th>
                                     <th class="text-center">@PCM.WEB.Properties.Resources.data_proximo_pmoc</th>
                                     <th class="text-center">@PCM.WEB.Properties.Resources.status</th>
-                                    <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                                    <th data-sortable="false" class="text-center d-print-none u-w-80"></th>
                                 </tr>
                             </thead>
 
@@ -197,7 +197,7 @@
                                         <td class="text-center">@Html.DisplayFor(modelItem => item.data_ultima)</td>
                                         <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima_formatada)</td>
                                         <td class="text-center"><span class="badge @item.cor.ToString().Replace("text", "bg")">@Html.DisplayFor(modelItem => item.descricao_status)</span></td>
-                                        <td class="text-center d-print-none" style="width: 80px;">
+                                        <td class="text-center d-print-none u-w-80">
                                             <div class="btn-group">
                                                 @if ((item.status != 2) && (item.status != 4))
                                                 {<a href="@Url.Action("ApontamentoPMOC", "PMOC", new { codigo_unidade = item.codigo_unidade, codigo_equipamento = item.codigo_equipamento, intervalo = item.data_proxima, view = "PMOC" })" class="btn btn-sm btn-secondary"><i class="fa fa-snowflake-o"></i></a>}

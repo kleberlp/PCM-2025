@@ -74,12 +74,12 @@
                                 <thead>
                                     <tr class="table-secondary">
                                         <th>@PCM.WEB.Properties.Resources.mes</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.corretiva</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.melhoria</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.preditiva</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.preventiva</th>
-                                        <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.checklist</th>
-                                        <th class="text-center" style="width: 100px;">Total</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.corretiva</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.melhoria</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.preditiva</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.preventiva</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.checklist</th>
+                                        <th class="text-center u-w-100">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -87,22 +87,22 @@
                                     {
                                         <tr>     
                                             <td>@Html.DisplayFor(modelItem => item.mes)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.corretiva)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.melhoria)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.preditiva)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.preventiva)</td>
-                                            <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.checklist)</td>
-                                            <td class="text-center" style="width: 100px;"><b>@Html.DisplayFor(modelItem => item.total)</b></td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.corretiva)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.melhoria)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.preditiva)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.preventiva)</td>
+                                            <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.checklist)</td>
+                                            <td class="text-center u-w-100"><b>@Html.DisplayFor(modelItem => item.total)</b></td>
                                         </tr>
                                     }
                                     <tr class="table-warning">     
                                         <td><b></b>TOTAL<b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.corretiva</b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.melhoria</b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.preditiva</b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.preventiva</b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.checklist</b></td>
-                                        <td class="text-center" style="width: 100px;"><b>@ViewBag.relatorio.total</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.corretiva</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.melhoria</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.preditiva</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.preventiva</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.checklist</b></td>
+                                        <td class="text-center u-w-100"><b>@ViewBag.relatorio.total</b></td>
                                     </tr>
                                 </tbody>
                             </table>

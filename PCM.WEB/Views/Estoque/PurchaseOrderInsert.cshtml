@@ -78,9 +78,9 @@
                         </div>
                         <div class="block-content block-content-full">
                             <div class="form-group row">
-                                <div class="col-md-2" id="div_barcode" name="div_barcode" style="display:none">
+                                <div class="col-md-2 u-hide" id="div_barcode" name="div_barcode">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.barcode</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" data-enter-focus="#quantity" data-act="loadProductInfo" data-on="blur"></div>
+                                    <div><input type="text" class="form-control u-upper" id="barcode" name="barcode" placeholder="" value="" data-enter-focus="#quantity" data-act="loadProductInfo" data-on="blur"></div>
                                 </div>
                                 <div class="col-md-2" id="div_product" name="div_product">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.product</label>
@@ -93,19 +93,19 @@
                                 <div class="col-md-5">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.description</label>
                                     <div>
-                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="description" name="description" placeholder="" value="" disabled>
+                                        <input type="text" class="form-control u-upper" id="description" name="description" placeholder="" value="" disabled>
                                         <input type="hidden" class="form-control" id="product" name="product" value="0">
                                         <input type="hidden" class="form-control" id="quantity_stock" name="quantity_stock" value="0">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.quantity</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="quantity" name="quantity" placeholder="" value="" data-enter-focus="#unitary_value"></div>
+                                    <div><input type="text" class="form-control u-upper" id="quantity" name="quantity" placeholder="" value="" data-enter-focus="#unitary_value"></div>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.unitary_value</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="unitary_value" name="unitary_value" placeholder="" value="" data-enter-act="addProduct">
+                                        <input type="text" class="form-control u-upper" id="unitary_value" name="unitary_value" placeholder="" value="" data-enter-act="addProduct">
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" data-act="addProduct"></button>
                                         </div>
@@ -116,17 +116,17 @@
                             <table class="table table-bordered table-sm table-striped table-vcenter" id="table" name="table">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th class="text-center" style="width:200px">@PCM.WEB.Properties.Resources.product</th>
+                                        <th class="text-center u-w-200">@PCM.WEB.Properties.Resources.product</th>
                                         <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.description</th>
-                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.quantity</th>
-                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.unitary_value</th>
-                                        <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                        <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.quantity</th>
+                                        <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.unitary_value</th>
+                                        <th class="text-center u-w-80" data-sortable="false"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_row" name="table_row">
                                     @for (int i = 0; i < Model.Count; i++)
                                     {
-                                        <tr id='row' style="display:none">
+                                        <tr class="u-hide" id='row'>
                                             @Html.HiddenFor(m => m[i].product_id)
                                             @Html.HiddenFor(m => m[i].uom_id)
                                             @Html.HiddenFor(m => m[i].description)
@@ -135,17 +135,17 @@
                                             @Html.HiddenFor(m => m[i].deleted)
                                             <td class="text-center">@Html.DisplayFor(m => m[i].product)</td>
                                             <td class="d-none d-sm-table-cell">@Html.DisplayFor(m => m[i].description)</td>
-                                            <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].quantity)</td>
-                                            <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].unitary_value)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(m => m[i].quantity)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(m => m[i].unitary_value)</td>
                                             <td class="text-center"><a href="#" data-act="remove" data-args='["__self__", @i]' class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>
                                         </tr>
                                     }
                                 </tbody>
                                 <tfoot id="table_footer" name="table_footer">
-                                    <tr id='row' style="display:none">
+                                    <tr class="u-hide" id='row'>
                                         <td class="font-w600" colspan="3">@PCM.WEB.Properties.Resources.total</td>
-                                        <td class="text-center font-w600" style="width:150px">0</td>
-                                        <td class="text-center font-w600" style="width:150px"></td>
+                                        <td class="text-center font-w600 u-w-150">0</td>
+                                        <td class="text-center font-w600 u-w-150"></td>
                                         <td></td>
                                     </tr>
                                 </tfoot>
@@ -409,11 +409,11 @@
             newRowItem.append(colsItem);
             colsItem = '<td class="d-none d-sm-table-cell">' + $("#description").val().toUpperCase() + '</td>';
             newRowItem.append(colsItem);
-            colsItem = '<td class="text-center" style="width:150px">' + $("#quantity").val() + '</td>';
+            colsItem = '<td class="text-center u-w-150">' + $("#quantity").val() + '</td>';
             newRowItem.append(colsItem);
-            colsItem = '<td class="text-center" style="width:150px">' + $("#unitary_value").val() + '</td>';
+            colsItem = '<td class="text-center u-w-150">' + $("#unitary_value").val() + '</td>';
             newRowItem.append(colsItem);
-            colsItem = '<td class="text-center" style="width: 80px;" ><div class="btn-group">';
+            colsItem = '<td class="text-center u-w-80" ><div class="btn-group">';
             colsItem += '<a href="#" data-act="remove" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>';
             colsItem += '</div></td>';
             newRowItem.append(colsItem);

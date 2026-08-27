@@ -42,10 +42,10 @@
                             <th>@PCM.WEB.Properties.Resources.nome_fantasia</th>
                             <th class="d-none d-sm-table-cell text-center">@PCM.WEB.Properties.Resources.uf</th>
                             <th class="d-none d-sm-table-cell text-center">@PCM.WEB.Properties.Resources.municipio</th>
-                            <th class="d-none d-sm-table-cell text-center" style="width: 80px;">@PCM.WEB.Properties.Resources.ativo</th>
+                            <th class="d-none d-sm-table-cell text-center u-w-80">@PCM.WEB.Properties.Resources.ativo</th>
                             @if(ViewBag.editar || ViewBag.excluir)
                             {
-                                <th class="text-center" style="width: 80px;" data-sortable="false"></th>
+                                <th class="text-center u-w-80" data-sortable="false"></th>
                             }
                         </tr>
                     </thead>
@@ -58,7 +58,7 @@
                                 <td>@Html.DisplayFor(modelItem => item.nome_fantasia)</td>
                                 <td class="d-none d-sm-table-cell text-center">@Html.DisplayFor(modelItem => item.uf)</td>
                                 <td class="d-none d-sm-table-cell text-center">@Html.DisplayFor(modelItem => item.municipio)</td>
-                                <td class="d-none d-sm-table-cell text-center" style="width: 80px;">
+                                <td class="d-none d-sm-table-cell text-center u-w-80">
                                     <label class="css-control-sm css-control-secondary css-checkbox">
                                         @Html.CheckBoxFor(modelItem => item.ativo, new { @class = "css-control-input", @disabled="disabled"})
                                         <span class="css-control-indicator"></span>
@@ -66,7 +66,7 @@
                                 </td>             
                                 @if(ViewBag.editar || ViewBag.excluir)
                                 {
-                                    <td class="text-center" style="width: 80px;" >
+                                    <td class="text-center u-w-80" >
                                         <div class="btn-group">          
                                             @if(ViewBag.editar) { <a href="@Url.Action("UnidadeEdit", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                             @if(ViewBag.excluir) { <a href="@Url.Action("UnidadeDelete", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}

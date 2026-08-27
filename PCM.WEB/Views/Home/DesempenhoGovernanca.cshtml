@@ -124,7 +124,7 @@
             <div class="dashboard-section row" style="min-height:350px;">
                 <div class="col-md-4 d-flex flex-column">
                     <div class="section-title">Score de Desempenho da Unidade</div>
-                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
+                    <div class="block dashboard-card flex-fill u-pad0-clip">
                         <div style="display:flex;flex-direction:column;align-items:center;padding:20px 16px 0;">
                             <svg viewBox="0 0 200 115" width="220" height="126" style="display:block;max-width:100%;">
                                 <path d="M 22 108 A 78 78 0 0 1 178 108" fill="none" stroke="#E5E7EB" stroke-width="16" stroke-linecap="round"/>
@@ -183,46 +183,46 @@
                     <span class="dg-section-badge">@(Model != null ? Model.Camareiras.Count : 0) camareiras</span>
                     <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Nota (1–10) = Produtividade×@(ViewBag.gIndPesoProdPct)% + NC×@(ViewBag.gIndPesoNCPct)% + Retrabalho×@(ViewBag.gIndPesoRetPct)% · elegível ≥ @ViewBag.gIndMinUhs UHs · NC/Retrab sobre vistoriados (UHs×@(ViewBag.gVisRatePct)%)</span>
                 </div>
-                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
-                    <div style="overflow-x:auto;">
+                <div class="block dashboard-card u-pad0-clip">
+                    <div class="u-scroll-x">
                         <table class="table mb-0" style="table-layout:fixed;width:100%;">
                             <colgroup>
-                                <col style="width:40px;" />
+                                <col class="u-w-40" />
                                 <col />
-                                <col style="width:60px;" />
-                                <col style="width:50px;" />
-                                <col style="width:85px;" />
-                                <col style="width:75px;" />
-                                <col style="width:80px;" />
-                                <col style="width:80px;" />
-                                <col style="width:150px;" />
+                                <col class="u-w-60" />
+                                <col class="u-w-50" />
+                                <col class="u-w-85" />
+                                <col class="u-w-75" />
+                                <col class="u-w-80" />
+                                <col class="u-w-80" />
+                                <col class="u-w-150" />
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="width:40px;">#</th>
+                                    <th class="u-w-40">#</th>
                                     <th>Camareira</th>
-                                    <th class="text-center" style="width:60px;">UHs</th>
-                                    <th class="text-center" style="width:50px;">NC</th>
-                                    <th class="text-center" style="width:85px;">Retrabalho</th>
-                                    <th class="text-center" style="width:75px;">Índ. NC%</th>
-                                    <th class="text-center" style="width:80px;">Índ. Retrab%</th>
-                                    <th class="text-center" style="width:80px;">Nota</th>
-                                    <th class="text-center" style="width: 150px;">Status</th>
+                                    <th class="text-center u-w-60">UHs</th>
+                                    <th class="text-center u-w-50">NC</th>
+                                    <th class="text-center u-w-85">Retrabalho</th>
+                                    <th class="text-center u-w-75">Índ. NC%</th>
+                                    <th class="text-center u-w-80">Índ. Retrab%</th>
+                                    <th class="text-center u-w-80">Nota</th>
+                                    <th class="text-center u-w-150">Status</th>
                                 </tr>
                             </thead>
                         </table>
                         <div style="max-height:510px;overflow-y:auto;">
                             <table class="table mb-0" style="table-layout:fixed;width:100%;">
                                 <colgroup>
-                                    <col style="width:40px;" />
+                                    <col class="u-w-40" />
                                     <col />
-                                    <col style="width:60px;" />
-                                    <col style="width:50px;" />
-                                    <col style="width:85px;" />
-                                    <col style="width:75px;" />
-                                    <col style="width:80px;" />
-                                    <col style="width:80px;" />
-                                    <col style="width: 150px;" />
+                                    <col class="u-w-60" />
+                                    <col class="u-w-50" />
+                                    <col class="u-w-85" />
+                                    <col class="u-w-75" />
+                                    <col class="u-w-80" />
+                                    <col class="u-w-80" />
+                                    <col class="u-w-150" />
                                 </colgroup>
                                 <tbody id="rankingGeralBody"></tbody>
                             </table>
@@ -235,25 +235,25 @@
             <div class="dashboard-section row">
                 <div class="col-md-6 d-flex flex-column">
                     <div class="section-title">Ranking por Produtividade</div>
-                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
+                    <div class="block dashboard-card flex-fill u-pad0-clip">
                         <table class="table mb-0" style="table-layout:fixed;width:100%;">
                             <colgroup>
-                                <col style="width:40px;" /><col /><col style="width:65px;" /><col style="width:65px;" /><col style="width:90px;" />
+                                <col class="u-w-40" /><col /><col class="u-w-65" /><col class="u-w-65" /><col class="u-w-90" />
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="width:40px;">#</th>
+                                    <th class="u-w-40">#</th>
                                     <th>Camareira</th>
-                                    <th class="text-center" style="width:65px;">UHs</th>
-                                    <th class="text-center" style="width:65px;">UH/Dia</th>
-                                    <th class="text-center" style="width: 150px;">Status</th>
+                                    <th class="text-center u-w-65">UHs</th>
+                                    <th class="text-center u-w-65">UH/Dia</th>
+                                    <th class="text-center u-w-150">Status</th>
                                 </tr>
                             </thead>
                         </table>
                         <div style="max-height:510px;overflow-y:auto;">
                             <table class="table mb-0" style="table-layout:fixed;width:100%;">
                                 <colgroup>
-                                    <col style="width:40px;" /><col /><col style="width:65px;" /><col style="width:65px;" /><col style="width:90px;" />
+                                    <col class="u-w-40" /><col /><col class="u-w-65" /><col class="u-w-65" /><col class="u-w-90" />
                                 </colgroup>
                                 <tbody id="rankingProdBody"></tbody>
                             </table>
@@ -262,27 +262,27 @@
                 </div>
                 <div class="col-md-6 d-flex flex-column">
                     <div class="section-title">Ranking por Qualidade de Serviço</div>
-                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
+                    <div class="block dashboard-card flex-fill u-pad0-clip">
                         <table class="table mb-0" style="table-layout:fixed;width:100%;">
                             <colgroup>
-                                <col style="width:40px;" /><col /><col style="width:50px;" /><col style="width:55px;" /><col style="width:75px;" /><col style="width:80px;" /><col style="width:90px;" />
+                                <col class="u-w-40" /><col /><col class="u-w-50" /><col class="u-w-55" /><col class="u-w-75" /><col class="u-w-80" /><col class="u-w-90" />
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="width:40px;">#</th>
+                                    <th class="u-w-40">#</th>
                                     <th>Camareira</th>
-                                    <th class="text-center" style="width:50px;">NC</th>
-                                    <th class="text-center" style="width:55px;">Retrab.</th>
-                                    <th class="text-center" style="width:75px;">Índ. NC%</th>
-                                    <th class="text-center" style="width:80px;">Índ. Retrab%</th>
-                                    <th class="text-center" style="width:150px;">Status</th>
+                                    <th class="text-center u-w-50">NC</th>
+                                    <th class="text-center u-w-55">Retrab.</th>
+                                    <th class="text-center u-w-75">Índ. NC%</th>
+                                    <th class="text-center u-w-80">Índ. Retrab%</th>
+                                    <th class="text-center u-w-150">Status</th>
                                 </tr>
                             </thead>
                         </table>
                         <div style="max-height:510px;overflow-y:auto;">
                             <table class="table mb-0" style="table-layout:fixed;width:100%;">
                                 <colgroup>
-                                    <col style="width:40px;" /><col /><col style="width:50px;" /><col style="width:55px;" /><col style="width:75px;" /><col style="width:80px;" /><col style="width:90px;" />
+                                    <col class="u-w-40" /><col /><col class="u-w-50" /><col class="u-w-55" /><col class="u-w-75" /><col class="u-w-80" /><col class="u-w-90" />
                                 </colgroup>
                                 <tbody id="rankingQualBody"></tbody>
                             </table>

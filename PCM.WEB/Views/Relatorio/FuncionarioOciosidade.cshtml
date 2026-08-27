@@ -93,7 +93,7 @@
                                     <th>@PCM.WEB.Properties.Resources.funcionario</th>
                                     @foreach (var item in ViewBag.meses)
                                     {
-                                        <th class="text-center" style="width: 80px;">@item</th>
+                                        <th class="text-center u-w-80">@item</th>
                                     }
                                 </tr>
                             </thead>
@@ -104,7 +104,7 @@
                                         <td>@Html.DisplayFor(modelItem => item.funcionario)</td>
                                         @foreach (var valor in item.valores)
                                         {
-                                            <td class="text-center" style="width: 80px;">@Html.DisplayFor(modelItem => valor.valor)</td>
+                                            <td class="text-center u-w-80">@Html.DisplayFor(modelItem => valor.valor)</td>
                                         }
                                     </tr>
                                 }

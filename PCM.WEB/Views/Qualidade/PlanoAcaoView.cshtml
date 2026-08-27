@@ -18,7 +18,7 @@
     </div>
     <!-- END Breadcrumb -->
     <!-- Page Content -->
-    <div class="content" id="main" name="main" style="display:none">
+    <div class="content u-hide" id="main" name="main">
 
         <!-- Update Product -->
         <div class="row gutters-tiny">
@@ -67,8 +67,8 @@
                                         <tr class="table-primary">
                                             <th colspan="4">@Model.checklist[i].subgrupo</th>
                                             <th>@PCM.WEB.Properties.Resources.observacao</th>
-                                            <th style="width:100px">@PCM.WEB.Properties.Resources.prazo_dias</th>
-                                            <th style="width:50px">@PCM.WEB.Properties.Resources.foto</th>
+                                            <th class="u-w-100">@PCM.WEB.Properties.Resources.prazo_dias</th>
+                                            <th class="u-w-50">@PCM.WEB.Properties.Resources.foto</th>
                                         </tr>
                                     }
 
@@ -78,10 +78,10 @@
                                         @Html.HiddenFor(m => m.checklist[i].codigo_tipo_item_checklist)
                                         @Html.HiddenFor(m => m.checklist[i].resultado)
                                         <td>@Html.DisplayFor(m => m.checklist[i].checklist) - @Html.DisplayFor(m => m.checklist[i].descricao)</td>
-                                        <td class="text-center" style="width:150px" colspan="3">@Model.checklist[i].resultado</td>
+                                        <td class="text-center u-w-150" colspan="3">@Model.checklist[i].resultado</td>
                                         <td>@Model.checklist[i].observacao</td>
                                         <td class="text-center">@Model.checklist[i].prazo</td>
-                                        <td style="width:50px">
+                                        <td class="u-w-50">
                                             <div class="btn-group">
                                                 <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                             </div>

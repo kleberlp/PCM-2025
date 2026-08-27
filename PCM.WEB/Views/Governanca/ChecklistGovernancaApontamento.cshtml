@@ -97,7 +97,7 @@
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.descricao</th>
-                                    <th class="text-center" style="width:150px">Quantidade</th>
+                                    <th class="text-center u-w-150">Quantidade</th>
                                 </tr>
                             </thead>
                             <tbody id="table_linha" name="table_linha">
@@ -166,13 +166,13 @@
                         <table class="table table-bordered table-sm table-striped table-vcenter" id="checklist-table" name="checklist-table">
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="width:100px">Código</th>
+                                    <th class="text-center u-w-100">Código</th>
                                     <th>@PCM.WEB.Properties.Resources.descricao </th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.sim</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.nao</th>
-                                    <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.na</th>
+                                    <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.sim</th>
+                                    <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.nao</th>
+                                    <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.na</th>
                                     <th>@PCM.WEB.Properties.Resources.observacao</th>
-                                    <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.nova_vistoria</th>
+                                    <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.nova_vistoria</th>
                                 </tr>
                             </thead>
                             <tbody id="table_linha" name="table_linha">
@@ -190,26 +190,26 @@
                                         @Html.HiddenFor(m => Model.checklist[i].descricao)
                                         <td class="text-center">@Html.DisplayFor(m => Model.checklist[i].checklist)</td>
                                         <td>@Html.DisplayFor(m => Model.checklist[i].descricao)</td>
-                                        <td class="text-center" style="width:100px">
+                                        <td class="text-center u-w-100">
                                             <label class="css-control css-control-success css-checkbox">
                                                 @Html.RadioButtonFor(m => Model.checklist[i].resultado, "S", new { @class = "css-control-input", @onChange = "opcaoNao(" + i + ", false);" })
                                                 <span class="css-control-indicator"></span>
                                             </label>
                                         </td>
-                                        <td class="text-center" style="width:100px">
+                                        <td class="text-center u-w-100">
                                             <label class="css-control css-control-danger css-checkbox">
                                                 @Html.RadioButtonFor(m => Model.checklist[i].resultado, "N", new { @class = "css-control-input", @onChange = "opcaoNao(" + i + ", this.checked);" })
                                                 <span class="css-control-indicator"></span>
                                             </label>
                                         </td>
-                                        <td class="text-center" style="width:100px">
+                                        <td class="text-center u-w-100">
                                             <label class="css-control-sm css-control-secondary css-checkbox">
                                                 @Html.RadioButtonFor(m => Model.checklist[i].resultado, "NA", new { @class = "css-control-input", @onChange = "opcaoNao(" + i + ", false);" })
                                                 <span class="css-control-indicator"></span>
                                             </label>
                                         </td>
                                         <td>@Html.TextBoxFor(m => Model.checklist[i].observacao, new { @class = "form-control col-12", @maxlength = "200" })</td>
-                                        <td class="text-center" style="width:150px">
+                                        <td class="text-center u-w-150">
                                             <label class="css-control css-control-success css-checkbox">
                                                 @Html.CheckBoxFor(m => Model.checklist[i].nova_vistoria, new { @class = "css-control-input", @id = "[" + i + "].nova_vistoria" })
                                                 <span class="css-control-indicator"></span>

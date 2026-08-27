@@ -47,37 +47,37 @@
                 <!-- ================= DADOS DA UNIDADE ================= -->
                 <div class="dashboard-section">
                     <div class="section-title">Dados da Unidade</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid">
-                            <a href="@Url.Action("UsuarioIndex", "Administracao")" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("UsuarioIndex", "Administracao")" class="torre-item os-item u-td-none">
                                 <div class="torre-header"><i class="si si-user torre-icon text-primary"></i><span class="torre-label">@PCM.WEB.Properties.Resources.usuarios</span></div>
                                 <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_usuario</div>
                             </a>
-                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="#" class="torre-item os-item u-td-none">
                                 <div class="torre-header"><i class="si si-users torre-icon text-info"></i><span class="torre-label">Equipe Manutenção</span></div>
                                 <div class="os-value text-info">@ViewBag.dashboard_info.equipe_manutencao</div>
                             </a>
-                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="#" class="torre-item os-item u-td-none">
                                 <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">Máq. / Equip.</span></div>
                                 <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_equipamento</div>
                             </a>
-                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="#" class="torre-item os-item u-td-none">
                                 <div class="torre-header"><i class="si si-settings torre-icon text-warning"></i><span class="torre-label">Total de OS</span></div>
                                 <div class="os-value text-warning">@ViewBag.dashboard_info.quantidade_os</div>
                             </a>
-                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="#" class="torre-item os-item u-td-none">
                                 <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">OS Mês</span></div>
                                 <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os_gerada</div>
                             </a>
-                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="#" class="torre-item os-item u-td-none">
                                 <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Qtd. Rotinas</span></div>
                                 <div class="os-value text-primary">@ViewBag.dashboard_info.rotinas_implantadas</div>
                             </a>
-                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="#" class="torre-item os-item u-td-none">
                                 <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">SLA</span></div>
                                 <div class="os-value text-primary">@ViewBag.dashboard_info.os_atendimento_dia</div>
                             </a>
-                            <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="#" class="torre-item os-item u-td-none">
                                 <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Qtd. Preventivas</span></div>
                                 <div class="os-value text-primary">@ViewBag.dashboard_info.preventivas_implantadas</div>
                             </a>
@@ -123,12 +123,12 @@
                             <thead>
                                 <tr>
                                     <th>Atividade</th>
-                                    <th class="text-center" style="width:130px;">OK</th>
-                                    <th class="text-center" style="width:130px;">Pend.</th>
-                                    <th class="text-center" style="width:130px;">Total</th>
+                                    <th class="text-center u-w-130">OK</th>
+                                    <th class="text-center u-w-130">Pend.</th>
+                                    <th class="text-center u-w-130">Total</th>
                                     <th style="min-width:180px;">% Atendido</th>
-                                    <th class="text-center" style="width:75px;">Peso</th>
-                                    <th class="text-center" style="width:75px;">Nota</th>
+                                    <th class="text-center u-w-75">Peso</th>
+                                    <th class="text-center u-w-75">Nota</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -167,16 +167,16 @@
                         </table>
                     </div>
                     <!-- Bloco 2: indicadores com Realizado / Meta -->
-                    <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <table class="table table-striped table-sm table-bordered mb-0">
                             <thead>
                                 <tr>
                                     <th>Atividade</th>
-                                    <th class="text-center" style="width:140px;">Realizado</th>
-                                    <th class="text-center" style="width:80px;">Meta</th>
+                                    <th class="text-center u-w-140">Realizado</th>
+                                    <th class="text-center u-w-80">Meta</th>
                                     <th style="min-width:180px;">% Atendido</th>
-                                    <th class="text-center" style="width:75px;">Peso</th>
-                                    <th class="text-center" style="width:75px;">Nota</th>
+                                    <th class="text-center u-w-75">Peso</th>
+                                    <th class="text-center u-w-75">Nota</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -225,7 +225,7 @@
                 <!-- ================= SLA – TEMPO MÉDIO (tabela com barras inline) ================= -->
                 <div class="dashboard-section">
                     <div class="section-title">SLA – Tempo Médio de Atendimento por Unidade</div>
-                    <div class="block dashboard-card" style="overflow-x:auto;">
+                    <div class="block dashboard-card u-scroll-x">
                         <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
                             <thead>
                                 <tr>
@@ -328,7 +328,7 @@
                 <!-- ================= HORA HOMEM (tabela) ================= -->
     <div class="dashboard-section">
         <div class="section-title">Apontamento - Horas</div>
-        <div class="block dashboard-card" style="overflow-x:auto;">
+        <div class="block dashboard-card u-scroll-x">
             <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
                 <thead>
                     <tr>
@@ -417,8 +417,8 @@
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.laudo</th>
-                                    <th class="text-center" style="width:100px;">@PCM.WEB.Properties.Resources.data_validade</th>
-                                    <th class="text-center" style="width:75px;">@ViewBag.data_atual</th>
+                                    <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.data_validade</th>
+                                    <th class="text-center u-w-75">@ViewBag.data_atual</th>
                                 </tr>
                             </thead>
                             <tbody>

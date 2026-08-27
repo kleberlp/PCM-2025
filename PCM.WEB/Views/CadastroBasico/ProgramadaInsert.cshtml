@@ -87,7 +87,7 @@
                                     <label>@PCM.WEB.Properties.Resources.tipo_ordem_servico</label>
                                     <div>@Html.DropDownList("tipo_ordem_servico", null, "", new { @class = "js-select2 form-control" })</div>
                                 </div>
-                                <div class="col-md-6" style="display:none" id="div_checklist">
+                                <div class="col-md-6 u-hide" id="div_checklist">
                                     <label>@PCM.WEB.Properties.Resources.checklist</label>
                                     <div>@Html.DropDownList("checklist", null, "", new { @class = "form-control js-select2" })</div>
                                 </div>
@@ -103,11 +103,11 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-2" id="div_dias_alerta" style="display:none">
+                                <div class="col-md-2 u-hide" id="div_dias_alerta">
                                     <label>@PCM.WEB.Properties.Resources.dias_alerta</label>
                                     <div><input type="text" class="form-control" id="dias_alerta" name="dias_alerta" value=""></div>
                                 </div>
-                                <div class="col-md-9" id="div_email" style="display:none">
+                                <div class="col-md-9 u-hide" id="div_email">
                                     <label>@PCM.WEB.Properties.Resources.lista_email</label>
                                     <div><textarea class="form-control" id="email" name="email" maxlength="2000" rows="6"></textarea></div>
                                 </div>

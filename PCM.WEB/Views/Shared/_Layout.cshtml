@@ -44,6 +44,8 @@
     @Styles.Render("~/Content/codebase")
     @Styles.Render("~/Content/dashboard")
 
+    @* Classes utilitárias (u-*) que substituem os styles inline — degrau 3 da CSP. *@
+    <link rel="stylesheet" href="~/Content/css/pcm-util.css" />
     @* Manual integrado: botão "?" do cabeçalho e painel lateral. *@
     <link rel="stylesheet" href="~/Content/css/manual.css" />
     @* CSS de impressão dos dashboards (Exportar PDF) — carregado só na impressão *@

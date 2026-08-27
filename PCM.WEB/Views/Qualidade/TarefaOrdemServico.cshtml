@@ -85,11 +85,11 @@
                                     <thead>
                                         <tr class="table-secondary">
                                             <th>@PCM.WEB.Properties.Resources.executor</th>
-                                            <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_inicio</th>
-                                            <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_termino</th>
+                                            <th class="d-none d-sm-table-cell text-center u-w-150">@PCM.WEB.Properties.Resources.data_inicio</th>
+                                            <th class="d-none d-sm-table-cell text-center u-w-150">@PCM.WEB.Properties.Resources.data_termino</th>
                                             @if ((ViewBag.editar || ViewBag.excluir) && ViewBag.ordem_servico.status != "2")
                                             {
-                                                <th class="text-center" style="width: 80px;"></th>
+                                                <th class="text-center u-w-80"></th>
 
                                             }
                                         </tr>
@@ -100,11 +100,11 @@
                                         {
                                             <tr>
                                                 <td>@apto.funcionario</td>
-                                                <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@apto.data_inicio</td>
-                                                <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@apto.data_termino</td>
+                                                <td class="d-none d-sm-table-cell text-center u-w-150">@apto.data_inicio</td>
+                                                <td class="d-none d-sm-table-cell text-center u-w-150">@apto.data_termino</td>
                                                 @if ((ViewBag.editar || ViewBag.excluir) && ViewBag.ordem_servico.status != "2")
                                                 {
-                                                    <td class="text-center" style="width: 80px;">
+                                                    <td class="text-center u-w-80">
                                                         <div class="btn-group">
                                                             @if (ViewBag.editar)
                                                             {<a href="@Url.Action("ApontamentoTarefaEdit", "PCM", new { codigo_apontamento = apto.codigo, codigo_unidade = apto.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
@@ -162,7 +162,7 @@
                                             <td>@Html.DisplayFor(m => m[i].descricao)</td>
                                             @if (Model[i].codigo_tipo_item_checklist == 1)
                                             {
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">SIM</span>
                                                     <label class="css-control css-control-success css-checkbox">
                                                         @if (Model[i].resultado == "SIM")
@@ -176,8 +176,8 @@
                                                         <span class="css-control-indicator"></span>
                                                     </label>
                                                 </td>
-                                                <td class="text-center" style="width:50px"></td>
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50"></td>
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">NÃO</span>
                                                     <label class="css-control css-control-danger css-checkbox">
                                                         @if (Model[i].resultado == "NÃO")
@@ -194,7 +194,7 @@
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 2)
                                             {
-                                                <td class="text-center" style="width:150px" colspan="3">
+                                                <td class="text-center u-w-150" colspan="3">
                                                     <div class="input-group">
                                                         @Html.TextBoxFor(m => m[i].resultado, new { @class = "js-masked-number form-control", @onChange = "setResultado(" + i + ", this.value);", @Value = Model[i].resultado })
                                                         <div class="input-group-append min-width-50 text-center">
@@ -205,25 +205,25 @@
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 3)
                                             {
-                                                <td class="text-center" style="width:150px" colspan="3">
+                                                <td class="text-center u-w-150" colspan="3">
                                                     <div>@Html.TextBoxFor(m => m[i].resultado, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);", @Value = Model[i].resultado })</div>
                                                 </td>
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 4)
                                             {
-                                                <td class="text-center" style="width:150px" colspan="3">
+                                                <td class="text-center u-w-150" colspan="3">
                                                     <div>@Html.TextBoxFor(m => m[i].resultado, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);", @Value = Model[i].resultado })</div>
                                                 </td>
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 5)
                                             {
-                                                <td class="text-center" style="width:150px" colspan="3">
+                                                <td class="text-center u-w-150" colspan="3">
                                                     <div>@Html.TextBoxFor(m => m[i].resultado, new { @class = "form-control", @onChange = "setResultado(" + i + ", this.value);", @Value = Model[i].resultado })</div>
                                                 </td>
                                             }
                                             else if (Model[i].codigo_tipo_item_checklist == 8)
                                             {
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">SIM</span>
                                                     <label class="css-control css-control-success css-checkbox">
                                                         @if (Model[i].resultado == "SIM")
@@ -237,7 +237,7 @@
                                                         <span class="css-control-indicator"></span>
                                                     </label>
                                                 </td>
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">NÃO</span>
                                                     <label class="css-control css-control-danger css-checkbox">
                                                         @if (Model[i].resultado == "NÃO")
@@ -251,7 +251,7 @@
                                                         <span class="css-control-indicator"></span>
                                                     </label>
                                                 </td>
-                                                <td class="text-center" style="width:50px">
+                                                <td class="text-center u-w-50">
                                                     <span class="text-center font-w600">N/A</span>
                                                     <label class="css-control css-control-secondary css-checkbox">
                                                         @if (Model[i].resultado == "N/A")
@@ -267,7 +267,7 @@
                                                 </td>
                                             }
                                             <td><div>@Html.TextBoxFor(m => m[i].observacao, new { @class = "form-control", @maxlength = 200 })</div></td>
-                                            <td style="width:40px">
+                                            <td class="u-w-40">
                                                 @if (Model[i].allow_picture)
                                                 {
                                                     <div class="btn-group">

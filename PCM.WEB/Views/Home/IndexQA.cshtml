@@ -15,30 +15,30 @@
             <!-- ================= NÃO CONFORMIDADES QUALIDADE ================= -->
             <div class="dashboard-section">
                 <div class="section-title">Não Conformidades de Qualidade</div>
-                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                <div class="block dashboard-card u-pad0-clip">
                     <div class="torre-comando-grid">
-                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 1 })" class="torre-item os-item u-td-none">
                             <div class="torre-header">
                                 <i class="fa fa-exclamation-triangle torre-icon text-warning"></i>
                                 <span class="torre-label">@PCM.WEB.Properties.Resources.pendente</span>
                             </div>
                             <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.plano_acao_status.pendente" id="nc_pendente">@ViewBag.plano_acao_status.pendente</div>
                         </a>
-                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 3 })" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 3 })" class="torre-item os-item u-td-none">
                             <div class="torre-header">
                                 <i class="fa fa-clock-o torre-icon text-danger"></i>
                                 <span class="torre-label">@PCM.WEB.Properties.Resources.atrasado</span>
                             </div>
                             <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.plano_acao_status.atrasado" id="nc_atrasado">@ViewBag.plano_acao_status.atrasado</div>
                         </a>
-                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 2 })" class="torre-item os-item u-td-none">
                             <div class="torre-header">
                                 <i class="fa fa-check-circle torre-icon text-success"></i>
                                 <span class="torre-label">@PCM.WEB.Properties.Resources.concluido</span>
                             </div>
                             <div class="os-value text-success" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.plano_acao_status.concluido" id="nc_concluido">@ViewBag.plano_acao_status.concluido</div>
                         </a>
-                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 4 })" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="@Url.Action("OrdemServicoIndex", "Qualidade", new { status = 4 })" class="torre-item os-item u-td-none">
                             <div class="torre-header">
                                 <i class="fa fa-spinner torre-icon text-primary"></i>
                                 <span class="torre-label">@PCM.WEB.Properties.Resources.em_andamento</span>
@@ -54,30 +54,30 @@
             {
                 <div class="dashboard-section">
                     <div class="section-title">Auditoria de Qualidade</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid">
-                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 1 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-edit torre-icon text-warning"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.pendente</span>
                                 </div>
                                 <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.status.pendente" id="aud_pendente">@ViewBag.status.pendente</div>
                             </a>
-                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 3 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 3 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-clock-o torre-icon text-danger"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.atrasado</span>
                                 </div>
                                 <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.status.atrasado" id="aud_atrasado">@ViewBag.status.atrasado</div>
                             </a>
-                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-check-circle torre-icon text-success"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.concluido</span>
                                 </div>
                                 <div class="os-value text-success" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.status.concluido" id="aud_concluido">@ViewBag.status.concluido</div>
                             </a>
-                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 4 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("Auditoria", "Qualidade", new { status = 4 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-spinner torre-icon text-primary"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.em_andamento</span>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="kpi-title">Saldo</div>
-                                <div class="kpi-value" style="color:rgb(255,201,14);" id="saldo">0</div>
+                                <div class="kpi-value u-gold" id="saldo">0</div>
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                             </div>
                             <div class="col">
                                 <div class="kpi-title">3 Dias</div>
-                                <div class="kpi-value" style="color:rgb(255,201,14);" id="tres_dia">0%</div>
+                                <div class="kpi-value u-gold" id="tres_dia">0%</div>
                             </div>
                             <div class="col">
                                 <div class="kpi-title">5 Dias</div>
@@ -165,9 +165,9 @@
                     <table class="table table-striped" id="tb-principais-ocorrencias">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width:80px;">#</th>
+                                <th class="text-center u-w-80">#</th>
                                 <th>Local</th>
-                                <th class="text-center" style="width:130px;">Quantidade</th>
+                                <th class="text-center u-w-130">Quantidade</th>
                             </tr>
                         </thead>
                         <tbody id="tb-principais-ocorrencias-body">
@@ -358,7 +358,7 @@
                 success: function (r) {
                     for (var i = 0; i < r.length; i++) {
                         var row = $("<tr>");
-                        row.append('<td class="text-center" style="width:80px;">' + r[i].item + '</td>');
+                        row.append('<td class="text-center u-w-80">' + r[i].item + '</td>');
                         row.append('<td class="font-w600">' + r[i].local + '</td>');
                         row.append('<td class="text-center">' + r[i].quantidade + '</td>');
                         $("#tb-principais-ocorrencias-body").append(row);

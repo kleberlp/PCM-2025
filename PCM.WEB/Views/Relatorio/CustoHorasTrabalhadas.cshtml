@@ -94,12 +94,12 @@
                                         <th>@PCM.WEB.Properties.Resources.funcionario</th>
                                         @foreach (var item in ViewBag.meses)
                                         {
-                                            <th class="text-center" style="width: 80px;">
+                                            <th class="text-center u-w-80">
                                                 @item
                                                 <br />@PCM.WEB.Properties.Resources.falta
                                             </th>
                                         }
-                                        <th class="text-center" style="width: 100px;">Total</th>
+                                        <th class="text-center u-w-100">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>          
@@ -108,7 +108,7 @@
                                         <tr>
                                             <td>@Html.DisplayFor(modelItem => item.funcionario)</td>
                                             @foreach(var valor in item.valores) {
-                                                <td class="text-center" style="width: 100px;">
+                                                <td class="text-center u-w-100">
                                                     @if(valor.valor == "0:00"){                                                                                                    
                                                         @Html.DisplayFor(modelItem => valor.valor)    
                                                     } else {
@@ -121,7 +121,7 @@
                                                     }
                                                 </td>
                                             }
-                                            <td class="text-center table-warning" style="width: 100px;">
+                                            <td class="text-center table-warning u-w-100">
                                                 <b>@Html.DisplayFor(modelItem => item.total)</b>
                                                 <br/>
                                                 <b>@Html.DisplayFor(modelItem => item.falta)</b>

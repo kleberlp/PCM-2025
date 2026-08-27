@@ -17,37 +17,37 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary no-print" data-act="window.print"><i class="si si-printer"></i> Exportar PDF</button>
                     </span>
                 </div>
-                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                <div class="block dashboard-card u-pad0-clip">
                     <div class="torre-comando-grid">
-                        <a href="@Url.Action("UsuarioIndex", "Administracao")" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="@Url.Action("UsuarioIndex", "Administracao")" class="torre-item os-item u-td-none">
                             <div class="torre-header"><i class="si si-user torre-icon text-primary"></i><span class="torre-label">@PCM.WEB.Properties.Resources.usuarios</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_usuario</div>
                         </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="#" class="torre-item os-item u-td-none">
                             <div class="torre-header"><i class="si si-users torre-icon text-info"></i><span class="torre-label">Equipe Manutenção</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.equipe_manutencao</div>
                         </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="#" class="torre-item os-item u-td-none">
                             <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">Máq. / Equipamentos</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_equipamento</div>
                         </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="#" class="torre-item os-item u-td-none">
                             <div class="torre-header"><i class="si si-settings torre-icon text-warning"></i><span class="torre-label">Total de OS</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os</div>
                         </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="#" class="torre-item os-item u-td-none">
                             <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">OS Mês</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidade_os_gerada</div>
                         </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="#" class="torre-item os-item u-td-none">
                             <div class="torre-header"><i class="si si-calendar torre-icon text-primary"></i><span class="torre-label">Qtd. Rotinas</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.rotinas_implantadas</div>
                         </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="#" class="torre-item os-item u-td-none">
                             <div class="torre-header"><i class="fa fa-list torre-icon text-primary"></i><span class="torre-label">SLA</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.os_atendimento_dia</div>
                         </a>
-                        <a href="#" class="torre-item os-item" style="text-decoration:none;">
+                        <a href="#" class="torre-item os-item u-td-none">
                             <div class="torre-header"><i class="si si-settings torre-icon text-primary"></i><span class="torre-label">Qtd. Preventivas</span></div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.preventivas_implantadas</div>
                         </a>
@@ -76,13 +76,13 @@
                     <!-- tabela única centralizada quando <= 15 unidades -->
                     <div class="row justify-content-center">
                         <div class="col-md-6">
-                            <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                            <div class="block dashboard-card u-pad0-clip">
                                 <table class="table table-striped table-sm mb-0 tbl-sort">
                                     <thead>
                                         <tr>
-                                            <th class="text-center" style="width:55px;">#</th>
+                                            <th class="text-center u-w-55">#</th>
                                             <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                            <th class="text-center" style="width:70px;">@PCM.WEB.Properties.Resources.nota</th>
+                                            <th class="text-center u-w-70">@PCM.WEB.Properties.Resources.nota</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -113,13 +113,13 @@
                         @foreach (var col in new[] { rankCol1, rankCol2, rankCol3 })
                         {
                             <div class="col-md-4">
-                                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                                <div class="block dashboard-card u-pad0-clip">
                                     <table class="table table-striped table-sm mb-0 tbl-sort">
                                         <thead>
                                             <tr>
-                                                <th class="text-center" style="width:45px;">#</th>
+                                                <th class="text-center u-w-45">#</th>
                                                 <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                                <th class="text-center" style="width:70px;">@PCM.WEB.Properties.Resources.nota</th>
+                                                <th class="text-center u-w-70">@PCM.WEB.Properties.Resources.nota</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -145,12 +145,12 @@
             <div class="dashboard-section">
                 <div class="section-title">Notas</div>
                 <div class="block dashboard-card">
-                    <div style="overflow-x:auto;">
+                    <div class="u-scroll-x">
                         <table class="table table-striped table-sm table-bordered tbl-sort dg-sortable">
                             <thead>
                                 <tr>
                                     <th rowspan="2" data-col="0">@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" rowspan="2" style="width:80px;" data-col="1">Nota Final</th>
+                                    <th class="text-center u-w-80" rowspan="2" data-col="1">Nota Final</th>
                                     <th class="text-center" colspan="2">Laudo<br /><span class="font-size-xs">@ViewBag.percentual_nota.laudo</span></th>
                                     <th class="text-center" colspan="2">Preventiva<br /><span class="font-size-xs">@ViewBag.percentual_nota.preventiva</span></th>
                                     <th class="text-center" colspan="2">Rotina<br /><span class="font-size-xs">@ViewBag.percentual_nota.rotina</span></th>
@@ -249,9 +249,9 @@
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:55px;">OK</th>
-                                    <th class="text-center" style="width:65px;">Pend.</th>
-                                    <th class="text-center" style="width:55px;">Total</th>
+                                    <th class="text-center u-w-55">OK</th>
+                                    <th class="text-center u-w-65">Pend.</th>
+                                    <th class="text-center u-w-55">Total</th>
                                     <th style="min-width:140px;">% Atend.</th>
                                 </tr>
                             </thead>
@@ -287,9 +287,9 @@
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:55px;">OK</th>
-                                    <th class="text-center" style="width:65px;">Pend.</th>
-                                    <th class="text-center" style="width:55px;">Total</th>
+                                    <th class="text-center u-w-55">OK</th>
+                                    <th class="text-center u-w-65">Pend.</th>
+                                    <th class="text-center u-w-55">Total</th>
                                     <th style="min-width:140px;">% Atend.</th>
                                 </tr>
                             </thead>
@@ -329,9 +329,9 @@
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:55px;">OK</th>
-                                    <th class="text-center" style="width:65px;">Pend.</th>
-                                    <th class="text-center" style="width:55px;">Total</th>
+                                    <th class="text-center u-w-55">OK</th>
+                                    <th class="text-center u-w-65">Pend.</th>
+                                    <th class="text-center u-w-55">Total</th>
                                     <th style="min-width:140px;">% Atend.</th>
                                 </tr>
                             </thead>
@@ -367,9 +367,9 @@
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:55px;">OK</th>
-                                    <th class="text-center" style="width:65px;">Pend.</th>
-                                    <th class="text-center" style="width:55px;">Total</th>
+                                    <th class="text-center u-w-55">OK</th>
+                                    <th class="text-center u-w-65">Pend.</th>
+                                    <th class="text-center u-w-55">Total</th>
                                     <th style="min-width:140px;">% Atend.</th>
                                 </tr>
                             </thead>
@@ -408,9 +408,9 @@
                         <thead>
                             <tr>
                                 <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                <th class="text-center" style="width:70px;">OK</th>
-                                <th class="text-center" style="width:80px;">Pend.</th>
-                                <th class="text-center" style="width:70px;">Total</th>
+                                <th class="text-center u-w-70">OK</th>
+                                <th class="text-center u-w-80">Pend.</th>
+                                <th class="text-center u-w-70">Total</th>
                                 <th style="min-width:200px;">% Atend.</th>
                             </tr>
                         </thead>
@@ -444,7 +444,7 @@
             <div class="dashboard-section">
                 <div class="section-title">@PCM.WEB.Properties.Resources.atendimento_ordem_servico</div>
                 <div class="block dashboard-card">
-                    <div style="overflow-x:auto;">
+                    <div class="u-scroll-x">
                         <table class="table table-striped table-sm table-bordered tbl-sort">
                             <thead>
                                 <tr>
@@ -525,7 +525,7 @@
             <!-- ================= SLA – TEMPO MÉDIO (tabela com barras inline) ================= -->
             <div class="dashboard-section">
                 <div class="section-title">SLA – Tempo Médio de Atendimento por Unidade</div>
-                <div class="block dashboard-card" style="overflow-x:auto;">
+                <div class="block dashboard-card u-scroll-x">
                     <table class="table table-striped table-sm table-bordered mb-0 tbl-sort">
                         <thead>
                             <tr>
@@ -617,7 +617,7 @@
             <div class="dashboard-section">
                 <div class="section-title">Apontamento - Horas</div>
                 <div class="block dashboard-card">
-                    <div style="overflow-x:auto;">
+                    <div class="u-scroll-x">
                         <table class="table table-striped table-sm table-bordered tbl-sort">
                             <thead>
                                 <tr>
@@ -684,7 +684,7 @@
             <!-- ================= MÉDIA OS POR COLABORADOR ================= -->
             <div class="dashboard-section">
                 <div class="section-title">Nº Colaborador × Média Individual de OS por Colaborador</div>
-                <div class="block dashboard-card" style="overflow-x:auto;">
+                <div class="block dashboard-card u-scroll-x">
                     <div id="tabelaMediaOS">
                         <div style="text-align:center;padding:20px;color:#aaa;"><i class="fa fa-spinner fa-spin"></i> Carregando...</div>
                     </div>
@@ -699,8 +699,8 @@
                         <thead>
                             <tr>
                                 <th>@PCM.WEB.Properties.Resources.laudo</th>
-                                <th class="text-center" style="width:100px;">@PCM.WEB.Properties.Resources.data_validade</th>
-                                <th class="text-center" style="width:75px;">@ViewBag.data_atual</th>
+                                <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.data_validade</th>
+                                <th class="text-center u-w-75">@ViewBag.data_atual</th>
                             </tr>
                         </thead>
                         <tbody>

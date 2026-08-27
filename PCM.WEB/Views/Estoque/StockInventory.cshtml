@@ -78,24 +78,24 @@
                                 <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full" id="tb_main">
                                     <thead>
                                         <tr class="table-secondary">
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.product</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.product</th>
                                             <th>@PCM.WEB.Properties.Resources.description</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.batch</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.quantity_inventory</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.quantity</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.divergence</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.batch</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.quantity_inventory</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.quantity</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.divergence</th>
                                         </tr>
                                     </thead>
                                     <tbody id="table_body" name="table_body">
                                         @foreach (var item in Model.result)
                                         {
                                         <tr>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.product)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.product)</td>
                                             <td>@Html.DisplayFor(modelItem => item.description)</td>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.batch)</td>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.quantity_inventory)</td>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.quantity)</td>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.divergence)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.batch)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.quantity_inventory)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.quantity)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.divergence)</td>
                                         </tr>
                                         }
                                     </tbody>
@@ -117,7 +117,7 @@
                                 <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full" id="tb_main_error">
                                     <thead>
                                         <tr class="table-secondary">
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.product</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.product</th>
                                             <th>@PCM.WEB.Properties.Resources.error</th>
                                         </tr>
                                     </thead>
@@ -125,7 +125,7 @@
                                         @foreach (var item in Model.result_error)
                                         {
                                         <tr>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.product)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.product)</td>
                                             <td>@Html.DisplayFor(modelItem => item.error)</td>
                                         </tr>
                                         }

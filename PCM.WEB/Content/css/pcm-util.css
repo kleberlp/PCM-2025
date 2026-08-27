@@ -1,0 +1,47 @@
+/* ============================================================
+   pcm-util.css — classes utilitárias (degrau 3 da CSP)
+   Geradas a partir dos estilos inline repetidos das views; o objetivo
+   é esvaziar style="" estático para um dia remover o unsafe-inline
+   do style-src. Arquivo gerado + mantido à mão: adicione aqui, não
+   volte a usar style inline.
+   ============================================================ */
+.u-w-100 { width: 100px; }
+.u-w-110 { width: 110px; }
+.u-w-120 { width: 120px; }
+.u-w-130 { width: 130px; }
+.u-w-140 { width: 140px; }
+.u-w-15 { width: 15px; }
+.u-w-150 { width: 150px; }
+.u-w-160 { width: 160px; }
+.u-w-180 { width: 180px; }
+.u-w-20 { width: 20px; }
+.u-w-200 { width: 200px; }
+.u-w-22 { width: 22px; }
+.u-w-250 { width: 250px; }
+.u-w-30 { width: 30px; }
+.u-w-300 { width: 300px; }
+.u-w-31 { width: 31px; }
+.u-w-32 { width: 32px; }
+.u-w-40 { width: 40px; }
+.u-w-45 { width: 45px; }
+.u-w-50 { width: 50px; }
+.u-w-55 { width: 55px; }
+.u-w-60 { width: 60px; }
+.u-w-65 { width: 65px; }
+.u-w-70 { width: 70px; }
+.u-w-75 { width: 75px; }
+.u-w-80 { width: 80px; }
+.u-w-85 { width: 85px; }
+.u-w-90 { width: 90px; }
+.u-wp-0 { width: 0%; }
+.u-wp-100 { width: 100%; }
+.u-wp-25 { width: 25%; }
+.u-hide { display: none; }
+.u-td-none { text-decoration: none; }
+.u-upper { text-transform: uppercase; }
+.u-cursor-default { cursor: default; }
+.u-scroll-x { overflow-x: auto; }
+.u-full-center-inline { width: 100%; text-align: center; display: inline; }
+.u-pad0-clip { padding: 0; overflow: hidden; }
+.u-gold { color: rgb(255, 201, 14); }
+.u-pointer { cursor: pointer; }
