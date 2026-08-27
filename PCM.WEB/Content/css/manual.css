@@ -221,7 +221,8 @@
     background: #000;
 }
 
-.manual-painel .manual-video iframe {
+.manual-painel .manual-video iframe,
+.manual-painel .manual-video video {
     position: absolute;
     inset: 0;
     width: 100%;

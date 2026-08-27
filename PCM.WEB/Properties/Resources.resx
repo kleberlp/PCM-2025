@@ -2404,7 +2404,7 @@
     <value>Link de vídeo</value>
   </data>
   <data name="manual_video_dica" xml:space="preserve">
-    <value>YouTube e Vimeo abrem incorporados no painel; outras URLs viram link.</value>
+    <value>YouTube, Vimeo, Google Drive e arquivo .mp4 abrem incorporados no painel; outras URLs viram link.</value>
   </data>
   <data name="manual_imagem_dica" xml:space="preserve">
     <value>JPG, PNG ou GIF ilustrando o passo.</value>

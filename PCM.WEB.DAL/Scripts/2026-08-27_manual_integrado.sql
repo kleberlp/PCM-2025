@@ -1,4 +1,4 @@
-/**********************************************************************************************
+﻿/**********************************************************************************************
     Script      : Manual integrado (botao "?" do cabecalho e telas de cadastro do help)
     Data        : 27/08/2026
     Descricao   : Estrutura e procedures do manual, no banco PCM.
@@ -47,8 +47,8 @@ BEGIN
         controller              varchar(100) NULL,
         [action]                varchar(100) NULL,
         codigo_manual_processo  int          NULL,
-        titulo                  varchar(200) NOT NULL,
-        subtitulo               varchar(300) NULL,
+        titulo                  nvarchar(200) NOT NULL,
+        subtitulo               nvarchar(300) NULL,
         ativo                   bit          NOT NULL CONSTRAINT DF_tb_manual_ativo DEFAULT (1),
         usuario                 varchar(100) NULL,
         data_inclusao           datetime     NOT NULL CONSTRAINT DF_tb_manual_data DEFAULT (GETDATE()),
@@ -73,7 +73,7 @@ BEGIN
         codigo         int IDENTITY(1,1) NOT NULL,
         codigo_manual  int            NOT NULL,
         sequencia      int            NOT NULL,
-        titulo         varchar(200)   NOT NULL,
+        titulo         nvarchar(200)  NOT NULL,
         conteudo       nvarchar(max)  NULL,
         -- Destaque opcional ao pe da secao: D = dica, A = aviso.
         tipo_nota      varchar(1)     NULL,
@@ -95,6 +95,24 @@ GO
 -- Reexecucao em base que ja tinha a tabela sem o video (versao anterior do script).
 IF COL_LENGTH('dbo.tb_manual_item', 'video') IS NULL
     ALTER TABLE dbo.tb_manual_item ADD video varchar(500) NULL
+GO
+
+-- Reexecucao em base criada com titulo/subtitulo varchar: emoji e simbolo do manual
+-- ("?? O que voce vai conquistar") nao cabem na code page do varchar e viram "?".
+-- O ALTER conserta a COLUNA; o texto ja gravado com "?" so volta remigrando.
+IF EXISTS (SELECT 1 FROM sys.columns
+           WHERE object_id = OBJECT_ID('dbo.tb_manual') AND name = 'titulo' AND system_type_id = TYPE_ID('varchar'))
+    ALTER TABLE dbo.tb_manual ALTER COLUMN titulo nvarchar(200) NOT NULL
+GO
+
+IF EXISTS (SELECT 1 FROM sys.columns
+           WHERE object_id = OBJECT_ID('dbo.tb_manual') AND name = 'subtitulo' AND system_type_id = TYPE_ID('varchar'))
+    ALTER TABLE dbo.tb_manual ALTER COLUMN subtitulo nvarchar(300) NULL
+GO
+
+IF EXISTS (SELECT 1 FROM sys.columns
+           WHERE object_id = OBJECT_ID('dbo.tb_manual_item') AND name = 'titulo' AND system_type_id = TYPE_ID('varchar'))
+    ALTER TABLE dbo.tb_manual_item ALTER COLUMN titulo nvarchar(200) NOT NULL
 GO
 
 
@@ -208,7 +226,7 @@ GO
 
 CREATE PROCEDURE [dbo].[sp_select_manual_index]
 @codigo_empresa smallint,
-@titulo         varchar(200) = ''
+@titulo         nvarchar(200) = ''
 AS
 BEGIN
 
@@ -283,8 +301,8 @@ CREATE PROCEDURE [dbo].[sp_save_manual]
 @controller             varchar(100),
 @action                 varchar(100),
 @codigo_manual_processo int,
-@titulo                 varchar(200),
-@subtitulo              varchar(300),
+@titulo                 nvarchar(200),
+@subtitulo              nvarchar(300),
 @ativo                  bit,
 @itens                  nvarchar(max),
 @usuario                varchar(100)
@@ -370,7 +388,7 @@ BEGIN
             FROM OPENJSON(@itens)
             WITH (
                 sequencia int            '$.sequencia',
-                titulo    varchar(200)   '$.titulo',
+                titulo    nvarchar(200)  '$.titulo',
                 conteudo  nvarchar(max)  '$.conteudo',
                 tipo_nota varchar(1)     '$.tipo_nota',
                 nota      nvarchar(1000) '$.nota',
