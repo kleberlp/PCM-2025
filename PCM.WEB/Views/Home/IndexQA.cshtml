@@ -204,7 +204,7 @@
     @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var unidade = $("#header-unidade");
         var modulo  = $("#header-modulo");

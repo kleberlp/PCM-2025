@@ -239,7 +239,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         function LogoMin() {
             document.getElementById("lblLogoMin").textContent = document.getElementById("logoMin").files[0].name;

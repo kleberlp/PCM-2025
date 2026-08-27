@@ -95,7 +95,7 @@
     @Scripts.Render("~/plugins/dataTables")
     @Scripts.Render("~/plugins/validation")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         $(function () {
 

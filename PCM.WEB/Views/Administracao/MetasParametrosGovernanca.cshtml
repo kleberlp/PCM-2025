@@ -320,7 +320,7 @@
 <!-- END Main Container -->
 
 @section scripts {
-<script>
+<script @Csp.NonceAttr>
 // Recalcula ao vivo: Meta Calculada = Aptos Totais PMS × (% Meta / 100)
 function calcularMetaLinha(tr) {
     var aptos = parseFloat(tr.querySelector('.aptos-totais').value || '0');

@@ -225,7 +225,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/chart")
 
-<script>
+<script @Csp.NonceAttr>
 
     function PrintGreenPlanet() {
 

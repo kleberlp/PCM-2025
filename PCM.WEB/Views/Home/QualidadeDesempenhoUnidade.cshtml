@@ -182,7 +182,7 @@
     @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         // ── Submit ao mudar data (passa unidade do header) ───────
         $(function () {

@@ -475,7 +475,7 @@
 }
 
 @section Scripts {
-    <script>
+    <script @Csp.NonceAttr>
         // Troca de unidade no header: navega via GET para ler a sessão já atualizada pelo SetUnidade.
         // (Sem isto, o codebase.js cai em location.reload(), que re-submete o POST do #form
         //  com a unidade antiga do campo escondido e sobrescreve a sessão — não surtia efeito.)

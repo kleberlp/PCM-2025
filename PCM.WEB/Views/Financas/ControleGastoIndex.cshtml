@@ -215,7 +215,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/maskedinput")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         $(document).ready(function ($) { $("#previsao_gasto_janeiro").maskMoney({ decimal: ",", thousands: "." }); });
         $(document).ready(function ($) { $("#previsao_gasto_fevereiro").maskMoney({ decimal: ",", thousands: "." }); });

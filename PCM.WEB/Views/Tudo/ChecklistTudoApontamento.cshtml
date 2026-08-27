@@ -215,7 +215,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
-    <script>
+    <script @Csp.NonceAttr>
         var tudoMsg = { campoRequerido: '@Resources.campo_requerido' };
     </script>
     <script src="~/Content/js/pages/Tudo/jquery.checklistTudoApontamento.init.js"></script>

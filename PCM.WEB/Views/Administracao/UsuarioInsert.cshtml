@@ -216,7 +216,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
         $(document).ready(function () {
             $("#telefone").mask("(99) 99999-9999");

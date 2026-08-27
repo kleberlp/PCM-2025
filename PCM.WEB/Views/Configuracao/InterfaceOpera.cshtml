@@ -96,7 +96,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
     
-<script>
+<script @Csp.NonceAttr>
 
         var FormValidation = function () {
             // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation

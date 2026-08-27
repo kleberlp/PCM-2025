@@ -488,7 +488,7 @@
     @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var colorNamesEvolucaoMensal = Object.keys(window.chartColors);
         var colorNamesEvolucaoHH     = Object.keys(window.chartColors);

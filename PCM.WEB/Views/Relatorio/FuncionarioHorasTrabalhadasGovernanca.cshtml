@@ -152,7 +152,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/chart")
     <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
-    <script>
+    <script @Csp.NonceAttr>
 
         $(document).ready(function () {
 

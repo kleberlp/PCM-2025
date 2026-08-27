@@ -146,7 +146,7 @@
     @Scripts.Render("~/plugins/dataTables")
     @Scripts.Render("~/plugins/maskedinput")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         $(document).ready(function () { $("#cnpj").mask("99.999.999/9999-99"); });
 

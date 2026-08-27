@@ -195,7 +195,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/slick")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;

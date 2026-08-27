@@ -97,7 +97,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
     $(document).ready(function () { $("#data").mask("99/99/9999"); });
     $(document).ready(function () { $("#valor").maskMoney({ prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2, allowNegative: false, 'placeholder': '' }); });

@@ -129,7 +129,7 @@
     @Scripts.Render("~/plugins/validation")   
 
     <!-- Page JS Code -->
-    <script>
+    <script @Csp.NonceAttr>
 
         var login = function () {
 

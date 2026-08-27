@@ -167,7 +167,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/imagecropper")
 
-<script>
+<script @Csp.NonceAttr>
 
         //window.addEventListener('DOMContentLoaded', function () {
         //    var avatar = document.getElementById('avatar');

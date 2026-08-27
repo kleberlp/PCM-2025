@@ -115,7 +115,7 @@
 }
 
 @section Scripts {
-    <script>
+    <script @Csp.NonceAttr>
         window.onload = function () {
             setTimeout(function () {
                 window.print();

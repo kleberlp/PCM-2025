@@ -166,7 +166,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/validation")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         jQuery.validator.addMethod("descricao_bd", function (value, element) {
 

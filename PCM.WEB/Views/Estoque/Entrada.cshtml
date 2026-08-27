@@ -209,7 +209,7 @@
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
     function getBase64(file) {
         return new Promise((resolve, reject) => {

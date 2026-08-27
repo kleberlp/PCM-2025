@@ -109,7 +109,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/select")
     
-    <script>
+    <script @Csp.NonceAttr>
         
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;

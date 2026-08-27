@@ -207,7 +207,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/slick")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         // Initialize when page loads
         jQuery(function () {

@@ -107,7 +107,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
     $(document).ready(function () {
 

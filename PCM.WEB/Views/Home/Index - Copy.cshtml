@@ -580,7 +580,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/easy_pie_chart")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var informacao = $("#informacao");
         var unidade = $("#unidade");

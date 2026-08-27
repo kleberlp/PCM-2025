@@ -335,7 +335,7 @@
         @Scripts.Render("~/plugins/magnificpopup")
         @Scripts.Render("~/plugins/select")
 
-        <script>
+        <script @Csp.NonceAttr>
 
 
         function resultado(value, id) {

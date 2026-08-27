@@ -96,7 +96,7 @@
     <!-- Handler for local scripts -->
     @RenderSection("scripts", required: false)
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
         var urlSenha = "@Url.Action("UsuarioUpdate", "Administracao")";
         var urlNotificacao = "@Url.Action("Notificacao", "Home")";
         var urlNotificacaoOSHospede = "@Url.Action("NotificacaoOSHospede", "Home")";

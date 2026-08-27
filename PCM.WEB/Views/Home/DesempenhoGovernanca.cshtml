@@ -325,7 +325,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/chart")
 
-    <script>
+    <script @Csp.NonceAttr>
     var camareiras = @Html.Raw(camareirasJson);
     var diaAtual   = @diasDecorridos;
     var ncDia      = @Html.Raw(ncDiaJson);

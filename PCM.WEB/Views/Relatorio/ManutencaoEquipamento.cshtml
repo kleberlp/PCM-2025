@@ -164,7 +164,7 @@
     @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/dataTables")
 
-    <script>
+    <script @Csp.NonceAttr>
 
     $(document).ready(function () { $("#data_inicio").mask("99/99/9999"); });
     $(document).ready(function () { $("#data_termino").mask("99/99/9999"); });

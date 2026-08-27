@@ -131,7 +131,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/

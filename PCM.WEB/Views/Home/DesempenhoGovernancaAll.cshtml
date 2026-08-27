@@ -246,7 +246,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/chart")
 
-    <script>
+    <script @Csp.NonceAttr>
     var unidades = @Html.Raw(unidadesJson);
     var META = 85;
 

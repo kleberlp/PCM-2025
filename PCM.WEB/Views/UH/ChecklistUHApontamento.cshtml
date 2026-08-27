@@ -265,7 +265,7 @@
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var validaMinDate = ('@ViewBag.administrador_string' == 'readonly') ? true : false;
 

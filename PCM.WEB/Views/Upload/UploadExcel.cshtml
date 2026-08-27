@@ -81,7 +81,7 @@
     @Scripts.Render("~/plugins/select")
 
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var register = 0;
 

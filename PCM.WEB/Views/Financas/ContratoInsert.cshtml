@@ -111,7 +111,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/datepicker")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;

@@ -144,7 +144,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
         function ImprimirRelatorio(unidade, codigo_unidade, codigo_apartamento, codigo) {
             window.open('PrintChecklist' + '?unidade=' + unidade + '&codigo_unidade=' + codigo_unidade + '&codigo_apartamento=' + codigo_apartamento + '&codigo=' + codigo, '_blank');

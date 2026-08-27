@@ -73,7 +73,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         jQuery.validator.addMethod("descricao_bd", function (value, element) {
 

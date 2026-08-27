@@ -172,7 +172,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/datepicker")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         $(function () {
 

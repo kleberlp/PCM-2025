@@ -809,7 +809,7 @@
     @Scripts.Render("~/plugins/validation")
     @Scripts.Render("~/plugins/datepicker")
 
-<script>
+<script @Csp.NonceAttr>
 
     $("#data").datepicker({
         format: "mm/yyyy",

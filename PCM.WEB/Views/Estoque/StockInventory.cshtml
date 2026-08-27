@@ -151,7 +151,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
 
-<script>
+<script @Csp.NonceAttr>
 
     var register = 0;
 

@@ -117,7 +117,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         //VÁRIAVEIS
         var unidade = $("#unidade");

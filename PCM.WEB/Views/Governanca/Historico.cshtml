@@ -126,7 +126,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/maskedinput")
 
-<script>
+<script @Csp.NonceAttr>
 
     var row;
     var tr;

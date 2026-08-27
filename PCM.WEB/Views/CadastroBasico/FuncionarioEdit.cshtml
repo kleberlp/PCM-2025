@@ -119,7 +119,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
     
-<script>
+<script @Csp.NonceAttr>
 
         $(document).ready(function ($) { $("#valor_hora").maskMoney({ decimal: ",", thousands: "." }); });
         $(document).ready(function () { $("#cpf").mask("999.999.999-99"); });

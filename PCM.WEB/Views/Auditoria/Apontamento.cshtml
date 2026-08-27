@@ -418,7 +418,7 @@
     @Scripts.Render("~/plugins/magnificpopup")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
     $(document).ready(function () { $("#prazo_dias").maskMoney({ prefix: '', thousands: '.', decimal: ',', precision: 0, allowNegative: false, 'placeholder': '' }); });
 

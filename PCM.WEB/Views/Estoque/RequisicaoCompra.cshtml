@@ -176,7 +176,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
     function Arquivo() {
         document.getElementById("lblArquivo").textContent = document.getElementById("fileInput").files[0].name;

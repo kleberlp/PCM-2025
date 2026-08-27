@@ -176,7 +176,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
         function Imprimir() {
             objetos = [];

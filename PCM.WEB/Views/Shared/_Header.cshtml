@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 
 <!-- URLs para o codebase.js usar — padrão do sistema -->
-<script>
+<script @Csp.NonceAttr>
     var urlHeaderCombos = '@Url.Action("HeaderCombos", "Home")';
     var urlHeaderPost   = '@Url.Action("Index", "Home")';
     var urlSetUnidade   = '@Url.Action("SetUnidade", "Home")';

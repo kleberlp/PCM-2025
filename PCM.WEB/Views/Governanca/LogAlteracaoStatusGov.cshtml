@@ -142,7 +142,7 @@
     @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
     // Initialize when page loads
     jQuery(function () {

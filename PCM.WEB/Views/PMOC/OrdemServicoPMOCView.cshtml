@@ -294,7 +294,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/clockpicker")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         $(document).ready(function () { $("#data_inicio").mask("99/99/9999"); });
         $(document).ready(function () { $("#data_termino").mask("99/99/9999"); });

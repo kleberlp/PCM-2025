@@ -148,7 +148,7 @@
     @Scripts.Render("~/plugins/validation")
     @Scripts.Render("~/plugins/chart")
 
-<script>
+<script @Csp.NonceAttr>
 
     function ImprimirRelatorio() {
 

@@ -100,7 +100,7 @@
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
     $(document).ready(function () {
 

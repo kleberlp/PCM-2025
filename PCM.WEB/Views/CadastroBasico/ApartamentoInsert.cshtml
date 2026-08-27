@@ -151,7 +151,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
     $(document).ready(function () { $("#andar").maskMoney({ prefix: '', thousands: '', precision: 0, allowNegative: false, 'placeholder': '' }); });
         $(function () {

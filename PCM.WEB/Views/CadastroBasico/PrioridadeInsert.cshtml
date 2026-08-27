@@ -88,7 +88,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         const envia_email = $("#envia_email");
 

@@ -87,7 +87,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/select")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         jQuery.validator.addMethod("codigo_checklist_bd", function (value, element) {
 
