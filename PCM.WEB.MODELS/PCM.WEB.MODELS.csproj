@@ -9,6 +9,9 @@
     <AssemblyName>PCM.WEB.MODELS</AssemblyName>
     <!-- Os atributos continuam em Properties\AssemblyInfo.cs -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Exigido pelos consumidores old-style (PCM.WEB/PCM.ADM.WEB, packages.config):
+         o NuGet deles pede os assets do RID win a este projeto SDK-style -->
+    <RuntimeIdentifiers>win</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>

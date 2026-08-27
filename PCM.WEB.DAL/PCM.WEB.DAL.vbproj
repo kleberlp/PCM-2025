@@ -16,6 +16,9 @@
     <OptionInfer>On</OptionInfer>
     <!-- Os atributos continuam em My Project\AssemblyInfo.vb -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Exigido pelos consumidores old-style (PCM.WEB/PCM.ADM.WEB, packages.config):
+         o NuGet deles pede os assets do RID win a este projeto SDK-style -->
+    <RuntimeIdentifiers>win</RuntimeIdentifiers>
   </PropertyGroup>
 
   <!-- Imports globais do projeto antigo (o SDK já traz os demais padrão) -->
