@@ -170,19 +170,42 @@
     }
 
     /* ── vídeo ──
-       YouTube e Vimeo viram player incorporado; qualquer outra URL vira link.
+       YouTube, Vimeo e Google Drive viram player incorporado; arquivo de vídeo solto
+       (.mp4 e afins) toca no player do próprio navegador; o resto vira link.
        O player só carrega quando a seção abre (data-src): abrir o painel não
        pode baixar meia dúzia de iframes de vídeo de uma vez. */
     function videoEmbed(url) {
+
         var m = url.match(/(?:youtube\.com\/(?:watch\?[^#]*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{5,20})/);
         if (m) return 'https://www.youtube.com/embed/' + m[1];
+
         m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
         if (m) return 'https://player.vimeo.com/video/' + m[1];
+
+        // Google Drive: o link que a pessoa copia costuma ser o /view, que só abre a
+        // página do Drive. Quem toca embutido é o /preview — o id é o mesmo.
+        m = url.match(/drive\.google\.com\/file\/d\/([A-Za-z0-9_-]+)/);
+        if (m) return 'https://drive.google.com/file/d/' + m[1] + '/preview';
+
+        m = url.match(/drive\.google\.com\/(?:open|uc)\?[^#]*id=([A-Za-z0-9_-]+)/);
+        if (m) return 'https://drive.google.com/file/d/' + m[1] + '/preview';
+
         return null;
+    }
+
+    // Arquivo de vídeo servido direto (o /Files do próprio PCM, um CDN): não precisa
+    // de iframe, o <video> do navegador dá conta e ainda respeita o clique para tocar.
+    function ehArquivoVideo(url) {
+        return /\.(mp4|webm|ogv|ogg|m4v|mov)(\?|#|$)/i.test(url);
     }
 
     function montarVideo(url, aberta) {
         if (!url || !/^https?:\/\//i.test(url)) return '';
+
+        if (ehArquivoVideo(url)) {
+            return '<div class="manual-video"><video controls preload="none" ' +
+                   'src="' + escapar(url) + '"></video></div>';
+        }
 
         var embed = videoEmbed(url);
         if (!embed) {

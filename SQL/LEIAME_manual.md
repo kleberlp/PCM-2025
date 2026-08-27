@@ -34,7 +34,7 @@ pip install pyodbc          # opcional, grava direto no SQL Server
 | `public.chapters` (12 trilhas) | Manual de **processo** — aparece como "Ver também" no rodapé do painel |
 | `public.articles` (82 artigos) | Manual de **tela** — um por artigo, com o botão "?" da tela |
 | `articles.content` (Markdown) | **Seções** do manual, quebradas nos títulos `##` |
-| `articles.video_url` | Vídeo da primeira seção (YouTube/Vimeo abre incorporado) |
+| `articles.video_url` | Vídeo da primeira seção (YouTube, Vimeo e Drive abrem incorporados) |
 
 ### Qual tela é cada artigo
 
@@ -102,5 +102,26 @@ colocou. Se apontam para um servidor que vai sair do ar, publique os arquivos em
 `~/Files/Manual` e ajuste as URLs no texto. O campo `imagem` da seção continua existindo
 para quem cadastra pela tela, com upload direto.
 
-**Vídeos.** YouTube e Vimeo abrem incorporados no painel (o player só carrega quando a
-seção é aberta); qualquer outra URL vira link para abrir em outra aba.
+**Vídeos.** Abrem incorporados no painel, com o player carregando só quando a seção é
+aberta:
+
+| Link | Como aparece |
+|---|---|
+| YouTube (`youtu.be/…`, `watch?v=`, `/shorts/`) | player incorporado |
+| Vimeo | player incorporado |
+| Google Drive (`/file/d/…/view`, `/preview`, `open?id=`) | player incorporado |
+| Arquivo de vídeo (`.mp4`, `.webm`, `.mov`…) | player do próprio navegador |
+| Qualquer outra URL | link para abrir em outra aba |
+
+No Drive, o link que a pessoa copia costuma ser o `/view` — não precisa converter para
+`/preview` na mão, o painel faz isso. O arquivo tem que estar compartilhado como
+"qualquer pessoa com o link", senão o player pede login.
+
+## Se os títulos aparecerem com "??"
+
+Emoji e símbolo não cabem na code page do `varchar`, e viram `?` **ao gravar**. A versão
+atual do script de estrutura já cria `titulo` e `subtitulo` como `nvarchar` e conserta
+quem criou antes — mas o texto já gravado com `?` não volta sozinho:
+
+1. Rode de novo o `2026-08-27_manual_integrado.sql` (ele tem o `ALTER COLUMN`).
+2. Rode de novo a migração — a carga refaz o que veio do Supabase.

@@ -1,4 +1,4 @@
-'==============================================================================================='
+﻿'==============================================================================================='
 'Classe:        Manual                                                                          '
 'Objetivo:      Manual integrado (botao "?" do cabecalho e telas de cadastro do help).          '
 '                                                                                               '
@@ -209,7 +209,7 @@ Public Class Manual
             oSqlParameter(i) = New SqlParameter
             oSqlParameter(i).ParameterName = "titulo"
             oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).SqlDbType = SqlDbType.NVarChar
             oSqlParameter(i).Size = 200
             oSqlParameter(i).Value = If(sTitulo, "")
 
@@ -362,7 +362,7 @@ Public Class Manual
             oSqlParameter(i) = New SqlParameter
             oSqlParameter(i).ParameterName = "titulo"
             oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).SqlDbType = SqlDbType.NVarChar
             oSqlParameter(i).Size = 200
             oSqlParameter(i).Value = If(oManual.titulo, "") : i += 1
 
@@ -370,7 +370,7 @@ Public Class Manual
             oSqlParameter(i) = New SqlParameter
             oSqlParameter(i).ParameterName = "subtitulo"
             oSqlParameter(i).Direction = ParameterDirection.Input
-            oSqlParameter(i).SqlDbType = SqlDbType.VarChar
+            oSqlParameter(i).SqlDbType = SqlDbType.NVarChar
             oSqlParameter(i).Size = 300
             oSqlParameter(i).Value = If(oManual.subtitulo, "") : i += 1
 

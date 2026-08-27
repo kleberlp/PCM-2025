@@ -6919,7 +6919,7 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a YouTube e Vimeo abrem incorporados no painel; outras URLs viram link..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a YouTube, Vimeo, Google Drive e arquivo .mp4 abrem incorporados no painel; outras URLs viram link..
         /// </summary>
         public static string manual_video_dica {
             get {
