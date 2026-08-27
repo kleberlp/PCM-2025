@@ -71,6 +71,17 @@ para ~6–8 meses porque as fases 1–3 paralelizam com a 5.
 **Fase 0** — trocar `<TargetFramework>` para `net10.0`, atualizar pacotes, rodar testes.
 Projetos `net6.0-windows` (PCM.JSON, PCM.IMAGE.RESIZE) mantêm o sufixo `-windows`.
 
+> **EXECUTADA em 2026-08-27** — 12 projetos retargetados para net10.0 (os 12 da
+> tabela 1.1 mais PCM.INTERFACE.ATRIO/DAL/MODELS, que não existiam no levantamento),
+> incluindo os perfis de publicação (.pubxml). Único pacote atualizado:
+> `Microsoft.AspNetCore.Authentication.JwtBearer` 6.0.28 → 10.0.0 nas duas APIs
+> (série 6.x em fim de vida, com CVEs conhecidas). Pendências da fase:
+> 1. compilar com o SDK .NET 10 (VS atualizado) e rodar smoke tests;
+> 2. instalar o runtime/hosting bundle do .NET 10 nos servidores ANTES do
+>    próximo deploy desses projetos (PCM.WEB.OS em produção é o crítico);
+> 3. com acesso ao NuGet, elevar EF Core 9→10, Microsoft.Extensions.* 8.x→10.x,
+>    Microsoft.Windows.Compatibility 9→10 e Swashbuckle nas APIs.
+
 **Fase 1** — VB.NET é suportado em class libraries .NET 10; o PCM.WEB.OS.DAL (net8, VB)
 prova o padrão dentro do próprio repositório. Trabalho principal: converter os `.vbproj`
 para SDK-style e trocar `System.Data.SqlClient` → `Microsoft.Data.SqlClient`
