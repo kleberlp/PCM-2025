@@ -36,9 +36,13 @@ namespace PCM.WEB.Controllers
                 Categoria = primeira?.Categoria,
                 TipoServico = primeira?.TipoServico,
                 Solucao = primeira?.DescricaoSolucao,
-                // TODO: placeholder fixo para o mockup. No projeto final, resolver o logo do cliente
-                // dinamicamente a partir de codigoEmpresa (essa convenção de armazenamento ainda não existe no projeto).
-                ClienteLogoUrl = "~/Content/img/report35/logo-cliente-placeholder.png",
+                // Pasta onde ficam os logos do cliente, mesma convenção usada pelo upload de
+                // Administração/Cadastro Básico (AdministracaoController/CadastroBasicoController,
+                // "~/Content/img/Cliente/Icons/{codigo_empresa}/"). O nome de arquivo "logo.png" é uma
+                // convenção nova assumida para os relatórios — hoje o upload existente grava com nomes
+                // baseados no CNPJ (min_/max_...), então isso pode precisar de ajuste quando o upload
+                // for padronizado para relatórios. Se o arquivo não existir, a view apenas oculta a imagem.
+                ClienteLogoUrl = $"~/Content/img/Cliente/Icons/{codigoEmpresa}/logo.png",
                 EmitidoPor = Session["nome"] as string,
                 Apontamentos = apontamentos,
                 Grupos = linhas

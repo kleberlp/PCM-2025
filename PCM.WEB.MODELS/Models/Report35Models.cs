@@ -20,8 +20,7 @@ namespace PCM.WEB.MODELS
         public string Solucao { get; set; }
 
         // Logo do cliente exibido no cabeçalho do relatório (caminho virtual, ex.: "~/Content/...").
-        // TODO: hoje é um valor fixo definido pelo controller; no projeto final deve ser resolvido
-        // dinamicamente a partir de CodigoEmpresa quando existir essa convenção de armazenamento por cliente.
+        // Montado pelo controller a partir de CodigoEmpresa (pasta ~/Content/img/Cliente/Icons/{codigo_empresa}/).
         public string ClienteLogoUrl { get; set; }
 
         // Nome do usuário logado que gerou o relatório (Session["nome"], preenchido no login).
