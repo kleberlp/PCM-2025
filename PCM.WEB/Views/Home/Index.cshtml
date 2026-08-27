@@ -6,8 +6,8 @@
         {
             @Html.AntiForgeryToken()
 
-            <div class="text-right no-print" style="margin-bottom:10px;">
-                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print();"><i class="si si-printer"></i> Exportar PDF</button>
+            <div class="text-right no-print u-mb-10">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-act="window.print"><i class="si si-printer"></i> Exportar PDF</button>
             </div>
 
             <!-- ================= INDICADOR DE ATUALIZAÇÃO ================= -->
@@ -22,51 +22,51 @@
                 <!-- CONDO -->
                 <div class="dashboard-section">
                     <div class="section-title">Condomínio</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid text-center">
-                                <a href="@Url.Action("OrdemServicoInsert", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                                <a href="@Url.Action("OrdemServicoInsert", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                     <div class="torre-header">
                                         <i class="fa fa-gear torre-icon text-danger"></i>
                                         <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.ordem_servico</span>
                                     </div>
                                     <div class="os-value text-newOS">NOVA</div>
                                 </a>
-                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                     <div class="torre-header">
                                         <i class="fa fa-gear torre-icon text-danger"></i>
                                         <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_atrasada</span>
                                     </div>
                                     <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_atrasada_condo" id="quantidade_atrasada_condo">0</div>
                                 </a>
-                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                     <div class="torre-header">
                                         <i class="fa fa-gear torre-icon text-warning"></i>
                                         <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente</span>
                                     </div>
                                     <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_condo" id="quantidade_pendente_condo">0</div>
                                 </a>
-                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                     <div class="torre-header">
                                         <i class="fa fa-gear torre-icon text-info"></i>
                                         <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_vinculada</span>
                                     </div>
                                     <div class="os-value text-info" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_condo" id="quantidade_vinculada_condo">0</div>
                                 </a>
-                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                     <div class="torre-header">
                                         <i class="fa fa-gear torre-icon text-primary"></i>
                                         <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_andamento</span>
                                     </div>
                                     <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_condo" id="quantidade_andamento_condo">0</div>
                                 </a>
-                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                     <div class="torre-header">
                                         <i class="fa fa-check-circle torre-icon text-earth"></i>
                                         <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_realizada</span>
                                     </div>
                                     <div class="os-value text-earth" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_concluida_condo" id="quantidade_realizada_condo">0</div>
                                 </a>
-                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 0, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                                <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 0, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                     <div class="torre-header">
                                         <i class="fa fa-clock-o torre-icon text-muted"></i>
                                         <span class="torre-label2 text-muted">Backlog</span>
@@ -80,51 +80,51 @@
                 <!-- POOL -->
                 <div class="dashboard-section">
                     <div class="section-title">Pool</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid text-center">
-                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.ordem_servico</span>
                                 </div>
                                 <div class="os-value text-newOS">NOVA</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.quantidade_atrasada</span>
                                 </div>
                                 <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_atrasada_pool" id="quantidade_atrasada_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-warning"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.quantidade_pendente</span>
                                 </div>
                                 <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-info"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.quantidade_vinculada</span>
                                 </div>
                                 <div class="os-value text-info" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_pool" id="quantidade_vinculada_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-primary"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.quantidade_andamento</span>
                                 </div>
                                 <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_pool" id="quantidade_andamento_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-check-circle torre-icon text-earth"></i>
                                     <span class="torre-label">@PCM.WEB.Properties.Resources.quantidade_realizada</span>
                                 </div>
                                 <div class="os-value text-earth" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_concluida_pool" id="quantidade_realizada_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 0, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 0, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-clock-o torre-icon text-muted"></i>
                                     <span class="torre-label">Backlog</span>
@@ -138,51 +138,51 @@
             else
             {
                 <div class="dashboard-section">
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid text-center">
-                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
                                     <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.ordem_servico</span>
                                 </div>
                                 <div class="os-value text-newOS">NOVA</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
                                     <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_atrasada</span>
                                 </div>
                                 <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_atrasada_pool" id="quantidade_atrasada_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-warning"></i>
                                     <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_pendente</span>
                                 </div>
                                 <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-info"></i>
                                     <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_vinculada</span>
                                 </div>
                                 <div class="os-value text-info" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_pool" id="quantidade_vinculada_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-primary"></i>
                                     <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_andamento</span>
                                 </div>
                                 <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_pool" id="quantidade_andamento_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-check-circle torre-icon text-earth"></i>
                                     <span class="torre-label2 text-muted">@PCM.WEB.Properties.Resources.quantidade_realizada</span>
                                 </div>
                                 <div class="os-value text-earth" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_concluida_pool" id="quantidade_realizada_pool">0</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 0, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 0, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-clock-o torre-icon text-muted"></i>
                                     <span class="torre-label2 text-muted">Backlog</span>
@@ -207,14 +207,14 @@
             {
                 <div class="dashboard-section">
                     <div class="section-title">Painel de Controle</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid">
                             @foreach (var g in gaugeItems)
                             {
                                 var pct = Math.Round((double)g.valor, 1);
                                 var pctInt = (int)Math.Round((double)g.valor);
                                 var status = pct < 65 ? "Crítico" : pct > 85 ? "Meta atingida" : "Em andamento";
-                                <a href="@g.url" class="torre-item" id="@g.id" style="text-decoration:none;">
+                                <a href="@g.url" class="torre-item u-td-none" id="@g.id">
                                     <div class="torre-header">
                                         <i class="fa @g.icon torre-icon text-muted"></i>
                                         <span class="torre-label2 text-muted">@g.label</span>
@@ -239,7 +239,7 @@
             {
                 <div class="dashboard-section">
                     <div class="section-title">Resumo das Unidades - @DateTime.Now.Date.ToString("MM/yyyy")</div>
-                    <div class="block dashboard-card" style="padding:0;overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         @{
                             var _info = ((IEnumerable<dynamic>)ViewBag.dashboardInfo).ToList();
 
@@ -267,15 +267,15 @@
                             <thead>
                                 <tr>
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width:70px;">OS Aberto</th>
-                                    <th class="text-center" style="width:85px;">OS Concluído</th>
-                                    <th class="text-center" style="width:80px;">OS Pendente</th>
-                                    <th style="min-width:130px;">Laudo</th>
-                                    <th style="min-width:130px;">Preventiva</th>
-                                    <th style="min-width:130px;">Rotina</th>
-                                    <th style="min-width:130px;">PMOC</th>
-                                    <th style="min-width:130px;">UH Dia</th>
-                                    <th style="min-width:130px;">Green Planet</th>
+                                    <th class="text-center u-w-70">OS Aberto</th>
+                                    <th class="text-center u-w-85">OS Concluído</th>
+                                    <th class="text-center u-w-80">OS Pendente</th>
+                                    <th class="u-minw-130">Laudo</th>
+                                    <th class="u-minw-130">Preventiva</th>
+                                    <th class="u-minw-130">Rotina</th>
+                                    <th class="u-minw-130">PMOC</th>
+                                    <th class="u-minw-130">UH Dia</th>
+                                    <th class="u-minw-130">Green Planet</th>
                                 </tr>
                             </thead>
                             <tbody id="tb-principais">
@@ -312,15 +312,15 @@
                         <div class="row mt-3 text-center">
                             <div class="col-4">
                                 <div class="kpi-title">Aberto</div>
-                                <div class="kpi-value" style="color:rgba(255,0,0);" id="aberto">0</div>
+                                <div class="kpi-value u-c-red" id="aberto">0</div>
                             </div>
                             <div class="col-4">
                                 <div class="kpi-title">Concluído</div>
-                                <div class="kpi-value" style="color:rgba(34,177,76);" id="concluido">0</div>
+                                <div class="kpi-value u-c-green" id="concluido">0</div>
                             </div>
                             <div class="col-4">
                                 <div class="kpi-title">Saldo</div>
-                                <div class="kpi-value" style="color:rgb(255,201,14);" id="saldo">0</div>
+                                <div class="kpi-value u-gold" id="saldo">0</div>
                             </div>
                         </div>
                     </div>
@@ -335,23 +335,23 @@
                         <div class="row mt-3 text-center">
                             <div class="col">
                                 <div class="kpi-title">No Dia</div>
-                                <div class="kpi-value" style="color:rgba(34,177,76);" id="no_dia">0%</div>
+                                <div class="kpi-value u-c-green" id="no_dia">0%</div>
                             </div>
                             <div class="col">
                                 <div class="kpi-title">1 Dia</div>
-                                <div class="kpi-value" style="color:rgba(63,72,204);" id="um_dia">0%</div>
+                                <div class="kpi-value u-c-indigo" id="um_dia">0%</div>
                             </div>
                             <div class="col">
                                 <div class="kpi-title">3 Dias</div>
-                                <div class="kpi-value" style="color:rgb(255,201,14);" id="tres_dia">0%</div>
+                                <div class="kpi-value u-gold" id="tres_dia">0%</div>
                             </div>
                             <div class="col">
                                 <div class="kpi-title">5 Dias</div>
-                                <div class="kpi-value" style="color:rgba(255,128,0);" id="cinco_dia">0%</div>
+                                <div class="kpi-value u-c-orange" id="cinco_dia">0%</div>
                             </div>
                             <div class="col">
                                 <div class="kpi-title">&gt;5 Dias</div>
-                                <div class="kpi-value" style="color:rgba(255,0,0);" id="mais_cinco_dia">0%</div>
+                                <div class="kpi-value u-c-red" id="mais_cinco_dia">0%</div>
                             </div>
                         </div>
                     </div>
@@ -377,7 +377,7 @@
                                         </div>
                                         <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" value="@ViewBag.data_termino">
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-square btn-secondary fa fa-refresh" onclick="refreshGreenPlanet();" id="btnRefreshGreenPlanet"></button>
+                                            <button type="button" class="btn btn-square btn-secondary fa fa-refresh" data-act="refreshGreenPlanet" id="btnRefreshGreenPlanet"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -395,10 +395,10 @@
                     Principais Ocorrências
                     <span>
                         <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-outline-secondary" onclick="PrincipaisOcorrencias(1);">Dia Anterior</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="PrincipaisOcorrencias(7);">Semana</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="PrincipaisOcorrencias(30);">Mês</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="PrincipaisOcorrencias(365);">Ano</button>
+                            <button type="button" class="btn btn-outline-secondary" data-act="PrincipaisOcorrencias" data-args='[1]'>Dia Anterior</button>
+                            <button type="button" class="btn btn-outline-secondary" data-act="PrincipaisOcorrencias" data-args='[7]'>Semana</button>
+                            <button type="button" class="btn btn-outline-secondary" data-act="PrincipaisOcorrencias" data-args='[30]'>Mês</button>
+                            <button type="button" class="btn btn-outline-secondary" data-act="PrincipaisOcorrencias" data-args='[365]'>Ano</button>
                         </div>
                     </span>
                 </div>
@@ -406,9 +406,9 @@
                     <table class="table table-striped" id="tb-principais-ocorrencias">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width:80px;">#</th>
+                                <th class="text-center u-w-80">#</th>
                                 <th>@PCM.WEB.Properties.Resources.equipamento</th>
-                                <th class="text-center" style="width:130px;">Quantidade</th>
+                                <th class="text-center u-w-130">Quantidade</th>
                             </tr>
                         </thead>
                         <tbody id="tb-principais-ocorrencias-body">
@@ -442,7 +442,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn bg-gray-light" onclick="confirmLogBook();" data-bs-dismiss="modal">
+                    <button type="button" class="btn bg-gray-light" data-act="confirmLogBook" data-bs-dismiss="modal">
                         <i class="fa fa-check"></i> @PCM.WEB.Properties.Resources.confirmado
                     </button>
                 </div>
@@ -475,7 +475,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable-bootstrap-notify/3.1.3/bootstrap-notify.min.js"></script>
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var informacao   = $("#informacao");
         var unidade      = $("#header-unidade");
@@ -680,7 +680,7 @@
                 success: function (r) {
                     for (var i = 0; i < r.length; i++) {
                         var row = $("<tr>");
-                        row.append('<td class="text-center" style="width:80px;">' + r[i].item + '</td>');
+                        row.append('<td class="text-center u-w-80">' + r[i].item + '</td>');
                         row.append('<td class="font-w600">' + r[i].local + '</td>');
                         row.append('<td class="text-center">' + r[i].quantidade + '</td>');
                         $("#tb-principais-ocorrencias").append(row);
@@ -812,7 +812,7 @@
                         $.each(data.ocorrencias, function (i, r) {
                             tbody.append(
                                 '<tr>' +
-                                '<td class="text-center" style="width:80px;">' + r.item + '</td>' +
+                                '<td class="text-center u-w-80">' + r.item + '</td>' +
                                 '<td class="font-w600">' + r.local + '</td>' +
                                 '<td class="text-center">' + r.quantidade + '</td>' +
                                 '</tr>'

@@ -36,12 +36,12 @@
                             <thead>
                                 <tr class="table-secondary">
                                     <th>@PCM.WEB.Properties.Resources.item_medicao</th>
-                                    <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.data</th>
-                                    <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.quantidade_hospede</th>
-                                    <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.ocupacao_quartos</th>
-                                    <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.medicao_anterior</th>
-                                    <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.medicao</th>
-                                    <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.consumo</th>
+                                    <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.data</th>
+                                    <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.quantidade_hospede</th>
+                                    <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.ocupacao_quartos</th>
+                                    <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.medicao_anterior</th>
+                                    <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.medicao</th>
+                                    <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.consumo</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,26 +49,26 @@
                                 {
                                     <tr>     
                                         <td>@Html.DisplayFor(modelItem => item.item_medicao)</td>
-                                        <td class="text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.data)</td>
+                                        <td class="text-center u-w-100">@Html.DisplayFor(modelItem => item.data)</td>
                                         @if(System.Convert.ToDouble(item.quantidade_hospedes) <= 0)
                                         {                                        
-                                            <td class="text-center" style="width: 150px;"><span class="text-danger font-w600">@Html.DisplayFor(modelItem => item.quantidade_hospedes)</span></td>
+                                            <td class="text-center u-w-150"><span class="text-danger font-w600">@Html.DisplayFor(modelItem => item.quantidade_hospedes)</span></td>
                                         } else {
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.quantidade_hospedes)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.quantidade_hospedes)</td>
                                         }
                                         @if(System.Convert.ToDouble(item.quartos_ocupados) <= 0)
                                         {                                        
-                                            <td class="text-center" style="width: 150px;"><span class="text-danger font-w600">@Html.DisplayFor(modelItem => item.quartos_ocupados)</span></td>
+                                            <td class="text-center u-w-150"><span class="text-danger font-w600">@Html.DisplayFor(modelItem => item.quartos_ocupados)</span></td>
                                         } else {
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.quartos_ocupados)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.quartos_ocupados)</td>
                                         }
-                                        <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.valor_anterior) @Html.DisplayFor(modelItem => item.unidade_medida)</td>
-                                        <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.valor) @Html.DisplayFor(modelItem => item.unidade_medida)</td>
+                                        <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.valor_anterior) @Html.DisplayFor(modelItem => item.unidade_medida)</td>
+                                        <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.valor) @Html.DisplayFor(modelItem => item.unidade_medida)</td>
                                         @if(System.Convert.ToDouble(item.consumo) <= 0)
                                         {                                        
-                                            <td class="text-center" style="width: 150px;"><span class="text-danger font-w600">@Html.DisplayFor(modelItem => item.consumo) @Html.DisplayFor(modelItem => item.unidade_medida)</span></td>
+                                            <td class="text-center u-w-150"><span class="text-danger font-w600">@Html.DisplayFor(modelItem => item.consumo) @Html.DisplayFor(modelItem => item.unidade_medida)</span></td>
                                         } else {
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.consumo) @Html.DisplayFor(modelItem => item.unidade_medida)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.consumo) @Html.DisplayFor(modelItem => item.unidade_medida)</td>
                                         }
                                     </tr>
                                 }
@@ -100,7 +100,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/

@@ -61,14 +61,14 @@
             <div class="block-header block-header-default bg-gd-default">
                 <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.pmoc</h3>                    
                 <div class="block-options">
-                    <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
-                    <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
-                    <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                    <button type="button" class="si si-grid btn-block-option text-white" data-show="#div_grid" data-hide="#div_list"></button>
+                    <button type="button" class="si si-list btn-block-option text-white" data-show="#div_list" data-hide="#div_grid"></button>
+                    <button type="button" class="si si-printer btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'></button>
                     <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
                 </div>
             </div>
 
-            <div class="block-content" id="div_grid" style="display:none">
+            <div class="block-content u-hide" id="div_grid">
 
                 @for (int i = 0; i < Model.Count; i++)
                 {
@@ -140,7 +140,7 @@
 
             </div>
 
-            <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+            <div class="col-md-12 col-xl-12 u-hide" id="div_list">
                
                 <div class="block-content block-content-full">
 
@@ -157,7 +157,7 @@
                                 <th class="text-center">@PCM.WEB.Properties.Resources.data_ultimo_pmoc</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.data_proximo_pmoc</th>
                                 <th class="text-center">@PCM.WEB.Properties.Resources.status</th>
-                                <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                                <th data-sortable="false" class="text-center d-print-none u-w-80"></th>
                             </tr>
                         </thead>
 
@@ -175,7 +175,7 @@
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.data_ultima)</td>
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima_formatada)</td>
                                 <td class="text-center"><span class="badge @item.cor.ToString().Replace("text", "bg")">@Html.DisplayFor(modelItem => item.descricao_status)</span></td>
-                                <td class="text-center d-print-none" style="width: 80px;">
+                                <td class="text-center d-print-none u-w-80">
                                     <div class="btn-group">
                                         @if ((item.status != 2) && (item.status != 4))
                                         {<a href="@Url.Action("ApontamentoPMOC", "PMOC", new { codigo_unidade = item.codigo_unidade, codigo_equipamento = item.codigo_equipamento, data_manutencao = item.data_proxima, view = "PMOC" })" class="btn btn-sm btn-secondary"><i class="fa fa-snowflake-o"></i></a>}
@@ -209,7 +209,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/

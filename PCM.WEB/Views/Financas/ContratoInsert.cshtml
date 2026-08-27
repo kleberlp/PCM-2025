@@ -64,7 +64,7 @@
                                 <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
                                 <div class="col-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="application/pdf">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" data-act="Arquivo" data-on="change" accept="application/pdf">
                                         <label id="lblArquivo" class="custom-file-label" for="arquivo">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
                                     </div>
                                 </div>
@@ -74,12 +74,12 @@
                                 <label class="col-12">@PCM.WEB.Properties.Resources.envia_email</label>
                                 <div class="col-12">
                                     <label class="css-control css-control-success css-switch">
-                                        <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" onchange="verificaEnviaEmail();">
+                                        <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" data-act="verificaEnviaEmail" data-on="change">
                                         <span class="css-control-indicator"></span>
                                     </label>
                                 </div>
                             </div>
-                            <div id="div_email" style="display:none">
+                            <div class="u-hide" id="div_email">
                                 <div class="form-group row">
                                     <label class="col-12">@PCM.WEB.Properties.Resources.dias_alerta</label>
                                     <div class="col-md-2"><input type="text" class="form-control" id="dias_alerta" name="dias_alerta" value=""></div>
@@ -111,7 +111,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/datepicker")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;

@@ -35,14 +35,14 @@
                             <thead>
                                 <tr class="table-secondary">
                                     <th>@PCM.WEB.Properties.Resources.unidade</th>
-                                    <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.ordem_servico</th>
+                                    <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.ordem_servico</th>
                                     <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.executor</th>
                                     <th class="d-none d-sm-table-cell">@PCM.WEB.Properties.Resources.local</th>
                                     <th>@PCM.WEB.Properties.Resources.descricao</th>
-                                    <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_inicio</th>
-                                    <th class="d-none d-sm-table-cell text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data_termino</th>
-                                    <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.horas</th>
-                                    <th data-sortable="false" class="text-center" style="width: 80px;" data-sortable="false"></th>
+                                    <th class="d-none d-sm-table-cell text-center u-w-150">@PCM.WEB.Properties.Resources.data_inicio</th>
+                                    <th class="d-none d-sm-table-cell text-center u-w-150">@PCM.WEB.Properties.Resources.data_termino</th>
+                                    <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.horas</th>
+                                    <th data-sortable="false" class="text-center u-w-80" data-sortable="false"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,19 +50,19 @@
                                 {
                                     <tr>
                                         <td>@Html.DisplayFor(modelItem => item.unidade)</td>
-                                        <td class="text-center" style="width: 120px;">@Html.DisplayFor(modelItem => item.ordem_servico)</td>
+                                        <td class="text-center u-w-120">@Html.DisplayFor(modelItem => item.ordem_servico)</td>
                                         <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.executor)</td>
                                         <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.local)</td>
                                         <td class="d-none d-sm-table-cell">@Html.DisplayFor(modelItem => item.descricao)</td>
-                                        <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.data_inicio)</td>
-                                        <td class="d-none d-sm-table-cell text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.data_termino)</td>
+                                        <td class="d-none d-sm-table-cell text-center u-w-150">@Html.DisplayFor(modelItem => item.data_inicio)</td>
+                                        <td class="d-none d-sm-table-cell text-center u-w-150">@Html.DisplayFor(modelItem => item.data_termino)</td>
                                         @if (item.erro == true)
                                         {
-                                            <td class="text-center" style="width: 150px;"><span class="badge badge-danger">@Html.DisplayFor(modelItem => item.horas)</span></td>
+                                            <td class="text-center u-w-150"><span class="badge badge-danger">@Html.DisplayFor(modelItem => item.horas)</span></td>
                                         }
                                         else
                                         {
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.horas)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.horas)</td>
                                         }
                                         <td class="text-center">
                                             <div class="btn-group">
@@ -108,7 +108,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/

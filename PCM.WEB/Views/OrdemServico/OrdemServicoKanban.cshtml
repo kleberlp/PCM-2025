@@ -1,0 +1,103 @@
+@*
+    Kanban de Ordens de Serviço — colunas por status (1 Em Aberto, 2 Vinculada,
+    3 Em Andamento, 4 Concluída). Arrastar um cartão entre colunas chama o
+    UpdateStatusOS (apenas com direito de edição). Padrão CSP: nada inline —
+    lógica em Content/js/pages/ordemservico-kanban.js, visual em
+    Content/css/kanban.css, parâmetros do servidor via data-*.
+*@
+
+@section Styles {
+    <link rel="stylesheet" href="~/Content/css/kanban.css">
+}
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("OrdemServicoIndex2", "OrdemServico")">Ordem de Serviço</a>
+                <span class="breadcrumb-item active">Kanban</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+
+        <div id="kb-root"
+             data-url-lista="@Url.Action("LoadOrdemServicoIndex", "OrdemServico")"
+             data-url-status="@Url.Action("UpdateStatusOS", "OrdemServico")"
+             data-url-view="@Url.Action("OrdemServicoView", "OrdemServico")"
+             data-empresa="@ViewBag.empresa"
+             data-usuario="@ViewBag.usuario"
+             data-unidade="@ViewBag.codigo_unidade"
+             data-data-inicio="@ViewBag.data_inicio"
+             data-data-termino="@ViewBag.data_termino"
+             data-editar="@(ViewBag.editar ? "1" : "0")">
+
+            <!-- Barra de ações -->
+            <div class="kb-toolbar">
+                <input type="text" id="kb-busca" class="form-control kb-busca"
+                       placeholder="Buscar por responsável, quarto, setor ou nº da O.S." autocomplete="off">
+
+                <select id="kb-unidade" class="form-control kb-unidade">
+                    @foreach (SelectListItem item in (SelectList)ViewBag.unidade)
+                    {
+                        if (item.Selected)
+                        {
+                            <option value="@item.Value" selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+
+                <button type="button" id="kb-atualizar" class="btn btn-secondary">
+                    <i class="fa fa-refresh"></i> Atualizar
+                </button>
+            </div>
+
+            <!-- Quadro -->
+            <div class="kb-board" id="kb-board">
+                <section class="kb-col" data-status="1">
+                    <header class="kb-col-header">Em Aberto <span class="kb-count" data-count="1">0</span></header>
+                    <div class="kb-cards" data-cards="1"></div>
+                </section>
+
+                <section class="kb-col" data-status="2">
+                    <header class="kb-col-header">Vinculadas <span class="kb-count" data-count="2">0</span></header>
+                    <div class="kb-cards" data-cards="2"></div>
+                </section>
+
+                <section class="kb-col" data-status="3">
+                    <header class="kb-col-header">Em Andamento <span class="kb-count" data-count="3">0</span></header>
+                    <div class="kb-cards" data-cards="3"></div>
+                </section>
+
+                <!-- Concluídas recolhida como no mock; clique expande -->
+                <section class="kb-col kb-col-fechada" data-status="4" id="kb-col-concluidas">
+                    <header class="kb-col-header">
+                        <span class="kb-col-titulo-v">Concluídas</span>
+                        <span class="kb-col-titulo-h">Concluídas <span class="kb-count" data-count="4">0</span></span>
+                    </header>
+                    <div class="kb-cards" data-cards="4"></div>
+                </section>
+            </div>
+
+            <div id="kb-vazio" class="kb-vazio kb-oculto">Nenhuma ordem de serviço no período.</div>
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    <script src="~/Content/js/pages/ordemservico-kanban.js"></script>
+}

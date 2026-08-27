@@ -69,8 +69,8 @@
                             <table class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full-pagination">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th class="text-center" style="width:100px">X</th>
-                                        <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.codigo</th>
+                                        <th class="text-center u-w-100">X</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.codigo</th>
                                         <th>@PCM.WEB.Properties.Resources.descricao </th>
                                     </tr>
                                 </thead>
@@ -80,7 +80,7 @@
                                     {
                                         @Html.HiddenFor(m => m[i].codigo)
                                         <tr>          
-                                            <td class="text-center" style="width:100px">
+                                            <td class="text-center u-w-100">
                                                 <label class="css-control css-control-success css-checkbox">
                                                     @Html.CheckBoxFor(m => m[i].selecionado, new { @class = "css-control-input"})
                                                     <span class="css-control-indicator"></span>                    
@@ -109,7 +109,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/validation")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         jQuery.validator.addMethod("descricao_bd", function (value, element) {
 

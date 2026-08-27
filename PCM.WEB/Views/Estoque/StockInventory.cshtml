@@ -34,7 +34,7 @@
                                 <a href="@Url.Action("StockInventoryDownloadExcel", "InventoryMaterial")" class="btn btn-square btn-secondary min-width-100 h-75">
                                     <i class="fa fa-download mr-5"></i>@PCM.WEB.Properties.Resources.download_excel
                                 </a>
-                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="$('#type').val('save'); $('#form').submit();">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" data-setval='{"#type": "save"}' data-submit="#form">
                                     <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.save
                                 </button>
                             </div>
@@ -57,7 +57,7 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="worksheet" name="worksheet" value="" maxlength="20">
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-upload mr-5" id="btnUpload" name="btnUpload" disabled onclick="$('#type').val('arquivo'); $('#form').submit();"></button>
+                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-upload mr-5" id="btnUpload" name="btnUpload" disabled data-setval='{"#type": "arquivo"}' data-submit="#form"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -78,24 +78,24 @@
                                 <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full" id="tb_main">
                                     <thead>
                                         <tr class="table-secondary">
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.product</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.product</th>
                                             <th>@PCM.WEB.Properties.Resources.description</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.batch</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.quantity_inventory</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.quantity</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.divergence</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.batch</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.quantity_inventory</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.quantity</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.divergence</th>
                                         </tr>
                                     </thead>
                                     <tbody id="table_body" name="table_body">
                                         @foreach (var item in Model.result)
                                         {
                                         <tr>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.product)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.product)</td>
                                             <td>@Html.DisplayFor(modelItem => item.description)</td>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.batch)</td>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.quantity_inventory)</td>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.quantity)</td>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.divergence)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.batch)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.quantity_inventory)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.quantity)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.divergence)</td>
                                         </tr>
                                         }
                                     </tbody>
@@ -117,7 +117,7 @@
                                 <table class="table table-bordered table-vcenter table-striped font-size-sm table-sm js-dataTable-full" id="tb_main_error">
                                     <thead>
                                         <tr class="table-secondary">
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.product</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.product</th>
                                             <th>@PCM.WEB.Properties.Resources.error</th>
                                         </tr>
                                     </thead>
@@ -125,7 +125,7 @@
                                         @foreach (var item in Model.result_error)
                                         {
                                         <tr>
-                                            <td class="text-center" style="width: 150px;">@Html.DisplayFor(modelItem => item.product)</td>
+                                            <td class="text-center u-w-150">@Html.DisplayFor(modelItem => item.product)</td>
                                             <td>@Html.DisplayFor(modelItem => item.error)</td>
                                         </tr>
                                         }
@@ -151,7 +151,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
 
-<script>
+<script @Csp.NonceAttr>
 
     var register = 0;
 

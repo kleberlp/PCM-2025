@@ -38,7 +38,7 @@
                             }
                             @if (ViewBag.imprimir)
                             {
-                                <button type="button" id="btnImprimir" name="btnImprimir" onclick="Imprimir();" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                <button type="button" id="btnImprimir" name="btnImprimir" data-act="Imprimir" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
                             }
                         </div>
                     </div>
@@ -80,7 +80,7 @@
 
                             <thead>
                                 <tr class="table-secondary">
-                                    <th class="text-md-center" style="width: 50px;" data-sortable="false">
+                                    <th class="text-md-center u-w-50" data-sortable="false">
                                     </th>
                                     <th class="d-none d-md-table-cell">@PCM.WEB.Properties.Resources.unidade </th>
                                     <th class="d-lg-table-cell text-center">@PCM.WEB.Properties.Resources.tag</th>
@@ -89,8 +89,8 @@
                                     <th class="d-lg-table-cell">@PCM.WEB.Properties.Resources.local</th>
                                     <th class="d-lg-table-cell">@PCM.WEB.Properties.Resources.tipo_ar_condicionado</th>
                                     <th class="d-lg-table-cell">@PCM.WEB.Properties.Resources.potencia</th>
-                                    <th class="d-lg-table-cell text-center" style="width: 85px;">@PCM.WEB.Properties.Resources.ativo</th>
-                                    <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                    <th class="d-lg-table-cell text-center u-w-85">@PCM.WEB.Properties.Resources.ativo</th>
+                                    <th data-sortable="false" class="text-center u-w-100" data-sortable="false"></th>
                                 </tr>
                             </thead>
 
@@ -125,7 +125,7 @@
                     <div class="row">
 
                         <div class="col-md-6 col-xl-6">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaZebra();">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirEtiquetaZebra">
                                 <div class="text-md-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="col-md-6 col-xl-6">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaA4();">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirEtiquetaA4">
                                 <div class="text-md-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
@@ -168,7 +168,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
         $(function () {
 

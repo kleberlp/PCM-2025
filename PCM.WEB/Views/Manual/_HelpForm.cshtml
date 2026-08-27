@@ -1,0 +1,150 @@
+@model PCM.WEB.MODELS.Manual
+
+@* Formulário do manual, compartilhado por HelpInsert e HelpEdit: o formulário é
+   o mesmo e o que muda é ter ou não código — duas telas divergiriam na primeira
+   correção. O que é da tela (breadcrumb, título) fica em cada view. *@
+
+<!-- Cabeçalho do manual -->
+<div class="block block-rounded border">
+    <div class="block-header block-header-default bg-gd-default">
+        <h3 class="block-title text-white font-w600">@(Model.codigo > 0 ? PCM.WEB.Properties.Resources.editar : PCM.WEB.Properties.Resources.cadastrar)</h3>
+        <div class="block-options">
+            <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" id="btnSalvarManual">
+                <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+            </button>
+            <a href="@Url.Action("HelpIndex", "Manual")" class="btn btn-square btn-secondary min-width-100 h-75">
+                <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+            </a>
+        </div>
+    </div>
+    <div class="block-content block-content-full">
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <label for="tipoManual">@PCM.WEB.Properties.Resources.manual_tipo</label>
+                <select class="form-control" id="tipoManual">
+                    <option value="S">@PCM.WEB.Properties.Resources.manual_tela</option>
+                    <option value="P">@PCM.WEB.Properties.Resources.manual_processo</option>
+                </select>
+                <small class="form-text text-muted">@PCM.WEB.Properties.Resources.manual_tipo_dica</small>
+            </div>
+            <div class="col-md-3 js-box-tela">
+                <label for="controllerManual">Controller</label>
+                <select class="form-control" id="controllerManual"></select>
+            </div>
+            <div class="col-md-3 js-box-tela">
+                <label for="actionManual">Action</label>
+                <select class="form-control" id="actionManual"></select>
+                <small class="form-text text-muted">@PCM.WEB.Properties.Resources.manual_action_dica</small>
+            </div>
+            <div class="col-md-3">
+                <label for="ativoManual">@PCM.WEB.Properties.Resources.ativo</label>
+                <select class="form-control" id="ativoManual">
+                    <option value="1">@PCM.WEB.Properties.Resources.sim</option>
+                    <option value="0">@PCM.WEB.Properties.Resources.nao</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-4">
+                <label for="tituloManual">@PCM.WEB.Properties.Resources.titulo</label>
+                <input type="text" class="form-control" id="tituloManual" maxlength="200">
+            </div>
+            <div class="col-md-5">
+                <label for="subtituloManual">@PCM.WEB.Properties.Resources.manual_subtitulo</label>
+                <input type="text" class="form-control" id="subtituloManual" maxlength="300">
+            </div>
+            <div class="col-md-3 js-box-tela">
+                <label for="processoManual">@PCM.WEB.Properties.Resources.manual_ver_tambem</label>
+                <select class="form-control" id="processoManual">
+                    <option value="0"></option>
+                    @foreach (var processo in (List<PCM.WEB.MODELS.ListCombo>)ViewBag.processos)
+                    {
+                        if (processo.codigo != Model.codigo)
+                        {
+                            <option value="@processo.codigo">@processo.descricao</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Seções -->
+<div class="block block-rounded border">
+    <div class="block-header block-header-default bg-gd-default">
+        <h3 class="block-title text-white font-w600"><i class="fa fa-list-ol mr-5"></i>@PCM.WEB.Properties.Resources.manual_secoes</h3>
+        <div class="block-options">
+            <button type="button" class="btn btn-square btn-secondary h-75" id="btnAddSecao">
+                <i class="fa fa-plus mr-5"></i>@PCM.WEB.Properties.Resources.manual_adicionar_secao
+            </button>
+        </div>
+    </div>
+    <div class="block-content block-content-full" id="secoes"></div>
+</div>
+
+@* Molde de uma seção. Fica no HTML, e não no JS, para o texto continuar vindo
+   dos recursos como o resto da tela. *@
+<template id="moldeSecao">
+    <div class="block block-rounded border secao mb-10">
+        <div class="block-content block-content-full py-10">
+
+            <div class="form-group row mb-10">
+                <div class="col-auto align-self-center secao-num font-w600 text-muted"></div>
+                <div class="col">
+                    <input type="text" class="form-control secao-titulo" maxlength="200" placeholder="@PCM.WEB.Properties.Resources.titulo">
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-sm btn-secondary secao-sobe" title="&#8593;"><i class="fa fa-arrow-up"></i></button>
+                    <button type="button" class="btn btn-sm btn-secondary secao-desce" title="&#8595;"><i class="fa fa-arrow-down"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger secao-remove" title="@PCM.WEB.Properties.Resources.excluir"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+
+            <textarea class="form-control secao-texto" rows="4" placeholder="@PCM.WEB.Properties.Resources.manual_conteudo_dica"></textarea>
+
+            <div class="form-group row mt-10 mb-0">
+                <div class="col-md-3 mt-5">
+                    <select class="form-control form-control-sm secao-tipo-nota">
+                        <option value="">@PCM.WEB.Properties.Resources.manual_destaque</option>
+                        <option value="D">@PCM.WEB.Properties.Resources.manual_dica</option>
+                        <option value="A">@PCM.WEB.Properties.Resources.manual_aviso</option>
+                    </select>
+                </div>
+                <div class="col-md-9 mt-5">
+                    <input type="text" class="form-control form-control-sm secao-nota" maxlength="1000">
+                </div>
+                <div class="col-md-6 mt-5">
+                    <label class="mb-0 font-size-sm">@PCM.WEB.Properties.Resources.imagem</label>
+                    <input type="file" class="form-control form-control-sm secao-arquivo" accept=".jpg,.jpeg,.png,.gif">
+                    <small class="form-text text-muted">@PCM.WEB.Properties.Resources.manual_imagem_dica</small>
+                    <div class="secao-img-box js-hidden mt-5">
+                        <img class="secao-img" alt="">
+                        <button type="button" class="btn btn-sm btn-danger secao-img-remove align-middle">
+                            <i class="fa fa-times mr-5"></i>@PCM.WEB.Properties.Resources.excluir
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-5">
+                    <label class="mb-0 font-size-sm">@PCM.WEB.Properties.Resources.manual_video</label>
+                    <input type="url" class="form-control form-control-sm secao-video" maxlength="500" placeholder="https://...">
+                    <small class="form-text text-muted">@PCM.WEB.Properties.Resources.manual_video_dica</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>
+
+<div id="manual-data" class="js-hidden"
+     data-manual='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model).Replace("'", "&#39;"))'
+     data-telas='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject((Dictionary<string, List<string>>)ViewBag.telas).Replace("'", "&#39;"))'
+     data-url-save="@Url.Action("SaveHelp", "Manual")"
+     data-url-upload="@Url.Action("UploadHelpImage", "Manual")"
+     data-url-index="@Url.Action("HelpIndex", "Manual")"
+     data-msg-secao="@PCM.WEB.Properties.Resources.manual_secao"
+     data-msg-requerido="@PCM.WEB.Properties.Resources.campo_requerido">
+</div>

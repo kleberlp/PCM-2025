@@ -2358,4 +2358,70 @@
   <data name="msgQuestionConfirmMovement" xml:space="preserve">
     <value>Confirma a movimentação do Ativo fixo?</value>
   </data>
+  <data name="manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="manual_secao" xml:space="preserve">
+    <value>Seção</value>
+  </data>
+  <data name="manual_secoes" xml:space="preserve">
+    <value>Seções</value>
+  </data>
+  <data name="manual_adicionar_secao" xml:space="preserve">
+    <value>Adicionar seção</value>
+  </data>
+  <data name="manual_destaque" xml:space="preserve">
+    <value>Sem destaque</value>
+  </data>
+  <data name="manual_dica" xml:space="preserve">
+    <value>Dica</value>
+  </data>
+  <data name="manual_aviso" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
+  <data name="manual_tela" xml:space="preserve">
+    <value>Tela</value>
+  </data>
+  <data name="manual_processo" xml:space="preserve">
+    <value>Processo</value>
+  </data>
+  <data name="manual_tipo" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="manual_tipo_dica" xml:space="preserve">
+    <value>Manual de tela abre no "?" da própria tela; manual de processo é avulso e aparece no rodapé como "ver também".</value>
+  </data>
+  <data name="manual_action_dica" xml:space="preserve">
+    <value>Sem action, o manual vale para o módulo inteiro.</value>
+  </data>
+  <data name="manual_subtitulo" xml:space="preserve">
+    <value>Subtítulo</value>
+  </data>
+  <data name="manual_conteudo_dica" xml:space="preserve">
+    <value>Texto da seção em Markdown: **negrito**, listas com "- ", tabelas com | e imagens com ![](url).</value>
+  </data>
+  <data name="manual_video" xml:space="preserve">
+    <value>Link de vídeo</value>
+  </data>
+  <data name="manual_video_dica" xml:space="preserve">
+    <value>YouTube, Vimeo, Google Drive e arquivo .mp4 abrem incorporados no painel; outras URLs viram link.</value>
+  </data>
+  <data name="manual_imagem_dica" xml:space="preserve">
+    <value>JPG, PNG ou GIF ilustrando o passo.</value>
+  </data>
+  <data name="manual_vazio" xml:space="preserve">
+    <value>Esta tela ainda não tem manual.</value>
+  </data>
+  <data name="manual_buscar" xml:space="preserve">
+    <value>Buscar no manual...</value>
+  </data>
+  <data name="manual_sem_resultado" xml:space="preserve">
+    <value>Nenhuma seção encontrada.</value>
+  </data>
+  <data name="manual_ver_tambem" xml:space="preserve">
+    <value>Ver também:</value>
+  </data>
+  <data name="manual_criar" xml:space="preserve">
+    <value>Criar manual desta tela</value>
+  </data>
 </root>

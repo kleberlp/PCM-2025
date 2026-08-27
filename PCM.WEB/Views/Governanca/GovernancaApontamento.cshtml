@@ -49,7 +49,7 @@
                                     <th class="text-center">@PCM.WEB.Properties.Resources.nao_conformidade</th>
                                     <th class="text-left">@PCM.WEB.Properties.Resources.responsavel_vistoria</th>
                                     <th class="text-center">@PCM.WEB.Properties.Resources.dataHoraVistoria</th>
-                                    <th data-sortable="false" class="text-center" style="width: 100px;" data-sortable="false"></th>
+                                    <th data-sortable="false" class="text-center u-w-100" data-sortable="false"></th>
                                 </tr>
                             </thead>
 
@@ -84,7 +84,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/maskedinput")
 
-<script>
+<script @Csp.NonceAttr>
 
     var row;
     var tr;
@@ -170,9 +170,9 @@
 
                         info = info + '<tr class="bg-white"> ';
                         info = info + '<td class="font-size-sm">' + response.enxoval[i].enxoval + '</td> ';
-                        info = info + '<td class="text-center font-size-sm" style="width:100px">' + response.enxoval[i].quantidade + '</td> ';
-                        info = info + '<td class="text-center font-size-sm" style="width:100px">' + response.enxoval[i].peso + '</td> ';
-                        info = info + '<td class="text-center font-size-sm" style="width:100px">' + response.enxoval[i].totalPeso + '</td> ';
+                        info = info + '<td class="text-center font-size-sm u-w-100">' + response.enxoval[i].quantidade + '</td> ';
+                        info = info + '<td class="text-center font-size-sm u-w-100">' + response.enxoval[i].peso + '</td> ';
+                        info = info + '<td class="text-center font-size-sm u-w-100">' + response.enxoval[i].totalPeso + '</td> ';
                         info = info + '</tr> ';
                     }
 

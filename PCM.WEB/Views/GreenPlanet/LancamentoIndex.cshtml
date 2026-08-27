@@ -44,7 +44,7 @@
                                         <div><input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data"></div>
                                     </li>
                                     <li class="list-group-item text-right">
-                                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar" onclick="Load();"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
+                                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar" data-act="Load"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
                                     </li>
                                 </ul>
                             </div>
@@ -65,7 +65,7 @@
                                 @if (ViewBag.inserir)
                                 {
                                     <div class="block-options">
-                                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" onclick="Insert();"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                                        <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" data-act="Insert"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
                                     </div>
                                 }
                             </div>
@@ -102,7 +102,7 @@
                                     <thead>
                                         <tr>
                                             <th>@PCM.WEB.Properties.Resources.item_medicao</th>
-                                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.medicao</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.medicao</th>
                                         </tr>
                                     </thead>
 
@@ -123,12 +123,12 @@
                                                 </td>
                                                 @if (Model[i].numero_digitos == 0)
                                                 {
-                                                    <td class="text-center" style="width: 150px;">@Html.TextBoxFor(m => m[i].valor, new { @class = "form-control text-center" })</td>
+                                                    <td class="text-center u-w-150">@Html.TextBoxFor(m => m[i].valor, new { @class = "form-control text-center" })</td>
 
                                                 }
                                                 else
                                                 {
-                                                    <td class="text-center" style="width: 150px;">@Html.TextBoxFor(m => m[i].valor, new { @class = "form-control text-center", @maxlength = Model[i].numero_digitos })</td>
+                                                    <td class="text-center u-w-150">@Html.TextBoxFor(m => m[i].valor, new { @class = "form-control text-center", @maxlength = Model[i].numero_digitos })</td>
 
                                                 }
                                             </tr>
@@ -172,7 +172,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/datepicker")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         $(function () {
 

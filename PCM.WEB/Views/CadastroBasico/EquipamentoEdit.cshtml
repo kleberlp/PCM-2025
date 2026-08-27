@@ -140,7 +140,7 @@
                                     <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
                                     <div class="col-12">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="image/*,application/pdf">
+                                            <input type="file" class="custom-file-input" id="arquivo" name="arquivo" data-act="Arquivo" data-on="change" accept="image/*,application/pdf">
                                             <label id="lblArquivo" class="custom-file-label" for="imagem">@Model.arquivo</label>
                                         </div>
                                     </div>
@@ -178,7 +178,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;

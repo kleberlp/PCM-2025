@@ -63,12 +63,12 @@
                                 <thead>
                                     <tr class="table-secondary">
                                         <th>@PCM.WEB.Properties.Resources.descricao </th>
-                                        <th class="d-none d-sm-table-cell text-md-center" style="width: 100px;" data-sortable="false">@PCM.WEB.Properties.Resources.visualizar</th>
-                                        <th class="d-none d-sm-table-cell text-md-center" style="width: 100px;" data-sortable="false">@PCM.WEB.Properties.Resources.inserir </th>
-                                        <th class="d-none d-sm-table-cell text-md-center" style="width: 100px;" data-sortable="false">@PCM.WEB.Properties.Resources.editar</th>
-                                        <th class="d-none d-sm-table-cell text-md-center" style="width: 100px;" data-sortable="false">@PCM.WEB.Properties.Resources.excluir</th>
-                                        <th class="d-none d-sm-table-cell text-md-center" style="width: 100px;" data-sortable="false">@PCM.WEB.Properties.Resources.imprimir</th>
-                                        <th class="d-none d-sm-table-cell text-md-center" style="width: 100px;" data-sortable="false">@PCM.WEB.Properties.Resources.administrador</th>
+                                        <th class="d-none d-sm-table-cell text-md-center u-w-100" data-sortable="false">@PCM.WEB.Properties.Resources.visualizar</th>
+                                        <th class="d-none d-sm-table-cell text-md-center u-w-100" data-sortable="false">@PCM.WEB.Properties.Resources.inserir </th>
+                                        <th class="d-none d-sm-table-cell text-md-center u-w-100" data-sortable="false">@PCM.WEB.Properties.Resources.editar</th>
+                                        <th class="d-none d-sm-table-cell text-md-center u-w-100" data-sortable="false">@PCM.WEB.Properties.Resources.excluir</th>
+                                        <th class="d-none d-sm-table-cell text-md-center u-w-100" data-sortable="false">@PCM.WEB.Properties.Resources.imprimir</th>
+                                        <th class="d-none d-sm-table-cell text-md-center u-w-100" data-sortable="false">@PCM.WEB.Properties.Resources.administrador</th>
                                     </tr>
                                 </thead>
 
@@ -163,7 +163,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/validation")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         jQuery.validator.addMethod("descricao_bd", function (value, element) {
 

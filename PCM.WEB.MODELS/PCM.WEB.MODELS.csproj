@@ -82,6 +82,7 @@
     <Compile Include="Models\InterfaceOperaModels.cs" />
     <Compile Include="Models\ApiModels.cs" />
     <Compile Include="Models\WebApiModels.cs" />
+    <Compile Include="Models\ManualModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

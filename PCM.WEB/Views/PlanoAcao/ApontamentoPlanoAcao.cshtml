@@ -94,7 +94,7 @@
                                 <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
                                 <div class="col-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="image/*">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" data-act="Arquivo" data-on="change" accept="image/*">
                                         <label id="lblArquivo" class="custom-file-label" for="imagem">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                                 <h3 class="block-title text-dark font-w600">@PCM.WEB.Properties.Resources.registros: <span class="text-danger" id="info_registros">0</span></h3>
                                 <div class="block-options">
                                     <label class="css-control css-control-danger css-checkbox">
-                                        <input type="checkbox" name="barcode" id="barcode" class="css-control-input" value="true" onchange="productInput();" />
+                                        <input type="checkbox" name="barcode" id="barcode" class="css-control-input" value="true" data-act="productInput" data-on="change" />
                                         <span class="css-control-indicator"></span>
                                         <span class="h5">@PCM.WEB.Properties.Resources.leitor_codigo_barras</span>
                                     </label>
@@ -116,13 +116,13 @@
                             <div class="block-content block-content-full">
                                 <div>
                                     <div class="form-group row">
-                                        <div class="col-md-2" id="input_barcode" style="display:none">
+                                        <div class="col-md-2 u-hide" id="input_barcode">
                                             <label>@PCM.WEB.Properties.Resources.produto</label>
-                                            <input type="text" class="form-control" style="text-transform: uppercase;" id="produto" name="produto" autocomplete="off" placeholder="" value="" maxlength="20">
+                                            <input type="text" class="form-control u-upper" id="produto" name="produto" autocomplete="off" placeholder="" value="" maxlength="20">
                                         </div>
-                                        <div class="col-md-4" id="descricao_barcode" style="display:none">
+                                        <div class="col-md-4 u-hide" id="descricao_barcode">
                                             <label>@PCM.WEB.Properties.Resources.descricao</label>
-                                            <input type="text" class="form-control" disabled style="text-transform: uppercase;" id="descricao" name="descricao" autocomplete="off" placeholder="" value="" maxlength="250">
+                                            <input type="text" class="form-control u-upper" disabled id="descricao" name="descricao" autocomplete="off" placeholder="" value="" maxlength="250">
                                         </div>
                                         <div class="col-md-6" id="input_combo">
                                             <label>@PCM.WEB.Properties.Resources.produto</label>
@@ -135,9 +135,9 @@
                                         <div class="col-md-2">
                                             <label>@PCM.WEB.Properties.Resources.quantidade</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="quantidade" name="quantidade" value="" onkeypress="if (event.keyCode == 13) { adicionarProduto(); return false; }">
+                                                <input type="text" class="form-control" id="quantidade" name="quantidade" value="" data-enter-act="adicionarProduto">
                                                 <div class="input-group-append">
-                                                    <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" onclick="adicionarProduto();"></button>
+                                                    <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" data-act="adicionarProduto"></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -147,29 +147,29 @@
                                 <table class="table table-bordered table-sm table-striped table-vcenter" id="table" name="table">
                                     <thead>
                                         <tr class="table-secondary">
-                                            <th class="text-center" style="width:200px">@PCM.WEB.Properties.Resources.produto</th>
+                                            <th class="text-center u-w-200">@PCM.WEB.Properties.Resources.produto</th>
                                             <th>@PCM.WEB.Properties.Resources.descricao</th>
-                                            <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.lote</th>
-                                            <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.quantidade</th>
-                                            <th class="text-center" style="width:80px" data-sortable="false"></th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.lote</th>
+                                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.quantidade</th>
+                                            <th class="text-center u-w-80" data-sortable="false"></th>
                                         </tr>
                                     </thead>
                                     <tbody id="table_linha" name="table_linha">
                                         @for (int i = 0; i < Model.Count; i++)
                                         {
-                                            <tr id='linha' style="display:none">
+                                            <tr class="u-hide" id='linha'>
                                                 @Html.HiddenFor(m => m[i].codigo_produto)
                                                 @Html.HiddenFor(m => m[i].excluido)
                                                 @Html.HiddenFor(m => m[i].lote)
                                                 @Html.HiddenFor(m => m[i].quantidade)
-                                                <td class="text-center" style="width:200px">@Html.DisplayFor(m => m[i].produto)</td>
+                                                <td class="text-center u-w-200">@Html.DisplayFor(m => m[i].produto)</td>
                                                 <td>@Html.DisplayFor(m => m[i].descricao_produto)</td>
-                                                <td class="text-center" style="width:150px" id="lote_@i" name="lote_@i">@Html.DisplayFor(m => m[i].lote)</td>
-                                                <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].quantidade)</td>
+                                                <td class="text-center u-w-150" id="lote_@i" name="lote_@i">@Html.DisplayFor(m => m[i].lote)</td>
+                                                <td class="text-center u-w-150">@Html.DisplayFor(m => m[i].quantidade)</td>
                                                 <td class="text-center">
                                                     <div class="btn-group">
-                                                        <a href="#" onclick="remove(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>
-                                                        <a href="#" onclick="informacao(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-info-circle"></i></a>
+                                                        <a href="#" data-act="remove" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>
+                                                        <a href="#" data-act="informacao" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-info-circle"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -206,7 +206,7 @@
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
         $(document).ready(function () {
             $("#data_inicio").mask("99/99/9999");

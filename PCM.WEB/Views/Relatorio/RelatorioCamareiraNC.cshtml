@@ -9,7 +9,7 @@
 
             <div class="page landscape-parent">
 
-                <div class="block d-print-normal p-10 m-10" style="display:none">
+                <div class="block d-print-normal p-10 m-10 u-hide">
                     <div class="form-row">
                         <div class="col-3">
                             <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
@@ -145,7 +145,7 @@
     @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
     $(function () {
 

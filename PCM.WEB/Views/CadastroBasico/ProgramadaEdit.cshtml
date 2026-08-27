@@ -95,7 +95,7 @@
                                     <label>@PCM.WEB.Properties.Resources.tipo_ordem_servico</label>
                                     <div>@Html.DropDownList("tipo_ordem_servico", null, "", new { @class = "form-control" })</div>
                                 </div>
-                                <div class="col-md-6" style="display:none" id="div_checklist">
+                                <div class="col-md-6 u-hide" id="div_checklist">
                                     <label>@PCM.WEB.Properties.Resources.checklist</label>
                                     <div>@Html.DropDownList("checklist", null, "", new { @class = "form-control js-select2" })</div>
                                 </div>
@@ -108,21 +108,21 @@
                                         <label class="css-control css-control-success css-switch">
                                             @if (@Model.envia_email)
                                             {
-                                                <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" checked onchange="verificaEnviaEmail();">
+                                                <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" checked data-act="verificaEnviaEmail" data-on="change">
                                             }
                                             else
                                             {
-                                                <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" onchange="verificaEnviaEmail();">
+                                                <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" data-act="verificaEnviaEmail" data-on="change">
                                             }
                                             <span class="css-control-indicator"></span>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-2" id="div_dias_alerta" style="display:none">
+                                <div class="col-md-2 u-hide" id="div_dias_alerta">
                                     <label>@PCM.WEB.Properties.Resources.dias_alerta</label>
                                     <div>@Html.TextBoxFor(model => model.dias_alerta, new { @class = "form-control", @maxlength = "3" })</div>
                                 </div>
-                                <div class="col-md-9" id="div_email" style="display:none">
+                                <div class="col-md-9 u-hide" id="div_email">
                                     <label>@PCM.WEB.Properties.Resources.lista_email</label>
                                     <div>@Html.TextAreaFor(model => model.email, new { @class = "form-control", @maxlength = "2000", @rows = "6" })</div>
                                 </div>
@@ -172,7 +172,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
 
     $(document).ready(function () {
         $("#valor_previsto").maskMoney({ decimal: ",", thousands: "." });

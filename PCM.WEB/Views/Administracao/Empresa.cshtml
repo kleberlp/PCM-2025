@@ -28,7 +28,7 @@
                     <thead>
                         <tr class="table-secondary">
                             <th>@PCM.WEB.Properties.Resources.nome_fantasia </th>
-                            <th class="d-none d-sm-table-cell text-md-center" style="width: 80px;"></th>
+                            <th class="d-none d-sm-table-cell text-md-center u-w-80"></th>
                         </tr>
                     </thead>
 
@@ -37,7 +37,7 @@
                         {
                             <tr>           
                                 <td>@Html.DisplayFor(modelItem => item.nome_fantasia)</td>
-                                <td class="text-md-center" style="width: 80px;" >
+                                <td class="text-md-center u-w-80" >
                                     <div class="btn-group">    
                                         @if(item.ativo) { <a href="@Url.Action("EmpresaAtivarInativar", "Administracao", new { codigo = item.codigo, ativar = false })" class="btn btn-sm btn-success"><i class="fa fa-close"></i></a>}
                                         @if(!item.ativo) { <a href="@Url.Action("EmpresaAtivarInativar", "Administracao", new { codigo = item.codigo, ativar = true })" class="btn btn-sm btn-danger"><i class="fa fa-check"></i></a>}
@@ -63,7 +63,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/

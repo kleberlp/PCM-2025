@@ -160,7 +160,7 @@
     @Scripts.Render("~/plugins/validation")   
 
     <!-- Page JS Code -->
-    <script>
+    <script @Csp.NonceAttr>
 
         document.getElementById("email").value = "";
         document.getElementById("senha").value = "";

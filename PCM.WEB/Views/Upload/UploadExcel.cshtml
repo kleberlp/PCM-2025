@@ -50,7 +50,7 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="planilha" name="planilha" value="" maxlength="20">
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-upload mr-5" id="btnUpload" name="btnUpload" disabled onclick="uploadExcel();"></button>
+                                            <button type="button" class="btn btn-square btn-secondary min-width-50 fa fa-upload mr-5" id="btnUpload" name="btnUpload" disabled data-act="uploadExcel"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +81,7 @@
     @Scripts.Render("~/plugins/select")
 
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var register = 0;
 

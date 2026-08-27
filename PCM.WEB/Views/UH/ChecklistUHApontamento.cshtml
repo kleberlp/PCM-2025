@@ -46,7 +46,7 @@
                                 }
                                 @if(ViewBag.imprimir)
                                 {
-                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" data-act="ImprimirRelatorio"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
                                 }
                                 <a href="@Url.Action(@ViewBag.page, @ViewBag.model)" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar</a>
                             </div>
@@ -126,13 +126,13 @@
                             <table class="table table-bordered table-sm table-striped table-vcenter" id="checklist-table" name="checklist-table">
                                 <thead>
                                     <tr>
-                                        <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.codigo</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.codigo</th>
                                         <th >@PCM.WEB.Properties.Resources.descricao </th>
-                                        <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.sim</th>
-                                        <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.nao</th>
-                                        <th class="text-center" style="width:100px">@PCM.WEB.Properties.Resources.na</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.sim</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.nao</th>
+                                        <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.na</th>
                                         <th>@PCM.WEB.Properties.Resources.observacao</th>
-                                        <th class="text-center" style="width:150px">@PCM.WEB.Properties.Resources.nova_vistoria</th>
+                                        <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.nova_vistoria</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_linha" name="table_linha">         
@@ -153,32 +153,32 @@
                                             <td>@Html.DisplayFor(m => m[i].descricao)</td>
                                             @if(Model[i].opcao == "SIM") 
                                             {
-                                                <td class="text-center text-success font-w600" style="width:100px">X</td>
+                                                <td class="text-center text-success font-w600 u-w-100">X</td>
                                             }
                                             else {
-                                                <td class="text-center" style="width:100px"></td>
+                                                <td class="text-center u-w-100"></td>
                                             }
                                             @if(Model[i].opcao == "NÃO") 
                                             {
-                                                <td class="text-center text-danger font-w600" style="width:100px">X</td>
+                                                <td class="text-center text-danger font-w600 u-w-100">X</td>
                                             }
                                             else {
-                                                <td class="text-center" style="width:100px"></td>
+                                                <td class="text-center u-w-100"></td>
                                             }
                                             @if(Model[i].opcao == "N/A") 
                                             {
-                                                <td class="text-center text-secondary font-w600" style="width:100px">X</td>
+                                                <td class="text-center text-secondary font-w600 u-w-100">X</td>
                                             }
                                             else {
-                                                <td class="text-center" style="width:100px"></td>
+                                                <td class="text-center u-w-100"></td>
                                             }                                    
                                             <td>@Html.DisplayFor(m => m[i].observacao)</td>                                               
                                             @if(Model[i].nova_vistoria == true) 
                                             {
-                                                <td class="text-center" style="width:150px">X</td>
+                                                <td class="text-center u-w-150">X</td>
                                             }
                                             else {
-                                                <td class="text-center" style="width:100px"></td>
+                                                <td class="text-center u-w-100"></td>
                                             }
                                         </tr>               
                                     } else {
@@ -188,26 +188,26 @@
                                             @Html.HiddenFor(m => m[i].descricao)
                                             <td class="text-center">@Html.DisplayFor(m => m[i].checklist)</td>
                                             <td>@Html.DisplayFor(m => m[i].descricao)</td>
-                                            <td class="text-center" style="width:100px">                                            
+                                            <td class="text-center u-w-100">                                            
                                                 <label class="css-control css-control-success css-checkbox">
                                                     @Html.RadioButtonFor(m => m[i].opcao, "SIM", new { @class = "css-control-input", @onChange="opcaoNao(" + i + ", false);" })
                                                     <span class="css-control-indicator"></span>
                                                 </label>
                                             </td>
-                                            <td class="text-center" style="width:100px">
+                                            <td class="text-center u-w-100">
                                                 <label class="css-control css-control-danger css-checkbox">
                                                     @Html.RadioButtonFor(m => m[i].opcao, "NÃO", new { @class = "css-control-input", @onChange="opcaoNao(" + i + ", this.checked);" })
                                                     <span class="css-control-indicator"></span>
                                                 </label>
                                             </td>
-                                            <td class="text-center" style="width:100px">
+                                            <td class="text-center u-w-100">
                                                 <label class="css-control-sm css-control-secondary css-checkbox">
                                                     @Html.RadioButtonFor(m => m[i].opcao, "N/A", new { @class = "css-control-input", @onChange="opcaoNao(" + i + ", false);" })
                                                     <span class="css-control-indicator"></span>
                                                 </label>
                                             </td>
                                             <td>@Html.TextBoxFor(m => m[i].observacao, new { @class = "form-control col-12", @maxlength="200" })</td>   
-                                            <td class="text-center" style="width:150px">
+                                            <td class="text-center u-w-150">
                                                 <label class="css-control css-control-success css-checkbox">
                                                     @Html.CheckBoxFor(m => m[i].nova_vistoria, new { @class = "css-control-input", @id="[" + i + "].nova_vistoria" })
                                                     <span class="css-control-indicator"></span>
@@ -232,7 +232,7 @@
                                     }
                                     @if(ViewBag.imprimir)
                                     {
-                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" onclick="ImprimirRelatorio();"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="imprimir" id="imprimir" data-act="ImprimirRelatorio"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
                                     }
                                     <a href="@Url.Action("ChecklistUH", "UH")" class="btn btn-square btn-secondary min-width-100 h-75">
                                         <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
@@ -265,7 +265,7 @@
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         var validaMinDate = ('@ViewBag.administrador_string' == 'readonly') ? true : false;
 
@@ -320,15 +320,15 @@
                 newRowItem.append(colsItem);
                 colsItem = '<td><input class="form-control col-12" maxlength="100" name="[' + codigo + '].descricao" type="text" value="" /></td>';
                 newRowItem.append(colsItem);
-                colsItem = '<td class="text-center" style="width:100px"><label class="css-control css-control-success css-checkbox"><input class="css-control-input" name="opcao[]" type="radio" value="S" /><span class="css-control-indicator"></span></label></td>';
+                colsItem = '<td class="text-center u-w-100"><label class="css-control css-control-success css-checkbox"><input class="css-control-input" name="opcao[]" type="radio" value="S" /><span class="css-control-indicator"></span></label></td>';
                 newRowItem.append(colsItem);
-                colsItem = '<td class="text-center" style="width:100px"><label class="css-control css-control-danger css-checkbox"><input class="css-control-input" name="opcao[]" type="radio" value="N" /><span class="css-control-indicator"></span></label></td>';
+                colsItem = '<td class="text-center u-w-100"><label class="css-control css-control-danger css-checkbox"><input class="css-control-input" name="opcao[]" type="radio" value="N" /><span class="css-control-indicator"></span></label></td>';
                 newRowItem.append(colsItem);
-                colsItem = '<td class="text-center" style="width:100px"><label class="css-control-sm css-control-secondary css-checkbox"><input class="css-control-input" name="opcao[]" type="radio" value="NA" /><span class="css-control-indicator"></span></label></td>';
+                colsItem = '<td class="text-center u-w-100"><label class="css-control-sm css-control-secondary css-checkbox"><input class="css-control-input" name="opcao[]" type="radio" value="NA" /><span class="css-control-indicator"></span></label></td>';
                 newRowItem.append(colsItem);
                 colsItem = '<td><input class="form-control col-12" maxlength="200" name="[' + codigo + '].observacao" type="text" value="" /></td>';
                 newRowItem.append(colsItem);
-                colsItem = '<td class="text-center" style="width:150px"><label class="css-control css-control-success css-checkbox"><input class="css-control-input" data-val="true" name="[' + codigo + '].nova_vistoria" type="checkbox" value="true" /><span class="css-control-indicator"></span></label></td>';
+                colsItem = '<td class="text-center u-w-150"><label class="css-control css-control-success css-checkbox"><input class="css-control-input" data-val="true" name="[' + codigo + '].nova_vistoria" type="checkbox" value="true" /><span class="css-control-indicator"></span></label></td>';
                 newRowItem.append(colsItem);
                 
                 $("#checklist-table").append(newRowItem);

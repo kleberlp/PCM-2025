@@ -21,8 +21,8 @@
 
             <input type="hidden" name="data" id="data" value="@_dataSelected" />
 
-            <div class="text-right no-print" style="margin-bottom:10px;">
-                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print();"><i class="si si-printer"></i> Exportar PDF</button>
+            <div class="text-right no-print u-mb-10">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-act="window.print"><i class="si si-printer"></i> Exportar PDF</button>
             </div>
 
             <!-- ================= KPIs – ORDEM DE SERVIÇO (torre-grid) ================= -->
@@ -30,44 +30,44 @@
             {
                 <div class="dashboard-section">
                     <div class="section-title">Condomínio</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid">
-                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="si si-wrench torre-icon text-primary"></i>
                                     <span class="torre-label">@Resources.ordem_servico</span>
                                 </div>
                                 <div class="os-value text-primary">@Resources.nova</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
                                     <span class="torre-label">@Resources.quantidade_atrasada</span>
                                 </div>
                                 <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_atrasada_condo" id="quantidade_atrasada_condo">@ViewBag.InfoOrdemServico.quantidade_atrasada_condo</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-warning"></i>
                                     <span class="torre-label">@Resources.quantidade_pendente</span>
                                 </div>
                                 <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_condo" id="quantidade_pendente_condo">@ViewBag.InfoOrdemServico.quantidade_pendente_condo</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-info"></i>
                                     <span class="torre-label">@Resources.quantidade_vinculada</span>
                                 </div>
                                 <div class="os-value text-info" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_condo" id="quantidade_vinculada_condo">@ViewBag.InfoOrdemServico.quantidade_vinculada_condo</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-primary"></i>
                                     <span class="torre-label">@Resources.quantidade_andamento</span>
                                 </div>
                                 <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_condo" id="quantidade_andamento_condo">@ViewBag.InfoOrdemServico.quantidade_andamento_condo</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 1 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-check-circle torre-icon text-earth"></i>
                                     <span class="torre-label">@Resources.quantidade_realizada</span>
@@ -80,44 +80,44 @@
 
                 <div class="dashboard-section">
                     <div class="section-title">Pool</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid">
-                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="si si-wrench torre-icon text-primary"></i>
                                     <span class="torre-label">@Resources.ordem_servico</span>
                                 </div>
                                 <div class="os-value text-primary">@Resources.nova</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
                                     <span class="torre-label">@Resources.quantidade_atrasada</span>
                                 </div>
                                 <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_atrasada_pool" id="quantidade_atrasada_pool">@ViewBag.InfoOrdemServico.quantidade_atrasada_pool</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-warning"></i>
                                     <span class="torre-label">@Resources.quantidade_pendente</span>
                                 </div>
                                 <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool">@ViewBag.InfoOrdemServico.quantidade_pendente_pool</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-info"></i>
                                     <span class="torre-label">@Resources.quantidade_vinculada</span>
                                 </div>
                                 <div class="os-value text-info" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_pool" id="quantidade_vinculada_pool">@ViewBag.InfoOrdemServico.quantidade_vinculada_pool</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-primary"></i>
                                     <span class="torre-label">@Resources.quantidade_andamento</span>
                                 </div>
                                 <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_pool" id="quantidade_andamento_pool">@ViewBag.InfoOrdemServico.quantidade_andamento_pool</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-check-circle torre-icon text-earth"></i>
                                     <span class="torre-label">@Resources.quantidade_realizada</span>
@@ -132,44 +132,44 @@
             {
                 <div class="dashboard-section">
                     <div class="section-title">Ordem de Serviço</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid">
-                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoInsert", "OrdemServico")" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="si si-wrench torre-icon text-primary"></i>
                                     <span class="torre-label">@Resources.ordem_servico</span>
                                 </div>
                                 <div class="os-value text-primary">@Resources.nova</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 3, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-danger"></i>
                                     <span class="torre-label">@Resources.quantidade_atrasada</span>
                                 </div>
                                 <div class="os-value text-danger" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_atrasada_pool" id="quantidade_atrasada_pool">@ViewBag.InfoOrdemServico.quantidade_atrasada_pool</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 1, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-warning"></i>
                                     <span class="torre-label">@Resources.quantidade_pendente</span>
                                 </div>
                                 <div class="os-value text-warning" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_pendente_pool" id="quantidade_pendente_pool">@ViewBag.InfoOrdemServico.quantidade_pendente_pool</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 5, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-info"></i>
                                     <span class="torre-label">@Resources.quantidade_vinculada</span>
                                 </div>
                                 <div class="os-value text-info" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_vinculada_pool" id="quantidade_vinculada_pool">@ViewBag.InfoOrdemServico.quantidade_vinculada_pool</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 4, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-gear torre-icon text-primary"></i>
                                     <span class="torre-label">@Resources.quantidade_andamento</span>
                                 </div>
                                 <div class="os-value text-primary" data-toggle="countTo" data-speed="1000" data-to="@ViewBag.InfoOrdemServico.quantidade_andamento_pool" id="quantidade_andamento_pool">@ViewBag.InfoOrdemServico.quantidade_andamento_pool</div>
                             </a>
-                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item" style="text-decoration:none;">
+                            <a href="@Url.Action("OrdemServicoIndex2", "OrdemServico", new { status = 2, responsavel_apartamento = 2 })" class="torre-item os-item u-td-none">
                                 <div class="torre-header">
                                     <i class="fa fa-check-circle torre-icon text-earth"></i>
                                     <span class="torre-label">@Resources.quantidade_realizada</span>
@@ -184,51 +184,51 @@
             <!-- ================= DADOS DA UNIDADE ================= -->
             <div class="dashboard-section">
                 <div class="section-title">Dados da Unidade</div>
-                <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                <div class="block dashboard-card u-pad0-clip">
                     <div class="torre-comando-grid">
-                        <div class="torre-item" style="cursor:default;">
+                        <div class="torre-item u-cursor-default">
                             <div class="torre-header">
                                 <i class="fa fa-bed torre-icon text-info"></i>
                                 <span class="torre-label">UH Arrumadas</span>
                             </div>
                             <div class="os-value text-info">@ViewBag.dashboard_info.quantidadeUHs</div>
                         </div>
-                        <div class="torre-item" style="cursor:default;">
+                        <div class="torre-item u-cursor-default">
                             <div class="torre-header">
                                 <i class="fa fa-search torre-icon text-success"></i>
                                 <span class="torre-label">UH Vistoriadas</span>
                             </div>
                             <div class="os-value text-success">@ViewBag.dashboard_info.quantidateUHsGovernanca</div>
                         </div>
-                        <div class="torre-item" style="cursor:default;">
+                        <div class="torre-item u-cursor-default">
                             <div class="torre-header">
                                 <i class="fa fa-female torre-icon text-warning"></i>
                                 <span class="torre-label">Camareiras</span>
                             </div>
                             <div class="os-value text-warning">@ViewBag.dashboard_info.quantidadeCamareira</div>
                         </div>
-                        <div class="torre-item" style="cursor:default;">
+                        <div class="torre-item u-cursor-default">
                             <div class="torre-header">
                                 <i class="fa fa-user torre-icon text-primary"></i>
                                 <span class="torre-label">Supervisores</span>
                             </div>
                             <div class="os-value text-primary">@ViewBag.dashboard_info.quantidadeVistoriador</div>
                         </div>
-                        <div class="torre-item" style="cursor:default;">
+                        <div class="torre-item u-cursor-default">
                             <div class="torre-header">
                                 <i class="fa fa-file-text-o torre-icon text-muted"></i>
                                 <span class="torre-label">OS Gerada</span>
                             </div>
                             <div class="os-value text-muted">@ViewBag.dashboard_info.quantidadeOSGerada</div>
                         </div>
-                        <div class="torre-item" style="cursor:default;">
+                        <div class="torre-item u-cursor-default">
                             <div class="torre-header">
                                 <i class="fa fa-list-ul torre-icon text-muted"></i>
                                 <span class="torre-label">Itens Vistoriados</span>
                             </div>
                             <div class="os-value text-muted">@ViewBag.dashboard_info.itensChecklist</div>
                         </div>
-                        <div class="torre-item" style="cursor:default;">
+                        <div class="torre-item u-cursor-default">
                             <div class="torre-header">
                                 <i class="fa fa-exchange torre-icon text-muted"></i>
                                 <span class="torre-label">Troca Status UH</span>
@@ -245,23 +245,23 @@
             <div class="dashboard-section row">
                 <div class="col-6">
                     <div class="section-title">Status Front Office</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid">
-                            <div class="torre-item" style="cursor:default;">
+                            <div class="torre-item u-cursor-default">
                                 <div class="torre-header">
                                     <i class="fa fa-bed torre-icon text-success"></i>
                                     <span class="torre-label">Vagos</span>
                                 </div>
                                 <div class="os-value text-success">@(_dgInfo != null ? _dgInfo.sfoVago.ToString() : "—")</div>
                             </div>
-                            <div class="torre-item" style="cursor:default;">
+                            <div class="torre-item u-cursor-default">
                                 <div class="torre-header">
                                     <i class="fa fa-bed torre-icon text-primary"></i>
                                     <span class="torre-label">Ocupados</span>
                                 </div>
                                 <div class="os-value text-primary">@(_dgInfo != null ? _dgInfo.sfoOcupado.ToString() : "—")</div>
                             </div>
-                            <div class="torre-item" style="cursor:default;">
+                            <div class="torre-item u-cursor-default">
                                 <div class="torre-header">
                                     <i class="fa fa-ban torre-icon text-danger"></i>
                                     <span class="torre-label">Bloqueados</span>
@@ -273,23 +273,23 @@
                 </div>
                 <div class="col-6">
                     <div class="section-title">Tipo de Arrumação</div>
-                    <div class="block dashboard-card" style="padding:0; overflow:hidden;">
+                    <div class="block dashboard-card u-pad0-clip">
                         <div class="torre-comando-grid">
-                            <div class="torre-item" style="cursor:default;">
+                            <div class="torre-item u-cursor-default">
                                 <div class="torre-header">
                                     <i class="fa fa-sign-out torre-icon text-warning"></i>
                                     <span class="torre-label">Arrumação Saída</span>
                                 </div>
                                 <div class="os-value text-warning">@(_dgInfo != null ? _dgInfo.taSaida.ToString() : "—")</div>
                             </div>
-                            <div class="torre-item" style="cursor:default;">
+                            <div class="torre-item u-cursor-default">
                                 <div class="torre-header">
                                     <i class="fa fa-home torre-icon text-info"></i>
                                     <span class="torre-label">Permanência</span>
                                 </div>
                                 <div class="os-value text-info">@(_dgInfo != null ? _dgInfo.taPermanencia.ToString() : "—")</div>
                             </div>
-                            <div class="torre-item" style="cursor:default;">
+                            <div class="torre-item u-cursor-default">
                                 <div class="torre-header">
                                     <i class="fa fa-wrench torre-icon text-earth"></i>
                                     <span class="torre-label">Manutenção</span>
@@ -335,7 +335,7 @@
             <div class="dashboard-section row">
                 <div class="col-6">
                     <div class="section-title">Produtividade por @(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Camareira")</div>
-                    <div class="block dashboard-card" style="overflow-x:auto;">
+                    <div class="block dashboard-card u-scroll-x">
                         <table class="table table-striped" id="tbProdutividadeCamareira" name="tbProdutividadeCamareira" style="min-width:520px;">
                             <thead>
                                 <tr>
@@ -353,7 +353,7 @@
                 </div>
                 <div class="col-6">
                     <div class="section-title">Produtividade por @(Session["codigo_unidade"].ToString() == "-1" ? "Unidade" : "Vistoriador")</div>
-                    <div class="block dashboard-card" style="overflow-x:auto;">
+                    <div class="block dashboard-card u-scroll-x">
                         <table class="table table-striped" id="tbProdutividadeVistoriador" name="tbProdutividadeVistoriador" style="min-width:480px;">
                             <thead>
                                 <tr>
@@ -475,7 +475,7 @@
 }
 
 @section Scripts {
-    <script>
+    <script @Csp.NonceAttr>
         // Troca de unidade no header: navega via GET para ler a sessão já atualizada pelo SetUnidade.
         // (Sem isto, o codebase.js cai em location.reload(), que re-submete o POST do #form
         //  com a unidade antiga do campo escondido e sobrescreve a sessão — não surtia efeito.)

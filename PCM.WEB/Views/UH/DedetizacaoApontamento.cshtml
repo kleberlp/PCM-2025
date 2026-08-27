@@ -105,7 +105,7 @@
     @Scripts.Render("~/plugins/clockpicker")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         $(document).ready(function () { $("#data").mask("99/99/9999"); });
                 

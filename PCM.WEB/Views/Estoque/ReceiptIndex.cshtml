@@ -90,17 +90,17 @@
 
                         <thead class="table-secondary">
                             <tr>
-                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.document_num</th>
-                                <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.purchase_order</th>
-                                <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.received_date</th>
+                                <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.document_num</th>
+                                <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.purchase_order</th>
+                                <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.received_date</th>
                                 <th>@PCM.WEB.Properties.Resources.supplier</th>
-                                <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.product</th>
-                                <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.quantity</th>
-                                <th class="text-center" style="width: 120px;">@PCM.WEB.Properties.Resources.quantity_received</th>
+                                <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.product</th>
+                                <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.quantity</th>
+                                <th class="text-center u-w-120">@PCM.WEB.Properties.Resources.quantity_received</th>
                                 <th>@PCM.WEB.Properties.Resources.status</th>
                                 @if (ViewBag.delete)
                                 {
-                                    <th class="text-center" style="width: 15px;" data-sortable="false"></th>
+                                    <th class="text-center u-w-15" data-sortable="false"></th>
                                 }
                             </tr>
                         </thead>
@@ -127,7 +127,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
     $(document).ready(function () {
 

@@ -1,0 +1,78 @@
+﻿artigo_id;titulo;trilha;controller;action;confianca
+1-4-hierarquia-de-perfis-e-permissoes;Hierarquia de Perfis e Permissões;Administrador;Administracao;PerfilHierarquia;baixa
+1-7-cadastro-de-empresa-fornecedor-prestador;Cadastro de Empresa (Fornecedor/Prestador);Administrador;CadastroBasico;FornecedorIndex;alta
+1-8-cadastro-de-cliente-unidade-hoteleira;Cadastro de Cliente (Unidade Hoteleira);Administrador;Administracao;ClienteIndex;alta
+1-9-configuracao-de-pesos-do-dashboard-de-desempenho;Configuração de Pesos do Dashboard de Desempenho;Administrador;Governanca;Dashboard;alta
+2-1-cadastro-de-unidades;Cadastro de Unidades;Gestor — Cadastros;CadastroBasico;UnidadeIndex;alta
+2-10-cadastro-de-funcoes;Cadastro de Funções;Gestor — Cadastros;CadastroBasico;FuncaoIndex;alta
+2-11-cadastro-de-departamentos;Cadastro de Departamentos;Gestor — Cadastros;CadastroBasico;DepartamentoIndex;alta
+2-12-gestores-de-departamento;Gestores de Departamento;Gestor — Cadastros;CadastroBasico;DepartamentoIndex;alta
+2-13-criacao-de-checklists;Criação de Checklists — Rotina, Preventiva e Governança;Gestor — Cadastros;CadastroBasico;PreventivaIndex;alta
+2-14-prioridades-e-regras-de-notificacao;Prioridades e Regras de Notificação;Gestor — Cadastros;CadastroBasico;PrioridadeIndex;alta
+2-15-cadastro-de-fornecedores;Cadastro de Fornecedores;Gestor — Cadastros;CadastroBasico;FornecedorIndex;alta
+2-16-produtos-e-grupos-de-estoque;Produtos e Grupos de Estoque;Gestor — Cadastros;CadastroBasico;ProdutoIndex;alta
+2-17-mapa-de-manutencao-e-itens-gerais;Mapa de Manutenção e Itens Gerais;Gestor — Cadastros;CadastroBasico;AtividadeIndex;alta
+2-18-cadastro-de-checklist-de-pmoc;Cadastro de Checklist de PMOC — Periodicidade por Item;Gestor — Cadastros;PMOC;PMOCIndex;alta
+2-2-cadastro-de-setores-e-areas;Cadastro de Setores e Áreas;Gestor — Cadastros;CadastroBasico;SetorIndex;alta
+2-3-cadastro-de-u-h-unidades-habitacionais;Cadastro de U.H. (Unidades Habitacionais);Gestor — Cadastros;CadastroBasico;UnidadeIndex;alta
+2-4-tipos-de-u-h-cama-e-ar-condicionado;Tipos de U.H., Cama e Ar Condicionado;Gestor — Cadastros;CadastroBasico;TipoArCondicionadoIndex;alta
+2-5-cadastro-de-maquinas-e-equipamentos;Cadastro de Máquinas e Equipamentos;Gestor — Cadastros;CadastroBasico;EquipamentoIndex;alta
+2-6-cadastro-de-sistemas-de-ar-condicionado;Cadastro de Sistemas de Ar Condicionado;Gestor — Cadastros;CadastroBasico;ArCondicionadoIndex;alta
+2-7-familia-de-equipamentos;Família de Equipamentos;Gestor — Cadastros;CadastroBasico;FamiliaEquipamentoIndex;alta
+2-8-categoria-de-servico;Categoria de Serviço;Gestor — Cadastros;CadastroBasico;CategoriaIndex;alta
+2-9-cadastro-de-colaboradores;Cadastro de Colaboradores;Gestor — Cadastros;CadastroBasico;FuncionarioIndex;alta
+3-10-plano-de-acao;Plano de Ação;Gestor de PCM;PlanoAcao;PlanoAcaoIndex;alta
+3-11-historicos-de-preventiva-rotina-e-laudo;Históricos de Preventiva, Rotina e Laudo;Gestor de PCM;PCM;HistoricoPreventiva;alta
+3-5-laudo-e-documentacao-tecnica;Laudo e Documentação Técnica;Gestor de PCM;AEB;LaudoIndex;alta
+3-6-pmoc-plano-de-manutencao-operacao-e-controle;PMOC — Plano de Manutenção, Operação e Controle;Gestor de PCM;PMOC;PMOCIndex;alta
+3-7-requisicao-de-servicos;Requisição de Serviços;Solicitante;PCM;Requisicao;alta
+3-8-aprovacao-de-requisicoes;Aprovação de Requisições;Gestor de PCM;PCM;Requisicao;alta
+3-9-registro-de-faltas;Registro de Faltas;Gestor de PCM;PCM;FaltaIndex;alta
+4-1-gestao-de-estoque;Gestão de Estoque;Almoxarife;;;sem
+4-2-requisicao-de-compra;Requisição de Compra;Almoxarife;Estoque;RequisicaoCompra;alta
+4-3-ordem-de-compra;Ordem de Compra;Almoxarife;Estoque;OrdemCompra;alta
+5-11-relatorio-de-discrepancias;Relatório de Discrepâncias;Governança & Camareira;Governanca;RelatorioUHNC;alta
+5-12-checklist-de-governanca;Checklist de Governança;Governança & Camareira;CadastroBasico;ChecklistIndex;alta
+5-4-auditoria-corporativa-e-de-qualidade;Auditoria Corporativa e de Qualidade;Qualidade & Auditoria;CadastroBasico;AuditoriaQualidadeIndex;alta
+5-5-normas-procedimentos-e-historico-de-auditorias;Normas, Procedimentos e Histórico de Auditorias;Qualidade & Auditoria;AEB;NormasProcedimentosIndex;alta
+5-6-a-b-alimentos-e-bebidas;A&B — Alimentos e Bebidas;Qualidade & Auditoria;;;sem
+5-7-cadastro-de-checklist-de-auditoria;Cadastro de Checklist de Auditoria — Estrutura e Pesos;Qualidade & Auditoria;CadastroBasico;ChecklistIndex;alta
+6-1-green-planet-configuracao-de-medicoes;Green Planet — Configuração de Medições;Gestor de PCM;GreenPlanet;LancamentoIndex;alta
+6-2-lancamento-e-analise-de-consumo;Lançamento e Análise de Consumo;Gestor de PCM;Financas;DespesaIndex;baixa
+7-2-relatorios-de-desempenho-e-business-intelligence;Relatorios de Desempenho e Business Intelligence;Gestor de PCM;Governanca;RelatorioUHNC;alta
+7-4-relatorios-de-governanca;Relatorios de Governanca;Governança & Camareira;Governanca;RelatorioUHNC;alta
+7-7-interface-opera-integracao-com-o-pms;Interface Opera — Integração com o PMS;Administrador;Configuracao;InterfaceOpera;alta
+7-8-relatorio-dinamico-de-itens-auditaveis;Relatório Dinâmico de Itens Auditáveis;Gestor de PCM;Auditoria;Relatorio;alta
+7-9-upload-em-massa-cadastro-basico-e-pmoc;Upload em Massa (Cadastro Básico e PMOC);Administrador;Upload;UploadExcel;alta
+8-1-cadastro-de-ativos-fixos;Cadastro de Ativos Fixos;Ativo Fixo;AtivoFixo;AssetIndex;alta
+8-2-movimentacao-de-ativos-fixos;Movimentação de Ativos Fixos;Ativo Fixo;AtivoFixo;assetMovement;alta
+8-3-gestao-de-inventario-de-ativos-fixos;Gestão de Inventário de Ativos Fixos;Ativo Fixo;AtivoFixo;assetInventoryMng;alta
+8-4-contagem-de-inventario-de-ativos-fixos;Contagem de Inventário de Ativos Fixos;Ativo Fixo;AtivoFixo;assetInventoryMng;alta
+8-5-cadastro-e-registro-fotografico-no-inventario-hand-on-hand-off;Cadastro e Registro Fotográfico no Inventário (Hand-on/Hand-off);Ativo Fixo;AtivoFixo;assetInventoryMng;alta
+a-1-controle-de-gastos-budget;Controle de Gastos (Budget);Financeiro;Financas;ControleGastoIndex;alta
+a-2-lancamento-de-despesas;Lançamento de Despesas;Financeiro;Financas;DespesaIndex;alta
+a-3-gestao-de-contratos;Gestão de Contratos;Financeiro;AEB;ContratoIndex;alta
+1-3-administracao-de-usuarios-e-permissoes;Administração de Usuários e Permissões;Gestor de PCM;Administracao;UsuarioIndex;alta
+1-1-como-acessar-o-sistema;Como Acessar o Sistema;Comece por aqui;;;sem
+7-1-dashboard-visao-geral-e-kpis;Dashboard — Visao Geral e KPIs;Supervisores e Técnicos;Governanca;Dashboard;alta
+5-1-status-de-u-h-em-tempo-real;Planejamento e Apontamentos de Arrumações;Governança & Camareira;Governanca;Planejamento;alta
+3-1-gestao-de-ordens-de-servico-os;Gestão de Ordens de Serviço (OS);Supervisores e Técnicos;OrdemServico;OrdemServicoIndex2;alta
+1-2-gestao-de-perfil-e-troca-de-senha;Gestão de Perfil e Troca de Senha;Comece por aqui;Administracao;PerfilIndex;alta
+novidades-agosto-26;Novidades em Agosto/26;Novidades na Plataforma;;;sem
+5-10-discrepancias-apontamento-avancado;Discrepâncias - Apontamento Avançado;Governança & Camareira;Governanca;Apontamento;alta
+3-3-rotinas-e-rondas;Rotinas e Rondas;Supervisores e Técnicos;CadastroBasico;RotinaIndex;alta
+1-5-treinamento-biblioteca-de-materiais;Treinamento — Biblioteca de Materiais;Gestor de PCM;CadastroBasico;TreinamentoIndex;alta
+5-7-lavanderia-apontamento-e-controle-de-lavagem;Lavanderia - Apontamento e Controle de Lavagem;Governança & Camareira;Lavanderia;RelatorioControleGeral;alta
+3-2-manutencao-preventiva;Manutenção Preventiva;Supervisores e Técnicos;CadastroBasico;PreventivaIndex;alta
+5-2-gestao-de-enxoval-e-lavanderia;Gestão de Enxoval;Governança & Camareira;CadastroBasico;EnxovalIndex;alta
+5-1-uh-em-dia-checklist-de-conformidade-tecnica;U.H. em Dia — Checklist de Conformidade Técnica;Supervisores e Técnicos;CadastroBasico;ChecklistIndex;alta
+7-10-desempenho-de-governanca;Desempenho de Governança — KPIs, Score e Rankings;Governança & Camareira;Home;DesempenhoGovernanca;alta
+5-8-mapa-de-manutencao-da-uh-atividades-unicas;Mapa de Manutenção da U.H. — Atividades Únicas;Supervisores e Técnicos;CadastroBasico;AtividadeIndex;alta
+1-6-metas-e-parametros-de-governanca;Metas e Parâmetros de Governança;Governança & Camareira;Administracao;MetasParametrosGovernanca;alta
+5-9-dedetizacao-controle-recorrente-por-uh;Dedetização — Controle Recorrente por U.H.;Supervisores e Técnicos;CadastroBasico;Dedetizacao;alta
+5-3-produtividade-e-qualidade-de-camareiras;Relatório de Produtividade e Qualidade de Camareiras;Governança & Camareira;Governanca;RelatorioCamareiraNC;alta
+6-2-lancamento-e-analise-de-consumo-tecnico;Green Planet — Lançamento de Medições;Supervisores e Técnicos;GreenPlanet;LancamentoIndex;alta
+laudos-apontamento-de-horas;Laudos — Apontamento de Horas;Supervisores e Técnicos;Governanca;Apontamento;alta
+5-13-tudo-em-dia-checklist-de-conformidade-de-locais;Tudo em Dia — Checklist de Conformidade de Locais;Supervisores e Técnicos;CadastroBasico;ChecklistIndex;alta
+7-6-logbook-livro-de-ocorrencias;LogBook — Livro de Ocorrencias;Supervisores e Técnicos;LogBook;LogBook;alta
+7-5-modulo-excel-extracao-e-analise-avancada;Módulo Excel — Extração e Análise Avançada;Gestor de PCM;;;sem

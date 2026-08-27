@@ -131,7 +131,7 @@
                                     </div>
                                 }
                             </div>
-                            <div class="form-group row" style="display:none">
+                            <div class="form-group row u-hide">
                                 <label class="col-12">@PCM.WEB.Properties.Resources.observacao</label>
                                 <div class="col-12"><textarea class="form-control" id="observacao" name="observacao" maxlength="500" rows="3"></textarea></div>
                             </div>
@@ -140,7 +140,7 @@
                                 <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
                                 <div class="col-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="image/*, application/pdf">
+                                        <input type="file" class="custom-file-input" id="arquivo" name="arquivo" data-act="Arquivo" data-on="change" accept="image/*, application/pdf">
                                         <label id="lblArquivo" class="custom-file-label" for="imagem">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
                                     </div>
                                 </div>
@@ -195,7 +195,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/slick")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         function Arquivo() {
             document.getElementById("lblArquivo").textContent = document.getElementById("arquivo").files[0].name;

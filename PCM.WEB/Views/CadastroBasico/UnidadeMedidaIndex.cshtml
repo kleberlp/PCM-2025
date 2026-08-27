@@ -38,12 +38,12 @@
                 <table class="table table-sm table-vcenter table-striped js-dataTable-list">
                     <thead>
                         <tr class="table-secondary">
-                            <th class="d-none d-sm-table-cell text-center" style="width:150px">@PCM.WEB.Properties.Resources.sigla</th>                                        
+                            <th class="d-none d-sm-table-cell text-center u-w-150">@PCM.WEB.Properties.Resources.sigla</th>                                        
                             <th>@PCM.WEB.Properties.Resources.descricao</th>
-                            <th class="d-none d-sm-table-cell text-center" style="width: 80px;">@PCM.WEB.Properties.Resources.ativo</th>
+                            <th class="d-none d-sm-table-cell text-center u-w-80">@PCM.WEB.Properties.Resources.ativo</th>
                             @if(ViewBag.editar || ViewBag.excluir)
                             {
-                                <th class="text-center" style="width: 80px;" data-sortable="false"></th>
+                                <th class="text-center u-w-80" data-sortable="false"></th>
                             }
                         </tr>
                     </thead>
@@ -52,9 +52,9 @@
                         @foreach (var item in Model)
                         {
                             <tr>                                     
-                                <td class="d-none d-sm-table-cell text-center" style="width:150px">@Html.DisplayFor(modelItem => item.sigla)</td>
+                                <td class="d-none d-sm-table-cell text-center u-w-150">@Html.DisplayFor(modelItem => item.sigla)</td>
                                 <td>@Html.DisplayFor(modelItem => item.descricao)</td>
-                                <td class="d-none d-sm-table-cell text-center" style="width: 80px;">
+                                <td class="d-none d-sm-table-cell text-center u-w-80">
                                     <label class="css-control-sm css-control-secondary css-checkbox">
                                         @Html.CheckBoxFor(modelItem => item.ativo, new { @class = "css-control-input", @disabled="disabled"})
                                         <span class="css-control-indicator"></span>
@@ -62,7 +62,7 @@
                                 </td>             
                                 @if(ViewBag.editar || ViewBag.excluir)
                                 {
-                                    <td class="text-center" style="width: 80px;" >
+                                    <td class="text-center u-w-80" >
                                         <div class="btn-group">          
                                             @if(ViewBag.editar) { <a href="@Url.Action("UnidadeMedidaEdit", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                             @if(ViewBag.excluir) { <a href="@Url.Action("UnidadeMedidaDelete", "CadastroBasico", new { codigo = item.codigo })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
@@ -90,7 +90,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/dataTables")
 
-    <script type="text/javascript">
+    <script type="text/javascript" @Csp.NonceAttr>
 
         var BeTableDatatables = function () {
             // Override a few DataTable defaults, for more examples you can check out https://www.datatables.net/

@@ -9,7 +9,7 @@
         {
             @Html.AntiForgeryToken()
 
-            <div class="block d-print-normal p-10 m-10" style="display:none">
+            <div class="block d-print-normal p-10 m-10 u-hide">
                 <div class="form-row">
                     <div class="col-3">
                         <img class="img-avatar" src="@Session["imagem_sidebar"]" alt="">
@@ -53,7 +53,7 @@
                                     <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75" name="filtrar" id="filtrar"><i class="si si-magnifier mr-5"></i>@PCM.WEB.Properties.Resources.filtrar</button>
                                     @if (ViewBag.imprimir)
                                     {
-                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="Codebase.helpers('print-page');"><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" data-act="Codebase.helpers" data-args='["print-page"]'><i class="si si-printer mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
                                     }
                                 </li>
                             </ul>
@@ -79,7 +79,7 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th class="text-md-center v-center col-md-1" style="width: 80px;" rowspan="3">@PCM.WEB.Properties.Resources.data</th>
+                                        <th class="text-md-center v-center col-md-1 u-w-80" rowspan="3">@PCM.WEB.Properties.Resources.data</th>
                                         @foreach (var item in ViewBag.informacao)
                                         {
                                             if (item.codigo_tipo_item_checklist == 2)
@@ -127,7 +127,7 @@
                                         for (int i = 0; i < (Model.Count / ViewBag.informacao.Count); i++)
                                         {
                                             <tr class="text-md-center">
-                                                <td class="text-md-center font-w600" style="width: 80px;">@Html.DisplayFor(m => m[i].data)</td>
+                                                <td class="text-md-center font-w600 u-w-80">@Html.DisplayFor(m => m[i].data)</td>
                                                 @for (int j = 0; j < ViewBag.informacao.Count; j++)
                                                 {
                                                     if (@Model[(j * Model.Count / ViewBag.informacao.Count) + i].codigo_tipo_item != 2)
@@ -188,7 +188,7 @@
     @Scripts.Render("~/plugins/chart")
     @Scripts.Render("~/plugins/select")
 
-<script>
+<script @Csp.NonceAttr>
     
     $(function () {
 

@@ -6782,5 +6782,203 @@ namespace PCM.WEB.Properties {
                 return ResourceManager.GetString("zero_records", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Manual.
+        /// </summary>
+        public static string manual {
+            get {
+                return ResourceManager.GetString("manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Seção.
+        /// </summary>
+        public static string manual_secao {
+            get {
+                return ResourceManager.GetString("manual_secao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Seções.
+        /// </summary>
+        public static string manual_secoes {
+            get {
+                return ResourceManager.GetString("manual_secoes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Adicionar seção.
+        /// </summary>
+        public static string manual_adicionar_secao {
+            get {
+                return ResourceManager.GetString("manual_adicionar_secao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Sem destaque.
+        /// </summary>
+        public static string manual_destaque {
+            get {
+                return ResourceManager.GetString("manual_destaque", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Dica.
+        /// </summary>
+        public static string manual_dica {
+            get {
+                return ResourceManager.GetString("manual_dica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Aviso.
+        /// </summary>
+        public static string manual_aviso {
+            get {
+                return ResourceManager.GetString("manual_aviso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Tela.
+        /// </summary>
+        public static string manual_tela {
+            get {
+                return ResourceManager.GetString("manual_tela", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Processo.
+        /// </summary>
+        public static string manual_processo {
+            get {
+                return ResourceManager.GetString("manual_processo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Tipo.
+        /// </summary>
+        public static string manual_tipo {
+            get {
+                return ResourceManager.GetString("manual_tipo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Manual de tela abre no &quot;?&quot; da própria tela; manual de processo é avulso e aparece no rodapé como &quot;ver também&quot;..
+        /// </summary>
+        public static string manual_tipo_dica {
+            get {
+                return ResourceManager.GetString("manual_tipo_dica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Sem action, o manual vale para o módulo inteiro..
+        /// </summary>
+        public static string manual_action_dica {
+            get {
+                return ResourceManager.GetString("manual_action_dica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Subtítulo.
+        /// </summary>
+        public static string manual_subtitulo {
+            get {
+                return ResourceManager.GetString("manual_subtitulo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Texto da seção em Markdown: **negrito**, listas com &quot;- &quot;, tabelas com | e imagens com ![](url)..
+        /// </summary>
+        public static string manual_conteudo_dica {
+            get {
+                return ResourceManager.GetString("manual_conteudo_dica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Link de vídeo.
+        /// </summary>
+        public static string manual_video {
+            get {
+                return ResourceManager.GetString("manual_video", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a YouTube, Vimeo, Google Drive e arquivo .mp4 abrem incorporados no painel; outras URLs viram link..
+        /// </summary>
+        public static string manual_video_dica {
+            get {
+                return ResourceManager.GetString("manual_video_dica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a JPG, PNG ou GIF ilustrando o passo..
+        /// </summary>
+        public static string manual_imagem_dica {
+            get {
+                return ResourceManager.GetString("manual_imagem_dica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Esta tela ainda não tem manual..
+        /// </summary>
+        public static string manual_vazio {
+            get {
+                return ResourceManager.GetString("manual_vazio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Buscar no manual....
+        /// </summary>
+        public static string manual_buscar {
+            get {
+                return ResourceManager.GetString("manual_buscar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nenhuma seção encontrada..
+        /// </summary>
+        public static string manual_sem_resultado {
+            get {
+                return ResourceManager.GetString("manual_sem_resultado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ver também:.
+        /// </summary>
+        public static string manual_ver_tambem {
+            get {
+                return ResourceManager.GetString("manual_ver_tambem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Criar manual desta tela.
+        /// </summary>
+        public static string manual_criar {
+            get {
+                return ResourceManager.GetString("manual_criar", resourceCulture);
+            }
+        }
     }
 }

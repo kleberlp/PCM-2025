@@ -37,7 +37,7 @@
                 @if (ViewBag.plano_acao.fotos.Count > 0)
                 {
                     <div class="row my-20 block-content border">
-                        <div class="col-md-9 h3 text-danger">@PCM.WEB.Properties.Resources.descricao.ToUpper(): <span class="h3" style="font-style:italic">@ViewBag.plano_acao.descricao</span></div>
+                        <div class="col-md-9 h3 text-danger">@PCM.WEB.Properties.Resources.descricao.ToUpper(): <span class="h3 u-italic">@ViewBag.plano_acao.descricao</span></div>
                         <div class="col-md-3 block">
                             <div class="block block-rounded border">
 
@@ -115,7 +115,7 @@
                 else
                 {
                     <div class="row my-20 block-content border">
-                        <div class="col-md-12 h3 text-danger">@PCM.WEB.Properties.Resources.descricao.ToUpper(): <span class="h3" style="font-style:italic">@ViewBag.plano_acao.descricao</span></div>
+                        <div class="col-md-12 h3 text-danger">@PCM.WEB.Properties.Resources.descricao.ToUpper(): <span class="h3 u-italic">@ViewBag.plano_acao.descricao</span></div>
                     </div>
                 }
                 <!-- END Invoice Info -->
@@ -124,13 +124,13 @@
                 <table class="table table-bordered">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center" style="width: 50px;"></th>
-                            <th class="text-center" style="width: 150px;">@PCM.WEB.Properties.Resources.data</th>
+                            <th class="text-center u-w-50"></th>
+                            <th class="text-center u-w-150">@PCM.WEB.Properties.Resources.data</th>
                             <th>@PCM.WEB.Properties.Resources.executor</th>
-                            <th class="text-center" style="width: 250px;">@PCM.WEB.Properties.Resources.justificativa_apontamento</th>
-                            <th class="text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.percentual_atendido</th>
+                            <th class="text-center u-w-250">@PCM.WEB.Properties.Resources.justificativa_apontamento</th>
+                            <th class="text-center u-w-100">@PCM.WEB.Properties.Resources.percentual_atendido</th>
                             <th>@PCM.WEB.Properties.Resources.descricao</th>
-                            <th class="text-center" style="width: 300px;">Imagem</th>
+                            <th class="text-center u-w-300">Imagem</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -207,7 +207,7 @@
     @Scripts.Render("~/plugins/select")
     @Scripts.Render("~/plugins/slick")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         // Initialize when page loads
         jQuery(function () {

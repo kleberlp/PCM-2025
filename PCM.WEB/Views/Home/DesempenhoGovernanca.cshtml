@@ -72,22 +72,22 @@
             <div class="dashboard-section">
                 <div class="section-title">
                     Desempenho de Governança — @mesLabel · @nomeUnidade
-                    <span class="float-right"><button type="button" class="btn btn-sm btn-outline-secondary no-print" onclick="window.print();"><i class="si si-printer"></i> Exportar PDF</button></span>
+                    <span class="float-right"><button type="button" class="btn btn-sm btn-outline-secondary no-print" data-act="window.print"><i class="si si-printer"></i> Exportar PDF</button></span>
                 </div>
-                <div class="block dashboard-card os-kpi-strip" style="padding:0;">
+                <div class="block dashboard-card os-kpi-strip u-pad-0">
                     <div class="torre-comando-grid">
                         <div class="torre-item">
                             <div class="torre-header"><i class="fa fa-bed torre-icon text-info"></i><span class="torre-label2">UHs Arrumadas</span></div>
-                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalUHsArrumadas.ToString("N0") : "—")</div>
+                            <div class="os-value u-c-slate">@(Model != null ? Model.TotalUHsArrumadas.ToString("N0") : "—")</div>
                             <span class="torre-meta">acumulado do mês</span>
                         </div>
                         <div class="torre-item">
                             <div class="torre-header"><i class="fa fa-eye torre-icon text-success"></i><span class="torre-label2">UHs Vistoriadas</span></div>
-                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalUHsVistoriadas.ToString("N0") : "—")</div>
+                            <div class="os-value u-c-slate">@(Model != null ? Model.TotalUHsVistoriadas.ToString("N0") : "—")</div>
                             <span class="torre-meta">acumulado do mês</span>
                         </div>
                         <div class="torre-item">
-                            <div class="torre-header"><i class="fa fa-percent torre-icon" style="color:#9CA3AF;"></i><span class="torre-label2">Vistoria</span></div>
+                            <div class="torre-header"><i class="fa fa-percent torre-icon u-c-gray"></i><span class="torre-label2">Vistoria</span></div>
                             <div class="os-value" style="color:@pctVistoriaColor;">@(Model != null ? Model.PctVistoria.ToString("N1") + "%" : "—")</div>
                             <span class="torre-meta">vistoriadas / arrumadas</span>
                         </div>
@@ -97,8 +97,8 @@
                             <span class="torre-meta">não conformidades</span>
                         </div>
                         <div class="torre-item">
-                            <div class="torre-header"><i class="fa fa-refresh torre-icon" style="color:#EA580C;"></i><span class="torre-label2">Total Retrabalho</span></div>
-                            <div class="os-value" style="color:#EA580C;">@(Model != null ? Model.TotalRetrabalho.ToString() : "—")</div>
+                            <div class="torre-header"><i class="fa fa-refresh torre-icon u-c-orange-deep"></i><span class="torre-label2">Total Retrabalho</span></div>
+                            <div class="os-value u-c-orange-deep">@(Model != null ? Model.TotalRetrabalho.ToString() : "—")</div>
                             <span class="torre-meta">quartos reinspecionados</span>
                         </div>
                         <div class="torre-item">
@@ -112,8 +112,8 @@
                             <span class="torre-meta">Retrabalho / Vistoriadas</span>
                         </div>
                         <div class="torre-item">
-                            <div class="torre-header"><i class="fa fa-wrench torre-icon" style="color:#6B7280;"></i><span class="torre-label2">OS Manutenção</span></div>
-                            <div class="os-value" style="color:#374151;">@(Model != null ? Model.TotalOSManutencao.ToString() : "—")</div>
+                            <div class="torre-header"><i class="fa fa-wrench torre-icon u-c-gray2"></i><span class="torre-label2">OS Manutenção</span></div>
+                            <div class="os-value u-c-slate">@(Model != null ? Model.TotalOSManutencao.ToString() : "—")</div>
                             <span class="torre-meta">abertas no mês</span>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
             <div class="dashboard-section row" style="min-height:350px;">
                 <div class="col-md-4 d-flex flex-column">
                     <div class="section-title">Score de Desempenho da Unidade</div>
-                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
+                    <div class="block dashboard-card flex-fill u-pad0-clip">
                         <div style="display:flex;flex-direction:column;align-items:center;padding:20px 16px 0;">
                             <svg viewBox="0 0 200 115" width="220" height="126" style="display:block;max-width:100%;">
                                 <path d="M 22 108 A 78 78 0 0 1 178 108" fill="none" stroke="#E5E7EB" stroke-width="16" stroke-linecap="round"/>
@@ -138,24 +138,24 @@
                             <div class="gauge-meta-item">
                                 <span class="gauge-meta-label">Meta Mensal</span>
                                 <div class="gauge-meta-value">85%</div>
-                                <div style="font-size:9px;color:#9CA3AF;">score mínimo</div>
+                                <div class="u-cap-mini">score mínimo</div>
                             </div>
                             <div class="gauge-meta-item" style="border-left:1px solid #F0F1F3;border-right:1px solid #F0F1F3;">
                                 <span class="gauge-meta-label">Ranking</span>
                                 <div class="gauge-meta-value" id="scoreRankVal">—</div>
-                                <div style="font-size:9px;color:#9CA3AF;" id="scoreRankSub">na rede</div>
+                                <div class="u-cap-mini" id="scoreRankSub">na rede</div>
                             </div>
                             <div class="gauge-meta-item">
                                 <span class="gauge-meta-label">Dias Restantes</span>
                                 <div class="gauge-meta-value @diasRestantesClass">@(Model != null ? Model.DiasRestantes.ToString() : "—")</div>
-                                <div style="font-size:9px;color:#9CA3AF;">dias no mês</div>
+                                <div class="u-cap-mini">dias no mês</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-8 d-flex flex-column">
                     <div class="section-title">Evolução Diária — NC e Retrabalho</div>
-                    <div class="block dashboard-card chart-card flex-fill" style="display:flex;flex-direction:column;">
+                    <div class="block dashboard-card chart-card flex-fill u-flex-col">
                         <div style="flex:1;min-height:350px;position:relative;">
                             <canvas id="evolucaoDiariaChart"></canvas>
                         </div>
@@ -167,7 +167,7 @@
             <div class="dashboard-section">
                 <div class="section-title">
                     Arrumado × Vistoriado
-                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Evolução diária — @mesLabel</span>
+                    <span class="u-label-mini">Evolução diária — @mesLabel</span>
                 </div>
                 <div class="block dashboard-card chart-card">
                     <div class="chart-wrapper" style="height:300px;">
@@ -181,48 +181,48 @@
                 <div class="section-title">
                     Ranking Geral de Camareiras
                     <span class="dg-section-badge">@(Model != null ? Model.Camareiras.Count : 0) camareiras</span>
-                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">Nota (1–10) = Produtividade×@(ViewBag.gIndPesoProdPct)% + NC×@(ViewBag.gIndPesoNCPct)% + Retrabalho×@(ViewBag.gIndPesoRetPct)% · elegível ≥ @ViewBag.gIndMinUhs UHs · NC/Retrab sobre vistoriados (UHs×@(ViewBag.gVisRatePct)%)</span>
+                    <span class="u-label-mini">Nota (1–10) = Produtividade×@(ViewBag.gIndPesoProdPct)% + NC×@(ViewBag.gIndPesoNCPct)% + Retrabalho×@(ViewBag.gIndPesoRetPct)% · elegível ≥ @ViewBag.gIndMinUhs UHs · NC/Retrab sobre vistoriados (UHs×@(ViewBag.gVisRatePct)%)</span>
                 </div>
-                <div class="block dashboard-card" style="padding:0;overflow:hidden;">
-                    <div style="overflow-x:auto;">
-                        <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                <div class="block dashboard-card u-pad0-clip">
+                    <div class="u-scroll-x">
+                        <table class="table mb-0 u-table-fixed">
                             <colgroup>
-                                <col style="width:40px;" />
+                                <col class="u-w-40" />
                                 <col />
-                                <col style="width:60px;" />
-                                <col style="width:50px;" />
-                                <col style="width:85px;" />
-                                <col style="width:75px;" />
-                                <col style="width:80px;" />
-                                <col style="width:80px;" />
-                                <col style="width:150px;" />
+                                <col class="u-w-60" />
+                                <col class="u-w-50" />
+                                <col class="u-w-85" />
+                                <col class="u-w-75" />
+                                <col class="u-w-80" />
+                                <col class="u-w-80" />
+                                <col class="u-w-150" />
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="width:40px;">#</th>
+                                    <th class="u-w-40">#</th>
                                     <th>Camareira</th>
-                                    <th class="text-center" style="width:60px;">UHs</th>
-                                    <th class="text-center" style="width:50px;">NC</th>
-                                    <th class="text-center" style="width:85px;">Retrabalho</th>
-                                    <th class="text-center" style="width:75px;">Índ. NC%</th>
-                                    <th class="text-center" style="width:80px;">Índ. Retrab%</th>
-                                    <th class="text-center" style="width:80px;">Nota</th>
-                                    <th class="text-center" style="width: 150px;">Status</th>
+                                    <th class="text-center u-w-60">UHs</th>
+                                    <th class="text-center u-w-50">NC</th>
+                                    <th class="text-center u-w-85">Retrabalho</th>
+                                    <th class="text-center u-w-75">Índ. NC%</th>
+                                    <th class="text-center u-w-80">Índ. Retrab%</th>
+                                    <th class="text-center u-w-80">Nota</th>
+                                    <th class="text-center u-w-150">Status</th>
                                 </tr>
                             </thead>
                         </table>
-                        <div style="max-height:510px;overflow-y:auto;">
-                            <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                        <div class="u-scroll-y-510">
+                            <table class="table mb-0 u-table-fixed">
                                 <colgroup>
-                                    <col style="width:40px;" />
+                                    <col class="u-w-40" />
                                     <col />
-                                    <col style="width:60px;" />
-                                    <col style="width:50px;" />
-                                    <col style="width:85px;" />
-                                    <col style="width:75px;" />
-                                    <col style="width:80px;" />
-                                    <col style="width:80px;" />
-                                    <col style="width: 150px;" />
+                                    <col class="u-w-60" />
+                                    <col class="u-w-50" />
+                                    <col class="u-w-85" />
+                                    <col class="u-w-75" />
+                                    <col class="u-w-80" />
+                                    <col class="u-w-80" />
+                                    <col class="u-w-150" />
                                 </colgroup>
                                 <tbody id="rankingGeralBody"></tbody>
                             </table>
@@ -235,25 +235,25 @@
             <div class="dashboard-section row">
                 <div class="col-md-6 d-flex flex-column">
                     <div class="section-title">Ranking por Produtividade</div>
-                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
-                        <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                    <div class="block dashboard-card flex-fill u-pad0-clip">
+                        <table class="table mb-0 u-table-fixed">
                             <colgroup>
-                                <col style="width:40px;" /><col /><col style="width:65px;" /><col style="width:65px;" /><col style="width:90px;" />
+                                <col class="u-w-40" /><col /><col class="u-w-65" /><col class="u-w-65" /><col class="u-w-90" />
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="width:40px;">#</th>
+                                    <th class="u-w-40">#</th>
                                     <th>Camareira</th>
-                                    <th class="text-center" style="width:65px;">UHs</th>
-                                    <th class="text-center" style="width:65px;">UH/Dia</th>
-                                    <th class="text-center" style="width: 150px;">Status</th>
+                                    <th class="text-center u-w-65">UHs</th>
+                                    <th class="text-center u-w-65">UH/Dia</th>
+                                    <th class="text-center u-w-150">Status</th>
                                 </tr>
                             </thead>
                         </table>
-                        <div style="max-height:510px;overflow-y:auto;">
-                            <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                        <div class="u-scroll-y-510">
+                            <table class="table mb-0 u-table-fixed">
                                 <colgroup>
-                                    <col style="width:40px;" /><col /><col style="width:65px;" /><col style="width:65px;" /><col style="width:90px;" />
+                                    <col class="u-w-40" /><col /><col class="u-w-65" /><col class="u-w-65" /><col class="u-w-90" />
                                 </colgroup>
                                 <tbody id="rankingProdBody"></tbody>
                             </table>
@@ -262,27 +262,27 @@
                 </div>
                 <div class="col-md-6 d-flex flex-column">
                     <div class="section-title">Ranking por Qualidade de Serviço</div>
-                    <div class="block dashboard-card flex-fill" style="padding:0;overflow:hidden;">
-                        <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                    <div class="block dashboard-card flex-fill u-pad0-clip">
+                        <table class="table mb-0 u-table-fixed">
                             <colgroup>
-                                <col style="width:40px;" /><col /><col style="width:50px;" /><col style="width:55px;" /><col style="width:75px;" /><col style="width:80px;" /><col style="width:90px;" />
+                                <col class="u-w-40" /><col /><col class="u-w-50" /><col class="u-w-55" /><col class="u-w-75" /><col class="u-w-80" /><col class="u-w-90" />
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="width:40px;">#</th>
+                                    <th class="u-w-40">#</th>
                                     <th>Camareira</th>
-                                    <th class="text-center" style="width:50px;">NC</th>
-                                    <th class="text-center" style="width:55px;">Retrab.</th>
-                                    <th class="text-center" style="width:75px;">Índ. NC%</th>
-                                    <th class="text-center" style="width:80px;">Índ. Retrab%</th>
-                                    <th class="text-center" style="width:150px;">Status</th>
+                                    <th class="text-center u-w-50">NC</th>
+                                    <th class="text-center u-w-55">Retrab.</th>
+                                    <th class="text-center u-w-75">Índ. NC%</th>
+                                    <th class="text-center u-w-80">Índ. Retrab%</th>
+                                    <th class="text-center u-w-150">Status</th>
                                 </tr>
                             </thead>
                         </table>
-                        <div style="max-height:510px;overflow-y:auto;">
-                            <table class="table mb-0" style="table-layout:fixed;width:100%;">
+                        <div class="u-scroll-y-510">
+                            <table class="table mb-0 u-table-fixed">
                                 <colgroup>
-                                    <col style="width:40px;" /><col /><col style="width:50px;" /><col style="width:55px;" /><col style="width:75px;" /><col style="width:80px;" /><col style="width:90px;" />
+                                    <col class="u-w-40" /><col /><col class="u-w-50" /><col class="u-w-55" /><col class="u-w-75" /><col class="u-w-80" /><col class="u-w-90" />
                                 </colgroup>
                                 <tbody id="rankingQualBody"></tbody>
                             </table>
@@ -295,7 +295,7 @@
             <div class="dashboard-section">
                 <div class="section-title">
                     Top 10 — Itens com Mais Não Conformidades
-                    <span style="font-size:10px;font-weight:400;color:#9CA3AF;">@(Model != null ? Model.TotalNcGeral.ToString() : "0") ocorrências totais no mês</span>
+                    <span class="u-label-mini">@(Model != null ? Model.TotalNcGeral.ToString() : "0") ocorrências totais no mês</span>
                 </div>
                 <div class="block dashboard-card">
                     <table style="width:100%;border-collapse:collapse;">
@@ -325,7 +325,7 @@
 @section Scripts {
     @Scripts.Render("~/plugins/chart")
 
-    <script>
+    <script @Csp.NonceAttr>
     var camareiras = @Html.Raw(camareirasJson);
     var diaAtual   = @diasDecorridos;
     var ncDia      = @Html.Raw(ncDiaJson);
@@ -524,8 +524,8 @@
             tr.innerHTML='<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'
                 +'<td class="font-w600">'+r.nome+'</td>'
                 +'<td class="text-center font-w700">'+r.uh+'</td>'
-                +'<td class="text-center font-w700" style="color:#EF5350;">'+r.nc+'</td>'
-                +'<td class="text-center font-w700" style="color:#EA580C;">'+r.retrab+'</td>'
+                +'<td class="text-center font-w700 u-c-red-mat">'+r.nc+'</td>'
+                +'<td class="text-center font-w700 u-c-orange-deep">'+r.retrab+'</td>'
                 +'<td class="text-center">'+(semDados?'—':fmt1(r.iNC)+'%')+'</td>'
                 +'<td class="text-center">'+(semDados?'—':fmt1(r.iR)+'%')+'</td>'
                 +'<td class="text-center"><span class="dg-nota-badge '+nk+'">'+(semDados?'—':fmt1(r.nota))+'</span></td>'
@@ -547,7 +547,7 @@
             tr.innerHTML='<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'
                 +'<td class="font-w600">'+r.nome+'</td>'
                 +'<td class="text-center font-w700">'+r.uh+'</td>'
-                +'<td class="text-center font-w700" style="color:#42A5F5;">'+fmt1(uhd)+'</td>'
+                +'<td class="text-center font-w700 u-c-blue-light">'+fmt1(uhd)+'</td>'
                 +'<td class="text-center"><span class="dg-status-pill '+sk+'">'+st+'</span></td>';
             tbody.appendChild(tr);
         });
@@ -567,8 +567,8 @@
             var tr=document.createElement('tr');
             tr.innerHTML='<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'
                 +'<td class="font-w600">'+r.nome+'</td>'
-                +'<td class="text-center font-w700" style="color:#EF5350;">'+r.nc+'</td>'
-                +'<td class="text-center font-w700" style="color:#EA580C;">'+r.retrab+'</td>'
+                +'<td class="text-center font-w700 u-c-red-mat">'+r.nc+'</td>'
+                +'<td class="text-center font-w700 u-c-orange-deep">'+r.retrab+'</td>'
                 +'<td class="text-center">'+fmt1(r.iNC)+'%</td>'
                 +'<td class="text-center">'+fmt1(r.iR)+'%</td>'
                 +'<td class="text-center"><span class="dg-status-pill '+sk+'">'+st+'</span></td>';

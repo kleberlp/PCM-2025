@@ -62,28 +62,28 @@
         <!-- END Collapsible Tasks Navigation -->
 
         <div class="gov-kpi">
-            <a class="gov-kpi-t gov-pend" onclick="reloadPage('1');">
+            <a class="gov-kpi-t gov-pend" data-act="reloadPage" data-args='["1"]'>
                 <div>
                     <div class="gov-kpi-n" data-speed="1000" data-to="@ViewBag.status.pendente" id="quantidade_indisponivel" name="quantidade_indisponivel">@ViewBag.status.pendente</div>
                     <div class="gov-kpi-l">@PCM.WEB.Properties.Resources.pendente</div>
                 </div>
                 <i class="fa fa-hotel gov-kpi-i d-none d-sm-block"></i>
             </a>
-            <a class="gov-kpi-t gov-ok" onclick="reloadPage('2');">
+            <a class="gov-kpi-t gov-ok" data-act="reloadPage" data-args='["2"]'>
                 <div>
                     <div class="gov-kpi-n" data-speed="1000" data-to="@ViewBag.status.concluido" id="quantidade_manutencao" name="quantidade_manutencao">@ViewBag.status.concluido</div>
                     <div class="gov-kpi-l">@PCM.WEB.Properties.Resources.concluido</div>
                 </div>
                 <i class="fa fa-hotel gov-kpi-i d-none d-sm-block"></i>
             </a>
-            <a class="gov-kpi-t gov-lib" onclick="reloadPage('3');">
+            <a class="gov-kpi-t gov-lib" data-act="reloadPage" data-args='["3"]'>
                 <div>
                     <div class="gov-kpi-n" data-speed="1000" data-to="@ViewBag.status.aguardandoLiberacao" id="quantidade_vistoria" name="quantidade_vistoria">@ViewBag.status.aguardandoLiberacao</div>
                     <div class="gov-kpi-l">@PCM.WEB.Properties.Resources.aguardando_liberacao</div>
                 </div>
                 <i class="fa fa-hotel gov-kpi-i d-none d-sm-block"></i>
             </a>
-            <a class="gov-kpi-t gov-ret" onclick="reloadPage('4');">
+            <a class="gov-kpi-t gov-ret" data-act="reloadPage" data-args='["4"]'>
                 <div>
                     <div class="gov-kpi-n"><span data-speed="1000" data-to="@ViewBag.status.retrabalho" id="quantidade_disponivel" name="quantidade_disponivel">@ViewBag.status.retrabalho</span></div>
                     <div class="gov-kpi-l">@PCM.WEB.Properties.Resources.retrabalho</div>
@@ -98,17 +98,17 @@
             <div class="block-header block-header-default bg-gd-default">
                 <h3 class="block-title text-white font-w600">Lista de UH</h3>
                 <div class="block-options">
-                    <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
-                    <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
-                    <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                    <button type="button" class="si si-grid btn-block-option text-white" data-show="#div_grid" data-hide="#div_list"></button>
+                    <button type="button" class="si si-list btn-block-option text-white" data-show="#div_list" data-hide="#div_grid"></button>
+                    <button type="button" class="si si-printer btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'></button>
                     <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
                 </div>
             </div>
 
-            <div class="block-content" id="div_grid" style="display:block">
+            <div class="block-content u-block" id="div_grid">
                 <div class="gov-legend">
                     <b>Legenda:</b>
-                    <span><i style="background:#EF5350"></i> Pendente</span>
+                    <span><i class="u-bg-red-mat"></i> Pendente</span>
                     <span><i style="background:#42A5F5"></i> Aguardando liberação</span>
                     <span><i style="background:#43A047"></i> Concluído</span>
                     <span><i style="background:#F59E0B"></i> Retrabalho</span>
@@ -226,7 +226,7 @@
             </div>
 
 
-            <div class="col-md-12 col-xl-12" id="div_list" style="display:none">
+            <div class="col-md-12 col-xl-12 u-hide" id="div_list">
 
                 <div class="block-content block-content-full">
 
@@ -243,7 +243,7 @@
                                 <th class="text-center">@PCM.WEB.Properties.Resources.data_proxima_vistoria</th>
                                 <th class="text-center">Status UH</th>
 								<th class="text-center">@PCM.WEB.Properties.Resources.status_uh</th>
-                                <th data-sortable="false" class="text-center d-print-none" style="width: 80px;"></th>
+                                <th data-sortable="false" class="text-center d-print-none u-w-80"></th>
                             </tr>
                         </thead>
 
@@ -261,7 +261,7 @@
                                     <td class="text-center">@Html.DisplayFor(modelItem => item.data_proxima)</td>
 									<td class="text-center">@Html.DisplayFor(modelItem => item.front_office_status)</td>
                                     <td class="text-center">@Html.DisplayFor(modelItem => item.room_status)</td>
-                                    <td class="text-center d-print-none" style="width: 80px;">
+                                    <td class="text-center d-print-none u-w-80">
                                         <div class="btn-group">
                                             @if ((item.status != 3))
                                             {<a href="@Url.Action("ChecklistUHApontamento", "UH", new { codigo_apartamento = @item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_vistoria = @item.codigo_vistoria, status = @item.status })" class="btn btn-sm btn-secondary"><i class="fa fa-hotel"></i></a>}
@@ -342,7 +342,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
     $(function () {
 

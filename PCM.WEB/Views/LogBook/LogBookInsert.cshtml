@@ -63,7 +63,7 @@
     @Scripts.Render("~/plugins/maskedinput")
     @Scripts.Render("~/plugins/maxlenght")
     
-    <script>
+    <script @Csp.NonceAttr>
 
         var FormValidation = function () {
             // Init Bootstrap Forms Validation, for more examples you can check out https://github.com/jzaefferer/jquery-validation

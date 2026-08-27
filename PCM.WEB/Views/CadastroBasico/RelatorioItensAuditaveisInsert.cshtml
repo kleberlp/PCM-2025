@@ -70,7 +70,7 @@
                             <table class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full-pagination">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th class="text-center" style="width: 20px;"></th>
+                                        <th class="text-center u-w-20"></th>
                                         <th>Itens Auditáveis</th>
                                     </tr>
                                 </thead>
@@ -81,7 +81,7 @@
                                         @Html.HiddenFor(m => m[i].codigo_checklist)
                                         @Html.HiddenFor(m => m[i].codigo)
                                         <tr>
-                                            <td class="d-table-cell text-center" style="width: 20px">
+                                            <td class="d-table-cell text-center u-w-20">
                                                 <div class="col-12">
                                                     <label class="css-control css-control-success css-switch">
                                                         @Html.CheckBoxFor(m => m[i].selecionado, new { @class = "css-control-input" })
@@ -117,7 +117,7 @@
     @Scripts.Render("~/plugins/maxlenght")
     @Scripts.Render("~/plugins/select")
 
-    <script>
+    <script @Csp.NonceAttr>
 
         //VÁRIAVEIS
         var unidade = $("#unidade");

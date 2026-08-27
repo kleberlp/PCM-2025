@@ -95,18 +95,18 @@
                                     <th class="text-center">@PCM.WEB.Properties.Resources.data</th>
                                     <th>@PCM.WEB.Properties.Resources.descricao</th>
                                     <th>@PCM.WEB.Properties.Resources.executor</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.pontos_possiveis</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.pontos_realizados</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.conforme</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.nao_conforme</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.nao_respondido</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.nao_aplicavel</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.nota</th>
-                                    <th class="d-none d-md-table-cell text-center" style="width: 100px;">@PCM.WEB.Properties.Resources.status</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-100">@PCM.WEB.Properties.Resources.pontos_possiveis</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-100">@PCM.WEB.Properties.Resources.pontos_realizados</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-100">@PCM.WEB.Properties.Resources.conforme</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-100">@PCM.WEB.Properties.Resources.nao_conforme</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-100">@PCM.WEB.Properties.Resources.nao_respondido</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-100">@PCM.WEB.Properties.Resources.nao_aplicavel</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-100">@PCM.WEB.Properties.Resources.nota</th>
+                                    <th class="d-none d-md-table-cell text-center u-w-100">@PCM.WEB.Properties.Resources.status</th>
 
                                     @if (ViewBag.editar || ViewBag.imprimir || ViewBag.administrador)
                                     {
-                                        <th data-sortable="false" class="text-center" style="width: 80px;"></th>
+                                        <th data-sortable="false" class="text-center u-w-80"></th>
                                     }
                                 </tr>
                             </thead>
@@ -122,24 +122,24 @@
                                     <td class="text-center">@Html.DisplayFor(modelItem => item.data)</td>
                                     <td>@Html.DisplayFor(modelItem => item.descricao)</td>
                                     <td>@Html.DisplayFor(modelItem => item.usuario)</td>
-                                    <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.pontos_possiveis)</td>
-                                    <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.pontos_realizados)</td>
-                                    <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.conforme)</td>
-                                    <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.nao_conforme)</td>
-                                    <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.nao_respondido)</td>
-                                    <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.nao_aplicavel)</td>
-                                    <td class="d-none d-md-table-cell text-center" style="width: 100px;">@Html.DisplayFor(modelItem => item.nota)</td>
-                                    <td class="d-none d-md-table-cell text-center @item.css_class" style="width: 100px;">@Html.DisplayFor(modelItem => item.descricao_status)</td>
+                                    <td class="d-none d-md-table-cell text-center u-w-100">@Html.DisplayFor(modelItem => item.pontos_possiveis)</td>
+                                    <td class="d-none d-md-table-cell text-center u-w-100">@Html.DisplayFor(modelItem => item.pontos_realizados)</td>
+                                    <td class="d-none d-md-table-cell text-center u-w-100">@Html.DisplayFor(modelItem => item.conforme)</td>
+                                    <td class="d-none d-md-table-cell text-center u-w-100">@Html.DisplayFor(modelItem => item.nao_conforme)</td>
+                                    <td class="d-none d-md-table-cell text-center u-w-100">@Html.DisplayFor(modelItem => item.nao_respondido)</td>
+                                    <td class="d-none d-md-table-cell text-center u-w-100">@Html.DisplayFor(modelItem => item.nao_aplicavel)</td>
+                                    <td class="d-none d-md-table-cell text-center u-w-100">@Html.DisplayFor(modelItem => item.nota)</td>
+                                    <td class="d-none d-md-table-cell text-center @item.css_class u-w-100">@Html.DisplayFor(modelItem => item.descricao_status)</td>
                                     @if (ViewBag.editar || ViewBag.administrador || ViewBag.imprimir)
                                     {
-                                        <td class="text-center" style="width: 80px;">
+                                        <td class="text-center u-w-80">
                                             <div class="btn-group">
                                                 @if (ViewBag.editar)
                                                 {<a href="@Url.Action("Apontamento", "Qualidade", new {codigo_unidade = item.codigo_unidade, codigo_auditoria = item.codigo_auditoria , codigo_auditoria_interna = item.codigo_auditoria_interna, action_name = "AuditoriaHistorico" })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                                 @if (ViewBag.imprimir)
                                                 {<a href="@Url.Action("AuditoriaPrintPDF", "Qualidade", new { codigo_empresa = item.codigo_empresa, codigo_unidade = item.codigo_unidade, codigo_auditoria = item.codigo_auditoria })" target="_blank" class="btn btn-sm btn-secondary"><i class="si si-printer"></i></a>}
                                                 @if (ViewBag.administrador && item.status == 2)
-                                                {<a onclick="ReabrirAuditoria(@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria);" class="btn btn-sm btn-secondary"><i class="fa fa-unlock"></i></a>}
+                                                {<a data-act="ReabrirAuditoria" data-args='[@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria]' class="btn btn-sm btn-secondary"><i class="fa fa-unlock"></i></a>}
                                             </div>
                                         </td>
                                     }
@@ -171,7 +171,7 @@
     @Scripts.Render("~/plugins/datepicker")
     @Scripts.Render("~/plugins/select")
 
-<script type="text/javascript">
+<script type="text/javascript" @Csp.NonceAttr>
 
         $(function () {
 
