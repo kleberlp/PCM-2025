@@ -42,7 +42,7 @@
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento_governanca</h3>
                             <div class="block-options">
-                                <button type="button" onclick="$('#nao_perturbe').val(true); $('#form').submit();" class="btn btn-square btn-secondary min-width-175 h-75"><i class="fa fa-pause-circle mr-5"></i>@PCM.WEB.Properties.Resources.nao_perturbe</button>
+                                <button type="button" data-setval='{"#nao_perturbe": true}' data-submit="#form" class="btn btn-square btn-secondary min-width-175 h-75"><i class="fa fa-pause-circle mr-5"></i>@PCM.WEB.Properties.Resources.nao_perturbe</button>
                                 <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
                                 <a href="@Url.Action("ChecklistGovernanca", "Governanca", new { unidade = @ViewBag.codigo_unidade, tipoGovernanca = @ViewBag.codigo_tipo_governanca})" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar</a>
                             </div>

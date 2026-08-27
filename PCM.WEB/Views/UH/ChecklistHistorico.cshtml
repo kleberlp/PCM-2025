@@ -102,11 +102,11 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 @if (ViewBag.imprimir)
-                                                {<button type="button" class="btn btn-sm btn-secondary fa fa-print" onclick="ImprimirRelatorio('@item.unidade', @item.codigo_unidade, @item.codigo_apartamento, @item.codigo);"></button>}
+                                                {<button type="button" class="btn btn-sm btn-secondary fa fa-print" data-act="ImprimirRelatorio" data-args='["@item.unidade", @item.codigo_unidade, @item.codigo_apartamento, @item.codigo]'></button>}
                                                 @if (ViewBag.editar)
                                                 {@Html.ActionLink(" ", "../UH/ChecklistUHApontamento", new { codigo_apartamento = @item.codigo_apartamento, codigo_unidade = @item.codigo_unidade, codigo_vistoria = @item.codigo, color = "text-earth", status = 2, page = "ChecklistHistorico", model = "UH" }, new { @class = "btn btn-sm btn-secondary fa fa-list-ul" })}
                                                 @if (ViewBag.excluir)
-                                                {<button type="button" class="btn btn-sm btn-secondary fa fa-times" name="excluir" id="excluir" onclick="DeleteUH(@item.codigo_unidade, @item.codigo_apartamento, @item.codigo);"></button>}
+                                                {<button type="button" class="btn btn-sm btn-secondary fa fa-times" name="excluir" id="excluir" data-act="DeleteUH" data-args='[@item.codigo_unidade, @item.codigo_apartamento, @item.codigo]'></button>}
                                                 </div>
                                         </td>
 

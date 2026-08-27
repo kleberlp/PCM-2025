@@ -128,7 +128,7 @@
                                                                 @if (ViewBag.editar)
                                                                 {<a href="@Url.Action("ApontamentoPMOCEdit", "PMOC", new { codigo_apontamento = apto.codigo, codigo_unidade = apto.codigo_unidade, codigo_pmoc_ordem_servico = @ViewBag.ordem_servico.codigo_pmoc_ordem_servico, view = @ViewBag.view})" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                                                 @if (ViewBag.excluir)
-                                                                {<button type="button" class="btn btn-sm btn-secondary" onclick="deleteApontamento(@apto.codigo, @apto.codigo_unidade, codigo_pmoc_ordem_servico = @ViewBag.ordem_servico.codigo_pmoc_ordem_servico, this);"><i class="fa fa-times"></i></button>}
+                                                                {<button type="button" class="btn btn-sm btn-secondary" data-act="deleteApontamento" data-args='[@apto.codigo, @apto.codigo_unidade, @ViewBag.ordem_servico.codigo_pmoc_ordem_servico, "__self__"]'><i class="fa fa-times"></i></button>}
                                                             </div>
                                                         </td>
 

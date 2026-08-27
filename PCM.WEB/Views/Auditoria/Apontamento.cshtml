@@ -38,7 +38,7 @@
                             <div class="block-options">
                                 @if (Model.status == 2)
                                 {
-                                    <button type="button" onclick="ReopenAuditoria(@Model.codigo_empresa, @Model.codigo_unidade, @Model.codigo_auditoria);" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <button type="button" data-act="ReopenAuditoria" data-args='[@Model.codigo_empresa, @Model.codigo_unidade, @Model.codigo_auditoria]' class="btn btn-square btn-secondary min-width-100 h-75">
                                         <i class="fa fa-unlock mr-5"></i>Reabrir Auditoria
                                     </button>
                                 }
@@ -50,11 +50,11 @@
                                 }
                                 @if (ViewBag.excluir)
                                 {
-                                    <button type="button" onclick="DeleteAuditoria(@Model.codigo_empresa, @Model.codigo_unidade, @Model.codigo_auditoria);" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <button type="button" data-act="DeleteAuditoria" data-args='[@Model.codigo_empresa, @Model.codigo_unidade, @Model.codigo_auditoria]' class="btn btn-square btn-secondary min-width-100 h-75">
                                         <i class="fa fa-times mr-5"></i>@PCM.WEB.Properties.Resources.excluir
                                     </button>
                                 }
-                                <button type="button" id="btnImprimir" name="btnImprimir" onclick="Imprimir();" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                <button type="button" id="btnImprimir" name="btnImprimir" data-act="Imprimir" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
 
                                 <a href="@Url.Action("AuditoriaCorporativoIndex", "Auditoria")" class="btn btn-square btn-secondary min-width-100 h-75">
                                     <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
@@ -133,7 +133,7 @@
                                                 <td style="width:100px">@Model.checklist[i].prazo</td>
                                                 <td style="width:50px">
                                                     <div class="btn-group">
-                                                        <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                        <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -261,13 +261,13 @@
                                                         if (Model.checklist[i].possui_foto)
                                                         {
                                                             <div class="btn-group">
-                                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                                <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                             </div>
                                                         }
                                                         else
                                                         {
                                                             <div class="btn-group">
-                                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                                <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                             </div>
                                                         }
                                                     }
@@ -317,8 +317,8 @@
                         <input type="hidden" id="codigo_auditoria" value="@Model.codigo_auditoria " />
                         <input type="hidden" id="data" value="@ViewBag.data" />
                         <input type="hidden" id="codigo_item_checklist" />
-                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo(); $(this).next('.custom-file-label').addClass('selected').html('');"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
-                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$(this).next('.custom-file-label').addClass('selected').html('');" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" data-act="Arquivo" data-clear-file-label><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-clear-file-label data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
                     </div>
                 </div>
             </div>
@@ -344,7 +344,7 @@
                     <div class="row">
 
                         <div class="col-md-6 col-xl-6">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirResumido();">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirResumido">
                                 <div class="text-md-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Auditoria - Corporativo</h6>
@@ -354,7 +354,7 @@
                         </div>
 
                         <div class="col-md-6 col-xl-6">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirDetalhado();">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirDetalhado">
                                 <div class="text-md-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Auditoria - Corporativo</h6>
@@ -615,7 +615,7 @@
                         image += '<img class="img-fluid options-item" src="' + response[i].filename + '" alt="">';
                         image += '<div class="options-overlay bg-black-op-75">';
                         image += '<div class="options-overlay-content">';
-                        image += '<a class="btn btn-sm btn-rounded btn-alt-danger min-width-75" onclick="DeleteAuditoriaPicture(' + response[i].codigo + ');">';
+                        image += '<a class="btn btn-sm btn-rounded btn-alt-danger min-width-75" data-act="DeleteAuditoriaPicture" data-args="[' + response[i].codigo + ']">';
                         image += '<i class="fa fa-times"></i> Excluir';
                         image += '</a>';
                         image += '</div>';

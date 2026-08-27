@@ -42,8 +42,8 @@
                                 <td class="d-none d-sm-table-cell text-md-center">@item.hierarquia</td>   
                                 <td class="text-md-center">
                                     <div class="btn-group">                                            
-                                        @if(item.hierarquia != 1) {<button type="button" class="btn btn-success h-75" onclick="UP(@item.hierarquia);"><i class="fa fa-arrow-up"></i></button>}
-                                        @if(item.hierarquia < Model.Count()) {<button type="button" class="btn btn-danger h-75" onclick="Down(@item.hierarquia);"><i class="fa fa-arrow-down"></i></button>}
+                                        @if(item.hierarquia != 1) {<button type="button" class="btn btn-success h-75" data-act="UP" data-args='[@item.hierarquia]'><i class="fa fa-arrow-up"></i></button>}
+                                        @if(item.hierarquia < Model.Count()) {<button type="button" class="btn btn-danger h-75" data-act="Down" data-args='[@item.hierarquia]'><i class="fa fa-arrow-down"></i></button>}
                                     </div>
                                 </td>
                             </tr>

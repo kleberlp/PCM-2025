@@ -139,7 +139,7 @@
                                                 @if (ViewBag.imprimir)
                                                 {<a href="@Url.Action("AuditoriaPrintPDF", "Qualidade", new { codigo_empresa = item.codigo_empresa, codigo_unidade = item.codigo_unidade, codigo_auditoria = item.codigo_auditoria })" target="_blank" class="btn btn-sm btn-secondary"><i class="si si-printer"></i></a>}
                                                 @if (ViewBag.administrador && item.status == 2)
-                                                {<a onclick="ReabrirAuditoria(@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria);" class="btn btn-sm btn-secondary"><i class="fa fa-unlock"></i></a>}
+                                                {<a data-act="ReabrirAuditoria" data-args='[@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria]' class="btn btn-sm btn-secondary"><i class="fa fa-unlock"></i></a>}
                                             </div>
                                         </td>
                                     }

@@ -56,7 +56,7 @@
                                     @foreach (var bimestre in unidade.mes)
                                     {
                                         <div class="col-md-2 col-xl-1">
-                                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirPMOC(@unidade.codigo_unidade, '@bimestre.startDate', '@bimestre.endDate');">
+                                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirPMOC" data-args='[@unidade.codigo_unidade, "@bimestre.startDate", "@bimestre.endDate"]'>
                                                 <div class="text-center">
                                                     <i class="fa fa-snowflake-o fa-2x text-success mt-5"></i>
                                                     <h6 class="font-w700 mb-5 mt-5">@PCM.WEB.Properties.Resources.pmoc</h6>
@@ -97,7 +97,7 @@
                     <div class="row">
 
                         <div class="col-md-4 col-xl-4">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000030_DASHBOARD_NEW');">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirReport" data-args='["RPT000000030_DASHBOARD_NEW"]'>
                                 <div class="text-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Dashboard</h6>
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="col-md-4 col-xl-4">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000030_RESUMO_ATENDIMENTO_NEW');">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirReport" data-args='["RPT000000030_RESUMO_ATENDIMENTO_NEW"]'>
                                 <div class="text-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Resumo do Atendimento</h6>
@@ -117,7 +117,7 @@
                         </div>
 
                         <div class="col-md-4 col-xl-4">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000030_OCORRENCIAS_CORRETIVAS_NEW');">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirReport" data-args='["RPT000000030_OCORRENCIAS_CORRETIVAS_NEW"]'>
                                 <div class="text-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Ocorrências Corretivas</h6>
@@ -131,7 +131,7 @@
                     <div class="row">
 
                         <div class="col-md-6 col-xl-4">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000030_PMOC_NEW');">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirReport" data-args='["RPT000000030_PMOC_NEW"]'>
                                 <div class="text-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">PMOC Agrupado</h6>
@@ -141,7 +141,7 @@
                         </div>
 
                         <div class="col-md-6 col-xl-4">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReportAno('RPT000000030_BUP');">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirReportAno" data-args='["RPT000000030_BUP"]'>
                                 <div class="text-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">PMOC Resumo do Ano</h6>
@@ -151,7 +151,7 @@
                         </div>
 
                         <div class="col-md-6 col-xl-4">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirReport('RPT000000037_NEW');">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirReport" data-args='["RPT000000037_NEW"]'>
                                 <div class="text-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Preventivas</h6>
@@ -218,7 +218,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnConfirm" id="btnConfirm" onclick="$('#form_modal').submit();" )><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                    <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnConfirm" id="btnConfirm" data-submit="#form_modal" )><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
                     <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="btnClose" id="btnClose" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
                 </div>
             }

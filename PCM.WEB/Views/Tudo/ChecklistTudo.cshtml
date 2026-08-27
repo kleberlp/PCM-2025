@@ -52,8 +52,8 @@
             </div>
             <form method="get" action="@Url.Action("ChecklistTudo", "Tudo")" class="pcm-filter" id="formFiltro">
                 <input type="hidden" name="statusSelected" value="@statusSel" />
-                @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "pcm-select", onchange = "document.getElementById('formFiltro').submit();" })
-                @Html.DropDownList("setor", (SelectList)ViewBag.setor, "Todos os setores", new { @class = "pcm-select", onchange = "document.getElementById('formFiltro').submit();" })
+                @Html.DropDownList("unidade", (SelectList)ViewBag.unidade, new { @class = "pcm-select", data-submit="#formFiltro" data-on="change" })
+                @Html.DropDownList("setor", (SelectList)ViewBag.setor, "Todos os setores", new { @class = "pcm-select", data-submit="#formFiltro" data-on="change" })
             </form>
         </div>
 

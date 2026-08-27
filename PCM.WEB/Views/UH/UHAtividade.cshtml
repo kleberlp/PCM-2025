@@ -60,7 +60,7 @@
 
                 <div class="row">
                     <div class="col-4 col-sm-12 col-md-4 col-xl-4">
-                        <a class="block block-rounded block-bordered block-link-shadow" onclick="$('#status').select2('val', '3'); $('#form').submit()">
+                        <a class="block block-rounded block-bordered block-link-shadow" data-select2val='{"#status": "3"}' data-submit="#form">
                             <div class="block-content block-content-full clearfix">
                                 <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-pulse"></i></div>
                                 <div class="font-size-h5 font-w600 text-pulse" data-speed="1000" data-to="@ViewBag.quantidade_atrasado" id="quantidade_atrasado" name="quantidade_atrasado">@ViewBag.quantidade_atrasado</div>
@@ -69,7 +69,7 @@
                         </a>
                     </div>
                     <div class="col-4 col-sm-12 col-md-4 col-xl-4">
-                        <a class="block block-rounded block-bordered block-link-shadow" onclick="$('#status').select2('val', '1'); $('#form').submit()">
+                        <a class="block block-rounded block-bordered block-link-shadow" data-select2val='{"#status": "1"}' data-submit="#form">
                             <div class="block-content block-content-full clearfix">
                                 <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-warning"></i></div>
                                 <div class="font-size-h5 font-w600 text-warning" data-speed="1000" data-to="@ViewBag.quantidade_pendente" id="quantidade_pendente" name="quantidade_pendente">@ViewBag.quantidade_pendente</div>
@@ -78,7 +78,7 @@
                         </a>
                     </div>
                     <div class="col-4 col-sm-12 col-md-4 col-xl-4">
-                        <a class="block block-rounded block-bordered block-link-shadow" onclick="$('#status').select2('val', '2'); $('#form').submit()">
+                        <a class="block block-rounded block-bordered block-link-shadow" data-select2val='{"#status": "2"}' data-submit="#form">
                             <div class="block-content block-content-full clearfix">
                                 <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-hotel fa-2x text-earth-light"></i></div>
                                 <div class="font-size-h5 font-w600 text-earth"><span data-speed="1000" data-to="@ViewBag.quantidade_realizada" id="quantidade_realizada" name="quantidade_realizada">@ViewBag.quantidade_realizada</span></div>
@@ -94,9 +94,9 @@
                     <div class="block-header block-header-default bg-gd-default">
                         <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.atividade - @ViewBag.lastUpdate</h3>
                         <div class="block-options">
-                            <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
-                            <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
-                            <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                            <button type="button" class="si si-grid btn-block-option text-white" data-show="#div_grid" data-hide="#div_list"></button>
+                            <button type="button" class="si si-list btn-block-option text-white" data-show="#div_list" data-hide="#div_grid"></button>
+                            <button type="button" class="si si-printer btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'></button>
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
                         </div>
                     </div>

@@ -42,8 +42,8 @@
                 <h3 class="block-title text-white font-w600">@Resources.asset</h3>
 
                 <div class="block-options">
-                    <button type="button" id="btnCancelInventory" name="btnCancelInventory" class="btn btn-square btn-secondary min-width-100 h-75 bg-danger-light" onclick="cancelInventory()"><i class="fa fa-ban mr-5"></i>Cancelar inventário</button>
-                    <button type="button" id="btnCloseInventory" name="btnCloseInventory" class="btn btn-square btn-secondary min-width-100 h-75" onclick="closeInventory()"><i class="fa fa-save mr-5"></i>@Resources.closeInventory</button>
+                    <button type="button" id="btnCancelInventory" name="btnCancelInventory" class="btn btn-square btn-secondary min-width-100 h-75 bg-danger-light" data-act="cancelInventory"><i class="fa fa-ban mr-5"></i>Cancelar inventário</button>
+                    <button type="button" id="btnCloseInventory" name="btnCloseInventory" class="btn btn-square btn-secondary min-width-100 h-75" data-act="closeInventory"><i class="fa fa-save mr-5"></i>@Resources.closeInventory</button>
                     <a href="@Url.Action("AssetInventoryMng", "AtivoFixo")" class="btn btn-square btn-secondary min-width-100 h-75"><i class="si si-action-undo mr-5"></i>@Resources.voltar</a>
                 </div>
             </div>
@@ -210,7 +210,7 @@
                             <div class="col-md-7">
                                 <label>@PCM.WEB.Properties.Resources.arquivo</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="application/pdf">
+                                    <input type="file" class="custom-file-input" id="arquivo" name="arquivo" data-act="Arquivo" data-on="change" accept="application/pdf">
                                     <label id="lblArquivo" class="custom-file-label" for="arquivo">@ViewBag.arquivo</label>
                                 </div>
                             </div>

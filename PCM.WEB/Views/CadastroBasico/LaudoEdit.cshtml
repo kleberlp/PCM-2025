@@ -116,11 +116,11 @@
                                         <label class="css-control css-control-success css-switch">
                                             @if (@Model.envia_email)
                                             {
-                                                <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" checked onchange="verificaEnviaEmail();">
+                                                <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" checked data-act="verificaEnviaEmail" data-on="change">
                                             }
                                             else
                                             {
-                                                <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" onchange="verificaEnviaEmail();">
+                                                <input type="checkbox" class="css-control-input" id="envia_email" name="envia_email" value="true" data-act="verificaEnviaEmail" data-on="change">
                                             }
                                             <span class="css-control-indicator"></span>
                                         </label>

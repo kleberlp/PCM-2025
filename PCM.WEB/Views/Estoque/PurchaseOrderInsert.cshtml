@@ -44,11 +44,11 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.purchase_order</label>
-                                    <div><input type="text" class="form-control" id="purchase_order" name="purchase_order" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#partner').focus(); return false; }"></div>
+                                    <div><input type="text" class="form-control" id="purchase_order" name="purchase_order" placeholder="" value="" data-enter-focus="#partner"></div>
                                 </div>
                                 <div class="col-md-3">
                                     <label>@PCM.WEB.Properties.Resources.partner</label>
-                                    <div><input type="text" class="form-control" id="partner" name="partner" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#date').focus(); return false; }"></div>
+                                    <div><input type="text" class="form-control" id="partner" name="partner" placeholder="" value="" data-enter-focus="#date"></div>
                                 </div>
                                 <div class="col-md-3">
                                     <label>@PCM.WEB.Properties.Resources.file</label>
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.date</label>
-                                    <input type="text" class="js-datepicker form-control" id="date" name="date" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.date" onkeypress="if(event.keyCode == 13){event.preventDefault(); startPurchaseOrder(); return false; }">
+                                    <input type="text" class="js-datepicker form-control" id="date" name="date" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.date" data-enter-act="startPurchaseOrder">
                                 </div>
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                             <div class="form-group row">
                                 <div class="col-md-2" id="div_barcode" name="div_barcode" style="display:none">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.barcode</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); document.getElementById('quantity').focus(); return false; }" onblur="loadProductInfo();"></div>
+                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" data-enter-focus="#quantity" data-act="loadProductInfo" data-on="blur"></div>
                                 </div>
                                 <div class="col-md-2" id="div_product" name="div_product">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.product</label>
@@ -100,14 +100,14 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.quantity</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="quantity" name="quantity" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#unitary_value').focus(); return false; }"></div>
+                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="quantity" name="quantity" placeholder="" value="" data-enter-focus="#unitary_value"></div>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="ecom-product-name">@PCM.WEB.Properties.Resources.unitary_value</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="unitary_value" name="unitary_value" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); addProduct(); return false; }">
+                                        <input type="text" class="form-control" style="text-transform: uppercase;" id="unitary_value" name="unitary_value" placeholder="" value="" data-enter-act="addProduct">
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" onclick="addProduct();"></button>
+                                            <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" data-act="addProduct"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +137,7 @@
                                             <td class="d-none d-sm-table-cell">@Html.DisplayFor(m => m[i].description)</td>
                                             <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].quantity)</td>
                                             <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].unitary_value)</td>
-                                            <td class="text-center"><a href="#" onclick="remove(this, @i);" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>
+                                            <td class="text-center"><a href="#" data-act="remove" data-args='["__self__", @i]' class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>
                                         </tr>
                                     }
                                 </tbody>
@@ -414,7 +414,7 @@
             colsItem = '<td class="text-center" style="width:150px">' + $("#unitary_value").val() + '</td>';
             newRowItem.append(colsItem);
             colsItem = '<td class="text-center" style="width: 80px;" ><div class="btn-group">';
-            colsItem += '<a href="#" onclick="remove(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>';
+            colsItem += '<a href="#" data-act="remove" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>';
             colsItem += '</div></td>';
             newRowItem.append(colsItem);
             $("#table").append(newRowItem);

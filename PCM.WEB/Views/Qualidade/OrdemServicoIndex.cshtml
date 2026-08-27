@@ -85,7 +85,7 @@
     <div class="row">
 
         <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-            <a class="block block-rounded block-bordered block-link-shadow" onclick="$('#status').select2('val', '3'); $('#form').submit()">
+            <a class="block block-rounded block-bordered block-link-shadow" data-select2val='{"#status": "3"}' data-submit="#form">
                 <div class="block-content block-content-full clearfix">
                     <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-area-chart fa-2x text-danger"></i></div>
                     <div class="font-size-h5 font-w600 text-danger" data-speed="1000" data-to="@ViewBag.plano_acao_status.atrasado" id="quantidade_atrasado" name="quantidade_atrasado">@ViewBag.plano_acao_status.atrasado</div>
@@ -95,7 +95,7 @@
         </div>
 
         <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-            <a class="block block-rounded block-bordered block-link-shadow" onclick="$('#status').select2('val', '1'); $('#form').submit()">
+            <a class="block block-rounded block-bordered block-link-shadow" data-select2val='{"#status": "1"}' data-submit="#form">
                 <div class="block-content block-content-full clearfix">
                     <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-area-chart fa-2x text-warning"></i></div>
                     <div class="font-size-h5 font-w600 text-warning"><span data-speed="1000" data-to="@ViewBag.plano_acao_status.pendente" id="quantidade_pendente" name="quantidade_pendente">@ViewBag.plano_acao_status.pendente</span></div>
@@ -105,7 +105,7 @@
         </div>
 
         <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-            <a class="block block-rounded block-bordered block-link-shadow" onclick="$('#status').select2('val', '2'); $('#form').submit()">
+            <a class="block block-rounded block-bordered block-link-shadow" data-select2val='{"#status": "2"}' data-submit="#form">
                 <div class="block-content block-content-full clearfix">
                     <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-area-chart fa-2x text-success"></i></div>
                     <div class="font-size-h5 font-w600 text-success"><span data-speed="1000" data-to="@ViewBag.plano_acao_status.concluido" id="quantidade_concluido" name="quantidade_concluido">@ViewBag.plano_acao_status.concluido</span></div>
@@ -115,7 +115,7 @@
         </div>
 
         <div class="col-3 col-sm-12 col-md-3 col-xl-3">
-            <a class="block block-rounded block-bordered block-link-shadow" onclick="$('#status').select2('val', '4'); $('#form').submit()">
+            <a class="block block-rounded block-bordered block-link-shadow" data-select2val='{"#status": "4"}' data-submit="#form">
                 <div class="block-content block-content-full clearfix">
                     <div class="float-right mt-15 d-none d-sm-block"><i class="fa fa-area-chart fa-2x text-primary"></i></div>
                     <div class="font-size-h5 font-w600 text-primary"><span data-speed="1000" data-to="@ViewBag.plano_acao_status.em_andamento" id="quantidade_andamento" name="quantidade_andamento">@ViewBag.plano_acao_status.em_andamento</span></div>
@@ -177,14 +177,14 @@
                                     <td class="text-center">
                                         <div class="btn-group">
                                             @if ((ViewBag.administrador_vincular) || Session["funcionario"] != "")
-                                            {<button type="button" class="btn btn-sm btn-secondary" id="btn.Model[i].codigo" onclick="UpdateStatus(Model[i].codigo, Model[i].codigo_unidade, '@Model[i].data_necessidade', 5);"><i class="si si-call-in" id="i.Model[i].codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                            {<button type="button" class="btn btn-sm btn-secondary" id="btn.Model[i].codigo" data-act="UpdateStatus" data-args='[@Model[i].codigo, @Model[i].codigo_unidade, "@Model[i].data_necessidade", 5]'><i class="si si-call-in" id="i.Model[i].codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                             @if (ViewBag.inserir)
                                             {
                                                 <a href="@Url.Action("ApontamentoOS", "Qualidade", new { codigo_pcm_ordem_servico = Model[i].codigo, codigo_unidade = Model[i].codigo_unidade, model = "Qualidade", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>
                                             }
                                             @if (ViewBag.editar)
                                             {
-                                        <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@Model[i].codigo, @Model[i].codigo_unidade, '@Model[i].data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                        <button type="button" class="btn btn-sm btn-secondary" data-act="UpdateDataOrdemServico" data-args='[@Model[i].codigo, @Model[i].codigo_unidade, "@Model[i].data_necessidade"]'><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
                                             }
                                             <a href="@Url.Action("OrdemServicoView", "Qualidade", new { codigo = Model[i].codigo, unidade = Model[i].codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
                                         </div>
@@ -207,12 +207,12 @@
                                     <td class="text-center">
                                         <div class="btn-group">
                                             @if ((ViewBag.administrador_vincular) || Session["funcionario"] != "")
-                                            {<button type="button" class="btn btn-sm btn-secondary" id="btn.Model[i].codigo" onclick="UpdateStatus(@Model[i].codigo, @Model[i].codigo_unidade, '@Model[i].data', 5);"><i class="si si-call-in" id="i.Model[i].codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                            {<button type="button" class="btn btn-sm btn-secondary" id="btn.Model[i].codigo" data-act="UpdateStatus" data-args='[@Model[i].codigo, @Model[i].codigo_unidade, "@Model[i].data", 5]'><i class="si si-call-in" id="i.Model[i].codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                             @if (ViewBag.inserir)
                                             {<a href="@Url.Action("ApontamentoOS", "Qualidade", new { codigo_pcm_ordem_servico = Model[i].codigo, codigo_unidade = Model[i].codigo_unidade, model = "Qualidade", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
                                             @if (ViewBag.editar)
                                             {
-                                                <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@Model[i].codigo, @Model[i].codigo_unidade, '@Model[i].data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                <button type="button" class="btn btn-sm btn-secondary" data-act="UpdateDataOrdemServico" data-args='[@Model[i].codigo, @Model[i].codigo_unidade, "@Model[i].data_necessidade"]'><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
                                             }
                                             <a href="@Url.Action("OrdemServicoView", "Qualidade", new { codigo = Model[i].codigo, unidade = Model[i].codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
                                         </div>
@@ -229,7 +229,7 @@
 
                                             @if (ViewBag.editar)
                                             {
-                                        <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@Model[i].codigo, @Model[i].codigo_unidade, '@Model[i].data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                        <button type="button" class="btn btn-sm btn-secondary" data-act="UpdateDataOrdemServico" data-args='[@Model[i].codigo, @Model[i].codigo_unidade, "@Model[i].data_necessidade"]'><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
                                             }
                                             <a href="@Url.Action("OrdemServicoView", "Qualidade", new { codigo = Model[i].codigo, unidade = Model[i].codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
                                         </div>
@@ -241,13 +241,13 @@
                                     <td class="text-center">
                                         <div class="btn-group">
                                             @if (ViewBag.inserir)
-                                            {<button type="button" class="btn btn-sm btn-danger" id="btn.Model[i].codigo" onclick="UpdateStatus(@Model[i].codigo, @Model[i].codigo_unidade, 'Model[i].data', 1);"><i class="si si-call-in" id="i.Model[i].codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                            {<button type="button" class="btn btn-sm btn-danger" id="btn.Model[i].codigo" data-act="UpdateStatus" data-args='[@Model[i].codigo, @Model[i].codigo_unidade, "Model[i].data", 1]'><i class="si si-call-in" id="i.Model[i].codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                             @if (ViewBag.inserir)
                                             {<a href="@Url.Action("ApontamentoOS", "Qualidade", new { codigo_pcm_ordem_servico = Model[i].codigo, codigo_unidade = Model[i].codigo_unidade, model = "Qualidade", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
 
                                             @if (ViewBag.editar)
                                             {
-                                        <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@Model[i].codigo, @Model[i].codigo_unidade, '@Model[i].data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                        <button type="button" class="btn btn-sm btn-secondary" data-act="UpdateDataOrdemServico" data-args='[@Model[i].codigo, @Model[i].codigo_unidade, "@Model[i].data_necessidade"]'><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
                                             }
                                             <a href="@Url.Action("OrdemServicoView", "Qualidade", new { codigo = Model[i].codigo, unidade = Model[i].codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
                                         </div>

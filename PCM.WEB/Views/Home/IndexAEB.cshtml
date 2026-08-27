@@ -428,7 +428,7 @@
                                         </div>
                                         <input type="text" class="form-control" id="data_termino" name="data_termino" placeholder="Até" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="@ViewBag.data_termino">
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-square btn-secondary fa fa-refresh" onclick="refreshGreenPlanet();" id="btnRefreshGreenPlanet" name="btnRefreshGreenPlanet"></button>
+                                            <button type="button" class="btn btn-square btn-secondary fa fa-refresh" data-act="refreshGreenPlanet" id="btnRefreshGreenPlanet" name="btnRefreshGreenPlanet"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -454,10 +454,10 @@
                             <h3 class="block-title text-white">Principas Ocorrências</h3>
                             <div class="dropdown float-right">
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(1);">Dia Anterior</button>
-                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(7);">Semana</button>
-                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(30);">Mês</button>
-                                    <button type="button" class="btn btn-sm btn btn-secondary" onclick="PrincipaisOcorrencias(365);">Ano</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" data-act="PrincipaisOcorrencias" data-args='[1]'>Dia Anterior</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" data-act="PrincipaisOcorrencias" data-args='[7]'>Semana</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" data-act="PrincipaisOcorrencias" data-args='[30]'>Mês</button>
+                                    <button type="button" class="btn btn-sm btn btn-secondary" data-act="PrincipaisOcorrencias" data-args='[365]'>Ano</button>
                                 </div>
                             </div>
                         </div>
@@ -504,7 +504,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn bg-gray-light" onclick="confirmLogBook();" data-bs-dismiss="modal">
+                            <button type="button" class="btn bg-gray-light" data-act="confirmLogBook" data-bs-dismiss="modal">
                                 <i class="fa fa-check"></i>@PCM.WEB.Properties.Resources.confirmado
                             </button>
                         </div>

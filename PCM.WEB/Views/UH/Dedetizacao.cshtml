@@ -63,9 +63,9 @@
                         <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.apontamento Múltiplos
                     </a>
                 }
-                <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
-                <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
-                <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>                
+                <button type="button" class="si si-grid btn-block-option text-white" data-show="#div_grid" data-hide="#div_list"></button>
+                <button type="button" class="si si-list btn-block-option text-white" data-show="#div_list" data-hide="#div_grid"></button>
+                <button type="button" class="si si-printer btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'></button>                
             </div>
         </div>
 

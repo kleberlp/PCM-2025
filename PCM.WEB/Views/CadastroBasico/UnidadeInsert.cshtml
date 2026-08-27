@@ -70,7 +70,7 @@
                             <div class="form-group row">
                                 <div class="col-lg-2">
                                     <label>@PCM.WEB.Properties.Resources.cep</label>
-                                    <div><input type="text" class="form-control" id="cep" name="cep" value="" onblur="LoadCEP();"></div>
+                                    <div><input type="text" class="form-control" id="cep" name="cep" value="" data-act="LoadCEP" data-on="blur"></div>
                                 </div>
                                 <div class="col-lg-2">
                                     <label>@PCM.WEB.Properties.Resources.uf</label>
@@ -252,7 +252,7 @@
                                 <div class="col-12">
                                     <label>Logo tamanho: (250 x 120)</label>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="logoMin" name="logoMin" onchange="LogoMin();" accept="image/png,image/gif,image/jpeg">
+                                        <input type="file" class="custom-file-input" id="logoMin" name="logoMin" data-act="LogoMin" data-on="change" accept="image/png,image/gif,image/jpeg">
                                         <label id="lblLogoMin" class="custom-file-label" for="logoMin">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
                                     </div>
                                 </div>
@@ -261,7 +261,7 @@
                                 <div class="col-12">
                                     <label>Logo tamanho: (500 x 500)</label>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="logoMax" name="logoMax" onchange="LogoMax();" accept="image/png,image/gif,image/jpeg">
+                                        <input type="file" class="custom-file-input" id="logoMax" name="logoMax" data-act="LogoMax" data-on="change" accept="image/png,image/gif,image/jpeg">
                                         <label id="lblLogoMax" class="custom-file-label" for="logoMax">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
                                     </div>
                                 </div>

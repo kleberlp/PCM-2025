@@ -83,7 +83,7 @@
                                         <td class="text-center">@Model.checklist[i].prazo</td>
                                         <td style="width:50px">
                                             <div class="btn-group">
-                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                             </div>
                                         </td>
                                     </tr>

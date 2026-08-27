@@ -139,9 +139,9 @@
                                                     @if (ViewBag.editar)
                                                     {<a href="@Url.Action("Apontamento", "Auditoria", new {codigo_unidade = item.codigo_unidade, codigo_auditoria = item.codigo_auditoria , codigo_auditoria_interna = item.codigo_auditoria_interna, action_name = "AuditoriaHistorico" })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                                     @if (ViewBag.imprimir)
-                                                    {<a onclick="Imprimir(@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria);" target="_blank" class="btn btn-sm btn-secondary"><i class="si si-printer"></i></a>}
+                                                    {<a data-act="Imprimir" data-args='[@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria]' target="_blank" class="btn btn-sm btn-secondary"><i class="si si-printer"></i></a>}
                                                     @if (ViewBag.administrador && item.status == 2)
-                                                    {<a onclick="ReabrirAuditoria(@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria);" class="btn btn-sm btn-secondary"><i class="fa fa-unlock"></i></a>}
+                                                    {<a data-act="ReabrirAuditoria" data-args='[@item.codigo_empresa, @item.codigo_unidade, @item.codigo_auditoria]' class="btn btn-sm btn-secondary"><i class="fa fa-unlock"></i></a>}
                                                 </div>
                                             </td>
                                         }
@@ -177,7 +177,7 @@
                     <div class="row">
 
                         <div class="col-md-6 col-xl-6">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirResumido();">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirResumido">
                                 <div class="text-md-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Auditoria - Corporativo</h6>
@@ -187,7 +187,7 @@
                         </div>
 
                         <div class="col-md-6 col-xl-6">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirDetalhado();">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirDetalhado">
                                 <div class="text-md-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Auditoria - Corporativo</h6>

@@ -38,7 +38,7 @@
                             }
                             @if (ViewBag.imprimir)
                             {
-                                <button type="button" id="btnImprimir" name="btnImprimir" onclick="Imprimir();" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
+                                <button type="button" id="btnImprimir" name="btnImprimir" data-act="Imprimir" class="btn btn-square btn-secondary min-width-100 h-75"><i class=" fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.imprimir</button>
                             }
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                     <div class="row">
 
                         <div class="col-md-6 col-xl-6">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaZebra();">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirEtiquetaZebra">
                                 <div class="text-md-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="col-md-6 col-xl-6">
-                            <a class="block block-rounded block-bordered block-link-shadow" href="#" onclick="ImprimirEtiquetaA4();">
+                            <a class="block block-rounded block-bordered block-link-shadow" href="#" data-act="ImprimirEtiquetaA4">
                                 <div class="text-md-center">
                                     <i class="fa fa-file-o fa-2x mt-5"></i>
                                     <h6 class="font-w700 mb-5 mt-5">Imprimir Etiqueta</h6>

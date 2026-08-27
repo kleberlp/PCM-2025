@@ -154,7 +154,7 @@
                                         <label class="chk-chip chk-os" title="@Resources.abrir_os">@Html.CheckBoxFor(m => m[i].abre_os)@Resources.abrir_os</label>
                                         @if (Model[i].allow_picture)
                                         {
-                                            <button type="button" class="chk-foto-btn" data-item="@Model[i].codigo" onclick="abrirFoto(@Model[i].codigo);"><i class="fa fa-camera"></i> @Resources.foto</button>
+                                            <button type="button" class="chk-foto-btn" data-item="@Model[i].codigo" data-act="abrirFoto" data-args='[@Model[i].codigo]'><i class="fa fa-camera"></i> @Resources.foto</button>
                                         }
                                     </div>
                                 </div>

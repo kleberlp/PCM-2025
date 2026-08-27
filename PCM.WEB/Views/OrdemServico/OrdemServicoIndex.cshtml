@@ -143,7 +143,7 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 @if ((ViewBag.administrador_vincular) || Session["funcionario"] != "")
-                                                {<button type="button" class="btn btn-sm btn-secondary" id="btn.@item.codigo" onclick="UpdateStatus(@item.codigo, @item.codigo_unidade, '@item.data', 5);"><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                                {<button type="button" class="btn btn-sm btn-secondary" id="btn.@item.codigo" data-act="UpdateStatus" data-args='[@item.codigo, @item.codigo_unidade, "@item.data", 5]'><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                                 @if (ViewBag.apontamento)
                                                 {<a href="@Url.Action("ApontamentoOS", "PCM", new { codigo_pcm_ordem_servico = item.codigo, codigo_unidade = item.codigo_unidade, model = "OrdemServico", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
                                                 @if (ViewBag.editar)
@@ -175,7 +175,7 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 @if ((ViewBag.administrador_vincular) || Session["funcionario"] != "")
-                                                {<button type="button" class="btn btn-sm btn-secondary" id="btn.@item.codigo" onclick="UpdateStatus(@item.codigo, @item.codigo_unidade, '@item.data', 5);"><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                                {<button type="button" class="btn btn-sm btn-secondary" id="btn.@item.codigo" data-act="UpdateStatus" data-args='[@item.codigo, @item.codigo_unidade, "@item.data", 5]'><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                                 @if (ViewBag.apontamento)
                                                 {<a href="@Url.Action("ApontamentoOS", "PCM", new { codigo_pcm_ordem_servico = item.codigo, codigo_unidade = item.codigo_unidade, model = "OrdemServico", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
                                                 @if (ViewBag.editar)
@@ -207,7 +207,7 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 @if (ViewBag.administrador_vincular)
-                                                {<button type="button" class="btn btn-sm btn-danger" id="btn.@item.codigo" onclick="UpdateStatus(@item.codigo, @item.codigo_unidade, '@item.data', 1);"><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
+                                                {<button type="button" class="btn btn-sm btn-danger" id="btn.@item.codigo" data-act="UpdateStatus" data-args='[@item.codigo, @item.codigo_unidade, "@item.data", 1]'><i class="si si-call-in" id="i.@item.codigo" title="@PCM.WEB.Properties.Resources.vincular_desvincular_os" data-toggle="tooltip"></i></button>}
                                                 @if (ViewBag.apontamento)
                                                 {<a href="@Url.Action("ApontamentoOS", "PCM", new { codigo_pcm_ordem_servico = item.codigo, codigo_unidade = item.codigo_unidade, model = "OrdemServico", page = "OrdemServicoIndex" })" class="btn btn-sm btn-secondary"><i class="fa fa-crosshairs"></i></a>}
                                                 @if (ViewBag.editar)

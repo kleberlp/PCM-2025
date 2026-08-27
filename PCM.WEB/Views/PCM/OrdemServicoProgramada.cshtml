@@ -136,7 +136,7 @@
                                                             @if (ViewBag.editar)
                                                             {<a href="@Url.Action("ApontamentoProgramadaEdit", "PCM", new { codigo_apontamento = apto.codigo, codigo_unidade = apto.codigo_unidade, formulario = ViewBag.formulario, tipo = ViewBag.tipo })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                                             @if (ViewBag.excluir)
-                                                            {<button type="button" class="btn btn-sm btn-secondary" onclick="deleteApontamento(@apto.codigo, @apto.codigo_unidade, this);"><i class="fa fa-times"></i></button>}
+                                                            {<button type="button" class="btn btn-sm btn-secondary" data-act="deleteApontamento" data-args='[@apto.codigo, @apto.codigo_unidade, "__self__"]'><i class="fa fa-times"></i></button>}
                                                         </div>
                                                     </td>
 
@@ -301,13 +301,13 @@
                                                     if (Model[i].possui_foto)
                                                     {
                                                         <div class="btn-group">
-                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model[i].codigo); LoadArquivo();" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                            <button type="button" data-setval='{"#codigo_item_checklist": @Model[i].codigo}' data-act="LoadArquivo" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                         </div>
                                                     }
                                                     else
                                                     {
                                                         <div class="btn-group">
-                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model[i].codigo); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                            <button type="button" data-setval='{"#codigo_item_checklist": @Model[i].codigo}' data-act="LoadArquivo" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                         </div>
                                                     }
                                                 }
@@ -357,8 +357,8 @@
                             <input type="hidden" id="codigo_auditoria" value="@Model.codigo " />
                             <input type="hidden" id="data" value="@ViewBag.data" />*@
                         <input type="hidden" id="codigo_item_checklist" />
-                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo();"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
-                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$(this).next('.custom-file-label').addClass('selected').html('');" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" data-act="Arquivo"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-clear-file-label data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
                     </div>
                 </div>
             </div>
@@ -500,7 +500,7 @@
                         image += '<img class="img-fluid options-item" src="' + response[i].filename + '" alt="">';
                         image += '<div class="options-overlay bg-black-op-75">';
                         image += '<div class="options-overlay-content">';
-                        image += '<a class="btn btn-sm btn-rounded btn-alt-danger min-width-75" onclick="DeleteFoto(' + response[i].codigo + ');">';
+                        image += '<a class="btn btn-sm btn-rounded btn-alt-danger min-width-75" data-act="DeleteFoto" data-args="[' + response[i].codigo + ']">';
                         image += '<i class="fa fa-times"></i> Excluir';
                         image += '</a>';
                         image += '</div>';

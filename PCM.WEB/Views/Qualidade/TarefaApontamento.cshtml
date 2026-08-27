@@ -39,7 +39,7 @@
                                 <button type="submit" class="btn btn-square btn-secondary min-width-100 h-75">
                                     <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
                                 </button>
-                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="printRegister(@ViewBag.dados.codigo_unidade, @ViewBag.codigo_qa_tarefa_ordem_servico);">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" data-act="printRegister" data-args='[@ViewBag.dados.codigo_unidade, @ViewBag.codigo_qa_tarefa_ordem_servico]'>
                                     <i class="fa fa-print mr-5"></i>@PCM.WEB.Properties.Resources.imprimir
                                 </button>
                                 <a href="@Url.Action(ViewBag.action, "Qualidade")" class="btn btn-square btn-secondary min-width-100 h-75">

@@ -324,7 +324,7 @@
                     <h3 class="block-title text-white font-w600">Dados da Unidade</h3>
                     <div class="block-options">
                         <!-- Print Page functionality is initialized in Codebase() -> uiHelperPrint() -->
-                        <button type="button" class="btn-block-option text-white" onclick="Codebase.helpers('print-page');">
+                        <button type="button" class="btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'>
                             <i class="si si-printer text-white"></i> @PCM.WEB.Properties.Resources.imprimir
                         </button>
                         <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
@@ -800,7 +800,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn bg-gray-light" onclick="confirmLogBook();" data-bs-dismiss="modal">
+                    <button type="button" class="btn bg-gray-light" data-act="confirmLogBook" data-bs-dismiss="modal">
                         <i class="fa fa-check"></i>@PCM.WEB.Properties.Resources.confirmado
                     </button>
                 </div>

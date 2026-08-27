@@ -37,13 +37,13 @@
                             <div class="block-options">
                                 @if (Model.status != 2)
                                 {
-                                    <button type="button" onclick="this.disabled = true; $('#form').submit();" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <button type="button" data-disable="self" data-submit="#form" class="btn btn-square btn-secondary min-width-100 h-75">
                                         <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
                                     </button>
                                 }
                                 @if (ViewBag.excluir)
                                 {
-                                    <button type="button" onclick="DeleteAuditoria(@Model.codigo_empresa, @Model.codigo_unidade, @Model.codigo_auditoria);" class="btn btn-square btn-secondary min-width-100 h-75">
+                                    <button type="button" data-act="DeleteAuditoria" data-args='[@Model.codigo_empresa, @Model.codigo_unidade, @Model.codigo_auditoria]' class="btn btn-square btn-secondary min-width-100 h-75">
                                         <i class="fa fa-times mr-5"></i>@PCM.WEB.Properties.Resources.excluir
                                     </button>
                                 }
@@ -137,13 +137,13 @@
                                                         @if (Model.checklist[i].possui_foto)
                                                         {
                                                         <div class="btn-group">
-                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                            <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                         </div>
                                                         }
                                                         else
                                                         {
                                                         <div class="btn-group">
-                                                            <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                            <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                         </div>
                                                         }
                                                     </div>
@@ -252,13 +252,13 @@
                                                         if (Model.checklist[i].possui_foto)
                                                         {
                                                             <div class="btn-group">
-                                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                                <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                             </div>
                                                         }
                                                         else
                                                         {
                                                             <div class="btn-group">
-                                                                <button type="button" onclick="$('#codigo_item_checklist').val(@Model.checklist[i].codigo_item_checklist); LoadArquivo();" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
+                                                                <button type="button" data-setval='{"#codigo_item_checklist": @Model.checklist[i].codigo_item_checklist}' data-act="LoadArquivo" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalFoto"><i class="fa fa-camera"></i></button>
                                                             </div>
                                                         }
                                                     }
@@ -308,8 +308,8 @@
                         <input type="hidden" id="codigo_auditoria" name="codigo_auditoria" value="@Model.codigo_auditoria " />
                         <input type="hidden" id="data" name="data" value="@ViewBag.data" />
                         <input type="hidden" id="codigo_item_checklist" name="codigo_item_checklist" />
-                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo(); $(this).next('.custom-file-label').addClass('selected').html('');"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
-                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$(this).next('.custom-file-label').addClass('selected').html('');" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" data-act="Arquivo" data-clear-file-label><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-clear-file-label data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
                     </div>
                 </div>
             </div>

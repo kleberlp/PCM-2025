@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.numero_documento</label>
-                                    <div><input type="text" class="form-control" id="numeroDocumento" name="numeroDocumento" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#ordemCompra').focus(); return false; }"></div>
+                                    <div><input type="text" class="form-control" id="numeroDocumento" name="numeroDocumento" placeholder="" value="" data-enter-focus="#ordemCompra"></div>
                                 </div>
                                 <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.ordemCompra</label>
@@ -61,7 +61,7 @@
                                 <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.data</label>
                                     <div class="input-group">
-                                        <input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data" onkeypress="if(event.keyCode == 13){event.preventDefault(); startReplenishment(); return false; }">
+                                        <input type="text" class="js-datepicker form-control" id="data" name="data" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="dd/mm/yyyy" placeholder="" value="@ViewBag.data" data-enter-act="startReplenishment">
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-square btn-secondary" id="btnStartReplenishment" name="btnStartReplenishment">@PCM.WEB.Properties.Resources.entrada</button>
                                         </div>
@@ -98,7 +98,7 @@
                             <div class="form-group row">
                                 <div class="col-md-2" id="div_barcode" name="div_barcode" style="display:none">
                                     <label>@PCM.WEB.Properties.Resources.barcode</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); document.getElementById('quantidade').focus(); return false; }" onblur="loadProductInfo();"></div>
+                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="barcode" name="barcode" placeholder="" value="" data-enter-focus="#quantidade" data-act="loadProductInfo" data-on="blur"></div>
                                 </div>
                                 <div class="col-md-2" id="div_product" name="div_product">
                                     <label>@PCM.WEB.Properties.Resources.produto</label>
@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="col-md-2" id="divLote" name="divLote">
                                     <label>@PCM.WEB.Properties.Resources.lote</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="lote" name="lote" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#quantidade').focus(); return false; }"></div>
+                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="lote" name="lote" placeholder="" value="" data-enter-focus="#quantidade"></div>
                                 </div>
                                 <div class="col-md-2" id="divDataValidade" name="divDataValidade">
                                     <label>@PCM.WEB.Properties.Resources.data_validade</label>
@@ -124,7 +124,7 @@
                             <div class="form-group row">
                                 <div class="col-md-2">
                                     <label>@PCM.WEB.Properties.Resources.quantidade</label>
-                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="quantidade" name="quantidade" placeholder="" value="" onkeypress="if(event.keyCode == 13){event.preventDefault(); $('#valorUnitario').focus(); return false; }"></div>
+                                    <div><input type="text" class="form-control" style="text-transform: uppercase;" id="quantidade" name="quantidade" placeholder="" value="" data-enter-focus="#valorUnitario"></div>
                                 </div>
                                 <div class="col-md-2" id="divUom" name="divUom">
                                     <label>@PCM.WEB.Properties.Resources.unidade_medida</label>

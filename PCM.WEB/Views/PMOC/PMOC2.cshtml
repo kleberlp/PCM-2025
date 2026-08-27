@@ -61,9 +61,9 @@
             <div class="block-header block-header-default bg-gd-default">
                 <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.pmoc</h3>                    
                 <div class="block-options">
-                    <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
-                    <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
-                    <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                    <button type="button" class="si si-grid btn-block-option text-white" data-show="#div_grid" data-hide="#div_list"></button>
+                    <button type="button" class="si si-list btn-block-option text-white" data-show="#div_list" data-hide="#div_grid"></button>
+                    <button type="button" class="si si-printer btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'></button>
                     <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
                 </div>
             </div>

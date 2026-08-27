@@ -29,8 +29,8 @@
                     <div class="block-header block-header-default bg-gd-default">
                         <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.requisicao_aprovar_reprovar</h3>
                         <div class="block-options">
-                            <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="aprovarRequisicao();"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.aprovar</button>
-                            <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="reprovarRequisicao();"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.reprovar</button>
+                            <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" data-act="aprovarRequisicao"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.aprovar</button>
+                            <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" data-act="reprovarRequisicao"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.reprovar</button>
                         </div>
                     </div>
                     <div class="block-content">
@@ -159,7 +159,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
-                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="reprovar" id="reprovar" onclick="$('#form').attr('action', 'RequisicaoAprovarReprovar'); $('#form').submit();"><i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.reprovar</button>
+                        <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="reprovar" id="reprovar" data-form-action="RequisicaoAprovarReprovar" data-submit="#form"><i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.reprovar</button>
                     </div>
                 </div>
             </div>

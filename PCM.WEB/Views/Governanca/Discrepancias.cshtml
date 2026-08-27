@@ -248,40 +248,40 @@
 <!-- Popup AD/Cr1/Cr2 -->
 <div class="adcr-modal-overlay" id="adcrModalOverlay">
     <div class="adcr-modal-box" style="position:relative;">
-        <button type="button" class="adcr-close-btn" onclick="closeADCrModal()">&times;</button>
+        <button type="button" class="adcr-close-btn" data-act="closeADCrModal">&times;</button>
         <div class="adcr-modal-title">Insira a quantidade de hóspedes no apartamento</div>
         <div class="adcr-field">
             <label>Quantidade de Adultos:</label>
             <div class="adcr-btn-group" data-group="ad">
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('ad',1,this)">1</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('ad',2,this)">2</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('ad',3,this)">3</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('ad',4,this)">4</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('ad',5,this)">5</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["ad", 1, "__self__"]'>1</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["ad", 2, "__self__"]'>2</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["ad", 3, "__self__"]'>3</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["ad", 4, "__self__"]'>4</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["ad", 5, "__self__"]'>5</button>
             </div>
         </div>
         <div class="adcr-field">
             <label>Quantidade de Crianças tipo 1:</label>
             <div class="adcr-btn-group" data-group="cr1">
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr1',1,this)">1</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr1',2,this)">2</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr1',3,this)">3</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr1',4,this)">4</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr1',5,this)">5</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr1", 1, "__self__"]'>1</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr1", 2, "__self__"]'>2</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr1", 3, "__self__"]'>3</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr1", 4, "__self__"]'>4</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr1", 5, "__self__"]'>5</button>
             </div>
         </div>
         <div class="adcr-field">
             <label>Quantidade de Crianças tipo 2:</label>
             <div class="adcr-btn-group" data-group="cr2">
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr2',1,this)">1</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr2',2,this)">2</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr2',3,this)">3</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr2',4,this)">4</button>
-                <button type="button" class="adcr-num-btn" onclick="adcrSelect('cr2',5,this)">5</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr2", 1, "__self__"]'>1</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr2", 2, "__self__"]'>2</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr2", 3, "__self__"]'>3</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr2", 4, "__self__"]'>4</button>
+                <button type="button" class="adcr-num-btn" data-act="adcrSelect" data-args='["cr2", 5, "__self__"]'>5</button>
             </div>
         </div>
         <div class="adcr-modal-footer">
-            <button type="button" class="adcr-save-btn" onclick="saveADCrModal()">SALVAR</button>
+            <button type="button" class="adcr-save-btn" data-act="saveADCrModal">SALVAR</button>
         </div>
     </div>
 </div>

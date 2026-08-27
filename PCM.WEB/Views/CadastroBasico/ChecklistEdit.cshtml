@@ -33,7 +33,7 @@
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.cadastrar</h3>
                             <div class="block-options">
-                                <button type="button" id="btnSave" onclick="$('#validation_type').val(1); $('#form').submit();" class="btn btn-square btn-secondary min-width-100 h-75">
+                                <button type="button" id="btnSave" data-setval='{"#validation_type": 1}' data-submit="#form" class="btn btn-square btn-secondary min-width-100 h-75">
                                     <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
                                 </button>
                                 <a href="@Url.Action("ChecklistIndex", "CadastroBasico")" class="btn btn-square btn-secondary min-width-100 h-75">
@@ -63,13 +63,13 @@
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.checklist</h3>
                             <div class="block-options">
-                                <button type="button" id="btnSaveChecklist" onclick="$('#validation_type').val(2); $('#form').submit();" class="btn btn-square btn-secondary min-width-100 h-75">
+                                <button type="button" id="btnSaveChecklist" data-setval='{"#validation_type": 2}' data-submit="#form" class="btn btn-square btn-secondary min-width-100 h-75">
                                     <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.incluir
                                 </button>
-                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="adicionarChecklist();">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" data-act="adicionarChecklist">
                                     <i class="fa fa-upload mr-5"></i>@PCM.WEB.Properties.Resources.arquivo
                                 </button>
-                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" onclick="DownloadExcel()">
+                                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" data-act="DownloadExcel">
                                     <i class="fa fa-download mr-5"></i>@PCM.WEB.Properties.Resources.download
                                 </button>
                             </div>
@@ -211,7 +211,7 @@
                                                 <td class="d-none d-md-table-cell text-md-center" style="width: 100px;">@Html.DisplayFor(m => m[i].periodicidade)</td>
                                                 <td class="d-none d-md-table-cell text-md-center" style="width: 100px;">@Html.DisplayFor(m => m[i].intervalo)</td>
                                                 <td class="d-none d-md-table-cell text-md-center" style="width: 150px;">@Html.DisplayFor(m => m[i].tempo_estimado)</td>
-                                                <td class="text-md-center" style="width: 80px;"><a href="#" onclick="remove(this);" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>
+                                                <td class="text-md-center" style="width: 80px;"><a href="#" data-act="remove" data-args='["__self__"]' class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>
                                             </tr>
                                             }
                                         </tbody>
@@ -263,8 +263,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" onclick="Arquivo(); $('fileInput').val('');"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
-                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" onclick="$('fileInput').val('');;" data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="salvar_arquivo" id="salvar_arquivo" data-act="Arquivo"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" name="close" id="close" data-setval='{"fileInput": ""}' data-bs-dismiss="modal"><i class="fa fa-close mr-5"></i>@PCM.WEB.Properties.Resources.sair</button>
             </div>
 
         </div>
@@ -385,7 +385,7 @@
                             colsItem += '<td class="d-none d-md-table-cell text-md-center" style="width: 100px;">' + result[i].periodicidade + '</td>'
                             colsItem += '<td class="d-none d-md-table-cell text-md-center" style="width: 100px;">' + result[i].intervalo + '</td>'
                             colsItem += '<td class="d-none d-md-table-cell text-md-center" style="width: 150px;">' + result[i].tempo_estimado + '</td>';
-                            colsItem += '<td class="text-md-center" style="width: 80px;"><a href="#" onclick="remove(this);" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>';
+                            colsItem += '<td class="text-md-center" style="width: 80px;"><a href="#" data-act="remove" data-args='["__self__"]' class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>';
                             newRowItem.append(colsItem);
 
                             $("#table").append(newRowItem);
@@ -767,7 +767,7 @@
                             colsItem += '<td class="d-none d-md-table-cell text-md-center" style="width: 100px;">' + $("#periodicidade_input option:selected").text().toUpperCase() + '</td>'
                             colsItem += '<td class="d-none d-md-table-cell text-md-center" style="width: 100px;">' + $("#intervalo_input").val().toUpperCase() + '</td>'
                             colsItem += '<td class="d-none d-md-table-cell text-md-center" style="width: 150px;">' + $("#tempo_estimado_input").val().toUpperCase() + '</td>';
-                            colsItem += '<td class="text-md-center" style="width: 80px;"><a href="#" onclick="remove(this);" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>';
+                            colsItem += '<td class="text-md-center" style="width: 80px;"><a href="#" data-act="remove" data-args='["__self__"]' class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></td>';
                             newRowItem.append(colsItem);
 
                             $("#table").append(newRowItem);

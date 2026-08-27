@@ -38,7 +38,7 @@
                         <div class="block-header block-header-default bg-gd-default">
                             <h3 class="block-title text-white font-w600">@PCM.WEB.Properties.Resources.apontamento_os</h3>
                             <div class="block-options">
-                                <button type="button" onclick="document.getElementById('btnSave').disabled = true; $('#form').submit();" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
+                                <button type="button" data-disable="#btnSave" data-submit="#form" id="btnSave" name="btnSave" class="btn btn-square btn-secondary min-width-100 h-75"><i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar</button>
                                 <a href="@Url.Action(@ViewBag.page, @ViewBag.model)" class="btn btn-square btn-secondary min-width-100 h-75">
                                     <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
                                 </a>
@@ -154,7 +154,7 @@
                                     <label class="col-12">@PCM.WEB.Properties.Resources.arquivo</label>
                                     <div class="col-12">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="image/*">
+                                            <input type="file" class="custom-file-input" id="arquivo" name="arquivo" data-act="Arquivo" data-on="change" accept="image/*">
                                             <label id="lblArquivo" class="custom-file-label" for="imagem">@PCM.WEB.Properties.Resources.selecione_arquivo</label>
                                         </div>
                                     </div>
@@ -167,7 +167,7 @@
                                 <h3 class="block-title text-dark font-w600">@PCM.WEB.Properties.Resources.registros: <span class="text-danger" id="info_registros">0</span></h3>
                                 <div class="block-options">
                                     <label class="css-control css-control-danger css-checkbox">
-                                        <input type="checkbox" name="barcode" id="barcode" class="css-control-input" value="true" onchange="productInput();" />
+                                        <input type="checkbox" name="barcode" id="barcode" class="css-control-input" value="true" data-act="productInput" data-on="change" />
                                         <span class="css-control-indicator"></span>
                                         <span class="h5">@PCM.WEB.Properties.Resources.leitor_codigo_barras</span>
                                     </label>
@@ -195,9 +195,9 @@
                                         <div class="col-md-2">
                                             <label>@PCM.WEB.Properties.Resources.quantidade</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="quantidade" name="quantidade" value="" onkeypress="if (event.keyCode == 13) { adicionarProduto(); return false; }">
+                                                <input type="text" class="form-control" id="quantidade" name="quantidade" value="" data-enter-act="adicionarProduto">
                                                 <div class="input-group-append">
-                                                    <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" onclick="adicionarProduto();"></button>
+                                                    <button type="button" class="btn btn-square btn-secondary min-width-40 fa fa-plus mr-5" data-act="adicionarProduto"></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -228,8 +228,8 @@
                                                 <td class="text-center" style="width:150px">@Html.DisplayFor(m => m[i].quantidade)</td>
                                                 <td class="text-center">
                                                     <div class="btn-group">
-                                                        <a href="#" onclick="remove(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>
-                                                        <a href="#" onclick="informacao(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-info-circle"></i></a>
+                                                        <a href="#" data-act="remove" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>
+                                                        <a href="#" data-act="informacao" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-info-circle"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -343,7 +343,7 @@
             newRowItem.append(colsItem);
             colsItem = '<td class="text-center" style="width:150px">' + $("#quantidade").val() + '</td>';
             newRowItem.append(colsItem);
-            colsItem = '<td class="text-center"><div class="btn-group"><a href="#" onclick="remove(this, ' + codigo + ');" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></div></td>';
+            colsItem = '<td class="text-center"><div class="btn-group"><a href="#" data-act="remove" data-args="[&quot;__self__&quot;, ' + codigo + ']" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a></div></td>';
             newRowItem.append(colsItem);
             $("#table").append(newRowItem);
 

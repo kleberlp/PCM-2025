@@ -182,7 +182,7 @@
                                                     {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                                     @if (ViewBag.excluir)
                                                     {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
-                                                    <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@item.codigo, @item.codigo_unidade, '@item.data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-secondary" data-act="UpdateDataOrdemServico" data-args='[@item.codigo, @item.codigo_unidade, "@item.data_necessidade"]'><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
                                                     <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
                                                 </div>
                                             </td>
@@ -213,7 +213,7 @@
                                                     {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                                     @if (ViewBag.excluir)
                                                     {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
-                                                <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@item.codigo, @item.codigo_unidade, '@item.data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                <button type="button" class="btn btn-sm btn-secondary" data-act="UpdateDataOrdemServico" data-args='[@item.codigo, @item.codigo_unidade, "@item.data_necessidade"]'><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
                                                     <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
                                                 </div>
                                             </td>
@@ -229,7 +229,7 @@
                                                     {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                                     @if (ViewBag.excluir)
                                                     {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
-                                                <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@item.codigo, @item.codigo_unidade, '@item.data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                <button type="button" class="btn btn-sm btn-secondary" data-act="UpdateDataOrdemServico" data-args='[@item.codigo, @item.codigo_unidade, "@item.data_necessidade"]'><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
                                                     <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
                                                 </div>
                                             </td>
@@ -245,7 +245,7 @@
                                                     {<a href="@Url.Action("PlanoAcaoEdit", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i></a>}
                                                     @if (ViewBag.excluir)
                                                     {<a href="@Url.Action("PlanoAcaoDelete", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary"><i class="fa fa-times"></i></a>}
-                                                <button type="button" class="btn btn-sm btn-secondary" onclick="UpdateDataOrdemServico(@item.codigo, @item.codigo_unidade, '@item.data_necessidade');"><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
+                                                <button type="button" class="btn btn-sm btn-secondary" data-act="UpdateDataOrdemServico" data-args='[@item.codigo, @item.codigo_unidade, "@item.data_necessidade"]'><i class="si si-calendar" title="@PCM.WEB.Properties.Resources.alterar_data_plano_acao" data-toggle="tooltip"></i></button>
                                                     <a href="@Url.Action("PlanoAcaoView", "PlanoAcao", new { codigo = item.codigo, unidade = item.codigo_unidade })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-navicon"></i></a>
                                                 </div>
                                             </td>

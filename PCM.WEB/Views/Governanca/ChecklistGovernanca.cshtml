@@ -62,28 +62,28 @@
         <!-- END Collapsible Tasks Navigation -->
 
         <div class="gov-kpi">
-            <a class="gov-kpi-t gov-pend" onclick="reloadPage('1');">
+            <a class="gov-kpi-t gov-pend" data-act="reloadPage" data-args='["1"]'>
                 <div>
                     <div class="gov-kpi-n" data-speed="1000" data-to="@ViewBag.status.pendente" id="quantidade_indisponivel" name="quantidade_indisponivel">@ViewBag.status.pendente</div>
                     <div class="gov-kpi-l">@PCM.WEB.Properties.Resources.pendente</div>
                 </div>
                 <i class="fa fa-hotel gov-kpi-i d-none d-sm-block"></i>
             </a>
-            <a class="gov-kpi-t gov-ok" onclick="reloadPage('2');">
+            <a class="gov-kpi-t gov-ok" data-act="reloadPage" data-args='["2"]'>
                 <div>
                     <div class="gov-kpi-n" data-speed="1000" data-to="@ViewBag.status.concluido" id="quantidade_manutencao" name="quantidade_manutencao">@ViewBag.status.concluido</div>
                     <div class="gov-kpi-l">@PCM.WEB.Properties.Resources.concluido</div>
                 </div>
                 <i class="fa fa-hotel gov-kpi-i d-none d-sm-block"></i>
             </a>
-            <a class="gov-kpi-t gov-lib" onclick="reloadPage('3');">
+            <a class="gov-kpi-t gov-lib" data-act="reloadPage" data-args='["3"]'>
                 <div>
                     <div class="gov-kpi-n" data-speed="1000" data-to="@ViewBag.status.aguardandoLiberacao" id="quantidade_vistoria" name="quantidade_vistoria">@ViewBag.status.aguardandoLiberacao</div>
                     <div class="gov-kpi-l">@PCM.WEB.Properties.Resources.aguardando_liberacao</div>
                 </div>
                 <i class="fa fa-hotel gov-kpi-i d-none d-sm-block"></i>
             </a>
-            <a class="gov-kpi-t gov-ret" onclick="reloadPage('4');">
+            <a class="gov-kpi-t gov-ret" data-act="reloadPage" data-args='["4"]'>
                 <div>
                     <div class="gov-kpi-n"><span data-speed="1000" data-to="@ViewBag.status.retrabalho" id="quantidade_disponivel" name="quantidade_disponivel">@ViewBag.status.retrabalho</span></div>
                     <div class="gov-kpi-l">@PCM.WEB.Properties.Resources.retrabalho</div>
@@ -98,9 +98,9 @@
             <div class="block-header block-header-default bg-gd-default">
                 <h3 class="block-title text-white font-w600">Lista de UH</h3>
                 <div class="block-options">
-                    <button type="button" class="si si-grid btn-block-option text-white" onclick="$('#div_grid').show(); $('#div_list').hide()"></button>
-                    <button type="button" class="si si-list btn-block-option text-white" onclick="$('#div_list').show(); $('#div_grid').hide()"></button>
-                    <button type="button" class="si si-printer btn-block-option text-white" onclick="Codebase.helpers('print-page');"></button>
+                    <button type="button" class="si si-grid btn-block-option text-white" data-show="#div_grid" data-hide="#div_list"></button>
+                    <button type="button" class="si si-list btn-block-option text-white" data-show="#div_list" data-hide="#div_grid"></button>
+                    <button type="button" class="si si-printer btn-block-option text-white" data-act="Codebase.helpers" data-args='["print-page"]'></button>
                     <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="fullscreen_toggle"></button>
                 </div>
             </div>

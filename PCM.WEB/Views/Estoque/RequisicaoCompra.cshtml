@@ -146,7 +146,7 @@
                             <div class="col-md-12">
                                 <label>@PCM.WEB.Properties.Resources.arquivo</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="arquivo" name="arquivo" onchange="Arquivo();" accept="application/pdf">
+                                    <input type="file" class="custom-file-input" id="arquivo" name="arquivo" data-act="Arquivo" data-on="change" accept="application/pdf">
                                     <label id="lblArquivo" class="custom-file-label" for="arquivo"></label>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-hero col-12 btn-secondary text-center" data-toggle="click-ripple" type="button" onclick="$('#form_modal_approval').submit();">@PCM.WEB.Properties.Resources.aprovar.ToUpper()</button>
+                    <button class="btn btn-hero col-12 btn-secondary text-center" data-toggle="click-ripple" type="button" data-submit="#form_modal_approval">@PCM.WEB.Properties.Resources.aprovar.ToUpper()</button>
                 </div>
             </div>
         </div>
