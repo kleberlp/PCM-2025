@@ -94,6 +94,15 @@ para SDK-style e trocar `System.Data.SqlClient` → `Microsoft.Data.SqlClient`
 (atenção: o novo driver liga `Encrypt=True` por padrão — validar certificado do SQL Server
 ou ajustar a connection string conscientemente).
 
+> **TENTADA E REVERTIDA em 2026-08-27:** a conversão SDK-style multi-target
+> (`net48;net9.0`) da DAL/MODELS quebrou o build dos consumidores old-style com
+> packages.config (PCM.WEB): o restore falha no RID (`doesn't list 'win'`) e a
+> resolução cai em CS0006 (procura a DLL em `bin\Debug\` sem a subpasta do TFM).
+> Lição: **migrar os consumidores para PackageReference ANTES de multi-targetar
+> as bibliotecas**, ou deixar a Fase 1 para quando o PCM.WEB migrar (Fase 4).
+> A limpeza de código feita na tentativa (imports WPF mortos na DAL, `using
+> System.Web` morto no MODELS) foi mantida — é válida em qualquer formato.
+
 **Fase 2** — o padrão Worker Service já existe no repo (MESSAGE.SERVICE). Cada serviço
 4.8 é pequeno; a conversão é repetitiva. Aproveitar para tirar segredos do fonte
 (ver §4.1 — há senha de SMTP hardcoded hoje).
