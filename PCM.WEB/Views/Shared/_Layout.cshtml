@@ -43,6 +43,9 @@
 
     @Styles.Render("~/Content/codebase")
     @Styles.Render("~/Content/dashboard")
+
+    @* Manual integrado: botão "?" do cabeçalho e painel lateral. *@
+    <link rel="stylesheet" href="~/Content/css/manual.css" />
     @* CSS de impressão dos dashboards (Exportar PDF) — carregado só na impressão *@
     <link rel="stylesheet" href="~/Content/css/print-dashboard.css" media="print" />
 
@@ -71,6 +74,28 @@
 
     </div>
     <!-- End wrapper-->
+
+    @* Painel do manual (botão "?" do cabeçalho). Nasce vazio: o conteúdo chega
+       por AJAX ao abrir e fica em memória entre aberturas na mesma tela. *@
+    <div class="manual-backdrop" id="manualBackdrop"></div>
+    <div class="manual-painel" id="manualPainel" role="dialog" aria-labelledby="manualTitulo">
+        <div class="manual-h">
+            <div>
+                <h5 class="manual-titulo" id="manualTitulo">@PCM.WEB.Properties.Resources.manual</h5>
+                <div class="manual-sub" id="manualSubtitulo"></div>
+            </div>
+            <button type="button" class="manual-fechar" id="manualFechar" aria-label="Fechar">&times;</button>
+        </div>
+        <div class="manual-busca">
+            <input type="text" class="form-control form-control-sm" id="manualBusca"
+                   placeholder="@PCM.WEB.Properties.Resources.manual_buscar" autocomplete="off">
+        </div>
+        <div class="manual-corpo" id="manualCorpo"></div>
+        <div class="manual-f">
+            <span id="manualProcesso"></span>
+            <a href="#" class="js-hidden" id="manualEditar"></a>
+        </div>
+    </div>
     <!-- Section for main scripts render -->
     @*@Scripts.Render("~/plugins/codebase")*@
     @*@Scripts.Render("~/plugins/validation")*@
@@ -113,6 +138,7 @@
     <script src="~/Content/js/lib/flatpickr/flatpickr.js"></script>
     <script src="~/Content/js/pages/sidebar.js"></script>
     <script src="~/Content/js/codebase.js"></script>
+    <script src="~/Content/js/manual-panel.js"></script>
 
 
     <!-- Handler for local scripts -->

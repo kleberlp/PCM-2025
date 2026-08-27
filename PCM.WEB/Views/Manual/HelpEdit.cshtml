@@ -1,0 +1,28 @@
+@model PCM.WEB.MODELS.Manual
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("HelpIndex", "Manual")">@PCM.WEB.Properties.Resources.manual</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.editar</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+        @Html.Partial("_HelpForm", Model)
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    <script src="~/Content/js/pages/manual-edit.js"></script>
+}

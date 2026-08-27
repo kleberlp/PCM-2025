@@ -313,6 +313,7 @@
     <Compile Include="Controllers\TreinamentoController.cs" />
     <Compile Include="Controllers\QualidadeController.cs" />
     <Compile Include="Controllers\CadastroBasicoController.cs" />
+    <Compile Include="Controllers\ManualController.cs" />
     <Compile Include="Controllers\AuditoriaController.cs" />
     <Compile Include="Controllers\GovernancaController.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
@@ -394,6 +395,7 @@
     <Content Include="Content\css\ativofixo.css" />
     <Content Include="Content\css\codebase.css" />
     <Content Include="Content\css\pcm-ui.css" />
+    <Content Include="Content\css\manual.css" />
     <Content Include="Content\css\pages\home\dashboard-governanca.css" />
     <Content Include="Content\css\themes\corporate.min.css" />
     <Content Include="Content\css\themes\earth.min.css" />
@@ -447,6 +449,8 @@
     <Content Include="Content\js\pages\Governanca\jquery.desempenhoGovernanca.init.js" />
     <Content Include="Content\js\pcm.js" />
     <Content Include="Content\js\codebase.js" />
+    <Content Include="Content\js\manual-panel.js" />
+    <Content Include="Content\js\pages\manual-edit.js" />
     <Content Include="Content\js\core\bootstrap-notify.min.js" />
     <Content Include="Content\js\core\bootstrap.bundle.min - Cópia .js" />
     <Content Include="Content\js\core\bootstrap.bundle.min.js" />
@@ -2188,6 +2192,10 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Manual\HelpIndex.cshtml" />
+    <Content Include="Views\Manual\HelpInsert.cshtml" />
+    <Content Include="Views\Manual\HelpEdit.cshtml" />
+    <Content Include="Views\Manual\_HelpForm.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\CadastroBasico\UnidadeIndex.cshtml" />
     <Content Include="Views\CadastroBasico\UnidadeInsert.cshtml" />

@@ -46,6 +46,26 @@
         <!-- Right: notificações + sair -->
         <div class="content-header-section">
 
+            @* Manual da tela. O "?" fica no canto porque é ajuda, não operação:
+               quem precisa dele procura no canto, e não no meio dos botões da
+               tela. O conteúdo vem por AJAX ao abrir — carregar manual em toda
+               tela seria peso à toa. *@
+            @{
+                var rotaManual = Url.RequestContext.RouteData.Values;
+            }
+            <button type="button" class="btn btn-circle btn-dual-secondary btn-manual" id="btnManual"
+                    title="@PCM.WEB.Properties.Resources.manual"
+                    data-url="@Url.Action("ManualTela", "Manual")"
+                    data-url-edit="@Url.Action("HelpEdit", "Manual")"
+                    data-url-new="@Url.Action("HelpInsert", "Manual")"
+                    data-controller="@Convert.ToString(rotaManual["controller"])"
+                    data-action="@Convert.ToString(rotaManual["action"])"
+                    data-msg-empty="@PCM.WEB.Properties.Resources.manual_vazio"
+                    data-msg-nomatch="@PCM.WEB.Properties.Resources.manual_sem_resultado"
+                    data-msg-process="@PCM.WEB.Properties.Resources.manual_ver_tambem"
+                    data-msg-edit="@PCM.WEB.Properties.Resources.editar"
+                    data-msg-create="@PCM.WEB.Properties.Resources.manual_criar">?</button>
+
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-rounded btn-dual-secondary"
                         id="page-header-notifications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

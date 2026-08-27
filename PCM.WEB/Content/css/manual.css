@@ -1,0 +1,274 @@
+/* ---------------------------------------------------------------------------
+   Manual integrado — botão "?" do cabeçalho, painel lateral e cadastro.
+
+   O painel é próprio (não usa o side-overlay do tema, que já pertence ao
+   perfil, nem o offcanvas do Bootstrap, que o tema não estiliza): um painel
+   fixo à direita que desliza ao abrir, com pano de fundo clicável.
+   --------------------------------------------------------------------------- */
+
+.js-hidden { display: none !important; }
+
+/* O "?" ao lado das notificações: mesmo desenho dos botões do cabeçalho,
+   com peso de fonte para o sinal não sumir. */
+#page-header .btn-manual {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+/* ── painel ── */
+
+.manual-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .35);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease;
+    z-index: 1050;
+}
+
+.manual-backdrop.aberto { opacity: 1; visibility: visible; }
+
+.manual-painel {
+    position: fixed;
+    top: 0;
+    right: -460px;
+    width: 430px;
+    max-width: 92vw;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -4px 0 18px rgba(0, 0, 0, .18);
+    display: flex;
+    flex-direction: column;
+    transition: right .25s ease;
+    z-index: 1051;
+}
+
+.manual-painel.aberto { right: 0; }
+
+.manual-painel .manual-h {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #f2f4f6;
+}
+
+.manual-painel .manual-titulo { font-size: 15px; font-weight: 700; margin: 0; }
+.manual-painel .manual-sub { color: #8a9099; font-size: 11.5px; margin-top: 3px; }
+
+.manual-painel .manual-fechar {
+    border: 0;
+    background: none;
+    font-size: 22px;
+    line-height: 1;
+    color: #8a9099;
+    cursor: pointer;
+    padding: 0 2px;
+}
+
+.manual-painel .manual-fechar:hover { color: #343a40; }
+
+.manual-painel .manual-busca {
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid #f2f4f6;
+}
+
+.manual-painel .manual-corpo { flex: 1 1 auto; overflow-y: auto; }
+
+.manual-painel .manual-sec { border-bottom: 1px solid #f2f4f6; }
+
+.manual-painel .manual-sec-h {
+    padding: 9px 16px;
+    font-weight: 700;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.manual-painel .manual-sec-h i { color: #adb5bd; font-size: 11px; }
+.manual-painel .manual-sec-h .n { color: #cc0000; font-size: 11px; margin-right: 7px; }
+
+.manual-painel .manual-sec-b {
+    padding: 0 16px 12px;
+    color: #495057;
+    font-size: 12.5px;
+    line-height: 1.55;
+}
+
+.manual-painel .manual-sec-b p { margin: 0 0 8px; }
+.manual-painel .manual-sec-b ul,
+.manual-painel .manual-sec-b ol { margin: 6px 0 8px; padding-left: 20px; }
+.manual-painel .manual-sec-b li { margin: 4px 0; }
+
+/* Markdown do conteúdo. O título da seção já é o topo, então o que vem do texto
+   entra como subtítulo — daí os tamanhos pequenos e o peso menor. */
+.manual-painel .manual-sec-b h4,
+.manual-painel .manual-sec-b h5,
+.manual-painel .manual-sec-b h6 {
+    margin: 12px 0 5px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #343a40;
+}
+
+.manual-painel .manual-sec-b h4 { font-size: 13px; }
+.manual-painel .manual-sec-b h5 { font-size: 12.5px; }
+.manual-painel .manual-sec-b h6 { font-size: 12px; color: #5b6675; }
+
+.manual-painel .manual-sec-b a { color: #35618f; text-decoration: underline; }
+
+.manual-painel .manual-sec-b code {
+    background: #f2f4f7;
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-size: 11.5px;
+    color: #b02a37;
+    word-break: break-word;
+}
+
+.manual-painel .manual-sec-b pre {
+    background: #f7f8fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 9px 11px;
+    margin: 8px 0;
+    overflow-x: auto;
+}
+
+.manual-painel .manual-sec-b pre code {
+    background: none;
+    padding: 0;
+    color: #495057;
+    white-space: pre;
+}
+
+.manual-painel .manual-sec-b blockquote {
+    margin: 8px 0;
+    padding: 6px 11px;
+    border-left: 3px solid #ced4da;
+    background: #f7f8fa;
+    color: #5b6675;
+}
+
+.manual-painel .manual-sec-b hr {
+    border: 0;
+    border-top: 1px solid #eef1f4;
+    margin: 12px 0;
+}
+
+/* Tabela do manual: o painel é estreito, então ela rola sozinha em vez de
+   empurrar o conteúdo para fora. */
+.manual-painel .manual-tabela {
+    overflow-x: auto;
+    margin: 9px 0;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+}
+
+.manual-painel .manual-tabela table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+}
+
+.manual-painel .manual-tabela th,
+.manual-painel .manual-tabela td {
+    padding: 6px 9px;
+    border-bottom: 1px solid #f2f4f6;
+    text-align: left;
+    vertical-align: top;
+}
+
+.manual-painel .manual-tabela th {
+    background: #f7f8fa;
+    font-weight: 700;
+    color: #343a40;
+    white-space: nowrap;
+}
+
+.manual-painel .manual-tabela tr:last-child td { border-bottom: 0; }
+
+.manual-painel .manual-nota {
+    padding: 7px 10px;
+    border-radius: 0 4px 4px 0;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.manual-painel .manual-nota.dica  { background: #f4f8ff; border-left: 3px solid #0665d0; }
+.manual-painel .manual-nota.aviso { background: #fffbeb; border-left: 3px solid #ffc107; }
+.manual-painel .manual-nota p:last-child { margin-bottom: 0; }
+
+.manual-painel .manual-img {
+    display: block;
+    max-width: 100%;
+    margin-top: 10px;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+}
+
+/* Vídeo incorporado: 16:9 dentro da largura do painel. */
+.manual-painel .manual-video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    margin-top: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #000;
+}
+
+.manual-painel .manual-video iframe,
+.manual-painel .manual-video video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.manual-painel .manual-video-link {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    word-break: break-all;
+}
+
+.manual-painel .manual-vazio {
+    padding: 26px 16px;
+    text-align: center;
+    color: #adb5bd;
+    font-size: 12.5px;
+}
+
+.manual-painel .manual-f {
+    border-top: 1px solid #eef1f4;
+    padding: 9px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 11.5px;
+    color: #8a9099;
+}
+
+.manual-painel .manual-f a { white-space: nowrap; }
+
+/* ── cadastro (HelpInsert/HelpEdit) ──
+   A miniatura da seção não pode dominar o formulário. */
+.secao .secao-img {
+    max-height: 90px;
+    max-width: 100%;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.secao .secao-num {
+    font-size: 11px;
+    white-space: nowrap;
+}

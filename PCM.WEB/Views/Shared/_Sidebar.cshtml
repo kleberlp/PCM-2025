@@ -211,6 +211,16 @@
                                         <a class="@Html.IsSelected(action: "PerfilHierarquia", cssClass: "active") font-size-sm" href="@Url.Action("PerfilHierarquia", "Administracao")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.perfil_hierarquia</span></a>
                                     </li>
                                 }
+                                @* Manutenção do manual integrado (botão "?"). Entra pelo grupo de quem
+                                   administra perfis: é quem mantém o manual enquanto o formulário
+                                   'adm_manual' não for cadastrado (ver o passo 8 do script
+                                   PCM.WEB.DAL/Scripts/2026-08-27_manual_integrado.sql). *@
+                                @if ((bool)Session["adm_perfil"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "HelpIndex", cssClass: "active") font-size-sm" href="@Url.Action("HelpIndex", "Manual")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.manual</span></a>
+                                    </li>
+                                }
                             </ul>
                         </li>
                     }
