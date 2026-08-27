@@ -2540,33 +2540,14 @@ namespace PCM.WEB.Controllers
 
                 if (body != "")
                 {
-                    string remetente = "no-reply@pcmbysim.com.br"; //O e-mail do remetente
-                    MailMessage mail = new MailMessage();
-                    foreach (string email in to.Split(new char[] { ';' }))
-                    {
-                        mail.To.Add(email);
-                    }
-
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    mail.From = new MailAddress(remetente, "PCM by SIM", System.Text.Encoding.UTF8);
-                    mail.Subject = String.Concat("Nº Requisição: ", numero_requisicao, " - ", DateTime.Now.ToShortTimeString());
-                    mail.SubjectEncoding = System.Text.Encoding.UTF8;
-                    mail.Body = body;
-                    mail.BodyEncoding = System.Text.Encoding.UTF8;
-                    mail.IsBodyHtml = true;
-                    mail.Priority = MailPriority.High;
-                    SmtpClient client = new SmtpClient();
-                    client.Credentials = new System.Net.NetworkCredential(remetente, "$Noreply@2026$");
-                    client.Port = 465;
-                    client.Host = "smtpout.secureserver.net";
-                    client.EnableSsl = true;
-
                     try
                     {
-                        client.Send(mail);
+                        // EmailSender da DAL: Brevo/SMTP conforme Web.config
+                        PCM.WEB.DAL.EmailSender.EnviarEmail(to, String.Concat("Nº Requisição: ", numero_requisicao, " - ", DateTime.Now.ToShortTimeString()), body);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
+                        // envio é melhor-esforço: a requisição já foi gravada
                     }
                 }
 

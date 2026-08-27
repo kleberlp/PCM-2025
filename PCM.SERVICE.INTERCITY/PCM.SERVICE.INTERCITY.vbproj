@@ -52,6 +52,7 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -77,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\SQLHelper.vb" />
+    <Compile Include="Module\EmailSender.vb" />
     <Compile Include="Module\modDeclaration.vb" />
     <Compile Include="Module\modFunction.vb" />
     <Compile Include="My Project\Application.Designer.vb">

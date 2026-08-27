@@ -1597,29 +1597,13 @@ Public Class Qualidade
 
             While oSqlDataReader.Read
 
-                Dim oMailMessage As New MailMessage()
-
-                For Each sEmail As String In oSqlDataReader.Item("to").ToString.Split(";")
-                    oMailMessage.To.Add(sEmail)
-                Next
-
-                oMailMessage.From = New MailAddress("no-reply@pcmbysim.com.br", "PCM by SIM", System.Text.Encoding.UTF8)
-                oMailMessage.Subject = oSqlDataReader.Item("subject")
-                oMailMessage.SubjectEncoding = System.Text.Encoding.UTF8
-                oMailMessage.Body = oSqlDataReader.Item("body")
-                oMailMessage.BodyEncoding = System.Text.Encoding.UTF8
-                oMailMessage.IsBodyHtml = True
-                oMailMessage.Priority = MailPriority.Normal
-                Dim oSmtpClient As New SmtpClient()
-                oSmtpClient.Credentials = New System.Net.NetworkCredential("no-reply@pcmbysim.com.br", "$Noreply@2026$")
-                oSmtpClient.Port = 465
-                oSmtpClient.Host = "smtpout.secureserver.net"
-                oSmtpClient.EnableSsl = True
-
                 Try
-                    oSmtpClient.Send(oMailMessage)
+                    EnviarEmail(sPara:=oSqlDataReader.Item("to").ToString,
+                                sAssunto:=oSqlDataReader.Item("subject").ToString,
+                                sCorpoHtml:=oSqlDataReader.Item("body").ToString,
+                                ePrioridade:=MailPriority.Normal)
                 Catch ex As Exception
-
+                    ' envio é melhor-esforço: uma falha não interrompe os demais
                 End Try
 
             End While

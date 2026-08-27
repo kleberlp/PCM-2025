@@ -79,6 +79,7 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
@@ -124,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\SQLHelper.vb" />
+    <Compile Include="Module\EmailSender.vb" />
     <Compile Include="Module\modDeclaration.vb" />
     <Compile Include="Module\modFunction.vb" />
     <Compile Include="My Project\Application.Designer.vb">

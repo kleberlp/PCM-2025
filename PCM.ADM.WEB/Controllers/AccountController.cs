@@ -97,26 +97,13 @@ namespace PCM.ADM.WEB.Controllers
             {
                 string password = getPassword(8);
 
-                string remetente = "no-reply@pcmbysim.com.br"; //O e-mail do remetente
-                MailMessage mail = new MailMessage();
-                mail.To.Add(email);
-                mail.From = new MailAddress(remetente, "PCM by SIM", System.Text.Encoding.UTF8);
-                mail.Subject = String.Concat("Solicitação de nova senha. - ", DateTime.Now.ToShortDateString(), " ", DateTime.Now.ToShortTimeString());
-                mail.SubjectEncoding = System.Text.Encoding.UTF8;
-                mail.Body = String.Concat("Olá, <br /> <br />Conforme sua solicitação, segue abaixo sua nova senha.<br /><br />Nova Senha: <b>", password, "</b><br /><br /><b><i> Obs.: Esta senha é provisória e deve ser alterada assim que acessar o PCM by SIM. </i></b><br /><br />Atenciosamente, <br />PCM by SIM");
-                mail.BodyEncoding = System.Text.Encoding.UTF8;
-                mail.IsBodyHtml = true;
-                mail.Priority = MailPriority.High;
-                SmtpClient client = new SmtpClient(); 
-                client.Credentials = new System.Net.NetworkCredential(remetente, "$Noreply@2026$");
-                client.Port = 465;
-                client.Host = "smtpout.secureserver.net";
-                client.EnableSsl = false;
+                string assunto = String.Concat("Solicitação de nova senha. - ", DateTime.Now.ToShortDateString(), " ", DateTime.Now.ToShortTimeString());
+                string corpo = String.Concat("Olá, <br /> <br />Conforme sua solicitação, segue abaixo sua nova senha.<br /><br />Nova Senha: <b>", password, "</b><br /><br /><b><i> Obs.: Esta senha é provisória e deve ser alterada assim que acessar o PCM by SIM. </i></b><br /><br />Atenciosamente, <br />PCM by SIM");
 
                 try
                 {
-                    //Envia E-mail
-                    client.Send(mail);
+                    //Envia E-mail (EmailSender da DAL: Brevo/SMTP conforme Web.config)
+                    PCM.WEB.DAL.EmailSender.EnviarEmail(email, assunto, corpo);
 
                     //Atualiza Senha
                     oAccount.UpdatePassword(sEmail: email,
