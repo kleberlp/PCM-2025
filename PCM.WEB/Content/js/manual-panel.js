@@ -7,26 +7,6 @@
 (function () {
     'use strict';
 
-    var $btn = jQuery('#btnManual');
-    if (!$btn.length) return;
-
-    var cfg = {
-        url:        $btn.attr('data-url'),
-        urlEdit:    $btn.attr('data-url-edit'),
-        urlNew:     $btn.attr('data-url-new'),
-        controller: $btn.attr('data-controller'),
-        action:     $btn.attr('data-action'),
-        msgEmpty:   $btn.attr('data-msg-empty'),
-        msgNoMatch: $btn.attr('data-msg-nomatch'),
-        msgProcess: $btn.attr('data-msg-process'),
-        msgEdit:    $btn.attr('data-msg-edit'),
-        msgCreate:  $btn.attr('data-msg-create')
-    };
-
-    var manual = null;   // o que veio do servidor, guardado entre aberturas
-    var canEdit = false;
-    var buscou = false;
-
     function escapar(txt) {
         return jQuery('<div>').text(txt == null ? '' : txt).html();
     }
@@ -98,10 +78,17 @@
                 continue;
             }
 
-            // Tabela: linha de células seguida da linha de traços.
-            if (linha.indexOf('|') >= 0 && i + 1 < linhas.length && ehSeparadorTabela(linhas[i + 1])) {
+            // Tabela: linha de células seguida da linha de traços — ou, sem os
+            // traços, duas linhas seguidas no formato |...|: quem escreveu assim
+            // queria uma tabela, e pipes crus no painel não ajudam ninguém.
+            var proxima = i + 1 < linhas.length ? linhas[i + 1] : '';
+            var comSeparador = linha.indexOf('|') >= 0 && ehSeparadorTabela(proxima);
+            var semSeparador = !comSeparador &&
+                               /^\s*\|.*\|\s*$/.test(linha) &&
+                               /^\s*\|.*\|\s*$/.test(proxima) && !ehSeparadorTabela(proxima);
+            if (comSeparador || semSeparador) {
                 var cab = celulas(linha);
-                i += 2;
+                i += comSeparador ? 2 : 1;
                 var corpo = [];
                 while (i < linhas.length && linhas[i].indexOf('|') >= 0 && linhas[i].trim() !== '') {
                     corpo.push(celulas(linhas[i])); i++;
@@ -168,6 +155,33 @@
 
         return html.join('');
     }
+
+    // O cadastro do manual (HelpInsert/HelpEdit) pré-visualiza a seção com ESTE
+    // formatador: o autor vê a tabela, o código e a lista exatamente como o
+    // painel vai mostrar, e não uma segunda implementação que divergiria dele.
+    window.PcmManualPreview = { formatar: formatar };
+
+    // Daqui para baixo é o painel em si: sem o "?" no cabeçalho (tela de login,
+    // layout sem header), só o formatador acima fica disponível.
+    var $btn = jQuery('#btnManual');
+    if (!$btn.length) return;
+
+    var cfg = {
+        url:        $btn.attr('data-url'),
+        urlEdit:    $btn.attr('data-url-edit'),
+        urlNew:     $btn.attr('data-url-new'),
+        controller: $btn.attr('data-controller'),
+        action:     $btn.attr('data-action'),
+        msgEmpty:   $btn.attr('data-msg-empty'),
+        msgNoMatch: $btn.attr('data-msg-nomatch'),
+        msgProcess: $btn.attr('data-msg-process'),
+        msgEdit:    $btn.attr('data-msg-edit'),
+        msgCreate:  $btn.attr('data-msg-create')
+    };
+
+    var manual = null;   // o que veio do servidor, guardado entre aberturas
+    var canEdit = false;
+    var buscou = false;
 
     /* ── vídeo ──
        YouTube, Vimeo e Google Drive viram player incorporado; arquivo de vídeo solto

@@ -265,9 +265,13 @@ namespace PCM.WEB.Controllers
                     subtitulo = subtitulo ?? "",
                     ativo = ativo,
                     itens = JsonConvert.DeserializeObject<List<ManualItem>>(itensJson ?? "[]") ?? new List<ManualItem>(),
-                    // Telas irmãs que compartilham este manual (além da principal)
-                    telas = JsonConvert.DeserializeObject<List<ManualTela>>(
-                                string.IsNullOrWhiteSpace(telasJson) ? "[]" : telasJson) ?? new List<ManualTela>()
+                    // Telas irmãs que compartilham este manual (além da principal).
+                    // telasJson vazio = o cliente não carregou a lista (JS antigo em
+                    // cache): vai null e o banco PRESERVA as associações gravadas.
+                    // "[]" é limpeza explícita de quem viu os chips e removeu todos.
+                    telas = string.IsNullOrWhiteSpace(telasJson)
+                                ? null
+                                : JsonConvert.DeserializeObject<List<ManualTela>>(telasJson) ?? new List<ManualTela>()
                 };
 
                 if (string.IsNullOrWhiteSpace(manual.titulo))

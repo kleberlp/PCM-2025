@@ -6892,6 +6892,15 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Pré-visualizar.
+        /// </summary>
+        public static string manual_previa {
+            get {
+                return ResourceManager.GetString("manual_previa", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Outras telas que usam este mesmo manual.
         /// </summary>
         public static string manual_telas_adicionais {

@@ -49,6 +49,11 @@ jQuery(function () {
        Kanban): cadastra-se o texto uma vez e o "?" mostra em todas. A tela
        principal continua nos campos acima; estas sao as adicionais. */
 
+    // Se o servidor nao mandou a lista (DLL antiga no ar, JSON sem "telas"), o
+    // salvar NAO pode enviar lista vazia e apagar as associacoes gravadas: nesse
+    // caso vai telasJson vazio e o banco preserva o que tem.
+    var telasCarregadas = Array.isArray(manual.telas);
+
     var telasExtras = (manual.telas || []).map(function (t) {
         return { controller: t.controller || '', action: t.action || '' };
     });
@@ -180,6 +185,29 @@ jQuery(function () {
         renumerar();
     });
 
+    /* ── pré-visualização ──
+       Mesmo formatador do painel "?" (manual-panel.js): o autor ve a tabela, o
+       codigo e a lista como o leitor vai ver, e nao outra implementacao que
+       divergiria dele. Com a previa aberta, atualiza enquanto digita. */
+
+    function atualizarPrevia($s) {
+        if (!window.PcmManualPreview) return;
+        $s.find('.secao-previa').html(window.PcmManualPreview.formatar($s.find('.secao-texto').val() || ''));
+    }
+
+    jQuery(document).on('click', '.secao-previa-btn', function (e) {
+        e.preventDefault();
+        var $s = jQuery(this).closest('.secao');
+        var abrir = $s.find('.secao-previa').hasClass('js-hidden');
+        $s.find('.secao-previa').toggleClass('js-hidden', !abrir);
+        if (abrir) atualizarPrevia($s);
+    });
+
+    jQuery(document).on('input', '.secao-texto', function () {
+        var $s = jQuery(this).closest('.secao');
+        if (!$s.find('.secao-previa').hasClass('js-hidden')) atualizarPrevia($s);
+    });
+
     /* ── imagem ──
        Sobe na hora de escolher, e não junto do salvar: assim o autor vê a
        imagem que escolheu antes de gravar o manual. */
@@ -251,7 +279,10 @@ jQuery(function () {
                 subtitulo: jQuery('#subtituloManual').val(),
                 ativo: jQuery('#ativoManual').val() === '1',
                 itensJson: JSON.stringify(secoes),
-                telasJson: JSON.stringify(processo ? [] : telasExtras)
+                // Vazio = "nao mexa nas telas gravadas" (lista nao carregou);
+                // "[]" e uma limpeza de verdade, pedida por quem viu os chips.
+                telasJson: processo ? '[]'
+                    : (telasCarregadas || telasExtras.length) ? JSON.stringify(telasExtras) : ''
             },
             success: function (r) {
                 $btn.prop('disabled', false);

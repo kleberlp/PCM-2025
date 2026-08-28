@@ -173,7 +173,7 @@ GO
 
 
 -- =============================================================================================
--- 4. GRAVA O MANUAL — telas adicionais em JSON, substituindo as anteriores
+-- 4. GRAVA O MANUAL — telas adicionais em JSON ('[]' limpa; NULL/vazio preserva as gravadas)
 -- =============================================================================================
 IF OBJECT_ID('dbo.sp_save_manual', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[sp_save_manual];
@@ -259,8 +259,12 @@ BEGIN
 
         END
 
-        -- Telas adicionais: sempre reescritas por inteiro (manual de processo nao tem tela).
-        DELETE FROM tb_manual_tela WHERE codigo_manual = @codigo;
+        -- Telas adicionais: @telas NULL ou vazio PRESERVA o que esta gravado — e um chamador
+        -- que nao carregou a lista (DLL/JS antigos no ar), e salvar o texto do manual nao pode
+        -- apagar associacoes por tabela. JSON presente (mesmo '[]') substitui por inteiro; e
+        -- manual de processo nao tem tela, entao sempre limpa.
+        IF @tipoOk = 'P' OR ISNULL(@telas, '') <> ''
+            DELETE FROM tb_manual_tela WHERE codigo_manual = @codigo;
 
         IF @tipoOk = 'S' AND ISNULL(@telas, '') <> ''
             INSERT INTO tb_manual_tela (codigo_manual, controller, [action])
