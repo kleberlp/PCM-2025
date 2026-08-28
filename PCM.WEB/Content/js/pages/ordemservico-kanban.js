@@ -8,8 +8,9 @@
 //    descrição
 //    relógio desde a abertura · aberta dd/MM/yyyy HH:mm
 //
-//  Relógio colorido pela data_necessidade: vermelho hoje > prazo,
-//  amarelo hoje = prazo, verde hoje < prazo (neutro em concluída).
+//  Cartao: fundo vermelho quando atrasada (hoje > data_necessidade), verde
+//  quando concluida, pulso quando passa do tempo maximo de atendimento.
+//  O relogio em si fica sempre cinza.
 //
 //  Status reais da tb_pcm_ordem_servico: 1 Em Aberto, 3 Atrasada
 //  (derivado pela SP — coluna não aceita drop), 5 Vinculada, 4 Concluída.
@@ -213,8 +214,11 @@
 
         // linha 4: relógio desde a abertura + data/hora da abertura
         if (abertoEm) {
+            // Sempre cinza: quem sinaliza atraso agora e o fundo do cartao
+            // (vermelho) e o pulso do tempo maximo — colorir o relogio tambem
+            // so competiria com eles.
             var rel = document.createElement('div');
-            rel.className = 'kb-card-relogio ' + prazoCls;
+            rel.className = 'kb-card-relogio kb-rel-neutro';
             rel.setAttribute('data-aberto-em', abertoEm.getTime());
 
             var icone = document.createElement('i');
