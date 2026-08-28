@@ -301,15 +301,15 @@
                 </div>
             </div>
 
-            @* ================= RANKING GERAL DE CAMAREIRAS =================
-               Mesmo cálculo e mesmo layout do Desempenho da Governança: as duas telas
-               dividem o governanca-ranking-camareira.js, para não divergirem. *@
-            @{
-                var _camareiras = ViewBag.camareiras as List<PCM.WEB.MODELS.CamareiraDesempenhoItem>;
-                var _camareirasJson = _camareiras != null
-                    ? JsonConvert.SerializeObject(_camareiras.Select(c => new object[] { c.Nome, c.UHsArrumadas, c.NC, c.Retrabalho, c.DiasTrabalhados }).ToList())
-                    : "[]";
-            }
+            // ================= RANKING GERAL DE CAMAREIRAS =================
+            // Mesmo calculo e mesmo layout do Desempenho da Governanca: as duas telas
+            // dividem o governanca-ranking-camareira.js, para nao divergirem.
+            // (estamos dentro do bloco de codigo do Html.BeginForm — sem @ aqui)
+            var _camareiras = ViewBag.camareiras as List<PCM.WEB.MODELS.CamareiraDesempenhoItem>;
+            var _camareirasJson = _camareiras != null
+                ? JsonConvert.SerializeObject(_camareiras.Select(c => new object[] { c.Nome, c.UHsArrumadas, c.NC, c.Retrabalho, c.DiasTrabalhados }).ToList())
+                : "[]";
+
             <div class="dashboard-section">
                 <div class="section-title">
                     Ranking Geral de Camareiras
