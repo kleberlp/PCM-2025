@@ -123,6 +123,15 @@
 
             <textarea class="form-control secao-texto" rows="4" placeholder="@PCM.WEB.Properties.Resources.manual_conteudo_dica"></textarea>
 
+            @* Prévia com o formatador do próprio painel (manual-panel.js): o autor
+               confere a tabela ou a lista renderizada antes de salvar. *@
+            <div class="text-right mt-5">
+                <button type="button" class="btn btn-sm btn-secondary secao-previa-btn">
+                    <i class="fa fa-eye mr-5"></i>@PCM.WEB.Properties.Resources.manual_previa
+                </button>
+            </div>
+            <div class="manual-preview secao-previa js-hidden"></div>
+
             <div class="form-group row mt-10 mb-0">
                 <div class="col-md-3 mt-5">
                     <select class="form-control form-control-sm secao-tipo-nota">

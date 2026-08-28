@@ -448,13 +448,17 @@ Public Class Manual
             oSqlParameter(i).Size = 100
             oSqlParameter(i).Value = If(sUsuario, "") : i += 1
 
-            'Seta Parametros - Telas adicionais (JSON) — o mesmo manual servindo telas irmas
+            'Seta Parametros - Telas adicionais (JSON) — o mesmo manual servindo telas irmas.
+            'Nothing = quem chamou nao carregou a lista, e a procedure preserva as
+            'associacoes gravadas; lista (mesmo vazia) substitui por inteiro.
             oSqlParameter(i) = New SqlParameter
             oSqlParameter(i).ParameterName = "telas"
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.NVarChar
             oSqlParameter(i).Size = -1
-            oSqlParameter(i).Value = Newtonsoft.Json.JsonConvert.SerializeObject(If(oManual.telas, New List(Of ManualTela)))
+            oSqlParameter(i).Value = If(oManual.telas Is Nothing,
+                                        CType(DBNull.Value, Object),
+                                        Newtonsoft.Json.JsonConvert.SerializeObject(oManual.telas))
 
             'Executa Query
             Return CInt(ExecuteScalar(sConnection, CommandType.StoredProcedure, "sp_save_manual", oSqlParameter))

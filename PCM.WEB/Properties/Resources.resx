@@ -2403,6 +2403,9 @@
   <data name="manual_subtitulo" xml:space="preserve">
     <value>Subtítulo</value>
   </data>
+  <data name="manual_previa" xml:space="preserve">
+    <value>Pré-visualizar</value>
+  </data>
   <data name="manual_conteudo_dica" xml:space="preserve">
     <value>Texto da seção em Markdown: **negrito**, listas com "- ", tabelas com | e imagens com ![](url).</value>
   </data>
