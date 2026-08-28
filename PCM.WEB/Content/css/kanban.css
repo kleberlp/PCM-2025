@@ -19,6 +19,7 @@
 }
 
 .kb-unidade { flex: 0 1 260px; }
+.kb-refresh { flex: 0 1 220px; border-radius: 8px; }
 
 /* ---- quadro ---- */
 .kb-board {
@@ -134,9 +135,13 @@
     white-space: nowrap;
 }
 
-.kb-chip-prioridade { background: #ef5350; border-color: #ef5350; color: #fff; }
-.kb-chip-prioridade-baixa { background: #22b14c; border-color: #22b14c; color: #fff; }
-.kb-chip-prioridade-media { background: #ff8000; border-color: #ff8000; color: #fff; }
+/* Prioridade pelo codigo da tb_cad_prioridade:
+   0 critico vermelho · 1 alta laranja · 2 media mostarda · 3 baixa amarelo claro */
+.kb-pri-critica { background: #d32f2f; border-color: #d32f2f; color: #fff; }
+.kb-pri-alta    { background: #f57c00; border-color: #f57c00; color: #fff; }
+.kb-pri-media   { background: #c9a227; border-color: #c9a227; color: #fff; }
+/* amarelo claro pede tinta escura para o texto continuar legivel */
+.kb-pri-baixa   { background: #f7e08a; border-color: #e6cd6a; color: #6b5900; }
 
 .kb-card-local {
     font-weight: 700;

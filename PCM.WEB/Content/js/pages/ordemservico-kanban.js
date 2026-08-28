@@ -28,7 +28,7 @@
     var cfg = {
         urlLista: $root.data('url-lista'),
         urlStatus: $root.data('url-status'),
-        urlView: $root.data('url-view'),
+        urlApontamento: $root.data('url-apontamento'),
         empresa: $root.data('empresa'),
         usuario: $root.data('usuario'),
         unidade: $root.data('unidade'),
@@ -91,12 +91,16 @@
         return el;
     }
 
-    function classePrioridade(nome) {
-        var s = (nome || '').toUpperCase();
-        if (s.indexOf('ALTA') >= 0 || s.indexOf('URGEN') >= 0) { return 'kb-chip-prioridade'; }
-        if (s.indexOf('MÉDIA') >= 0 || s.indexOf('MEDIA') >= 0) { return 'kb-chip-prioridade-media'; }
-        if (s.indexOf('BAIXA') >= 0) { return 'kb-chip-prioridade-baixa'; }
-        return '';
+    // Cor pelo codigo da prioridade (tb_cad_prioridade):
+    // 0 critico vermelho · 1 alta laranja · 2 media mostarda · 3 baixa amarelo claro
+    function classePrioridade(os) {
+        switch (Number(os.codigo_prioridade)) {
+            case 0: return 'kb-pri-critica';
+            case 1: return 'kb-pri-alta';
+            case 2: return 'kb-pri-media';
+            case 3: return 'kb-pri-baixa';
+            default: return '';
+        }
     }
 
     function linhaIcone(classeLinha, classeIcone, texto) {
@@ -123,7 +127,7 @@
         var chips = document.createElement('div');
         chips.className = 'kb-card-chips';
         if (os.origem) { chips.appendChild(chip(os.origem)); }
-        if (os.prioridade) { chips.appendChild(chip(os.prioridade, classePrioridade(os.prioridade))); }
+        if (os.prioridade) { chips.appendChild(chip(os.prioridade, classePrioridade(os))); }
         card.appendChild(chips);
 
         if (os.numero_documento) {
@@ -187,13 +191,22 @@
             var itens = ordens.filter(function (os) { return os.status === st && combina(os); });
 
             itens.sort(function (a, b) {
-                if (ordenacao === 'prazo') {
-                    // menor prazo primeiro (necessidade mais próxima/estourada no topo)
-                    return (parseData(a.data_necessidade) || 0) - (parseData(b.data_necessidade) || 0) ||
-                           (parseData(a.data) || 0) - (parseData(b.data) || 0);
+                switch (ordenacao) {
+                    case 'abertura':
+                        // abertura mais recente primeiro
+                        return (parseData(b.data) || 0) - (parseData(a.data) || 0);
+                    case 'data':
+                        // menor prazo primeiro (necessidade mais próxima/estourada no topo)
+                        return (parseData(a.data_necessidade) || 0) - (parseData(b.data_necessidade) || 0) ||
+                               (parseData(a.data) || 0) - (parseData(b.data) || 0);
+                    case 'prioridade':
+                        // crítica (0) primeiro; empate desempata pela mais antiga
+                        return Number(a.codigo_prioridade) - Number(b.codigo_prioridade) ||
+                               (parseData(a.data) || 0) - (parseData(b.data) || 0);
+                    default:
+                        // 'tempo': mais tempo aberta primeiro
+                        return (parseData(a.data) || 0) - (parseData(b.data) || 0);
                 }
-                // mais tempo aberta primeiro
-                return (parseData(a.data) || 0) - (parseData(b.data) || 0);
             });
 
             var wrap = $('[data-cards="' + st + '"]');
@@ -250,11 +263,35 @@
     $('#kb-ordenar').on('change', render);
     $('#kb-atualizar').on('click', carregar);
 
-    // abrir a O.S. (clique simples no cartão)
+    // ---------- atualização automática ----------
+    // A escolha fica no navegador de quem usa: o quadro costuma ficar aberto
+    // em telão da manutenção, e reconfigurar a cada abertura seria trabalho à toa.
+    var timerRefresh = null;
+
+    function aplicarRefresh() {
+        var seg = Number($('#kb-refresh').val()) || 0;
+
+        if (timerRefresh) { clearInterval(timerRefresh); timerRefresh = null; }
+        if (seg > 0) { timerRefresh = setInterval(carregar, seg * 1000); }
+
+        try { localStorage.setItem('kb-refresh', String(seg)); } catch (e) { /* modo privado */ }
+    }
+
+    $('#kb-refresh').on('change', aplicarRefresh);
+
+    try {
+        var salvo = localStorage.getItem('kb-refresh');
+        if (salvo && $('#kb-refresh option[value="' + salvo + '"]').length) { $('#kb-refresh').val(salvo); }
+    } catch (e) { /* modo privado */ }
+
+    aplicarRefresh();
+
+    // clique no cartão abre o apontamento da O.S. (volta para o Kanban ao concluir)
     $root.on('click', '.kb-card', function () {
-        window.location.href = cfg.urlView +
-            '?codigo=' + encodeURIComponent($(this).data('codigo')) +
-            '&unidade=' + encodeURIComponent($(this).data('unidade'));
+        window.location.href = cfg.urlApontamento +
+            '?codigo_pcm_ordem_servico=' + encodeURIComponent($(this).data('codigo')) +
+            '&codigo_unidade=' + encodeURIComponent($(this).data('unidade')) +
+            '&model=OrdemServico&page=OrdemServicoKanban';
     });
 
     // coluna Concluídas recolhida <-> aberta

@@ -31,7 +31,7 @@
         <div id="kb-root"
              data-url-lista="@Url.Action("LoadOrdemServicoIndex", "OrdemServico")"
              data-url-status="@Url.Action("UpdateStatusOS", "OrdemServico")"
-             data-url-view="@Url.Action("OrdemServicoView", "OrdemServico")"
+             data-url-apontamento="@Url.Action("ApontamentoOS", "PCM")"
              data-empresa="@ViewBag.empresa"
              data-usuario="@ViewBag.usuario"
              data-unidade="@ViewBag.codigo_unidade"
@@ -59,8 +59,17 @@
                 </select>
 
                 <select id="kb-ordenar" class="form-control kb-unidade" title="Ordenação dos cartões">
-                    <option value="aberta" selected>Ordenar: mais tempo aberta</option>
-                    <option value="prazo">Ordenar: menor prazo (data de necessidade)</option>
+                    <option value="tempo" selected>Ordenar: mais tempo aberta</option>
+                    <option value="abertura">Ordenar: abertura mais recente</option>
+                    <option value="data">Ordenar: data de necessidade</option>
+                    <option value="prioridade">Ordenar: prioridade</option>
+                </select>
+
+                <select id="kb-refresh" class="form-control kb-refresh" title="Atualização automática">
+                    <option value="0" selected>Sem atualização automática</option>
+                    <option value="30">Atualizar a cada 30s</option>
+                    <option value="60">Atualizar a cada 1 min</option>
+                    <option value="300">Atualizar a cada 5 min</option>
                 </select>
 
                 <button type="button" id="kb-atualizar" class="btn btn-secondary">
