@@ -119,6 +119,10 @@
 }
 
 .kb-card.kb-atrasada { border-color: #f3c1c1; }
+
+/* O.S. concluída: fundo verde para o quadro dizer de longe o que ja fechou */
+.kb-card.kb-concluida { background: #eafaef; border-color: #b7e4c7; }
+.kb-card.kb-concluida .kb-card-local { color: #14532d; }
 .kb-card.kb-arrastando { opacity: .5; }
 .kb-card[draggable="true"] { cursor: grab; }
 

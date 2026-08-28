@@ -29,6 +29,7 @@
         urlLista: $root.data('url-lista'),
         urlStatus: $root.data('url-status'),
         urlApontamento: $root.data('url-apontamento'),
+        urlView: $root.data('url-view'),
         urlCorPrioridade: $root.data('url-cor-prioridade'),
         empresa: $root.data('empresa'),
         usuario: $root.data('usuario'),
@@ -160,9 +161,12 @@
         var abertoEm = parseData(os.data);
 
         var card = document.createElement('article');
-        card.className = 'kb-card' + (prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '');
+        card.className = 'kb-card'
+            + (os.status === 4 ? ' kb-concluida' : '')
+            + (prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '');
         card.setAttribute('data-codigo', os.codigo);
         card.setAttribute('data-unidade', os.codigo_unidade);
+        card.setAttribute('data-status', os.status);
         if (cfg.editar && os.status !== 3) { card.setAttribute('draggable', 'true'); }
 
         // linha 1: origem + prioridade + nº da O.S. em destaque
@@ -338,11 +342,20 @@
 
     aplicarRefresh();
 
-    // clique no cartão abre o apontamento da O.S. (volta para o Kanban ao concluir)
+    // Clique no cartão: O.S. concluída não tem o que apontar, entao abre a
+    // visualizacao; as demais vao para o apontamento e voltam para o Kanban.
     $root.on('click', '.kb-card', function () {
+        var codigo = encodeURIComponent($(this).data('codigo'));
+        var unidade = encodeURIComponent($(this).data('unidade'));
+
+        if (String($(this).attr('data-status')) === '4') {
+            window.location.href = cfg.urlView + '?codigo=' + codigo + '&unidade=' + unidade;
+            return;
+        }
+
         window.location.href = cfg.urlApontamento +
-            '?codigo_pcm_ordem_servico=' + encodeURIComponent($(this).data('codigo')) +
-            '&codigo_unidade=' + encodeURIComponent($(this).data('unidade')) +
+            '?codigo_pcm_ordem_servico=' + codigo +
+            '&codigo_unidade=' + unidade +
             '&model=OrdemServico&page=OrdemServicoKanban';
     });
 
