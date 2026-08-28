@@ -91,16 +91,34 @@
         return el;
     }
 
-    // Cor pelo codigo da prioridade (tb_cad_prioridade):
-    // 0 critico vermelho · 1 alta laranja · 2 media mostarda · 3 baixa amarelo claro
+    // Cor da prioridade: 0 critico vermelho · 1 alta laranja · 2 media mostarda
+    // · 3 baixa amarelo claro.
+    //
+    // A descricao cadastrada ja carrega o numero ("0- CRITICA", "1- ALTA"), e ele
+    // e a fonte da verdade do negocio — o codigo da tb_cad_prioridade e identity e
+    // pode nao coincidir. Por isso: numero da descricao > nome > codigo.
+    var CLASSES_PRI = ['kb-pri-critica', 'kb-pri-alta', 'kb-pri-media', 'kb-pri-baixa'];
+
     function classePrioridade(os) {
-        switch (Number(os.codigo_prioridade)) {
-            case 0: return 'kb-pri-critica';
-            case 1: return 'kb-pri-alta';
-            case 2: return 'kb-pri-media';
-            case 3: return 'kb-pri-baixa';
-            default: return '';
-        }
+        var nome = String(os.prioridade || '').toUpperCase();
+
+        var numero = nome.match(/^\s*([0-3])\b/);
+        if (numero) { return CLASSES_PRI[Number(numero[1])]; }
+
+        if (nome.indexOf('CRITIC') >= 0 || nome.indexOf('CRÍTIC') >= 0) { return 'kb-pri-critica'; }
+        if (nome.indexOf('ALTA') >= 0 || nome.indexOf('URGEN') >= 0) { return 'kb-pri-alta'; }
+        if (nome.indexOf('MEDIA') >= 0 || nome.indexOf('MÉDIA') >= 0) { return 'kb-pri-media'; }
+        if (nome.indexOf('BAIXA') >= 0) { return 'kb-pri-baixa'; }
+
+        var codigo = Number(os.codigo_prioridade);
+        return (codigo >= 0 && codigo <= 3) ? CLASSES_PRI[codigo] : '';
+    }
+
+    // Ordem de prioridade para a ordenacao, pela mesma regra da cor
+    function pesoPrioridade(os) {
+        var cls = classePrioridade(os);
+        var idx = CLASSES_PRI.indexOf(cls);
+        return idx >= 0 ? idx : 99;
     }
 
     function linhaIcone(classeLinha, classeIcone, texto) {
@@ -200,8 +218,8 @@
                         return (parseData(a.data_necessidade) || 0) - (parseData(b.data_necessidade) || 0) ||
                                (parseData(a.data) || 0) - (parseData(b.data) || 0);
                     case 'prioridade':
-                        // crítica (0) primeiro; empate desempata pela mais antiga
-                        return Number(a.codigo_prioridade) - Number(b.codigo_prioridade) ||
+                        // crítica primeiro; empate desempata pela mais antiga
+                        return pesoPrioridade(a) - pesoPrioridade(b) ||
                                (parseData(a.data) || 0) - (parseData(b.data) || 0);
                     default:
                         // 'tempo': mais tempo aberta primeiro
