@@ -43,6 +43,8 @@
 
     var ordens = [];   // última carga do servidor
     var busca = '';
+    var LIMITE_PADRAO = 30;  // minutos — vale até o usuário informar o dele
+    var limiteMin = LIMITE_PADRAO; // tempo máx. de atendimento (0 = sem limite)
 
     // ---------- datas ----------
 
@@ -74,6 +76,12 @@
         if (hoje > prazo) { return 'kb-rel-vermelho'; }
         if (hoje.getTime() === prazo.getTime()) { return 'kb-rel-amarelo'; }
         return 'kb-rel-verde';
+    }
+
+    // Passou do tempo máximo de atendimento? (só para O.S. ainda não concluída)
+    function estourouLimite(abertoEm, status) {
+        if (!limiteMin || !abertoEm || status === 4) { return false; }
+        return (Date.now() - abertoEm) > (limiteMin * 60000);
     }
 
     function combina(os) {
@@ -163,7 +171,8 @@
         var card = document.createElement('article');
         card.className = 'kb-card'
             + (os.status === 4 ? ' kb-concluida' : '')
-            + (prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '');
+            + (prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '')
+            + (estourouLimite(abertoEm ? abertoEm.getTime() : 0, os.status) ? ' kb-estourada' : '');
         card.setAttribute('data-codigo', os.codigo);
         card.setAttribute('data-unidade', os.codigo_unidade);
         card.setAttribute('data-status', os.status);
@@ -279,11 +288,16 @@
         $('#kb-vazio').toggleClass('kb-oculto', visiveis > 0);
     }
 
-    // relógios correm por segundo
+    // relógios correm por segundo — e o pulso entra sozinho quando o tempo
+    // estoura, sem depender de recarregar a página
     setInterval(function () {
         $('.kb-card-relogio[data-aberto-em]').each(function () {
             var abertoEm = Number($(this).attr('data-aberto-em'));
             $(this).find('.kb-rel-tempo').text(fmtDecorrido(Date.now() - abertoEm));
+
+            var $card = $(this).closest('.kb-card');
+            var status = Number($card.attr('data-status'));
+            $card.toggleClass('kb-estourada', estourouLimite(abertoEm, status));
         });
     }, 1000);
 
@@ -334,6 +348,33 @@
     }
 
     $('#kb-refresh').on('change', aplicarRefresh);
+
+    // ---------- tempo máximo de atendimento ----------
+    // Começa em 30 min; assim que o usuário troca, o valor dele passa a ser o
+    // fixo do quadro — fica no navegador, como o refresh, por ser ajuste de
+    // quem opera a tela. Campo vazio = sem limite (ninguém pulsa).
+    function aplicarLimite() {
+        var informado = $('#kb-limite').val();
+
+        limiteMin = (informado === '' || informado === null)
+            ? 0
+            : Math.max(0, Number(informado) || 0);
+
+        try { localStorage.setItem('kb-limite', String(limiteMin)); } catch (e) { /* modo privado */ }
+        render();
+    }
+
+    $('#kb-limite').on('change input', aplicarLimite);
+
+    try {
+        var limiteSalvo = localStorage.getItem('kb-limite');
+        // já escolhido antes vence o padrão — inclusive o zero (sem limite)
+        limiteMin = (limiteSalvo === null) ? LIMITE_PADRAO : Math.max(0, Number(limiteSalvo) || 0);
+    } catch (e) {
+        limiteMin = LIMITE_PADRAO;
+    }
+
+    $('#kb-limite').val(limiteMin > 0 ? limiteMin : '');
 
     try {
         var salvo = localStorage.getItem('kb-refresh');

@@ -21,6 +21,10 @@
 .kb-unidade { flex: 0 1 260px; }
 .kb-refresh { flex: 0 1 220px; border-radius: 8px; }
 
+.kb-limite { display: flex; flex-direction: column; gap: 2px; }
+.kb-limite-label { font-size: 10px; font-weight: 600; color: #6b7280; margin: 0; white-space: nowrap; }
+.kb-limite-input { width: 120px; border-radius: 8px; }
+
 /* ---- quadro ---- */
 .kb-board {
     display: flex;
@@ -123,6 +127,28 @@
 /* O.S. concluída: fundo verde para o quadro dizer de longe o que ja fechou */
 .kb-card.kb-concluida { background: #eafaef; border-color: #b7e4c7; }
 .kb-card.kb-concluida .kb-card-local { color: #14532d; }
+
+/* Passou do tempo máximo de atendimento: o cartão pulsa até alguém agir.
+   Anima box-shadow e borda, não tamanho, para o cartão não "pular" e
+   atrapalhar a leitura das colunas vizinhas. */
+.kb-card.kb-estourada {
+    border-color: #dc2626;
+    animation: kb-pulso 1.4s ease-in-out infinite;
+}
+
+@keyframes kb-pulso {
+    0%   { box-shadow: 0 0 0 0 rgba(220, 38, 38, .55); }
+    70%  { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+/* Sem animação: o cartão estourado ainda se distingue pela borda e pelo halo fixo. */
+@media (prefers-reduced-motion: reduce) {
+    .kb-card.kb-estourada {
+        animation: none;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, .35);
+    }
+}
 .kb-card.kb-arrastando { opacity: .5; }
 .kb-card[draggable="true"] { cursor: grab; }
 
