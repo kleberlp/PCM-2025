@@ -221,6 +221,14 @@
                                         <a class="@Html.IsSelected(action: "HelpIndex", cssClass: "active") font-size-sm" href="@Url.Action("HelpIndex", "Manual")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.manual</span></a>
                                     </li>
                                 }
+                                @* Avisos aos Clientes: mesmo grupo do manual (adm_perfil como
+                                   reserva enquanto o formulário 'adm_aviso' não for cadastrado). *@
+                                @if ((bool)Session["adm_perfil"])
+                                {
+                                    <li>
+                                        <a class="@Html.IsSelected(action: "AvisoIndex", cssClass: "active") font-size-sm" href="@Url.Action("AvisoIndex", "Aviso")"><span class="sidebar-mini-hide">Avisos aos Clientes</span></a>
+                                    </li>
+                                }
                             </ul>
                         </li>
                     }

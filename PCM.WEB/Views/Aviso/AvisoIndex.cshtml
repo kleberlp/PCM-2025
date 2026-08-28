@@ -1,0 +1,120 @@
+@model List<PCM.WEB.MODELS.AvisoGrid>
+@{
+    var empresas = (List<PCM.WEB.MODELS.ListCombo>)ViewBag.empresas;
+    Func<int, string> nomeEmpresa = codigo =>
+    {
+        if (codigo == -1) { return "TODAS"; }
+        var e = empresas.Find(x => x.codigo == codigo);
+        return e != null ? e.descricao : codigo.ToString();
+    };
+    Func<int, string> situacaoPill = s =>
+        s == 2 ? "av-pill av-pill-ativo" :
+        s == 1 ? "av-pill av-pill-agendado" : "av-pill av-pill-encerrado";
+    Func<int, string> situacaoNome = s =>
+        s == 0 ? "Desativado" : s == 1 ? "Agendado" : s == 2 ? "Ativo" : "Encerrado";
+}
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">Avisos aos Clientes</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Avisos aos Clientes</h3>
+                <div class="block-options">
+                    @if (ViewBag.inserir)
+                    {
+                        <a class="btn btn-primary" href="@Url.Action("AvisoInsert", "Aviso")"><i class="fa fa-plus mr-5"></i>Novo aviso</a>
+                    }
+                </div>
+            </div>
+            <div class="block-content block-content-full">
+                <div class="u-scroll-x">
+                    <table class="table table-striped table-vcenter">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Período</th>
+                                <th>Empresa / Unidade</th>
+                                <th class="text-center">Auditado</th>
+                                <th class="text-center">Avaliado</th>
+                                <th class="text-center">Visualizações</th>
+                                <th class="text-center">Média</th>
+                                <th class="text-center">Situação</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var aviso in Model)
+                            {
+                                <tr>
+                                    <td class="font-w600">@aviso.titulo</td>
+                                    <td>@aviso.data_inicio – @aviso.data_termino</td>
+                                    <td class="font-size-sm">
+                                        <b>@nomeEmpresa(aviso.codigo_empresa)</b> /
+                                        @(aviso.codigo_unidade == -1 ? "TODAS" : aviso.unidade)
+                                    </td>
+                                    <td class="text-center">@(aviso.auditado ? "Sim" : "Não")</td>
+                                    <td class="text-center">@(aviso.avaliado ? "Sim" : "Não")</td>
+                                    <td class="text-center">@(aviso.visualizacoes > 0 ? aviso.visualizacoes.ToString() : "—")</td>
+                                    <td class="text-center">
+                                        @if (aviso.avaliacoes > 0)
+                                        {
+                                            <span class="av-estrelas-media">★ @aviso.media_avaliacao.ToString("0.0") <span class="av-qtd">(@aviso.avaliacoes)</span></span>
+                                        }
+                                        else
+                                        {
+                                            <text>—</text>
+                                        }
+                                    </td>
+                                    <td class="text-center"><span class="@situacaoPill(aviso.situacao)">@situacaoNome(aviso.situacao)</span></td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            @if (ViewBag.editar)
+                                            {
+                                                <a class="btn btn-sm btn-secondary" href="@Url.Action("AvisoEdit", "Aviso", new { codigo = aviso.codigo })" title="Editar"><i class="fa fa-pencil"></i></a>
+                                            }
+                                            @if (aviso.auditado)
+                                            {
+                                                <a class="btn btn-sm btn-secondary" href="@Url.Action("AvisoAuditoria", "Aviso", new { codigo = aviso.codigo })" title="Auditoria"><i class="fa fa-list-alt"></i></a>
+                                            }
+                                            @if (ViewBag.excluir)
+                                            {
+                                                <button type="button" class="btn btn-sm btn-secondary av-excluir" data-codigo="@aviso.codigo" data-titulo="@aviso.titulo" title="Excluir"><i class="fa fa-times"></i></button>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            @if (Model.Count == 0)
+                            {
+                                <tr><td colspan="9" class="text-center text-muted">Nenhum aviso cadastrado.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+<div id="aviso-index-data" class="js-hidden"
+     data-url-delete="@Url.Action("DeleteAviso", "Aviso")"></div>
+
+@section Scripts {
+    <script src="~/Content/js/pages/aviso-index.js"></script>
+}

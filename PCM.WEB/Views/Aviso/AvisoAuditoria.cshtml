@@ -1,0 +1,83 @@
+@model PCM.WEB.MODELS.AvisoAuditoriaResumo
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <a class="breadcrumb-item" href="@Url.Action("AvisoIndex", "Aviso")">Avisos aos Clientes</a>
+                <span class="breadcrumb-item active">Auditoria</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Auditoria — @Model.titulo</h3>
+                <div class="block-options">
+                    <a class="btn btn-secondary" href="@Url.Action("AvisoIndex", "Aviso")">
+                        <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+                    </a>
+                </div>
+            </div>
+            <div class="block-content block-content-full">
+
+                <div class="av-tiles">
+                    <div class="av-tile"><div class="av-tile-rotulo">Visualizações</div><div class="av-tile-valor">@Model.visualizacoes</div></div>
+                    <div class="av-tile"><div class="av-tile-rotulo">Usuários únicos</div><div class="av-tile-valor">@Model.usuarios</div></div>
+                    <div class="av-tile"><div class="av-tile-rotulo">Dispensaram</div><div class="av-tile-valor">@Model.dispensaram</div></div>
+                    <div class="av-tile"><div class="av-tile-rotulo">Avaliaram</div><div class="av-tile-valor">@Model.avaliaram</div></div>
+                    <div class="av-tile"><div class="av-tile-rotulo">Média</div><div class="av-tile-valor">@(Model.avaliaram > 0 ? Model.media_avaliacao.ToString("0.0") : "—") <span class="av-tile-estrela">★</span></div></div>
+                </div>
+
+                <div class="u-scroll-x">
+                    <table class="table table-striped table-vcenter">
+                        <thead>
+                            <tr>
+                                <th>@PCM.WEB.Properties.Resources.usuario</th>
+                                <th>Última visualização</th>
+                                <th class="text-center">Vezes exibido</th>
+                                <th class="text-center">Avaliação</th>
+                                <th class="text-center">Não ver mais</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var linha in Model.linhas)
+                            {
+                                <tr>
+                                    <td class="font-w600">@linha.usuario</td>
+                                    <td>@(string.IsNullOrEmpty(linha.ultima_visualizacao) ? "—" : linha.ultima_visualizacao)</td>
+                                    <td class="text-center">@linha.exibicoes</td>
+                                    <td class="text-center">
+                                        @if (linha.avaliacao > 0)
+                                        {
+                                            <span class="av-estrelas-media">@(new string('★', linha.avaliacao))@(new string('☆', 5 - linha.avaliacao))</span>
+                                        }
+                                        else
+                                        {
+                                            <text>—</text>
+                                        }
+                                    </td>
+                                    <td class="text-center">@(linha.nao_ver_mais ? "Sim · " + linha.data_dispensa : "—")</td>
+                                </tr>
+                            }
+                            @if (Model.linhas.Count == 0)
+                            {
+                                <tr><td colspan="5" class="text-center text-muted">Nenhum registro ainda.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
