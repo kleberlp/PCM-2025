@@ -271,62 +271,10 @@ window.onHeaderReady = function () {
 
     });
 
-    var tbRankingCamareira = $('#tbRankingCamareira').DataTable({
-        select: {
-            selector: 'td:not(:first-child)',
-            style: 'os'
-        },
-        searching: false,
-        fixedColumns: {
-            start: 0,
-            end: 1
-        },
-        scrollX: false,
-        autoWidth: false,
-        lengthChange: false,
-        pageLength: 15,
-        processing: true,
-        scrollCollapse: true,
-        serverSide: false,
-        ajax: {
-            url: "LoadRankingCamareira",
-            type: "POST",
-            datatype: "json",
-            data: function (d) {
-                d.empresa = $('#empresa').val(),
-                    d.unidade = ($('#header-unidade').val() == "") ? -1 : $('#header-unidade').val(),
-                    d.data = $('#data').val()
-            },
-            dataSrc: ""
-        },
-        columns: [
-            { data: "ranking" },
-            { data: "camareira" },
-            { data: "qtdeNC" },
-            { data: "qtdeNCRetrabalho" },
-            { data: "pesoNCRetrabalho" },
-            { data: "qtdeUH" },
-            { data: "percentualNC" }
-        ],
-        order: [[0, 'asc']],
-        language: {
-            emptyTable: messages.emptyTable,
-            info: "",
-            infoEmpty: "",
-            infoFiltered: "",
-        },
-        columnDefs: [
-            { className: 'text-center', targets: [0, 2, 3, 4, 5, 6] },
-            { width: '150px', targets: [2, 3, 4, 5, 6] },
-            { width: '20px', targets: [0] },
-            {
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).addClass(rowData.cssClass);
-                }, targets: [0]
-            }
-        ],
-
-    });
+    // O ranking de camareiras agora e o mesmo do Desempenho da Governanca,
+    // desenhado pelo governanca-ranking-camareira.js a partir dos dados que a
+    // propria view entrega — nao ha mais DataTable nem chamada ao
+    // LoadRankingCamareira aqui.
 
 };
 

@@ -301,25 +301,78 @@
                 </div>
             </div>
 
-            <!-- ================= RANKING ================= -->
+            @* ================= RANKING GERAL DE CAMAREIRAS =================
+               Mesmo cálculo e mesmo layout do Desempenho da Governança: as duas telas
+               dividem o governanca-ranking-camareira.js, para não divergirem. *@
+            @{
+                var _camareiras = ViewBag.camareiras as List<PCM.WEB.MODELS.CamareiraDesempenhoItem>;
+                var _camareirasJson = _camareiras != null
+                    ? JsonConvert.SerializeObject(_camareiras.Select(c => new object[] { c.Nome, c.UHsArrumadas, c.NC, c.Retrabalho, c.DiasTrabalhados }).ToList())
+                    : "[]";
+            }
             <div class="dashboard-section">
-                <div class="section-title">@Resources.ranking</div>
-                <div class="block dashboard-card">
-                    <table class="table table-striped" id="tbRankingCamareira" name="tbRankingCamareira">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>@Resources.camareira</th>
-                                <th>Qtde. NC</th>
-                                <th>Qtde. Retrabalho</th>
-                                <th>Nota (NC + Retrabalho)</th>
-                                <th>Qtde. UH</th>
-                                <th>Nota x UH</th>
-                            </tr>
-                        </thead>
-                    </table>
+                <div class="section-title">
+                    Ranking Geral de Camareiras
+                    <span class="dg-section-badge">@(_camareiras != null ? _camareiras.Count : 0) camareiras</span>
+                    <span class="u-label-mini">Nota (1–10) = Produtividade×@(ViewBag.gIndPesoProdPct)% + NC×@(ViewBag.gIndPesoNCPct)% + Retrabalho×@(ViewBag.gIndPesoRetPct)% · elegível ≥ @ViewBag.gIndMinUhs UHs · NC/Retrab sobre vistoriados (UHs×@(ViewBag.gVisRatePct)%)</span>
+                </div>
+                <div class="block dashboard-card u-pad0-clip">
+                    <div class="u-scroll-x">
+                        <table class="table mb-0 u-table-fixed">
+                            <colgroup>
+                                <col class="u-w-40" />
+                                <col />
+                                <col class="u-w-60" />
+                                <col class="u-w-50" />
+                                <col class="u-w-85" />
+                                <col class="u-w-75" />
+                                <col class="u-w-80" />
+                                <col class="u-w-80" />
+                                <col class="u-w-150" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="u-w-40">#</th>
+                                    <th>@Resources.camareira</th>
+                                    <th class="text-center u-w-60">UHs</th>
+                                    <th class="text-center u-w-50">NC</th>
+                                    <th class="text-center u-w-85">Retrabalho</th>
+                                    <th class="text-center u-w-75">Índ. NC%</th>
+                                    <th class="text-center u-w-80">Índ. Retrab%</th>
+                                    <th class="text-center u-w-80">Nota</th>
+                                    <th class="text-center u-w-150">Status</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="u-scroll-y-510">
+                            <table class="table mb-0 u-table-fixed">
+                                <colgroup>
+                                    <col class="u-w-40" />
+                                    <col />
+                                    <col class="u-w-60" />
+                                    <col class="u-w-50" />
+                                    <col class="u-w-85" />
+                                    <col class="u-w-75" />
+                                    <col class="u-w-80" />
+                                    <col class="u-w-80" />
+                                    <col class="u-w-150" />
+                                </colgroup>
+                                <tbody id="rankingGeralBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div data-ranking-camareira
+                 class="u-hide"
+                 data-camareiras='@Html.Raw(_camareirasJson.Replace("'", "&#39;"))'
+                 data-min-uhs="@ViewBag.gIndMinUhs"
+                 data-vis-rate="@ViewBag.gVisRate"
+                 data-peso-prod="@ViewBag.gIndPesoProd"
+                 data-peso-nc="@ViewBag.gIndPesoNC"
+                 data-peso-ret="@ViewBag.gIndPesoRet"
+                 data-alvo="rankingGeralBody"></div>
 
             <!-- ================= GRÁFICO ARRUMADO x VISTORIADO ================= -->
             <div class="dashboard-section">
@@ -475,6 +528,8 @@
 }
 
 @section Scripts {
+    <script src="~/Content/js/pages/governanca-ranking-camareira.js"></script>
+
     <script @Csp.NonceAttr>
         // Troca de unidade no header: navega via GET para ler a sessão já atualizada pelo SetUnidade.
         // (Sem isto, o codebase.js cai em location.reload(), que re-submete o POST do #form

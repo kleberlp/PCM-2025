@@ -715,3 +715,6 @@ body {
 .header-filter-form .select2-selection__arrow {
     height: 30px !important;
 }
+
+/* Camareira sem UHs suficientes para nota: some no fim do ranking */
+.dg-sem-dados { opacity: .5; }

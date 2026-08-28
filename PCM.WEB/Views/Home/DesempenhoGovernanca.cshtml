@@ -324,6 +324,7 @@
 
 @section Scripts {
     @Scripts.Render("~/plugins/chart")
+    <script src="~/Content/js/pages/governanca-ranking-camareira.js"></script>
 
     <script @Csp.NonceAttr>
     var camareiras = @Html.Raw(camareirasJson);
@@ -478,61 +479,14 @@
         });
     })();
 
-    (function(){
-        // MaxUHs = maior UHs entre as camareiras elegíveis (≥ 20 UHs) do grupo
-        var elegiveis = camareiras.filter(function(c){ return c[1] >= CAM_MIN_UHS; });
-        var maxUHs = elegiveis.length
-            ? Math.max.apply(null, elegiveis.map(function(c){ return c[1]; }))
-            : 1;
-
-        var data = camareiras.map(function(c){
-            var uh=c[1], nc=c[2], r=c[3];
-            if (uh < CAM_MIN_UHS)
-                return { nome:c[0], uh:uh, nc:nc, retrab:r, nota:null, iNC:null, iR:null };
-
-            var vis      = uh * CAM_VIS_RATE;                                  // quartos vistoriados (estimado)
-            var prodComp = (uh / maxUHs) * 100;                                // produtividade relativa ao grupo
-            var ncComp   = vis>0 ? Math.max(0, 100 - (nc/vis*100)) : 0;        // 100 = zero erros
-            var retComp  = vis>0 ? Math.max(0, 100 - (r /vis*100)) : 0;
-            var score    = prodComp*CAM_PESO_PROD + ncComp*CAM_PESO_NC + retComp*CAM_PESO_RET;
-            var nota     = Math.max(1.0, Math.round(score) / 10);             // escala 1–10, 1 casa decimal
-
-            return { nome:c[0], uh:uh, nc:nc, retrab:r, nota:nota,
-                     iNC: vis>0 ? nc/vis*100 : 0,                              // NC / vistoriados %
-                     iR:  vis>0 ? r /vis*100 : 0 };
-        });
-
-        // elegíveis por nota desc; inelegíveis (sem dados) por último
-        data.sort(function(a,b){
-            if (a.nota===null && b.nota===null) return b.uh-a.uh;
-            if (a.nota===null) return 1;
-            if (b.nota===null) return -1;
-            return b.nota-a.nota;
-        });
-
-        var tbody=document.getElementById('rankingGeralBody');
-        data.forEach(function(r,i){
-            var pos=i+1,rk=pos===1?'dg-rank-1':pos===2?'dg-rank-2':pos===3?'dg-rank-3':'dg-rank-n';
-            var semDados = r.nota===null, nk, sk, st;
-            if (semDados)              { nk='dg-nota-yellow'; sk='dg-status-yellow'; st='— Sem dados'; }
-            else if (r.nota>=9.0)      { nk='dg-nota-green';  sk='dg-status-green';  st='● Excelente'; }
-            else if (r.nota>=7.0)      { nk='dg-nota-green';  sk='dg-status-green';  st='● Bom'; }
-            else if (r.nota>=5.0)      { nk='dg-nota-yellow'; sk='dg-status-yellow'; st='● Regular'; }
-            else                       { nk='dg-nota-red';    sk='dg-status-red';    st='● Atenção'; }
-            var tr=document.createElement('tr');
-            if (semDados) tr.style.opacity='.5';
-            tr.innerHTML='<td><span class="dg-rank-badge '+rk+'">'+pos+'</span></td>'
-                +'<td class="font-w600">'+r.nome+'</td>'
-                +'<td class="text-center font-w700">'+r.uh+'</td>'
-                +'<td class="text-center font-w700 u-c-red-mat">'+r.nc+'</td>'
-                +'<td class="text-center font-w700 u-c-orange-deep">'+r.retrab+'</td>'
-                +'<td class="text-center">'+(semDados?'—':fmt1(r.iNC)+'%')+'</td>'
-                +'<td class="text-center">'+(semDados?'—':fmt1(r.iR)+'%')+'</td>'
-                +'<td class="text-center"><span class="dg-nota-badge '+nk+'">'+(semDados?'—':fmt1(r.nota))+'</span></td>'
-                +'<td class="text-center"><span class="dg-status-pill '+sk+'">'+st+'</span></td>';
-            tbody.appendChild(tr);
-        });
-    })();
+    // Ranking Geral: mesma regra do IndexGovernanca — governanca-ranking-camareira.js
+    PcmRankingCamareira.render('rankingGeralBody', camareiras, {
+        minUhs:   CAM_MIN_UHS,
+        visRate:  CAM_VIS_RATE,
+        pesoProd: CAM_PESO_PROD,
+        pesoNC:   CAM_PESO_NC,
+        pesoRet:  CAM_PESO_RET
+    });
 
     (function(){
         var data=camareiras.map(function(c){return{nome:c[0],uh:c[1],nc:c[2],retrab:c[3],dias:c[4]};});

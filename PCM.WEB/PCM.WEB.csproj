@@ -459,6 +459,7 @@
     <Content Include="Content\js\manual-panel.js" />
     <Content Include="Content\js\pages\manual-edit.js" />
     <Content Include="Content\js\pages\ordemservico-kanban.js" />
+    <Content Include="Content\js\pages\governanca-ranking-camareira.js" />
     <Content Include="Content\js\core\bootstrap-notify.min.js" />
     <Content Include="Content\js\core\bootstrap.bundle.min - Cópia .js" />
     <Content Include="Content\js\core\bootstrap.bundle.min.js" />

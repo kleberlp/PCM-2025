@@ -893,6 +893,14 @@ namespace PCM.WEB.Controllers
                 ViewBag.dataTermino = dataTermino;
                 ViewBag.ShowDateFilter = true;
 
+                // Ranking de camareiras: mesma origem e mesmos parametros do
+                // Desempenho da Governanca, para as duas telas mostrarem o mesmo numero.
+                ViewBag.camareiras = oGovernanca.LoadDesempenhoGovernancaCamareira(
+                                        Convert.ToInt32(Session["empresa"].ToString()),
+                                        Convert.ToInt32(Session["codigo_unidade"].ToString()),
+                                        dataTermino);
+                SetGovParamsViewBag(Convert.ToInt32(Session["empresa"].ToString()));
+
                 return View();
             }
 
@@ -1070,6 +1078,14 @@ namespace PCM.WEB.Controllers
 
                 ViewBag.dadosGovernanca = oGovernanca.LoadDadosGovernanca(codigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                                                           codigoUnidade: unidade);
+
+                // Ranking de camareiras: mesma origem e mesmos parametros do
+                // Desempenho da Governanca, para as duas telas mostrarem o mesmo numero.
+                ViewBag.camareiras = oGovernanca.LoadDesempenhoGovernancaCamareira(
+                                        Convert.ToInt32(Session["empresa"].ToString()),
+                                        unidade,
+                                        dataTermino);
+                SetGovParamsViewBag(Convert.ToInt32(Session["empresa"].ToString()));
 
                 return View();
             }
