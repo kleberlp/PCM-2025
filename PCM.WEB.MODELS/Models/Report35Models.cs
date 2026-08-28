@@ -10,6 +10,10 @@ namespace PCM.WEB.MODELS
         public int CodigoUnidade { get; set; }
         public long CodigoOrdemServico { get; set; }
 
+        // Nome fantasia da empresa (tb_cad_empresa.nome_fantasia) — exibido no lugar do código
+        // interno; código nunca aparece em telas/relatórios voltados ao usuário.
+        public string EmpresaDescricao { get; set; }
+
         public string TipoOrdemServico { get; set; }
         public string Unidade { get; set; }
         public string Data { get; set; }

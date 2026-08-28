@@ -20,6 +20,7 @@ namespace PCM.WEB.Controllers
         {
             var linhas = await CarregarLinhasAsync(codigoEmpresa, codigoUnidade, codigoOrdemServico);
             var apontamentos = await CarregarApontamentosAsync(codigoEmpresa, codigoUnidade, codigoOrdemServico);
+            var empresaDescricao = await CarregarEmpresaDescricaoAsync(codigoEmpresa);
 
             var primeira = linhas.FirstOrDefault();
 
@@ -28,6 +29,7 @@ namespace PCM.WEB.Controllers
                 CodigoEmpresa = codigoEmpresa,
                 CodigoUnidade = codigoUnidade,
                 CodigoOrdemServico = codigoOrdemServico,
+                EmpresaDescricao = empresaDescricao,
                 TipoOrdemServico = primeira?.TipoOrdemServico,
                 Unidade = primeira?.Unidade,
                 Data = primeira?.Data,
@@ -155,6 +157,24 @@ namespace PCM.WEB.Controllers
             }
 
             return linhas;
+        }
+
+        // Nome fantasia da empresa — sp_report_000000035 não traz esse dado (só o código),
+        // então é uma consulta direta à parte em vez de alterar a stored procedure original.
+        private static async Task<string> CarregarEmpresaDescricaoAsync(short codigoEmpresa)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString;
+
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand("SELECT nome_fantasia FROM tb_cad_empresa WHERE codigo = @codigo_empresa", conn) { CommandType = CommandType.Text, CommandTimeout = 30 })
+            {
+                cmd.Parameters.Add("@codigo_empresa", SqlDbType.SmallInt).Value = codigoEmpresa;
+
+                await conn.OpenAsync();
+
+                var resultado = await cmd.ExecuteScalarAsync();
+                return resultado as string;
+            }
         }
 
         private static async Task<List<Report35ApontamentoViewModel>> CarregarApontamentosAsync(short codigoEmpresa, int codigoUnidade, long codigoOrdemServico)
