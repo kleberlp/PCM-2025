@@ -6892,6 +6892,24 @@ namespace PCM.WEB.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Outras telas que usam este mesmo manual.
+        /// </summary>
+        public static string manual_telas_adicionais {
+            get {
+                return ResourceManager.GetString("manual_telas_adicionais", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Telas irmãs compartilham o texto: cadastre uma vez e o &quot;?&quot; mostra o mesmo manual em todas.
+        /// </summary>
+        public static string manual_telas_adicionais_dica {
+            get {
+                return ResourceManager.GetString("manual_telas_adicionais_dica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Subtítulo.
         /// </summary>
         public static string manual_subtitulo {

@@ -127,6 +127,9 @@ Public Class Manual
             'Fecha o SqlDataReader
             If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
 
+            'Telas adicionais (o mesmo manual servindo telas irmas)
+            If oManual.codigo > 0 Then oManual.telas = TelasManual(oManual.codigo)
+
             'Retorno da Funcao
             Return oManual
 
@@ -135,6 +138,54 @@ Public Class Manual
         Catch ex As Exception
             Throw ex
         End Try
+
+    End Function
+
+    '-------------------------------------------------------------------------------------------'
+    'DESCRICAO     :   Telas ALEM da principal atendidas pelo manual. Base antiga, sem a         '
+    '                  tb_manual_tela e a procedure, devolve lista vazia: o cadastro continua    '
+    '                  funcionando com uma tela so em vez de quebrar.                            '
+    '-------------------------------------------------------------------------------------------'
+    Public Function TelasManual(ByVal iCodigo As Integer) As List(Of ManualTela)
+
+        'Variaveis Locais
+        Dim oSqlParameter(0) As SqlParameter
+        Dim oSqlDataReader As SqlDataReader = Nothing
+        Dim oLista As New List(Of ManualTela)
+
+        Try
+
+            'Seta Parametros - Codigo
+            oSqlParameter(0) = New SqlParameter
+            oSqlParameter(0).ParameterName = "codigo"
+            oSqlParameter(0).Direction = ParameterDirection.Input
+            oSqlParameter(0).SqlDbType = SqlDbType.Int
+            oSqlParameter(0).Value = iCodigo
+
+            'Executa Query
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_manual_tela_lista", oSqlParameter)
+
+            While oSqlDataReader.Read()
+
+                Dim oTela As New ManualTela
+
+                oTela.controller = SafeGetString(oSqlDataReader, "controller")
+                oTela.action = SafeGetString(oSqlDataReader, "action")
+
+                oLista.Add(oTela)
+
+            End While
+
+            'Fecha o SqlDataReader
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+
+        Catch ex As Exception
+            ' Script 2026-08-28 ainda nao rodado: segue com a tela principal apenas
+            If oSqlDataReader IsNot Nothing AndAlso oSqlDataReader.IsClosed = False Then oSqlDataReader.Close()
+        End Try
+
+        'Retorno da Funcao
+        Return oLista
 
     End Function
 
@@ -308,7 +359,7 @@ Public Class Manual
                                ByVal sUsuario As String) As Integer
 
         'Variaveis Locais
-        Dim oSqlParameter(10) As SqlParameter
+        Dim oSqlParameter(11) As SqlParameter
         Dim i As Integer = 0
 
         Try
@@ -395,7 +446,15 @@ Public Class Manual
             oSqlParameter(i).Direction = ParameterDirection.Input
             oSqlParameter(i).SqlDbType = SqlDbType.VarChar
             oSqlParameter(i).Size = 100
-            oSqlParameter(i).Value = If(sUsuario, "")
+            oSqlParameter(i).Value = If(sUsuario, "") : i += 1
+
+            'Seta Parametros - Telas adicionais (JSON) — o mesmo manual servindo telas irmas
+            oSqlParameter(i) = New SqlParameter
+            oSqlParameter(i).ParameterName = "telas"
+            oSqlParameter(i).Direction = ParameterDirection.Input
+            oSqlParameter(i).SqlDbType = SqlDbType.NVarChar
+            oSqlParameter(i).Size = -1
+            oSqlParameter(i).Value = Newtonsoft.Json.JsonConvert.SerializeObject(If(oManual.telas, New List(Of ManualTela)))
 
             'Executa Query
             Return CInt(ExecuteScalar(sConnection, CommandType.StoredProcedure, "sp_save_manual", oSqlParameter))

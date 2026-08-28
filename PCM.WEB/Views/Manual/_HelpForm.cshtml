@@ -70,6 +70,23 @@
             </div>
         </div>
 
+        @* Telas irmãs: o mesmo manual atendendo mais de uma action, em vez de
+           duplicar o texto (ex.: as listas de O.S. e o Kanban). *@
+        <div class="form-group row js-box-tela">
+            <div class="col-md-12">
+                <label>@PCM.WEB.Properties.Resources.manual_telas_adicionais</label>
+                <div class="d-flex flex-wrap align-items-end mb-10">
+                    <select class="form-control u-w-250 mr-5" id="controllerTelaExtra"></select>
+                    <select class="form-control u-w-250 mr-5" id="actionTelaExtra"></select>
+                    <button type="button" class="btn btn-secondary" id="addTelaExtra">
+                        <i class="fa fa-plus"></i> @PCM.WEB.Properties.Resources.adicionar
+                    </button>
+                </div>
+                <div id="listaTelasExtras" class="js-telas-extras"></div>
+                <small class="form-text text-muted">@PCM.WEB.Properties.Resources.manual_telas_adicionais_dica</small>
+            </div>
+        </div>
+
     </div>
 </div>
 

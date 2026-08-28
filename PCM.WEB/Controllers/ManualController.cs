@@ -240,7 +240,8 @@ namespace PCM.WEB.Controllers
         // meio-caminho gravado se o navegador cair no meio da edição.
         [HttpPost]
         public JsonResult SaveHelp(int codigo, string tipo, string tela_controller, string tela_action,
-                                   int processo, string titulo, string subtitulo, bool ativo, string itensJson)
+                                   int processo, string titulo, string subtitulo, bool ativo, string itensJson,
+                                   string telasJson = "")
         {
             try
             {
@@ -263,7 +264,10 @@ namespace PCM.WEB.Controllers
                     titulo = titulo ?? "",
                     subtitulo = subtitulo ?? "",
                     ativo = ativo,
-                    itens = JsonConvert.DeserializeObject<List<ManualItem>>(itensJson ?? "[]") ?? new List<ManualItem>()
+                    itens = JsonConvert.DeserializeObject<List<ManualItem>>(itensJson ?? "[]") ?? new List<ManualItem>(),
+                    // Telas irmãs que compartilham este manual (além da principal)
+                    telas = JsonConvert.DeserializeObject<List<ManualTela>>(
+                                string.IsNullOrWhiteSpace(telasJson) ? "[]" : telasJson) ?? new List<ManualTela>()
                 };
 
                 if (string.IsNullOrWhiteSpace(manual.titulo))
