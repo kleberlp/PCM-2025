@@ -105,10 +105,11 @@
                                                     {<a href="@Url.Action("PrintPreventiva", "PCM", new {unidade = item.codigo_unidade, codigo = item.codigo })" target="_blank" class="btn btn-sm btn-secondary"><i class="si si-printer"></i></a>}
                                                     @if (ViewBag.imprimir)
                                                     {<a href="@Url.Action("PrintReportProgramada", "PCM", new { unidade = item.codigo_unidade, codigo_pcm_programada_ordem_servico = item.codigo })" class="btn btn-sm btn-secondary" target="_blank"><i class="fa fa-print"></i></a>
+                                                    <a href="@Url.Action("Index", "Report35", new { codigoEmpresa = Session["empresa"], codigoUnidade = item.codigo_unidade, codigoOrdemServico = item.codigo })" class="btn btn-sm btn-secondary" target="_blank" title="Relatório HTML (teste)"><i class="fa fa-file-code-o"></i></a>
                                                     }
                                                     </div>
                                             </td>
-                                        }                                                                                       
+                                        }
                                     </tr>
                                 }
                             </tbody>

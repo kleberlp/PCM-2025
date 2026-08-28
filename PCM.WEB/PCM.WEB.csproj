@@ -302,6 +302,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Report35Controller.cs" />
     <Compile Include="Controllers\AtivoFixoController.cs" />
     <Compile Include="Controllers\AEBController.cs" />
     <Compile Include="Controllers\AgendaController.cs" />
@@ -401,6 +402,7 @@
     <Content Include="Content\css\manual.css" />
     <Content Include="Content\css\kanban.css" />
     <Content Include="Content\css\pages\home\dashboard-governanca.css" />
+    <Content Include="Content\css\pages\reports\reports.css" />
     <Content Include="Content\css\themes\corporate.min.css" />
     <Content Include="Content\css\themes\earth.min.css" />
     <Content Include="Content\css\themes\elegance.min.css" />
@@ -440,6 +442,7 @@
     <Content Include="Content\img\photos\photo1.jpg" />
     <Content Include="Content\img\photos\PRODIGY.png" />
     <Content Include="Content\img\photos\WISH.png" />
+    <Content Include="Content\img\report35\logo-pcm.png" />
     <Content Include="Content\js\bootstrap.bundle.min.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetEdit.init.js" />
     <Content Include="Content\js\pages\AtivoFixo\jquery.assetInventoryClose.init.js" />
@@ -811,6 +814,7 @@
     <Content Include="Content\js\pages\Governanca\planejamentoHistorico.js" />
     <Content Include="Content\js\pages\Governanca\dashboard.js" />
     <Content Include="Content\js\pages\sidebar.js" />
+    <Content Include="Content\js\pages\reports\reports.js" />
     <Content Include="Content\js\pages\UH\jquery.mapaManutencaoHistorico.init.js" />
     <Content Include="Content\js\pages\UH\jquery.dedetizacaoHistorico.init.js" />
     <Content Include="Content\js\plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
@@ -2647,6 +2651,7 @@
     <Content Include="Views\AtivoFixo\assetMovementInsert.cshtml" />
     <Content Include="Views\AtivoFixo\assetInventoryClose.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Report35\Index.cshtml" />
     <Content Include="Views\Shared\shared\_Footer.cshtml" />
     <Content Include="Views\Shared\shared\_Header.cshtml" />
     <Content Include="Views\Shared\shared\_HeaderApp.cshtml" />
