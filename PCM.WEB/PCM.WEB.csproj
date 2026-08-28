@@ -315,6 +315,7 @@
     <Compile Include="Controllers\QualidadeController.cs" />
     <Compile Include="Controllers\CadastroBasicoController.cs" />
     <Compile Include="Controllers\ManualController.cs" />
+    <Compile Include="Controllers\AvisoController.cs" />
     <Compile Include="Controllers\AuditoriaController.cs" />
     <Compile Include="Controllers\GovernancaController.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
@@ -400,6 +401,7 @@
     <Content Include="Content\css\codebase.css" />
     <Content Include="Content\css\pcm-ui.css" />
     <Content Include="Content\css\manual.css" />
+    <Content Include="Content\css\aviso.css" />
     <Content Include="Content\css\kanban.css" />
     <Content Include="Content\css\pages\home\dashboard-governanca.css" />
     <Content Include="Content\css\pages\reports\reports.css" />
@@ -458,6 +460,9 @@
     <Content Include="Content\js\codebase.js" />
     <Content Include="Content\js\manual-panel.js" />
     <Content Include="Content\js\pages\manual-edit.js" />
+    <Content Include="Content\js\pages\aviso-edit.js" />
+    <Content Include="Content\js\pages\aviso-index.js" />
+    <Content Include="Content\js\pages\aviso-popup.js" />
     <Content Include="Content\js\pages\ordemservico-kanban.js" />
     <Content Include="Content\js\pages\governanca-ranking-camareira.js" />
     <Content Include="Content\js\core\bootstrap-notify.min.js" />
@@ -2205,6 +2210,12 @@
     <Content Include="Views\Manual\HelpIndex.cshtml" />
     <Content Include="Views\Manual\HelpInsert.cshtml" />
     <Content Include="Views\Manual\HelpEdit.cshtml" />
+    <Content Include="Views\Aviso\AvisoIndex.cshtml" />
+    <Content Include="Views\Aviso\AvisoInsert.cshtml" />
+    <Content Include="Views\Aviso\AvisoEdit.cshtml" />
+    <Content Include="Views\Aviso\_AvisoForm.cshtml" />
+    <Content Include="Views\Aviso\AvisoAuditoria.cshtml" />
+    <Content Include="Views\Shared\_AvisoPopup.cshtml" />
     <Content Include="Views\OrdemServico\OrdemServicoKanban.cshtml" />
     <Content Include="Views\Manual\_HelpForm.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />

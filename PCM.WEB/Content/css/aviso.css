@@ -1,0 +1,176 @@
+/* ============================================================
+   aviso.css — Avisos aos Clientes
+   Manutenção (av-*) e popup do login (avp-*). Escopo próprio,
+   sem estilos inline (CSP degrau 3).
+   ============================================================ */
+
+/* Sem depender do manual.css (o popup entra em todos os layouts) */
+.js-hidden { display: none !important; }
+
+/* ---- manutenção: pills, médias e tiles ---- */
+.av-pill {
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 2px 10px;
+    white-space: nowrap;
+}
+
+.av-pill-ativo { background: #eafaef; color: #14532d; border: 1px solid #b7e4c7; }
+.av-pill-agendado { background: #eef4fe; color: #1c63c4; border: 1px solid #bcd7fb; }
+.av-pill-encerrado { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+
+.av-estrelas-media { color: #f5b301; font-weight: 600; white-space: nowrap; }
+.av-estrelas-media .av-qtd { color: #6b7280; font-size: 11px; font-weight: 400; }
+
+.av-tiles { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+
+.av-tile {
+    flex: 1 1 150px;
+    background: #f6f7f9;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.av-tile-rotulo { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #6b7280; }
+.av-tile-valor { font-size: 24px; font-weight: 700; color: #111827; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.av-tile-estrela { color: #f5b301; font-size: 18px; }
+
+/* ---- cadastro: seções 1:N ---- */
+.av-secao {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f6f7f9;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.av-secao-topo { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+
+.av-secao-ordem {
+    width: 26px; height: 26px; border-radius: 50%; flex: none;
+    background: #2b7de9; color: #fff; font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.av-secao-titulo { flex: 1; }
+.av-secao-rotulo { font-size: 11px; font-weight: 600; color: #6b7280; }
+.av-secao-conteudo { font-family: Consolas, Menlo, monospace; font-size: 12px; }
+
+/* ---- popup do login ---- */
+#aviso-popup-root.avp-aberto { display: block !important; }
+
+.avp-fundo {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, .55);
+    z-index: 1080;
+}
+
+.avp-central {
+    position: fixed;
+    inset: 0;
+    z-index: 1081;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.avp-cartao {
+    background: #fff;
+    border-radius: 14px;
+    width: min(640px, 100%);
+    max-height: 92vh;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .35);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.avp-topo {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.avp-titulo { font-weight: 700; font-size: 16px; color: #111827; }
+.avp-periodo { font-size: 11px; color: #6b7280; }
+
+.avp-fechar {
+    border: none; background: none; font-size: 22px; line-height: 1;
+    color: #9ca3af; cursor: pointer; padding: 4px 8px; border-radius: 6px;
+}
+
+.avp-fechar:hover { background: #f6f7f9; color: #374151; }
+
+/* carrossel */
+.avp-carrossel { position: relative; overflow-y: auto; }
+
+.avp-slide { display: none; padding: 22px 56px 10px; min-height: 200px; }
+.avp-slide.avp-ativo { display: block; }
+.avp-slide h4 { font-size: 15px; margin-bottom: 10px; color: #111827; }
+.avp-slide-conteudo { font-size: 13px; color: #374151; line-height: 1.55; }
+.avp-slide-conteudo img { max-width: 100%; height: auto; border-radius: 6px; }
+
+.avp-seta {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid #e5e7eb; background: #fff;
+    color: #374151; font-size: 16px; cursor: pointer; z-index: 1;
+}
+
+.avp-seta:hover { background: #f6f7f9; }
+.avp-prev { left: 10px; }
+.avp-next { right: 10px; }
+.avp-seta[disabled] { opacity: .3; cursor: default; }
+
+.avp-pontos { display: flex; justify-content: center; gap: 7px; padding: 4px 0 12px; }
+
+.avp-ponto {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #d1d5db; border: none; cursor: pointer; padding: 0;
+}
+
+.avp-ponto.avp-ativo { background: #2b7de9; }
+
+/* avaliação */
+.avp-avaliacao {
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.avp-pergunta { font-size: 13px; font-weight: 600; color: #374151; }
+.avp-estrelas { display: flex; gap: 4px; }
+
+.avp-estrela {
+    font-size: 24px; color: #d1d5db; cursor: pointer;
+    border: none; background: none; padding: 0 2px; line-height: 1;
+}
+
+.avp-estrela.avp-cheia { color: #f5b301; }
+.avp-obrigado { font-size: 12px; color: #22b14c; font-weight: 600; }
+
+.avp-rodape {
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: #f6f7f9;
+}
+
+.avp-nao-ver { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #374151; cursor: pointer; margin: 0; }
+.avp-nao-ver input { width: 15px; height: 15px; }
+
+.avp-nota-auditoria { font-size: 10px; color: #9ca3af; padding: 6px 20px 10px; background: #f6f7f9; }

@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AvisoModels.cs" />
     <Compile Include="Models\AgendaModels.cs" />
     <Compile Include="Models\Report35Models.cs" />
     <Compile Include="Models\AtivoFixoModels.cs" />

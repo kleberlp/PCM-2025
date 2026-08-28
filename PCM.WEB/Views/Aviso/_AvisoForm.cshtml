@@ -1,0 +1,113 @@
+@model PCM.WEB.MODELS.Aviso
+@*
+    Formulário do aviso — usado por AvisoInsert e AvisoEdit. Padrão CSP:
+    nada inline; a lógica mora em Content/js/pages/aviso-edit.js e os dados
+    do servidor chegam pelo #aviso-data (data-*).
+*@
+
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">@(Model.codigo > 0 ? "Editar aviso" : "Novo aviso")</h3>
+        <div class="block-options">
+            <a class="btn btn-secondary" href="@Url.Action("AvisoIndex", "Aviso")">
+                <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
+            </a>
+            <button type="button" class="btn btn-primary" id="btnSalvarAviso">
+                <i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+            </button>
+        </div>
+    </div>
+    <div class="block-content block-content-full">
+
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label for="tituloAviso">@PCM.WEB.Properties.Resources.titulo</label>
+                <input type="text" class="form-control" id="tituloAviso" maxlength="200">
+            </div>
+            <div class="col-md-2">
+                <label for="dataInicioAviso">Data de início</label>
+                <input type="date" class="form-control" id="dataInicioAviso">
+            </div>
+            <div class="col-md-2">
+                <label for="dataTerminoAviso">Data de término</label>
+                <input type="date" class="form-control" id="dataTerminoAviso">
+            </div>
+            <div class="col-md-2">
+                <label for="ativoAviso">@PCM.WEB.Properties.Resources.ativo</label>
+                <select class="form-control" id="ativoAviso">
+                    <option value="1">@PCM.WEB.Properties.Resources.sim</option>
+                    <option value="0">@PCM.WEB.Properties.Resources.nao</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <label for="empresaAviso">@PCM.WEB.Properties.Resources.empresa</label>
+                <select class="form-control" id="empresaAviso">
+                    <option value="-1">TODAS</option>
+                    @foreach (var empresa in (List<PCM.WEB.MODELS.ListCombo>)ViewBag.empresas)
+                    {
+                        <option value="@empresa.codigo">@empresa.descricao</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="unidadeAviso">@PCM.WEB.Properties.Resources.unidade</label>
+                <select class="form-control" id="unidadeAviso">
+                    <option value="-1">TODAS</option>
+                </select>
+                <small class="form-text text-muted">Escolha uma empresa para listar as unidades.</small>
+            </div>
+            <div class="col-md-3">
+                <label class="css-control css-control-primary css-switch">
+                    <input type="checkbox" class="css-control-input" id="auditadoAviso">
+                    <span class="css-control-indicator"></span>
+                    Auditar visualizações
+                </label>
+                <small class="form-text text-muted">Grava quem viu, quantas vezes, a avaliação e a dispensa.</small>
+            </div>
+            <div class="col-md-3">
+                <label class="css-control css-control-primary css-switch">
+                    <input type="checkbox" class="css-control-input" id="avaliadoAviso">
+                    <span class="css-control-indicator"></span>
+                    Solicitar avaliação
+                </label>
+                <small class="form-text text-muted">Exibe 5 estrelas no popup para o usuário avaliar o aviso.</small>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Seções do aviso <small class="text-muted">cada seção é um passo do carrossel do popup</small></h3>
+        <div class="block-options">
+            <button type="button" class="btn btn-secondary" id="btnAddSecao"><i class="fa fa-plus mr-5"></i>Adicionar seção</button>
+        </div>
+    </div>
+    <div class="block-content block-content-full">
+        <div id="secoesAviso"></div>
+    </div>
+</div>
+
+@* Molde de uma seção (clonado pelo JS) *@
+<template id="moldeSecaoAviso">
+    <div class="av-secao">
+        <div class="av-secao-topo">
+            <span class="av-secao-ordem"></span>
+            <input type="text" class="form-control av-secao-titulo" maxlength="200" placeholder="Título da seção">
+            <button type="button" class="btn btn-sm btn-secondary av-secao-remover"><i class="fa fa-times"></i></button>
+        </div>
+        <label class="av-secao-rotulo">Conteúdo (HTML)</label>
+        <textarea class="form-control av-secao-conteudo" rows="5" placeholder="<p>Conteúdo da seção...</p>"></textarea>
+    </div>
+</template>
+
+<div id="aviso-data" class="js-hidden"
+     data-aviso='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model).Replace("'", "&#39;"))'
+     data-url-save="@Url.Action("SaveAviso", "Aviso")"
+     data-url-unidades="@Url.Action("LoadUnidadeAviso", "Aviso")"
+     data-url-index="@Url.Action("AvisoIndex", "Aviso")"
+     data-msg-requerido="Preencha o título, o período e ao menos uma seção."></div>
