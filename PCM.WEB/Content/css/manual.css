@@ -10,9 +10,45 @@
 
 /* O "?" ao lado das notificações: mesmo desenho dos botões do cabeçalho,
    com peso de fonte para o sinal não sumir. */
+/* Botao "?" do cabecalho: bolinha azul com pulso, para quem nao conhece a
+   ajuda reparar que ela existe. O pulso e um anel proprio (::after), nao a
+   sombra do botao, para nao empurrar o layout do header. */
 #page-header .btn-manual {
     font-weight: 700;
     font-size: 15px;
+    position: relative;
+    background: #2b7de9;
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 6px rgba(43, 125, 233, .45);
+}
+
+#page-header .btn-manual:hover,
+#page-header .btn-manual:focus,
+#page-header .btn-manual:active {
+    background: #1c63c4;
+    color: #fff;
+}
+
+#page-header .btn-manual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid #2b7de9;
+    animation: manual-pulso 2s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes manual-pulso {
+    0%   { transform: scale(1);    opacity: .75; }
+    70%  { transform: scale(1.65); opacity: 0; }
+    100% { transform: scale(1.65); opacity: 0; }
+}
+
+/* Quem pediu menos animacao no sistema operacional so ve a bolinha azul. */
+@media (prefers-reduced-motion: reduce) {
+    #page-header .btn-manual::after { animation: none; opacity: 0; }
 }
 
 /* ── painel ── */
