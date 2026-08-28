@@ -29,6 +29,7 @@
         urlLista: $root.data('url-lista'),
         urlStatus: $root.data('url-status'),
         urlApontamento: $root.data('url-apontamento'),
+        urlCorPrioridade: $root.data('url-cor-prioridade'),
         empresa: $root.data('empresa'),
         usuario: $root.data('usuario'),
         unidade: $root.data('unidade'),
@@ -91,7 +92,30 @@
         return el;
     }
 
-    // Cor da prioridade: 0 critico vermelho · 1 alta laranja · 2 media mostarda
+    // ---------- cor da prioridade ----------
+    //
+    // A cor vem do cadastro (tb_cad_prioridade.cor). Sem cor cadastrada — ou com o
+    // script 2026-08-28 ainda nao rodado — cai na paleta padrao abaixo, para a tela
+    // nunca ficar sem cor nenhuma.
+    var coresPrioridade = {};   // codigo -> "#rrggbb"
+
+    // So cor literal segura entra no style: o valor vem do banco.
+    function corValida(cor) {
+        return /^#[0-9a-fA-F]{3,8}$/.test(String(cor || '').trim()) ? String(cor).trim() : '';
+    }
+
+    // Texto escuro sobre fundo claro, branco sobre escuro (luminancia aproximada).
+    function tintaSobre(cor) {
+        var hex = cor.replace('#', '');
+        if (hex.length === 3) { hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2]; }
+        if (hex.length < 6) { return '#fff'; }
+        var r = parseInt(hex.substr(0, 2), 16),
+            g = parseInt(hex.substr(2, 2), 16),
+            b = parseInt(hex.substr(4, 2), 16);
+        return (0.299 * r + 0.587 * g + 0.114 * b) > 165 ? '#3b3200' : '#fff';
+    }
+
+    // Paleta padrao: 0 critico vermelho · 1 alta laranja · 2 media mostarda
     // · 3 baixa amarelo claro.
     //
     // A descricao cadastrada ja carrega o numero ("0- CRITICA", "1- ALTA"), e ele
@@ -145,7 +169,17 @@
         var chips = document.createElement('div');
         chips.className = 'kb-card-chips';
         if (os.origem) { chips.appendChild(chip(os.origem)); }
-        if (os.prioridade) { chips.appendChild(chip(os.prioridade, classePrioridade(os))); }
+        if (os.prioridade) {
+            var cor = corValida(coresPrioridade[os.codigo_prioridade]);
+            var chipPri = chip(os.prioridade, cor ? '' : classePrioridade(os));
+            if (cor) {
+                // cor do cadastro: CSSOM, nao atributo style inline (CSP)
+                chipPri.style.background = cor;
+                chipPri.style.borderColor = cor;
+                chipPri.style.color = tintaSobre(cor);
+            }
+            chips.appendChild(chipPri);
+        }
         card.appendChild(chips);
 
         if (os.numero_documento) {
@@ -378,7 +412,15 @@
         });
     }
 
-    // primeira carga
-    carregar();
+    // primeira carga: o mapa de cores vem antes, para o primeiro desenho ja sair pintado
+    if (cfg.urlCorPrioridade) {
+        $.getJSON(cfg.urlCorPrioridade)
+            .done(function (lista) {
+                (lista || []).forEach(function (p) { coresPrioridade[p.codigo] = p.cor; });
+            })
+            .always(carregar);
+    } else {
+        carregar();
+    }
 
 })(jQuery);

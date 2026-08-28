@@ -11361,6 +11361,54 @@ Public Class CadastroBasico
 
     End Sub
 
+    '-------------------------------------------------------------------------------------------'
+    'DESCRICAO     :   Mapa codigo -> cor das prioridades, para as telas pintarem o chip a       '
+    '                  partir do cadastro. Base sem a coluna/procedure (script 2026-08-28 nao    '
+    '                  rodado) devolve lista vazia e a tela cai na paleta padrao dela.           '
+    '-------------------------------------------------------------------------------------------'
+    Public Function CorPrioridade(ByVal iCodigoEmpresa As Integer) As List(Of PrioridadeCor)
+
+        'Variaveis Locais
+        Dim oSqlParameter(0) As SqlParameter
+        Dim oSqlDataReader As SqlDataReader = Nothing
+        Dim oLista As New List(Of PrioridadeCor)
+
+        Try
+
+            'Seta Parametros - Codigo Empresa
+            oSqlParameter(0) = New SqlParameter
+            oSqlParameter(0).ParameterName = "codigo_empresa"
+            oSqlParameter(0).Direction = ParameterDirection.Input
+            oSqlParameter(0).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(0).Value = iCodigoEmpresa
+
+            'Executa Query
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_cadastro_basico_prioridade_cor", oSqlParameter)
+
+            While oSqlDataReader.Read
+
+                Dim oCor As New PrioridadeCor
+
+                oCor.codigo = oSqlDataReader.Item("codigo")
+                oCor.descricao = oSqlDataReader.Item("descricao").ToString()
+                oCor.cor = oSqlDataReader.Item("cor").ToString()
+
+                oLista.Add(oCor)
+
+            End While
+
+            'Fecha o oSqlDataReader
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+
+        Catch ex As Exception
+            If oSqlDataReader IsNot Nothing AndAlso oSqlDataReader.IsClosed = False Then oSqlDataReader.Close()
+        End Try
+
+        'Retorno da Funcao
+        Return oLista
+
+    End Function
+
     Public Sub InfoPrioridade(ByVal iCodigoEmpresa As Integer,
                               ByVal iCodigo As Integer,
                               ByRef oPrioridade As Prioridade)

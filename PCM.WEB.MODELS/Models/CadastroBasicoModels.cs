@@ -510,6 +510,17 @@ namespace PCM.WEB.MODELS
         public bool ativo { get; set; }
     }
 
+    /// <summary>
+    /// Cor cadastrada da prioridade, para as telas pintarem o chip sem regra
+    /// fixa no código (Kanban de O.S.). Cor vazia = a tela usa o padrão dela.
+    /// </summary>
+    public class PrioridadeCor
+    {
+        public int codigo { get; set; }
+        public string descricao { get; set; }
+        public string cor { get; set; }
+    }
+
     public class Produto
     {
         public int codigo { get; set; }

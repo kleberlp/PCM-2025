@@ -43,6 +43,7 @@ namespace PCM.WEB.Controllers
         private Picture oPicture = new DAL.Picture(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private Account oAccount = new Account(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         private Home oHome = new Home(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private CadastroBasico oCadastroBasico = new CadastroBasico(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         #region ::: JSON :::
 
@@ -72,6 +73,15 @@ namespace PCM.WEB.Controllers
         {
             return Json(oCombo.Prioridade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString()),
                                             iCodigoUnidade: unidade));
+        }
+
+        //JSON: /COR DA PRIORIDADE/ — mapa codigo -> cor cadastrada, usado pelo Kanban
+        public JsonResult LoadPrioridadeCor()
+        {
+            if (Session["empresa"] == null) return Json(new List<MODELS.PrioridadeCor>(), JsonRequestBehavior.AllowGet);
+
+            return Json(oCadastroBasico.CorPrioridade(iCodigoEmpresa: Convert.ToInt32(Session["empresa"].ToString())),
+                        JsonRequestBehavior.AllowGet);
         }
 
         //JSON: /APARTAMENTO/
