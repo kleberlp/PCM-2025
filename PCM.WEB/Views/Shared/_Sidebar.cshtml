@@ -167,7 +167,7 @@
                             <a class="@Html.IsSelected(action: "DesempenhoGovernanca", cssClass: "active") font-size-sm" href="@Url.Action("DesempenhoGovernanca", "Home", new { unidade = Session["codigo_unidade"].ToString() })"><i class="si si-bar-chart"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.desempenho - @PCM.WEB.Properties.Resources.governanca</span></a>
                         </li>
                     }
-                    @if ((bool)Session["adm_empresa"] || (bool)Session["adm_usuario"] || (bool)Session["adm_configuracao_desempenho_unidade"] || (bool)Session["adm_perfil"] || (bool)Session["adm_perfil_hierarquia"])
+                    @if ((bool)Session["adm_empresa"] || (bool)Session["adm_usuario"] || (bool)Session["adm_configuracao_desempenho_unidade"] || (bool)Session["adm_perfil"] || (bool)Session["adm_perfil_hierarquia"] || (Session["cad_aviso"] != null && (bool)Session["cad_aviso"]))
                     {
                         <li class="@Html.IsSelected(controller: "Administracao", cssClass: "open")">
                             <a class="nav-submenu font-size-sm" data-toggle="nav-submenu" href="#"><i class="si si-settings"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.administracao</span></a>
@@ -221,9 +221,9 @@
                                         <a class="@Html.IsSelected(action: "HelpIndex", cssClass: "active") font-size-sm" href="@Url.Action("HelpIndex", "Manual")"><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.manual</span></a>
                                     </li>
                                 }
-                                @* Avisos aos Clientes: mesmo grupo do manual (adm_perfil como
-                                   reserva enquanto o formulário 'adm_aviso' não for cadastrado). *@
-                                @if ((bool)Session["adm_perfil"])
+                                @* Avisos aos Clientes: formulário próprio 'cad_aviso'. A guarda de
+                                   null protege sessões abertas antes do deploy (chave ainda ausente). *@
+                                @if (Session["cad_aviso"] != null && (bool)Session["cad_aviso"])
                                 {
                                     <li>
                                         <a class="@Html.IsSelected(action: "AvisoIndex", cssClass: "active") font-size-sm" href="@Url.Action("AvisoIndex", "Aviso")"><span class="sidebar-mini-hide">Avisos aos Clientes</span></a>

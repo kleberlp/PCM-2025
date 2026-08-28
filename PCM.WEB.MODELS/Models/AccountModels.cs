@@ -23,6 +23,7 @@ namespace PCM.WEB.MODELS
         public bool adm_empresa { get; set; }
         public bool adm_perfil { get; set; }
         public bool adm_perfil_hierarquia { get; set; }        
+        public bool cad_aviso { get; set; }
         public bool adm_usuario { get; set; }
         public bool audit_laudo { get; set; }
         public bool audit_normas_procedimentos { get; set; }

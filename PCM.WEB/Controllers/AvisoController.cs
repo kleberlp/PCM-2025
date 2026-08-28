@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Text.RegularExpressions;
@@ -34,9 +34,8 @@ namespace PCM.WEB.Controllers
         }
 
         /// <summary>
-        /// Direitos da manutenção de avisos. Enquanto o formulário 'adm_aviso'
-        /// não existir no cadastro de perfis, vale o direito de 'adm_perfil' —
-        /// mesmo padrão do manual integrado.
+        /// Direitos da manutenção de avisos: formulário 'cad_aviso' no cadastro
+        /// de perfis (registrado no banco pela administração).
         /// </summary>
         private void LoadPerfilAviso(ref bool inserir, ref bool editar, ref bool excluir)
         {
@@ -44,22 +43,11 @@ namespace PCM.WEB.Controllers
 
             oAccount.LoadPerfil(iCodigoEmpresa: codigoEmpresa,
                                 iCodigoUsuario: codigoUsuario,
-                                sFormulario: "adm_aviso",
+                                sFormulario: "cad_aviso",
                                 bInserir: ref inserir,
                                 bEditar: ref editar,
                                 bExcluir: ref excluir,
                                 bAdministrador: ref administrador);
-
-            if (!inserir && !editar && !excluir && !administrador)
-            {
-                oAccount.LoadPerfil(iCodigoEmpresa: codigoEmpresa,
-                                    iCodigoUsuario: codigoUsuario,
-                                    sFormulario: "adm_perfil",
-                                    bInserir: ref inserir,
-                                    bEditar: ref editar,
-                                    bExcluir: ref excluir,
-                                    bAdministrador: ref administrador);
-            }
         }
 
         /// <summary>

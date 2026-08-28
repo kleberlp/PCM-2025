@@ -433,6 +433,13 @@ Public Class Account
                 oFormularioVisualizar.adm_usuario = IIf(IsDBNull(oSqlDataReader.Item("adm_usuario")) = False AndAlso oSqlDataReader.Item("adm_usuario") = "S", True, False)
                 oFormularioVisualizar.adm_perfil = IIf(ISDBNULL(oSqlDataReader.Item("adm_perfil")) = False AndAlso oSqlDataReader.Item("adm_perfil") = "S", True, False)
                 oFormularioVisualizar.adm_perfil_hierarquia = IIf(IsDBNull(oSqlDataReader.Item("adm_perfil_hierarquia")) = False AndAlso oSqlDataReader.Item("adm_perfil_hierarquia") = "S", True, False)
+                'Avisos aos Clientes: formulario cad_aviso. A coluna so existe depois
+                'de cadastrado no perfil — ate la o direito fica falso, sem quebrar o login.
+                Try
+                    oFormularioVisualizar.cad_aviso = IIf(IsDBNull(oSqlDataReader.Item("cad_aviso")) = False AndAlso oSqlDataReader.Item("cad_aviso") = "S", True, False)
+                Catch ex As Exception
+                    oFormularioVisualizar.cad_aviso = False
+                End Try
                 oFormularioVisualizar.audit_externa = IIf(IsDBNull(oSqlDataReader.Item("audit_externa")) = False AndAlso oSqlDataReader.Item("audit_externa") = "S", True, False)
                 oFormularioVisualizar.audit_corporativo = IIf(IsDBNull(oSqlDataReader.Item("audit_corporativo")) = False AndAlso oSqlDataReader.Item("audit_corporativo") = "S", True, False)
                 oFormularioVisualizar.audit_laudo = IIf(IsDBNull(oSqlDataReader.Item("audit_laudo")) = False AndAlso oSqlDataReader.Item("audit_laudo") = "S", True, False)

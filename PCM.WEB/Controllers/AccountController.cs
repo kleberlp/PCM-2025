@@ -243,6 +243,7 @@ namespace PCM.WEB.Controllers
                     Session["adm_usuario"] = formulario_visualizar.adm_usuario;
                     Session["adm_perfil"] = formulario_visualizar.adm_perfil;
                     Session["adm_perfil_hierarquia"] = formulario_visualizar.adm_perfil_hierarquia;
+                    Session["cad_aviso"] = formulario_visualizar.cad_aviso;
                     Session["audit_externa"] = formulario_visualizar.audit_externa;
                     Session["audit_corporativo"] = formulario_visualizar.audit_corporativo;
                     Session["audit_laudo"] = formulario_visualizar.audit_laudo;
@@ -594,6 +595,7 @@ namespace PCM.WEB.Controllers
             Session["adm_usuario"] = null;
             Session["adm_perfil"] = null;
             Session["adm_perfil_hierarquia"] = null;
+            Session["cad_aviso"] = null;
             Session["audit_externa"] = null;
             Session["audit_corporativo"] = null;
             Session["audit_laudo"] = null;
