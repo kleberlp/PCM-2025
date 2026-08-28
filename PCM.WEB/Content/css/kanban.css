@@ -25,7 +25,10 @@
 .kb-limite-label { font-size: 10px; font-weight: 600; color: #6b7280; margin: 0; white-space: nowrap; }
 .kb-limite-input { width: 120px; border-radius: 8px; }
 
-/* ---- quadro ---- */
+/* ---- quadro ----
+   A altura e medida em JS (espaco real ate o rodape da janela) e aplicada
+   aqui: com valor fixo em vh sobrava faixa em branco embaixo nas telas
+   grandes e faltava espaco quando a barra de acoes quebrava em duas linhas. */
 .kb-board {
     display: flex;
     gap: 12px;
@@ -43,7 +46,8 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    max-height: 72vh;
+    /* acompanha a altura do quadro; as colunas rolam por dentro */
+    min-height: 0;
 }
 
 .kb-col-header {
