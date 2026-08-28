@@ -42,7 +42,7 @@
             <!-- Barra de ações -->
             <div class="kb-toolbar">
                 <input type="text" id="kb-busca" class="form-control kb-busca"
-                       placeholder="Buscar por responsável, quarto, setor ou nº da O.S." autocomplete="off">
+                       placeholder="Buscar por origem, setor, local, descrição ou nº da O.S." autocomplete="off">
 
                 <select id="kb-unidade" class="form-control kb-unidade">
                     @foreach (SelectListItem item in (SelectList)ViewBag.unidade)
@@ -58,29 +58,36 @@
                     }
                 </select>
 
+                <select id="kb-ordenar" class="form-control kb-unidade" title="Ordenação dos cartões">
+                    <option value="aberta" selected>Ordenar: mais tempo aberta</option>
+                    <option value="prazo">Ordenar: menor prazo (data de necessidade)</option>
+                </select>
+
                 <button type="button" id="kb-atualizar" class="btn btn-secondary">
                     <i class="fa fa-refresh"></i> Atualizar
                 </button>
             </div>
 
-            <!-- Quadro -->
+            @* Status reais da tb_pcm_ordem_servico: 1 Em Aberto, 3 Atrasada
+               (derivado pela SP quando a 1 vence — não aceita drop),
+               5 Vinculada, 4 Concluída *@
             <div class="kb-board" id="kb-board">
                 <section class="kb-col" data-status="1">
                     <header class="kb-col-header">Em Aberto <span class="kb-count" data-count="1">0</span></header>
                     <div class="kb-cards" data-cards="1"></div>
                 </section>
 
-                <section class="kb-col" data-status="2">
-                    <header class="kb-col-header">Vinculadas <span class="kb-count" data-count="2">0</span></header>
-                    <div class="kb-cards" data-cards="2"></div>
-                </section>
-
-                <section class="kb-col" data-status="3">
-                    <header class="kb-col-header">Em Andamento <span class="kb-count" data-count="3">0</span></header>
+                <section class="kb-col" data-status="3" data-drop="nao">
+                    <header class="kb-col-header">Atrasadas <span class="kb-count" data-count="3">0</span></header>
                     <div class="kb-cards" data-cards="3"></div>
                 </section>
 
-                <!-- Concluídas recolhida como no mock; clique expande -->
+                <section class="kb-col" data-status="5">
+                    <header class="kb-col-header">Vinculadas <span class="kb-count" data-count="5">0</span></header>
+                    <div class="kb-cards" data-cards="5"></div>
+                </section>
+
+                <!-- Concluídas recolhida; clique expande -->
                 <section class="kb-col kb-col-fechada" data-status="4" id="kb-col-concluidas">
                     <header class="kb-col-header">
                         <span class="kb-col-titulo-v">Concluídas</span>

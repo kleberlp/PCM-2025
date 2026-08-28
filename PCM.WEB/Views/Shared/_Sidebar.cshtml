@@ -940,6 +940,9 @@
                         <li>
                             <a class="@Html.IsSelected(action: "OrdemServicoIndex2", cssClass: "active") font-size-sm" href="@Url.Action("OrdemServicoIndex2", "OrdemServico")"><i class="si si-wrench"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.ordem_servico</span></a>
                         </li>
+                        <li>
+                            <a class="@Html.IsSelected(action: "OrdemServicoKanban", cssClass: "active") font-size-sm" href="@Url.Action("OrdemServicoKanban", "OrdemServico")"><i class="fa fa-columns"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.ordem_servico - Kanban</span></a>
+                        </li>
                     }
                     @if ((bool)Session["pcm_cronograma_semanal"] || (bool)Session["pcm_falta"] || (bool)Session["pcm_apontamento_os"] || (bool)Session["pcm_apontamento_os_edit"] || (bool)Session["pcm_apontamento_laudo"] || (bool)Session["pcm_apontamento_preventiva"] || (bool)Session["pcm_apontamento_rotina"] || (bool)Session["pcm_historico_programada"] || (bool)Session["pcm_requisicao"] || (bool)Session["pcm_requisicao_aprovar_reprovar"])
                     {

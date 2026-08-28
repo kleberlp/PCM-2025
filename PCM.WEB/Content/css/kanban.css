@@ -178,6 +178,27 @@
     gap: 5px;
 }
 
+/* relógio desde a abertura, cor pela data_necessidade */
+.kb-card-relogio {
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+.kb-rel-verde { color: #22b14c; }
+.kb-rel-amarelo { color: #b48a00; }
+.kb-rel-vermelho { color: #dc2626; }
+.kb-rel-neutro { color: #6b7280; }
+
+.kb-card-abertura {
+    font-size: 10px;
+    font-weight: 400;
+    color: #6b7280;
+}
+
 .kb-card-executor { font-size: 11px; color: #6b7280; }
 
 .kb-vazio {

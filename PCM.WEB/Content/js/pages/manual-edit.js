@@ -44,6 +44,81 @@ jQuery(function () {
         montarActions(jQuery(this).val(), '');
     });
 
+    /* ── telas irmas ──
+       O mesmo manual pode atender varias telas (ex.: as listas de O.S. e o
+       Kanban): cadastra-se o texto uma vez e o "?" mostra em todas. A tela
+       principal continua nos campos acima; estas sao as adicionais. */
+
+    var telasExtras = (manual.telas || []).map(function (t) {
+        return { controller: t.controller || '', action: t.action || '' };
+    });
+
+    function rotuloTela(t) {
+        return t.controller + (t.action ? '/' + t.action : ' (módulo inteiro)');
+    }
+
+    function pintarTelasExtras() {
+        var $lista = jQuery('#listaTelasExtras').empty();
+        if (!telasExtras.length) {
+            $lista.append(jQuery('<span>').addClass('text-muted font-size-sm').text('—'));
+            return;
+        }
+        telasExtras.forEach(function (t, idx) {
+            var $chip = jQuery('<span>').addClass('badge badge-secondary mr-5 mb-5 js-tela-chip').text(rotuloTela(t));
+            jQuery('<a>').attr({ href: '#', 'data-idx': idx, title: 'Remover' })
+                .addClass('ml-5 js-remove-tela').text('×').appendTo($chip);
+            $lista.append($chip);
+        });
+    }
+
+    function montarComboExtra() {
+        var $c = jQuery('#controllerTelaExtra').empty();
+        Object.keys(telas).sort().forEach(function (n) {
+            $c.append(jQuery('<option>').attr('value', n).text(n));
+        });
+        montarActionsExtra($c.val());
+    }
+
+    function montarActionsExtra(controller) {
+        var $a = jQuery('#actionTelaExtra').empty();
+        $a.append(jQuery('<option>').attr('value', '').text('— módulo inteiro —'));
+        (telas[controller] || []).slice().sort().forEach(function (acao) {
+            $a.append(jQuery('<option>').attr('value', acao).text(acao));
+        });
+    }
+
+    jQuery('#controllerTelaExtra').on('change', function () {
+        montarActionsExtra(jQuery(this).val());
+    });
+
+    jQuery('#addTelaExtra').on('click', function () {
+        var nova = {
+            controller: jQuery('#controllerTelaExtra').val() || '',
+            action: jQuery('#actionTelaExtra').val() || ''
+        };
+        if (!nova.controller) { return; }
+
+        // a tela principal ja e atendida pelo proprio cabecalho
+        var principal = (jQuery('#controllerManual').val() || '') + '/' + (jQuery('#actionManual').val() || '');
+        var repetida = telasExtras.some(function (t) {
+            return t.controller === nova.controller && t.action === nova.action;
+        });
+
+        if (nova.controller + '/' + nova.action === principal || repetida) {
+            Swal.fire({ text: 'Essa tela já está associada a este manual.', icon: 'info' });
+            return;
+        }
+
+        telasExtras.push(nova);
+        pintarTelasExtras();
+    });
+
+    jQuery('#listaTelasExtras').on('click', '.js-remove-tela', function (e) {
+        e.preventDefault();
+        telasExtras.splice(parseInt(jQuery(this).attr('data-idx'), 10), 1);
+        pintarTelasExtras();
+    });
+
     /* ── tela x processo ──
        Um manual é de uma coisa só: processo não tem tela nem "ver também". */
     jQuery('#tipoManual').on('change', function () {
@@ -175,7 +250,8 @@ jQuery(function () {
                 titulo: jQuery('#tituloManual').val(),
                 subtitulo: jQuery('#subtituloManual').val(),
                 ativo: jQuery('#ativoManual').val() === '1',
-                itensJson: JSON.stringify(secoes)
+                itensJson: JSON.stringify(secoes),
+                telasJson: JSON.stringify(processo ? [] : telasExtras)
             },
             success: function (r) {
                 $btn.prop('disabled', false);
@@ -192,6 +268,8 @@ jQuery(function () {
     /* ── carga ── */
     montarControllers(manual.controller || '');
     montarActions(jQuery('#controllerManual').val(), manual.action || '');
+    montarComboExtra();
+    pintarTelasExtras();
 
     jQuery('#tipoManual').val(manual.tipo === 'P' ? 'P' : 'S').trigger('change');
     jQuery('#processoManual').val(String(manual.processo_codigo || 0));

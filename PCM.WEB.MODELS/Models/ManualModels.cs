@@ -26,6 +26,19 @@ namespace PCM.WEB.MODELS
         public string subtitulo { get; set; }
         public bool ativo { get; set; }
         public List<ManualItem> itens { get; set; } = new List<ManualItem>();
+        /// <summary>
+        /// Telas ALÉM da principal (controller/action acima) que este mesmo manual
+        /// atende — telas irmãs que compartilham a ajuda em vez de duplicar o texto.
+        /// </summary>
+        public List<ManualTela> telas { get; set; } = new List<ManualTela>();
+    }
+
+    /// <summary>Uma tela adicional atendida pelo manual.</summary>
+    public class ManualTela
+    {
+        public string controller { get; set; }
+        /// <summary>Vazio = módulo inteiro daquele controller.</summary>
+        public string action { get; set; }
     }
 
     /// <summary>Uma seção do manual.</summary>

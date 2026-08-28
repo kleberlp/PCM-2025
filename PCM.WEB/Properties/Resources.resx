@@ -2394,6 +2394,12 @@
   <data name="manual_action_dica" xml:space="preserve">
     <value>Sem action, o manual vale para o módulo inteiro.</value>
   </data>
+  <data name="manual_telas_adicionais" xml:space="preserve">
+    <value>Outras telas que usam este mesmo manual</value>
+  </data>
+  <data name="manual_telas_adicionais_dica" xml:space="preserve">
+    <value>Telas irmãs compartilham o texto: cadastre uma vez e o "?" mostra o mesmo manual em todas.</value>
+  </data>
   <data name="manual_subtitulo" xml:space="preserve">
     <value>Subtítulo</value>
   </data>

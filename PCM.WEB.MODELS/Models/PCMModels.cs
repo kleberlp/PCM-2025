@@ -228,6 +228,7 @@ namespace PCM.WEB.MODELS
         public string arquivo { get; set; }
         public int status { get; set; }
         public string status_descricao { get; set; }
+        public string origem { get; set; }
         public string horas { get; set; }
         public string justificativa_apontamento { get; set; }
         public string justificativa_cancelamento { get; set; }

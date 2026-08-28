@@ -2,9 +2,21 @@
 //  ordemservico-kanban.js — quadro Kanban de Ordens de Serviço
 //  (OrdemServico/OrdemServicoKanban)
 //
-//  Padrão CSP: nenhum handler/estilo inline; parâmetros do servidor
-//  chegam pelos data-* do #kb-root; DOM montado via createElement +
-//  textContent (nunca HTML concatenado com dado do banco).
+//  Cartão (aprovado no mockup):
+//    [origem] [prioridade]  Nº O.S. (destaque)
+//    setor - local
+//    descrição
+//    relógio desde a abertura · aberta dd/MM/yyyy HH:mm
+//
+//  Relógio colorido pela data_necessidade: vermelho hoje > prazo,
+//  amarelo hoje = prazo, verde hoje < prazo (neutro em concluída).
+//
+//  Status reais da tb_pcm_ordem_servico: 1 Em Aberto, 3 Atrasada
+//  (derivado pela SP — coluna não aceita drop), 5 Vinculada, 4 Concluída.
+//
+//  Padrão CSP: nenhum handler/estilo inline; parâmetros via data-* do
+//  #kb-root; DOM via createElement + textContent (nada de HTML
+//  concatenado com dado do banco).
 // ============================================================
 
 (function ($) {
@@ -25,41 +37,47 @@
         editar: String($root.data('editar')) === '1'
     };
 
+    var STATUS_COLUNAS = [1, 3, 5, 4];
+
     var ordens = [];   // última carga do servidor
     var busca = '';
 
-    // ---------- utilidades ----------
+    // ---------- datas ----------
 
-    // "dd/MM/yyyy" -> Date (meia-noite local); null se inválida
+    // "dd/MM/yyyy" ou "dd/MM/yyyy HH:mm" -> Date; null se inválida
     function parseData(sData) {
         if (!sData) { return null; }
-        var p = String(sData).split('/');
-        if (p.length !== 3) { return null; }
-        var d = new Date(Number(p[2]), Number(p[1]) - 1, Number(p[0]));
+        var m = String(sData).match(/^(\d{2})\/(\d{2})\/(\d{4})(?:\s+(\d{2}):(\d{2}))?/);
+        if (!m) { return null; }
+        var d = new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]),
+                         Number(m[4] || 0), Number(m[5] || 0));
         return isNaN(d.getTime()) ? null : d;
     }
 
-    function diasAtraso(os) {
-        var alvo = parseData(os.data_necessidade);
-        if (!alvo) { return 0; }
-        var hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
-        var diff = Math.floor((hoje - alvo) / 86400000);
-        return diff > 0 ? diff : 0;
+    function dois(n) { return (n < 10 ? '0' : '') + n; }
+
+    function fmtDecorrido(ms) {
+        var s = Math.max(0, Math.floor(ms / 1000));
+        return dois(Math.floor(s / 3600)) + ':' + dois(Math.floor(s / 60) % 60) + ':' + dois(s % 60);
     }
 
-    function classePrioridade(nome) {
-        var s = (nome || '').toUpperCase();
-        if (s.indexOf('ALTA') >= 0 || s.indexOf('URGEN') >= 0) { return 'kb-chip-prioridade'; }
-        if (s.indexOf('MÉDIA') >= 0 || s.indexOf('MEDIA') >= 0) { return 'kb-chip-prioridade-media'; }
-        if (s.indexOf('BAIXA') >= 0) { return 'kb-chip-prioridade-baixa'; }
-        return '';
+    // vermelho: hoje > data_necessidade | amarelo: hoje = | verde: hoje <
+    function classePrazo(os) {
+        if (os.status === 4) { return 'kb-rel-neutro'; }
+        var prazo = parseData(os.data_necessidade);
+        if (!prazo) { return 'kb-rel-neutro'; }
+        prazo.setHours(0, 0, 0, 0);
+        var hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        if (hoje > prazo) { return 'kb-rel-vermelho'; }
+        if (hoje.getTime() === prazo.getTime()) { return 'kb-rel-amarelo'; }
+        return 'kb-rel-verde';
     }
 
     function combina(os) {
         if (!busca) { return true; }
-        var alvo = [os.executor, os.local, os.setor, os.equipamento,
-                    os.numero_documento, os.descricao, os.categoria]
+        var alvo = [os.origem, os.setor, os.local, os.descricao,
+                    os.numero_documento, os.executor, os.equipamento]
             .join(' ').toUpperCase();
         return alvo.indexOf(busca) >= 0;
     }
@@ -73,6 +91,14 @@
         return el;
     }
 
+    function classePrioridade(nome) {
+        var s = (nome || '').toUpperCase();
+        if (s.indexOf('ALTA') >= 0 || s.indexOf('URGEN') >= 0) { return 'kb-chip-prioridade'; }
+        if (s.indexOf('MÉDIA') >= 0 || s.indexOf('MEDIA') >= 0) { return 'kb-chip-prioridade-media'; }
+        if (s.indexOf('BAIXA') >= 0) { return 'kb-chip-prioridade-baixa'; }
+        return '';
+    }
+
     function linhaIcone(classeLinha, classeIcone, texto) {
         var linha = document.createElement('div');
         linha.className = classeLinha;
@@ -84,23 +110,31 @@
     }
 
     function montaCartao(os) {
-        var atraso = (os.status !== 4) ? diasAtraso(os) : 0;
+        var prazoCls = classePrazo(os);
+        var abertoEm = parseData(os.data);
 
         var card = document.createElement('article');
-        card.className = 'kb-card' + (atraso ? ' kb-atrasada' : '');
+        card.className = 'kb-card' + (prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '');
         card.setAttribute('data-codigo', os.codigo);
         card.setAttribute('data-unidade', os.codigo_unidade);
-        if (cfg.editar) { card.setAttribute('draggable', 'true'); }
+        if (cfg.editar && os.status !== 3) { card.setAttribute('draggable', 'true'); }
 
+        // linha 1: origem + prioridade + nº da O.S. em destaque
         var chips = document.createElement('div');
         chips.className = 'kb-card-chips';
-        if (os.categoria) { chips.appendChild(chip(os.categoria)); }
+        if (os.origem) { chips.appendChild(chip(os.origem)); }
         if (os.prioridade) { chips.appendChild(chip(os.prioridade, classePrioridade(os.prioridade))); }
         card.appendChild(chips);
 
-        var local = os.local || os.setor || os.unidade || '';
-        if (local) { card.appendChild(linhaIcone('kb-card-local', 'fa-bed', local)); }
+        if (os.numero_documento) {
+            card.appendChild(linhaIcone('kb-card-local', 'fa-tag', os.numero_documento));
+        }
 
+        // linha 2: setor - local
+        var setorLocal = [os.setor, os.local].filter(function (v) { return v; }).join(' - ');
+        if (setorLocal) { card.appendChild(linhaIcone('kb-card-numero', 'fa-map-marker', setorLocal)); }
+
+        // linha 3: descrição
         if (os.descricao) {
             var desc = document.createElement('div');
             desc.className = 'kb-card-descricao';
@@ -108,16 +142,30 @@
             card.appendChild(desc);
         }
 
-        if (os.numero_documento) {
-            card.appendChild(linhaIcone('kb-card-numero', 'fa-tag', os.numero_documento));
+        // linha 4: relógio desde a abertura + data/hora da abertura
+        if (abertoEm) {
+            var rel = document.createElement('div');
+            rel.className = 'kb-card-relogio ' + prazoCls;
+            rel.setAttribute('data-aberto-em', abertoEm.getTime());
+
+            var icone = document.createElement('i');
+            icone.className = 'fa fa-clock-o';
+            rel.appendChild(icone);
+
+            var tempo = document.createElement('span');
+            tempo.className = 'kb-rel-tempo';
+            tempo.textContent = fmtDecorrido(Date.now() - abertoEm.getTime());
+            rel.appendChild(tempo);
+
+            var abertura = document.createElement('span');
+            abertura.className = 'kb-card-abertura';
+            abertura.textContent = '· aberta ' + os.data;
+            rel.appendChild(abertura);
+
+            card.appendChild(rel);
         }
 
-        if (atraso) {
-            card.appendChild(linhaIcone('kb-card-atraso', 'fa-exclamation-circle',
-                'Atraso + ' + atraso + (atraso === 1 ? ' dia' : ' dias')));
-        }
-
-        if (os.executor) {
+        if (os.executor && os.executor !== '-') {
             var exec = document.createElement('div');
             exec.className = 'kb-card-executor';
             exec.textContent = os.executor;
@@ -128,21 +176,32 @@
     }
 
     function render() {
+        var ordenacao = $('#kb-ordenar').val();
         var visiveis = 0;
+        var contagem = {};
 
         $('.kb-cards').empty();
+        STATUS_COLUNAS.forEach(function (st) { contagem[st] = 0; });
 
-        var contagem = { 1: 0, 2: 0, 3: 0, 4: 0 };
+        STATUS_COLUNAS.forEach(function (st) {
+            var itens = ordens.filter(function (os) { return os.status === st && combina(os); });
 
-        for (var i = 0; i < ordens.length; i++) {
-            var os = ordens[i];
-            if (!contagem.hasOwnProperty(os.status)) { continue; }
-            if (!combina(os)) { continue; }
+            itens.sort(function (a, b) {
+                if (ordenacao === 'prazo') {
+                    // menor prazo primeiro (necessidade mais próxima/estourada no topo)
+                    return (parseData(a.data_necessidade) || 0) - (parseData(b.data_necessidade) || 0) ||
+                           (parseData(a.data) || 0) - (parseData(b.data) || 0);
+                }
+                // mais tempo aberta primeiro
+                return (parseData(a.data) || 0) - (parseData(b.data) || 0);
+            });
 
-            contagem[os.status]++;
-            visiveis++;
-            $('[data-cards="' + os.status + '"]').append(montaCartao(os));
-        }
+            var wrap = $('[data-cards="' + st + '"]');
+            itens.forEach(function (os) { wrap.append(montaCartao(os)); });
+
+            contagem[st] = itens.length;
+            visiveis += itens.length;
+        });
 
         $.each(contagem, function (status, n) {
             $('[data-count="' + status + '"]').text(n);
@@ -150,6 +209,14 @@
 
         $('#kb-vazio').toggleClass('kb-oculto', visiveis > 0);
     }
+
+    // relógios correm por segundo
+    setInterval(function () {
+        $('.kb-card-relogio[data-aberto-em]').each(function () {
+            var abertoEm = Number($(this).attr('data-aberto-em'));
+            $(this).find('.kb-rel-tempo').text(fmtDecorrido(Date.now() - abertoEm));
+        });
+    }, 1000);
 
     // ---------- carga ----------
 
@@ -180,6 +247,7 @@
     });
 
     $('#kb-unidade').on('change', carregar);
+    $('#kb-ordenar').on('change', render);
     $('#kb-atualizar').on('click', carregar);
 
     // abrir a O.S. (clique simples no cartão)
@@ -215,6 +283,7 @@
         });
 
         $root.on('dragover', '.kb-col', function (e) {
+            if ($(this).attr('data-drop') === 'nao') { return; }
             e.preventDefault();
             e.originalEvent.dataTransfer.dropEffect = 'move';
             $(this).addClass('kb-drop-alvo');
@@ -225,6 +294,7 @@
         });
 
         $root.on('drop', '.kb-col', function (e) {
+            if ($(this).attr('data-drop') === 'nao') { return; }
             e.preventDefault();
             $(this).removeClass('kb-drop-alvo');
 

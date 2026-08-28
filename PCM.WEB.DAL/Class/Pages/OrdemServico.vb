@@ -842,6 +842,7 @@ Public Class OrdemServico
                 oOrdemServicoInfo.status = oSqlDataReader("status")
                 oOrdemServicoInfo.status_descricao = oSqlDataReader("status_descricao")
                 oOrdemServicoInfo.justificativa_apontamento = oSqlDataReader("justificativa_apontamento")
+                oOrdemServicoInfo.origem = oSqlDataReader("origem").ToString()
 
                 oOrdemServico.Add(oOrdemServicoInfo)
 
