@@ -122,9 +122,13 @@
     gap: 6px;
 }
 
-.kb-card.kb-atrasada { border-color: #f3c1c1; }
+/* O.S. atrasada (hoje > data_necessidade): fundo vermelho claro */
+.kb-card.kb-atrasada { background: #fdecec; border-color: #f3b1b1; }
+.kb-card.kb-atrasada .kb-card-local { color: #7f1d1d; }
 
-/* O.S. concluída: fundo verde para o quadro dizer de longe o que ja fechou */
+/* O.S. concluída: fundo verde para o quadro dizer de longe o que ja fechou.
+   Vem depois da atrasada de proposito: uma O.S. fechada fora do prazo conta
+   como resolvida, e o verde deve vencer o vermelho. */
 .kb-card.kb-concluida { background: #eafaef; border-color: #b7e4c7; }
 .kb-card.kb-concluida .kb-card-local { color: #14532d; }
 
