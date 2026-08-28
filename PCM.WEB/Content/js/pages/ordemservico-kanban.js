@@ -201,7 +201,7 @@
         }
 
         // linha 2: setor - local
-        var setorLocal = [os.setor, os.local].filter(function (v) { return v; }).join(' - ');
+        var setorLocal = [os.local].filter(function (v) { return v; }).join(' - ');
         if (setorLocal) { card.appendChild(linhaIcone('kb-card-numero', 'fa-map-marker', setorLocal)); }
 
         // linha 3: descrição
