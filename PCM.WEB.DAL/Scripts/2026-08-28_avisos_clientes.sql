@@ -9,8 +9,8 @@
 --  aviso dispensado nem guardar a avaliacao. O flag "auditado" controla a exibicao da tela
 --  de auditoria e o aviso de transparencia no popup.
 --
---  Permissao: formulario 'adm_aviso' no cadastro de perfis; enquanto nao existir, o sistema
---  usa como reserva o direito de 'adm_perfil' (mesmo padrao do manual integrado).
+--  Permissao: formulario 'cad_aviso' no cadastro de perfis (cadastrado pela administracao;
+--  a coluna cad_aviso passa a sair no result set dos formularios do login).
 --
 --  Idempotente: pode rodar mais de uma vez.
 --  Autor: manutencao PCM · Data: 28/08/2026
@@ -503,9 +503,10 @@ GO
 
 
 -- =============================================================================================
--- 8. PERMISSAO (documentacao — mesmo padrao do manual integrado)
+-- 8. PERMISSAO (documentacao)
 --
---  A tela de manutencao usa o formulario 'adm_aviso'; enquanto ele nao for cadastrado no
---  perfil, o sistema usa como reserva o direito de 'adm_perfil' (quem administra perfis
---  tambem mantem os avisos). O popup do login nao exige direito nenhum: e para todos.
+--  A tela de manutencao usa o formulario 'cad_aviso', cadastrado no banco pela administracao
+--  (tabela de formularios + direitos por perfil, como os demais). O menu e o login leem a
+--  coluna cad_aviso do result set de formularios; enquanto ela nao existir, o menu fica
+--  oculto e o login segue normal. O popup do login nao exige direito nenhum: e para todos.
 -- =============================================================================================
