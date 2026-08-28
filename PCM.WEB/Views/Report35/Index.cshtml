@@ -51,8 +51,7 @@
                     <p class="doc-subtitulo">@Model.Servico</p>
                 </div>
                 <div class="doc-meta">
-                    <div>Empresa <b>@Model.CodigoEmpresa</b> &middot; Unidade <b>@Model.CodigoUnidade</b></div>
-                    <div>Ordem de serviço <b>@Model.CodigoOrdemServico</b></div>
+                    <div>Empresa <b>@Model.EmpresaDescricao</b> &middot; Unidade <b>@Model.Unidade</b></div>
                     <div>Data <b>@Model.Data</b></div>
                     <div>Emitido em <b>@emitidoEm</b></div>
                 </div>
@@ -78,7 +77,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Solucao))
                 {
                     <div class="campo" style="grid-column: 1 / -1;">
-                        <div class="rotulo">Solução</div>
+                        <div class="rotulo">Observações</div>
                         <div class="valor">@Model.Solucao</div>
                     </div>
                 }
