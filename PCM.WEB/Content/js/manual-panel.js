@@ -1,9 +1,9 @@
 /* manual-panel.js
    Manual integrado: o "?" do cabeçalho abre o manual da tela atual.
 
-   O conteúdo só é buscado quando o painel abre — carregar manual em toda tela
-   seria peso à toa, e a maioria das visitas não abre a ajuda. Buscado uma vez,
-   fica em memória: reabrir na mesma tela não volta ao servidor. */
+   O manual é buscado uma vez na carga da página: é o que diz se o "?" aparece
+   (tela sem manual não tem por que mostrar o botão) e já deixa o conteúdo
+   pronto para o clique. Fica em memória: reabrir não volta ao servidor. */
 (function () {
     'use strict';
 
@@ -385,6 +385,15 @@
             jQuery('#manualCorpo').append('<div class="manual-vazio manual-semnada">' +
                 escapar(cfg.msgNoMatch) + '</div>');
         }
+    });
+
+    /* ── presença do botão ──
+       O "?" só existe onde há manual: a busca da carga decide. Quem pode manter
+       o manual continua vendo o botão mesmo na tela sem conteúdo — é por ele
+       que se cria o manual daquela tela. Se a busca falhar (rede, banco), o
+       botão fica e o clique tenta de novo, como antes. */
+    buscar(function () {
+        $btn.toggleClass('js-hidden', !manual && !canEdit);
     });
 
     /* ── manual do processo (link "ver também") ── */
