@@ -244,6 +244,10 @@ namespace PCM.WEB.Controllers
                     Session["adm_perfil"] = formulario_visualizar.adm_perfil;
                     Session["adm_perfil_hierarquia"] = formulario_visualizar.adm_perfil_hierarquia;
                     Session["cad_aviso"] = formulario_visualizar.cad_aviso;
+                    // Cada login recomeça a entrega dos Avisos aos Clientes: sem
+                    // limpar aqui, a marca de "já exibi" de um login anterior na
+                    // mesma sessão ASP.NET suprimiria o popup deste.
+                    Session["avisos_exibidos"] = null;
                     Session["audit_externa"] = formulario_visualizar.audit_externa;
                     Session["audit_corporativo"] = formulario_visualizar.audit_corporativo;
                     Session["audit_laudo"] = formulario_visualizar.audit_laudo;
@@ -596,6 +600,7 @@ namespace PCM.WEB.Controllers
             Session["adm_perfil"] = null;
             Session["adm_perfil_hierarquia"] = null;
             Session["cad_aviso"] = null;
+            Session["avisos_exibidos"] = null;
             Session["audit_externa"] = null;
             Session["audit_corporativo"] = null;
             Session["audit_laudo"] = null;

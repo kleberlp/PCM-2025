@@ -30,13 +30,15 @@
 
     <!-- Page Content -->
     <div class="content">
-        <div class="block">
-            <div class="block-header block-header-default">
-                <h3 class="block-title">Avisos aos Clientes</h3>
+        <div class="block block-rounded border">
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600">Avisos aos Clientes</h3>
                 <div class="block-options">
                     @if (ViewBag.inserir)
                     {
-                        <a class="btn btn-primary" href="@Url.Action("AvisoInsert", "Aviso")"><i class="fa fa-plus mr-5"></i>Novo aviso</a>
+                        <a href="@Url.Action("AvisoInsert", "Aviso")" class="btn btn-square btn-secondary min-width-100 h-75">
+                            <i class="fa fa-plus mr-5"></i>@PCM.WEB.Properties.Resources.cadastrar
+                        </a>
                     }
                 </div>
             </div>

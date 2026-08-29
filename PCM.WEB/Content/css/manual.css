@@ -65,22 +65,28 @@
 
 .manual-backdrop.aberto { opacity: 1; visibility: visible; }
 
+/* 1/3 da tela em monitor de trabalho; o mínimo segura a largura de leitura em
+   janela menor e o máximo impede o painel de engolir a tela no celular.
+   Fechado, ele sai por transform — assim a distância do esconderijo acompanha
+   a largura, seja ela qual for. */
 .manual-painel {
     position: fixed;
     top: 0;
-    right: -460px;
-    width: 430px;
+    right: 0;
+    width: 33.33vw;
+    min-width: 430px;
     max-width: 92vw;
     height: 100vh;
     background: #fff;
     box-shadow: -4px 0 18px rgba(0, 0, 0, .18);
     display: flex;
     flex-direction: column;
-    transition: right .25s ease;
+    transform: translateX(110%);
+    transition: transform .25s ease;
     z-index: 1051;
 }
 
-.manual-painel.aberto { right: 0; }
+.manual-painel.aberto { transform: translateX(0); }
 
 .manual-painel .manual-h {
     display: flex;

@@ -5,16 +5,16 @@
     do servidor chegam pelo #aviso-data (data-*).
 *@
 
-<div class="block">
-    <div class="block-header block-header-default">
-        <h3 class="block-title">@(Model.codigo > 0 ? "Editar aviso" : "Novo aviso")</h3>
+<div class="block block-rounded border">
+    <div class="block-header block-header-default bg-gd-default">
+        <h3 class="block-title text-white font-w600">@(Model.codigo > 0 ? PCM.WEB.Properties.Resources.editar : PCM.WEB.Properties.Resources.cadastrar)</h3>
         <div class="block-options">
-            <a class="btn btn-secondary" href="@Url.Action("AvisoIndex", "Aviso")">
+            <button type="button" class="btn btn-square btn-secondary min-width-100 h-75" id="btnSalvarAviso">
+                <i class="fa fa-save mr-5"></i>@PCM.WEB.Properties.Resources.salvar
+            </button>
+            <a href="@Url.Action("AvisoIndex", "Aviso")" class="btn btn-square btn-secondary min-width-100 h-75">
                 <i class="si si-action-undo mr-5"></i>@PCM.WEB.Properties.Resources.voltar
             </a>
-            <button type="button" class="btn btn-primary" id="btnSalvarAviso">
-                <i class="fa fa-check mr-5"></i>@PCM.WEB.Properties.Resources.salvar
-            </button>
         </div>
     </div>
     <div class="block-content block-content-full">
@@ -80,14 +80,17 @@
     </div>
 </div>
 
-<div class="block">
-    <div class="block-header block-header-default">
-        <h3 class="block-title">Seções do aviso <small class="text-muted">cada seção é um passo do carrossel do popup</small></h3>
+<div class="block block-rounded border">
+    <div class="block-header block-header-default bg-gd-default">
+        <h3 class="block-title text-white font-w600"><i class="fa fa-list-ol mr-5"></i>Seções do aviso</h3>
         <div class="block-options">
-            <button type="button" class="btn btn-secondary" id="btnAddSecao"><i class="fa fa-plus mr-5"></i>Adicionar seção</button>
+            <button type="button" class="btn btn-square btn-secondary h-75" id="btnAddSecao">
+                <i class="fa fa-plus mr-5"></i>Adicionar seção
+            </button>
         </div>
     </div>
     <div class="block-content block-content-full">
+        <small class="form-text text-muted mb-10">Cada seção é um passo do carrossel do popup.</small>
         <div id="secoesAviso"></div>
     </div>
 </div>
