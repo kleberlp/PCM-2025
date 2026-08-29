@@ -1,0 +1,669 @@
+﻿using System.Collections.Generic;
+
+namespace PCM.WEB.MODELS
+{
+    public class apartamentoList
+    {
+        public string codigoApartamento { get; set; }
+    }
+
+    public class dashboardGovernancaArrumadoxVistoriado
+    {
+        public string data { get; set; }
+        public int qtdeSaida { get; set; }
+        public int qtdePermanencia { get; set; }
+        public int qtdeManutencao { get; set; }
+        public int meta { get; set; }
+        public int total { get; set; }
+        public int percentualVistoriado { get; set; }
+    }
+
+    public class dashboardGovernanca
+    {
+        public string quantidadeCamareira { get; set; }
+        public string quantidadeVistoriador { get; set; }
+        public string quantidadeUHs { get; set; }
+        public string hhDisponivel { get; set; }
+        public string hhUtilizado { get; set; }
+        public string quantidateUHsGovernanca { get; set; }
+        public string quantidadeOSGerada { get; set; }
+        public string quantidadeTrocaStatus { get; set; }
+        public string itensChecklist { get; set; }
+    }
+
+    public class dashboardGovernancaChartArrumacaoDia
+    {
+        public string camareira { get; set; }
+        public int quantidade { get; set; }
+        public string data { get; set; }
+    }
+
+    public class dashboardGovernancaChartVistoriaDia
+    {
+        public string vistoriador { get; set; }
+        public int quantidade { get; set; }
+        public string data { get; set; }
+    }
+
+    public class dashboardGovernancaChartProdutividadeCamareira
+    {
+        public string unidade { get; set; }
+        public string totalUHArrumada { get; set; }
+        public string totalUHSaida { get; set; }
+        public string totalUHPermanencia { get; set; }
+        public string totalUHManutencao { get; set; }
+        public string percentual { get; set; }
+    }
+
+    public class dashboardGovernancaChartProdutividadeVistoriador
+    {
+        public string unidade { get; set; }
+        public string totalUHVistoriada { get; set; }
+        public string totalUHSaida { get; set; }
+        public string percentualTotal { get; set; }
+        public string percentualMeta { get; set; }
+    }
+
+    public class dashboardGovernancaNCDia
+    {
+        public string unidade { get; set; }
+        public float quantidadeNC { get; set; }
+        public string data { get; set; }
+    }
+
+    public class dashboardGovernancaAtendimentoOS
+    {
+        public string unidade { get; set; }
+        public int quantidadeProprio { get; set; }
+        public int quantidadeTerceiro { get; set; }
+        public string hhDisponivel { get; set; }
+        public int quantidaeOSGerada { get; set; }
+        public int quantidaeOSAtendida { get; set; }
+        public int quantidaeOSPAX { get; set; }
+        public int quantidadeOSPendente { get; set; }
+        public string percentualAtendido { get; set; }
+    }
+
+    public class dashboardGovernancaApartamentoInfo
+    {
+        public int sfoVago { get; set; }
+        public int sfoOcupado { get; set; }
+        public int sfoBloqueado { get; set; }
+        public int taManutencao { get; set; }
+        public int taPermanencia { get; set; }
+        public int taSaida { get; set; }
+    }
+
+    public class dashboardGovernancaChartUHxCamareira
+    {
+        public string camareira { get; set; }
+        public float quantidade { get; set; }
+        public string data { get; set; }
+    }
+
+    public class dashboardGovernancaNCDetalhado
+    {
+        public string ocorrencia { get; set; }
+        public int quantidadeNC { get; set; }
+        public int mediaMovel30Dias { get; set; }
+        public string tendencia { get; set; }
+    }
+
+    public class dashboardRankingCamareira
+    {
+        public string camareira { get; set; }
+        public string percentualNC { get; set; }
+        public string percentualNCRetrabalho { get; set; }
+        public int ranking { get; set; }
+        public long qtdeNC { get; set; }
+        public long qtdeNCRetrabalho { get; set; }
+        public long pesoNC { get; set; }
+        public long pesoNCRetrabalho { get; set; }
+        public long qtdeUH { get; set; }
+        public string cssClass { get; set; }
+    }
+
+    public class dashboardGovernancaNCCamareira
+    {
+        public string camareira { get; set; }
+        public int quantidadeNC { get; set; }
+        public int mediaMovel30Dias { get; set; }
+        public string tendencia { get; set; }
+    }
+
+    public class dashboardGovernancaChartNaoConformidadeTipo
+    {
+        public string naoConformidadeTipo { get; set; }
+        public string quantidade { get; set; }
+    }
+
+    public class dashboardGovernancaNaoConformidade
+    {
+        public string item { get; set; }
+        public string descricao { get; set; }
+        public float quantidade { get; set; }
+    }
+
+    public class Governanca
+    {
+        public int codigo_unidade { get; set; }
+        public string unidade { get; set; }
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string apartamento { get; set; }
+        public int codigo_apartamento { get; set; }
+        public string tipo_apartamento { get; set; }
+        public int codigo_tipo_apartamento { get; set; }
+        public long codigo_checklist { get; set; }
+        public int status { get; set; }
+        public string descricao_status { get; set; }
+        public string data_proxima { get; set; }
+        public string css_class { get; set; }
+        public long codigo_vistoria { get; set; }
+        public string room_status { get; set; }
+        public string front_office_status { get; set; }
+        public int codigo_tipo_governanca { get; set; }
+        public bool nao_perturbe { get; set; }
+    }
+
+    public class GovernancaDados
+    {
+        public int codigo { get; set; }
+        public string camareira { get; set; }
+        public string apartamento { get; set; }
+        public string codigo_funcionario { get; set; }
+        public int codigo_funcionario_responsavel_vistoria { get; set; }
+        public string data{ get; set; }
+        public string hora_inicio { get; set; }
+        public string hora_termino { get; set; }
+        public int status { get; set; }
+        public bool apontaCamareira { get; set; }
+    }
+
+    public class GovernancaApontamento
+    {
+        public string unidade { get; set; }
+        public int codigo_unidade { get; set; }
+        public int codigo_apartamento { get; set; }
+        public string apartamento { get; set; }
+        public string funcionario_responsavel { get; set; }
+        public string funcionario_responsavel_unidade { get; set; }
+        public string data_inicio { get; set; }
+        public string data_termino { get; set; }
+        public bool aponta_horas { get; set; }
+        public string hora_inicio { get; set; }
+        public string hora_termino { get; set; }
+        public float valor { get; set; }
+        public long codigo_apontamento { get; set; }
+    }
+
+    public class GovernancaApontamentoResponse
+    {
+        public bool success { get; set; }
+        public string message { get; set; }
+    }
+
+    public class GovernancaApto
+    {
+        public List<GovernancaApontamentoChecklist> checklist { get; set; }
+        public List<GovernancaApontamentoEnxoval> enxoval { get; set; }
+    }
+
+    // Campo de discrepância (tb_cad_discrepancia_gov) exibido no apontamento
+    public class GovernancaApontamentoDiscrepancia
+    {
+        public int codigo { get; set; }
+        public string descricao { get; set; }
+        public int codigo_tipo_item_checklist { get; set; }   // 10 = combo, 1 = texto
+        public string campo_apontamento { get; set; }          // coluna destino em tb_gov_apontamento
+        public string valor { get; set; }                      // valor atual (edição)
+        public List<GovernancaComboItem> opcoes { get; set; } = new List<GovernancaComboItem>();
+    }
+
+    // Item de combo (codigo/descricao) carregado da procedure_lista
+    public class GovernancaComboItem
+    {
+        public string codigo { get; set; }
+        public string descricao { get; set; }
+    }
+    
+    public class GovernancaApontamentoChecklist
+    {
+        public int codigo { get; set; }
+        public string grupo { get; set; }
+        public string checklist { get; set; }
+        public string descricao { get; set; }
+        public int codigo_tipo_item_checklist { get; set; }
+        public string resultado { get; set; }
+        public string resultado_descricao { get; set; }
+        public string observacao { get; set; }
+        public bool nova_vistoria { get; set; }
+    }
+
+    public class GovernancaApontamentoEnxoval
+    {
+        public string unidade { get; set; }
+        public int codigo_unidade { get; set; }
+        public int codigo_enxoval { get; set; }
+        public string enxoval { get; set; }
+        public int quantidade { get; set; }
+        public long codigo_apontamento { get; set; }
+    }
+
+    public class GovernancaStatus
+    {
+        public int pendente { get; set; }
+        public int concluido { get; set; }
+        public int aguardandoLiberacao { get; set; }
+        public int retrabalho { get; set; }
+    }
+
+    public class GovFuncionario
+    {
+        public int codigo { get; set; }
+        public int codigo_unidade { get; set; }
+        public string unidade { get; set; }
+        public string nome { get; set; }
+        public string cpf { get; set; }
+        public int codigo_funcao { get; set; }
+        public int codigo_usuario { get; set; }
+        public string funcao { get; set; }
+        public string telefone { get; set; }
+        public string tipo_funcionario { get; set; }
+        public int codigo_tipo_funcionario { get; set; }
+        public float valor_hora { get; set; }
+        public bool ativo { get; set; }
+        public string texto_ativo { get; set; }
+        public bool contabiliza_hora { get; set; }
+    }
+
+    public class GovernancaPlanejamento
+    {
+        public int codigoApartamento { get; set; }
+        public string apartamento { get; set; }
+        public string tipoApartamento { get; set; }
+        public string tipoCama { get; set; }
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string quantidadeCama { get; set; }
+        public string funcionario { get; set; }
+        public string selecionado { get; set; }
+        public string statusFrontOffice { get; set; }
+        public string tipoGovernanca { get; set; }
+        public string dataChegada { get; set; }
+        public string dataSaida { get; set; }
+        public string cssClassTipoGovernaca { get; set; }
+        public string statusRoom { get; set; }
+    }
+
+    public class GovernancaPlanejamentoHistorico
+    {
+        public int codigoApartamento { get; set; }
+        public string data { get; set; }
+        public string tipoGovernanca { get; set; }
+        public string apartamento { get; set; }
+        public string tipoApartamento { get; set; }
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string quantidadeCama { get; set; }
+        public string camareira { get; set; }
+        public string executado { get; set; }
+        public string quantidadeNC { get; set; }
+        public string vistoriado { get; set; }
+
+    }
+
+    public class GovernancaApontamentoApartamento
+    {
+        public int codigoApartamento { get; set; }
+        public string apartamento { get; set; }
+        public string tipoApartamento { get; set; }
+        public string tipoCama { get; set; }
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string quantidadeCama { get; set; }
+        public string funcionario { get; set; }
+        public string selecionado { get; set; }
+        public string statusFrontOffice { get; set; }
+        public string tipoGovernanca { get; set; }
+        public string cssClassTipoGovernaca { get; set; }
+        public string statusRoom { get; set; }
+    }
+
+    public class GovernancaDiscrepanciaLista
+    {
+        public long codigoApartamento { get; set; }
+        public long codigoApontamento { get; set; }
+        public string apartamento { get; set; }
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string statusFrontOffice { get; set; }
+        public string statusRoom { get; set; }
+        public string tipoGovernanca { get; set; }
+        public string cssClassTipoGovernaca { get; set; }
+        public string dataChegada { get; set; }
+        public string dataSaida { get; set; }
+        public string dias { get; set; }
+        public string tipoHospede { get; set; }
+        public string planejadoPara { get; set; }
+        public string executadoPor { get; set; }
+        public string horaTermino { get; set; }
+        public string vistoriadoPor { get; set; }
+        public string statusUh { get; set; }
+        public string statusGov { get; set; }
+        public string divergencia { get; set; }
+        public string adultos { get; set; }
+        public string criancas1 { get; set; }
+        public string criancas2 { get; set; }
+        public string bagagem { get; set; }
+        public string observacao { get; set; }
+        public string selecionado { get; set; }
+    }
+
+    public class GovernancaHistorico
+    {
+        public long codigo { get; set; }
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public string unidade { get; set; }
+        public string data { get; set; }
+        public string apartamento { get; set; }
+        public string camareira { get; set; }
+        public string horaInicio { get; set; }
+        public string horaTermino { get; set; }
+        public string tempoGasto { get; set; }
+        public string tipoGovernanca { get; set; }
+        public int naoConformidade { get; set; }
+        public int quantidadeOS { get; set; }
+        public string responsavelVistoria { get; set; }
+        public string horaVistoria { get; set; }
+        public string status { get; set; }
+        public string cssClass { get; set; }
+    }
+
+    public class GovernancaHistoricoDetails
+    {
+        public List<GovernancaHistoricoChecklistGrupo> grupo { get; set; }
+        public List<GovernancaHistoricoEnxoval> enxoval { get; set; }
+    }
+
+    public class GovernancaHistoricoChecklistGrupo
+    {
+        public string grupo { get; set; }
+        public List<GovernancaHistoricoChecklistSubGrupo> subgrupo { get; set; }
+    }
+
+    public class GovernancaHistoricoChecklistSubGrupo
+    {
+        public string grupo { get; set; }
+        public string subgrupo { get; set; }
+        public List<GovernancaHistoricoChecklist> checklist { get; set; }
+    }
+
+    public class GovernancaHistoricoChecklist
+    {
+        public string checklist { get; set; }
+        public string resposta { get; set; }
+        public string observacao { get; set; }
+        public string ordemServico { get; set; }
+        public string link { get; set; }
+        public bool foto { get; set; }
+        public string cssClass { get; set; }
+    }
+
+    public class GovernancaHistoricoEnxoval
+    {
+        public string enxoval { get; set; }
+        public string quantidade { get; set; }
+        public string peso { get; set; }
+        public string totalPeso { get; set; }
+    }
+
+    public class GovernancaStatusUH
+    {
+        public bool success { get; set; }
+        public string message { get; set; }
+        public List<GovernancaStatusUHDetalhe> result { get; set; }
+        public List<GovernancaStatusUHDetalheError> resultError { get; set; }
+    }
+
+    public class GovernancaStatusUHDetalhe
+    {
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string apartamento { get; set; }
+        public string statusUH { get; set; }
+        public string statusGov { get; set; }
+        public string newStatusUH { get; set; }
+        public string newStatusGov { get; set; }
+    }
+
+    public class GovernancaStatusUHDetalheError
+    {
+        public string apartamento { get; set; }
+        public string erro { get; set; }
+    }
+
+    public class GovernancaLogAlteracaoStatusUH
+    {
+        public string unidade { get; set; }
+        public string bloco { get; set; }
+        public string andar { get; set; }
+        public string apartamento { get; set; }
+        public string status { get; set; }
+        public string origem { get; set; }
+        public string usuario { get; set; }
+        public string dataAlteracao { get; set; }
+    }
+
+    public class GovernancaInventarioEnxoval
+    {
+        public long codigo { get; set; }
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public string unidade { get; set; }
+        public string data { get; set; }
+        public string contador { get; set; }
+        public string status { get; set; }
+        public string statusDescricao { get; set; }
+        public string acuracidade { get; set; }
+        public string cssClass { get; set; }
+    }
+
+    public class GovernancaInventarioEnxovalDetalhe
+    {
+        public string enxoval { get; set; }
+        public int quantidadeContabil { get; set; }
+        public int quantidadeInventario { get; set; }
+        public int quantidadeUso { get; set; }
+        public int quantidadeLavanderia { get; set; }
+        public int total { get; set; }
+        public int divergencia { get; set; }
+    }
+
+    public class GovernancaInventarioChangeStatusResponse
+    {
+        public bool success { get; set; }
+        public string message { get; set; }
+    }
+
+    public class GovernancaMovimentacaoEnxoval
+    {
+        public long codigo { get; set; }
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public int codigoEnxoval { get; set; }
+        public string enxoval { get; set; }
+        public int quantidade { get; set; }
+        public int quantidadeHotel { get; set; }
+        public int saidaLavanderia { get; set; }
+        public int entradaLavanderia { get; set; }
+        public int saldoLavanderia { get; set; }
+        public int perdasDeclaradas { get; set; }
+        public int aquisicoes { get; set; }
+        public int evasoes { get; set; }
+        public string percentualEvasao { get; set; }
+    }
+
+    public class GovernancaMovimentacaoEnxovalDetalhe
+    {
+        public string data { get; set; }
+        public string tipoMovimentacao { get; set; }
+        public string quantidade { get; set; }
+        public string usuario { get; set; }
+        public string local { get; set; }
+        public string saldo { get; set; }
+    }
+
+    public class TipoPerdaEnxoval
+    {
+        public int codigo { get; set; }
+        public int codigoEmpresa { get; set; }
+        public int codigoUnidade { get; set; }
+        public string unidade { get; set; }
+        public string descricao { get; set; }
+        public string ativo { get; set; }
+        public int ativoValue { get; set; }
+    }
+
+    public class DesempenhoGovernancaViewModel
+    {
+        public int UnidadeId { get; set; }
+        public string NomeUnidade { get; set; }
+        public int MesReferencia { get; set; }
+        public int AnoReferencia { get; set; }
+        public string MesLabel { get; set; }
+        public int DiasDecorridos { get; set; }
+        public int DiasRestantes { get; set; }
+
+        public int TotalUHsArrumadas { get; set; }
+        public int TotalUHsVistoriadas { get; set; }
+        public decimal PctVistoria { get; set; }
+        public int TotalNC { get; set; }
+        public int TotalRetrabalho { get; set; }
+        public decimal IndiceNC { get; set; }
+        public decimal IndiceRetrabalho { get; set; }
+        public int TotalOSManutencao { get; set; }
+
+        public int MetaMensalUHs { get; set; }
+        public int RealizadoUHs { get; set; }
+        public decimal GaugePct { get; set; }
+        public int TotalNcGeral { get; set; }
+
+        public List<EvolucaoDiariaItem> EvolucaoDiaria { get; set; } = new List<EvolucaoDiariaItem>();
+        public List<CamareiraDesempenhoItem> Camareiras { get; set; } = new List<CamareiraDesempenhoItem>();
+        public List<TopNcItem> TopNcItens { get; set; } = new List<TopNcItem>();
+
+        // Ranking da rede (mesma origem da tela "Todas as Unidades") — usado para o Score e a posição desta unidade
+        public List<DesempenhoGovernancaAllUnidadeItem> RankingUnidades { get; set; } = new List<DesempenhoGovernancaAllUnidadeItem>();
+    }
+
+    public class EvolucaoDiariaItem
+    {
+        public int Dia { get; set; }
+        public int NC { get; set; }
+        public int Retrabalho { get; set; }
+        public int UHsSaida { get; set; }
+        public int UHsVistoriadas { get; set; }
+        public int UHsPermanencia { get; set; }
+        public int UHsManutencao { get; set; }
+        public int MetaDiaria { get; set; }
+    }
+
+    public class CamareiraDesempenhoItem
+    {
+        public string Nome { get; set; }
+        public int UHsArrumadas { get; set; }
+        public int NC { get; set; }
+        public int Retrabalho { get; set; }
+        public int DiasTrabalhados { get; set; }
+    }
+
+    public class TopNcItem
+    {
+        public string ItemVistoria { get; set; }
+        public int Quantidade { get; set; }
+    }
+
+    public class DesempenhoGovernancaAllViewModel
+    {
+        public string MesLabel { get; set; }
+        public int MesReferencia { get; set; }
+        public int AnoReferencia { get; set; }
+        public int QtdCamareira { get; set; }
+        public int QtdVistoriador { get; set; }
+        public int TotalUHsArrumadas { get; set; }
+        public int TotalUHsSaida { get; set; }
+        public int TotalUHsPermanencia { get; set; }
+        public int TotalUHsVistoriadas { get; set; }
+        public int TotalNC { get; set; }
+        public int TotalRetrabalho { get; set; }
+        public int TotalOSManutencao { get; set; }
+        public decimal PctVistoriaMedia { get; set; }
+        public List<DesempenhoGovernancaAllUnidadeItem> Unidades { get; set; } = new List<DesempenhoGovernancaAllUnidadeItem>();
+    }
+
+    public class DesempenhoGovernancaAllUnidadeItem
+    {
+        public int CodigoUnidade { get; set; }
+        public string NomeUnidade { get; set; }
+        public int QtdCamareira { get; set; }
+        public int QtdUH { get; set; }
+        public int QtdVistoriador { get; set; }
+        public int UHsArrumadas { get; set; }
+        public int UHsSaida { get; set; }
+        public int UHsPermanencia { get; set; }
+        public int UHsVistoriadas { get; set; }
+        public decimal PctVistoriaSaidas { get; set; }
+        public int OSManutencao { get; set; }
+        public int TotalNC { get; set; }
+        public decimal NCPorUH { get; set; }
+        public int TotalRetrabalho { get; set; }
+        public int QtdTrocaStatus { get; set; }
+        public decimal RetrabPorUH { get; set; }
+        public decimal Score { get; set; }
+    }
+
+    // ===== AD07 - Metas e Parâmetros de Governança =====
+    public class MetasParametrosGovernancaViewModel
+    {
+        // ---- Meta de Atendimento — Padrão da empresa ----
+        public decimal PctMetaAtendimentoPadrao { get; set; }   // ex: 90
+        public int MetaAptosDiaCamareiraPadrao { get; set; }    // ex: 18 (UHs/dia)
+        public decimal MetaPctVistoriaPadrao { get; set; }      // ex: 95
+
+        // ---- Pesos — Ranking de Todas as Unidades (somam 100) ----
+        public decimal PesoNCUnidades { get; set; }             // ex: 30
+        public decimal PesoVistoriaUnidades { get; set; }       // ex: 30
+        public decimal PesoProdutividadeUnidades { get; set; }  // ex: 30
+        public decimal PesoRetrabalhoUnidades { get; set; }     // ex: 10
+        public int QtdMinimaElegivelUnidades { get; set; }      // ex: 100 (UHs arrumadas/mês)
+
+        // ---- Pesos — Ranking Individual "Governança Nota 10" (somam 100) ----
+        public decimal PesoProdutividadeIndividual { get; set; } // ex: 60
+        public decimal PesoNCIndividual { get; set; }            // ex: 30
+        public decimal PesoRetrabalhoIndividual { get; set; }    // ex: 10
+        public int QtdMinimaElegivelIndividual { get; set; }     // ex: 20 (UHs arrumadas/mês)
+        public decimal PctVistoriadosEstimado { get; set; }      // ex: 80
+
+        public string MesReferenciaLabel { get; set; }           // ex: "Julho/2026"
+
+        public List<MetaUnidadeItem> Unidades { get; set; }
+
+        public MetasParametrosGovernancaViewModel()
+        {
+            Unidades = new List<MetaUnidadeItem>();
+        }
+    }
+
+    public class MetaUnidadeItem
+    {
+        public int UnidadeId { get; set; }
+        public string NomeUnidade { get; set; }
+        public int AptosTotaisPMS { get; set; }                  // total de aptos a arrumar no período (fonte PMS)
+        public decimal? PctMetaCustom { get; set; }              // null = usa PctMetaAtendimentoPadrao
+        public int? MetaAptosDiaCamareiraCustom { get; set; }    // null = usa MetaAptosDiaCamareiraPadrao
+        public decimal? MetaPctVistoriaCustom { get; set; }      // null = usa MetaPctVistoriaPadrao
+        public int MetaCalculada { get; set; }                   // AptosTotaisPMS * (% Meta efetivo / 100)
+    }
+}

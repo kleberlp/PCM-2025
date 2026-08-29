@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Modelos do PCM em .NET 10. O namespace continua PCM.WEB.MODELS de
+       propósito: o código do DAL e dos controllers migra sem mexer em using;
+       só o assembly muda de nome (PCMCore.*), para conviver com o antigo.
+       VS sem suporte a net10 (< 17.16): troque net10.0 por net9.0 aqui e nos
+       outros dois projetos — nada mais depende da versão. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>PCM.WEB.MODELS</RootNamespace>
+    <AssemblyName>PCMCore.WEB.MODELS</AssemblyName>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+</Project>

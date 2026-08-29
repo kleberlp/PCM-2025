@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- DAL do PCM em .NET 10 (VB continua VB — suportado normalmente em
+       class library). Namespace raiz segue PCM.WEB.DAL para o código migrar
+       sem mexer em Imports; o assembly é PCMCore.WEB.DAL.
+       Option Strict/Explicit iguais ao projeto antigo. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>PCM.WEB.DAL</RootNamespace>
+    <AssemblyName>PCMCore.WEB.DAL</AssemblyName>
+    <OptionStrict>Off</OptionStrict>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PCMCore.WEB.MODELS\PCMCore.WEB.MODELS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Mesmo EPPlus do projeto net48: nenhuma mudança de API. -->
+    <PackageReference Include="EPPlus" Version="8.4.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <!-- Variante Core do driver Oracle (a Oracle.ManagedDataAccess clássica é só net48). -->
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.6.1" />
+    <!-- System.Data.SqlClient mantém o código como está (zero mudança de Imports).
+         Migrar para Microsoft.Data.SqlClient fica como passo futuro — muda default
+         de Encrypt e exige ajuste de connection string. -->
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    <!-- Import de planilha Excel via ACE (Stock.vb) — só Windows, exige o
+         Access Database Engine instalado no servidor, como hoje. -->
+    <PackageReference Include="System.Data.OleDb" Version="9.0.4" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.4" />
+    <!-- EmailSender lê ConfigurationManager.AppSettings: no host Core os valores
+         vêm do PCMCore.Web.dll.config OU migram para appsettings (ver docs/MIGRACAO-PCMCORE.md). -->
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
+  </ItemGroup>
+
+</Project>

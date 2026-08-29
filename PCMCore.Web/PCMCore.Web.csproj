@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- PCM em ASP.NET Core (.NET 10). Namespace raiz segue PCM.WEB para os
+       controllers do projeto antigo migrarem com o menor diff possível. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>PCM.WEB</RootNamespace>
+    <AssemblyName>PCMCore.Web</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PCMCore.WEB.DAL\PCMCore.WEB.DAL.vbproj" />
+    <ProjectReference Include="..\PCMCore.WEB.MODELS\PCMCore.WEB.MODELS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Os controllers usam JsonConvert (secoesJson, telasJson etc.). -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

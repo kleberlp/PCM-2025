@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - PCM by SIM</title>
+    @* O layout real (Codebase, sidebar, header com o "?" do manual, popup de
+       avisos) migra junto com o módulo Account/Home — este aqui só sustenta o
+       esqueleto até lá. *@
+</head>
+<body>
+    @RenderBody()
+    @await RenderSectionAsync("scripts", required: false)
+</body>
+</html>
