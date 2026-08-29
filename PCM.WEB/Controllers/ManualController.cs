@@ -238,7 +238,11 @@ namespace PCM.WEB.Controllers
 
         // POST: SAVE — cabeçalho e seções (JSON) de uma vez, para não ficar
         // meio-caminho gravado se o navegador cair no meio da edição.
+        // ValidateInput(false): o Markdown pode citar tags (<b>, <table>...) e a
+        // validação de requisição derrubaria o POST; na exibição o painel escapa
+        // todo o conteúdo antes de formatar, então tag colada vira texto.
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult SaveHelp(int codigo, string tipo, string tela_controller, string tela_action,
                                    int processo, string titulo, string subtitulo, bool ativo, string itensJson,
                                    string telasJson = "")

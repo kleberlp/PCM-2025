@@ -55,6 +55,10 @@ namespace PCM.WEB.Controllers
         /// atributos de evento (onclick etc.) e URLs javascript:. O conteúdo é
         /// digitado por administradores, mas será renderizado no navegador de
         /// todos os usuários — defesa em profundidade além da CSP.
+        /// Aceita um documento inteiro colado (export de outra ferramenta):
+        /// o invólucro (doctype/html/head/body) e o CSS global saem, porque o
+        /// conteúdo vai para DENTRO da página do PCM — um style com "body{...}"
+        /// restilizaria o sistema todo enquanto o popup existisse no DOM.
         /// </summary>
         private static string SanitizarHtml(string html)
         {
@@ -62,8 +66,12 @@ namespace PCM.WEB.Controllers
 
             var opts = RegexOptions.IgnoreCase | RegexOptions.Singleline;
 
-            html = Regex.Replace(html, @"<\s*(script|iframe|object|embed|form)\b[^>]*>.*?<\s*/\s*\1\s*>", "", opts);
+            html = Regex.Replace(html, @"<!--.*?-->", "", opts);
+            html = Regex.Replace(html, @"<!DOCTYPE[^>]*>", "", opts);
+            html = Regex.Replace(html, @"<\s*(script|iframe|object|embed|form|style|title)\b[^>]*>.*?<\s*/\s*\1\s*>", "", opts);
             html = Regex.Replace(html, @"<\s*(script|iframe|object|embed|form)\b[^>]*/?\s*>", "", opts);
+            html = Regex.Replace(html, @"<\s*/?\s*(html|head|body)\b[^>]*>", "", opts);
+            html = Regex.Replace(html, @"<\s*(meta|link|base)\b[^>]*/?\s*>", "", opts);
             html = Regex.Replace(html, @"\son\w+\s*=\s*""[^""]*""", "", opts);
             html = Regex.Replace(html, @"\son\w+\s*=\s*'[^']*'", "", opts);
             html = Regex.Replace(html, @"\son\w+\s*=\s*[^\s>]+", "", opts);
@@ -147,8 +155,12 @@ namespace PCM.WEB.Controllers
                                        bCadastro: false), JsonRequestBehavior.AllowGet);
         }
 
-        // POST: SAVE — cabeçalho e seções (JSON) de uma vez
+        // POST: SAVE — cabeçalho e seções (JSON) de uma vez.
+        // ValidateInput(false): a seção É HTML — sem isso a validação de
+        // requisição do ASP.NET derruba o POST com erro 500 antes do controller.
+        // A defesa fica no SanitizarHtml (e na CSP, na exibição).
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult SaveAviso(int codigo, string titulo, string data_inicio, string data_termino,
                                     int empresa, int unidade, bool auditado, bool avaliado, bool ativo,
                                     string secoesJson)
