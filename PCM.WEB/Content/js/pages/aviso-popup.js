@@ -102,7 +102,6 @@ jQuery(function () {
         $root.find('.avp-obrigado').toggleClass('js-hidden', !(aviso.avaliacao > 0));
         pintarEstrelas(aviso.avaliacao || 0);
 
-        $root.find('.avp-nota-auditoria').toggleClass('js-hidden', !aviso.auditado);
         $root.find('.avp-nao-ver-chk').prop('checked', false);
 
         irPara(0);
