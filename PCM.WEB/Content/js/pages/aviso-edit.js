@@ -104,9 +104,11 @@ jQuery(function () {
                 if (r.success) { window.location.href = $dados.attr('data-url-index'); }
                 else { Swal.fire({ text: r.message, icon: 'error' }); }
             },
-            error: function () {
+            error: function (xhr) {
                 $btn.prop('disabled', false);
-                Swal.fire({ text: 'Não foi possível salvar o aviso.', icon: 'error' });
+                // O código HTTP diz onde morreu (500 validação/erro no servidor,
+                // 404 rota, 413 tamanho): sem ele o suporte fica no escuro.
+                Swal.fire({ text: 'Não foi possível salvar o aviso (HTTP ' + (xhr && xhr.status || 0) + ').', icon: 'error' });
             }
         });
     });
