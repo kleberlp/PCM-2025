@@ -51,6 +51,45 @@
         return /^\s*\|?[\s:-]*-[\s|:-]*$/.test(linha) && linha.indexOf('-') >= 0 && linha.indexOf('|') >= 0;
     }
 
+    function tabelaHtml(cab, corpo) {
+        return '<div class="manual-tabela"><table><thead><tr>' +
+               cab.map(function (c) { return '<th>' + emLinha(c) + '</th>'; }).join('') +
+               '</tr></thead><tbody>' +
+               corpo.map(function (l) {
+                   return '<tr>' + l.map(function (c) { return '<td>' + emLinha(c) + '</td>'; }).join('') + '</tr>';
+               }).join('') +
+               '</tbody></table></div>';
+    }
+
+    /* Tabela espremida numa linha só — conteúdo colado sem as quebras de linha:
+       "| A | B | | :--- | :--- | | a1 | b1 | | a2 | b2 |". O separador embutido
+       diz quantas colunas a tabela tem; o que vem antes é o cabeçalho e as
+       células seguintes são fatiadas em linhas dessa largura. */
+    function tabelaEmLinhaUnica(linha) {
+
+        if (!/^\s*\|/.test(linha)) return null;
+
+        var mSep = /\|\s*:?-{2,}:?\s*(?:\|\s*:?-{2,}:?\s*)*\|/.exec(linha);
+        if (!mSep || mSep.index <= 0) return null;
+
+        var cab = celulas(linha.slice(0, mSep.index));
+        var n = celulas(mSep[0]).length;
+        if (!cab.length || !n) return null;
+
+        var corpo = [];
+        var atual = [];
+        linha.slice(mSep.index + mSep[0].length).split('|').forEach(function (tok) {
+            var t = tok.trim();
+            // o "| |" entre uma linha e outra vira token vazio na borda: pula
+            if (t === '' && atual.length === 0) return;
+            atual.push(t);
+            if (atual.length === n) { corpo.push(atual); atual = []; }
+        });
+        if (atual.length && atual.join('') !== '') corpo.push(atual);
+
+        return tabelaHtml(cab, corpo);
+    }
+
     // O texto chega escapado: o ">" do Markdown já é "&gt;" quando o bloco é lido.
     var CITACAO = /^\s*&gt;\s?/;
 
@@ -78,6 +117,10 @@
                 continue;
             }
 
+            // Tabela colada numa linha só (sem quebras de linha).
+            var comprimida = tabelaEmLinhaUnica(linha);
+            if (comprimida) { html.push(comprimida); i++; continue; }
+
             // Tabela: linha de células seguida da linha de traços — ou, sem os
             // traços, duas linhas seguidas no formato |...|: quem escreveu assim
             // queria uma tabela, e pipes crus no painel não ajudam ninguém.
@@ -93,14 +136,7 @@
                 while (i < linhas.length && linhas[i].indexOf('|') >= 0 && linhas[i].trim() !== '') {
                     corpo.push(celulas(linhas[i])); i++;
                 }
-                html.push(
-                    '<div class="manual-tabela"><table><thead><tr>' +
-                    cab.map(function (c) { return '<th>' + emLinha(c) + '</th>'; }).join('') +
-                    '</tr></thead><tbody>' +
-                    corpo.map(function (l) {
-                        return '<tr>' + l.map(function (c) { return '<td>' + emLinha(c) + '</td>'; }).join('') + '</tr>';
-                    }).join('') +
-                    '</tbody></table></div>');
+                html.push(tabelaHtml(cab, corpo));
                 continue;
             }
 
