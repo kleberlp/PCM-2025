@@ -388,12 +388,12 @@
     });
 
     /* ── presença do botão ──
-       O "?" só existe onde há manual: a busca da carga decide. Quem pode manter
-       o manual continua vendo o botão mesmo na tela sem conteúdo — é por ele
-       que se cria o manual daquela tela. Se a busca falhar (rede, banco), o
-       botão fica e o clique tenta de novo, como antes. */
+       O "?" só existe onde há manual cadastrado: a busca da carga decide, para
+       todo mundo — quem mantém o manual cria o da tela pela manutenção
+       (HelpIndex), não por aqui. Se a busca falhar (rede, banco), o botão fica
+       e o clique tenta de novo, como antes. */
     buscar(function () {
-        $btn.toggleClass('js-hidden', !manual && !canEdit);
+        $btn.toggleClass('js-hidden', !manual);
     });
 
     /* ── manual do processo (link "ver também") ── */
