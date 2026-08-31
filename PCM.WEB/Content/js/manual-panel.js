@@ -271,7 +271,12 @@
             }
             player = '<iframe ' + (aberta ? 'src' : 'data-src') + '="' + escapar(embed) + '" ' +
                      'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
-                     'allowfullscreen loading="lazy"></iframe>';
+                     'allowfullscreen loading="lazy"></iframe>' +
+                     // A faixa de cima do player embutido é onde moram os botões
+                     // que levam para fora (pop-out do Drive, título/compartilhar
+                     // do YouTube). O iframe é de outro domínio — não dá para
+                     // removê-los —, então uma tampa invisível engole os cliques.
+                     '<div class="manual-video-tampa"></div>';
         }
 
         return '<div class="manual-video-box">' +

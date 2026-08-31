@@ -279,6 +279,19 @@
     word-break: break-all;
 }
 
+/* Tampa invisível sobre a faixa de cima do player embutido: bloqueia o
+   pop-out do Drive e o título/compartilhar do YouTube, que levariam o
+   usuário para a página do vídeo (com link e download). Os controles do
+   player ficam embaixo e continuam livres. */
+.manual-painel .manual-video-tampa {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 62px;
+    z-index: 2;
+}
+
 /* Barra de ações do vídeo (tela cheia) */
 .manual-painel .manual-video-acoes { text-align: right; margin-top: 4px; }
 
