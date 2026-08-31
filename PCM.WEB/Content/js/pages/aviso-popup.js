@@ -142,19 +142,51 @@ jQuery(function () {
         }
     }
 
+    /* ── lâmpada do header ──
+       Acesa (pulsando) enquanto houver aviso vigente que o usuário ainda não
+       dispensou; o clique reabre o popup a qualquer momento. Apaga quando o
+       último aviso for dispensado ou sair de vigência. */
+    var $lampada = jQuery('#btnAviso');
+
+    function atualizarLampada() {
+        if (!$lampada.length) { return; }
+        jQuery.getJSON($lampada.attr('data-url-resumo')).done(function (r) {
+            $lampada.toggleClass('js-hidden', !(r && r.quantidade > 0));
+        });
+    }
+
+    $lampada.on('click', function () {
+        jQuery.getJSON($lampada.attr('data-url-abrir')).done(function (avisos) {
+            if (!avisos || !avisos.length) { atualizarLampada(); return; }
+            fila = avisos;
+            mostrar(fila.shift());
+        });
+    });
+
     /* ── fechar / próximo da fila ── */
     function fechar() {
 
-        if (avisoAtual && !avisoAtual.previa && $root.find('.avp-nao-ver-chk').prop('checked')) {
-            jQuery.post(urls.dispensar, { codigo: avisoAtual.codigo });
-        }
+        var dispensou = avisoAtual && !avisoAtual.previa &&
+                        $root.find('.avp-nao-ver-chk').prop('checked');
+        var codigoDispensa = dispensou ? avisoAtual.codigo : 0;
+        var eraPrevia = !!(avisoAtual && avisoAtual.previa);
 
         avisoAtual = null;
 
         if (fila.length) {
+            if (dispensou) { jQuery.post(urls.dispensar, { codigo: codigoDispensa }); }
             mostrar(fila.shift());
-        } else {
-            $root.removeClass('avp-aberto');
+            return;
+        }
+
+        $root.removeClass('avp-aberto');
+
+        // A lâmpada reflete a dispensa na hora: espera o registro gravar
+        // antes de reconferir a contagem.
+        if (dispensou) {
+            jQuery.post(urls.dispensar, { codigo: codigoDispensa }).always(atualizarLampada);
+        } else if (!eraPrevia) {
+            atualizarLampada();
         }
     }
 
@@ -178,4 +210,6 @@ jQuery(function () {
         fila = avisos;
         mostrar(fila.shift());
     });
+
+    atualizarLampada();
 });

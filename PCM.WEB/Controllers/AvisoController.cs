@@ -277,6 +277,37 @@ namespace PCM.WEB.Controllers
             return jsonResult;
         }
 
+        // JSON: quantos avisos vigentes o usuário ainda não dispensou — acende a
+        // lâmpada do header. Só a contagem: o conteúdo (que pode pesar) fica
+        // para o clique.
+        public JsonResult AvisosResumo()
+        {
+            if (Session["empresa"] == null)
+                return Json(new { quantidade = 0 }, JsonRequestBehavior.AllowGet);
+
+            var avisos = oAviso.AvisosPendentes(iCodigoEmpresa: codigoEmpresa,
+                                                iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"]),
+                                                iCodigoUsuario: codigoUsuario);
+
+            return Json(new { quantidade = avisos.Count }, JsonRequestBehavior.AllowGet);
+        }
+
+        // JSON: avisos vigentes para abrir sob demanda (clique na lâmpada) —
+        // sem a trava de uma-vez-por-sessão do AvisosLogin.
+        public JsonResult AvisosAbrir()
+        {
+            if (Session["empresa"] == null)
+                return Json(new List<Aviso>(), JsonRequestBehavior.AllowGet);
+
+            var avisos = oAviso.AvisosPendentes(iCodigoEmpresa: codigoEmpresa,
+                                                iCodigoUnidade: Convert.ToInt32(Session["codigo_unidade"]),
+                                                iCodigoUsuario: codigoUsuario);
+
+            var jsonResult = Json(avisos, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+
         // POST: registra que o aviso foi exibido (log de auditoria)
         [HttpPost]
         public JsonResult AvisoVisualizado(int codigo)
