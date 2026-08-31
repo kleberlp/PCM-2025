@@ -58,6 +58,44 @@
 .av-secao-rotulo { font-size: 11px; font-weight: 600; color: #6b7280; }
 .av-secao-conteudo { font-family: Consolas, Menlo, monospace; font-size: 12px; }
 
+/* ---- lâmpada do header ----
+   Mesmo desenho do "?" do manual (bolinha com anel pulsante), em âmbar:
+   avisar é chamar atenção, mas cada botão com a sua cor. */
+#page-header .btn-aviso {
+    position: relative;
+    background: #f5a623;
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 6px rgba(245, 166, 35, .45);
+}
+
+#page-header .btn-aviso:hover,
+#page-header .btn-aviso:focus,
+#page-header .btn-aviso:active {
+    background: #d98c0c;
+    color: #fff;
+}
+
+#page-header .btn-aviso::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid #f5a623;
+    animation: aviso-pulso 2s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes aviso-pulso {
+    0%   { transform: scale(1);    opacity: .75; }
+    70%  { transform: scale(1.65); opacity: 0; }
+    100% { transform: scale(1.65); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #page-header .btn-aviso::after { animation: none; opacity: 0; }
+}
+
 /* ---- popup do login ---- */
 #aviso-popup-root.avp-aberto { display: block !important; }
 
