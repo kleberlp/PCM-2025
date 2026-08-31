@@ -64,6 +64,51 @@ jQuery(function () {
         renumerar();
     });
 
+    /* ── pré-visualização ──
+       Mostra o aviso no MESMO popup do login (aviso-popup.js, no layout):
+       trilha, carrossel e estrelas de verdade, montados com o que está no
+       formulário — e sem registrar visualização/avaliação/dispensa. */
+
+    // Espelho leve da sanitização do servidor: a prévia não deve mostrar o
+    // que o salvar vai remover (script/style/invólucro de documento colado).
+    function limparHtmlPrevia(html) {
+        return (html || '')
+            .replace(/<!--[\s\S]*?-->/g, '')
+            .replace(/<!DOCTYPE[^>]*>/gi, '')
+            .replace(/<\s*(script|style|title)\b[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, '')
+            .replace(/<\s*\/?\s*(html|head|body)\b[^>]*>/gi, '')
+            .replace(/<\s*(meta|link|base)\b[^>]*\/?\s*>/gi, '');
+    }
+
+    jQuery('#btnPreviaAviso').on('click', function () {
+
+        if (!window.PcmAvisoPopup) { return; }
+
+        var secoes = jQuery('#secoesAviso .av-secao').map(function (i) {
+            var $s = jQuery(this);
+            return {
+                titulo: jQuery.trim($s.find('.av-secao-titulo').val() || ''),
+                conteudo: limparHtmlPrevia($s.find('.av-secao-conteudo').val() || '')
+            };
+        }).get().filter(function (s) { return s.titulo !== '' || s.conteudo !== ''; });
+
+        if (!secoes.length) {
+            secoes = [{ titulo: 'Sem conteúdo', conteudo: '<p>Inclua ao menos uma seção para pré-visualizar.</p>' }];
+        }
+
+        var termino = (jQuery('#dataTerminoAviso').val() || '').split('-'); // yyyy-mm-dd
+
+        window.PcmAvisoPopup.exibir({
+            codigo: 0,
+            titulo: jQuery('#tituloAviso').val() || '(sem título)',
+            data_termino: termino.length === 3 ? termino[2] + '/' + termino[1] + '/' + termino[0] : '',
+            auditado: false,
+            avaliado: jQuery('#avaliadoAviso').prop('checked'),
+            avaliacao: 0,
+            secoes: secoes
+        });
+    });
+
     /* ── salvar ── */
     jQuery('#btnSalvarAviso').on('click', function () {
 

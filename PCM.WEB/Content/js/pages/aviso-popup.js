@@ -76,7 +76,7 @@ jQuery(function () {
         pintarEstrelas(nota);
         $root.find('.avp-obrigado').removeClass('js-hidden');
 
-        if (avisoAtual) {
+        if (avisoAtual && !avisoAtual.previa) {
             jQuery.post(urls.avaliar, { codigo: avisoAtual.codigo, avaliacao: nota });
         }
     });
@@ -136,7 +136,8 @@ jQuery(function () {
         $root.addClass('avp-aberto');
 
         // log de auditoria: o aviso foi exibido para este usuário
-        if (aviso.auditado) {
+        // (pré-visualização do cadastro não registra nada)
+        if (aviso.auditado && !aviso.previa) {
             jQuery.post(urls.visualizado, { codigo: aviso.codigo });
         }
     }
@@ -144,7 +145,7 @@ jQuery(function () {
     /* ── fechar / próximo da fila ── */
     function fechar() {
 
-        if (avisoAtual && $root.find('.avp-nao-ver-chk').prop('checked')) {
+        if (avisoAtual && !avisoAtual.previa && $root.find('.avp-nao-ver-chk').prop('checked')) {
             jQuery.post(urls.dispensar, { codigo: avisoAtual.codigo });
         }
 
@@ -158,6 +159,18 @@ jQuery(function () {
     }
 
     $root.on('click', '.avp-ok, .avp-fechar', fechar);
+
+    /* ── pré-visualização do cadastro ──
+       O aviso-edit.js monta um aviso com o que está no formulário e mostra
+       NESTE popup: a prévia é o próprio popup do login, fiel por definição.
+       O sinal previa desliga qualquer registro no servidor. */
+    window.PcmAvisoPopup = {
+        exibir: function (aviso) {
+            aviso.previa = true;
+            fila = [];
+            mostrar(aviso);
+        }
+    };
 
     /* ── carga: uma vez por sessão (o servidor controla) ── */
     jQuery.getJSON(urls.avisos).done(function (avisos) {
