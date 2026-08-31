@@ -12,6 +12,9 @@
     <div class="avp-fundo"></div>
     <div class="avp-central" role="dialog" aria-modal="true" aria-labelledby="avp-titulo">
         <div class="avp-cartao">
+            @* Barra de progresso: corre conforme o leitor avança nas seções *@
+            <div class="avp-progresso"><div></div></div>
+
             <div class="avp-topo">
                 <div>
                     <div class="avp-titulo" id="avp-titulo"></div>
@@ -20,11 +23,13 @@
                 <button type="button" class="avp-fechar" title="Fechar por enquanto">×</button>
             </div>
 
+            @* Trilha de seções: cada seção vira uma etapa numerada, com nome *@
+            <div class="avp-trilha"></div>
+
             <div class="avp-carrossel">
                 <div class="avp-slides"></div>
                 <button type="button" class="avp-seta avp-prev" aria-label="Seção anterior">‹</button>
                 <button type="button" class="avp-seta avp-next" aria-label="Próxima seção">›</button>
-                <div class="avp-pontos"></div>
             </div>
 
             <div class="avp-avaliacao js-hidden">
@@ -44,7 +49,10 @@
                     <input type="checkbox" class="avp-nao-ver-chk">
                     Não mostrar este aviso novamente
                 </label>
-                <button type="button" class="btn btn-primary avp-ok">Fechar</button>
+                <div class="avp-acoes">
+                    <button type="button" class="btn btn-secondary avp-ok">Fechar</button>
+                    <button type="button" class="btn btn-primary avp-prox">Próxima seção ›</button>
+                </div>
             </div>
         </div>
     </div>

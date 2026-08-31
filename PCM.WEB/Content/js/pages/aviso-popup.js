@@ -28,20 +28,41 @@ jQuery(function () {
     var avisoAtual = null;
     var slideAtual = 0;
 
-    /* ── carrossel ── */
+    /* ── carrossel ──
+       A navegação vive na trilha de seções: cada seção é uma etapa numerada
+       com nome, para ninguém fechar o aviso sem perceber que há outras. */
     function irPara(i) {
         var $slides = $root.find('.avp-slide');
         slideAtual = Math.max(0, Math.min($slides.length - 1, i));
 
         $slides.removeClass('avp-ativo').eq(slideAtual).addClass('avp-ativo');
-        $root.find('.avp-ponto').removeClass('avp-ativo').eq(slideAtual).addClass('avp-ativo');
+
+        $root.find('.avp-trilha button').each(function (idx) {
+            jQuery(this).toggleClass('avp-atual', idx === slideAtual)
+                        .toggleClass('avp-vista', idx < slideAtual);
+        });
+
         $root.find('.avp-prev').prop('disabled', slideAtual === 0);
         $root.find('.avp-next').prop('disabled', slideAtual === $slides.length - 1);
+
+        // barra de progresso acompanha o avanço
+        $root.find('.avp-progresso > div')
+             .css('width', (($slides.length ? (slideAtual + 1) / $slides.length : 0) * 100) + '%');
+
+        // na última seção o caminho natural é encerrar
+        $root.find('.avp-prox').text(slideAtual === $slides.length - 1 ? 'Concluir' : 'Próxima seção ›');
+
+        $root.find('.avp-carrossel').scrollTop(0);
     }
 
     $root.on('click', '.avp-prev', function () { irPara(slideAtual - 1); });
     $root.on('click', '.avp-next', function () { irPara(slideAtual + 1); });
-    $root.on('click', '.avp-ponto', function () { irPara(jQuery(this).index()); });
+    $root.on('click', '.avp-trilha button', function () { irPara(jQuery(this).index()); });
+
+    $root.on('click', '.avp-prox', function () {
+        if (slideAtual < $root.find('.avp-slide').length - 1) { irPara(slideAtual + 1); }
+        else { fechar(); }
+    });
 
     /* ── estrelas ── */
     function pintarEstrelas(nota) {
@@ -69,7 +90,7 @@ jQuery(function () {
         $root.find('.avp-periodo').text('Aviso válido até ' + aviso.data_termino);
 
         var $slides = $root.find('.avp-slides').empty();
-        var $pontos = $root.find('.avp-pontos').empty();
+        var $trilha = $root.find('.avp-trilha').empty();
 
         (aviso.secoes || []).forEach(function (secao, i) {
             var slide = document.createElement('section');
@@ -87,16 +108,23 @@ jQuery(function () {
 
             $slides.append(slide);
 
-            var ponto = document.createElement('button');
-            ponto.type = 'button';
-            ponto.className = 'avp-ponto';
-            ponto.setAttribute('aria-label', 'Seção ' + (i + 1));
-            $pontos.append(ponto);
+            // etapa da trilha: número + nome da seção (textContent: título é dado)
+            var etapa = document.createElement('button');
+            etapa.type = 'button';
+
+            var num = document.createElement('span');
+            num.className = 'avp-num';
+            num.textContent = i + 1;
+            etapa.appendChild(num);
+            etapa.appendChild(document.createTextNode(secao.titulo || ('Seção ' + (i + 1))));
+
+            $trilha.append(etapa);
         });
 
+        // Aviso de seção única dispensa trilha, setas e progresso.
         var umaSecao = (aviso.secoes || []).length <= 1;
         $root.find('.avp-prev, .avp-next').toggleClass('js-hidden', umaSecao);
-        $root.find('.avp-pontos').toggleClass('js-hidden', umaSecao);
+        $root.find('.avp-trilha, .avp-progresso').toggleClass('js-hidden', umaSecao);
 
         $root.find('.avp-avaliacao').toggleClass('js-hidden', !aviso.avaliado);
         $root.find('.avp-obrigado').toggleClass('js-hidden', !(aviso.avaliacao > 0));
