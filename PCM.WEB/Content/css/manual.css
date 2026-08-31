@@ -279,6 +279,26 @@
     word-break: break-all;
 }
 
+/* Barra de ações do vídeo (tela cheia) */
+.manual-painel .manual-video-acoes { text-align: right; margin-top: 4px; }
+
+.manual-painel .manual-video-cheia {
+    border: 1px solid #dfe3e8;
+    background: #fff;
+    color: #5b6675;
+    font-size: 11px;
+    border-radius: 4px;
+    padding: 3px 9px;
+    cursor: pointer;
+}
+
+.manual-painel .manual-video-cheia:hover { background: #f2f4f6; color: #343a40; }
+
+/* Em tela cheia o truque do 16:9 (padding-bottom) sai de cena: o contêiner
+   vira a tela inteira e o player preenche via inset 0. */
+.manual-painel .manual-video:fullscreen { padding-bottom: 0; height: 100%; }
+.manual-painel .manual-video:-webkit-full-screen { padding-bottom: 0; height: 100%; }
+
 .manual-painel .manual-vazio {
     padding: 26px 16px;
     text-align: center;

@@ -227,7 +227,7 @@
     function videoEmbed(url) {
 
         var m = url.match(/(?:youtube\.com\/(?:watch\?[^#]*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{5,20})/);
-        if (m) return 'https://www.youtube.com/embed/' + m[1];
+        if (m) return 'https://www.youtube.com/embed/' + m[1] + '?rel=0';
 
         m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
         if (m) return 'https://player.vimeo.com/video/' + m[1];
@@ -252,21 +252,35 @@
     function montarVideo(url, aberta) {
         if (!url || !/^https?:\/\//i.test(url)) return '';
 
+        // O endereço do vídeo não aparece para quem lê: nada de URL estampada,
+        // menu de contexto bloqueado e download escondido no player. Não é
+        // cofre — o navegador precisa carregar o vídeo —, mas os caminhos
+        // casuais de copiar o link somem.
+        var player;
+
         if (ehArquivoVideo(url)) {
-            return '<div class="manual-video"><video controls preload="none" ' +
-                   'src="' + escapar(url) + '"></video></div>';
+            player = '<video controls controlsList="nodownload noremoteplayback" ' +
+                     'disablepictureinpicture preload="none" src="' + escapar(url) + '"></video>';
+        } else {
+            var embed = videoEmbed(url);
+            if (!embed) {
+                // Sem player para esta URL: abre em outra aba, sem mostrar o
+                // endereço no painel.
+                return '<a class="manual-video-link" href="' + escapar(url) + '" target="_blank" rel="noopener noreferrer">' +
+                       '<i class="fa fa-play-circle"></i> Assistir vídeo</a>';
+            }
+            player = '<iframe ' + (aberta ? 'src' : 'data-src') + '="' + escapar(embed) + '" ' +
+                     'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+                     'allowfullscreen loading="lazy"></iframe>';
         }
 
-        var embed = videoEmbed(url);
-        if (!embed) {
-            return '<a class="manual-video-link" href="' + escapar(url) + '" target="_blank" rel="noopener noreferrer">' +
-                   '<i class="fa fa-play-circle"></i> ' + escapar(url) + '</a>';
-        }
-
-        return '<div class="manual-video">' +
-               '<iframe ' + (aberta ? 'src' : 'data-src') + '="' + escapar(embed) + '" ' +
-               'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
-               'allowfullscreen loading="lazy"></iframe></div>';
+        return '<div class="manual-video-box">' +
+               '<div class="manual-video">' + player + '</div>' +
+               '<div class="manual-video-acoes">' +
+                   '<button type="button" class="manual-video-cheia">' +
+                       '<i class="fa fa-expand"></i> Tela cheia' +
+                   '</button>' +
+               '</div></div>';
     }
 
     function montarSecoes(itens) {
@@ -391,6 +405,26 @@
                 jQuery(this).attr('src', jQuery(this).attr('data-src')).removeAttr('data-src');
             });
         }
+    });
+
+    /* ── vídeo: tela cheia e sem caminho fácil para o link ── */
+    jQuery(document).on('click', '.manual-video-cheia', function () {
+        var $box = jQuery(this).closest('.manual-video-box');
+
+        // Player ainda adormecido (data-src): acorda antes de expandir.
+        $box.find('iframe[data-src]').each(function () {
+            jQuery(this).attr('src', jQuery(this).attr('data-src')).removeAttr('data-src');
+        });
+
+        var alvo = $box.find('.manual-video')[0];
+        if (!alvo) return;
+        if (alvo.requestFullscreen) alvo.requestFullscreen();
+        else if (alvo.webkitRequestFullscreen) alvo.webkitRequestFullscreen();
+    });
+
+    // Botão direito no vídeo oferece "copiar endereço do vídeo": fica bloqueado.
+    jQuery(document).on('contextmenu', '.manual-video', function (e) {
+        e.preventDefault();
     });
 
     /* ── busca dentro do manual ──
