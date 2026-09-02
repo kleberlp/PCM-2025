@@ -169,6 +169,17 @@
     white-space: nowrap;
 }
 
+/* O.S. vinculada: o nome dos colaboradores é o badge. Sem "nowrap" — nomes
+   longos quebram dentro do chip em vez de esticar o cartão. */
+.kb-chip-vinculada {
+    background: #8e44ad;
+    border-color: #8e44ad;
+    color: #fff;
+    white-space: normal;
+    text-align: left;
+    letter-spacing: .01em;
+}
+
 /* Prioridade pelo codigo da tb_cad_prioridade:
    0 critico vermelho · 1 alta laranja · 2 media mostarda · 3 baixa amarelo claro */
 .kb-pri-critica { background: #d32f2f; border-color: #d32f2f; color: #fff; }
@@ -176,6 +187,15 @@
 .kb-pri-media   { background: #c9a227; border-color: #c9a227; color: #fff; }
 /* amarelo claro pede tinta escura para o texto continuar legivel */
 .kb-pri-baixa   { background: #f7e08a; border-color: #e6cd6a; color: #6b5900; }
+
+/* linha do nº da O.S.: número em destaque à esquerda, relógio/abertura à direita */
+.kb-card-titulo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 10px;
+    flex-wrap: wrap;
+}
 
 .kb-card-local {
     font-weight: 700;
@@ -217,13 +237,16 @@
     gap: 5px;
 }
 
-/* relógio desde a abertura, cor pela data_necessidade */
+/* relógio desde a abertura + data/hora de abertura — à direita do nº da O.S. */
 .kb-card-relogio {
     font-size: 12px;
     font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: flex-end;
+    gap: 4px 6px;
+    flex-wrap: wrap;
+    margin-left: auto;
     font-variant-numeric: tabular-nums;
 }
 
@@ -237,8 +260,6 @@
     font-weight: 400;
     color: #6b7280;
 }
-
-.kb-card-executor { font-size: 11px; color: #6b7280; }
 
 .kb-vazio {
     text-align: center;
