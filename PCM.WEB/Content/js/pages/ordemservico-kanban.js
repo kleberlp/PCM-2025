@@ -7,6 +7,7 @@
 //    Nº O.S. (destaque)          relógio desde a abertura · aberta dd/MM/yyyy HH:mm
 //    setor - local
 //    descrição
+//  (na O.S. concluída o relógio não corre — mostra só "aberta dd/MM/yyyy HH:mm")
 //
 //  O.S. vinculada não tem coluna própria: vira o chip roxo com o nome dos
 //  colaboradores (o próprio nome já diz que é vinculada). O cartão cai em
@@ -249,20 +250,25 @@
             // so competiria com eles.
             var rel = document.createElement('div');
             rel.className = 'kb-card-relogio kb-rel-neutro';
-            rel.setAttribute('data-aberto-em', abertoEm.getTime());
 
             var icone = document.createElement('i');
             icone.className = 'fa fa-clock-o';
             rel.appendChild(icone);
 
-            var tempo = document.createElement('span');
-            tempo.className = 'kb-rel-tempo';
-            tempo.textContent = fmtDecorrido(Date.now() - abertoEm.getTime());
-            rel.appendChild(tempo);
+            // O.S. concluida nao tem "tempo decorrido" correndo — so a data de
+            // abertura. Sem data-aberto-em o cronometro por segundo a ignora.
+            if (os.status !== 2) {
+                rel.setAttribute('data-aberto-em', abertoEm.getTime());
+
+                var tempo = document.createElement('span');
+                tempo.className = 'kb-rel-tempo';
+                tempo.textContent = fmtDecorrido(Date.now() - abertoEm.getTime());
+                rel.appendChild(tempo);
+            }
 
             var abertura = document.createElement('span');
             abertura.className = 'kb-card-abertura';
-            abertura.textContent = '· aberta ' + os.data;
+            abertura.textContent = (os.status === 2 ? 'aberta ' : '· aberta ') + os.data;
             rel.appendChild(abertura);
 
             titulo.appendChild(rel);
