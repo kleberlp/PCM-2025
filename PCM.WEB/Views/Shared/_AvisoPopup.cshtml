@@ -1,0 +1,59 @@
+@*
+    Popup de Avisos aos Clientes — incluído nos layouts. O JS (aviso-popup.js)
+    busca os avisos pendentes uma vez por sessão (AvisosLogin) e monta o
+    carrossel dentro deste esqueleto. Sem aviso pendente, nada aparece.
+*@
+<div id="aviso-popup-root" class="js-hidden"
+     data-url-avisos="@Url.Action("AvisosLogin", "Aviso")"
+     data-url-visualizado="@Url.Action("AvisoVisualizado", "Aviso")"
+     data-url-avaliar="@Url.Action("AvisoAvaliar", "Aviso")"
+     data-url-dispensar="@Url.Action("AvisoDispensar", "Aviso")">
+
+    <div class="avp-fundo"></div>
+    <div class="avp-central" role="dialog" aria-modal="true" aria-labelledby="avp-titulo">
+        <div class="avp-cartao">
+            @* Barra de progresso: corre conforme o leitor avança nas seções *@
+            <div class="avp-progresso"><div></div></div>
+
+            <div class="avp-topo">
+                <div>
+                    <div class="avp-titulo" id="avp-titulo"></div>
+                    <div class="avp-periodo"></div>
+                </div>
+                <button type="button" class="avp-fechar" title="Fechar por enquanto">×</button>
+            </div>
+
+            @* Trilha de seções: cada seção vira uma etapa numerada, com nome *@
+            <div class="avp-trilha"></div>
+
+            <div class="avp-carrossel">
+                <div class="avp-slides"></div>
+                <button type="button" class="avp-seta avp-prev" aria-label="Seção anterior">‹</button>
+                <button type="button" class="avp-seta avp-next" aria-label="Próxima seção">›</button>
+            </div>
+
+            <div class="avp-avaliacao js-hidden">
+                <span class="avp-pergunta">O que achou deste aviso?</span>
+                <div class="avp-estrelas">
+                    <button type="button" class="avp-estrela" data-v="1" aria-label="1 estrela">★</button>
+                    <button type="button" class="avp-estrela" data-v="2" aria-label="2 estrelas">★</button>
+                    <button type="button" class="avp-estrela" data-v="3" aria-label="3 estrelas">★</button>
+                    <button type="button" class="avp-estrela" data-v="4" aria-label="4 estrelas">★</button>
+                    <button type="button" class="avp-estrela" data-v="5" aria-label="5 estrelas">★</button>
+                </div>
+                <span class="avp-obrigado js-hidden">Obrigado pela avaliação!</span>
+            </div>
+
+            <div class="avp-rodape">
+                <label class="avp-nao-ver">
+                    <input type="checkbox" class="avp-nao-ver-chk">
+                    Não mostrar este aviso novamente
+                </label>
+                <div class="avp-acoes">
+                    <button type="button" class="btn btn-secondary avp-ok">Fechar</button>
+                    <button type="button" class="btn btn-primary avp-prox">Próxima seção ›</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@
 //  Cartão (aprovado no mockup):
 //    [origem] [prioridade] [colaboradores vinculados]
 //    Nº O.S. (destaque)          relógio desde a abertura · aberta dd/MM/yyyy HH:mm
-//    setor - local
+//    local
 //    descrição
 //  (na O.S. concluída o relógio não corre — mostra só "aberta dd/MM/yyyy HH:mm")
 //
@@ -276,8 +276,8 @@
 
         if (titulo.childNodes.length) { card.appendChild(titulo); }
 
-        // linha 3: setor - local
-        var setorLocal = [os.setor, os.local].filter(function (v) { return v; }).join(' - ');
+        // linha 3: local (o setor saiu do cartão em 8029d2e — master)
+        var setorLocal = [os.local].filter(function (v) { return v; }).join(' - ');
         if (setorLocal) { card.appendChild(linhaIcone('kb-card-numero', 'fa-map-marker', setorLocal)); }
 
         // linha 4: descrição
@@ -333,6 +333,8 @@
         });
 
         $('#kb-vazio').toggleClass('kb-oculto', visiveis > 0);
+
+        ajustarAltura();
     }
 
     // relógios correm por segundo — e o pulso entra sozinho quando o tempo
@@ -368,6 +370,24 @@
             Swal.fire({ text: 'Falha ao carregar as ordens de serviço.', icon: 'error' });
         });
     }
+
+    // ---------- altura do quadro ----------
+    //
+    // O quadro ocupa o que sobra da janela ate o rodape. Medir em JS (e nao
+    // fixar vh no CSS) acerta em qualquer tela e continua certo quando a
+    // barra de acoes quebra em duas linhas. CSSOM, nao atributo style (CSP).
+    function ajustarAltura() {
+        var board = document.getElementById('kb-board');
+        if (!board) { return; }
+
+        var topo = board.getBoundingClientRect().top;
+        var altura = window.innerHeight - topo - 16;   // 16 = respiro do rodape
+
+        board.style.height = Math.max(320, altura) + 'px';
+    }
+
+    $(window).on('resize', ajustarAltura);
+    ajustarAltura();
 
     // ---------- eventos ----------
 

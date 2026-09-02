@@ -238,7 +238,11 @@ namespace PCM.WEB.Controllers
 
         // POST: SAVE — cabeçalho e seções (JSON) de uma vez, para não ficar
         // meio-caminho gravado se o navegador cair no meio da edição.
+        // ValidateInput(false): o Markdown pode citar tags (<b>, <table>...) e a
+        // validação de requisição derrubaria o POST; na exibição o painel escapa
+        // todo o conteúdo antes de formatar, então tag colada vira texto.
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult SaveHelp(int codigo, string tipo, string tela_controller, string tela_action,
                                    int processo, string titulo, string subtitulo, bool ativo, string itensJson,
                                    string telasJson = "")
@@ -265,9 +269,13 @@ namespace PCM.WEB.Controllers
                     subtitulo = subtitulo ?? "",
                     ativo = ativo,
                     itens = JsonConvert.DeserializeObject<List<ManualItem>>(itensJson ?? "[]") ?? new List<ManualItem>(),
-                    // Telas irmãs que compartilham este manual (além da principal)
-                    telas = JsonConvert.DeserializeObject<List<ManualTela>>(
-                                string.IsNullOrWhiteSpace(telasJson) ? "[]" : telasJson) ?? new List<ManualTela>()
+                    // Telas irmãs que compartilham este manual (além da principal).
+                    // telasJson vazio = o cliente não carregou a lista (JS antigo em
+                    // cache): vai null e o banco PRESERVA as associações gravadas.
+                    // "[]" é limpeza explícita de quem viu os chips e removeu todos.
+                    telas = string.IsNullOrWhiteSpace(telasJson)
+                                ? null
+                                : JsonConvert.DeserializeObject<List<ManualTela>>(telasJson) ?? new List<ManualTela>()
                 };
 
                 if (string.IsNullOrWhiteSpace(manual.titulo))

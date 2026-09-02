@@ -1,0 +1,277 @@
+/* ============================================================
+   aviso.css — Avisos aos Clientes
+   Manutenção (av-*) e popup do login (avp-*). Escopo próprio,
+   sem estilos inline (CSP degrau 3).
+   ============================================================ */
+
+/* Sem depender do manual.css (o popup entra em todos os layouts) */
+.js-hidden { display: none !important; }
+
+/* ---- manutenção: pills, médias e tiles ---- */
+.av-pill {
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 2px 10px;
+    white-space: nowrap;
+}
+
+.av-pill-ativo { background: #eafaef; color: #14532d; border: 1px solid #b7e4c7; }
+.av-pill-agendado { background: #eef4fe; color: #1c63c4; border: 1px solid #bcd7fb; }
+.av-pill-encerrado { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+
+.av-estrelas-media { color: #f5b301; font-weight: 600; white-space: nowrap; }
+.av-estrelas-media .av-qtd { color: #6b7280; font-size: 11px; font-weight: 400; }
+
+.av-tiles { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+
+.av-tile {
+    flex: 1 1 150px;
+    background: #f6f7f9;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.av-tile-rotulo { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #6b7280; }
+.av-tile-valor { font-size: 24px; font-weight: 700; color: #111827; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.av-tile-estrela { color: #f5b301; font-size: 18px; }
+
+/* ---- cadastro: seções 1:N ---- */
+.av-secao {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f6f7f9;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.av-secao-topo { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+
+.av-secao-ordem {
+    width: 26px; height: 26px; border-radius: 50%; flex: none;
+    background: #2b7de9; color: #fff; font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.av-secao-titulo { flex: 1; }
+.av-secao-rotulo { font-size: 11px; font-weight: 600; color: #6b7280; }
+.av-secao-conteudo { font-family: Consolas, Menlo, monospace; font-size: 12px; }
+
+/* ---- lâmpada do header ----
+   Mesmo desenho do "?" do manual (bolinha com anel pulsante), em âmbar:
+   avisar é chamar atenção, mas cada botão com a sua cor. */
+#page-header .btn-aviso {
+    position: relative;
+    background: #f5a623;
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 6px rgba(245, 166, 35, .45);
+}
+
+#page-header .btn-aviso:hover,
+#page-header .btn-aviso:focus,
+#page-header .btn-aviso:active {
+    background: #d98c0c;
+    color: #fff;
+}
+
+#page-header .btn-aviso::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid #f5a623;
+    animation: aviso-pulso 2s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes aviso-pulso {
+    0%   { transform: scale(1);    opacity: .75; }
+    70%  { transform: scale(1.65); opacity: 0; }
+    100% { transform: scale(1.65); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #page-header .btn-aviso::after { animation: none; opacity: 0; }
+}
+
+/* ---- popup do login ---- */
+#aviso-popup-root.avp-aberto { display: block !important; }
+
+.avp-fundo {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, .55);
+    z-index: 1080;
+}
+
+.avp-central {
+    position: fixed;
+    inset: 0;
+    z-index: 1081;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Pelo menos metade da tela: o aviso é comunicação da administração, não um
+   toast — em monitor de trabalho ele abre com ~60% da largura e da altura
+   (640px de piso para a largura nunca ficar menor que a versão original, e
+   96vw/92vh de teto para caber no celular). */
+.avp-cartao {
+    background: #fff;
+    border-radius: 14px;
+    width: min(max(60vw, 640px), 96vw);
+    min-height: min(60vh, 92vh);
+    max-height: 92vh;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .35);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.avp-topo {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.avp-titulo { font-weight: 700; font-size: 16px; color: #111827; }
+.avp-periodo { font-size: 11px; color: #6b7280; }
+
+.avp-fechar {
+    border: none; background: none; font-size: 22px; line-height: 1;
+    color: #9ca3af; cursor: pointer; padding: 4px 8px; border-radius: 6px;
+}
+
+.avp-fechar:hover { background: #f6f7f9; color: #374151; }
+
+/* carrossel — cresce para preencher a altura do cartão; o que passar rola */
+.avp-carrossel { position: relative; overflow-y: auto; flex: 1 1 auto; }
+
+.avp-slide { display: none; padding: 22px 56px 10px; min-height: 200px; }
+.avp-slide.avp-ativo { display: block; }
+.avp-slide h4 { font-size: 15px; margin-bottom: 10px; color: #111827; }
+.avp-slide-conteudo { font-size: 13px; color: #374151; line-height: 1.55; }
+.avp-slide-conteudo img { max-width: 100%; height: auto; border-radius: 6px; }
+
+/* Conteúdo colado de um export perde o CSS global na sanitização (um style
+   com body{...} restilizaria o sistema todo): o popup dá o acabamento
+   padrão para título, lista e tabela ficarem apresentáveis por conta. */
+.avp-slide-conteudo h1,
+.avp-slide-conteudo h2 { font-size: 16px; font-weight: 700; color: #111827; margin: 14px 0 6px; }
+.avp-slide-conteudo h3 { font-size: 14px; font-weight: 700; color: #1f2937; margin: 12px 0 5px; }
+.avp-slide-conteudo h4 { font-size: 13px; font-weight: 700; color: #374151; margin: 10px 0 4px; }
+.avp-slide-conteudo p { margin: 0 0 9px; }
+.avp-slide-conteudo ul,
+.avp-slide-conteudo ol { margin: 6px 0 9px; padding-left: 20px; }
+.avp-slide-conteudo li { margin: 3px 0; }
+.avp-slide-conteudo hr { border: 0; border-top: 1px solid #e5e7eb; margin: 12px 0; }
+.avp-slide-conteudo blockquote { margin: 8px 0; padding: 6px 11px; border-left: 3px solid #d1d5db; background: #f9fafb; color: #4b5563; }
+
+.avp-slide-conteudo table { width: 100%; border-collapse: collapse; margin: 9px 0; font-size: 12px; }
+.avp-slide-conteudo th,
+.avp-slide-conteudo td { padding: 6px 9px; border: 1px solid #e5e7eb; text-align: left; vertical-align: top; }
+.avp-slide-conteudo th { background: #f9fafb; font-weight: 700; color: #374151; }
+
+.avp-seta {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid #e5e7eb; background: #fff;
+    color: #374151; font-size: 16px; cursor: pointer; z-index: 1;
+}
+
+.avp-seta:hover { background: #f6f7f9; }
+.avp-prev { left: 10px; }
+.avp-next { right: 10px; }
+.avp-seta[disabled] { opacity: .3; cursor: default; }
+
+/* Barra de progresso no alto do cartão: corre conforme o leitor avança. */
+.avp-progresso { height: 3px; background: #e8edf3; }
+.avp-progresso > div { height: 100%; width: 0; background: #2b7de9; transition: width .25s ease; }
+
+/* Trilha de seções: etapas numeradas com nome, no lugar das bolinhas —
+   quem abre o aviso vê de cara quantas partes existem e onde está. */
+.avp-trilha {
+    display: flex;
+    gap: 6px;
+    padding: 0 20px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    overflow-x: auto;
+}
+
+.avp-trilha button {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    border-radius: 999px;
+    padding: 6px 13px 6px 7px;
+    font-size: 12px;
+    color: #6b7280;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.avp-trilha .avp-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #eef1f5; color: #6b7280;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex: none;
+}
+
+.avp-trilha button.avp-atual {
+    border-color: #2b7de9;
+    background: #eaf2fd;
+    color: #1c63c4;
+    font-weight: 700;
+}
+
+.avp-trilha button.avp-atual .avp-num { background: #2b7de9; color: #fff; }
+.avp-trilha button.avp-vista .avp-num { background: #d9e9fc; color: #1c63c4; }
+
+/* avaliação */
+.avp-avaliacao {
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.avp-pergunta { font-size: 13px; font-weight: 600; color: #374151; }
+.avp-estrelas { display: flex; gap: 4px; }
+
+.avp-estrela {
+    font-size: 24px; color: #d1d5db; cursor: pointer;
+    border: none; background: none; padding: 0 2px; line-height: 1;
+}
+
+.avp-estrela.avp-cheia { color: #f5b301; }
+.avp-obrigado { font-size: 12px; color: #22b14c; font-weight: 600; }
+
+.avp-rodape {
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: #f6f7f9;
+}
+
+.avp-nao-ver { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #374151; cursor: pointer; margin: 0; }
+.avp-nao-ver input { width: 15px; height: 15px; }
+
+.avp-acoes { display: flex; align-items: center; gap: 8px; }
+.avp-acoes .avp-prox { font-weight: 700; }

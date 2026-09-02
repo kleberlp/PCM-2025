@@ -1,31 +1,11 @@
 /* manual-panel.js
    Manual integrado: o "?" do cabeçalho abre o manual da tela atual.
 
-   O conteúdo só é buscado quando o painel abre — carregar manual em toda tela
-   seria peso à toa, e a maioria das visitas não abre a ajuda. Buscado uma vez,
-   fica em memória: reabrir na mesma tela não volta ao servidor. */
+   O manual é buscado uma vez na carga da página: é o que diz se o "?" aparece
+   (tela sem manual não tem por que mostrar o botão) e já deixa o conteúdo
+   pronto para o clique. Fica em memória: reabrir não volta ao servidor. */
 (function () {
     'use strict';
-
-    var $btn = jQuery('#btnManual');
-    if (!$btn.length) return;
-
-    var cfg = {
-        url:        $btn.attr('data-url'),
-        urlEdit:    $btn.attr('data-url-edit'),
-        urlNew:     $btn.attr('data-url-new'),
-        controller: $btn.attr('data-controller'),
-        action:     $btn.attr('data-action'),
-        msgEmpty:   $btn.attr('data-msg-empty'),
-        msgNoMatch: $btn.attr('data-msg-nomatch'),
-        msgProcess: $btn.attr('data-msg-process'),
-        msgEdit:    $btn.attr('data-msg-edit'),
-        msgCreate:  $btn.attr('data-msg-create')
-    };
-
-    var manual = null;   // o que veio do servidor, guardado entre aberturas
-    var canEdit = false;
-    var buscou = false;
 
     function escapar(txt) {
         return jQuery('<div>').text(txt == null ? '' : txt).html();
@@ -71,6 +51,45 @@
         return /^\s*\|?[\s:-]*-[\s|:-]*$/.test(linha) && linha.indexOf('-') >= 0 && linha.indexOf('|') >= 0;
     }
 
+    function tabelaHtml(cab, corpo) {
+        return '<div class="manual-tabela"><table><thead><tr>' +
+               cab.map(function (c) { return '<th>' + emLinha(c) + '</th>'; }).join('') +
+               '</tr></thead><tbody>' +
+               corpo.map(function (l) {
+                   return '<tr>' + l.map(function (c) { return '<td>' + emLinha(c) + '</td>'; }).join('') + '</tr>';
+               }).join('') +
+               '</tbody></table></div>';
+    }
+
+    /* Tabela espremida numa linha só — conteúdo colado sem as quebras de linha:
+       "| A | B | | :--- | :--- | | a1 | b1 | | a2 | b2 |". O separador embutido
+       diz quantas colunas a tabela tem; o que vem antes é o cabeçalho e as
+       células seguintes são fatiadas em linhas dessa largura. */
+    function tabelaEmLinhaUnica(linha) {
+
+        if (!/^\s*\|/.test(linha)) return null;
+
+        var mSep = /\|\s*:?-{2,}:?\s*(?:\|\s*:?-{2,}:?\s*)*\|/.exec(linha);
+        if (!mSep || mSep.index <= 0) return null;
+
+        var cab = celulas(linha.slice(0, mSep.index));
+        var n = celulas(mSep[0]).length;
+        if (!cab.length || !n) return null;
+
+        var corpo = [];
+        var atual = [];
+        linha.slice(mSep.index + mSep[0].length).split('|').forEach(function (tok) {
+            var t = tok.trim();
+            // o "| |" entre uma linha e outra vira token vazio na borda: pula
+            if (t === '' && atual.length === 0) return;
+            atual.push(t);
+            if (atual.length === n) { corpo.push(atual); atual = []; }
+        });
+        if (atual.length && atual.join('') !== '') corpo.push(atual);
+
+        return tabelaHtml(cab, corpo);
+    }
+
     // O texto chega escapado: o ">" do Markdown já é "&gt;" quando o bloco é lido.
     var CITACAO = /^\s*&gt;\s?/;
 
@@ -98,22 +117,26 @@
                 continue;
             }
 
-            // Tabela: linha de células seguida da linha de traços.
-            if (linha.indexOf('|') >= 0 && i + 1 < linhas.length && ehSeparadorTabela(linhas[i + 1])) {
+            // Tabela colada numa linha só (sem quebras de linha).
+            var comprimida = tabelaEmLinhaUnica(linha);
+            if (comprimida) { html.push(comprimida); i++; continue; }
+
+            // Tabela: linha de células seguida da linha de traços — ou, sem os
+            // traços, duas linhas seguidas no formato |...|: quem escreveu assim
+            // queria uma tabela, e pipes crus no painel não ajudam ninguém.
+            var proxima = i + 1 < linhas.length ? linhas[i + 1] : '';
+            var comSeparador = linha.indexOf('|') >= 0 && ehSeparadorTabela(proxima);
+            var semSeparador = !comSeparador &&
+                               /^\s*\|.*\|\s*$/.test(linha) &&
+                               /^\s*\|.*\|\s*$/.test(proxima) && !ehSeparadorTabela(proxima);
+            if (comSeparador || semSeparador) {
                 var cab = celulas(linha);
-                i += 2;
+                i += comSeparador ? 2 : 1;
                 var corpo = [];
                 while (i < linhas.length && linhas[i].indexOf('|') >= 0 && linhas[i].trim() !== '') {
                     corpo.push(celulas(linhas[i])); i++;
                 }
-                html.push(
-                    '<div class="manual-tabela"><table><thead><tr>' +
-                    cab.map(function (c) { return '<th>' + emLinha(c) + '</th>'; }).join('') +
-                    '</tr></thead><tbody>' +
-                    corpo.map(function (l) {
-                        return '<tr>' + l.map(function (c) { return '<td>' + emLinha(c) + '</td>'; }).join('') + '</tr>';
-                    }).join('') +
-                    '</tbody></table></div>');
+                html.push(tabelaHtml(cab, corpo));
                 continue;
             }
 
@@ -169,6 +192,33 @@
         return html.join('');
     }
 
+    // O cadastro do manual (HelpInsert/HelpEdit) pré-visualiza a seção com ESTE
+    // formatador: o autor vê a tabela, o código e a lista exatamente como o
+    // painel vai mostrar, e não uma segunda implementação que divergiria dele.
+    window.PcmManualPreview = { formatar: formatar };
+
+    // Daqui para baixo é o painel em si: sem o "?" no cabeçalho (tela de login,
+    // layout sem header), só o formatador acima fica disponível.
+    var $btn = jQuery('#btnManual');
+    if (!$btn.length) return;
+
+    var cfg = {
+        url:        $btn.attr('data-url'),
+        urlEdit:    $btn.attr('data-url-edit'),
+        urlNew:     $btn.attr('data-url-new'),
+        controller: $btn.attr('data-controller'),
+        action:     $btn.attr('data-action'),
+        msgEmpty:   $btn.attr('data-msg-empty'),
+        msgNoMatch: $btn.attr('data-msg-nomatch'),
+        msgProcess: $btn.attr('data-msg-process'),
+        msgEdit:    $btn.attr('data-msg-edit'),
+        msgCreate:  $btn.attr('data-msg-create')
+    };
+
+    var manual = null;   // o que veio do servidor, guardado entre aberturas
+    var canEdit = false;
+    var buscou = false;
+
     /* ── vídeo ──
        YouTube, Vimeo e Google Drive viram player incorporado; arquivo de vídeo solto
        (.mp4 e afins) toca no player do próprio navegador; o resto vira link.
@@ -177,7 +227,7 @@
     function videoEmbed(url) {
 
         var m = url.match(/(?:youtube\.com\/(?:watch\?[^#]*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{5,20})/);
-        if (m) return 'https://www.youtube.com/embed/' + m[1];
+        if (m) return 'https://www.youtube.com/embed/' + m[1] + '?rel=0';
 
         m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
         if (m) return 'https://player.vimeo.com/video/' + m[1];
@@ -202,21 +252,40 @@
     function montarVideo(url, aberta) {
         if (!url || !/^https?:\/\//i.test(url)) return '';
 
+        // O endereço do vídeo não aparece para quem lê: nada de URL estampada,
+        // menu de contexto bloqueado e download escondido no player. Não é
+        // cofre — o navegador precisa carregar o vídeo —, mas os caminhos
+        // casuais de copiar o link somem.
+        var player;
+
         if (ehArquivoVideo(url)) {
-            return '<div class="manual-video"><video controls preload="none" ' +
-                   'src="' + escapar(url) + '"></video></div>';
+            player = '<video controls controlsList="nodownload noremoteplayback" ' +
+                     'disablepictureinpicture preload="none" src="' + escapar(url) + '"></video>';
+        } else {
+            var embed = videoEmbed(url);
+            if (!embed) {
+                // Sem player para esta URL: abre em outra aba, sem mostrar o
+                // endereço no painel.
+                return '<a class="manual-video-link" href="' + escapar(url) + '" target="_blank" rel="noopener noreferrer">' +
+                       '<i class="fa fa-play-circle"></i> Assistir vídeo</a>';
+            }
+            player = '<iframe ' + (aberta ? 'src' : 'data-src') + '="' + escapar(embed) + '" ' +
+                     'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+                     'allowfullscreen loading="lazy"></iframe>' +
+                     // A faixa de cima do player embutido é onde moram os botões
+                     // que levam para fora (pop-out do Drive, título/compartilhar
+                     // do YouTube). O iframe é de outro domínio — não dá para
+                     // removê-los —, então uma tampa invisível engole os cliques.
+                     '<div class="manual-video-tampa"></div>';
         }
 
-        var embed = videoEmbed(url);
-        if (!embed) {
-            return '<a class="manual-video-link" href="' + escapar(url) + '" target="_blank" rel="noopener noreferrer">' +
-                   '<i class="fa fa-play-circle"></i> ' + escapar(url) + '</a>';
-        }
-
-        return '<div class="manual-video">' +
-               '<iframe ' + (aberta ? 'src' : 'data-src') + '="' + escapar(embed) + '" ' +
-               'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
-               'allowfullscreen loading="lazy"></iframe></div>';
+        return '<div class="manual-video-box">' +
+               '<div class="manual-video">' + player + '</div>' +
+               '<div class="manual-video-acoes">' +
+                   '<button type="button" class="manual-video-cheia">' +
+                       '<i class="fa fa-expand"></i> Tela cheia' +
+                   '</button>' +
+               '</div></div>';
     }
 
     function montarSecoes(itens) {
@@ -343,6 +412,26 @@
         }
     });
 
+    /* ── vídeo: tela cheia e sem caminho fácil para o link ── */
+    jQuery(document).on('click', '.manual-video-cheia', function () {
+        var $box = jQuery(this).closest('.manual-video-box');
+
+        // Player ainda adormecido (data-src): acorda antes de expandir.
+        $box.find('iframe[data-src]').each(function () {
+            jQuery(this).attr('src', jQuery(this).attr('data-src')).removeAttr('data-src');
+        });
+
+        var alvo = $box.find('.manual-video')[0];
+        if (!alvo) return;
+        if (alvo.requestFullscreen) alvo.requestFullscreen();
+        else if (alvo.webkitRequestFullscreen) alvo.webkitRequestFullscreen();
+    });
+
+    // Botão direito no vídeo oferece "copiar endereço do vídeo": fica bloqueado.
+    jQuery(document).on('contextmenu', '.manual-video', function (e) {
+        e.preventDefault();
+    });
+
     /* ── busca dentro do manual ──
        Filtra as seções pelo título e pelo texto, e abre o que sobrou: procurar
        e ainda ter que clicar em cada seção para ver se está lá não ajuda. */
@@ -371,6 +460,15 @@
             jQuery('#manualCorpo').append('<div class="manual-vazio manual-semnada">' +
                 escapar(cfg.msgNoMatch) + '</div>');
         }
+    });
+
+    /* ── presença do botão ──
+       O "?" só existe onde há manual cadastrado: a busca da carga decide, para
+       todo mundo — quem mantém o manual cria o da tela pela manutenção
+       (HelpIndex), não por aqui. Se a busca falhar (rede, banco), o botão fica
+       e o clique tenta de novo, como antes. */
+    buscar(function () {
+        $btn.toggleClass('js-hidden', !manual);
     });
 
     /* ── manual do processo (link "ver também") ── */

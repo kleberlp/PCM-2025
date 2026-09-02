@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\EmailSender.vb" />
+    <Compile Include="Class\Pages\Aviso.vb" />
     <Compile Include="Class\Pages\AEB.vb" />
     <Compile Include="Class\Pages\AtivoFixo.vb" />
     <Compile Include="Class\Pages\Agenda.vb" />
