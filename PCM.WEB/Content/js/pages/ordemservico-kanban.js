@@ -202,6 +202,7 @@
 
         var card = document.createElement('article');
         card.className = 'kb-card'
+            + (colunaDaOS(os) === 1 ? ' kb-aberta' : '')
             + (os.status === 2 ? ' kb-concluida' : '')
             + (os.status === 4 ? ' kb-andamento' : '')
             + (os.status !== 4 && prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '')

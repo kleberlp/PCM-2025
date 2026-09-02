@@ -122,8 +122,15 @@
     gap: 6px;
 }
 
-/* O.S. atrasada (hoje > data_necessidade): fundo vermelho claro */
-.kb-card.kb-atrasada { background: #fdecec; border-color: #f3b1b1; }
+/* Borda por situação da O.S.: amarela em aberto, azul em andamento, vermelha
+   atrasada, verde concluída. O pulso (kb-estourada, tempo máx. de atendimento)
+   continua vencendo todas — regra do head do projeto. */
+
+/* O.S. em aberto (inclui vinculada ainda no prazo): só a borda muda */
+.kb-card.kb-aberta { border-color: #e0b34d; }
+
+/* O.S. atrasada (hoje > data_necessidade): fundo vermelho claro + borda vermelha */
+.kb-card.kb-atrasada { background: #fdecec; border-color: #ef4444; }
 .kb-card.kb-atrasada .kb-card-local { color: #7f1d1d; }
 
 /* O.S. concluída: fundo verde para o quadro dizer de longe o que ja fechou.
