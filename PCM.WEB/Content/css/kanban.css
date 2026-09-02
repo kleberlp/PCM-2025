@@ -132,6 +132,12 @@
 .kb-card.kb-concluida { background: #eafaef; border-color: #b7e4c7; }
 .kb-card.kb-concluida .kb-card-local { color: #14532d; }
 
+/* O.S. em andamento: borda e fundo azul translúcido — mesma lógica de cor
+   das atrasadas/concluídas, mas sinalizando "em execução". Vence o vermelho
+   de prazo vencido: se já está sendo tocada, o que importa é isso. */
+.kb-card.kb-andamento { background: rgba(37, 99, 235, .08); border-color: #93b4f0; }
+.kb-card.kb-andamento .kb-card-local { color: #1e3a8a; }
+
 /* Passou do tempo máximo de atendimento: o cartão pulsa até alguém agir.
    Anima box-shadow e borda, não tamanho, para o cartão não "pular" e
    atrapalhar a leitura das colunas vizinhas. */
@@ -156,7 +162,9 @@
 .kb-card.kb-arrastando { opacity: .5; }
 .kb-card[draggable="true"] { cursor: grab; }
 
-.kb-card-chips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+/* uma linha só: origem e prioridade mantêm o tamanho; o badge de vinculada
+   (se houver) fica com o resto e corta com reticências */
+.kb-card-chips { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow: hidden; }
 
 .kb-chip {
     font-size: 10px;
@@ -167,17 +175,23 @@
     color: #374151;
     border: 1px solid #e5e7eb;
     white-space: nowrap;
+    flex: 0 0 auto;
 }
 
-/* O.S. vinculada: o nome dos colaboradores é o badge. Sem "nowrap" — nomes
-   longos quebram dentro do chip em vez de esticar o cartão. */
+/* O.S. vinculada: o nome dos colaboradores é o badge. Fica na mesma linha dos
+   demais chips — se não couber, corta com reticências (nunca quebra a linha
+   nem empurra o chip para baixo). */
 .kb-chip-vinculada {
     background: #8e44ad;
     border-color: #8e44ad;
     color: #fff;
-    white-space: normal;
-    text-align: left;
     letter-spacing: .01em;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Prioridade pelo codigo da tb_cad_prioridade:

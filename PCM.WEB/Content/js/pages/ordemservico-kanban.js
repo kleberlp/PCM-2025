@@ -12,9 +12,12 @@
 //  colaboradores (o próprio nome já diz que é vinculada). O cartão cai em
 //  Em Aberto ou Atrasadas conforme o prazo (data_necessidade) já venceu ou não.
 //
-//  Cartao: fundo vermelho quando atrasada (hoje > data_necessidade), verde
-//  quando concluida, pulso quando passa do tempo maximo de atendimento.
-//  O relogio em si fica sempre cinza.
+//  Cartao: fundo vermelho quando atrasada (hoje > data_necessidade), azul
+//  quando em andamento, verde quando concluida, pulso quando passa do tempo
+//  maximo de atendimento. O relogio em si fica sempre cinza.
+//
+//  Clique: concluida (2) e em andamento (4) abrem OrdemServicoView; pendente,
+//  atrasada e vinculada vao para ApontamentoOS.
 //
 //  Status reais da tb_pcm_ordem_servico: 1 Em Aberto, 2 Concluída,
 //  3 Atrasada (derivado pela SP — coluna não aceita drop), 4 Em Andamento,
@@ -200,7 +203,8 @@
         var card = document.createElement('article');
         card.className = 'kb-card'
             + (os.status === 2 ? ' kb-concluida' : '')
-            + (prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '')
+            + (os.status === 4 ? ' kb-andamento' : '')
+            + (os.status !== 4 && prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '')
             + (estourouLimite(abertoEm ? abertoEm.getTime() : 0, os.status) ? ' kb-estourada' : '');
         card.setAttribute('data-codigo', os.codigo);
         card.setAttribute('data-unidade', os.codigo_unidade);
@@ -419,13 +423,15 @@
 
     aplicarRefresh();
 
-    // Clique no cartão: O.S. concluída não tem o que apontar, entao abre a
-    // visualizacao; as demais vao para o apontamento e voltam para o Kanban.
+    // Clique no cartão: concluída (2) e em andamento (4) abrem a visualização;
+    // pendente (1), atrasada (3) e vinculada (5) vão para o apontamento e
+    // voltam para o Kanban.
     $root.on('click', '.kb-card', function () {
         var codigo = encodeURIComponent($(this).data('codigo'));
         var unidade = encodeURIComponent($(this).data('unidade'));
+        var st = String($(this).attr('data-status'));
 
-        if (String($(this).attr('data-status')) === '2') {
+        if (st === '2' || st === '4') {
             window.location.href = cfg.urlView + '?codigo=' + codigo + '&unidade=' + unidade;
             return;
         }
