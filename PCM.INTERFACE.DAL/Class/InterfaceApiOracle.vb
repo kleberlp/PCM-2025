@@ -85,7 +85,6 @@ Public Class InterfaceApiOracle
                  JOIN STATUSGOVFULL SG ON SG.IDSTATUSGOV = U.IDSTATUSGOV
                  JOIN STATUSUHFULL SU ON SU.IDSTATUSUH = U.IDSTATUSUH
                  WHERE U.IDHOTEL = :HotelId
-                   AND U.UHPOOL = 'S'
                    AND U.FLGATIVA = 'S'
                  ORDER BY 2,3,5"
 
