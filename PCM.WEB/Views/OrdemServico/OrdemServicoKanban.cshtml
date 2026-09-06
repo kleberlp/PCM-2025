@@ -1,9 +1,12 @@
 @*
-    Kanban de Ordens de Serviço — colunas por status (1 Em Aberto, 2 Vinculada,
-    3 Em Andamento, 4 Concluída). Arrastar um cartão entre colunas chama o
-    UpdateStatusOS (apenas com direito de edição). Padrão CSP: nada inline —
-    lógica em Content/js/pages/ordemservico-kanban.js, visual em
-    Content/css/kanban.css, parâmetros do servidor via data-*.
+    Kanban de Ordens de Serviço — colunas por status: 1 Em Aberto, 3 Atrasadas
+    (derivada pela SP — não aceita drop), 4 Em Andamento, 2 Concluídas.
+    A O.S. vinculada (status 5) não tem coluna própria: o nome dos colaboradores
+    vira um badge no cartão e ela aparece em Em Aberto ou Atrasadas conforme o
+    prazo. Arrastar um cartão entre colunas chama o UpdateStatusOS (apenas com
+    direito de edição). Padrão CSP: nada inline — lógica em
+    Content/js/pages/ordemservico-kanban.js, visual em Content/css/kanban.css,
+    parâmetros do servidor via data-*.
 *@
 
 @section Styles {
@@ -84,9 +87,10 @@
                 </button>
             </div>
 
-            @* Status reais da tb_pcm_ordem_servico: 1 Em Aberto, 3 Atrasada
-               (derivado pela SP quando a 1 vence — não aceita drop),
-               5 Vinculada, 4 Concluída *@
+            @* Status reais da tb_pcm_ordem_servico: 1 Em Aberto, 2 Concluída,
+               3 Atrasada (derivada pela SP quando a 1 vence — não aceita drop),
+               4 Em Andamento, 5 Vinculada (sem coluna própria — o JS a coloca
+               em Em Aberto ou Atrasadas conforme o prazo). *@
             <div class="kb-board" id="kb-board">
                 <section class="kb-col" data-status="1">
                     <header class="kb-col-header">Em Aberto <span class="kb-count" data-count="1">0</span></header>
@@ -98,18 +102,18 @@
                     <div class="kb-cards" data-cards="3"></div>
                 </section>
 
-                <section class="kb-col" data-status="5">
-                    <header class="kb-col-header">Vinculadas <span class="kb-count" data-count="5">0</span></header>
-                    <div class="kb-cards" data-cards="5"></div>
+                <section class="kb-col" data-status="4">
+                    <header class="kb-col-header">Em Andamento <span class="kb-count" data-count="4">0</span></header>
+                    <div class="kb-cards" data-cards="4"></div>
                 </section>
 
                 <!-- Concluídas recolhida; clique expande -->
-                <section class="kb-col kb-col-fechada" data-status="4" id="kb-col-concluidas">
+                <section class="kb-col kb-col-fechada" data-status="2" id="kb-col-concluidas">
                     <header class="kb-col-header">
                         <span class="kb-col-titulo-v">Concluídas</span>
-                        <span class="kb-col-titulo-h">Concluídas <span class="kb-count" data-count="4">0</span></span>
+                        <span class="kb-col-titulo-h">Concluídas <span class="kb-count" data-count="2">0</span></span>
                     </header>
-                    <div class="kb-cards" data-cards="4"></div>
+                    <div class="kb-cards" data-cards="2"></div>
                 </section>
             </div>
 

@@ -126,8 +126,15 @@
     gap: 6px;
 }
 
-/* O.S. atrasada (hoje > data_necessidade): fundo vermelho claro */
-.kb-card.kb-atrasada { background: #fdecec; border-color: #f3b1b1; }
+/* Borda por situação da O.S.: amarela em aberto, azul em andamento, vermelha
+   atrasada, verde concluída. O pulso (kb-estourada, tempo máx. de atendimento)
+   continua vencendo todas — regra do head do projeto. */
+
+/* O.S. em aberto (inclui vinculada ainda no prazo): só a borda muda */
+.kb-card.kb-aberta { border-color: #e0b34d; }
+
+/* O.S. atrasada (hoje > data_necessidade): fundo vermelho claro + borda vermelha */
+.kb-card.kb-atrasada { background: #fdecec; border-color: #ef4444; }
 .kb-card.kb-atrasada .kb-card-local { color: #7f1d1d; }
 
 /* O.S. concluída: fundo verde para o quadro dizer de longe o que ja fechou.
@@ -135,6 +142,12 @@
    como resolvida, e o verde deve vencer o vermelho. */
 .kb-card.kb-concluida { background: #eafaef; border-color: #b7e4c7; }
 .kb-card.kb-concluida .kb-card-local { color: #14532d; }
+
+/* O.S. em andamento: borda e fundo azul translúcido — mesma lógica de cor
+   das atrasadas/concluídas, mas sinalizando "em execução". Vence o vermelho
+   de prazo vencido: se já está sendo tocada, o que importa é isso. */
+.kb-card.kb-andamento { background: rgba(37, 99, 235, .08); border-color: #93b4f0; }
+.kb-card.kb-andamento .kb-card-local { color: #1e3a8a; }
 
 /* Passou do tempo máximo de atendimento: o cartão pulsa até alguém agir.
    Anima box-shadow e borda, não tamanho, para o cartão não "pular" e
@@ -160,7 +173,9 @@
 .kb-card.kb-arrastando { opacity: .5; }
 .kb-card[draggable="true"] { cursor: grab; }
 
-.kb-card-chips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+/* uma linha só: origem e prioridade mantêm o tamanho; o badge de vinculada
+   (se houver) fica com o resto e corta com reticências */
+.kb-card-chips { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow: hidden; }
 
 .kb-chip {
     font-size: 10px;
@@ -171,6 +186,23 @@
     color: #374151;
     border: 1px solid #e5e7eb;
     white-space: nowrap;
+    flex: 0 0 auto;
+}
+
+/* O.S. vinculada: o nome dos colaboradores é o badge. Fica na mesma linha dos
+   demais chips — se não couber, corta com reticências (nunca quebra a linha
+   nem empurra o chip para baixo). */
+.kb-chip-vinculada {
+    background: #8e44ad;
+    border-color: #8e44ad;
+    color: #fff;
+    letter-spacing: .01em;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Prioridade pelo codigo da tb_cad_prioridade:
@@ -180,6 +212,15 @@
 .kb-pri-media   { background: #c9a227; border-color: #c9a227; color: #fff; }
 /* amarelo claro pede tinta escura para o texto continuar legivel */
 .kb-pri-baixa   { background: #f7e08a; border-color: #e6cd6a; color: #6b5900; }
+
+/* linha do nº da O.S.: número em destaque à esquerda, relógio/abertura à direita */
+.kb-card-titulo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 10px;
+    flex-wrap: wrap;
+}
 
 .kb-card-local {
     font-weight: 700;
@@ -221,13 +262,16 @@
     gap: 5px;
 }
 
-/* relógio desde a abertura, cor pela data_necessidade */
+/* relógio desde a abertura + data/hora de abertura — à direita do nº da O.S. */
 .kb-card-relogio {
     font-size: 12px;
     font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: flex-end;
+    gap: 4px 6px;
+    flex-wrap: wrap;
+    margin-left: auto;
     font-variant-numeric: tabular-nums;
 }
 
@@ -241,8 +285,6 @@
     font-weight: 400;
     color: #6b7280;
 }
-
-.kb-card-executor { font-size: 11px; color: #6b7280; }
 
 .kb-vazio {
     text-align: center;

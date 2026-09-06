@@ -3,17 +3,29 @@
 //  (OrdemServico/OrdemServicoKanban)
 //
 //  Cartão (aprovado no mockup):
-//    [origem] [prioridade]  Nº O.S. (destaque)
-//    setor - local
+//    [origem] [prioridade] [colaboradores vinculados]
+//    Nº O.S. (destaque)          relógio desde a abertura · aberta dd/MM/yyyy HH:mm
+//    local
 //    descrição
-//    relógio desde a abertura · aberta dd/MM/yyyy HH:mm
+//  (na O.S. concluída o relógio não corre — mostra só "aberta dd/MM/yyyy HH:mm")
 //
-//  Cartao: fundo vermelho quando atrasada (hoje > data_necessidade), verde
-//  quando concluida, pulso quando passa do tempo maximo de atendimento.
-//  O relogio em si fica sempre cinza.
+//  O.S. vinculada não tem coluna própria: vira o chip roxo com o nome dos
+//  colaboradores (o próprio nome já diz que é vinculada). O cartão cai em
+//  Em Aberto ou Atrasadas conforme o prazo (data_necessidade) já venceu ou não.
 //
-//  Status reais da tb_pcm_ordem_servico: 1 Em Aberto, 3 Atrasada
-//  (derivado pela SP — coluna não aceita drop), 5 Vinculada, 4 Concluída.
+//  Cartao: fundo vermelho quando atrasada (hoje > data_necessidade), azul
+//  quando em andamento, verde quando concluida, pulso quando passa do tempo
+//  maximo de atendimento. O relogio em si fica sempre cinza.
+//
+//  Clique: concluida (2) e em andamento (4) abrem OrdemServicoView; pendente,
+//  atrasada e vinculada vao para ApontamentoOS.
+//
+//  Status reais da tb_pcm_ordem_servico: 1 Em Aberto, 2 Concluída,
+//  3 Atrasada (derivado pela SP — coluna não aceita drop), 4 Em Andamento,
+//  5 Vinculada (substitui o status de trabalho; no quadro entra em Em Aberto
+//  ou Atrasadas, conforme o prazo).
+//
+//  Colunas do quadro: 1 Em Aberto, 3 Atrasadas, 4 Em Andamento, 2 Concluídas.
 //
 //  Padrão CSP: nenhum handler/estilo inline; parâmetros via data-* do
 //  #kb-root; DOM via createElement + textContent (nada de HTML
@@ -40,7 +52,8 @@
         editar: String($root.data('editar')) === '1'
     };
 
-    var STATUS_COLUNAS = [1, 3, 5, 4];
+    // Colunas do quadro, na ordem de exibição (chave = status de destino no drop)
+    var COLUNAS = [1, 3, 4, 2];
 
     var ordens = [];   // última carga do servidor
     var busca = '';
@@ -68,7 +81,7 @@
 
     // vermelho: hoje > data_necessidade | amarelo: hoje = | verde: hoje <
     function classePrazo(os) {
-        if (os.status === 4) { return 'kb-rel-neutro'; }
+        if (os.status === 2) { return 'kb-rel-neutro'; }
         var prazo = parseData(os.data_necessidade);
         if (!prazo) { return 'kb-rel-neutro'; }
         prazo.setHours(0, 0, 0, 0);
@@ -79,9 +92,28 @@
         return 'kb-rel-verde';
     }
 
+    // Prazo de execução já venceu? (hoje > data_necessidade)
+    function prazoVencido(os) {
+        return classePrazo(os) === 'kb-rel-vermelho';
+    }
+
+    // Coluna do quadro em que a O.S. aparece. A SP já deriva a 3 (Atrasada) para
+    // as pendentes vencidas, mas não para as vinculadas (5) — essas são
+    // separadas aqui entre Em Aberto e Atrasadas conforme o prazo.
+    function colunaDaOS(os) {
+        switch (os.status) {
+            case 1: return 1;   // Em Aberto
+            case 3: return 3;   // Atrasada
+            case 4: return 4;   // Em Andamento
+            case 2: return 2;   // Concluída
+            case 5: return prazoVencido(os) ? 3 : 1;   // Vinculada
+            default: return 0;  // demais status não entram no quadro
+        }
+    }
+
     // Passou do tempo máximo de atendimento? (só para O.S. ainda não concluída)
     function estourouLimite(abertoEm, status) {
-        if (!limiteMin || !abertoEm || status === 4) { return false; }
+        if (!limiteMin || !abertoEm || status === 2) { return false; }
         return (Date.now() - abertoEm) > (limiteMin * 60000);
     }
 
@@ -171,15 +203,19 @@
 
         var card = document.createElement('article');
         card.className = 'kb-card'
-            + (os.status === 4 ? ' kb-concluida' : '')
-            + (prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '')
+            + (colunaDaOS(os) === 1 ? ' kb-aberta' : '')
+            + (os.status === 2 ? ' kb-concluida' : '')
+            + (os.status === 4 ? ' kb-andamento' : '')
+            + (os.status !== 4 && prazoCls === 'kb-rel-vermelho' ? ' kb-atrasada' : '')
             + (estourouLimite(abertoEm ? abertoEm.getTime() : 0, os.status) ? ' kb-estourada' : '');
         card.setAttribute('data-codigo', os.codigo);
         card.setAttribute('data-unidade', os.codigo_unidade);
         card.setAttribute('data-status', os.status);
-        if (cfg.editar && os.status !== 3) { card.setAttribute('draggable', 'true'); }
+        // Atrasada (3) não recebe drop nem sai arrastada — vale também para a
+        // vinculada (5) que caiu na coluna Atrasadas por prazo vencido.
+        if (cfg.editar && colunaDaOS(os) !== 3) { card.setAttribute('draggable', 'true'); }
 
-        // linha 1: origem + prioridade + nº da O.S. em destaque
+        // linha 1: origem + prioridade + colaboradores vinculados
         var chips = document.createElement('div');
         chips.className = 'kb-card-chips';
         if (os.origem) { chips.appendChild(chip(os.origem)); }
@@ -194,55 +230,62 @@
             }
             chips.appendChild(chipPri);
         }
+        // O.S. vinculada: o nome dos colaboradores é o próprio "badge" de vinculada.
+        if (os.executor && os.executor !== '-') {
+            chips.appendChild(chip(os.executor, 'kb-chip-vinculada'));
+        }
         card.appendChild(chips);
 
+        // linha 2: nº da O.S. em destaque (esq.) + relógio desde a abertura (dir.)
+        var titulo = document.createElement('div');
+        titulo.className = 'kb-card-titulo';
+
         if (os.numero_documento) {
-            card.appendChild(linhaIcone('kb-card-local', 'fa-tag', os.numero_documento));
+            titulo.appendChild(linhaIcone('kb-card-local', 'fa-tag', os.numero_documento));
         }
 
-        // linha 2: setor - local
-        var setorLocal = [os.local].filter(function (v) { return v; }).join(' - ');
-        if (setorLocal) { card.appendChild(linhaIcone('kb-card-numero', 'fa-map-marker', setorLocal)); }
-
-        // linha 3: descrição
-        if (os.descricao) {
-            var desc = document.createElement('div');
-            desc.className = 'kb-card-descricao';
-            desc.textContent = os.descricao;
-            card.appendChild(desc);
-        }
-
-        // linha 4: relógio desde a abertura + data/hora da abertura
         if (abertoEm) {
             // Sempre cinza: quem sinaliza atraso agora e o fundo do cartao
             // (vermelho) e o pulso do tempo maximo — colorir o relogio tambem
             // so competiria com eles.
             var rel = document.createElement('div');
             rel.className = 'kb-card-relogio kb-rel-neutro';
-            rel.setAttribute('data-aberto-em', abertoEm.getTime());
 
             var icone = document.createElement('i');
             icone.className = 'fa fa-clock-o';
             rel.appendChild(icone);
 
-            var tempo = document.createElement('span');
-            tempo.className = 'kb-rel-tempo';
-            tempo.textContent = fmtDecorrido(Date.now() - abertoEm.getTime());
-            rel.appendChild(tempo);
+            // O.S. concluida nao tem "tempo decorrido" correndo — so a data de
+            // abertura. Sem data-aberto-em o cronometro por segundo a ignora.
+            if (os.status !== 2) {
+                rel.setAttribute('data-aberto-em', abertoEm.getTime());
+
+                var tempo = document.createElement('span');
+                tempo.className = 'kb-rel-tempo';
+                tempo.textContent = fmtDecorrido(Date.now() - abertoEm.getTime());
+                rel.appendChild(tempo);
+            }
 
             var abertura = document.createElement('span');
             abertura.className = 'kb-card-abertura';
-            abertura.textContent = '· aberta ' + os.data;
+            abertura.textContent = (os.status === 2 ? 'aberta ' : '· aberta ') + os.data;
             rel.appendChild(abertura);
 
-            card.appendChild(rel);
+            titulo.appendChild(rel);
         }
 
-        if (os.executor && os.executor !== '-') {
-            var exec = document.createElement('div');
-            exec.className = 'kb-card-executor';
-            exec.textContent = os.executor;
-            card.appendChild(exec);
+        if (titulo.childNodes.length) { card.appendChild(titulo); }
+
+        // linha 3: local (o setor saiu do cartão em 8029d2e — master)
+        var setorLocal = [os.local].filter(function (v) { return v; }).join(' - ');
+        if (setorLocal) { card.appendChild(linhaIcone('kb-card-numero', 'fa-map-marker', setorLocal)); }
+
+        // linha 4: descrição
+        if (os.descricao) {
+            var desc = document.createElement('div');
+            desc.className = 'kb-card-descricao';
+            desc.textContent = os.descricao;
+            card.appendChild(desc);
         }
 
         return card;
@@ -254,10 +297,10 @@
         var contagem = {};
 
         $('.kb-cards').empty();
-        STATUS_COLUNAS.forEach(function (st) { contagem[st] = 0; });
+        COLUNAS.forEach(function (st) { contagem[st] = 0; });
 
-        STATUS_COLUNAS.forEach(function (st) {
-            var itens = ordens.filter(function (os) { return os.status === st && combina(os); });
+        COLUNAS.forEach(function (st) {
+            var itens = ordens.filter(function (os) { return colunaDaOS(os) === st && combina(os); });
 
             itens.sort(function (a, b) {
                 switch (ordenacao) {
@@ -407,13 +450,15 @@
 
     aplicarRefresh();
 
-    // Clique no cartão: O.S. concluída não tem o que apontar, entao abre a
-    // visualizacao; as demais vao para o apontamento e voltam para o Kanban.
+    // Clique no cartão: concluída (2) e em andamento (4) abrem a visualização;
+    // pendente (1), atrasada (3) e vinculada (5) vão para o apontamento e
+    // voltam para o Kanban.
     $root.on('click', '.kb-card', function () {
         var codigo = encodeURIComponent($(this).data('codigo'));
         var unidade = encodeURIComponent($(this).data('unidade'));
+        var st = String($(this).attr('data-status'));
 
-        if (String($(this).attr('data-status')) === '4') {
+        if (st === '2' || st === '4') {
             window.location.href = cfg.urlView + '?codigo=' + codigo + '&unidade=' + unidade;
             return;
         }
@@ -475,7 +520,7 @@
             for (var i = 0; i < ordens.length; i++) {
                 if (ordens[i].codigo === codigo) { os = ordens[i]; break; }
             }
-            if (!os || os.status === novoStatus) { return; }
+            if (!os || colunaDaOS(os) === novoStatus) { return; }
 
             var statusAnterior = os.status;
             os.status = novoStatus;

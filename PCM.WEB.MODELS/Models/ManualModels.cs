@@ -70,6 +70,23 @@ namespace PCM.WEB.MODELS
         public bool ativo { get; set; }
     }
 
+    /// <summary>
+    /// Item da navegação do Guia do PCM (menu próprio): trilhas (tipo 'P') e
+    /// artigos de tela (tipo 'S'), cada artigo com a trilha a que pertence. O
+    /// conteúdo em si vem depois pela leitura normal do manual.
+    /// </summary>
+    public class ManualGuiaItem
+    {
+        public int codigo { get; set; }
+        /// <summary>S = tela/artigo, P = processo/trilha.</summary>
+        public string tipo { get; set; }
+        public string titulo { get; set; }
+        public string subtitulo { get; set; }
+        /// <summary>Trilha (manual de processo) do artigo; 0 = sem trilha.</summary>
+        public int processo_codigo { get; set; }
+        public int secoes { get; set; }
+    }
+
     #endregion
 
 }
