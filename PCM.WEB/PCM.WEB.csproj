@@ -401,6 +401,7 @@
     <Content Include="Content\css\codebase.css" />
     <Content Include="Content\css\pcm-ui.css" />
     <Content Include="Content\css\manual.css" />
+    <Content Include="Content\css\guia.css" />
     <Content Include="Content\css\aviso.css" />
     <Content Include="Content\css\kanban.css" />
     <Content Include="Content\css\pages\home\dashboard-governanca.css" />
@@ -460,6 +461,7 @@
     <Content Include="Content\js\codebase.js" />
     <Content Include="Content\js\manual-panel.js" />
     <Content Include="Content\js\pages\manual-edit.js" />
+    <Content Include="Content\js\pages\manual-guia.js" />
     <Content Include="Content\js\pages\aviso-edit.js" />
     <Content Include="Content\js\pages\aviso-index.js" />
     <Content Include="Content\js\pages\aviso-popup.js" />
@@ -2209,6 +2211,7 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Manual\HelpIndex.cshtml" />
     <Content Include="Views\Manual\HelpInsert.cshtml" />
+    <Content Include="Views\Manual\Guia.cshtml" />
     <Content Include="Views\Manual\HelpEdit.cshtml" />
     <Content Include="Views\Aviso\AvisoIndex.cshtml" />
     <Content Include="Views\Aviso\AvisoInsert.cshtml" />

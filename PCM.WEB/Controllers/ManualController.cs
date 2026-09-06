@@ -162,6 +162,45 @@ namespace PCM.WEB.Controllers
 
         #endregion
 
+        #region ::: GUIA (menu proprio) :::
+
+        /// <summary>
+        /// Guia do PCM: o manual inteiro numa tela própria (no lugar da
+        /// plataforma externa). Navegação por trilha à esquerda, conteúdo à
+        /// direita; ambos saem das mesmas tabelas do manual integrado.
+        /// Aberto a qualquer usuário logado — é documentação, não operação.
+        /// </summary>
+        public ActionResult Guia()
+        {
+            if (Session["empresa"] == null)
+                return RedirectToAction("Login", "Account", new { returnURL = Request.RawUrl });
+
+            return View();
+        }
+
+        /// <summary>
+        /// Navegação do Guia: trilhas e artigos (só título/tipo/trilha). O
+        /// conteúdo de cada um é buscado sob demanda pelo mesmo ManualTela.
+        /// </summary>
+        [HttpGet]
+        public JsonResult GuiaLista()
+        {
+            try
+            {
+                if (Session["empresa"] == null)
+                    return Json(new { itens = new object[0] }, JsonRequestBehavior.AllowGet);
+
+                return Json(new { itens = oManual.GuiaManual(iCodigoEmpresa: codigoEmpresa) },
+                            JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { itens = new object[0] }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        #endregion
+
         #region ::: CADASTRO :::
 
         // GET: INDEX

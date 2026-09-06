@@ -1,0 +1,178 @@
+/* ---------------------------------------------------------------------------
+   guia.css — Guia do PCM (menu próprio: o manual inteiro numa tela).
+   Índice de trilhas à esquerda, artigo à direita. O conteúdo do artigo usa
+   o mesmo formatador do painel "?", então repete a marcação (.manual-tabela,
+   .manual-img, .manual-video...) — aqui reescopada para .guia-artigo.
+   --------------------------------------------------------------------------- */
+
+.guia-bloco { margin-bottom: 0; }
+.guia-corpo { padding: 0; }
+
+.guia-grade {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: 62vh;
+}
+
+/* ── navegação ── */
+.guia-nav {
+    border-right: 1px solid #e9ecef;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    max-height: 78vh;
+}
+
+.guia-busca { padding: 12px; border-bottom: 1px solid #e9ecef; }
+.guia-busca input { font-size: 12.5px; }
+
+.guia-indice { overflow-y: auto; padding: 8px 0 16px; }
+
+.guia-grupo { margin-bottom: 4px; }
+
+.guia-trilha {
+    display: block;
+    padding: 9px 16px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #35618f;
+    text-decoration: none;
+}
+.guia-trilha:hover { color: #1c63c4; }
+.guia-trilha-fixa { color: #8a9099; }
+
+.guia-filhos { display: flex; flex-direction: column; }
+
+.guia-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 16px 7px 24px;
+    font-size: 12.5px;
+    color: #495057;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+}
+.guia-item:hover { background: #eef3f9; color: #1c63c4; }
+.guia-item.ativo {
+    background: #eaf2fd;
+    border-left-color: #2b7de9;
+    color: #1c63c4;
+    font-weight: 700;
+}
+
+.guia-secoes {
+    flex: none;
+    font-size: 10px;
+    font-weight: 700;
+    color: #8a9099;
+    background: #e9eef4;
+    border-radius: 9px;
+    padding: 1px 7px;
+}
+
+/* ── artigo ── */
+.guia-artigo {
+    padding: 26px 34px 40px;
+    overflow-y: auto;
+    max-height: 78vh;
+    color: #374151;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.guia-titulo { font-size: 22px; font-weight: 700; color: #1f2937; margin: 0 0 4px; }
+.guia-subtitulo { font-size: 13px; color: #8a9099; margin: 0 0 20px; }
+
+.guia-secao { margin-bottom: 22px; }
+.guia-secao h3 { font-size: 16px; font-weight: 700; color: #2b3a4d; margin: 18px 0 8px; }
+.guia-artigo p { margin: 0 0 11px; }
+.guia-artigo ul, .guia-artigo ol { margin: 8px 0 12px; padding-left: 22px; }
+.guia-artigo li { margin: 5px 0; }
+
+.guia-artigo h4, .guia-artigo h5, .guia-artigo h6 {
+    margin: 14px 0 6px; font-weight: 700; color: #343a40;
+}
+.guia-artigo h4 { font-size: 14px; }
+.guia-artigo h5 { font-size: 13px; }
+.guia-artigo h6 { font-size: 12.5px; color: #5b6675; }
+
+.guia-artigo a { color: #35618f; text-decoration: underline; }
+
+.guia-artigo code {
+    background: #f2f4f7; border-radius: 3px; padding: 1px 5px;
+    font-size: 12.5px; color: #b02a37; word-break: break-word;
+}
+.guia-artigo pre {
+    background: #f7f8fa; border: 1px solid #e9ecef; border-radius: 5px;
+    padding: 11px 13px; margin: 10px 0; overflow-x: auto;
+}
+.guia-artigo pre code { background: none; padding: 0; color: #495057; white-space: pre; }
+
+.guia-artigo blockquote {
+    margin: 10px 0; padding: 8px 13px;
+    border-left: 3px solid #ced4da; background: #f7f8fa; color: #5b6675;
+}
+
+.guia-artigo hr { border: 0; border-top: 1px solid #eef1f4; margin: 16px 0; }
+
+/* tabela (mesma marcação do painel: .manual-tabela) */
+.guia-artigo .manual-tabela {
+    overflow-x: auto; margin: 12px 0;
+    border: 1px solid #e9ecef; border-radius: 5px;
+}
+.guia-artigo .manual-tabela table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.guia-artigo .manual-tabela th, .guia-artigo .manual-tabela td {
+    padding: 8px 11px; border-bottom: 1px solid #f2f4f6; text-align: left; vertical-align: top;
+}
+.guia-artigo .manual-tabela th { background: #f7f8fa; font-weight: 700; color: #343a40; white-space: nowrap; }
+.guia-artigo .manual-tabela tr:last-child td { border-bottom: 0; }
+
+.guia-artigo .manual-img {
+    display: block; max-width: 100%; margin: 12px 0;
+    border: 1px solid #e9ecef; border-radius: 6px;
+}
+
+.guia-artigo .manual-nota {
+    padding: 9px 13px; border-radius: 0 5px 5px 0; font-size: 13px; margin: 12px 0;
+}
+.guia-artigo .manual-nota.dica  { background: #f4f8ff; border-left: 3px solid #0665d0; }
+.guia-artigo .manual-nota.aviso { background: #fffbeb; border-left: 3px solid #ffc107; }
+.guia-artigo .manual-nota p:last-child { margin-bottom: 0; }
+
+/* vídeo (mesma proteção do painel: tampa na faixa de cima, botão tela cheia) */
+.guia-artigo .manual-video-box { margin: 14px 0; max-width: 720px; }
+.guia-artigo .manual-video {
+    position: relative; padding-bottom: 56.25%; height: 0;
+    border-radius: 6px; overflow: hidden; background: #000;
+}
+.guia-artigo .manual-video iframe, .guia-artigo .manual-video video {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+}
+.guia-artigo .manual-video-tampa { position: absolute; top: 0; left: 0; right: 0; height: 62px; z-index: 2; }
+.guia-artigo .manual-video:fullscreen { padding-bottom: 0; height: 100%; }
+.guia-artigo .manual-video:-webkit-full-screen { padding-bottom: 0; height: 100%; }
+.guia-artigo .manual-video-acoes { text-align: right; margin-top: 5px; }
+.guia-artigo .manual-video-cheia {
+    border: 1px solid #dfe3e8; background: #fff; color: #5b6675;
+    font-size: 12px; border-radius: 5px; padding: 4px 11px; cursor: pointer;
+}
+.guia-artigo .manual-video-cheia:hover { background: #f2f4f6; color: #343a40; }
+.guia-artigo .manual-video-link { display: inline-block; margin: 12px 0; font-size: 13px; }
+
+.guia-vertambem {
+    margin-top: 26px; padding-top: 14px; border-top: 1px solid #eef1f4;
+}
+.guia-vertambem a { font-size: 13px; font-weight: 600; }
+
+.guia-vazio { padding: 40px 16px; text-align: center; color: #adb5bd; font-size: 13px; }
+
+/* ── responsivo: índice vira topo em telas estreitas ── */
+@media (max-width: 767px) {
+    .guia-grade { grid-template-columns: 1fr; }
+    .guia-nav { border-right: 0; border-bottom: 1px solid #e9ecef; max-height: 240px; }
+    .guia-artigo { max-height: none; padding: 20px; }
+}

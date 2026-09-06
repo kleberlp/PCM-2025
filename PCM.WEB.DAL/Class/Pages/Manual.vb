@@ -190,6 +190,59 @@ Public Class Manual
     End Function
 
     '-------------------------------------------------------------------------------------------'
+    'DESCRICAO     :   Lista enxuta de todos os manuais ativos para a navegacao do Guia do PCM   '
+    '                  (menu proprio): trilhas (tipo P) e artigos (tipo S) com a trilha de cada  '
+    '                  um. O conteudo de cada manual vem depois pela sp_select_manual.           '
+    '-------------------------------------------------------------------------------------------'
+    Public Function GuiaManual(ByVal iCodigoEmpresa As Integer) As List(Of ManualGuiaItem)
+
+        'Variaveis Locais
+        Dim oSqlParameter(0) As SqlParameter
+        Dim oSqlDataReader As SqlDataReader
+        Dim oLista As New List(Of ManualGuiaItem)
+
+        Try
+
+            'Seta Parametros - Codigo Empresa
+            oSqlParameter(0) = New SqlParameter
+            oSqlParameter(0).ParameterName = "codigo_empresa"
+            oSqlParameter(0).Direction = ParameterDirection.Input
+            oSqlParameter(0).SqlDbType = SqlDbType.SmallInt
+            oSqlParameter(0).Value = iCodigoEmpresa
+
+            'Executa Query
+            oSqlDataReader = ExecuteReader(sConnection, CommandType.StoredProcedure, "sp_select_manual_guia", oSqlParameter)
+
+            While oSqlDataReader.Read()
+
+                Dim oItem As New ManualGuiaItem
+
+                oItem.codigo = CInt(SafeGetLong(oSqlDataReader, "codigo"))
+                oItem.tipo = SafeGetString(oSqlDataReader, "tipo")
+                oItem.titulo = SafeGetString(oSqlDataReader, "titulo")
+                oItem.subtitulo = SafeGetString(oSqlDataReader, "subtitulo")
+                oItem.processo_codigo = CInt(SafeGetLong(oSqlDataReader, "processo_codigo"))
+                oItem.secoes = CInt(SafeGetLong(oSqlDataReader, "secoes"))
+
+                oLista.Add(oItem)
+
+            End While
+
+            'Fecha o SqlDataReader
+            If oSqlDataReader.IsClosed = False Then oSqlDataReader.Close() : oSqlDataReader = Nothing
+
+            'Retorno da Funcao
+            Return oLista
+
+        Catch SqlEx As SqlException
+            Throw SqlEx
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+
+    '-------------------------------------------------------------------------------------------'
     'DESCRICAO     :   Le os dois result sets das procedures do manual: o cabecalho e as secoes. '
     '                  Cabecalho sem linha = tela sem manual, e o objeto volta vazio: o painel   '
     '                  diz que a tela ainda nao tem manual em vez de dar erro.                   '

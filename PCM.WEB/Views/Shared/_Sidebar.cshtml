@@ -1401,6 +1401,12 @@
                         </li>
                     }
 
+                    @* Guia do PCM: o manual inteiro numa tela própria (no lugar da
+                       plataforma externa). Documentação — aberto a todos. *@
+                    <li>
+                        <a class="@Html.IsSelected(action: "Guia", cssClass: "active") font-size-sm" href="@Url.Action("Guia", "Manual")"><i class="si si-book-open"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.manual</span></a>
+                    </li>
+
                     <li>
                         <a class="@Html.IsSelected(action: "Contato", cssClass: "active")  font-size-sm" href="mailto:suporte@simservices.com.br"><i class="si si-envelope"></i><span class="sidebar-mini-hide">@PCM.WEB.Properties.Resources.contato</span></a>
                     </li>

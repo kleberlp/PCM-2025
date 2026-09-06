@@ -1,0 +1,55 @@
+@{
+    var rota = Url.RequestContext.RouteData.Values;
+}
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Breadcrumb -->
+    <div class="bg-body-light border-b">
+        <div class="content py-0 text-md-center">
+            <nav class="breadcrumb bg-body-light mb-0">
+                <a class="breadcrumb-item font-w600" href="@Url.Action(Session["dashboard"].ToString(), "Home")">@PCM.WEB.Properties.Resources.sistema</a>
+                <span class="breadcrumb-item active">@PCM.WEB.Properties.Resources.manual</span>
+            </nav>
+        </div>
+    </div>
+    <!-- END Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+        <div class="block block-rounded border guia-bloco">
+            <div class="block-header block-header-default bg-gd-default">
+                <h3 class="block-title text-white font-w600"><i class="fa fa-book mr-5"></i>@PCM.WEB.Properties.Resources.manual</h3>
+            </div>
+
+            <div class="block-content block-content-full guia-corpo"
+                 data-url-lista="@Url.Action("GuiaLista", "Manual")"
+                 data-url-conteudo="@Url.Action("ManualTela", "Manual")">
+
+                <div class="guia-grade">
+
+                    <!-- Navegação -->
+                    <nav class="guia-nav">
+                        <div class="guia-busca">
+                            <input type="text" id="guiaBusca" class="form-control" placeholder="Buscar no guia...">
+                        </div>
+                        <div id="guiaIndice" class="guia-indice"></div>
+                    </nav>
+
+                    <!-- Conteúdo -->
+                    <section class="guia-artigo" id="guiaArtigo">
+                        <div class="guia-vazio"><i class="fa fa-spinner fa-spin"></i></div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Page Content -->
+</main>
+<!-- END Main Container -->
+
+@section Scripts {
+    <script src="~/Content/js/pages/manual-guia.js" @Csp.NonceAttr></script>
+}
