@@ -192,10 +192,32 @@
         return html.join('');
     }
 
+    // Imagem do manual que não carrega (o arquivo saiu do ar, o caminho migrado
+    // aponta para fora): em vez do ícone quebrado do navegador com o texto
+    // alternativo esparramado, vira uma legenda discreta — o leitor sabe que ali
+    // ia uma captura, sem a tela parecer defeituosa. CSP não deixa onerror inline,
+    // então o handler é ligado por código depois que o HTML entra no DOM.
+    function tratarImagens(raiz) {
+        if (!raiz) return;
+        var imgs = raiz.querySelectorAll ? raiz.querySelectorAll('img.manual-img') : [];
+        Array.prototype.forEach.call(imgs, function (img) {
+            function faltou() {
+                if (!img.parentNode) return;
+                var cap = document.createElement('div');
+                cap.className = 'manual-img-faltando';
+                cap.textContent = '📷 ' + (img.getAttribute('alt') || 'Imagem indisponível');
+                img.parentNode.replaceChild(cap, img);
+            }
+            img.addEventListener('error', faltou);
+            // Já falhou antes de ligarmos o handler? (carregou do cache e quebrou)
+            if (img.complete && img.naturalWidth === 0) faltou();
+        });
+    }
+
     // O cadastro do manual (HelpInsert/HelpEdit) pré-visualiza a seção com ESTE
     // formatador: o autor vê a tabela, o código e a lista exatamente como o
     // painel vai mostrar, e não uma segunda implementação que divergiria dele.
-    window.PcmManualPreview = { formatar: formatar };
+    window.PcmManualPreview = { formatar: formatar, tratarImagens: tratarImagens };
 
     // Daqui para baixo é o painel em si: sem o "?" no cabeçalho (tela de login,
     // layout sem header), só o formatador acima fica disponível.
@@ -332,6 +354,7 @@
         jQuery('#manualSubtitulo').text((manual && manual.subtitulo) || '');
         jQuery('#manualBusca').val('');
         jQuery('#manualCorpo').html(montarSecoes(manual && manual.itens));
+        tratarImagens(document.getElementById('manualCorpo'));
 
         var $proc = jQuery('#manualProcesso').empty();
         if (manual && manual.processo_codigo > 0) {
