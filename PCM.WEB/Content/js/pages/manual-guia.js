@@ -138,6 +138,11 @@ jQuery(function () {
 
         jQuery('#guiaArtigo').html(html).scrollTop(0);
         jQuery('#guiaArtigo')[0].scrollTop = 0;
+
+        // Imagem faltando (caminho migrado que saiu do ar) vira legenda discreta.
+        if (window.PcmManualPreview && window.PcmManualPreview.tratarImagens) {
+            window.PcmManualPreview.tratarImagens(document.getElementById('guiaArtigo'));
+        }
     }
 
     function abrir(codigo) {

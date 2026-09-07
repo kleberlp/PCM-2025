@@ -252,6 +252,19 @@
     border-radius: 4px;
 }
 
+/* Imagem que não carregou: legenda discreta no lugar do ícone quebrado. */
+.manual-painel .manual-img-faltando,
+.manual-img-faltando {
+    margin: 8px 0;
+    padding: 8px 11px;
+    border: 1px dashed #ced4da;
+    border-radius: 4px;
+    background: #f7f8fa;
+    color: #8a9099;
+    font-size: 11.5px;
+    font-style: italic;
+}
+
 /* Vídeo incorporado: 16:9 dentro da largura do painel. */
 .manual-painel .manual-video {
     position: relative;

@@ -136,6 +136,14 @@
     border: 1px solid #e9ecef; border-radius: 6px;
 }
 
+/* Captura que não carregou (caminho migrado fora do ar): legenda no lugar
+   do ícone quebrado, com o texto alternativo dizendo o que ia ali. */
+.guia-artigo .manual-img-faltando {
+    margin: 12px 0; padding: 10px 13px;
+    border: 1px dashed #ced4da; border-radius: 6px;
+    background: #f7f8fa; color: #8a9099; font-size: 13px; font-style: italic;
+}
+
 .guia-artigo .manual-nota {
     padding: 9px 13px; border-radius: 0 5px 5px 0; font-size: 13px; margin: 12px 0;
 }
